@@ -1,0 +1,66 @@
+@font-face {
+    font-family: "BpmOpenSans";
+    src: url("/fonts/BpmonlineOpenSans-Light.eot");
+}
+
+@font-face {
+    font-family: "BpmOpenSans-Light-woff";
+    src: url("/fonts/BpmonlineOpenSans-Light.woff");
+}
+@font-face {
+    font-family: "BpmOpenSans-woff";
+    src: url("/fonts/BpmonlineOpenSans.woff");
+}
+
+.menu-title-2 {
+    font-size: 18px;
+    margin-left: 12px;
+    font-family: "BpmOpenSans-woff";
+}
+.d-flex {
+    font-size: 14px;
+    font-family: "BpmOpenSans-woff";
+    color: #535353;
+    font-weight: 100;
+}
+#kt_toolbar_primary_button {
+    font-family: "BpmOpenSans-woff";
+    font-size: 14px;
+    padding: 5px 30px 5px 30px;
+    border-radius: 5px;
+}
+#cloedButton {
+    font-family: "BpmOpenSans-woff";
+    font-size: 14px;
+    padding: 5px 30px 5px 30px;
+    border-radius: 5px;
+}
+img.tengah {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#List-vv {
+    margin: 0px 30px 0px 30px;
+}
+#new-form {
+    /* border-left: none;
+    border-top: none;
+    border-right: none;
+    border-bottom: #c8c8c8 dashed 1px; */
+    /* background-color: white; */
+}
+#HeadDetail {
+    color: #529ef7;
+    font-family: "BpmOpenSans-Light-woff";
+}
+#Plus {
+    font-family: "BpmOpenSans-Light-woff";
+    font-size: 20px;
+    margin-left: 10px;
+}
+.Drag {
+    font-family: "BpmOpenSans-Light-woff";
+    font-size: 18px;
+}

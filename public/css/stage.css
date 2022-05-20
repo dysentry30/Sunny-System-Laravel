@@ -1,0 +1,178 @@
+.stage-list {
+    display: flex;
+    overflow: hidden;
+    line-height: 1.5;
+    margin: 0;
+    border-radius: 5px;
+    padding: 0;
+    border: none;
+    background: none;
+}
+.stage-button {
+    flex: 1;
+    color: #414141;
+    text-decoration: none;
+    padding: 5px 0px 5px 45px;
+    position: relative;
+    display: flex;
+    border: none;
+    background: none;
+}
+.stage-button:first-child {
+    padding-left: 15px;
+}
+.stage-button:last-child {
+    padding-right: 15px;
+}
+.stage-button:after {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    /* Go big on the size, and let overflow hide */
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid #fff;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    left: 100%;
+    z-index: 2;
+}
+.stage-button:before {
+    content: " ";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    /* Go big on the size, and let overflow hide */
+    border-bottom: 50px solid transparent;
+    border-left: 30px solid white;
+    position: absolute;
+    top: 50%;
+    margin-top: -50px;
+    margin-left: 2px;
+    left: 100%;
+    z-index: 1;
+}
+.stage-button.stage-is-not-active {
+    background-color: #BABABA;
+    color: #fff;
+}
+.stage-button.stage-is-not-active:after {
+    border-left-color: #BABABA;
+}
+
+/* Color */
+
+    /* blue */
+    .stage-is-done.color-is-blue {
+        background-color: #007BFF;
+        color: #fff;
+    }
+    .stage-is-done.color-is-blue:after {
+        border-left-color: #007BFF;
+    }
+    .stage-is-before.color-is-blue {
+        background-color: #86b8ee;
+        color: #fff;
+    }
+    .stage-is-before.color-is-blue:after {
+        border-left-color:#86b8ee;
+    }
+    .stage-button.stage-is-not-active.color-is-blue:hover {
+        background-color:#86b8ee;
+    }
+    .stage-button.stage-is-not-active.color-is-blue:hover:after {
+        border-left-color:#86b8ee;
+    }
+
+    /* green */
+    .stage-is-done.color-is-green {
+        background-color: #28A745;
+        color: #fff;
+    }
+    .stage-is-done.color-is-green:after {
+        border-left-color: #28A745;
+    }
+    .stage-is-before.color-is-green {
+        background-color: #a3e7b3;
+        color: #fff;
+    }
+    .stage-is-before.color-is-green:after {
+        border-left-color: #a3e7b3;
+    }
+    .stage-button.stage-is-not-active.color-is-green:hover {
+        background-color: #a3e7b3;
+    }
+    .stage-button.stage-is-not-active.color-is-green:hover:after {
+        border-left-color: #a3e7b3;
+    }
+
+    /* red */
+    .stage-is-done.color-is-red {
+        background-color:#DC3545;
+        color: #fff;
+    }
+    .stage-is-done.color-is-red:after {
+        border-left-color: #DC3545;
+    }
+    .stage-is-before.color-is-red {
+        background-color: #ec838d;
+        color: #fff;
+    }
+    .stage-is-before.color-is-red:after {
+        border-left-color:#ec838d;
+    }
+    .stage-button.stage-is-not-active.color-is-red:hover {
+        background-color: #ec838d;
+    }
+    .stage-button.stage-is-not-active.color-is-red:hover:after {
+        border-left-color: #ec838d;
+    }
+
+    /* yellow */
+    .stage-is-done.color-is-yellow {
+        background-color: #FFC107;
+        color: #fff;
+    }
+    .stage-is-done.color-is-yellow:after {
+        border-left-color: #FFC107;
+    }
+    .stage-is-before.color-is-yellow {
+        background-color: #f4e0a4;
+        color: #fff;
+    }
+    .stage-is-before.color-is-yellow:after {
+        border-left-color: #f4e0a4;
+    }
+    .stage-button.stage-is-not-active.color-is-yellow:hover {
+        background-color: #f4e0a4;
+    }
+    .stage-button.stage-is-not-active.color-is-yellow:hover:after {
+        border-left-color: #f4e0a4;
+    }
+
+    /* default */
+    .stage-is-done.color-is-default {
+        background-color: #ffa62b;
+        color: #fff;
+    }
+    .stage-is-done.color-is-default:after {
+        border-left-color: #ffa62b;
+    }
+    .stage-is-before.color-is-default {
+        background-color: #FFB062;
+        color: #fff;
+    }
+    .stage-is-before.color-is-default:after {
+        border-left-color: #FFB062;
+    }
+    .stage-button.stage-is-not-active.color-is-default:hover {
+        background-color: #FFB062;
+    }
+    .stage-button.stage-is-not-active.color-is-default:hover:after {
+        border-left-color: #FFB062;
+    }
+    
+/* End Color */
