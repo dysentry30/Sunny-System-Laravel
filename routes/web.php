@@ -1,9 +1,6 @@
 <?php
 
-// require_once "./vendor/autoload.php";
-// require_once 'vendor/autoload.php';
 
-use Google\Service\Docs;
 use Illuminate\Support\Facades\Route;
 use App\Models\ContractManagements;
 use App\Models\DraftContracts;
@@ -12,18 +9,10 @@ use App\Models\IssueProjects;
 use App\Models\MonthlyReports;
 use App\Models\Questions;
 use App\Models\ReviewContracts;
-use Google\Service\Drive\Permission;
-use Google\Service\Oauth2;
-use Illuminate\Contracts\Cache\Store;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
-use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\TemplateProcessor;
 
 /*
 |--------------------------------------------------------------------------
@@ -297,25 +286,45 @@ Route::post("/laporan-bulanan/upload", function (Request $request, MonthlyReport
     return redirect($_SERVER["HTTP_REFERER"]);
 });
 
+Route::post("/serah-terima/upload", function (Request $request, MonthlyReports $monthlyReports) {
+    $faker = new Faker\Core\Uuid();
+    $id_document = (string) $faker->uuid3();
+    $file = $request->file("attach-file-terima");
+    $data = $request->all();
+    $monthlyReports->id_contract = $data["id-contract"];
+    $monthlyReports->id_document = $id_document;
+    $monthlyReports->document_name_report = $data["document-name-terima"];
+    $monthlyReports->note_report = $data["note-terima"];
+    $monthlyReports->save();
+    moveFileTemp($file, $id_document);
+    return redirect($_SERVER["HTTP_REFERER"]);
+});
+
 
 Route::get("/document/view/{id}/{id_document}", function (Request $request) {
     $id_document = $request->id_document;
     $id = $request->id;
+    // dd($request->id_document);
     $document_path = asset("/storage/words/" . $id_document . ".docx");
     return view("document", ["document" => $document_path, "id" => $id, "id_document" => $id_document]);
+    // return view("document", ["document" => $document_path]);
 });
 
 Route::post("/document/view/{id}/{id_document}/save", function (Request $request,) {
     $id_document = $request->id_document;
     $id = $request->id;
-    $tables = DB::select("SHOW TABLES");
+    $tables = DB::select("SELECT table_name
+    FROM information_schema.columns;");
     foreach ($tables as $table) {
-        $table_name = $table->Tables_in_ccm_system_laravel;
-        $columns = DB::select("DESCRIBE $table_name");
+        $table_name = $table->table_name;
+        $columns = DB::select("SELECT column_name
+        FROM information_schema.columns
+       WHERE table_name  = '$table_name';");
         foreach ($columns as $column) {
-            $column_name = $column->Field;
+            $column_name = $column->column_name;
             if ($column_name == "id_document") {
-                $data = DB::selectOne("SELECT * FROM $table_name WHERE $table_name.id_document = '$id_document'");
+                $data = DB::selectOne("SELECT * FROM $table_name WHERE $table_name.id_document = '$id_document';");
+                $primary_column = array_keys(get_object_vars($data));
                 if (!empty($data)) {
                     $php_word = new PhpWord();
                     $section = $php_word->addSection();
@@ -325,15 +334,14 @@ Route::post("/document/view/{id}/{id_document}/save", function (Request $request
                     header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
                     header("Content-Disposition: attachment;filename=$id_document.docx");
                     if (empty($counter[1])) {
-                        echo "gak ada";
                         $file_name = $counter[0] . "_2";
                         $docx_writer->save(public_path("storage/words/" . $file_name . ".docx"));
-                        DB::update("UPDATE $table_name SET id_document = '$file_name' WHERE id_report = $id");
+                        DB::update("UPDATE $table_name SET id_document = '$file_name' WHERE  $primary_column[0] = $id");
                     } else {
                         $num = (int) $counter[1] + 1;
                         $file_name = $counter[0] . "_$num";
                         $docx_writer->save(public_path("storage/words/" . $file_name . ".docx"));
-                        DB::update("UPDATE $table_name SET id_document = '$file_name' WHERE id_report = $id");
+                        DB::update("UPDATE $table_name SET id_document = '$file_name' WHERE $primary_column[0] = $id");
                     }
                     return response()->json([
                         "status" => "success",
@@ -342,5 +350,17 @@ Route::post("/document/view/{id}/{id_document}/save", function (Request $request
                 }
             }
         }
+    }
+});
+
+Route::post('/stage/save', function (Request $request) {
+    $id = $request->id_contract;
+    $contract_management = ContractManagements::find($id);
+    $contract_management->stages = $request->stage;
+    if ($contract_management->save()) {
+        return response()->json([
+            "status" => "success",
+            "link" => true,
+        ]);
     }
 });

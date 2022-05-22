@@ -7,10 +7,41 @@
         width: 100%;
     }
 
+    .circle-loading {
+        position: relative;
+        width: 1.5rem;
+        height: 1.5rem;
+        top: 0;
+        left: 0;
+        margin-left: 1rem;
+        border: 4px solid rgb(212, 212, 212);
+        border-top: 4px solid rgb(255, 255, 255);
+        border-radius: 50%;
+        animation-name: rotation;
+        animation-duration: 1s;
+        animation-iteration-count: infinite;
+        animation-timing-function: linear;
+        display: none;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
 </style>
 @section('content')
     {{-- begin::action --}}
-    <a href="#" onclick="saveDocument()" class="btn btn-sm btn-primary" style="background-color:#26b2e9;">Save</a>
+    <a href="#" onclick="saveDocument()" class="btn btn-sm btn-primary d-flex justify-content-center align-items-center"
+        style="background-color:#26b2e9;">
+        Save
+        <div class="circle-loading"></div>
+    </a>
     <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-sm btn-primary mt-2" style="background-color:#ffa62b;">Back to
         Contract
         Management</a>
@@ -57,6 +88,7 @@
         }
         async function saveDocument() {
             const html = document.querySelector("#A section");
+            const circleLoadingElt = document.querySelector(".circle-loading");
             const formData = new FormData();
             // const editor = new FroalaEditor('div#froala-editor', {}, function() {
             //     html = editor.html.get();
@@ -68,16 +100,18 @@
             formData.append("id", "{{ $id }}");
             formData.append("id_document", "{{ $id_document }}");
             formData.append("content_word", html.innerHTML);
+            circleLoadingElt.style.display = "block";
             const uploadFile = await fetch(
                 "/document/view/{{ $id }}/{{ $id_document }}/save", {
                     method: "POST",
                     body: formData,
                 }).then(res => res.json());
+            circleLoadingElt.style.display = "none";
             window.location.href = uploadFile.redirect;
             return;
             // const document = await readFile("{{ $document }}", false);
         }
-        // /document/save/{{ $id }}/{{ $id_document }}/save
+        // /document/save///save
         document.addEventListener("DOMContentLoaded", () => {
             readFile(`{{ $document }}`);
         });

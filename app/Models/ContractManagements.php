@@ -10,7 +10,7 @@ class ContractManagements extends Model
 {
     use HasFactory;
 
-    // protected $primaryKey   = "id_contract";
+    protected $primaryKey   = "id_contract";
     public $timestamps      = false;
     protected $fillable     = ["*"];
     protected $visible      = ["*"];
@@ -46,6 +46,11 @@ class ContractManagements extends Model
     }
 
     public function monthlyReports()
+    {
+        return $this->hasMany(MonthlyReports::class, "id_contract");
+    }
+
+    public function handOvers()
     {
         return $this->hasMany(MonthlyReports::class, "id_contract");
     }

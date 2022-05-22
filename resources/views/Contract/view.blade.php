@@ -234,38 +234,39 @@
                                                     <div class="form-group">
 
                                                         <div id="stage-button" class="stage-list">
-                                                            <button
+                                                            <a href="#"
                                                                 class="stage-button color-is-default stage-is-done is-done"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Draft
-                                                            </button>
-                                                            <button
+                                                            </a>
+                                                            <a href="#"
                                                                 class="stage-button color-is-default is-done stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Terkontrak
-                                                            </button>
-                                                            <button
+                                                            </a>
+                                                            <a href="#"
                                                                 class="stage-button color-is-default is-done stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Pelaksanaan
-                                                            </button>
-                                                            <button
+                                                            </a>
+                                                            <a href="#"
                                                                 class="stage-button color-is-default is-done stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Addendum Kontrak
-                                                            </button>
-                                                            <button
+                                                            </a>
+                                                            <a href="#"
                                                                 class="stage-button stage-is-not-active color-is-default"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Serah Terima Pekerjaan
-                                                            </button>
-                                                            <button
+                                                            </a>
+                                                            <a href="#"
                                                                 class="stage-button stage-is-not-active color-is-default"
                                                                 disabled="" style="outline: 0px; cursor: not-allowed;">
                                                                 Closing Proyek
-                                                            </button>
+                                                            </a>
 
                                                         </div>
+
 
                                                     </div>
 
@@ -297,6 +298,12 @@
                                                                 <input type="text" class="form-control form-control-solid"
                                                                     id="number-contract" name="number-contract" value=""
                                                                     placeholder="No. Contract" />
+                                                                @error('number-contract')
+                                                                    <h6>
+                                                                        <b
+                                                                            style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                    </h6>
+                                                                @enderror
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group Name-->
@@ -320,8 +327,8 @@
                                                                     @isset($contracts)
                                                                         @foreach ($contracts as $contract_in_contracts)
                                                                             <option
-                                                                                value="{{ $contract_in_contracts->id_contract }}"
-                                                                                @if (isset($contract)) {{ $contract_in_contracts->id_contract == $contract->id_contract ? 'selected' : '' }} @endif>
+                                                                                value="{{ $contract_in_contracts->project_id }}"
+                                                                                @if (isset($contract)) {{ $contract_in_contracts->project_id == $contract->project_id ? 'selected' : '' }} @endif>
                                                                                 {{ $contract_in_contracts->project_id }}
                                                                             </option>
                                                                         @endforeach
@@ -330,6 +337,11 @@
 
                                                                 <!--end::Input-->
                                                             </div>
+                                                            @error('project-id')
+                                                                <h6>
+                                                                    <b style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                </h6>
+                                                            @enderror
                                                             <!--end::Input group Name-->
                                                         </div>
                                                     </div>
@@ -352,6 +364,12 @@
                                                                     placeholder="Select a date" value="" name="start-date"
                                                                     id="start-date" />
 
+                                                                @error('start-date')
+                                                                    <h6>
+                                                                        <b
+                                                                            style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                    </h6>
+                                                                @enderror
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -370,6 +388,12 @@
                                                                     class="form-control form-control-solid ps-12" value=""
                                                                     placeholder="Select a date" id="due-date"
                                                                     name="due-date" />
+                                                                @error('due-date')
+                                                                    <h6>
+                                                                        <b
+                                                                            style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                    </h6>
+                                                                @enderror
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -393,7 +417,12 @@
                                                                 <input type="text" class="form-control form-control-solid"
                                                                     name="number-spk" id="number-spk" value=""
                                                                     placeholder="No. SPK" />
-
+                                                                @error('number-spk')
+                                                                    <h6>
+                                                                        <b
+                                                                            style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                    </h6>
+                                                                @enderror
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -411,6 +440,12 @@
                                                                 <input type="decimal" id="value-contract"
                                                                     class="form-control form-control-solid" name="value"
                                                                     value="" placeholder="Nilai Kontrak" />
+                                                                @error('value')
+                                                                    <h6>
+                                                                        <b
+                                                                            style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                    </h6>
+                                                                @enderror
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -427,1133 +462,8 @@
                                         </div>
                                         <!--end::Header Contract-->
 
-                                        <!--begin::Content-->
-                                        <div class="col-xl-15">
-                                            <!--begin::Contacts-->
-                                            <div class="card card-flush h-lg-100" id="kt_contacts_main">
-
-                                                <!--begin::Card body-->
-                                                <div class="card-body pt-5">
-                                                    <!--begin:::Tabs-->
-                                                    <ul
-                                                        class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                        <!--begin:::Tab item Informasi Perusahaan-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active"
-                                                                data-bs-toggle="tab" href="#kt_user_view_overview_tab"
-                                                                style="font-size:14px;">Tender
-                                                                Awal</a>
-                                                        </li>
-                                                        <!--end:::Tab item Informasi Perusahaan-->
-
-                                                        <!--begin:::Tab item History-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_history"
-                                                                style="font-size:14px;">Tender
-                                                                Menang</a>
-                                                        </li>
-                                                        <!--end:::Tab item History-->
-
-                                                        <!--begin:::Tab item Atachment & Notes-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_Performance"
-                                                                style="font-size:14px;">Pelaksanaan</a>
-                                                        </li>
-                                                        <!--end:::Tab item Atachment & Notes-->
-
-                                                        <!--begin:::Tab item Atachment & Notes-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_SerahTerima"
-                                                                style="font-size:14px;">Serah Terima Pekerjaan</a>
-                                                        </li>
-                                                        <!--end:::Tab item Atachment & Notes-->
-                                                    </ul>
-                                                    <!--end:::Tabs-->
-
-                                                    <!--begin:::Tab content -->
-                                                    <div class="tab-content" id="myTabContent">
-
-                                                        <!--Informasi Perusahaan-->
-                                                        <div class="tab-pane fade show active"
-                                                            id="kt_user_view_overview_tab" role="tabpanel">
-
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Rekomendasi</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <select name="Instansi"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Instansi">
-                                                                            <option value="Yes">Yes</option>
-                                                                            <option value="No">No</option>
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
-
-                                                            &nbsp;<br>
-                                                            &nbsp;<br>
-
-                                                            <!--begin::Card title-->
-                                                            <div class="card-title m-0">
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Draft Kontrak
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_create_proyek">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Draft Contract-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama Dokumen
-                                                                            </th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                            <th class="min-w-125px">Action</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->draftContracts as $draftContract)
-                                                                                @if ($draftContract->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $draftContract->draft_name }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $draftContract->id_document }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $draftContract->draft_note }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $draftContract->id_document }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Draft Contract-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Review
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_create_review">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama Dokumen
-                                                                            </th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->reviewProjects as $reviewProject)
-                                                                                @if ($reviewProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $reviewProject->document_name_review }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $reviewProject->id_review }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($reviewProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $reviewProject->note_review }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $reviewProject->id_review }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Issue Project
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_issue_proyek">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->issueProjects as $issueProject)
-                                                                                @if ($issueProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $issueProject->document_name_issue }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $issueProject->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($issueProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $issueProject->draft_note }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $issueProject->id_document }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Input Resiko
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_risk_proyek">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->inputRisks as $inputRisk)
-                                                                                @if ($inputRisk->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $inputRisk->document_name_risk }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $inputRisk->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($inputRisk->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $inputRisk->note_risk }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $inputRisk->id_risk }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Daftar Pertanyaan
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_question_proyek">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($record))
-                                                                            @forelse ($contract->questionsProjects as $questionProject)
-                                                                                @if ($questionProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $questionProject->document_name_question }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $questionProject->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $questionProject->note_question }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $questionProject->id_document }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-                                                            </div>
-                                                        </div>
-                                                        <!--end:::Tab pane Informasi Perusahaan-->
-
-                                                        <!--begin:::Tab pane History-->
-                                                        <div class="tab-pane fade" id="kt_user_view_overview_history"
-                                                            role="tabpanel">
-
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Rekomendasi</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <select name="Instansi"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Instansi">
-                                                                            <option></option>
-                                                                            <option value="Yes">Yes</option>
-                                                                            <option value="No">No</option>
-                                                                        </select>
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-
-                                                                    <div class="fv-row mb-7">
-
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
-
-                                                            &nbsp;<br>
-                                                            &nbsp;<br>
-
-                                                            <!--begin::Card title-->
-                                                            <div class="card-title m-0">
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Draft Kontrak
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_draft_menang">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama Dokumen</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->draftContracts as $draftContract)
-                                                                                <tr>
-                                                                                    <!--begin::Name=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $draftContract->draft_name }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name=-->
-                                                                                    <!--begin::Name=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $draftContract->id_document }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name=-->
-                                                                                    <!--begin::Kode=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                                                            14 April, 2022</a>
-                                                                                    </td>
-                                                                                    <!--end::Kode=-->
-                                                                                    <!--begin::Unit=-->
-                                                                                    <td>{{ $draftContract->draft_note }}
-                                                                                    </td>
-                                                                                    <!--end::Unit=-->
-                                                                                </tr>
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Review
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_review_menang">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama Dokumen</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->reviewProjects as $reviewProject)
-                                                                                @if ($reviewProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $reviewProject->document_name_review }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $reviewProject->id_review }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($reviewProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $reviewProject->note_review }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $reviewProject->id_review }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Issue Project
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_issue_project_menang">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->issueProjects as $issueProject)
-                                                                                @if ($issueProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $issueProject->document_name_issue }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $issueProject->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($issueProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $issueProject->draft_note }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $issueProject->id_document }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Input Resiko
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_input_resiko_menang">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->inputRisks as $inputRisk)
-                                                                                @if ($inputRisk->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $inputRisk->document_name_risk }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $inputRisk->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($inputRisk->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $inputRisk->note_risk }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $inputRisk->id_risk }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-
-                                                                &nbsp;<br>
-                                                                &nbsp;<br>
-
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Daftar Pertanyaan
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_question_menang">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->questionsProjects as $questionProject)
-                                                                                @if ($questionProject->tender_menang == 0)
-                                                                                    <tr>
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $questionProject->document_name_question }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Name=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-800 text-hover-primary mb-1">
-                                                                                                {{ $questionProject->id_contract }}
-                                                                                            </a>
-                                                                                        </td>
-                                                                                        <!--end::Name=-->
-                                                                                        <!--begin::Kode=-->
-                                                                                        <td>
-                                                                                            <a href="#"
-                                                                                                class="text-gray-600 text-hover-primary mb-1">
-                                                                                                {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
-                                                                                        </td>
-                                                                                        <!--end::Kode=-->
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td>{{ $questionProject->note_question }}
-                                                                                        </td>
-                                                                                        <!--end::Unit=-->
-
-                                                                                        <!--begin::Unit=-->
-                                                                                        <td><a href="/document/view/{{ $questionProject->id_document }}"
-                                                                                                class="btn btn-sm btn-primary link-docs"
-                                                                                                style="background-color:#ffa62b;">Open
-                                                                                                with
-                                                                                                Editor</a></td>
-                                                                                        <!--end::Unit=-->
-                                                                                    </tr>
-                                                                                @endif
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-
-                                                                </table>
-                                                                <!--End:Table: Review-->
-                                                            </div>
-                                                        </div>
-                                                        <!--end:::Tab pane History-->
-
-                                                        <!--begin:::Tab pane Performance-->
-                                                        <div class="tab-pane fade" id="kt_user_view_overview_Performance"
-                                                            role="tabpanel">
-                                                            <!--begin::Card title-->
-                                                            <div class="card-title m-0">
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
-                                                                    Laporan Bulanan
-                                                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                        data-bs-target="#kt_modal_laporan_bulanan">+</a>
-                                                                </h3>
-
-                                                                <!--begin:Table: Review-->
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-125px">Nama Dokumen</th>
-                                                                            <th class="min-w-125px">No. Dokumen</th>
-                                                                            <th class="min-w-125px">Tanggal</th>
-                                                                            <th class="min-w-125px">Catatan</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-                                                                        @if (isset($contract))
-                                                                            @forelse ($contract->monthlyReports as $monthlyReports)
-                                                                                <tr>
-                                                                                    <!--begin::Name=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            Draft Kontrak
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name=-->
-                                                                                    <!--begin::Name=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            3D4091
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name=-->
-                                                                                    <!--begin::Kode=-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                                                            14 April, 2022</a>
-                                                                                    </td>
-                                                                                    <!--end::Kode=-->
-                                                                                    <!--begin::Unit=-->
-                                                                                    <td>Review draft kontrak 3D4091</td>
-                                                                                    <!--end::Unit=-->
-                                                                                </tr>
-                                                                            @empty
-                                                                                <tr>
-                                                                                    <td>
-                                                                                        <h6><b>There is no data</b></h6>
-                                                                                    </td>
-                                                                                </tr>
-                                                                            @endforelse
-                                                                        @else
-                                                                            <tr>
-                                                                                <td>
-                                                                                    <h6><b>There is no data</b></h6>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endif
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-                                                                </table>
-                                                                <!--End:Table: Review-->
-
-                                                            </div>
-                                                            <!--end:::Tab pane Performance-->
-
-                                                            <!--begin:::Tab pane Serah Terima-->
-                                                            <div class="tab-pane fade"
-                                                                id="kt_user_view_overview_SerahTerima" role="tabpanel">
-                                                            </div>
-                                                            <!--end:::Tab pane Serah Terima-->
-
-                                                        </div>
-                                                        <!--end:::Tab content-->
+                                    </div>
+                                </div>
                         </form>
                     </div>
                     <!--end::Card body-->
@@ -1632,30 +542,30 @@
                                     <div class="form-group">
 
                                         <div id="stage-button" class="stage-list">
-                                            <button class="stage-button color-is-default stage-is-done is-done"
+                                            <a href="#" role="link" class="stage-button color-is-default "
                                                 style="outline: 0px; cursor: pointer;">
                                                 Draft
-                                            </button>
-                                            <button class="stage-button color-is-default is-done stage-is-done"
+                                            </a>
+                                            <a href="#" role="link" class="stage-button color-is-default "
                                                 style="outline: 0px; cursor: pointer;">
                                                 Terkontrak
-                                            </button>
-                                            <button class="stage-button color-is-default is-done stage-is-done"
+                                            </a>
+                                            <a href="#" role="link" class="stage-button color-is-default "
                                                 style="outline: 0px; cursor: pointer;">
                                                 Pelaksanaan
-                                            </button>
-                                            <button class="stage-button color-is-default is-done stage-is-done"
+                                            </a>
+                                            <a href="#" role="link" class="stage-button color-is-default "
                                                 style="outline: 0px; cursor: pointer;">
                                                 Addendum Kontrak
-                                            </button>
-                                            <button class="stage-button stage-is-not-active color-is-default"
+                                            </a>
+                                            <a href="#" role="link" class="stage-button color-is-default"
                                                 style="outline: 0px; cursor: pointer;">
                                                 Serah Terima Pekerjaan
-                                            </button>
-                                            <button class="stage-button stage-is-not-active color-is-default" disabled=""
-                                                style="outline: 0px; cursor: not-allowed;">
+                                            </a>
+                                            <a href="#" role="link" class="stage-button color-is-default"
+                                                style="outline: 0px;">
                                                 Closing Proyek
-                                            </button>
+                                            </a>
 
                                         </div>
 
@@ -1664,6 +574,44 @@
                                 </div>
                             </div>
                         </div>
+                        {{-- begin:: Stages script --}}
+                        <script>
+                            const stages = document.querySelectorAll(".stage-button");
+                            stages.forEach((stage, i) => {
+                                stage.setAttribute("stage", i + 1);
+                                if (i + 1 <= Number("{{ $contract->stages }}")) {
+                                    stage.classList.add("stage-is-done");
+                                    stage.style.cursor = "cursor";
+                                } else {
+                                    stage.classList.add("stage-is-not-active");
+                                    stage.style.cursor = "cursor";
+                                    if (i > Number("{{ $contract->stages }}")) {
+                                        stage.style.cursor = "not-allowed";
+                                        stage.style.pointerEvents = "none";
+                                    }
+
+                                }
+
+                                stage.addEventListener("click", async e => {
+                                    e.stopPropagation();
+                                    const stage = e.target.getAttribute("stage");
+                                    const formData = new FormData();
+                                    formData.append("_token", "{{ csrf_token() }}");
+                                    formData.append("stage", stage);
+                                    // formData.append("id", "");
+                                    formData.append("id_contract", "{{ $contract->id_contract }}");
+                                    const setStage = await fetch("/stage/save", {
+                                        method: "POST",
+                                        body: formData
+                                    }).then(res => res.json());
+                                    if (setStage.link) {
+                                        // window.location.href = setStage.link;
+                                        window.location.reload();
+                                    }
+                                })
+                            });
+                        </script>
+                        {{-- end:: Stages script --}}
                         <!--end::Header Contract-->
 
                         <!--begin::Header Contract-->
@@ -1711,7 +659,7 @@
                                                     <option selected>Pilih Proyek...</option>
                                                     @isset($contracts)
                                                         @foreach ($contracts as $contract_in_contracts)
-                                                            <option value="{{ $contract_in_contracts->id_contract }}"
+                                                            <option value="{{ $contract_in_contracts->project_id }}"
                                                                 @if (isset($contract)) {{ $contract_in_contracts->id_contract == $contract->id_contract ? 'selected' : '' }} @endif>
                                                                 {{ $contract_in_contracts->project_id }}
                                                             </option>
@@ -1831,41 +779,522 @@
                 <div class="card-body pt-5">
                     <!--begin:::Tabs-->
                     <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                        <!--begin:::Tab item Informasi Perusahaan-->
-                        <li class="nav-item">
-                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                href="#kt_user_view_overview_tab" style="font-size:14px;">Tender
-                                Awalaaa</a>
-                        </li>
-                        <!--end:::Tab item Informasi Perusahaan-->
+                        @if ($contract->stages > 0)
 
-                        <!--begin:::Tab item History-->
-                        <li class="nav-item">
-                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                href="#kt_user_view_overview_history" style="font-size:14px;">Tender
-                                Menang</a>
-                        </li>
-                        <!--end:::Tab item History-->
+                            <!--begin:::Tab item Informasi Perusahaan-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                    href="#kt_user_view_overview_tab" style="font-size:14px;">Tender
+                                    Awal</a>
+                            </li>
+                            <!--end:::Tab item Informasi Perusahaan-->
+                        @endif
 
-                        <!--begin:::Tab item Atachment & Notes-->
-                        <li class="nav-item">
-                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                href="#kt_user_view_overview_Performance" style="font-size:14px;">Pelaksanaan</a>
-                        </li>
-                        <!--end:::Tab item Atachment & Notes-->
+                        @if ($contract->stages > 1)
+                            <!--begin:::Tab item History-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                    data-bs-toggle="tab" href="#kt_user_view_overview_history"
+                                    style="font-size:14px;">Tender
+                                    Menang</a>
+                            </li>
+                            <!--end:::Tab item History-->
 
-                        <!--begin:::Tab item Atachment & Notes-->
-                        <li class="nav-item">
-                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                href="#kt_user_view_overview_SerahTerima" style="font-size:14px;">Serah Terima Pekerjaan</a>
-                        </li>
-                        <!--end:::Tab item Atachment & Notes-->
+                        @endif
+
+                        @if ($contract->stages > 2)
+                            <!--begin:::Tab item Atachment & Notes-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                    data-bs-toggle="tab" href="#kt_user_view_overview_Performance"
+                                    style="font-size:14px;">Pelaksanaan</a>
+                            </li>
+                            <!--end:::Tab item Atachment & Notes-->
+
+                        @endif
+
+                        @if ($contract->stages > 3)
+                            <!--begin:::Tab item Atachment & Notes-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                    data-bs-toggle="tab" href="#kt_user_view_overview_SerahTerima"
+                                    style="font-size:14px;">Serah Terima Pekerjaan</a>
+                            </li>
+                            <!--end:::Tab item Atachment & Notes-->
+
+                        @endif
 
                     </ul>
                     <!--end:::Tabs-->
 
                     <!--begin:::Tab content -->
                     <div class="tab-content" id="myTabContent">
+                        <!--Informasi Perusahaan-->
+                        <div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
+
+                            <!--begin::Row-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Rekomendasi</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="Instansi" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Instansi">
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                            </div>
+                            <!--End begin::Row-->
+
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <!--begin::Card title-->
+                            <div class="card-title m-0">
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Draft Kontrak
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_proyek">+</a>
+                                </h3>
+                                @isset($error)
+                                    @foreach ($error->all() as $error)
+                                        <small style="color: rgb(228, 31, 31)">{{ $error }}</small>
+                                    @endforeach
+
+                                @endisset
+
+                                <!--begin:Table: Draft Contract-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama Dokumen
+                                            </th>
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                            <th class="min-w-125px">Action</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->draftContracts as $draftContract)
+                                                @if ($draftContract->tender_menang == 0)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $draftContract->draft_name }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $draftContract->id_document }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>{{ $draftContract->draft_note }}
+                                                        </td>
+                                                        <!--end::Unit=-->
+
+                                                        <!--begin::Unit=-->
+                                                        <td><a href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                                class="btn btn-sm btn-primary link-docs"
+                                                                style="background-color:#ffa62b;">Open
+                                                                with
+                                                                Editor</a></td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+
+                                </table>
+                                <!--End:Table: Draft Contract-->
+
+                                &nbsp;<br>
+                                &nbsp;<br>
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Review
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_review">+</a>
+                                </h3>
+
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama Dokumen
+                                            </th>
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->reviewProjects as $reviewProject)
+                                                @if ($reviewProject->tender_menang == 0)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $reviewProject->document_name_review }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $reviewProject->id_review }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                {{ date_format(new DateTime($reviewProject->created_at), 'd M, Y') }}</a>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>{{ $reviewProject->note_review }}
+                                                        </td>
+                                                        <!--end::Unit=-->
+
+                                                        <!--begin::Unit=-->
+                                                        <td><a href="/document/view/{{ $reviewProject->id_review }}"
+                                                                class="btn btn-sm btn-primary link-docs"
+                                                                style="background-color:#ffa62b;">Open
+                                                                with
+                                                                Editor</a></td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+
+                                </table>
+                                <!--End:Table: Review-->
+
+                                &nbsp;<br>
+                                &nbsp;<br>
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Issue Project
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_issue_proyek">+</a>
+                                </h3>
+
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama</th>
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->issueProjects as $issueProject)
+                                                @if ($issueProject->tender_menang == 0)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $issueProject->document_name_issue }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $issueProject->id_contract }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                {{ date_format(new DateTime($issueProject->created_at), 'd M, Y') }}</a>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>{{ $issueProject->draft_note }}
+                                                        </td>
+                                                        <!--end::Unit=-->
+
+                                                        <!--begin::Unit=-->
+                                                        <td><a href="/document/view/{{ $issueProject->id_document }}"
+                                                                class="btn btn-sm btn-primary link-docs"
+                                                                style="background-color:#ffa62b;">Open
+                                                                with
+                                                                Editor</a></td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+
+                                </table>
+                                <!--End:Table: Review-->
+
+                                &nbsp;<br>
+                                &nbsp;<br>
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Input Resiko
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_risk_proyek">+</a>
+                                </h3>
+
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama</th>
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->inputRisks as $inputRisk)
+                                                @if ($inputRisk->tender_menang == 0)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $inputRisk->document_name_risk }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $inputRisk->id_contract }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                {{ date_format(new DateTime($inputRisk->created_at), 'd M, Y') }}</a>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>{{ $inputRisk->note_risk }}
+                                                        </td>
+                                                        <!--end::Unit=-->
+
+                                                        <!--begin::Unit=-->
+                                                        <td><a href="/document/view/{{ $inputRisk->id_risk }}"
+                                                                class="btn btn-sm btn-primary link-docs"
+                                                                style="background-color:#ffa62b;">Open
+                                                                with
+                                                                Editor</a></td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+
+                                </table>
+                                <!--End:Table: Review-->
+
+
+                                &nbsp;<br>
+                                &nbsp;<br>
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Daftar Pertanyaan
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_question_proyek">+</a>
+                                </h3>
+
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->questionsProjects as $questionProject)
+                                                @if ($questionProject->tender_menang == 0)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $questionProject->document_name_question }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $questionProject->id_contract }}
+                                                            </a>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>{{ $questionProject->note_question }}
+                                                        </td>
+                                                        <!--end::Unit=-->
+
+                                                        <!--begin::Unit=-->
+                                                        <td><a href="/document/view/{{ $questionProject->id_document }}"
+                                                                class="btn btn-sm btn-primary link-docs"
+                                                                style="background-color:#ffa62b;">Open
+                                                                with
+                                                                Editor</a></td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+
+                                </table>
+                                <!--End:Table: Review-->
+                            </div>
+                        </div>
+                        <!--end:::Tab pane Informasi Perusahaan-->
 
                         <!--begin:::Tab pane History-->
                         <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
@@ -2213,6 +1642,7 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="min-w-125px">Nama</th>
+                                            <th class="min-w-125px">No Dokumen</th>
                                             <th class="min-w-125px">Tanggal</th>
                                             <th class="min-w-125px">Catatan</th>
                                         </tr>
@@ -2302,33 +1732,33 @@
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-600">
                                         @if (isset($contract))
-                                            @forelse ($contract->monthlyReports as $monthlyReports)
+                                            @forelse ($contract->monthlyReports as $monthlyReport)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/document/view/{{ $monthlyReports->id_report }}/{{ $monthlyReports->id_document }}"
+                                                        <a href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
                                                             class="text-gray-800 text-hover-primary mb-1">
-                                                            {{ $monthlyReports->document_name_report }}
+                                                            {{ $monthlyReport->document_name_report }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
                                                         <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                            {{ $monthlyReports->id_document }}
+                                                            {{ $monthlyReport->id_document }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Kode=-->
                                                     <td>
                                                         <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ date_format(new DateTime($monthlyReports->created_at), 'd M, Y') }}</a>
+                                                            {{ date_format(new DateTime($monthlyReport->created_at), 'd M, Y') }}</a>
                                                         </a>
                                                     </td>
                                                     <!--end::Kode=-->
                                                     <!--begin::Unit=-->
                                                     <td>
-                                                        {{ $monthlyReports->note_report }}
+                                                        {{ $monthlyReport->note_report }}
                                                     </td>
                                                     <!--end::Unit=-->
                                                 </tr>
@@ -2356,6 +1786,82 @@
 
                         <!--begin:::Tab pane Serah Terima-->
                         <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
+                            <div class="card-title m-0">
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Dokumen Serah Terima Pekerjaan
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_serah_terima">+</a>
+                                </h3>
+
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Nama Dokumen
+                                            </th>
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                            <th class="min-w-125px">Catatan</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->handOvers as $hand_over)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $hand_over->document_name_terima }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $hand_over->id_document }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ date_format(new DateTime($hand_over->created_at), 'd M, Y') }}</a>
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        {{ $hand_over->note_terima }}
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--End:Table: Review-->
+
+                            </div>
                         </div>
                         <!--end:::Tab pane Serah Terima-->
 
@@ -2389,6 +1895,7 @@
 @endisset
 
 <!--begin::Modal-->
+
 
 <!--begin::Modal - Create App-->
 <div class="modal fade" id="kt_modal_create_app" tabindex="-1" aria-hidden="true">
@@ -3178,6 +2685,110 @@
 </div>
 <!--end::Modal - Create App-->
 
+<!--begin::Modal - Serah Terima Pekerjaan-->
+<div class="modal fade" id="kt_modal_serah_terima" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Attachment</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <form action="/serah-terima/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!--begin::Label-->
+                        <label class="fs-6 form-label mt-3">
+                            <span style="font-weight: normal">Attachment</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                            name="id-contract">
+                        <input type="file" style="font-weight: normal" class="form-control form-control-solid"
+                            name="attach-file-terima" id="attach-file-terima" value="" accept=".docx"
+                            placeholder="Name terima" />
+                        <!--end::Input-->
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nama Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="document-name-terima"
+                            id="document-name-terima" value="" style="font-weight: normal"
+                            placeholder="Nama Document" />
+                        <!--end::Input-->
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Catatan</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" style="font-weight: normal" class="form-control form-control-solid"
+                            name="note-terima" id="note-terima" value="" placeholder="Catatan" />
+                        <!--end::Input-->
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                        {{-- begin::Froala Editor --}}
+                        <div id="froala-editor">
+                            <h1>Attach file with <b>.DOCX</b> format only</h1>
+                        </div>
+                        <script>
+                            var editor = new FroalaEditor('#froala-editor', {
+                                documentReady: true,
+                            });
+                        </script>
+                        {{-- end::Froala Editor --}}
+                        {{-- begin::Read File --}}
+                        <script>
+                            document.getElementById("attach-file-terima").addEventListener("change", function() {
+                                readFile(this.files[0], "#froala-editor");
+                            });
+                        </script>
+                        {{-- end::Read File --}}
+                </div>
+                <!--end::Input group-->
+
+                <button type="submit" id="save-terima" class="btn btn-lg btn-primary"
+                    data-bs-dismiss="modal">Save</button>
+                </form>
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Serah Terima Pekerjaan-->
+
 <!--begin::Modal - Draft Contract-->
 <div class="modal fade" id="kt_modal_create_proyek" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -3214,34 +2825,35 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" value="" accept=".docx" placeholder="Name draft" />
+                            id="attach-file-draft" value="" style="font-weight: normal" accept=".docx"
+                            placeholder="Name draft" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" value="" placeholder="Nama Document" />
+                            id="document-name-draft" value="" style="font-weight: normal" placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="note-draft" id="note-draft"
-                            value="" placeholder="Catatan" />
+                            value="" placeholder="Catatan" style="font-weight: normal" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -3316,7 +2928,7 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -3324,27 +2936,28 @@
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" value="" accept=".docx" placeholder="Name draft" />
+                            id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
+                            placeholder="Name draft" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" value="" placeholder="Nama Document" />
+                            id="document-name-draft" style="font-weight: normal" value="" placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="note-draft" id="note-draft"
-                            value="" placeholder="Catatan" />
+                            value="" placeholder="Catatan" style="font-weight: normal" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -3415,39 +3028,41 @@
 
                 <!--begin::Input group Website-->
                 <div class="fv-row mb-5">
-                    <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
+                    <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="1" name="is-tender-menang">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
-                        <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" value="" accept=".docx" placeholder="Name draft" />
+                        <input type="file" style="font-weight: normal" class="form-control form-control-solid"
+                            name="attach-file-review" id="attach-file-review" value="" accept=".docx"
+                            placeholder="Name review" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" value="" placeholder="Nama Document" />
+                        <input type="text" class="form-control form-control-solid" name="document-name-review"
+                            id="document-name-review" value="" style="font-weight: normal"
+                            placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-draft" id="note-draft"
-                            value="" placeholder="Catatan" />
+                        <input type="text" class="form-control form-control-solid" name="note-review" id="note-review"
+                            value="" style="font-weight: normal" placeholder="Catatan" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -3464,7 +3079,7 @@
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-draft").addEventListener("change", function() {
+                            document.getElementById("attach-file-review").addEventListener("change", function() {
                                 readFile(this.files[0], "#froala-editor");
                             });
                         </script>
@@ -3472,7 +3087,7 @@
                 </div>
                 <!--end::Input group-->
 
-                <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
+                <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
                     data-bs-dismiss="modal">Save</button>
                 </form>
 
@@ -3518,11 +3133,11 @@
 
                 <!--begin::Input group Website-->
                 <div class="fv-row mb-5">
-                    <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
+                    <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -3530,22 +3145,23 @@
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" value="" accept=".docx" placeholder="Name draft" />
+                            id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
+                            placeholder="Name draft" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" value="" placeholder="Nama Document" />
+                            id="document-name-draft" style="font-weight: normal" value="" placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -3625,7 +3241,7 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -3633,17 +3249,18 @@
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-risk"
-                            id="attach-file-risk" value="" accept=".docx" placeholder="Name risk" />
+                            id="attach-file-risk" value="" style="font-weight: normal" accept=".docx"
+                            placeholder="Name risk" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-risk"
-                            id="document-name-risk" value="" placeholder="Nama Document" />
+                            id="document-name-risk" style="font-weight: normal" value="" placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
@@ -3728,7 +3345,7 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
@@ -3741,22 +3358,23 @@
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-question"
-                            id="document-name-question" value="" placeholder="Nama Document" />
+                            id="document-name-question" style="font-weight: normal" value=""
+                            placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-question"
-                            id="note-question" value="" placeholder="Catatan" />
+                        <input type="text" style="font-weight: normal" class="form-control form-control-solid"
+                            name="note-question" id="note-question" value="" placeholder="Catatan" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -3831,34 +3449,36 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-bulanan"
-                            id="attach-file-bulanan" value="" accept=".docx" placeholder="Name draft" />
+                            id="attach-file-bulanan" value="" style="font-weight: normal" accept=".docx"
+                            placeholder="Name draft" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-bulanan"
-                            id="document-name-bulanan" value="" placeholder="Nama Document" />
+                            id="document-name-bulanan" value="" style="font-weight: normal"
+                            placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="note-bulanan"
-                            id="note-bulanan" value="" placeholder="Catatan" />
+                            id="note-bulanan" value="" style="font-weight: normal" placeholder="Catatan" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -3935,34 +3555,35 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-issue"
-                            id="attach-file-issue" value="" accept=".docx" placeholder="Name Proyek" />
+                            id="attach-file-issue" value="" style="font-weight: normal" accept=".docx"
+                            placeholder="Name Proyek" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-issue"
-                            id="document-name-issue" value="" placeholder="Nama Document" />
+                            id="document-name-issue" style="font-weight: normal" value="" placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="note-issue" id="note-issue"
-                            value="" placeholder="Catatan" />
+                            value="" placeholder="Catatan" style="font-weight: normal" />
                         <!--end::Input-->
                         <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -4039,34 +3660,36 @@
                             @csrf
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Attachment</span>
+                                <span style="font-weight: normal">Attachment</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract-review">
                             <input type="hidden" value="{{ csrf_token() }}" id="csrf_token_file_review">
                             <input type="file" class="form-control form-control-solid" name="attach-file-review"
-                                id="attach-file-review" value="" accept=".docx" placeholder="Name Proyek" />
+                                id="attach-file-review" value="" style="font-weight: normal" accept=".docx"
+                                placeholder="Name Proyek" />
                             <!--end::Input-->
 
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Nama Dokumen</span>
+                                <span style="font-weight: normal">Nama Dokumen</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" class="form-control form-control-solid" name="document-name-review"
-                                id="document-name-review" value="" placeholder="Nama Document" />
+                                id="document-name-review" style="font-weight: normal" value=""
+                                placeholder="Nama Document" />
                             <!--end::Input-->
 
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Catatan</span>
+                                <span style="font-weight: normal">Catatan</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="text" class="form-control form-control-solid" name="note-review"
-                                id="note-review" value="" placeholder="Catatan" />
+                                id="note-review" value="" style="font-weight: normal" placeholder="Catatan" />
                             <!--end::Input-->
                             <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -4142,33 +3765,34 @@
                     @csrf
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Attachment</span>
+                        <span style="font-weight: normal">Attachment</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                     <input type="file" class="form-control form-control-solid" name="attach-file-risk"
-                        id="attach-file-risk" value="" accept=".docx" placeholder="Name Proyek" />
+                        id="attach-file-risk" style="font-weight: normal" value="" accept=".docx"
+                        placeholder="Name Proyek" />
                     <!--end::Input-->
 
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Nama Dokumen</span>
+                        <span style="font-weight: normal">Nama Dokumen</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="text" class="form-control form-control-solid" name="document-name-risk"
-                        id="document-name-risk" value="" placeholder="Nama Document" />
+                        id="document-name-risk" style="font-weight: normal" value="" placeholder="Nama Document" />
                     <!--end::Input-->
 
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Catatan</span>
+                        <span style="font-weight: normal">Catatan</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
                     <input type="text" class="form-control form-control-solid" name="note-risk" id="note-risk" value=""
-                        placeholder="Catatan" />
+                        placeholder="Catatan" style="font-weight: normal" />
                     <!--end::Input-->
                     <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
@@ -4243,34 +3867,36 @@
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Attachment</span>
+                            <span style="font-weight: normal">Attachment</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                             name="id-contract">
                         <input type="file" class="form-control form-control-solid" name="attach-file-question"
-                            id="attach-file-question" value="" accept=".docx" placeholder="Name Proyek" />
+                            id="attach-file-question" value="" style="font-weight: normal" accept=".docx"
+                            placeholder="Name Proyek" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Nama Dokumen</span>
+                            <span style="font-weight: normal">Nama Dokumen</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="document-name-question"
-                            id="document-name-question" value="" placeholder="Nama Document" />
+                            id="document-name-question" style="font-weight: normal" value=""
+                            placeholder="Nama Document" />
                         <!--end::Input-->
 
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
+                            <span style="font-weight: normal">Catatan</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="text" class="form-control form-control-solid" name="note-question"
-                            id="note-question" value="" placeholder="Catatan" />
+                            id="note-question" style="font-weight: normal" value="" placeholder="Catatan" />
                         <!--end::Input-->
                         <small id="file-error-msg-question" style="color: rgb(199, 42, 42); display:none"></small>
 
