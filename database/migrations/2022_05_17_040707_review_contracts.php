@@ -14,8 +14,8 @@ return new class extends Migration
     public function up()
     {
         Schema::create('review_contracts', function (Blueprint $table) {
-            $table->id("id");
-            $table->longText('id_review')->unique();
+            $table->id('id_review');
+            $table->longText('id_document')->unique();
             $table->integer("id_contract");
             $table->text("document_name_review");
             $table->longText("note_review");

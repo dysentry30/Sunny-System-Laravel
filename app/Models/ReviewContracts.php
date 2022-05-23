@@ -9,6 +9,6 @@ class ReviewContracts extends Model
 {
     use HasFactory;
 
-    // protected $primaryKey = "id_review";
+    protected $primaryKey = "id_review";
     protected $fillable = ["*"];
 }

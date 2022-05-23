@@ -12,6 +12,7 @@ use App\Models\ReviewContracts;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpWord\PhpWord;
 
 /*
@@ -197,8 +198,12 @@ Route::post("/draft-contract/upload", function (Request $request, DraftContracts
     $file = $request->file("attach-file-draft");
     $data = $request->all();
     $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+    if ($is_tender_menang == 1) {
+        $draftContracts->draft_name = $data["document-name-draft-menang"];
+    } else {
+        $draftContracts->draft_name = $data["document-name-draft"];
+    }
     $draftContracts->id_document = $id_document;
-    $draftContracts->draft_name = $data["document-name-draft"];
     $draftContracts->draft_note = $data["note-draft"];
     $draftContracts->id_contract = $data["id-contract"];
     $draftContracts->tender_menang = $is_tender_menang;
@@ -213,12 +218,15 @@ Route::post("/review-contract/upload", function (Request $request, ReviewContrac
     $file = $request->file("attach-file-review");
     $data = $request->all();
     $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
-    $reviewContracts->id_review = $id_document;
-    $reviewContracts->document_name_review = $data["document-name-review"];
+    if ($is_tender_menang == 1) {
+        $reviewContracts->document_name_review = $data["document-name-review-menang"];
+    } else {
+        $reviewContracts->document_name_review = $data["document-name-review"];
+    }
+    $reviewContracts->id_document = $id_document;
     $reviewContracts->note_review = $data["note-review"];
     $reviewContracts->id_contract = $data["id-contract-review"];
     $reviewContracts->tender_menang = $is_tender_menang;
-    // dd($reviewContracts);
     $reviewContracts->save();
     moveFileTemp($file, $id_document);
     return redirect($_SERVER["HTTP_REFERER"]);
@@ -230,9 +238,13 @@ Route::post("/issue-project/upload", function (Request $request, IssueProjects $
     $file = $request->file("attach-file-issue");
     $data = $request->all();
     $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+    if ($is_tender_menang == 1) {
+        $issueProjects->document_name_issue = $data["document-name-issue-menang"];
+    } else {
+        $issueProjects->document_name_issue = $data["document-name-issue"];
+    }
     $issueProjects->id_contract = $data["id-contract"];
     $issueProjects->id_document = $id_document;
-    $issueProjects->document_name_issue = $data["document-name-issue"];
     $issueProjects->note_issue = $data["note-issue"];
     $issueProjects->tender_menang = $is_tender_menang;
     $issueProjects->save();
@@ -246,9 +258,13 @@ Route::post("/question/upload", function (Request $request, Questions $questions
     $file = $request->file("attach-file-question");
     $data = $request->all();
     $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+    if ($is_tender_menang == 1) {
+        $questions->document_name_question = $data["document-name-question-menang"];
+    } else {
+        $questions->document_name_question = $data["document-name-question"];
+    }
     $questions->id_contract = $data["id-contract"];
     $questions->id_document = $id_document;
-    $questions->document_name_question = $data["document-name-question"];
     $questions->note_question = $data["note-question"];
     $questions->tender_menang = $is_tender_menang;
     $questions->save();
@@ -262,9 +278,13 @@ Route::post("/input-risk/upload", function (Request $request, InputRisks $risk) 
     $file = $request->file("attach-file-risk");
     $data = $request->all();
     $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+    if ($is_tender_menang == 1) {
+        $risk->document_name_risk = $data["document-name-risk-menang"];
+    } else {
+        $risk->document_name_risk = $data["document-name-risk"];
+    }
     $risk->id_contract = $data["id-contract"];
     $risk->id_document = $id_document;
-    $risk->document_name_risk = $data["document-name-risk"];
     $risk->note_risk = $data["note-risk"];
     $risk->tender_menang = $is_tender_menang;
     $risk->save();
@@ -310,7 +330,26 @@ Route::get("/document/view/{id}/{id_document}", function (Request $request) {
     // return view("document", ["document" => $document_path]);
 });
 
-Route::post("/document/view/{id}/{id_document}/save", function (Request $request,) {
+Route::get("/document/view/{id}/{id_document}/history", function (Request $request) {
+    $id_document = explode("_", $request->id_document)[0];
+    $id = $request->id;
+    $files = Storage::disk("public/words")->allFiles();
+    $file_documents = [];
+    foreach ($files as $file) {
+        if (str_contains($file, "_")) {
+            $file_id = explode("_", $file)[0];
+        } else {
+            $file_id = $file;
+        }
+        if ($file_id == $id_document) {
+            // dump($file);
+            array_push($file_documents, str_replace(".docx", "", $file));
+        }
+    }
+    return view("document-history", ["files" => $file_documents, "id" => $id]);
+});
+
+Route::post("/document/view/{id}/{id_document}/save", function (Request $request) {
     $id_document = $request->id_document;
     $id = $request->id;
     $tables = DB::select("SELECT table_name
@@ -324,8 +363,8 @@ Route::post("/document/view/{id}/{id_document}/save", function (Request $request
             $column_name = $column->column_name;
             if ($column_name == "id_document") {
                 $data = DB::selectOne("SELECT * FROM $table_name WHERE $table_name.id_document = '$id_document';");
-                $primary_column = array_keys(get_object_vars($data));
                 if (!empty($data)) {
+                    $primary_column = array_keys(get_object_vars($data));
                     $php_word = new PhpWord();
                     $section = $php_word->addSection();
                     \PhpOffice\PhpWord\Shared\Html::addHtml($section, $request->get("content_word"));

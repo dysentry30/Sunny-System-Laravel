@@ -24,6 +24,15 @@
         display: none;
     }
 
+    @media only print {
+        #A {
+            position: absolute;
+            top: 0;
+            left: 0;
+            scrollbar-width: 0;
+        }
+    }
+
     @keyframes rotation {
         0% {
             transform: rotate(0deg);
@@ -42,9 +51,11 @@
         Save
         <div class="circle-loading"></div>
     </a>
-    <a href="{{ $_SERVER['HTTP_REFERER'] }}" class="btn btn-sm btn-primary mt-2" style="background-color:#ffa62b;">Back to
-        Contract
-        Management</a>
+    <a href="/document/view/{{ $id }}/{{ $id_document }}/history"
+        class="btn btn-sm btn-primary my-2 d-flex justify-content-center align-items-center"
+        style="background-color:#e78b13;">
+        View Document History
+    </a>
     {{-- end::action --}}
     {{-- begin::text --}}
     <small style="text-align: center; font-size: 1rem; padding: 1rem 0">Make sure you use <b>Fullscreen Mode</b> for better
@@ -61,6 +72,7 @@
         var editor = new FroalaEditor('#froala-editor', {
             charCounterCount: true,
             documentReady: true,
+            // height: 400,
         });
 
         // Convert DOCX format to HTML tag

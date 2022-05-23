@@ -894,7 +894,6 @@
                                             <th class="min-w-125px">No. Dokumen</th>
                                             <th class="min-w-125px">Tanggal</th>
                                             <th class="min-w-125px">Catatan</th>
-                                            <th class="min-w-125px">Action</th>
                                         </tr>
                                         <!--end::Table row-->
                                     </thead>
@@ -907,7 +906,9 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $draftContract->draft_name }}
                                                             </a>
                                                         </td>
@@ -930,13 +931,6 @@
                                                         </td>
                                                         <!--end::Unit=-->
 
-                                                        <!--begin::Unit=-->
-                                                        <td><a href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                                class="btn btn-sm btn-primary link-docs"
-                                                                style="background-color:#ffa62b;">Open
-                                                                with
-                                                                Editor</a></td>
-                                                        <!--end::Unit=-->
                                                     </tr>
                                                 @endif
                                             @empty
@@ -974,8 +968,7 @@
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-125px">Nama Dokumen
-                                            </th>
+                                            <th class="min-w-125px">Nama Dokumen</th>
                                             <th class="min-w-125px">No. Dokumen</th>
                                             <th class="min-w-125px">Tanggal</th>
                                             <th class="min-w-125px">Catatan</th>
@@ -991,7 +984,9 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $reviewProject->document_name_review }}
                                                             </a>
                                                         </td>
@@ -999,7 +994,7 @@
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                                {{ $reviewProject->id_review }}
+                                                                {{ $reviewProject->id_document }}
                                                             </a>
                                                         </td>
                                                         <!--end::Name=-->
@@ -1012,14 +1007,6 @@
                                                         <!--begin::Unit=-->
                                                         <td>{{ $reviewProject->note_review }}
                                                         </td>
-                                                        <!--end::Unit=-->
-
-                                                        <!--begin::Unit=-->
-                                                        <td><a href="/document/view/{{ $reviewProject->id_review }}"
-                                                                class="btn btn-sm btn-primary link-docs"
-                                                                style="background-color:#ffa62b;">Open
-                                                                with
-                                                                Editor</a></td>
                                                         <!--end::Unit=-->
                                                     </tr>
                                                 @endif
@@ -1075,7 +1062,9 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/${{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $issueProject->document_name_issue }}
                                                             </a>
                                                         </td>
@@ -1096,14 +1085,6 @@
                                                         <!--begin::Unit=-->
                                                         <td>{{ $issueProject->draft_note }}
                                                         </td>
-                                                        <!--end::Unit=-->
-
-                                                        <!--begin::Unit=-->
-                                                        <td><a href="/document/view/{{ $issueProject->id_document }}"
-                                                                class="btn btn-sm btn-primary link-docs"
-                                                                style="background-color:#ffa62b;">Open
-                                                                with
-                                                                Editor</a></td>
                                                         <!--end::Unit=-->
                                                     </tr>
                                                 @endif
@@ -1158,7 +1139,9 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $inputRisk->id_risk }}/{{ $inputRisk->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $inputRisk->document_name_risk }}
                                                             </a>
                                                         </td>
@@ -1166,7 +1149,7 @@
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                                {{ $inputRisk->id_contract }}
+                                                                {{ $inputRisk->id_document }}
                                                             </a>
                                                         </td>
                                                         <!--end::Name=-->
@@ -1179,14 +1162,6 @@
                                                         <!--begin::Unit=-->
                                                         <td>{{ $inputRisk->note_risk }}
                                                         </td>
-                                                        <!--end::Unit=-->
-
-                                                        <!--begin::Unit=-->
-                                                        <td><a href="/document/view/{{ $inputRisk->id_risk }}"
-                                                                class="btn btn-sm btn-primary link-docs"
-                                                                style="background-color:#ffa62b;">Open
-                                                                with
-                                                                Editor</a></td>
                                                         <!--end::Unit=-->
                                                     </tr>
                                                 @endif
@@ -1227,6 +1202,7 @@
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                             <th class="min-w-125px">Nama</th>
+                                            <th class="min-w-125px">No. Dokumen</th>
                                             <th class="min-w-125px">Tanggal</th>
                                             <th class="min-w-125px">Catatan</th>
                                         </tr>
@@ -1241,7 +1217,9 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $questionProject->document_name_question }}
                                                             </a>
                                                         </td>
@@ -1262,14 +1240,6 @@
                                                         <!--begin::Unit=-->
                                                         <td>{{ $questionProject->note_question }}
                                                         </td>
-                                                        <!--end::Unit=-->
-
-                                                        <!--begin::Unit=-->
-                                                        <td><a href="/document/view/{{ $questionProject->id_document }}"
-                                                                class="btn btn-sm btn-primary link-docs"
-                                                                style="background-color:#ffa62b;">Open
-                                                                with
-                                                                Editor</a></td>
                                                         <!--end::Unit=-->
                                                     </tr>
                                                 @endif
@@ -1656,7 +1626,8 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/document/view/{{ $question->id_document }}"
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $question->id_document }}"
                                                             class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $question->document_name_question }}
                                                         </a>
@@ -1736,7 +1707,8 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
                                                             class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $monthlyReport->document_name_report }}
                                                         </a>
@@ -1815,7 +1787,8 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
                                                             class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $hand_over->document_name_terima }}
                                                         </a>
@@ -2756,11 +2729,11 @@
 
 
                         {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
+                        <div id="froala-editor-terima">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
                         <script>
-                            var editor = new FroalaEditor('#froala-editor', {
+                            var editor = new FroalaEditor('#froala-editor-terima', {
                                 documentReady: true,
                             });
                         </script>
@@ -2768,7 +2741,7 @@
                         {{-- begin::Read File --}}
                         <script>
                             document.getElementById("attach-file-terima").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
+                                readFile(this.files[0], "#froala-editor-terima");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -2859,11 +2832,11 @@
 
 
                         {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
+                        <div id="froala-editor-draft">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
                         <script>
-                            var editor = new FroalaEditor('#froala-editor', {
+                            var editor = new FroalaEditor('#froala-editor-draft', {
                                 documentReady: true,
                             });
                         </script>
@@ -2871,7 +2844,7 @@
                         {{-- begin::Read File --}}
                         <script>
                             document.getElementById("attach-file-draft").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
+                                readFile(this.files[0], "#froala-editor-draft");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -2892,526 +2865,539 @@
 </div>
 <!--end::Modal - Draft Contract-->
 
-<!--begin::Modal - Draft Contract Tender Menang-->
-<div class="modal fade" id="kt_modal_draft_menang" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Attachment</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
+@if ($contract->stages > 1)
+
+    <!--begin::Modal - Draft Contract Tender Menang-->
+    <div class="modal fade" id="kt_modal_draft_menang" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="1" name="is-tender-menang">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
-                            placeholder="Name draft" />
-                        <!--end::Input-->
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" class="form-control form-control-solid" name="attach-file-draft-menang"
+                                id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
+                                placeholder="Name draft" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" style="font-weight: normal" value="" placeholder="Nama Document" />
-                        <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="document-name-draft"
+                                id="document-name-draft" style="font-weight: normal" value=""
+                                placeholder="Nama Document" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-draft" id="note-draft"
-                            value="" placeholder="Catatan" style="font-weight: normal" />
-                        <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note-draft"
+                                id="note-draft" value="" placeholder="Catatan" style="font-weight: normal" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor', {
-                                documentReady: true,
-                            });
-                        </script>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-draft").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-draft-menang">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            <script>
+                                var editor = new FroalaEditor('#froala-editor-draft-menang', {
+                                    documentReady: true,
+                                });
+                            </script>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-draft-menang").addEventListener("change", function() {
+                                    readFile(this.files[0], "#froala-editor-draft-menang");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
                 </div>
-                <!--end::Input group-->
-
-                <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-                </form>
-
-
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Draft Contract Tender Menang-->
+    <!--end::Modal - Draft Contract Tender Menang-->
 
-<!--begin::Modal - Review Tender Menang-->
-<div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Attachment</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
+    <!--begin::Modal - Review Tender Menang-->
+    <div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="1" name="is-tender-menang">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="file" style="font-weight: normal" class="form-control form-control-solid"
-                            name="attach-file-review" id="attach-file-review" value="" accept=".docx"
-                            placeholder="Name review" />
-                        <!--end::Input-->
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal" class="form-control form-control-solid"
+                                name="attach-file-review-menang" id="attach-file-review" value="" accept=".docx"
+                                placeholder="Name review" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-review"
-                            id="document-name-review" value="" style="font-weight: normal"
-                            placeholder="Nama Document" />
-                        <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="document-name-review"
+                                id="document-name-review" value="" style="font-weight: normal"
+                                placeholder="Nama Document" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-review" id="note-review"
-                            value="" style="font-weight: normal" placeholder="Catatan" />
-                        <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note-review"
+                                id="note-review" value="" style="font-weight: normal" placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor', {
-                                documentReady: true,
-                            });
-                        </script>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-review").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-review-menang">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            <script>
+                                var editor = new FroalaEditor('#froala-editor-review-menang', {
+                                    documentReady: true,
+                                });
+                            </script>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-review-menang").addEventListener("change", function() {
+                                    readFile(this.files[0], "#froala-editor-review-menang");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
                 </div>
-                <!--end::Input group-->
-
-                <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-                </form>
-
-
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Review Tender Menang-->
+    <!--end::Modal - Review Tender Menang-->
 
-<!--begin::Modal - Issue Project Tender Menang-->
-<div class="modal fade" id="kt_modal_issue_project_menang" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Attachment</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
+    <!--begin::Modal - Issue Project Tender Menang-->
+    <div class="modal fade" id="kt_modal_issue_project_menang" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="1" name="is-tender-menang">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid" name="attach-file-draft"
-                            id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
-                            placeholder="Name draft" />
-                        <!--end::Input-->
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" class="form-control form-control-solid"
+                                name="attach-file-issue-project-menang" id="attach-file-issue-project-menang"
+                                style="font-weight: normal" value="" accept=".docx"
+                                placeholder="Name issue-project-menang" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                            id="document-name-draft" style="font-weight: normal" value="" placeholder="Nama Document" />
-                        <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name-issue-project-menang" id="document-name-issue-project-menang"
+                                style="font-weight: normal" value="" placeholder="Nama Document" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-draft" id="note-draft"
-                            value="" placeholder="Catatan" />
-                        <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note-issue-project-menang"
+                                id="note-issue-project-menang" value="" placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor', {
-                                documentReady: true,
-                            });
-                        </script>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-draft").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-issue-project-menang">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            <script>
+                                var editor = new FroalaEditor('#froala-editor-issue-project-menang', {
+                                    documentReady: true,
+                                });
+                            </script>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-issue-project-menang").addEventListener("change", function() {
+                                    readFile(this.files[0], "#froala-editor-issue-project-menang");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-issue-project-tender-menang" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
                 </div>
-                <!--end::Input group-->
-
-                <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-                </form>
-
-
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Issue Project Tender Menang-->
+    <!--end::Modal - Issue Project Tender Menang-->
 
-<!--begin::Modal - Input Resiko Tender Menang-->
-<div class="modal fade" id="kt_modal_input_resiko_menang" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Attachment</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
+    <!--begin::Modal - Input Resiko Tender Menang-->
+    <div class="modal fade" id="kt_modal_input_resiko_menang" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="1" name="is-tender-menang">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid" name="attach-file-risk"
-                            id="attach-file-risk" value="" style="font-weight: normal" accept=".docx"
-                            placeholder="Name risk" />
-                        <!--end::Input-->
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" class="form-control form-control-solid" name="attach-file-risk-menang"
+                                id="attach-file-risk" value="" style="font-weight: normal" accept=".docx"
+                                placeholder="Name risk" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-risk"
-                            id="document-name-risk" style="font-weight: normal" value="" placeholder="Nama Document" />
-                        <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="document-name-risk-menang"
+                                id="document-name-risk" style="font-weight: normal" value=""
+                                placeholder="Nama Document" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="note-risk" id="note-risk"
-                            value="" placeholder="Catatan" />
-                        <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note-risk" id="note-risk"
+                                value="" placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor', {
-                                documentReady: true,
-                            });
-                        </script>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-risk").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-risk-menang">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            <script>
+                                var editor = new FroalaEditor('#froala-editor-risk-menang', {
+                                    documentReady: true,
+                                });
+                            </script>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-risk-menang").addEventListener("change", function() {
+                                    readFile(this.files[0], "#froala-editor-risk-menang");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-risk-tender-menang" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
                 </div>
-                <!--end::Input group-->
-
-                <button type="submit" id="save-risk-tender-menang" class="btn btn-lg btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-                </form>
-
-
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Input Resiko Tender Menang-->
+    <!--end::Modal - Input Resiko Tender Menang-->
 
-<!--begin::Modal - Qeustion Tender Menang-->
-<div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Add Attachment</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
-                    <!--end::Svg Icon-->
+    <!--begin::Modal - Question Tender Menang-->
+    <div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/question/upload" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Attachment</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="hidden" value="1" name="is-tender-menang">
-                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                            name="id-contract">
-                        <input type="file" class="form-control form-control-solid" name="attach-file-question"
-                            id="attach-file-question" value="" accept=".docx" placeholder="Name draft" />
-                        <!--end::Input-->
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/question/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" class="form-control form-control-solid"
+                                name="attach-file-question-menang" id="attach-file-question" value="" accept=".docx"
+                                placeholder="Name draft" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Nama Dokumen</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" name="document-name-question"
-                            id="document-name-question" style="font-weight: normal" value=""
-                            placeholder="Nama Document" />
-                        <!--end::Input-->
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="document-name-question"
+                                id="document-name-question" style="font-weight: normal" value=""
+                                placeholder="Nama Document" />
+                            <!--end::Input-->
 
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span style="font-weight: normal">Catatan</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" style="font-weight: normal" class="form-control form-control-solid"
-                            name="note-question" id="note-question" value="" placeholder="Catatan" />
-                        <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" style="font-weight: normal" class="form-control form-control-solid"
+                                name="note-question" id="note-question" value="" placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor', {
-                                documentReady: true,
-                            });
-                        </script>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-question").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-question-menang">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            <script>
+                                var editor = new FroalaEditor('#froala-editor-question-menang', {
+                                    documentReady: true,
+                                });
+                            </script>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-question-menang").addEventListener("change", function() {
+                                    readFile(this.files[0], "#froala-editor-question-menang");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
                 </div>
-                <!--end::Input group-->
-
-                <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
-                    data-bs-dismiss="modal">Save</button>
-                </form>
-
-
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal body-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal content-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Qeustion Tender Menang-->
+    <!--end::Modal - Question Tender Menang-->
+@endif
 
 <!--begin::Modal - Laporan Bulanan-->
 <div class="modal fade" id="kt_modal_laporan_bulanan" tabindex="-1" aria-hidden="true">
@@ -3484,11 +3470,11 @@
 
 
                         {{-- begin::Froala Editor --}}
-                        <div id="froala-editor">
+                        <div id="froala-editor-bulanan">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
                         <script>
-                            var editor = new FroalaEditor('#froala-editor', {
+                            var editor = new FroalaEditor('#froala-editor-bulanan-menang', {
                                 documentReady: true,
                             });
                         </script>
@@ -3496,7 +3482,7 @@
                         {{-- begin::Read File --}}
                         <script>
                             document.getElementById("attach-file-bulanan").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor");
+                                readFile(this.files[0], "#froala-editor-bulanan-menang");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -3621,7 +3607,7 @@
     <!--end::Modal dialog-->
 </div>
 
-<!--end::Modal - Review-->
+<!--end::Modal - Issue Project-->
 <!--begin::Modal - Review-->
 <div class="modal fade" id="kt_modal_create_review" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
