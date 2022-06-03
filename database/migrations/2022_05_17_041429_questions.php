@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('questions_project', function (Blueprint $table) {
             $table->bigIncrements('id_question');
             $table->integer("id_contract");
-            $table->uuid("id_document");
+            $table->mediumText("id_document");
             $table->text("document_name_question");
             $table->longText("note_question");
             $table->boolean("tender_menang");

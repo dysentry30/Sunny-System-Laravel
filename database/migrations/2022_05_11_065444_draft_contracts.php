@@ -15,10 +15,15 @@ return new class extends Migration
     {
         Schema::create("draft_contracts", function (Blueprint $table) {
             $table->id("id_draft");
-            $table->longText("id_document");
-            $table->mediumText("draft_name");
+            $table->mediumText("id_document");
             $table->mediumInteger("id_contract");
+            $table->mediumText("document_name");
+            $table->mediumText("created_by");
+            $table->date("start_date");
             $table->longText("draft_note");
+            $table->text("title_draft");
+            $table->text("pasals");
+            $table->mediumInteger("draft_contract_version");
             $table->boolean("tender_menang");
             $table->timestamp("created_at")->useCurrent();
         });

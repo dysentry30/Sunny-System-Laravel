@@ -1,4 +1,4 @@
-@extends('template.header')
+@extends('template.main')
 @section('title', 'Document History')
 <style>
     .list-link {
@@ -19,15 +19,17 @@
 @section('content')
     <div class="list-link">
         <h3 class="text-white text-center">Document History</h3>
-        <?php $file_initial = explode('_', $files[0])[0]; ?>
         <div class="row d-flex">
-            <a href="/document/view/{{ $id }}/{{ $file_initial }}" class="btn btn-primary my-2"
-                style="background: rgb(8, 149, 162)">Version 1</a>
-            @foreach ($files as $key => $file)
-                <a href="/document/view/{{ $id }}/{{ $file }}" class="btn btn-primary my-2"
-                    style="background: rgb(8, 149, 162)">Version {{ $key += 2 }}</a>
-            @endforeach
+            @if (count($files) >= 1)
+                <?php $file_initial = explode('_', $files[0])[0]; ?>
+                @foreach ($files as $key => $file)
+                    <?php
+                    $file = str_replace('.docx', '', $file);
+                    ?>
+                    <a href="/document/view/{{ $id }}/{{ $file }}" class="btn btn-primary my-2"
+                        style="background: rgb(8, 149, 162)">Version {{ $key += 1 }}</a>
+                @endforeach
+            @endif
         </div>
     </div>
 @endsection
-@extends('template.footer')

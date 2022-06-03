@@ -1,0 +1,178 @@
+.calendar {
+    --side-padding: 20px;
+    --border-radius: 34px;
+    --accent-br: 15px;
+    width: 250px;
+}
+.calendar select {
+    background-color: #f3f4f6;
+    padding: 15px 20px;
+}
+.calendar__opts,
+.calendar__buttons {
+    background-color: #fff;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 15px;
+}
+.calendar__opts {
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    padding: 20px var(--side-padding);
+}
+.calendar__body {
+    background-image: linear-gradient(to bottom, #f3f4f6, #fff);
+}
+.calendar__days {
+    background-color: #fff;
+    padding: 0 var(--side-padding) 10px;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.calendar__days > div {
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.02rem;
+    color: #c5c8ca;
+}
+.calendar__dates {
+    padding: 10px var(--side-padding);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+}
+.calendar__date {
+    --height: calc(400px / 6 - var(--side-padding));
+    text-align: center;
+    height: var(--height);
+    line-height: var(--height);
+    font-weight: 600;
+    font-size: 1.02rem;
+    cursor: pointer;
+    position: relative;
+}
+.calendar__date::before {
+    content: "";
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0);
+    width: 100%;
+    height: calc(var(--height) * 0.9);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: var(--accent-br);
+    transition: background-color 0.3s ease;
+}
+.calendar__date:not(.calendar__date--selected):not(.calendar__date--grey):hover::before {
+    background-color: #ededed;
+}
+.calendar__date--grey {
+    color: #c5c8ca;
+    cursor: not-allowed;
+}
+.calendar__date--selected {
+    color: #e08c16;
+}
+.calendar__date--selected::before {
+    background-color: #ffeaec;
+    border-radius: 0px;
+}
+.calendar__date--first-date::before {
+    border-top-left-radius: var(--accent-br);
+    border-bottom-left-radius: var(--accent-br);
+}
+.calendar__date--last-date::before {
+    border-top-right-radius: var(--accent-br);
+    border-bottom-right-radius: var(--accent-br);
+}
+.calendar__date--range-start::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    border-radius: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #e08c16;
+    width: 10px;
+    height: 4px;
+}
+.calendar__date--range-end {
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+}
+.calendar__date--range-end::before {
+    box-shadow: 0 15px 20px -3px #e38f1a;
+    background-color: #e08c16;
+    border-radius: var(--accent-br);
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+}
+/* .calendar__date--range-end::after {
+    content: "";
+    position: absolute;
+    height: calc(var(--height) * 0.9);
+    background-color: #ffeaec;
+    width: 50px;
+    top: 50%;
+    right: 50%;
+    transform: translateY(-50%);
+} */
+.calendar__date span {
+    position: relative;
+    z-index: 1;
+}
+.calendar__buttons {
+    padding: 10px var(--side-padding) 20px;
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+}
+.calendar__button {
+    cursor: pointer;
+}
+.calendar__button--grey {
+    background-color: #c6c6c6;
+}
+.calendar__button--primary {
+    background-color: #1752ff;
+    color: #fff;
+    transition: box-shadow 0.3s cubic-bezier(0.21, 0.68, 0.09, 0.27),
+        transform 0.2s linear;
+}
+.calendar__button--primary:hover {
+    box-shadow: 0 20px 30px -13px rgba(23, 82, 255, 0.45);
+    transform: translateY(-3px);
+}
+.calendar__button--primary:active {
+    box-shadow: 0 10px 10px -6px rgba(23, 82, 255, 0.45);
+    transform: translateY(-1px);
+}
+
+/* body {
+    display: grid;
+    place-items: center;
+    background-color: #eaedf2;
+    height: 100vh;
+    font-family: "Nunito", sans-serif;
+    font-size: 14px;
+    margin: 3vmin;
+} */
+
+select,
+button {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 1.02rem;
+    border-radius: 20px;
+    outline: none;
+    border: 0;
+    padding: 15px 20px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+select {
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='utf-8'%3F%3E%3C!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'%3E%3Csvg version='1.1' id='Capa_1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' width='960px' height='560px' viewBox='0 0 960 560' enable-background='new 0 0 960 560' xml:space='preserve'%3E%3Cg id='Rounded_Rectangle_33_copy_4_1_'%3E%3Cpath d='M480,344.181L268.869,131.889c-15.756-15.859-41.3-15.859-57.054,0c-15.754,15.857-15.754,41.57,0,57.431l237.632,238.937 c8.395,8.451,19.562,12.254,30.553,11.698c10.993,0.556,22.159-3.247,30.555-11.698l237.631-238.937 c15.756-15.86,15.756-41.571,0-57.431s-41.299-15.859-57.051,0L480,344.181z'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - var(--side-padding)) center;
+}

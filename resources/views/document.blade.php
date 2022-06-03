@@ -1,4 +1,4 @@
-@extends('template.header')
+@extends('template.main')
 @section('title', 'Document Viewer')
 <style>
     #froala-editor {
@@ -22,15 +22,6 @@
         animation-iteration-count: infinite;
         animation-timing-function: linear;
         display: none;
-    }
-
-    @media only print {
-        #A {
-            position: absolute;
-            top: 0;
-            left: 0;
-            scrollbar-width: 0;
-        }
     }
 
     @keyframes rotation {
@@ -67,6 +58,10 @@
     <div id="froala-editor">
     </div>
     {{-- end::Froala Editor --}}
+@endsection
+@section('js-script')
+
+    <script src="{{ asset('/js/html-docx.js') }}" crossorigin="anonymous"></script>
     {{-- begin::Read File --}}
     <script>
         var editor = new FroalaEditor('#froala-editor', {
@@ -87,9 +82,9 @@
             file.onloadend = () => {
                 const docx2html = require("docx2html");
                 const content = docx2html(file.result).then(html => {
-                    if (show) {
-                        document.querySelector(".fr-view").innerHTML = html;
-                    }
+                    // if (show) {
+                    // }
+                    document.querySelector(".fr-view").innerHTML = html;
                     data = html;
                     // document.getElementById("A").remove();
                 });
@@ -99,7 +94,7 @@
             // End::Read DOCX Content
         }
         async function saveDocument() {
-            const html = document.querySelector("#A section");
+            const html = document.querySelector(".fr-view #A section");
             const circleLoadingElt = document.querySelector(".circle-loading");
             const formData = new FormData();
             // const editor = new FroalaEditor('div#froala-editor', {}, function() {
@@ -107,19 +102,29 @@
 
             // });
             // const content = htmlDocx.asBlob(html.innerHTML);
-
+            const parser = new XMLSerializer().serializeToString(html);
+            // console.log(parser);
+            // return;
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("id", "{{ $id }}");
             formData.append("id_document", "{{ $id_document }}");
-            formData.append("content_word", html.innerHTML);
+            formData.append("content_word", parser);
             circleLoadingElt.style.display = "block";
             const uploadFile = await fetch(
                 "/document/view/{{ $id }}/{{ $id_document }}/save", {
                     method: "POST",
                     body: formData,
+                    header: {
+                        "content-type": "application/json",
+                    }
                 }).then(res => res.json());
+            console.log(uploadFile);
             circleLoadingElt.style.display = "none";
-            window.location.href = uploadFile.redirect;
+            if (uploadFile.status == "success") {
+                console.log(uploadFile);
+                window.location.href = uploadFile.redirect;
+            }
+            circleLoadingElt.style.display = "none";
             return;
             // const document = await readFile("{{ $document }}", false);
         }
@@ -130,5 +135,3 @@
     </script>
     {{-- end::Read File --}}
 @endsection
-<script src="{{ asset('/js/html-docx.js') }}" crossorigin="anonymous"></script>
-@extends('template.footer')

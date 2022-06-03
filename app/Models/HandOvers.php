@@ -9,4 +9,5 @@ class HandOvers extends Model
 {
     use HasFactory;
     protected $primaryKey = "id_handover";
+    protected $table = "hand_overs";
 }

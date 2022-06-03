@@ -1,6 +1,17 @@
-@extends('template.header')
+@extends('template.main')
+<style>
+    input[type="date"]::-webkit-input-placeholder {
+        visibility: hidden !important;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        display: none;
+    }
+
+</style>
 @section('title', 'View Contract')
 @section('content')
+
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
         <!--begin::Page-->
@@ -172,6 +183,7 @@
                     <!--end::Container-->
                 </div>
                 <!--end::Header-->
+
                 @if (!isset($contract))
 
                     <!--begin::Content-->
@@ -234,29 +246,28 @@
                                                     <div class="form-group">
 
                                                         <div id="stage-button" class="stage-list">
-                                                            <a href="#"
-                                                                class="stage-button color-is-default stage-is-done is-done"
+                                                            <a href="#" class="stage-button color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Draft
                                                             </a>
                                                             <a href="#"
-                                                                class="stage-button color-is-default is-done stage-is-done"
+                                                                class="stage-button color-is-default stage-is-not-active"
                                                                 style="outline: 0px; cursor: pointer;">
                                                                 Terkontrak
                                                             </a>
                                                             <a href="#"
-                                                                class="stage-button color-is-default is-done stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;">
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: not-allowed;">
                                                                 Pelaksanaan
                                                             </a>
                                                             <a href="#"
-                                                                class="stage-button color-is-default is-done stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;">
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: not-allowed;">
                                                                 Addendum Kontrak
                                                             </a>
                                                             <a href="#"
                                                                 class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: pointer;">
+                                                                style="outline: 0px; cursor: not-allowed;">
                                                                 Serah Terima Pekerjaan
                                                             </a>
                                                             <a href="#"
@@ -359,6 +370,10 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
 
+                                                                <a href="#" class="btn btn-sm btn-secondary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_calendar-start"
+                                                                    id="start-date-modal">+</a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12"
                                                                     placeholder="Select a date" value="" name="start-date"
@@ -384,6 +399,9 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
+                                                                <a href="#" class="btn btn-secondary" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_calendar-end"
+                                                                    id="end-date-modal">+</a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12" value=""
                                                                     placeholder="Select a date" id="due-date"
@@ -554,7 +572,8 @@
                                                 style="outline: 0px; cursor: pointer;">
                                                 Pelaksanaan
                                             </a>
-                                            <a href="#" role="link" class="stage-button color-is-default "
+                                            <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
+                                                role="link" class="stage-button color-is-default "
                                                 style="outline: 0px; cursor: pointer;">
                                                 Addendum Kontrak
                                             </a>
@@ -591,24 +610,26 @@
                                     }
 
                                 }
+                                if (stage.innerText !== "Addendum Kontrak") {
 
-                                stage.addEventListener("click", async e => {
-                                    e.stopPropagation();
-                                    const stage = e.target.getAttribute("stage");
-                                    const formData = new FormData();
-                                    formData.append("_token", "{{ csrf_token() }}");
-                                    formData.append("stage", stage);
-                                    // formData.append("id", "");
-                                    formData.append("id_contract", "{{ $contract->id_contract }}");
-                                    const setStage = await fetch("/stage/save", {
-                                        method: "POST",
-                                        body: formData
-                                    }).then(res => res.json());
-                                    if (setStage.link) {
-                                        // window.location.href = setStage.link;
-                                        window.location.reload();
-                                    }
-                                })
+                                    stage.addEventListener("click", async e => {
+                                        e.stopPropagation();
+                                        const stage = e.target.getAttribute("stage");
+                                        const formData = new FormData();
+                                        formData.append("_token", "{{ csrf_token() }}");
+                                        formData.append("stage", stage);
+                                        // formData.append("id", "");
+                                        formData.append("id_contract", "{{ $contract->id_contract }}");
+                                        const setStage = await fetch("/stage/save", {
+                                            method: "POST",
+                                            body: formData
+                                        }).then(res => res.json());
+                                        if (setStage.link) {
+                                            // window.location.href = setStage.link;
+                                            window.location.reload();
+                                        }
+                                    });
+                                }
                             });
                         </script>
                         {{-- end:: Stages script --}}
@@ -616,6 +637,48 @@
 
                         <!--begin::Header Contract-->
                         <div class="col-xl-15">
+                            @if (Session::has('failed') || Session::has('success'))
+                                {{-- Begin:: Alert --}}
+                                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                    <symbol id="check-circle-fill" fill="#0f5132" viewBox="0 0 16 16">
+                                        <path
+                                            d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                    </symbol>
+                                    <symbol id="exclamation-triangle-fill" fill="#842029" viewBox="0 0 16 16">
+                                        <path
+                                            d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                    </symbol>
+                                </svg>
+                                @if (Session::has('failed'))
+                                    <div class="alert alert-danger alert-dismissible d-flex align-items-center"
+                                        role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                            aria-label="Danger:">
+                                            <use xlink:href="#exclamation-triangle-fill" />
+                                        </svg>
+                                        <div style="color: #842029;">
+                                            {{ Session::get('failed') }}
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+
+                                    </div>
+                                @elseif (Session::has('success'))
+                                    <div class="alert alert-success alert-dismissible d-flex align-items-center"
+                                        role="alert">
+                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                            aria-label="Success:">
+                                            <use xlink:href="#check-circle-fill" />
+                                        </svg>
+                                        <div style="color: #0f5132;">
+                                            {{ Session::get('success') }}
+                                        </div>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                @endif
+                                {{-- End:: Alert --}}
+                            @endif
                             <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
                                 <div class="card-body pt-5">
@@ -685,12 +748,16 @@
                                                 </label>
                                                 <!--end::Label-->
                                                 <!--begin::Input-->
-
-                                                <input type="Date" class="form-control form-control-solid ps-12"
+                                                <a href="#" class="btn btn-sm mx-3"
+                                                    style="background: transparent;width:1rem;height:2.3rem;"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
+                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                        style="color: #e08c16"></i></a>
+                                                <input type="Date" data-bs-target="#kt_modal_calendar-start"
+                                                    class="form-control form-control-solid ps-12"
                                                     placeholder="Select a date"
                                                     value="{{ date_format($contract->contract_in ?? now(), 'Y-m-d') }}"
                                                     name="start-date" id="start-date" />
-
                                                 <!--end::Input-->
                                             </div>
                                             <!--end::Input group-->
@@ -704,6 +771,12 @@
                                                     <span>Tanggal Berakhir Kontrak</span>
                                                 </label>
                                                 <!--end::Label-->
+
+                                                <a href="#" class="btn btn-sm mx-3"
+                                                    style="background: transparent;width:1rem;height:2.3rem;"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-end"><i
+                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                        style="color: #e08c16"></i></a>
                                                 <!--begin::Input-->
                                                 <input type="Date" class="form-control form-control-solid ps-12"
                                                     value="{{ date_format($contract->contract_out ?? now(), 'Y-m-d') }}"
@@ -764,11 +837,12 @@
 
                                     <!--End begin::Row-->
                                 </div>
-
-
                             </div>
                         </div>
-                        <!--end::Header Contract-->
+                    </div>
+                </div>
+            </div>
+            <!--end::Header Contract-->
         </form>
         <!--begin::Content-->
         <div class="col-xl-15">
@@ -873,15 +947,11 @@
 
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                     Draft Kontrak
-                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_create_proyek">+</a>
+                                    {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_proyek">+</a> --}}
+                                    <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract"
+                                        Id="Plus">+</a>
                                 </h3>
-                                @isset($error)
-                                    @foreach ($error->all() as $error)
-                                        <small style="color: rgb(228, 31, 31)">{{ $error }}</small>
-                                    @endforeach
-
-                                @endisset
 
                                 <!--begin:Table: Draft Contract-->
                                 <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
@@ -906,16 +976,23 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a target="_blank"
+                                                            {{-- <a target="_blank"
                                                                 href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
                                                                 class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $draftContract->draft_name }}
+                                                            </a> --}}
+                                                            <a target="_blank"
+                                                                href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $draftContract->title_draft }}
                                                             </a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $draftContract->id_document }}
                                                             </a>
                                                         </td>
@@ -993,7 +1070,9 @@
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $reviewProject->id_document }}
                                                             </a>
                                                         </td>
@@ -1063,7 +1142,7 @@
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a target="_blank"
-                                                                href="/document/view/${{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
+                                                                href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
                                                                 class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $issueProject->document_name_issue }}
                                                             </a>
@@ -1071,8 +1150,10 @@
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                                {{ $issueProject->id_contract }}
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $issueProject->id_document }}
                                                             </a>
                                                         </td>
                                                         <!--end::Name=-->
@@ -1083,7 +1164,7 @@
                                                         </td>
                                                         <!--end::Kode=-->
                                                         <!--begin::Unit=-->
-                                                        <td>{{ $issueProject->draft_note }}
+                                                        <td>{{ $issueProject->note_issue }}
                                                         </td>
                                                         <!--end::Unit=-->
                                                     </tr>
@@ -1148,7 +1229,9 @@
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $inputRisk->id_risk }}/{{ $inputRisk->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
                                                                 {{ $inputRisk->id_document }}
                                                             </a>
                                                         </td>
@@ -1226,8 +1309,10 @@
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                                {{ $questionProject->id_contract }}
+                                                            <a target="_blank"
+                                                                href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                                class="text-gray-800 text-hover-primary mb-1">
+                                                                {{ $questionProject->id_document }}
                                                             </a>
                                                         </td>
                                                         <!--end::Name=-->
@@ -1310,8 +1395,8 @@
                             <div class="card-title m-0">
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                     Draft Kontrak
-                                    <a href="#" Id="Plus" data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_draft_menang">+</a>
+                                    <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/tender-menang"
+                                        Id="Plus">+</a>
                                 </h3>
 
                                 <!--begin:Table: Review-->
@@ -1336,14 +1421,18 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                            {{ $draftContract->draft_name }}
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $draftContract->title_draft }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $draftContract->id_document }}
                                                         </a>
                                                     </td>
@@ -1410,14 +1499,18 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $review->document_name_review }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $review->id_document }}
                                                         </a>
                                                     </td>
@@ -1479,14 +1572,17 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a href="/document/view/{{ $issue->id_issue }}/{{ $issue->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $issue->document_name_issue }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $issue->id_issue }}/{{ $issue->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $issue->id_document }}
                                                         </a>
                                                     </td>
@@ -1552,14 +1648,17 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $risk->id_risk }}/{{ $risk->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $risk->document_name_risk }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a href="/document/view/{{ $risk->id_risk }}/{{ $risk->id_document }}"
+                                                            target="_blank" class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $risk->id_document }}
                                                         </a>
                                                     </td>
@@ -1627,7 +1726,7 @@
                                                     <!--begin::Name=-->
                                                     <td>
                                                         <a target="_blank"
-                                                            href="/document/view/{{ $question->id_document }}"
+                                                            href="/document/view/{{ $question->id_question }}/{{ $question->id_document }}"
                                                             class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $question->document_name_question }}
                                                         </a>
@@ -1635,14 +1734,17 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $question->id_question }}/{{ $question->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $question->id_document }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Kode=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                        <a target="_blank" href="#"
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ date_format(new DateTime($question->created_at), 'd M, Y') }}</a>
                                                         </a>
                                                     </td>
@@ -1675,7 +1777,7 @@
                         </div>
                         <!--end:::Tab pane History-->
 
-                        <!--begin:::Tab pane Performance-->
+                        <!--begin:::Tab pane Laporan Bulanan-->
                         <div class="tab-pane fade" id="kt_user_view_overview_Performance" role="tabpanel">
                             <!--begin::Card title-->
                             <div class="card-title m-0">
@@ -1716,7 +1818,9 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $monthlyReport->id_document }}
                                                         </a>
                                                     </td>
@@ -1752,9 +1856,78 @@
                                     <!--end::Table body-->
                                 </table>
                                 <!--End:Table: Laporan Bulanan-->
+                                <br>
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Addendum Kontrak
+                                    <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
+                                        Id="Plus">+</a>
+                                </h3>
+
+                                <!--begin:Table: Laporan Bulanan-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">No. Dokumen</th>
+                                            <th class="min-w-125px">Dibuat Oleh
+                                            </th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract))
+                                            @forelse ($contract->addendumContracts as $addendumContract)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank"
+                                                            href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract/{{ $addendumContract->id_addendum }}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $addendumContract->no_addendum }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $addendumContract->created_by }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ date_format(new DateTime($addendumContract->created_at), 'd M, Y') }}</a>
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--End:Table: Laporan Bulanan-->
                             </div>
                         </div>
-                        <!--end:::Tab pane Performance-->
+                        <!--end:::Tab pane Laporan Bulanan-->
 
                         <!--begin:::Tab pane Serah Terima-->
                         <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
@@ -1796,7 +1969,8 @@
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                        <a href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
+                                                            target="_blank" class="text-gray-800 text-hover-primary mb-1">
                                                             {{ $hand_over->id_document }}
                                                         </a>
                                                     </td>
@@ -2703,6 +2877,11 @@
                         <input type="file" style="font-weight: normal" class="form-control form-control-solid"
                             name="attach-file-terima" id="attach-file-terima" value="" accept=".docx"
                             placeholder="Name terima" />
+                        @error('attach-file-terima')
+                            <h6>
+                                <b style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                            </h6>
+                        @enderror
                         <!--end::Input-->
 
                         <!--begin::Label-->
@@ -2732,18 +2911,20 @@
                         <div id="froala-editor-terima">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor-terima', {
-                                documentReady: true,
-                            });
-                        </script>
+
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-terima").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor-terima");
+                            let contentHtmlTerima = "";
+                            document.getElementById("attach-file-terima").addEventListener("change", async function() {
+                                contentHtmlTerima = await readFile(this.files[0], "#froala-editor-terima");
+                                document.querySelector(`#content-word-terima`).innerText = contentHtmlTerima;
+
                             });
                         </script>
+                        {{-- Begin::input textarea --}}
+                        <textarea name="content-word-terima" class="form-control form-control-solid" id="content-word-terima"></textarea>
+                        {{-- Begin::input textarea --}}
                         {{-- end::Read File --}}
                 </div>
                 <!--end::Input group-->
@@ -2835,16 +3016,11 @@
                         <div id="froala-editor-draft">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor-draft', {
-                                documentReady: true,
-                            });
-                        </script>
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-draft").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor-draft");
+                            document.getElementById("attach-file-draft").addEventListener("change", async function() {
+                                await readFile(this.files[0], "#froala-editor-draft");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -2864,540 +3040,515 @@
     <!--end::Modal dialog-->
 </div>
 <!--end::Modal - Draft Contract-->
+@isset($contract)
 
-@if ($contract->stages > 1)
+    @if ($contract->stages > 1)
 
-    <!--begin::Modal - Draft Contract Tender Menang-->
-    <div class="modal fade" id="kt_modal_draft_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+        <!--begin::Modal - Draft Contract Tender Menang-->
+        <div class="modal fade" id="kt_modal_draft_menang" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Attachment</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
 
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" class="form-control form-control-solid" name="attach-file-draft-menang"
-                                id="attach-file-draft" style="font-weight: normal" value="" accept=".docx"
-                                placeholder="Name draft" />
-                            <!--end::Input-->
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/draft-contract/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Attachment</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" value="1" name="is-tender-menang">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="file" class="form-control form-control-solid" name="attach-file-draft-menang"
+                                    id="attach-file-draft-menang" style="font-weight: normal" value="" accept=".docx"
+                                    placeholder="Name draft" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="document-name-draft"
-                                id="document-name-draft" style="font-weight: normal" value=""
-                                placeholder="Nama Document" />
-                            <!--end::Input-->
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nama Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="document-name-draft"
+                                    id="document-name-draft" style="font-weight: normal" value=""
+                                    placeholder="Nama Document" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-draft"
-                                id="note-draft" value="" placeholder="Catatan" style="font-weight: normal" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Catatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="note-draft"
+                                    id="note-draft" value="" placeholder="Catatan" style="font-weight: normal" />
+                                <!--end::Input-->
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-draft-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-draft-menang', {
-                                    documentReady: true,
-                                });
-                            </script>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-draft-menang").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-draft-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
+                                {{-- begin::Froala Editor --}}
+                                <div id="froala-editor-draft-menang">
+                                    <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                </div>
+                                {{-- end::Froala Editor --}}
+                                {{-- begin::Read File --}}
+                                <script>
+                                    document.getElementById("attach-file-draft-menang").addEventListener("change", async function() {
+                                        await readFile(this.files[0], "#froala-editor-draft-menang");
+                                    });
+                                </script>
+                                {{-- end::Read File --}}
+                        </div>
+                        <!--end::Input group-->
+
+                        <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+
+
                     </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-draft-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
+                    <!--end::Modal body-->
                 </div>
-                <!--end::Modal body-->
+                <!--end::Modal content-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Draft Contract Tender Menang-->
+        <!--end::Modal - Draft Contract Tender Menang-->
 
-    <!--begin::Modal - Review Tender Menang-->
-    <div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+        <!--begin::Modal - Review Tender Menang-->
+        <div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Attachment</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
 
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" style="font-weight: normal" class="form-control form-control-solid"
-                                name="attach-file-review-menang" id="attach-file-review" value="" accept=".docx"
-                                placeholder="Name review" />
-                            <!--end::Input-->
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Attachment</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" value="1" name="is-tender-menang">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="file" style="font-weight: normal" class="form-control form-control-solid"
+                                    name="attach-file-review" id="attach-file-review-menang" value="" accept=".docx"
+                                    placeholder="Name review" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="document-name-review"
-                                id="document-name-review" value="" style="font-weight: normal"
-                                placeholder="Nama Document" />
-                            <!--end::Input-->
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nama Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="document-name-review"
+                                    id="document-name-review" value="" style="font-weight: normal"
+                                    placeholder="Nama Document" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-review"
-                                id="note-review" value="" style="font-weight: normal" placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Catatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="note-review"
+                                    id="note-review" value="" style="font-weight: normal" placeholder="Catatan" />
+                                <!--end::Input-->
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-review-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-review-menang', {
-                                    documentReady: true,
-                                });
-                            </script>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-review-menang").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-review-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
+                                {{-- begin::Froala Editor --}}
+                                <div id="froala-editor-review-menang">
+                                    <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                </div>
+                                {{-- end::Froala Editor --}}
+                                {{-- begin::Read File --}}
+                                <script>
+                                    document.getElementById("attach-file-review-menang").addEventListener("change", async function() {
+                                        await readFile(this.files[0], "#froala-editor-review-menang");
+                                    });
+                                </script>
+                                {{-- end::Read File --}}
+                        </div>
+                        <!--end::Input group-->
+
+                        <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+
+
                     </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
+                    <!--end::Modal body-->
                 </div>
-                <!--end::Modal body-->
+                <!--end::Modal content-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Review Tender Menang-->
+        <!--end::Modal - Review Tender Menang-->
 
-    <!--begin::Modal - Issue Project Tender Menang-->
-    <div class="modal fade" id="kt_modal_issue_project_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+        <!--begin::Modal - Issue Project Tender Menang-->
+        <div class="modal fade" id="kt_modal_issue_project_menang" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Attachment</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
 
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" class="form-control form-control-solid"
-                                name="attach-file-issue-project-menang" id="attach-file-issue-project-menang"
-                                style="font-weight: normal" value="" accept=".docx"
-                                placeholder="Name issue-project-menang" />
-                            <!--end::Input-->
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Attachment</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" value="1" name="is-tender-menang">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="file" class="form-control form-control-solid" name="attach-file-issue"
+                                    id="attach-file-issue-project-menang" style="font-weight: normal" value=""
+                                    accept=".docx" placeholder="Name Issue" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid"
-                                name="document-name-issue-project-menang" id="document-name-issue-project-menang"
-                                style="font-weight: normal" value="" placeholder="Nama Document" />
-                            <!--end::Input-->
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nama Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="document-name-issue"
+                                    id="document-name-issue-project" style="font-weight: normal" value=""
+                                    placeholder="Nama Document" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-issue-project-menang"
-                                id="note-issue-project-menang" value="" placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Catatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="note-issue"
+                                    id="note-issue-project-menang" value="" placeholder="Catatan" />
+                                <!--end::Input-->
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-issue-project-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-issue-project-menang', {
-                                    documentReady: true,
-                                });
-                            </script>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-issue-project-menang").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-issue-project-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
+                                {{-- begin::Froala Editor --}}
+                                <div id="froala-editor-issue-project-menang">
+                                    <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                </div>
+                                {{-- end::Froala Editor --}}
+                                {{-- begin::Read File --}}
+                                <script>
+                                    document.getElementById("attach-file-issue-project-menang").addEventListener("change", async function() {
+                                        await readFile(this.files[0], "#froala-editor-issue-project-menang");
+                                    });
+                                </script>
+                                {{-- end::Read File --}}
+                        </div>
+                        <!--end::Input group-->
+
+                        <button type="submit" id="save-issue-project-tender-menang" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+
+
                     </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-issue-project-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
+                    <!--end::Modal body-->
                 </div>
-                <!--end::Modal body-->
+                <!--end::Modal content-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Issue Project Tender Menang-->
+        <!--end::Modal - Issue Project Tender Menang-->
 
-    <!--begin::Modal - Input Resiko Tender Menang-->
-    <div class="modal fade" id="kt_modal_input_resiko_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+        <!--begin::Modal - Input Resiko Tender Menang-->
+        <div class="modal fade" id="kt_modal_input_resiko_menang" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Attachment</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
 
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" class="form-control form-control-solid" name="attach-file-risk-menang"
-                                id="attach-file-risk" value="" style="font-weight: normal" accept=".docx"
-                                placeholder="Name risk" />
-                            <!--end::Input-->
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Attachment</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" value="1" name="is-tender-menang">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="file" class="form-control form-control-solid" name="attach-file-risk"
+                                    id="attach-file-risk-menang" value="" style="font-weight: normal" accept=".docx"
+                                    placeholder="Name risk" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="document-name-risk-menang"
-                                id="document-name-risk" style="font-weight: normal" value=""
-                                placeholder="Nama Document" />
-                            <!--end::Input-->
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nama Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="document-name-risk"
+                                    id="document-name-risk" style="font-weight: normal" value=""
+                                    placeholder="Nama Document" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-risk" id="note-risk"
-                                value="" placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Catatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="note-risk" id="note-risk"
+                                    value="" placeholder="Catatan" />
+                                <!--end::Input-->
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-risk-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-risk-menang', {
-                                    documentReady: true,
-                                });
-                            </script>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-risk-menang").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-risk-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
+                                {{-- begin::Froala Editor --}}
+                                <div id="froala-editor-risk-menang">
+                                    <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                </div>
+                                {{-- end::Froala Editor --}}
+                                {{-- begin::Read File --}}
+                                <script>
+                                    document.getElementById("attach-file-risk-menang").addEventListener("change", async function() {
+                                        await readFile(this.files[0], "#froala-editor-risk-menang");
+                                    });
+                                </script>
+                                {{-- end::Read File --}}
+                        </div>
+                        <!--end::Input group-->
+
+                        <button type="submit" id="save-risk-tender-menang" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+
+
                     </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-risk-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
+                    <!--end::Modal body-->
                 </div>
-                <!--end::Modal body-->
+                <!--end::Modal content-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Input Resiko Tender Menang-->
+        <!--end::Modal - Input Resiko Tender Menang-->
 
-    <!--begin::Modal - Question Tender Menang-->
-    <div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
+        <!--begin::Modal - Question Tender Menang-->
+        <div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-900px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Add Attachment</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                        fill="black" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
                     </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
 
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/question/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" class="form-control form-control-solid"
-                                name="attach-file-question-menang" id="attach-file-question" value="" accept=".docx"
-                                placeholder="Name draft" />
-                            <!--end::Input-->
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-5">
+                            <form action="/question/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Attachment</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="hidden" value="1" name="is-tender-menang">
+                                <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                    name="id-contract">
+                                <input type="file" class="form-control form-control-solid" name="attach-file-question"
+                                    id="attach-file-question-menang" value="" accept=".docx" placeholder="Name draft" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="document-name-question"
-                                id="document-name-question" style="font-weight: normal" value=""
-                                placeholder="Nama Document" />
-                            <!--end::Input-->
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Nama Dokumen</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" name="document-name-question"
+                                    id="document-name-question-menang" style="font-weight: normal" value=""
+                                    placeholder="Nama Document" />
+                                <!--end::Input-->
 
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" style="font-weight: normal" class="form-control form-control-solid"
-                                name="note-question" id="note-question" value="" placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Catatan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" style="font-weight: normal" class="form-control form-control-solid"
+                                    name="note-question" id="note-question" value="" placeholder="Catatan" />
+                                <!--end::Input-->
+                                <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
 
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-question-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-question-menang', {
-                                    documentReady: true,
-                                });
-                            </script>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-question-menang").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-question-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
+                                {{-- begin::Froala Editor --}}
+                                <div id="froala-editor-question-menang">
+                                    <h1>Attach file with <b>.DOCX</b> format only</h1>
+                                </div>
+                                {{-- end::Froala Editor --}}
+                                {{-- begin::Read File --}}
+                                <script>
+                                    document.getElementById("attach-file-question-menang").addEventListener("change", async function() {
+                                        await readFile(this.files[0], "#froala-editor-question-menang");
+                                    });
+                                </script>
+                                {{-- end::Read File --}}
+                        </div>
+                        <!--end::Input group-->
+
+                        <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+                        </form>
+
+
                     </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
+                    <!--end::Modal body-->
                 </div>
-                <!--end::Modal body-->
+                <!--end::Modal content-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Question Tender Menang-->
-@endif
+        <!--end::Modal - Question Tender Menang-->
+    @endif
+@endisset
 
 <!--begin::Modal - Laporan Bulanan-->
 <div class="modal fade" id="kt_modal_laporan_bulanan" tabindex="-1" aria-hidden="true">
@@ -3470,19 +3621,14 @@
 
 
                         {{-- begin::Froala Editor --}}
-                        <div id="froala-editor-bulanan">
+                        <div id="froala-editor-bulanan-menang">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor-bulanan-menang', {
-                                documentReady: true,
-                            });
-                        </script>
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-bulanan").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor-bulanan-menang");
+                            document.getElementById("attach-file-bulanan").addEventListener("change", async function() {
+                                await readFile(this.files[0], "#froala-editor-bulanan-menang");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -3578,16 +3724,11 @@
                         <div id="froala-editor-issue">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor-issue', {
-                                documentReady: true,
-                            });
-                        </script>
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-issue").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor-issue");
+                            document.getElementById("attach-file-issue").addEventListener("change", async function() {
+                                await readFile(this.files[0], "#froala-editor-issue");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -3608,6 +3749,7 @@
 </div>
 
 <!--end::Modal - Issue Project-->
+
 <!--begin::Modal - Review-->
 <div class="modal fade" id="kt_modal_create_review" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
@@ -3650,8 +3792,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract-review">
-                            <input type="hidden" value="{{ csrf_token() }}" id="csrf_token_file_review">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                             <input type="file" class="form-control form-control-solid" name="attach-file-review"
                                 id="attach-file-review" value="" style="font-weight: normal" accept=".docx"
                                 placeholder="Name Proyek" />
@@ -3684,16 +3825,11 @@
                             <div id="froala-editor-review">
                                 <h1>Attach file with <b>.DOCX</b> format only</h1>
                             </div>
-                            <script>
-                                var editor = new FroalaEditor('#froala-editor-review', {
-                                    documentReady: true,
-                                });
-                            </script>
                             {{-- end::Froala Editor --}}
                             {{-- begin::Read File --}}
                             <script>
-                                document.getElementById("attach-file-review").addEventListener("change", function() {
-                                    readFile(this.files[0], "#froala-editor-review");
+                                document.getElementById("attach-file-review").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-review");
                                 });
                             </script>
                             {{-- end::Read File --}}
@@ -3787,16 +3923,11 @@
                     <div id="froala-editor-risk">
                         <h1>Attach file with <b>.DOCX</b> format only</h1>
                     </div>
-                    <script>
-                        var editor = new FroalaEditor('#froala-editor-risk', {
-                            documentReady: true,
-                        });
-                    </script>
                     {{-- end::Froala Editor --}}
                     {{-- begin::Read File --}}
                     <script>
-                        document.getElementById("attach-file-risk").addEventListener("change", function() {
-                            readFile(this.files[0], "#froala-editor-risk");
+                        document.getElementById("attach-file-risk").addEventListener("change", async function() {
+                            await readFile(this.files[0], "#froala-editor-risk");
                         });
                     </script>
                     {{-- end::Read File --}}
@@ -3891,16 +4022,11 @@
                         <div id="froala-editor-question">
                             <h1>Attach file with <b>.DOCX</b> format only</h1>
                         </div>
-                        <script>
-                            var editor = new FroalaEditor('#froala-editor-question', {
-                                documentReady: true,
-                            });
-                        </script>
                         {{-- end::Froala Editor --}}
                         {{-- begin::Read File --}}
                         <script>
-                            document.getElementById("attach-file-question").addEventListener("change", function() {
-                                readFile(this.files[0], "#froala-editor-question");
+                            document.getElementById("attach-file-question").addEventListener("change", async function() {
+                                await readFile(this.files[0], "#froala-editor-question");
                             });
                         </script>
                         {{-- end::Read File --}}
@@ -3923,6 +4049,292 @@
 </div>
 <!--end::Modal - List Questions-->
 
+<!--begin::Modal - Calendar Start -->
+<div class="modal fade" id="kt_modal_calendar-start" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-300px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Start Date</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin:: Calendar-->
+                <div class="fv-row mb-5">
+                    <div class="calendar" id="start-date">
+                        <div class="calendar__opts">
+                            <select name="calendar__month" id="calendar__month">
+                                <option value="1" selected>Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">Jun</option>
+                                <option value="7">Jul</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+                            </select>
+
+                            <select name="calendar__year" id="calendar__year">
+                                <option>2017</option>
+                                <option>2018</option>
+                                <option>2019</option>
+                                <option selected>2020</option>
+                                <option>2021</option>
+                                <option>2022</option>
+                            </select>
+                        </div>
+
+                        <div class="calendar__body">
+                            {{-- <div class="calendar__days">
+                                <div>M</div>
+                                <div>T</div>
+                                <div>W</div>
+                                <div>T</div>
+                                <div>F</div>
+                                <div>S</div>
+                                <div>S</div>
+                            </div> --}}
+
+                            <div class="calendar__dates">
+                                {{-- <div class="calendar__date calendar__date--grey"><span>27</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>28</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>29</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>30</span></div> --}}
+                                <div class="calendar__date"><span>1</span></div>
+                                <div class="calendar__date"><span>2</span></div>
+                                <div class="calendar__date"><span>3</span></div>
+                                <div class="calendar__date"><span>4</span></div>
+                                <div class="calendar__date"><span>5</span></div>
+                                <div class="calendar__date"><span>6</span></div>
+                                <div class="calendar__date"><span>7</span></div>
+                                <div class="calendar__date"><span>8</span></div>
+                                <div class="calendar__date"><span>9</span></div>
+                                <div class="calendar__date"><span>10</span></div>
+                                <div class="calendar__date"><span>11</span></div>
+                                <div class="calendar__date"><span>12</span></div>
+                                <div class="calendar__date"><span>13</span></div>
+                                <div class="calendar__date"><span>14</span></div>
+                                <div class="calendar__date"><span>15</span></div>
+                                <div class="calendar__date">
+                                    <span>16</span>
+                                </div>
+                                <div class="calendar__date">
+                                    <span>17</span>
+                                </div>
+                                <div class="calendar__date">
+                                    <span>18</span>
+                                </div>
+                                <div class="calendar__date"><span>19</span></div>
+                                <div class="calendar__date"><span>20</span></div>
+                                <div class="calendar__date">
+                                    <span>21</span>
+                                </div>
+                                <div class="calendar__date"><span>22</span></div>
+                                <div class="calendar__date"><span>23</span></div>
+                                <div class="calendar__date"><span>24</span></div>
+                                <div class="calendar__date"><span>25</span></div>
+                                <div class="calendar__date"><span>26</span></div>
+                                <div class="calendar__date"><span>27</span></div>
+                                <div class="calendar__date"><span>28</span></div>
+                                <div class="calendar__date"><span>29</span></div>
+                                <div class="calendar__date"><span>30</span></div>
+                                <div class="calendar__date"><span>31</span></div>
+                            </div>
+                        </div>
+
+                        <div class="calendar__buttons">
+                            <button class="btn btn-sm fw-normal btn-primary" style="background: #f3f6f9;color:black;"
+                                data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
+
+                            <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
+                                style="background-color: #e08c16;color: white;" id="set-calendar-start">Apply</button>
+
+                        </div>
+                    </div>
+                </div>
+                <!--end::Calendar-->
+
+            </div>
+            <!--end::Input group-->
+
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+</div>
+<!--end::Modal dialog-->
+</div>
+<!--end::Modal - Calendar Start -->
+
+<!--begin::Modal - Calendar End -->
+<div class="modal fade" data-bs-backdrop="static" id="kt_modal_calendar-end" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-300px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>End Date</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin:: Calendar-->
+                <div class="fv-row mb-5">
+                    <div class="calendar" id="end-date">
+                        <div class="calendar__opts">
+                            <select name="calendar__month" id="calendar__month">
+                                <option value="1" selected>Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">Jun</option>
+                                <option value="7">Jul</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+                            </select>
+
+                            <select name="calendar__year" id="calendar__year">
+                                <option>2017</option>
+                                <option>2018</option>
+                                <option>2019</option>
+                                <option selected>2020</option>
+                                <option>2021</option>
+                                <option>2022</option>
+                            </select>
+                        </div>
+
+                        <div class="calendar__body">
+                            {{-- <div class="calendar__days">
+                                <div>M</div>
+                                <div>T</div>
+                                <div>W</div>
+                                <div>T</div>
+                                <div>F</div>
+                                <div>S</div>
+                                <div>S</div>
+                            </div> --}}
+
+                            <div class="calendar__dates">
+                                {{-- <div class="calendar__date calendar__date--grey"><span>27</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>28</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>29</span></div>
+                                <div class="calendar__date calendar__date--grey"><span>30</span></div> --}}
+                                <div class="calendar__date"><span>1</span></div>
+                                <div class="calendar__date"><span>2</span></div>
+                                <div class="calendar__date"><span>3</span></div>
+                                <div class="calendar__date"><span>4</span></div>
+                                <div class="calendar__date"><span>5</span></div>
+                                <div class="calendar__date"><span>6</span></div>
+                                <div class="calendar__date"><span>7</span></div>
+                                <div class="calendar__date"><span>8</span></div>
+                                <div class="calendar__date"><span>9</span></div>
+                                <div class="calendar__date"><span>10</span></div>
+                                <div class="calendar__date"><span>11</span></div>
+                                <div class="calendar__date"><span>12</span></div>
+                                <div class="calendar__date"><span>13</span></div>
+                                <div class="calendar__date"><span>14</span></div>
+                                <div class="calendar__date"><span>15</span></div>
+                                <div class="calendar__date">
+                                    <span>16</span>
+                                </div>
+                                <div class="calendar__date">
+                                    <span>17</span>
+                                </div>
+                                <div class="calendar__date">
+                                    <span>18</span>
+                                </div>
+                                <div class="calendar__date"><span>19</span></div>
+                                <div class="calendar__date"><span>20</span></div>
+                                <div class="calendar__date">
+                                    <span>21</span>
+                                </div>
+                                <div class="calendar__date"><span>22</span></div>
+                                <div class="calendar__date"><span>23</span></div>
+                                <div class="calendar__date"><span>24</span></div>
+                                <div class="calendar__date"><span>25</span></div>
+                                <div class="calendar__date"><span>26</span></div>
+                                <div class="calendar__date"><span>27</span></div>
+                                <div class="calendar__date"><span>28</span></div>
+                                <div class="calendar__date"><span>29</span></div>
+                                <div class="calendar__date"><span>30</span></div>
+                                <div class="calendar__date"><span>31</span></div>
+                            </div>
+                        </div>
+
+                        <div class="calendar__buttons">
+                            <button class="btn btn-sm fw-normal btn-primary" style="background: #f3f6f9;color:black;"
+                                data-bs-dismiss="modal" id="cancel-date-btn-end">Back</button>
+
+                            <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
+                                style="background-color: #e08c16;color: white;" id="set-calendar-end">Apply</button>
+                            {{-- <button class="calendar__button calendar__button--grey" data-bs-dismiss="modal"
+                                id="cancel-date-btn-end">Back</button>
+
+                            <button class="calendar__button" data-bs-dismiss="modal"
+                                style="background-color: #e08c16;color: white;" id="set-calendar-end">Apply</button> --}}
+                        </div>
+                    </div>
+                </div>
+                <!--end::Calendar-->
+
+            </div>
+            <!--end::Input group-->
+
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+</div>
+<!--end::Modal dialog-->
+</div>
+<!--end::Modal - Calendar End -->
+
 <!--end::Modals-->
 
 <!--begin::Scrolltop-->
@@ -3940,5 +4352,56 @@
 </div>
 <!--end::Scrolltop-->
 @endsection
+@section('js-script')
 <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script>
-@extends('template.footer')
+
+<script>
+    new FroalaEditor('#froala-editor-terima', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-issue', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-review', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-draft', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-risk', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-question', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-draft-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-review-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-risk-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-question-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-issue-project-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-terima-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-bulanan-menang', {
+        documentReady: true,
+    });
+</script>
+
+@endsection
+
+
+<!--begin::Aside-->
+@section('aside')
+@include('template.aside')
+@endsection
+<!--end::Aside-->

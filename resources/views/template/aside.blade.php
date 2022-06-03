@@ -2,11 +2,11 @@
 <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
     data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
     data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
-    data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#535353;">
+    data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9">
     <!--begin::Brand-->
-    <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#535353;">
+    <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
         <!--begin::Logo-->
-        <a href="#" style="background-color:#535353;">
+        <a href="#" style="background-color:#0db0d9;">
             <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
                 style="margin-top:30px;margin-left:-20px;" />
         </a>
@@ -15,14 +15,14 @@
     </div>
     <!--end::Brand-->
     <!--begin::Aside menu-->
-    <div class="aside-menu flex-column-fluid" style="background-color:#535353;margin-top:40px;">
+    <div class="aside-menu flex-column-fluid" style="background-color:#0db0d9;margin-top:40px;">
         <!--begin::Aside Menu-->
         <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
             data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
             data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"
             data-kt-scroll-offset="0">
             <!--begin::Menu-->
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/" style="color:white;">
                         <span class="menu-icon">
@@ -39,7 +39,7 @@
             </div>
 
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/customer" style="color:white;">
                         <span class="menu-icon">
@@ -55,7 +55,7 @@
             </div>
 
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/project" style="color:white;">
                         <span class="menu-icon">
@@ -87,7 +87,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/claim" style="color:white;">
                         <span class="menu-icon">
@@ -103,7 +103,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/document" style="color:white;">
                         <span class="menu-icon">
@@ -121,7 +121,7 @@
 
 
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/KPI" style="color:white;">
                         <span class="menu-icon">
@@ -137,7 +137,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/knowledge-base" style="color:white;">
                         <span class="menu-icon">
@@ -153,7 +153,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/change-request" style="color:white;">
                         <span class="menu-icon">
@@ -168,7 +168,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#535353;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="stakeholder-communication" style="color:white;">
                         <span class="menu-icon">

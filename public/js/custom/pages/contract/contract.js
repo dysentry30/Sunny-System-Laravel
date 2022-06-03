@@ -14,6 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // saveBtn.addEventListener("click", saveDataDraft);
     valueContractElt.addEventListener("keyup", reformatNumber);
 
+    // startDate.disabled = true;
+    // dueDate.disabled = true;
+
     function reformatNumber() {
         const valueFormatted = Intl.NumberFormat("en-US", {
             maximumFractionDigits: 0,
@@ -129,18 +132,371 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     })
 
+    let month = 1;
+    let year = 2020;
+    let date = -1;
+    let monthFix = 1;
+    let yearFix = 2020;
+    let dateFix = -1;
+    let monthEndFix = 1;
+    let yearEndFix = 2020;
+    let dateEndFix = -1;
+
+    // Begin Function Calendar Start
+    const months = document.querySelector(`#start-date #calendar__month`);
+    const years = document.querySelector(`#start-date #calendar__year`);
+    months.addEventListener("change", elt => {
+        month = elt.target.value;
+        if (month == 2) {
+            let html = ``;
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 <= dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+        } else {
+            let html = ``;
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 == dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+
+                } else if (i + 1 == dateEndFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+
+        }
+        setDateClickable("#start-date");
+    });
+    years.addEventListener("change", elt => {
+        year = elt.target.value;
+        if (yearEnd == year) {
+            let html = ``;
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 == dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+
+        } else {
+            let html = ``;
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 == dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+
+
+        }
+        setDateClickable("#start-date");
+    });
+
+    setDateClickable("#start-date");
+
+    function setDateClickable(rootElt) {
+        const dates = document.querySelectorAll(`${rootElt} .calendar__body .calendar__dates .calendar__date`);
+        dates.forEach(elt => {
+            elt.addEventListener("click", e => {
+                dates.forEach(d => {
+                    if (d.classList.contains("calendar__date--selected")) {
+                        d.classList.remove("calendar__date--selected");
+                        d.classList.remove("calendar__date--range-end");
+                        d.classList.remove("calendar__date--first-date");
+                    }
+                });
+
+                if (elt.classList.contains("calendar__date--selected")) {
+                    elt.classList.remove("calendar__date--selected");
+                    elt.classList.remove("calendar__date--range-end");
+                    elt.classList.remove("calendar__date--first-date");
+                } else {
+                    if (rootElt.toString().match("end")) {
+                        dateEnd = Number(elt.firstElementChild.innerText);
+                        const dateStart = document.querySelectorAll(`#start-date .calendar__body .calendar__dates .calendar__date`);
+                        dateStart.forEach((d, i) => {
+                            if (i + 1 == dateEndFix) {
+                                d.classList.add("calendar__date--range-start");
+                            } else {
+                                d.classList.remove("calendar__date--range-start");
+                            }
+                        });
+                    } else {
+                        date = Number(elt.firstElementChild.innerText);
+                        const dateEnd = document.querySelectorAll(`#end-date .calendar__body .calendar__dates .calendar__date`);
+                        dateEnd.forEach((d, i) => {
+                            if (i + 1 <= date && monthEndFix < month) {
+                                // d.classList.add("calendar__date--range-start");
+                                d.classList.add("calendar__date--grey");
+                            } else {
+                                d.classList.remove("calendar__date--range-start");
+                            }
+                        });
+                    }
+                    elt.classList.add("calendar__date--selected");
+                    elt.classList.add("calendar__date--range-end");
+                    elt.classList.add("calendar__date--first-date");
+                }
+            });
+        });
+    }
+
+    const setCalendarStartBtn = getElement("#set-calendar-start");
+    setCalendarStartBtn.addEventListener("click", e => {
+        startDate.setAttribute("value", `${year}-${month.toString().length < 2 ? month.toString().padStart(2, "0") : month}-${date.toString().length < 2 ? date.toString().padStart(2, "0") : date}`);
+        dateFix = date;
+        monthFix = month;
+        yearFix = year;
+        let html = ``;
+        if (monthEnd == 2) {
+            let html = ``;
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 <= dateFix && yearEndFix == yearEnd && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+        } else {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 <= dateFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        }
+        const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+        updateDates.innerHTML = html;
+        setDateClickable("#end-date");
+    })
+    // End Function Calendar Start
+
+    // Begin Function Calendar End
+    const monthsEnd = document.querySelector(`#end-date #calendar__month`);
+    const yearsEnd = document.querySelector(`#end-date #calendar__year`);
+    let dateEnd = -1;
+    let monthEnd = 1;
+    let yearEnd = 2020;
+    monthsEnd.addEventListener("change", elt => {
+        monthEnd = elt.target.value;
+        if (monthEnd == 2) {
+            let html = ``;
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 <= dateFix && yearEndFix == yearEnd && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--first-date calendar__date--range-end"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+        } else {
+            // calendar__date--grey
+            let html = ``;
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 <= dateFix && yearEndFix == yearEnd && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--first-date calendar__date--range-end"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+            const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+            updateDates.innerHTML = html;
+
+
+        }
+        setDateClickable("#end-date");
+    });
+    yearsEnd.addEventListener("change", elt => {
+        yearEnd = elt.target.value;
+        let html = ``;
+        if (yearEnd == year) {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 <= dateFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        } else {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 <= dateFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+
+        }
+        const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+        updateDates.innerHTML = html;
+
+        setDateClickable("#end-date");
+    });
+
+    setDateClickable("#end-date");
+
+    // Begin Set Input Date Value
+    const setCalendarEndBtn = getElement("#set-calendar-end");
+    setCalendarEndBtn.addEventListener("click", e => {
+        dueDate.setAttribute("value", `${yearEnd}-${monthEnd.toString().length < 2 ? monthEnd.toString().padStart(2, "0") : monthEnd}-${dateEnd.toString().length < 2 ? dateEnd.toString().padStart(2, "0") : dateEnd}`);
+        dateEndFix = dateEnd;
+        monthEndFix = monthEnd;
+        yearEndFix = yearEnd;
+        let html = ``;
+        if (monthEndFix == 2) {
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 == dateFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    // html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        } else {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 == dateFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                    // html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        }
+        const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+        updateDates.innerHTML = html;
+        setDateClickable("#start-date");
+
+    })
+    // END Set Input Date Value
+    // End Function Calendar End
+
+    // Begin Cancel Dates Value
+    const cancelDateStartBtn = getElement("#cancel-date-btn-start");
+    cancelDateStartBtn.addEventListener("click", e => {
+        date = dateFix;
+        month = monthFix;
+        year = yearFix;
+        let html = ``;
+        if (monthEndFix == 2) {
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 == dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+
+        } else {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 == dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--selected calendar__date--range-end calendar__date--first-date"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--range-start"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+
+        }
+        const updateDates = document.querySelector(`#start-date .calendar__body .calendar__dates`);
+        updateDates.innerHTML = html;
+        setDateClickable("#start-date");
+        // dateEnd = dateEndFix;
+        // monthEnd = monthEndFix;
+        // yearEnd = yearEndFix;
+    });
+    const cancelDateEndBtn = getElement("#cancel-date-btn-end");
+    cancelDateEndBtn.addEventListener("click", e => {
+        // date = dateFix;
+        // month = monthFix;
+        // year = yearFix;
+        dateEnd = dateEndFix;
+        monthEnd = monthEndFix;
+        yearEnd = yearEndFix;
+        let html = ``;
+        if (monthEndFix == 2) {
+            for (let i = 0; i < 29; i += 1) {
+                if (i + 1 <= dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--first-date calendar__date--range-end"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        } else {
+            for (let i = 0; i < 31; i += 1) {
+                if (i + 1 <= dateFix && yearFix == year && month == monthFix) {
+                    html += `<div class="calendar__date calendar__date--grey"><span>${i + 1}</span></div>`;
+                } else if (i + 1 == dateEndFix && year == yearEndFix && monthEndFix == monthEnd) {
+                    html += `<div class="calendar__date calendar__date--first-date calendar__date--range-end"><span>${i + 1}</span></div>`;
+                } else {
+                    html += `<div class="calendar__date"><span>${i + 1}</span></div>`;
+                }
+            }
+        }
+        const updateDates = document.querySelector(`#end-date .calendar__body .calendar__dates`);
+        updateDates.innerHTML = html;
+        setDateClickable("#end-date");
+    });
+    // End Cancel Dates Value
+
 })
 // Convert DOCX format to HTML tag
-function readFile(file, elt) {
+async function readFile(file, elt) {
     const docx2html = require("docx2html");
-    docx2html(file).then(html => {
-        document.querySelector(` ${elt} .fr-wrapper .fr-view`).innerHTML = html;
-    });
+    const html = await docx2html(file);
+    document.querySelector(` ${elt} > .fr-wrapper > .fr-view`).innerHTML = html;
+    document.querySelector(`body > #A`).remove();
+    return html;
 };
 
 // Save Data Review
 async function saveReview() {
-    console.log("test");
     const csrfTokenFileDraft = getElement("#csrf_token_file_review");
     const fileName = getElement("#document-name-review").value;
     const note = getElement("#note-review").value;
@@ -163,4 +519,9 @@ async function saveReview() {
     if (uploadFile.status == "Login Required") {
         window.location.href = `${uploadFile.link}&id-contract=${numberContract.value}`;
     }
+}
+
+
+function setCalendar() {
+
 }

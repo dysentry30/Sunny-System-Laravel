@@ -1,4 +1,4 @@
-@extends('template.header')
+@extends('template.main')
 @section('title', 'Contract Management')
 <!--begin::Main-->
 @section('content')
@@ -266,9 +266,9 @@
                         <div class="card-header border-0 pt-">
 
                             <!--begin::Card title-->
-                            <div class="card-title">
+                            <div class="card-title" style="width: 100%">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
+                                <div class="d-flex align-items-center my-1" style="width: 100%;">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -284,13 +284,23 @@
                                     <input type="text" data-kt-customer-table-filter="search"
                                         class="form-control form-control-solid w-250px ps-15"
                                         placeholder="Search Contract" />
+                                    <!--end::Search-->
+
+                                    {{-- Display Error --}}
                                     @if (Session::get('success'))
                                         <div class="success-msg">
-                                            <h6 style="color: green"><b>Your contract has been created successfuly</b></h6>
+                                            <h6 style="color: green"><b>{{ Session::get('success') }}</b></h6>
                                         </div>
                                     @endif
+                                    @if (Session::get('failed'))
+                                        <div class="success-msg">
+                                            <h6 style="color: rgb(201, 30, 30)"><b>{{ Session::get('failed') }}</b></h6>
+                                        </div>
+                                    @endif
+                                    {{-- begin::pagination --}}
+                                    {{-- end::pagination --}}
                                 </div>
-                                <!--end::Search-->
+
                             </div>
                             <!--begin::Card title-->
                         </div>
@@ -1167,19 +1177,4 @@
     </div>
     <!--end::Modal - Create App-->
     <!--end::Modals-->
-
-    <!--begin::Scrolltop-->
-    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-        <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-                <path
-                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                    fill="black" />
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
-    </div>
-    <!--end::Scrolltop-->
 @endsection

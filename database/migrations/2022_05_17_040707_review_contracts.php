@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('review_contracts', function (Blueprint $table) {
             $table->id('id_review');
-            $table->longText('id_document')->unique();
+            $table->mediumText('id_document')->unique();
             $table->integer("id_contract");
             $table->text("document_name_review");
             $table->longText("note_review");

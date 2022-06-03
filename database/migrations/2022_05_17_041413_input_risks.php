@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('input_risks', function (Blueprint $table) {
             $table->bigIncrements('id_risk');
             $table->integer("id_contract");
-            $table->uuid("id_document");
+            $table->mediumText("id_document");
             $table->text("document_name_risk");
             $table->longText("note_risk");
             $table->boolean("tender_menang");

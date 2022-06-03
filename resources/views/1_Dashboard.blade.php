@@ -1,5 +1,5 @@
 {{-- Begin::Extend Header --}}
-@extends('template.header')
+@extends('template.main')
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}

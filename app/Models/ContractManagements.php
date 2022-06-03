@@ -52,7 +52,12 @@ class ContractManagements extends Model
 
     public function handOvers()
     {
-        return $this->hasMany(MonthlyReports::class, "id_contract");
+        return $this->hasMany(HandOvers::class, "id_contract");
+    }
+
+    public function AddendumContracts()
+    {
+        return $this->hasMany(AddendumContracts::class, "id_contract");
     }
 
     public function projects()
