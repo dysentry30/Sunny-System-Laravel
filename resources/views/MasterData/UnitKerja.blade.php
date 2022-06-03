@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Proyek')
+@section('title', 'Unit Kerja')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -168,7 +168,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center fs-3 my-1">Proyek
+									<h1 class="d-flex align-items-center fs-3 my-1">Unit kerja
 									</h1>
 									<!--end::Title-->
 								</div>
@@ -179,7 +179,7 @@
 									<!--begin::Button-->
 									<a href="#" class="btn btn-sm btn-primary"
 									data-bs-toggle="modal" 
-									data-bs-target="#kt_modal_create_proyek" 
+									data-bs-target="#kt_modal_create" 
 									id="kt_toolbar_primary_button"
 									style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
 									New</a>
@@ -262,23 +262,6 @@
 											</div>
 											<!--begin::Card title-->
 
-											<!--begin::Paginate-->
-											{{-- <div class="align-items-center d-flex flex-row-reverse">
-												<div>
-													{{ $proyeks->links() }}
-												</div>
-
-												<div class="p-2" style="color:gray">
-													Showing
-													{{ $proyeks->firstItem() }}
-													to
-													{{ $proyeks->lastItem() }}
-													of
-													{{ $proyeks->total()}}
-													entries
-												</div>
-											</div> --}}
-											<!--end::Paginate-->
 										</div>
 										<!--end::Card header-->
 
@@ -293,91 +276,72 @@
 												<thead>
 													<!--begin::Table row-->
 													<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-														<th class="min-w-auto">Kode Proyek</th>
-														<th class="min-w-auto">Nama Proyek</th>
-														<th class="min-w-auto">Unit Kerja</th>
-														{{-- <th class="min-w-auto">Stage</th> --}}
-														<th class="min-w-auto">Nilai RKAP</th>
-														<th class="min-w-auto">Nilai Forecast</th>
-														<th class="min-w-auto">Nilai Realisasi</th>
-														<th class="min-w-auto">Jenis Proyek</th>
-														<th class="min-w-auto">Tipe Proyek</th>
-														<th class=""><center>Action</center></th>
+														<th class="min-w-auto">Nomer ID</th>
+														<th class="min-w-auto">Nama Unit</th>
+														<th class="min-w-auto">Divcode</th>
+														<th class="min-w-auto">DOP</th>
+														<th class="min-w-auto">Company</th>
+														<th class="min-w-auto">PIC</th>
+														{{-- <th class=""><center>Action</center></th> --}}
 													</tr>
 													<!--end::Table row-->
 												</thead>
 												<!--end::Table head-->
 												<!--begin::Table body-->
-												@php
+												{{-- @php
 												$proyeks = $proyeks->reverse();
-												@endphp
-												@foreach ($proyeks as $proyek)
+												@endphp --}}
+												@foreach ($unitkerja as $unitkerja)
 												
 												<tbody class="fw-bold text-gray-600">
 													<tr>
-														
 														<!--begin::Name=-->
 														<td>
-															<a href="/proyek/view/{{ $proyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">id : {{ $proyek->id }}</a>
+															<a href="/unit-kerja" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $unitkerja->nomor_unit }}</a>
 														</td>
 														<!--end::Name=-->
-														<!--begin::Email=-->
+														<!--begin::Coloumn=-->
 														<td>
-															{{ $proyek->nama_proyek }}
+															{{ $unitkerja->unit_kerja }}
 														</td>
-														<!--end::Email=-->
-														<!--begin::Company=-->
+														<!--end::Coloumn=-->
+														<!--begin::Coloumn=-->
 														<td>
-															{{ $proyek->unit_kerja }}
+															{{ $unitkerja->divcode }}
 														</td>
-														<!--end::Company=-->
-														
-														<!--begin::Date=-->
-														{{-- <td>
-															{{ $proyek->stage }}
-														</td> --}}
-														<!--end::Date=-->
-														<!--begin::Action=-->
+														<!--end::Coloumn=-->
+														<!--begin::Coloumn=-->
 														<td>
-															{{ $proyek->nilai_rkap }}
+															{{ $unitkerja->dop }}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Coloumn=-->
+														<!--begin::Coloumn=-->
 														<td>
-															{{-- {{ $proyek->nilai_forecast }} --}}
+															{{ $unitkerja->company }}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Coloumn=-->
+														<!--begin::Coloumn=-->
 														<td>
-															{{-- {{ $proyek->nilai_realisasi }} --}}
+															{{ $unitkerja->pic }}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
-														<td>
-															{{ $proyek->jenis_proyek }}
-														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
-														<td>
-															{{ $proyek->tipe_proyek }}
-														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Coloumn=-->
+
+														{{-- <!--begin::Action=-->
 														<td>
 														<!--begin::Button-->
-														<form action="/proyek/delete/{{ $proyek->id }}" method="post" class="d-inline" >
-															@method('delete')
-															@csrf
-															<center>
+														<center>
+															<form action="#" method="post" class="d-inline" >
+																@method('delete')
+																@csrf
 																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-															</center>
-														</form>
+															</form>
+														</center>
 														<!--end::Button-->
 														</td>
-														<!--end::Action=-->
+														<!--end::Action=--> --}}
 													</tr>
-													@endforeach
-													
+
+												@endforeach
 												</tbody>
 												<!--end::Table body-->
 											</table>
@@ -408,11 +372,16 @@
 
 		<!--begin::Modal-->
 
-			<form action="/proyek/save" method="post" enctype="multipart/form-data"> 
+			<form action="/unit-kerja/save" method="post" enctype="multipart/form-data"> 
 				@csrf
-								
+				
+				<!--begin::Modal - Create App-->
+				{{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
+				
+				
+				
 				<!--begin::Modal - Create Proyek-->
-				<div class="modal fade" id="kt_modal_create_proyek" tabindex="-1" aria-hidden="true">
+				<div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
 				<!--begin::Modal dialog-->
 				<div class="modal-dialog modal-dialog-centered mw-900px">
 					<!--begin::Modal content-->
@@ -420,7 +389,7 @@
 						<!--begin::Modal header-->
 						<div class="modal-header">
 							<!--begin::Modal title-->
-							<h2>New Proyek</h2>
+							<h2>Unit Kerja</h2>
 							<!--end::Modal title-->
 							<!--begin::Close-->
 							<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -446,12 +415,12 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span class="required">Nama Proyek</span>
+												<span class="required">Nomer ID</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="nama-proyek" name="nama-proyek" value="" placeholder="Nama Proyek" />
+											id="nomor-unit" name="nomor-unit" value="" placeholder="Nomer ID" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -471,13 +440,18 @@
 												data-control="select2" data-hide-search="true" 
 												data-placeholder="Unit Kerja">
 												<option></option>
-												@foreach ($unitkerjas as $unitkerja)
-												@if ($unitkerja->unit_kerja == null)
-													<option value="{{ $unitkerja->unit_kerja }}" selected>{{$unitkerja->unit_kerja }}</option>
-												@else
-													<option value="{{ $unitkerja->unit_kerja }}">{{$unitkerja->unit_kerja }}</option>
-												@endif
-												@endforeach
+												<option value="Divisi Bangun Gedung">Divisi Bangun Gedung</option>
+												<option value="Divisi Industri Plant">Divisi Industri Plant</option>
+												<option value="Industri Infrastruktur 1">Industri Infrastruktur 1</option>
+												<option value="Industri Infrastruktur 2">Industri Infrastruktur 2</option>
+												<option value="Divisi Luar Negeri">Divisi Luar Negeri</option>
+												<option value="Industri Power Energi">Industri Power Energi</option>
+												<option value="Wika Beton">Wika Beton</option>
+												<option value="Wika Bitumen">Wika Bitumen</option>
+												<option value="Wika Gedung">Wika Gedung</option>
+												<option value="Wika Industri & Konstruksi">Wika Industri & Konstruksi</option>
+												<option value="Wika Reality">Wika Reality</option>
+												<option value="Wika Rekayasa Konstruksi">Wika Rekayasa Konstruksi</option>
 											</select>
 											<!--end::Input-->
 										</div>
@@ -493,27 +467,14 @@
 									<div class="col-6">
 										<!--begin::Input group Website-->
 										<div class="fv-row mb-7">
-											{{-- <!--begin::Label-->
+											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span class="required">Kode Proyek</span>
+												<span class="required">Div Code</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="kode-proyek" name="kode-proyek" value="" placeholder="Kode" />
-											<!--end::Input--> --}}
-											<!--begin::Label-->
-											<label class="fs-6 fw-bold form-label mt-3">
-												<span class="required">Jenis Proyek</span>
-											</label>
-											<!--end::Label-->
-											<!--begin::Input-->
-											<select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-												data-placeholder="Jenis Proyek">
-												<option selected></option>
-												<option value="Internal">Internal</option>
-												<option value="External">External</option>
-											</select>
+											id="divcode" name="divcode" value="" placeholder="Div Code" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -524,60 +485,18 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Tipe Proyek</span>
+												<span>DOP</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-											data-placeholder="Tipe Proyek">
-												<option selected></option>
-												<option value="Retail">Retail</option>
-												<option value="Non-Retail">Non-Retail</option>
-											</select>
-											<!--end::Input-->
-										</div>
-										<!--end::Input group-->
-									</div>
-									<!--End::Col-->
-								</div>
-								<!--End::Row Kanan+Kiri-->
-								
-								<!--begin::Row Kanan+Kiri-->
-								<div class="row fv-row">
-									<!--begin::Col-->
-									<div class="col-6">
-										<!--begin::Input group Website-->
-										<div class="fv-row mb-7">
-											<!--begin::Label-->
-											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Nilai OK RKAP</span>
-											</label>
-											<!--end::Label-->
-											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid reformat" 
-											id="nilai-rkap" name="nilai-rkap" value="" placeholder="Nilai OK RKAP" />
-											<!--end::Input-->
-										</div>
-										<!--end::Input group-->
-									</div>
-									<!--End begin::Col-->
-									<div class="col-6">
-										<!--begin::Input group Website-->
-										<div class="fv-row mb-7">
-											<!--begin::Label-->
-											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Sumber Dana</span>
-											</label>
-											<!--end::Label-->
-											<!--begin::Input-->
-											<select id="sumber-dana" name="sumber-dana" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-												data-placeholder="Sumber Dana">
+											<select id="dop" name="dop" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
+												data-placeholder="DOP">
 												<option></option>
-												@foreach ($sumberdanas as $sumberdana)
-												@if ($sumberdana->nama_sumber == null)
-													<option value="{{ $sumberdana->nama_sumber }}" selected>{{$sumberdana->nama_sumber }}</option>
+												@foreach ($dops as $dop)
+												@if ($dop->dop == null)
+													<option value="{{ $dop->dop }}" selected>{{$dop->dop }}</option>
 												@else
-													<option value="{{ $sumberdana->nama_sumber }}">{{$sumberdana->nama_sumber }}</option>
+													<option value="{{ $dop->dop }}">{{$dop->dop }}</option>
 												@endif
 												@endforeach
 											</select>
@@ -589,7 +508,6 @@
 								</div>
 								<!--End::Row Kanan+Kiri-->
 								
-								
 								<!--begin::Row Kanan+Kiri-->
 								<div class="row fv-row">
 									<!--begin::Col-->
@@ -597,15 +515,22 @@
 										<!--begin::Input group Website-->
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
-											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Tahun Perolehan</span>
+												<span>Company</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input type="number" class="form-control form-control-solid" 
-											id="tahun-perolehan" name="tahun-perolehan" min="2020" max="2099" step="1" value="2022" />
-											<!--end::Input-->
+											<select id="company" name="company" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
+												data-placeholder="Company">
+												<option></option>
+												@foreach ($companies as $company)
+												@if ($company->nama_company == null)
+													<option value="{{ $company->nama_company }}" selected>{{$company->nama_company }}</option>
+												@else
+													<option value="{{ $company->nama_company }}">{{$company->nama_company }}</option>
+												@endif
+												@endforeach
+											</select>
 										</div>
 										<!--end::Input group-->
 									</div>
@@ -615,26 +540,12 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Bulan Pelaksanaan</span>
+												<span>PIC</span>
 											</label>
 											<!--end::Label-->
-											<!--Begin::Input-->
-											<select id="bulan-pelaksanaan" name="bulan-pelaksanaan" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-											data-placeholder="Bulan Pelaksanaan">
-												<option selected></option>
-												<option value="Januari">Januari</option>
-												<option value="Februari">Februari</option>
-												<option value="Maret">Maret</option>
-												<option value="April">April</option>
-												<option value="Mei">Mei</option>
-												<option value="Juni">Juni</option>
-												<option value="Juli">Juli</option>
-												<option value="Agustus">Agustus</option>
-												<option value="September">September</option>
-												<option value="Oktober">Oktober</option>
-												<option value="November">November</option>
-												<option value="Desember">Desember</option>
-											</select>
+											<!--begin::Input-->
+											<input type="text" class="form-control form-control-solid" 
+											id="pic" name="pic" value="" placeholder="PIC" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -642,8 +553,8 @@
 									<!--End::Col-->
 								</div>
 								<!--End::Row Kanan+Kiri-->
-							
-							
+								
+								
 								
 								<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
 									
@@ -687,3 +598,4 @@
 			<!--end::Scrolltop-->
 		<!--end::Main-->
 
+		
