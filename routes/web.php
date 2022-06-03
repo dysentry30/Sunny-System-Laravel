@@ -19,11 +19,17 @@ use App\Models\ContractManagements;
 use App\Models\CustomerAttachments;
 use Illuminate\Support\Facades\Route;
 use App\Models\AddendumContractDrafts;
+use App\Http\Controllers\DopController;
+use App\Http\Controllers\SbuController;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Controllers\ProyekController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\UnitKerjaController;
+use App\Http\Controllers\SumberDanaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -204,6 +210,67 @@ Route::get('/', function () {
             
     }); 
 //End :: Customer
+
+
+
+//Begin :: Project
+
+    // Home Page Proyek
+    Route::get('/project', [ProyekController::class, 'view']);
+
+    // to NEW page 
+    Route::get('/proyek/new', [ProyekController::class, 'new']);
+
+    // direct to proyek after SAVE page 
+    Route::post('/proyek/save', [ProyekController::class, 'save']);
+
+    // VIEW to proyek and EDIT 
+    Route::get('/proyek/view/{id}', [ProyekController::class, 'edit']);
+
+    // direct to Project after EDIT 
+    Route::post('/proyek/update', [ProyekController::class, 'update']);
+
+    // DELETE data customer pada dasboard customer by ID 
+    Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+
+//End :: Project
+
+
+// Begin :: Master Data
+
+    // Home Page Company
+    Route::get('/company', [CompanyController::class, 'index']);
+
+    // NEW Company after SAVE 
+    Route::post('/company/save', [CompanyController::class, 'store']);
+    
+    // Home Sumber Dana
+    Route::get('/sumber-dana', [SumberDanaController::class, 'index']);
+    
+    // NEW Sumber Dana after SAVE
+    Route::post('/sumber-dana/save', [SumberDanaController::class, 'store']);
+
+    // Home DOP
+    Route::get('/dop', [DopController::class, 'index']);
+
+    // NEW DOP after SAVE
+    Route::post('/dop/save', [DopController::class, 'store']);
+
+    // Home SBU
+    Route::get('/sbu', [SbuController::class, 'index']);
+
+    // NEW SBU after SAVE
+    Route::post('/sbu/save', [SbuController::class, 'store']);
+
+    // Home Unit Kerja
+    Route::get('/unit-kerja', [UnitKerjaController::class, 'index']);
+
+    // NEW Unit Kerja after SAVE
+    Route::post('/unit-kerja/save', [UnitKerjaController::class, 'store']);
+
+//End :: Master Data
+
+
 
 Route::get('/contract-management', function () {
     $contract_managements = ContractManagements::all();
