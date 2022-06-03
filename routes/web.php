@@ -1,25 +1,29 @@
 <?php
 
-use App\Models\AddendumContractDrafts;
-use App\Models\AddendumContracts;
-use Illuminate\Support\Facades\Route;
-use App\Models\ContractManagements;
-use App\Models\DraftContracts;
-use App\Models\HandOvers;
-use App\Models\InputRisks;
-use App\Models\IssueProjects;
-use App\Models\MonthlyReports;
 use App\Models\Pasals;
+use App\Models\Customer;
+use App\Models\HandOvers;
 use App\Models\Questions;
-use App\Models\ReviewContracts;
+use App\Models\InputRisks;
 use Illuminate\Http\Request;
+use App\Models\IssueProjects;
+use App\Models\DraftContracts;
+use App\Models\MonthlyReports;
+use PhpOffice\PhpWord\PhpWord;
+use App\Models\ProyekBerjalans;
+use App\Models\ReviewContracts;
+use App\Models\AddendumContracts;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
+use App\Models\ContractManagements;
+use App\Models\CustomerAttachments;
+use Illuminate\Support\Facades\Route;
+use App\Models\AddendumContractDrafts;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpWord\PhpWord;
+use App\Http\Controllers\CustomerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +42,168 @@ Route::get('/', function () {
     return view('1_Dashboard');
 });
 
-Route::get('/customer', function () {
-    return view('2_Customer');
-});
+
+//Begin :: Customer
+
+    // customer dashboard all database
+    // Route::get('/customer', [CustomerController::class, 'view']);
+    Route::get('/customer', function(){
+        return view('2_Customer', ["customer" => Customer::all()]);
+    }); 
+
+
+
+    // DELETE data customer pada dasboard customer by ID 
+    Route::delete('customer/delete/{id_customer}', function ($id_customer) { 
+        $id_customer = Customer::find($id_customer)->delete();
+        return redirect("/customer")->with('status', 'Customer deleted');   
+    });
+
+
+    // view customer by id_customer #1
+    Route::get('/customer/view/{id_customer}', function ($id_customer) {
+        $customer = Customer::find($id_customer);
+        // dd($customer->proyekBerjalans); //tes log hasil 
+        return view('Customer/viewCustomer', [
+            "customer" => $customer, 
+            "customers" => Customer::all(),
+            "attachment" => $customer->customerAttachments->all(),   
+            "proyekberjalan" => $customer->proyekBerjalans->all(),
+        ]);
+    });
+
+
+
+    // EDIT customer by view id_customer #2   
+    Route::post('/customer/save-edit', function (
+        Request $request, 
+        Customer $editCustomer, 
+        CustomerAttachments $customerAttachments) 
+        {
+
+        $data = $request->all(); 
+        // dd($data); //tes log hasil $data 
+        $editCustomer=Customer::find($data["id-customer"]);
+        $editCustomer->name = $data["name-customer"];
+        $editCustomer->check_customer = $request->has("check-customer"); //boolean check
+        $editCustomer->check_partner = $request->has("check-partner"); //boolean check
+        $editCustomer->check_competitor = $request->has("check-competitor"); //boolean check
+        $editCustomer->address_1 = $data["AddressLine1"];
+        $editCustomer->address_2 = $data["AddressLine2"];
+        $editCustomer->email = $data["email"];
+        $editCustomer->phone_number = $data["phone-number"];
+        $editCustomer->website = $data["website"];
+
+        // form company information
+        $editCustomer->jenis_instansi = $data["jenis-instansi"];
+        $editCustomer->kode_proyek = $data["kodeproyek-company"];
+        $editCustomer->npwp_company = $data["npwp-company"];
+        $editCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $editCustomer->journey_company = $data["journey-company"];
+        $editCustomer->segmentation_company = $data["segmentation-company"];
+        $editCustomer->name_pic = $data["name-pic"];
+        $editCustomer->kode_pic = $data["kode-pic"];
+        $editCustomer->email_pic = $data["email-pic"];
+        $editCustomer->phone_number_pic = $data["phone-number-pic"];
+        
+        // form table performance
+        $editCustomer->nilaiok = $data["nilaiok-performance"];
+        $editCustomer->piutang = $data["piutang-performance"];
+        $editCustomer->laba = $data["laba-performance"];
+        $editCustomer->rugi = $data["rugi-performance"];
+
+        // form attachment
+        $editCustomer->note_attachment = $data["note-attachment"];
+        $customerAttachments->id_customer=$data["id-customer"];
+        $customerAttachments->name_customer=$data["name-customer"];
+        
+        
+        
+        if ($_FILES['doc-attachment']['size'] == 0)
+        {
+            // file is empty (and not an error)
+            $editCustomer->save();
+        }else{
+            $editCustomer->save();
+            $file_name = $request->file("doc-attachment")->getClientOriginalName();
+            $customerAttachments->name_attachment = $file_name;
+            $request->file("doc-attachment")->storeAs("public/CustomerAttachments", $file_name);
+            $customerAttachments->save();
+        }
+
+        return redirect("/customer");
+    }); 
+
+    // NEW to Create New customer #1 
+    Route::get('/customer/new', function () {
+        return view('Customer/newCustomer');
+    });
+
+
+    // NEW to Create New customer #2
+    Route::post('/customer/save', function (Request $request, Customer $newCustomer) {
+        $data = $request->all(); 
+        // dd($request); //console log hasil $data
+        $newCustomer->name = $data["name-customer"];
+        $newCustomer->check_customer = $request->has("check-customer"); //boolean check
+        $newCustomer->check_partner = $request->has("check-partner"); //boolean check
+        $newCustomer->check_competitor = $request->has("check-competitor"); //boolean check
+        $newCustomer->address_1 = $data["AddressLine1"];
+        $newCustomer->address_2 = $data["AddressLine2"];
+        $newCustomer->email = $data["email"];
+        $newCustomer->phone_number = $data["phone-number"];
+        $newCustomer->website = $data["website"];
+
+        // form company information
+        $newCustomer->jenis_instansi = $data["jenis-instansi"];
+        $newCustomer->kode_proyek = $data["kodeproyek-company"];
+        $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $newCustomer->journey_company = $data["journey-company"];
+        $newCustomer->segmentation_company = $data["segmentation-company"];
+        $newCustomer->name_pic = $data["name-pic"];
+        $newCustomer->kode_pic = $data["kode-pic"];
+        $newCustomer->email_pic = $data["email-pic"];
+        $newCustomer->phone_number_pic = $data["phone-number-pic"];
+        
+        // form table performance
+        $newCustomer->nilaiok = $data["nilaiok-performance"];
+        $newCustomer->piutang = $data["piutang-performance"];
+        $newCustomer->laba = $data["laba-performance"];
+        $newCustomer->rugi = $data["rugi-performance"];
+        
+        // form attachment
+        // $newCustomer->note_attachment = $data["note-attachment"];
+
+        if ($newCustomer->save()) {
+            return redirect("/customer")->with("success", true);
+        }
+    });
+
+    // Edit MODAL by view id_customer    
+    Route::post('/customer/save-modal', function (
+        Request $request, 
+        Customer $modalCustomer, 
+        ProyekBerjalans $customerHistory) 
+        {
+
+        $data = $request->all(); 
+        // dd($data); //tes log hasil $data 
+        $modalCustomer=Customer::find($data["id-customer"]);
+        $customerHistory->id_customer = $data["id-customer"];
+        $customerHistory->nama_proyek = $data["nama-proyek"];
+        $customerHistory->kode_proyek = $data["kode-proyek"];
+        $customerHistory->pic_proyek = $data["pic-proyek"];
+        $customerHistory->unit_kerja = $data["unit-kerja"];
+        $customerHistory->jenis_proyek = $data["jenis-proyek"];
+        $customerHistory->nilaiok_proyek = $data["nilaiok-proyek"];
+
+        $modalCustomer->save();
+        $customerHistory->save();
+        return redirect("/customer");
+            
+    }); 
+//End :: Customer
 
 Route::get('/contract-management', function () {
     $contract_managements = ContractManagements::all();
