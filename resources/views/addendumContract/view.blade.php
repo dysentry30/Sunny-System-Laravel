@@ -244,7 +244,6 @@
                                             style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
 
                                             <div class="form-group">
-
                                                 <div id="stage-button" class="stage-list">
                                                     <a href="#" role="link"
                                                         class="stage-button color-is-default stage-is-done"
@@ -256,6 +255,7 @@
                                                         style="outline: 0px; cursor: pointer;" stage="2">
                                                         Terkontrak
                                                     </a>
+
 
                                                 </div>
 
@@ -1338,10 +1338,10 @@
                 }).then(res => res.json());
 
                 if (setStage.status == "success") {
-                    toaster.classList.add("text-bg-primary");
+                    toaster.classList.add("text-bg-success");
                     document.querySelector(".toast-body").innerText = setStage.msg;
                     toasterBoots.show()
-                    if (step < 2) {
+                    if (step < 1) {
                         stage.classList.add("stage-is-done");
                         stage.classList.remove("stage-is-not-active");
                         stages[i++].classList.remove("stage-is-done");
