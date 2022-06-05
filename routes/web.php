@@ -193,6 +193,10 @@ Route::get('/pasal/{pasal}', function (Pasals $pasal) {
     ]);
 });
 
+Route::get('change-request', function () {
+    return view("changeRequest/view", ["addendumContracts" => AddendumContracts::all()]);
+});
+
 // Route::post("/contract-management/save/{id_contract}", function (Request $request, $id_contract) {
 //     $contract_management = ContractManagements::find($id_contract);
 //     $contract_management->id_contract = $request->number_contract;
