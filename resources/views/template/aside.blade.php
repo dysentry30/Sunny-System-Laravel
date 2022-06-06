@@ -89,7 +89,7 @@
 
             <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
-                    <a class="menu-link active" href="/claim" style="color:white;">
+                    <a class="menu-link active" href="/claim-management" style="color:white;">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">

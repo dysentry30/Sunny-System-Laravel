@@ -370,10 +370,11 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
 
-                                                                <a href="#" class="btn btn-sm btn-secondary"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_calendar-start"
-                                                                    id="start-date-modal">+</a>
+                                                                <a href="#" class="btn btn-sm mx-3"
+                                                    style="background: transparent;width:1rem;height:2.3rem;"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
+                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                        style="color: #e08c16"></i></a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12"
                                                                     placeholder="Select a date" value="" name="start-date"
@@ -399,9 +400,11 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <a href="#" class="btn btn-secondary" data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_calendar-end"
-                                                                    id="end-date-modal">+</a>
+                                                                <a href="#" class="btn btn-sm mx-3"
+                                                    style="background: transparent;width:1rem;height:2.3rem;"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
+                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                        style="color: #e08c16"></i></a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12" value=""
                                                                     placeholder="Select a date" id="due-date"

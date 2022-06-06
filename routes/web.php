@@ -10,6 +10,7 @@ use App\Models\InputRisks;
 use App\Models\IssueProjects;
 use App\Models\MonthlyReports;
 use App\Models\Pasals;
+use App\Models\Projects;
 use App\Models\Questions;
 use App\Models\ReviewContracts;
 use Illuminate\Http\Request;
@@ -195,6 +196,14 @@ Route::get('/pasal/{pasal}', function (Pasals $pasal) {
 
 Route::get('change-request', function () {
     return view("changeRequest/view", ["addendumContracts" => AddendumContracts::all()]);
+});
+
+Route::get('claim-management', function () {
+    return view("claimManagement/view");
+});
+
+Route::get('claim-management/new', function () {
+    return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "projects" => Projects::all()]);
 });
 
 // Route::post("/contract-management/save/{id_contract}", function (Request $request, $id_contract) {
