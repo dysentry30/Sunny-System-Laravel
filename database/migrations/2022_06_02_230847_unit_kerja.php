@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('nomor_unit');
             $table->string('unit_kerja')->unique();
-            $table->string('divcode')->nullable();
-            $table->string('dop')->nullable();
-            $table->string('company')->nullable();
+            $table->string('divcode')->unique();
+            $table->string('dop');
+            $table->string('company');
             $table->string('pic')->nullable();
             $table->timestamps();
         });
