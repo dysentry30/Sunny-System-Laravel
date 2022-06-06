@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#ff7f00;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/contract-management" style="color:white;">
                         <span class="menu-icon">
@@ -118,8 +118,91 @@
                     </a>
                 </div>
             </div>
-
-
+            
+            
+            
+<!--Begin::Master Data Expand-->
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
+                <div class="menu-item">
+                    <a class="menu-link active" style="color:white;" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
+                                    class="h-30px logo" />
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title-2">Master Data <i class="bi bi-caret-down-fill"></i></span>
+                    </a>
+                </div>
+            </div>
+            <!--begin::Colapse-->
+            <div class="collapse" id="collapseExample">
+                <!--begin::Menu Colapse-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                        <a class="menu-link active" href="/company" style="color:white;">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <i class="bi bi-building text-white"></i>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Company</span>
+                        </a>
+                </div>
+                <!--end::Menu Colapse-->
+                <!--begin::Menu Colapse-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                        <a class="menu-link active" href="/sumber-dana" style="color:white;">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <i class="bi bi-wallet text-white"></i>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Sumber Dana</span>
+                        </a>
+                </div>
+                <!--end::Menu Colapse-->
+                <!--begin::Menu Colapse-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                        <a class="menu-link active" href="/dop" style="color:white;">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <i class="bi bi-bar-chart text-white"></i>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">DOP</span>
+                        </a>
+                </div>
+                <!--end::Menu Colapse-->
+                <!--begin::Menu Colapse-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                        <a class="menu-link active" href="/sbu" style="color:white;">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <i class="bi bi-bar-chart text-white"></i>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">SBU</span>
+                        </a>
+                </div>
+                <!--end::Menu Colapse-->
+                <!--begin::Menu Colapse-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                        <a class="menu-link active" href="/unit-kerja" style="color:white;">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <i class="bi bi-at text-white"></i>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Unit Kerja</span>
+                        </a>
+                </div>
+                <!--end::Menu Colapse-->
+            </div>
+            <!--end::Colapse-->
+<!--end::Master Data Expand-->
+            
 
             <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
