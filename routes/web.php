@@ -203,7 +203,7 @@ Route::get('claim-management', function () {
 });
 
 Route::get('claim-management/new', function () {
-    return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "projects" => Projects::all()]);
+    return view("claimManagement/new", ["contractManagements" => ContractManagements::all()]);
 });
 
 // Route::post("/contract-management/save/{id_contract}", function (Request $request, $id_contract) {
