@@ -40,6 +40,7 @@ class ProyekController extends Controller
         $newProyek->sumber_dana= $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan= $dataProyek["bulan-pelaksanaan"];
+        $newProyek->stage= "1";
         
         $newProyek->dop= $unitKerja->dop;
         $newProyek->company= $unitKerja->company;
