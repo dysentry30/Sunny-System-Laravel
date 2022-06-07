@@ -1,0 +1,92 @@
+<option value="Divisi Bangun Gedung">		F. Divisi Bangun Gedung </option>
+<option value="Divisi Industri Plant">		U. Divisi Industri Plant</option>
+<option value="Industri Infrastruktur 1">	G. Industri Infrastruktur 1</option>
+<option value="Industri Infrastruktur 2">	H. Industri Infrastruktur 2</option>
+<option value="Divis Luar Negri">		L. Divisi Luar Negri</option>
+<option value="Industri Power Energi">		O. Industri Power Energi</option>
+<option value="Wika Beton">			1. Wika Beton</option>
+<option value="Wika Bitumen">			6. Wika Bitumen</option>
+<option value="Wika Gedung">			5. Wika Gedung</option>
+<option value="Wika Industri & Konstruksi">	3. Wika Industri & Konstruksi</option>
+<option value="Wika Reality">			2. Wika Reality</option>
+<option value="Wika Rekayasa Konstruksi">	4. Wika Rekayasa Konstruksi</option>
+</select>
+
+
+jenis proyek : I = internal ; E = external
+
+kategory / TIPE proyek : R = RETAIL ; P = NON RETAIL
+
+KODE TAHUN = Jika tahunnya 2021 = "A" ; selain/elsa "O"
+
+terakhir = no urut
+
+susunan kode proyek : (kode)unitkerja+jenisproyek+kategoriproyek+kodetahun+nourut3digit
+
+contoh = divisi bangun gedung + internal + retail + 2021 + no urut
+
+hasil = FIRA001
+
+#Buat Kode proyek auto generate base on data diatas
+
+
+
+<DONE> #TOMBOL NEW PROYEK TIDAK PERLU KODE 
+#KODE PROYEK SEBAGAI URL
+
+
+
+
+
+<DONE> #BUAT NAVIGASI BARU UNTUK : COMPANY ,PADA ASIDE NAVBAR (NAMA COMPANY "STR") 
+
+<DONE> #BUAT NAVIGASI BARU UNTUK : SUMBER DANA ,PADA ASIDE NAVBAR {
+	ISINYA = 
+	NAME : "LEMBAGA PEMBERI DANA" (dipanggil)
+	KATEGORI : [BUMN,INVESTASI,LOAN,PEMERINTAH,SWASTA]
+	UNIQUE KODE : [NPWP, BUSSINES PERMITE LICENSE, KODE ANGGARAN PROVINSI,KODE BAGIAN ANGGARAN, TAX INDETIFICATION NUMBER]
+	JENIS PERUSAHAAN : "STRING"
+	TIPE LAIN : "STRING"
+	KODE : "STRING"
+	SUMBER DANA ID : "STR"
+	KODE PROYEK ID : "STR"
+	TIPE PERUSAHAAN : "STR"
+	COT ID : "STR"
+	}
+
+
+<DONE>#BUAT NAVIGASI BARU UNTUK : DOP , PADA ASIDE NAVBAR (NAMA DOP "STR")
+
+<DONE>#BUAT NAVIGASI BARU UNTUK : SBU , PADA ASIDE NAVBAR {
+	NAMA : STRING (DIPANGGIL)
+	KODE : "STR"
+	KLASIFIKASI : [BANGUN GEDUNG, Kontruksi Manufaktur, Minyak Dan Gas, Sumber Daya Air, Transportasi]
+	Sub-Klasifikasi : Str"
+	Referensi 1 : str
+	Referensi 2 : str
+	Referensi 3 : str
+	}
+
+<DONE>#BUAT NAVIGASI BARU UNTUK : UNIT KERJA, PADA ASIDE NAVBAR {
+	nomer/ID : int
+	nama unit : "strg" dipanggil
+	DivCode : F...
+	DOP : look up DOP master
+	Company : Look Master Company
+	PIC : String
+	}
+
+
+#pada proyek, pada saat pilih UNIT kerja, DOP dan Company auto ikut master UNIT Kerja. dibuat disable
+
+<DONE> #buat dropdown untuk tombol master
+
+
+#CRM = KEPUASAN PELANGGAN
+per : proyek
+ISI CONTENT : ToBeContinue
+
+
+
+
+
