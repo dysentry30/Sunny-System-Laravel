@@ -30,6 +30,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\SumberDanaController;
+use App\Models\Proyek;
 
 /*
 |--------------------------------------------------------------------------
@@ -232,6 +233,21 @@ Route::get('/', function () {
 
     // DELETE data customer pada dasboard customer by ID 
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+    
+    // Stage Update 
+    // Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+    Route::post('/proyek/stage-save', function (Request $request) {
+        $id = $request->id;
+        $proyekStage = Proyek::find($id);
+        $proyekStage->stage = $request->stage;
+        // dd($proyekStage);
+        if ($proyekStage->save()) {
+            return response()->json([
+                "status" => "success",
+                "link" => true,
+            ]);
+        }
+    });
 
 //End :: Project
 
