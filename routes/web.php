@@ -30,6 +30,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\SumberDanaController;
+use App\Models\Proyek;
 
 /*
 |--------------------------------------------------------------------------
@@ -232,6 +233,21 @@ Route::get('/', function () {
 
     // DELETE data customer pada dasboard customer by ID 
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+    
+    // Stage Update 
+    // Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+    Route::post('/proyek/stage-save', function (Request $request) {
+        $id = $request->id;
+        $proyekStage = Proyek::find($id);
+        $proyekStage->stage = $request->stage;
+        // dd($proyekStage);
+        if ($proyekStage->save()) {
+            return response()->json([
+                "status" => "success",
+                "link" => true,
+            ]);
+        }
+    });
 
 //End :: Project
 
@@ -423,111 +439,6 @@ Route::get('/pasal/{pasal}', function (Pasals $pasal) {
     ]);
 });
 
-// Route::post("/contract-management/save/{id_contract}", function (Request $request, $id_contract) {
-//     $contract_management = ContractManagements::find($id_contract);
-//     $contract_management->id_contract = $request->number_contract;
-//     $contract_management->project_name = $request->project_name;
-//     $contract_management->contract_in = $request->start_date;
-//     $contract_management->contract_out = $request->due_date;
-//     $contract_management->value = $request->value_contract;
-
-//     if ($contract_management->save()) {
-//         return response(json_encode([
-//             "status" => "Success",
-//             "message" => "Kontrak ini berhasil disimpan",
-//         ]), 200, [
-//             "content-type" => "application/json"
-//         ]);
-//     }
-//     return response(json_encode([
-//         "status" => "Failed",
-//         "message" => "Kontrak ini gagal disimpan",
-//     ]), 200, [
-//         "content-type" => "application/json"
-//     ]);
-
-//     // $contract_management->num = $request->number_contract;
-// });
-
-
-// function getClient()
-// {
-//     global $request;
-//     $client = new \Google\Client();
-//     // $credentials = json_encode([
-//     //     "CLIENT_ID" => getenv("GOOGLE_CLIENT_ID"),
-//     //     "CLIENT_SECRET_PATH" => getenv("GOOGLE_CLIENT_SECRET"),
-//     // ]);
-
-//     $client->setApplicationName('Sunny System');
-
-//     $client->setScopes([DOCS::DOCUMENTS, DOCS::DRIVE]);
-//     $client->addScope([Oauth2::USERINFO_EMAIL, Oauth2::USERINFO_PROFILE]);
-
-//     $client->setAccessType('online');
-
-//     $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER["PHP_SELF"];
-//     $client->setRedirectUri($redirect_uri);
-
-//     $client->setAuthConfig(
-//         ["web" => [
-//             "client_id" => getenv("GOOGLE_CLIENT_ID"),
-//             "project_id" => getenv("PROJECT_ID"),
-//             "auth_uri" => getenv("AUTH_URI"),
-//             "token_uri" => getenv("TOKEN_URI"),
-//             "auth_provider_x509_cert_url" => getenv("AUTH_PROVIDER_X509_CERT_URL"),
-//             "client_secret" => getenv("GOOGLE_CLIENT_SECRET"),
-//             // "redirect_uris" => getenv("GOOGLE_REDIRECT_URIS"),
-//         ]]
-//     );
-//     if (isset($_GET['code'])) {
-//         $token = $client->fetchAccessTokenWithAuthCode($_GET['code']);
-//         $client->setAccessToken($token);
-
-//         // store in the session also
-//         $request->session()->put('upload_token', $token);
-//         header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
-//     }
-
-//     // set the access token as part of the client
-//     if (!empty($request->session()->get('upload_token'))) {
-//         $client->setAccessToken($request->session()->get('upload_token'));
-//         if ($client->isAccessTokenExpired()) {
-//             $request->session()->remove('upload_token');
-//         }
-//     } else {
-//         $authUrl = $client->createAuthUrl();
-//         $data = [
-//             "status" => "Login Required",
-//             "link" => $authUrl,
-//         ];
-//         // return redirect($data["link"]);
-//         print_r(json_encode($data));
-//         return $client;
-//         // return response("", 200, []);
-//     }
-//     return $client;
-// }
-
-// function insertFileToDrive($file_name, $client, $id_contract)
-// {
-//     if ($client->getAccessToken()) {
-//         $service_drive = new \Google\Service\Drive($client);
-//         // $service_docs = new \Google\Service\Docs($client);
-//         $file_drive = new \Google\Service\Drive\DriveFile();
-//         $original_file_name = explode("/", $file_name);
-//         $file_drive->setName($original_file_name[count($original_file_name) - 1]);
-//         $permissions = new Permission();
-//         // $file_drive->setPermissions($permissions->set)
-//         $result = $service_drive->files->create($file_drive, [
-//             'data' => file_get_contents(Storage::path($file_name)),
-//             'mimeType' => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-//             'uploadType' => 'media'
-//         ]);
-//         // print_r($result);
-//         return $result;
-//     }
-// }
 
 function moveFileTemp(UploadedFile $file, $file_name)
 {

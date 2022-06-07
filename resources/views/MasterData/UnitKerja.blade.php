@@ -435,24 +435,8 @@
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<select name="unit-kerja" 
-												class="form-select form-select-solid" 
-												data-control="select2" data-hide-search="true" 
-												data-placeholder="Unit Kerja">
-												<option></option>
-												<option value="Divisi Bangun Gedung">Divisi Bangun Gedung</option>
-												<option value="Divisi Industri Plant">Divisi Industri Plant</option>
-												<option value="Industri Infrastruktur 1">Industri Infrastruktur 1</option>
-												<option value="Industri Infrastruktur 2">Industri Infrastruktur 2</option>
-												<option value="Divisi Luar Negeri">Divisi Luar Negeri</option>
-												<option value="Industri Power Energi">Industri Power Energi</option>
-												<option value="Wika Beton">Wika Beton</option>
-												<option value="Wika Bitumen">Wika Bitumen</option>
-												<option value="Wika Gedung">Wika Gedung</option>
-												<option value="Wika Industri & Konstruksi">Wika Industri & Konstruksi</option>
-												<option value="Wika Reality">Wika Reality</option>
-												<option value="Wika Rekayasa Konstruksi">Wika Rekayasa Konstruksi</option>
-											</select>
+											<input type="text" class="form-control form-control-solid" 
+											id="unit-kerja" name="unit-kerja" value="" placeholder="Unit Kerja" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->

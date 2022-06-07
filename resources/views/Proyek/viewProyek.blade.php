@@ -201,7 +201,7 @@
                                     <!--begin::Page title-->
                                     <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                         <!--begin::Title-->
-                                        <h1 class="d-flex align-items-center fs-3 my-1">Account
+                                        <h1 class="d-flex align-items-center fs-3 my-1">Proyek
                                         </h1>
                                         <!--end::Title-->
                                     </div>
@@ -258,46 +258,84 @@
                                                     <div class="form-group">
 
                                                         <div id="stage-button" class="stage-list">
-                                                        <button
-                                                            class="stage-button color-is-default stage-is-done is-done"
+                                                        <a href="#" class="stage-button color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Pasar Dini
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
+                                                        </a>
+                                                        <a href="#" class="stage-button color-is-default stage-is-not-active"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Pasar Potensial
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Prakualifikasi
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Tender Diikuti
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Perolehan
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
-                                                            disabled="" style="outline: 0px; cursor: not-allowed;">
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                            style="outline: 0px; cursor: pointer;">
                                                             Menang
-                                                        </button>
-                                                        <button
-                                                            class="stage-button stage-is-not-active color-is-default"
-                                                            disabled="" style="outline: 0px; cursor: not-allowed;">
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                            style="outline: 0px; cursor: pointer;">
                                                             Terkontrak
-                                                        </button>
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                            style="outline: 0px; cursor: pointer;">
+                                                            ForeCast
+                                                        </a>
+                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                            style="outline: 0px; cursor: pointer;">
+                                                            Approval
+                                                        </a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                        <script>
+                                            const stages = document.querySelectorAll(".stage-button");
+                                            stages.forEach((stage, i) => {
+                                                stage.setAttribute("stage", i + 1);
+                                                if (i + 1 <= Number("{{ $proyek->stage }}")) {
+                                                    stage.classList.add("stage-is-done");
+                                                    stage.style.cursor = "cursor";
+                                                } else {
+                                                    stage.classList.add("stage-is-not-active");
+                                                    stage.style.cursor = "cursor";
+                                                    if (i > Number("{{ $proyek->stage }}")) {
+                                                        stage.style.cursor = "not-allowed";
+                                                        stage.style.pointerEvents = "none";
+                                                    }
+                
+                                                }
+                                                               
+                                                stage.addEventListener("click", async e => {
+                                                    e.stopPropagation();
+                                                    const stage = e.target.getAttribute("stage");
+                                                    const formData = new FormData();
+                                                    formData.append("_token", "{{ csrf_token() }}");
+                                                    formData.append("stage", stage);
+                                                    // formData.append("id", "");
+                                                    formData.append("id", "{{ $proyek->id }}");
+                                                    const setStage = await fetch("/proyek/stage-save", {
+                                                        method: "POST",
+                                                        body: formData
+                                                    }).then(res => res.json());
+                                                    console.log(setStage);
+                                                    if (setStage.link) {
+                                                        // window.location.href = setStage.link;
+                                                        window.location.reload();
+                                                    }
+                                                });
+                                            });
+                                        </script>
 <!--end::Header Orange-->
 
 
@@ -313,85 +351,103 @@
 <!--begin:::Tabs Navigasi-->
                                         <ul
                                             class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                            <!--begin:::Tab item Pasar Dini-->
-                                            <li class="nav-item">
-                                                <a class="nav-link text-active-primary pb-4 active"
-                                                    data-bs-toggle="tab" href="#kt_user_view_overview_pasardini"
-                                                    style="font-size:14px;">Pasar Dini</a>
-                                            </li>
-                                            <!--end:::Tab item Pasar Dini-->
-
+                                            @if ($proyek->stage > 0)
+                                                <!--begin:::Tab item Pasar Dini-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4 active"
+                                                        data-bs-toggle="tab" href="#kt_user_view_overview_pasardini"
+                                                        style="font-size:14px;">Pasar Dini</a>
+                                                </li>
+                                                <!--end:::Tab item Pasar Dini-->
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 1)
                                             <!--begin:::Tab item Pasar Potensial-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_potensial"
-                                                    style="font-size:14px;">Pasar Potensial</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_potensial"
+                                                style="font-size:14px;">Pasar Potensial</a>
                                             </li>
                                             <!--end:::Tab item Pasar Potensial-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 2)
                                             <!--begin:::Tab item Prakualifikasi-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_prakualifikasi"
-                                                    style="font-size:14px;">Prakualifikasi</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_prakualifikasi"
+                                                style="font-size:14px;">Prakualifikasi</a>
                                             </li>
                                             <!--end:::Tab item Prakualifikasi-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 3)
                                             <!--begin:::Tab item Tender Diikuti-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_tender"
-                                                    style="font-size:14px;">Tender Diikuti</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_tender"
+                                                style="font-size:14px;">Tender Diikuti</a>
                                             </li>
                                             <!--end:::Tab item Tender Diikuti-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 4)
                                             <!--begin:::Tab item Perolehan-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_perolehan"
-                                                    style="font-size:14px;">Perolehan</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_perolehan"
+                                                style="font-size:14px;">Perolehan</a>
                                             </li>
                                             <!--end:::Tab item Perolehan-->
-                                                
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 5)
                                             <!--begin:::Tab item Menang-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_menang"
-                                                    style="font-size:14px;">Menang</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_menang"
+                                                style="font-size:14px;">Menang</a>
                                             </li>
                                             <!--end:::Tab item Menang-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 6)
                                             <!--begin:::Tab item Terkontrak-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_terkontrak"
-                                                    style="font-size:14px;">Terkontrak</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_terkontrak"
+                                                style="font-size:14px;">Terkontrak</a>
                                             </li>
                                             <!--end:::Tab item Terkontrak-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 7)
                                             <!--begin:::Tab item Forecast-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_forecast"
-                                                    style="font-size:14px;">Forecast</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_forecast"
+                                                style="font-size:14px;">Forecast</a>
                                             </li>
                                             <!--end:::Tab item Forecast-->
-
+                                            @endif
+                                            
+                                            @if ($proyek->stage > 8)
                                             <!--begin:::Tab item Approval-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
-                                                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_approval"
-                                                    style="font-size:14px;">Approval</a>
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_approval"
+                                                style="font-size:14px;">Approval</a>
                                             </li>
                                             <!--end:::Tab item Approval-->
+                                            @endif
                                         </ul>
 
 <!--end:::Tabs Navigasi-->
@@ -402,9 +458,9 @@
 <!--begin:::Tab Pasar Dini-->
                                             <div class="tab-pane fade show active" id="kt_user_view_overview_pasardini" role="tabpanel">
 
-                                                @php
+                                                {{-- @php
                                                      isset($proyek->nama_proyek)
-                                                @endphp
+                                                @endphp --}}
 
                                                     <!--begin::Row Kanan+Kiri-->
                                                     <div class="row fv-row">
@@ -435,13 +491,13 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select name="unit-kerja" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Pilih Unit Kerja">
+                                                                data-placeholder="Pilih Unit Kerja" disabled>
                                                                     <option></option>
                                                                     @foreach ($unitkerjas as $unitkerja)
-                                                                    @if ($unitkerja->unit_kerja == $proyek->unit_kerja)
-                                                                        <option value="{{ $unitkerja->unit_kerja }}" selected>{{$unitkerja->unit_kerja }}</option>
+                                                                    @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                                                        <option value="{{ $unitkerja->divcode }}" selected>{{$unitkerja->unit_kerja }}</option>
                                                                     @else
-                                                                        <option value="{{ $unitkerja->unit_kerja }}">{{$unitkerja->unit_kerja }}</option>
+                                                                        <option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option>
                                                                     @endif
                                                                     @endforeach
                                                                 </select>
@@ -466,7 +522,33 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid" 
-                                                                id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}" placeholder="Kode Proyek" />
+                                                                id="kode-proyek" name="kode-proyek" value="{{ $proyek->kode_proyek }}" placeholder="Kode Proyek" disabled/>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+                                                    
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span class="required">Tipe Proyek</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
+                                                                data-placeholder="Pilih Tipe Proyek" disabled>
+                                                                    <option ></option>
+                                                                    <option value="R" {{ $proyek->tipe_proyek == "R" ? "selected" : "" }}>Retail</option>
+                                                                    <option value="P" {{ $proyek->tipe_proyek == "P" ? "selected" : "" }}>Non-Retail</option>
+                                                                </select>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -477,11 +559,16 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Tahun Perolehan</span>
+                                                                    <span class="required">Jenis Proyek</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="number" class="form-control form-control-solid" name="tahun-perolehan" min="2020" max="2099" step="1" value="{{ $proyek->tahun_perolehan }}" />
+                                                                <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
+                                                                    data-placeholder="Pilih Jenis Proyek" disabled>
+                                                                    <option ></option>
+                                                                    <option value="I" {{ $proyek->jenis_proyek == "I" ? "selected" : "" }}>Internal</option>
+                                                                    <option value="E" {{ $proyek->jenis_proyek == "E" ? "selected" : "" }}>External</option>
+                                                                </select>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -496,7 +583,6 @@
                                                         <div class="col-6">
                                                             <!--begin::Input group Website-->
                                                             <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span>Bulan Pelaksanaan</span>
@@ -518,52 +604,6 @@
                                                                         <option value="Oktober" {{ $proyek->bulan_pelaksanaan == "Oktober" ? "selected" : "" }}>Oktober</option>
                                                                         <option value="November" {{ $proyek->bulan_pelaksanaan == "November" ? "selected" : "" }}>November</option>
                                                                         <option value="Desember" {{ $proyek->bulan_pelaksanaan == "Desember" ? "selected" : "" }}>Desember</option>
-                                                                </select>
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Jenis Proyek</span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih Jenis Proyek">
-                                                                    <option ></option>
-                                                                    <option value="Internal" {{ $proyek->jenis_proyek == "Internal" ? "selected" : "" }}>Internal</option>
-                                                                    <option value="External" {{ $proyek->jenis_proyek == "External" ? "selected" : "" }}>External</option>
-                                                                </select>
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End::Col-->
-                                                    </div>
-                                                    <!--End::Row Kanan+Kiri-->
-                                                    
-                                                    <!--begin::Row Kanan+Kiri-->
-                                                    <div class="row fv-row">
-                                                        <!--begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Tipe Proyek</span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                data-placeholder="Pilih Tipe Proyek">
-                                                                    <option ></option>
-                                                                    <option value="Retail" {{ $proyek->tipe_proyek == "Retail" ? "selected" : "" }}>Retail</option>
-                                                                    <option value="Non-Retail" {{ $proyek->tipe_proyek == "Non-Retail" ? "selected" : "" }}>Non-Retail</option>
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
@@ -617,6 +657,22 @@
                                                             </div>
                                                             <!--end::Input group-->
                                                         </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Tahun Perolehan</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="number" class="form-control form-control-solid" name="tahun-perolehan" min="2021" max="2099" step="1" value="{{ $proyek->tahun_perolehan }}" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
                                                     
@@ -1041,15 +1097,15 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="dop" name="dop" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih DOP">
-                                                                    <option></option>
-                                                                    @foreach ($dops as $dop)
+                                                                    data-placeholder="Pilih DOP" disabled>
+                                                                    <option>{{ $proyek->dop }}</option>
+                                                                    {{-- @foreach ($dops as $dop)
                                                                     @if ($dop->dop == $proyek->dop)
                                                                         <option value="{{ $dop->dop }}" selected>{{$dop->dop }}</option>
                                                                     @else
                                                                         <option value="{{ $dop->dop }}">{{$dop->dop }}</option>
                                                                     @endif
-                                                                    @endforeach
+                                                                    @endforeach --}}
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
@@ -1066,15 +1122,15 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="company" name="company" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih Company">
-                                                                    <option></option>
-                                                                    @foreach ($companies as $company)
+                                                                    data-placeholder="Pilih Company" disabled>
+                                                                    <option>{{ $proyek->company }}</option>
+                                                                    {{-- @foreach ($companies as $company)
                                                                     @if ($company->nama_company == $proyek->company)
                                                                         <option value="{{ $company->nama_company }}" selected>{{$company->nama_company }}</option>
                                                                     @else
                                                                         <option value="{{ $company->nama_company }}">{{$company->nama_company }}</option>
                                                                     @endif
-                                                                    @endforeach
+                                                                    @endforeach --}}
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
