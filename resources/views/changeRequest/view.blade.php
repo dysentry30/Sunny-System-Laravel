@@ -269,11 +269,7 @@
                     <!--begin::Container-->
                     <!--begin::Card "style edited"-->
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
-
-
-
-
-                        @isset($addendumContracts)
+                        @if(count($addendumContracts) > 0)
                             <!--begin::Card header-->
                             <div class="card-header border-0 pt-">
                                 <!--begin::Card title-->
@@ -293,7 +289,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-customer-table-filter="search"
-                                            class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
+                                            class="form-control form-control-solid w-250px ps-15" placeholder="Search Addendum" />
                                     </div>
                                     <!--end::Search-->
                                 </div>
@@ -349,7 +345,7 @@
                                     src="{{ asset('/media/illustrations/dozzy-1/18-dark.png') }}">
                                 <h3 class=""><b>Data not found</b></h3>
                             </div>
-                        @endisset
+                        @endif
                     </div>
                     <!--end::Card-->
                     <!--end::Container-->

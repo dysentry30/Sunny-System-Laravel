@@ -60,8 +60,9 @@ class ContractManagements extends Model
         return $this->hasMany(AddendumContracts::class, "id_contract");
     }
 
-    public function projects()
+    public function project()
     {
+        return $this->hasOne(Proyek::class, "kode_proyek", "project_id");
     }
 
     public function getAll()
