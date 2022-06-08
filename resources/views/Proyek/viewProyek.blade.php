@@ -2144,7 +2144,7 @@
  
 
 
-    <!--begin::Modal-->
+<!--begin::Modal-->
 
 			<form action="/project" method="post" enctype="multipart/form-data"> 
 				@csrf
