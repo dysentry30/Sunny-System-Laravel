@@ -10,6 +10,7 @@ class Proyek extends Model
 {
     use HasFactory;
     // protected $primaryKey   = 'kode_proyek';
+    protected $table = "proyeks";
 
     public function Company()
     {
