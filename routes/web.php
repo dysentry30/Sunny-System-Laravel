@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\SumberDanaController;
 use App\Models\Proyek;
@@ -235,7 +236,6 @@ Route::get('/', function () {
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
     
     // Stage Update 
-    // Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
     Route::post('/proyek/stage-save', function (Request $request) {
         $id = $request->id;
         $proyekStage = Proyek::find($id);
@@ -250,6 +250,17 @@ Route::get('/', function () {
     });
 
 //End :: Project
+
+
+//Begin :: Forecast
+
+    // Home Page Forecast
+    Route::get('/forecast', [ForecastController::class, 'index']);
+
+    // to NEW page 
+    // Route::get('/proyek/new', [ProyekController::class, 'new']);
+
+//End :: Forecast
 
 
 // Begin :: Master Data

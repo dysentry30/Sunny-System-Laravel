@@ -329,9 +329,6 @@
 														<!--begin::Company=-->
 														<td>
 															{{ $proyek->UnitKerja->unit_kerja }}
-															@php
-																// dd($proyek->UnitKerja)
-															@endphp
 														</td>
 														<!--end::Company=-->
 														
