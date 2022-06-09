@@ -225,7 +225,6 @@
                     <!--end::Colapse-->
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title-2">Master Data <i class="bi bi-caret-down-fill text-white"></i></span>
                     </a>
                 </div>
             </div>
