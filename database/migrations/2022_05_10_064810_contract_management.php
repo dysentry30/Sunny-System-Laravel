@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create("contract_managements", function (Blueprint $table) {
             $table->id();
             $table->integer("id_contract")->unique();
-            $table->integer("project_id");
+            $table->mediumText("project_id");
             $table->mediumText("contract_proceed");
             $table->tinyInteger("stages");
             $table->dateTime("contract_in");

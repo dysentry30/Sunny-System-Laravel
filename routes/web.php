@@ -91,7 +91,7 @@ Route::get('/customer', function () {
         }
         $validation->validate();
         $contractManagements->id_contract = (int) $data["number-contract"];
-        $contractManagements->project_id = (int) $data["project-id"];
+        $contractManagements->project_id = $data["project-id"];
         $contractManagements->contract_proceed = "Belum Selesai";
         $contractManagements->contract_in = new DateTime($data["start-date"]);
         $contractManagements->contract_out = new DateTime($data["due-date"]);
@@ -566,7 +566,7 @@ Route::get('/document', function () {
             $customerAttachments->save();
         }
 
-        return redirect("/customer");
+        return redirect()->back();
     }); 
 
     // NEW to Create New customer #1 
