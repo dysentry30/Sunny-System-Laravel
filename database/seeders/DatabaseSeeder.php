@@ -11,6 +11,7 @@ use App\Models\Proyek;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use App\Models\Company;
+use App\Models\Customer;
 
 class DatabaseSeeder extends Seeder
 {
@@ -24,7 +25,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // ContractManagements::factory(5)->create();
         Pasals::factory(5)->create();
-        // Customer::factory(6)->create();
+        Customer::factory(6)->create();
         // Proyek::factory(8)->create();
         // DraftContracts::factory(5)->create();
 
