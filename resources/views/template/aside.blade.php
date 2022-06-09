@@ -71,7 +71,7 @@
                 </div>
             </div>
 
-            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#ff7f00;margin-top:8px;">
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
                     <a class="menu-link active" href="/forecast" style="color:white;">
                         <span class="menu-icon">
