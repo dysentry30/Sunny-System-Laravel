@@ -155,7 +155,7 @@
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end">
                                             Hi,<strong>Indar Wiguna</strong>
-                                            <img src="/media/avatars/User-Icon.png" alt="user" />
+                                            <img src="{{ asset('/media/avatars/User-Icon.png') }}" alt="user" />
                                         </div>
 
                                         <!--end::Menu wrapper-->
@@ -338,8 +338,13 @@
                                             <!--end::Name=-->
                                             <!--begin::Email=-->
                                             <td>
-                                                <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                    {{ $contract->project_name }}</a>
+                                                @isset($contract->project)
+                                                    <a href="/proyek/{{ $contract->project->id}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $contract->project->nama_proyek }}</a>
+                                                @else
+                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                        Kosong</a>
+                                                @endisset
                                             </td>
                                             <!--end::Email=-->
 
