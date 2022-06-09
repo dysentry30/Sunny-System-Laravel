@@ -73,6 +73,21 @@
 
             <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
                 <div class="menu-item">
+                    <a class="menu-link active" href="/forecast" style="color:white;">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="bi bi-wallet-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title-2">Forecast</span>
+                    </a>
+                </div>
+            </div>
+
+            <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;">
+                <div class="menu-item">
                     <a class="menu-link active" href="/contract-management" style="color:white;">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -133,7 +148,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title-2">Master Data <i class="bi bi-caret-down-fill"></i></span>
+                        <span class="menu-title-2">Master Data <i class="bi bi-caret-down-fill text-white"></i></span>
                     </a>
                 </div>
             </div>
