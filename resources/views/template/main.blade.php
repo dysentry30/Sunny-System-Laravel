@@ -53,6 +53,7 @@
         input[type="date"]::-webkit-calendar-picker-indicator {
             display: none;
         }
+
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -89,16 +90,16 @@
         var hostUrl = "../";
     </script>
     <!--begin::Javascript-->
-    {{-- begin::Bootstrap JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
-    </script>
-    {{-- end::Bootstrap JS --}}
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('/js/scripts.bundle.js') }}"></script>
     <!--end::Global Javascript Bundle-->
+    {{-- begin::Bootstrap JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+    </script>
+    {{-- end::Bootstrap JS --}}
     {{-- begin::html2pdf JS --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
