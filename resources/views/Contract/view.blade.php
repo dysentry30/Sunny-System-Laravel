@@ -334,12 +334,16 @@
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Proyek">
-                                                                    <option value=""></option>
-                                                                    @foreach ($projects as $project)
-                                                                        <option value="{{ $project->kode_proyek }}">
-                                                                            {{ $project->nama_proyek }}
-                                                                        </option>
-                                                                    @endforeach
+                                                                    <option selected>Pilih Proyek...</option>
+                                                                    @isset($contracts)
+                                                                        @foreach ($contracts as $contract_in_contracts)
+                                                                            <option
+                                                                                value="{{ $contract_in_contracts->project_id }}"
+                                                                                @if (isset($contract)) {{ $contract_in_contracts->project_id == $contract->project_id ? 'selected' : '' }} @endif>
+                                                                                {{ $contract_in_contracts->project_id }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    @endisset
                                                                 </select>
 
                                                                 <!--end::Input-->
@@ -366,12 +370,10 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
 
-                                                                <a href="#" class="btn btn-sm mx-3"
-                                                                    style="background: transparent;width:1rem;height:2.3rem;"
+                                                                <a href="#" class="btn btn-sm btn-secondary"
                                                                     data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_calendar-start"><i
-                                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #e08c16"></i></a>
+                                                                    data-bs-target="#kt_modal_calendar-start"
+                                                                    id="start-date-modal">+</a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12"
                                                                     placeholder="Select a date" value="" name="start-date"
@@ -397,12 +399,9 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <a href="#" class="btn btn-sm mx-3"
-                                                                    style="background: transparent;width:1rem;height:2.3rem;"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#kt_modal_calendar-end"><i
-                                                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #e08c16"></i></a>
+                                                                <a href="#" class="btn btn-secondary" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_calendar-end"
+                                                                    id="end-date-modal">+</a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12" value=""
                                                                     placeholder="Select a date" id="due-date"
@@ -720,12 +719,15 @@
                                                 <select name="project-id" id="project-id"
                                                     class="form-select form-select-solid" data-control="select2"
                                                     data-hide-search="true" data-placeholder="Pilih Proyek">
-                                                    @foreach ($projects as $project_all)
-                                                        <option value="{{ $project_all->kode_proyek }}"
-                                                            {{ $contract->project->kode_proyek == $project_all->kode_proyek ? "selected" : ""}}>
-                                                            {{ $project_all->nama_proyek }}
-                                                        </option>
-                                                    @endforeach
+                                                    <option selected>Pilih Proyek...</option>
+                                                    @isset($contracts)
+                                                        @foreach ($contracts as $contract_in_contracts)
+                                                            <option value="{{ $contract_in_contracts->project_id }}"
+                                                                @if (isset($contract)) {{ $contract_in_contracts->id_contract == $contract->id_contract ? 'selected' : '' }} @endif>
+                                                                {{ $contract_in_contracts->project_id }}
+                                                            </option>
+                                                        @endforeach
+                                                    @endisset
                                                 </select>
 
                                                 <!--end::Input-->

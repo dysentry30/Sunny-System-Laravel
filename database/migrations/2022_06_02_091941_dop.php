@@ -13,12 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('claim_details', function (Blueprint $table) {
-            $table->bigIncrements('id_claim_detail');
-            $table->mediumText('id_claim');
-            $table->mediumText('id_document');
-            $table->longText('document_name');
-            $table->longText("note_detail_claim");
+        Schema::create('dops', function (Blueprint $table) {
+            $table->id();
+            $table->string("dop");
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('claim_details');
+        Schema::dropIfExists('dops');
     }
 };
