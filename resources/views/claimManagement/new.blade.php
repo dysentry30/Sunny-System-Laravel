@@ -1333,7 +1333,7 @@
             const formData = new FormData();
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("index_array", indexArray);
-            formData.append("id_claim", "{{ $claimContract->id_claim}}");
+            formData.append("id_claim", "{{ $claimContract->id_claim ?? 0}}");
             const deleteArrayApprovalRes = await fetch("/approval-claim/delete", {
                 method: "POST",
                 header: {
