@@ -14,11 +14,8 @@ use Illuminate\Pagination\Paginator;
 
 class ProyekController extends Controller
 {
-    // public function view () {return view('1_Dashboard');}
     public function view() 
     {
-        // ["paginator" => Paginator::useBootstrapFour()];
-        // return view('3_Proyek', ['proyeks' => DB::table('proyeks')->paginate(10)]);
         return view('3_Proyek', ['proyeks' => Proyek::all(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::all()]);
     }
 
@@ -32,6 +29,8 @@ class ProyekController extends Controller
     public function save(Request $request, Proyek $newProyek)
     {
         $dataProyek = $request->all(); 
+        $proyekAll = Proyek::all();
+        $unitKerja = DB::table('unit_kerjas')->where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
@@ -41,7 +40,35 @@ class ProyekController extends Controller
         $newProyek->sumber_dana= $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan= $dataProyek["bulan-pelaksanaan"];
+        $newProyek->stage= "1";
+        
+        $newProyek->dop= $unitKerja->dop;
+        $newProyek->company= $unitKerja->company;
 
+        //begin::Generate Kode Proyek
+            if ($proyekAll->last() == null){
+                $no_urut = 1;
+            } else {
+                $no_urut = count($proyekAll)+1;
+            }
+            
+            $unit_kerja = $dataProyek["unit-kerja"];
+            $jenis_proyek = $dataProyek["jenis-proyek"];
+            $tipe_proyek = $dataProyek["tipe-proyek"];
+            $tahun = $dataProyek["tahun-perolehan"];
+            
+                // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
+                $kode_tahun = $tahun == 2021 ? "A" : "O";
+                
+                // Untuk membuat 3 digit nomor urut terakhir
+                $no_urut = str_pad(strval($no_urut),3,0, STR_PAD_LEFT);
+                
+                // Menggabungkan semua kode beserta nomor urut
+                $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
+
+                $newProyek->kode_proyek = $kode_proyek;
+        //end::Generate Kode Proyek
+        
         if ($newProyek->save()) {
             return redirect("/project")->with("success", true);
         }
@@ -70,12 +97,12 @@ class ProyekController extends Controller
         
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
-        $newProyek->unit_kerja = $dataProyek["unit-kerja"];
-        $newProyek->kode_proyek = $dataProyek["kode-proyek"];
+        // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
+        // $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
-        $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];
-        $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
+        // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
+        // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         $newProyek->nilai_valas_review = $dataProyek["nilai-valas-review"];
@@ -97,8 +124,8 @@ class ProyekController extends Controller
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
-        $newProyek->dop = $dataProyek["dop"];
-        $newProyek->company = $dataProyek["company"];
+        // $newProyek->dop = $dataProyek["dop"];
+        // $newProyek->company = $dataProyek["company"];
         $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
         
         // form PASAR PRAKUALIFIKASI

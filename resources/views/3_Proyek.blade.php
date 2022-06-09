@@ -287,7 +287,7 @@
 										<div class="card-body pt-0 ">
 
 
-											<!--begin::Table-->
+<!--begin::Table Proyek-->
 											<table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
 												<!--begin::Table head-->
 												<thead>
@@ -318,7 +318,7 @@
 														
 														<!--begin::Name=-->
 														<td>
-															<a href="/proyek/view/{{ $proyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">id : {{ $proyek->id }}</a>
+															<a href="/proyek/view/{{ $proyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
 														</td>
 														<!--end::Name=-->
 														<!--begin::Email=-->
@@ -328,7 +328,7 @@
 														<!--end::Email=-->
 														<!--begin::Company=-->
 														<td>
-															{{ $proyek->unit_kerja }}
+															{{ $proyek->UnitKerja->unit_kerja }}
 														</td>
 														<!--end::Company=-->
 														
@@ -354,12 +354,12 @@
 														<!--end::Action=-->
 														<!--begin::Action=-->
 														<td>
-															{{ $proyek->jenis_proyek }}
+															{{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}
 														</td>
 														<!--end::Action=-->
 														<!--begin::Action=-->
 														<td>
-															{{ $proyek->tipe_proyek }}
+															{{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
 														</td>
 														<!--end::Action=-->
 														<!--begin::Action=-->
@@ -381,7 +381,7 @@
 												</tbody>
 												<!--end::Table body-->
 											</table>
-											<!--end::Table-->
+<!--end::Table Proyek-->
 
 											
 
@@ -406,7 +406,7 @@
 					<!--end::Root-->
 
 
-		<!--begin::Modal-->
+<!--begin::Modal New Proyek-->
 
 			<form action="/proyek/save" method="post" enctype="multipart/form-data"> 
 				@csrf
@@ -473,9 +473,9 @@
 												<option></option>
 												@foreach ($unitkerjas as $unitkerja)
 												@if ($unitkerja->unit_kerja == null)
-													<option value="{{ $unitkerja->unit_kerja }}" selected>{{$unitkerja->unit_kerja }}</option>
+													<option value="{{ $unitkerja->divcode }}" selected>{{$unitkerja->unit_kerja }}</option>
 												@else
-													<option value="{{ $unitkerja->unit_kerja }}">{{$unitkerja->unit_kerja }}</option>
+													<option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option>
 												@endif
 												@endforeach
 											</select>
@@ -493,15 +493,6 @@
 									<div class="col-6">
 										<!--begin::Input group Website-->
 										<div class="fv-row mb-7">
-											{{-- <!--begin::Label-->
-											<label class="fs-6 fw-bold form-label mt-3">
-												<span class="required">Kode Proyek</span>
-											</label>
-											<!--end::Label-->
-											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid" 
-											id="kode-proyek" name="kode-proyek" value="" placeholder="Kode" />
-											<!--end::Input--> --}}
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
 												<span class="required">Jenis Proyek</span>
@@ -511,8 +502,8 @@
 											<select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
 												data-placeholder="Jenis Proyek">
 												<option selected></option>
-												<option value="Internal">Internal</option>
-												<option value="External">External</option>
+												<option value="I">Internal</option>
+												<option value="E">External</option>
 											</select>
 											<!--end::Input-->
 										</div>
@@ -524,15 +515,15 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Tipe Proyek</span>
+												<span class="required">Tipe Proyek</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
 											data-placeholder="Tipe Proyek">
 												<option selected></option>
-												<option value="Retail">Retail</option>
-												<option value="Non-Retail">Non-Retail</option>
+												<option value="R">Retail</option>
+												<option value="P">Non-Retail</option>
 											</select>
 											<!--end::Input-->
 										</div>
@@ -604,7 +595,7 @@
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="number" class="form-control form-control-solid" 
-											id="tahun-perolehan" name="tahun-perolehan" min="2020" max="2099" step="1" value="2022" />
+											id="tahun-perolehan" name="tahun-perolehan" min="2021" max="2099" step="1" value="2022" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -642,8 +633,6 @@
 									<!--End::Col-->
 								</div>
 								<!--End::Row Kanan+Kiri-->
-							
-							
 								
 								<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
 									
@@ -667,7 +656,8 @@
 						inp.addEventListener('input', reformat);
 					});
 				</script>
-		<!--end::Modals-->
+
+<!--end::Modal New Proyek-->
 
 					
 		
