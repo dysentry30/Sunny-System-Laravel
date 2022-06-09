@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('sumber_danas', function (Blueprint $table) {
             $table->id();
             $table->string('nama_sumber');
-            $table->string('kategori')->nullable();
-            $table->string('unique_code')->nullable();
+            $table->string('kategori');
+            $table->string('unique_code');
             $table->string('jenis_perusahaan')->nullable();
             $table->string('tipe_lain')->nullable();
             $table->string('kode_sumber')->nullable();
