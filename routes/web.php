@@ -78,7 +78,7 @@ Route::get('/customer', function () {
         ];
         $rules = [
             "number-contract" => "required|numeric",
-            "project-id" => "required|numeric",
+            "project-id" => "required|string",
             "start-date" => "required|date|before:due-date",
             "due-date" => "required|date|after:start-date",
             "value" => "required",
@@ -334,7 +334,7 @@ Route::post('/claim-management/save', function (Request $request, ClaimManagemen
     $rules = [
         "approve-date" => "required|date",
         "pic" => "required|string",
-        "project-id" => "required|numeric",
+        "project-id" => "required|string",
         "id-contract" => "required|numeric",
     ];
     $validation = Validator::make($data, $rules, $messages);
@@ -344,6 +344,7 @@ Route::post('/claim-management/save', function (Request $request, ClaimManagemen
         $request->old("project-id");
         $request->old("id-contract");
         $request->old("number-claim");
+        dd($validation->errors());
         return redirect()->back()->with("failed", "This claim failed to add");
     }
     $validation->validate();
