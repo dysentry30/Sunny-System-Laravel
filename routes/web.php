@@ -239,13 +239,15 @@ Route::post('/approval-claim/save', function (Request $request) {
     $approval_name = trim(htmlspecialchars($request->get("approval-claim-name")));
     $id_claim = $request->id_claim;
     $total = $request->total;
-    $store_data_array = [$approval_name, $total];
     $claimManagement = ClaimManagements::find($id_claim);
-    $approval_array = explode(",", trim($claimManagement->approval_claim));
+    $approval_array = explode(";", trim($claimManagement->approval_claim));
+    $index_array = count($approval_array);
     $claimManagement->nilai_claim += $total;
-    if (count($approval_array) > 1) {
+    if ($index_array > 1) {
+        $store_data_array = [$index_array, $approval_name, $total];
         $claimManagement->approval_claim = $claimManagement->approval_claim . json_encode($store_data_array) . ";";
     } else {
+        $store_data_array = [$index_array, $approval_name, $total];
         $claimManagement->approval_claim = json_encode($store_data_array) . ";";
     }
 
@@ -254,6 +256,7 @@ Route::post('/approval-claim/save', function (Request $request) {
             "status" => "success",
             "message" => "Approval has been added",
             "approval_name" => $approval_name,
+            "index_array" => $index_array,
             "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
         ]);
     }
@@ -261,6 +264,51 @@ Route::post('/approval-claim/save', function (Request $request) {
         "status" => "success",
         "message" => "Approval failed to add",
     ]);
+});
+
+Route::post('/approval-claim/delete', function (Request $request) {
+    $id_claim = $request->id_claim;
+    $id_requested = $request->index_array;
+    $claimManagement = ClaimManagements::find($id_claim);
+    $approval_array = explode(";", trim($claimManagement->approval_claim));
+    array_pop($approval_array); //remove last array because it's always an empty string
+    $approval_array = array_map(function($data){
+        $data_array = json_decode($data);
+        return $data_array;
+    }, $approval_array);
+    $total = array_map(function($data) {
+        return (int) $data[2];
+    }, $approval_array);
+    $approval_array = array_filter($approval_array, function($data) use ($id_requested) {
+        return $data[0] != $id_requested;
+    });
+    $index_array = count($approval_array);
+    $total = array_sum($total);
+    $store_data_array = "";
+    foreach ($approval_array as $approval) {
+        $store_data_array .= json_encode($approval) . ";";
+        // $store_data_array += "";
+    }
+    dump($store_data_array);
+    // if ($index_array > 1) {
+    //     $claimManagement->approval_claim = json_encode($approval_array) . ";";
+    // } else {
+    //     $claimManagement->approval_claim = "";
+    // }
+    // $claimManagement->nilai_claim = $total;
+    // if ($claimManagement->save()) {
+    //     return response()->json([
+    //         "status" => "success",
+    //         "message" => "Selected approval has been deleted",
+    //         "approval_name" => $approval_name,
+    //         "index_array" => $index_array,
+    //         "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
+    //     ]);
+    // }
+    // return response()->json([
+    //     "status" => "success",
+    //     "message" => "Approval failed to add",
+    // ]);
 });
 
 Route::post('/claim-management/save', function (Request $request, ClaimManagements $claimManagements) {

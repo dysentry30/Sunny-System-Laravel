@@ -176,7 +176,7 @@
             <!--begin::Toolbar-->
             @isset($claimContract)
                 <form action="/claim-management/update" method="post">
-                    <input type="hidden" name="id-claim" value="{{$claimContract->id_claim}}">
+                    <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim }}">
                 @else
                     <form action="/claim-management/save" method="post">
                     @endisset
@@ -574,8 +574,9 @@
                                                                 <!--begin::Table row-->
                                                                 <tr
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Nama</th>
-                                                                    <th class="min-w-125px">Total</th>
+                                                                    <th class="min-w-auto">Nama</th>
+                                                                    <th class="min-w-auto">Total</th>
+
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
@@ -591,13 +592,20 @@
                                                                         @php
                                                                             $approval = json_decode($approval);
                                                                         @endphp
-                                                                        <tr>
+                                                                        <tr data-id="{{ $approval[0] }}">
                                                                             <td>
-                                                                                <h6><b>{{ $approval[0] }}</b></h6>
+                                                                                <h6><b>{{ $approval[1] }}</b></h6>
                                                                             </td>
                                                                             <td>
-                                                                                <h6><b>{{ number_format($approval[1], 0, ',', ',') }}</b>
+                                                                                <h6><b>{{ number_format($approval[2], 0, ',', ',') }}</b>
                                                                                 </h6>
+                                                                            </td>
+                                                                            <td>
+                                                                                <button type="button"
+                                                                                    onclick="deleteApprovalClaim(this)"
+                                                                                    class="btn btn-sm btn-link">
+                                                                                    <i class="bi bi-trash3-fill"></i>
+                                                                                </button>
                                                                             </td>
                                                                         </tr>
                                                                     @endforeach
@@ -638,8 +646,8 @@
                                                                 <!--begin::Table row-->
                                                                 <tr
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Nama Dokumen</th>
-                                                                    <th class="min-w-125px">Notes</th>
+                                                                    <th class="min-w-auto">Nama Dokumen</th>
+                                                                    <th class="min-w-auto">Notes</th>
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
@@ -1202,7 +1210,8 @@
                                 </td>
                                 <td>
                                     <h6 class="text-gray-500">${total}</h6>
-                                </td>`;
+                                </td>
+                                `;
                                 editableRow.innerHTML = html;
 
                                 const approvalClaimRes = await fetch(
@@ -1215,20 +1224,26 @@
                                     }).then(res => res.json());
 
                                 if (approvalClaimRes.status == "success") {
+                                    console.log(approvalClaimRes);
                                     html = `
-                                    <tr>
+                                    <tr data-id="${approvalClaimRes.index_array}">
                                         <td>
                                             <h6 class="text-gray-800">${approvalClaimRes.approval_name}</h6>
                                         </td>
                                         <td>
                                             <h6 class="text-gray-800">${total}</h6>
                                         </td>
+                                        <td>
+                                            <button type="button" onclick="deleteApprovalClaim(this)" class="btn btn-sm btn-link">
+                                                <i class="bi bi-trash3-fill"></i>
+                                            </button>
+                                        </td>
                                     </tr>`;
-                                    editableRow.innerHTML = html;
+                                    editableRow.remove();
+                                    tablePengajuanClaim.innerHTML += html;
                                     textFieldTotalClaim.value = approvalClaimRes
                                         .nilai_claim;
                                 }
-                                editableRow.classList.remove("editable-row");
                             } else {
                                 input2.classList.add("form-invalid");
 
@@ -1309,6 +1324,29 @@
             documentReady: true,
         });
         // end initialize Froala Editor
+
+        // begin Delete Approval Claim
+        async function deleteApprovalClaim(elt) {
+            const parentElt = elt.parentElement.parentNode;
+            const indexArray = parentElt.getAttribute("data-id");
+            const tablePengajuanClaim = document.querySelector("#kt_customers_pengajuan_claim tbody");
+            const formData = new FormData();
+            formData.append("_token", "{{ csrf_token() }}");
+            formData.append("index_array", indexArray);
+            formData.append("id_claim", "{{ $claimContract->id_claim}}");
+            const deleteArrayApprovalRes = await fetch("/approval-claim/delete", {
+                method: "POST",
+                header: {
+                    "content-type": "application/json",
+                },
+                body: formData,
+            }).then(res => res.json());
+            if (deleteArrayApprovalRes.status == "success") {
+                parentElt.remove();
+                return;
+            }
+        }
+        // end Delete Approval Claim
     </script>
 
 @endsection
