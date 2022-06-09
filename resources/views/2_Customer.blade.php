@@ -1,19 +1,13 @@
-{{-- Begin::Extend Header --}}
-@extends('template.main')
-{{-- End::Extend Header --}}
-
-{{-- Begin::Title --}}
+@extends('template.header')
 @section('title', 'Customer')
-{{-- End::Title --}}
-
-<!--begin::Main-->
 @section('content')
-
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
+            <!--begin::Aside-->
             @extends('template.aside')
+            <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
                 <!--begin::Header-->
@@ -74,7 +68,7 @@
                                             data-kt-menu="true">
                                             <!--begin::Heading-->
                                             <div class="d-flex flex-column bgi-no-repeat rounded-top"
-                                                style="background-image:url('{{ asset('media/misc/pattern-1.jpg') }}')">
+                                                style="background-image:url('assets/media/misc/pattern-1.jpg')">
                                                 <!--begin::Title-->
                                                 <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notifications
                                                     <span class="fs-8 opacity-75 ps-3">0 reports</span>
@@ -93,7 +87,6 @@
                                             </div>
                                             <!--end::Heading-->
                                             <!--begin::Tab content-->
-
                                             <div class="tab-content">
                                                 <!--begin::Tab panel-->
                                                 <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
@@ -162,7 +155,7 @@
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end">
                                             Hi,<strong>Indar Wiguna</strong>
-                                            <img src="/media/avatars/User-Icon.png" alt="user" />
+                                            <img src="assets/media/avatars/User-Icon.png" alt="user" />
                                         </div>
 
                                         <!--end::Menu wrapper-->
@@ -180,206 +173,672 @@
                     </div>
                     <!--end::Container-->
                 </div>
-
                 <!--end::Header-->
-					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-						<!--begin::Toolbar-->
-						<div class="toolbar" id="kt_toolbar">
-							<!--begin::Container-->
-							<div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-								<!--begin::Page title-->
-								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-									<!--begin::Title-->
-									<h1 class="d-flex align-items-center fs-3 my-1">Account
-									</h1>
-									<!--end::Title-->
-								</div>
-								<!--end::Page title-->
-								<!--begin::Actions-->
-								<div class="d-flex align-items-center py-1">
+                <!--begin::Content-->
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <!--begin::Toolbar-->
+                    <div class="toolbar" id="kt_toolbar">
+                        <!--begin::Container-->
+                        <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                            <!--begin::Page title-->
+                            <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                <!--begin::Title-->
+                                <h1 class="d-flex align-items-center fs-3 my-1">Account
+                                </h1>
+                                <!--end::Title-->
+                            </div>
+                            <!--end::Page title-->
+                            <!--begin::Actions-->
+                            <div class="d-flex align-items-center py-1">
 
-										<!--begin::Button-->
-										<a href="customer/new" class="btn btn-sm btn-primary"
-										
-										id="kt_toolbar_primary_button"
-										style="background-color:#ffa62b;">
-										New</a>
-									   <!--end::Button-->
+                                <!--begin::Button-->
+                                <a href="Customer/view.html" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
+                                    style="background-color:#ffa62b;">
+                                    New</a>
+                                <!--end::Button-->
 
-									<!--begin::Wrapper-->
-									<div class="me-4" style="margin-left:10px;">
-										<!--begin::Menu-->
-										<a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-										<!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-										<span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
-											</svg>
-										</span>
-										<!--end::Svg Icon-->Export Data</a>
-										<!--begin::Menu 1-->
-										<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-											<!--begin::Header-->
-											<div class="px-7 py-5">
-												<div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-											</div>
-											<!--end::Header-->
-											<!--begin::Menu separator-->
-											<div class="separator border-gray-200"></div>
-											<!--end::Menu separator-->
-											<!--begin::Form-->
-											<div class="px-7 py-5">
-												<!--begin::Input group-->
-												<div class="mb-10">
-													<!--begin::Label-->
-													
-													<i class="fas fa-file-excel"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Export Excel</label><br>
-													<i class="fas fa-file"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Import Excel</label><br>
-													<!--end::Label-->
-												</div>
-											</div>
-											<!--end::Form-->
-										</div>
-										<!--end::Menu 1-->
-										<!--end::Menu-->
-									</div>
-									<!--end::Wrapper-->
-									
-								
-								</div>
-								<!--end::Actions-->
-							</div>
-							<!--end::Container-->
-						</div>
-						<!--end::Toolbar-->
-						
-					
+                                <!--begin::Wrapper-->
+                                <div class="me-4" style="margin-left:10px;">
+                                    <!--begin::Menu-->
+                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
+                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+                                        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none">
+                                                <path
+                                                    d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
+                                                    fill="black" />
+                                            </svg>
+                                        </span>
+                                        <!--end::Svg Icon-->Export Data
+                                    </a>
+                                    <!--begin::Menu 1-->
+                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                        id="kt_menu_6155ac804a1c2">
+                                        <!--begin::Header-->
+                                        <div class="px-7 py-5">
+                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Menu separator-->
+                                        <div class="separator border-gray-200"></div>
+                                        <!--end::Menu separator-->
+                                        <!--begin::Form-->
+                                        <div class="px-7 py-5">
+                                            <!--begin::Input group-->
+                                            <div class="mb-10">
+                                                <!--begin::Label-->
 
-							<!--begin::Post-->
-								<!--begin::Container-->
-									<!--begin::Card-->
-									<div class="card" Id="List-vv">
+                                                <i class="fas fa-file-excel"></i>
+                                                <label class="form-label" style="margin-left:5px;">
+                                                    Export Excel</label><br>
+                                                <i class="fas fa-file"></i>
+                                                <label class="form-label" style="margin-left:5px;">
+                                                    Import Excel</label><br>
+                                                <!--end::Label-->
+                                            </div>
+                                        </div>
+                                        <!--end::Form-->
+                                    </div>
+                                    <!--end::Menu 1-->
+                                    <!--end::Menu-->
+                                </div>
+                                <!--end::Wrapper-->
 
 
-										<!--begin::Card header-->
-										<div class="card-header border-0 pt-">
-											<!--begin::Card title-->
-											<div class="card-title">
-												<!--begin::Search-->
-												<div class="d-flex align-items-center position-relative my-1">
-													<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-													<span class="svg-icon svg-icon-1 position-absolute ms-6">
-														<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-															<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
-															<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
-														</svg>
-													</span>
-													<!--end::Svg Icon-->
-													<input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search Customers" />
-												</div>
-												<!--end::Search-->
-											</div>
-											<!--begin::Card title-->
-										</div>
-										<!--end::Card header-->
-	
-										<!--begin::Card body-->
-										<div class="card-body pt-0">
-											<!--begin::Table-->
-											<table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-												<!--begin::Table head-->
-												<thead>
-													<!--begin::Table row-->
-													<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0"
-													>
-														<th class="min-w-auto">Customer Name</th>
-														<th class="min-w-auto">Email</th>
-														<th class="min-w-auto">Phone Number</th>
-														<th class="min-w-auto">Website</th>
-														<th class="min-w-auto">Created Date</th>
-														<th class="min-w-auto">PIC</th>
-														<th class="min-w-auto"><center>Action</center></th>
-													</tr>
-													<!--end::Table row-->
-												</thead>
-												<!--end::Table head-->
-												<!--begin::Table body-->
-												<tbody class="fw-bold text-gray-600">
+                            </div>
+                            <!--end::Actions-->
+                        </div>
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Toolbar-->
 
-                                                    @php
-                                                    $customer = $customer->reverse();
-                                                    @endphp
-                                                    @foreach ($customer as $customers)
-                                                        
-													<tr>
-                                                        
-                                                        <!--begin::Name=-->
-														<td>
-                                                            <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">
-																{{ $customers->name }}
-															</a>
-														</td>
-														<!--end::Name=-->
-														<!--begin::Email=-->
-														<td>
-                                                            {{-- <a href="#" class="text-gray-600 text-hover-primary mb-1"> --}}
-                                                                {{ $customers->email }}
-                                                            {{-- </a> --}}
-														</td>
-														<!--end::Email=-->
-														<!--begin::Phone Number=-->
-														<td>{{ $customers->phone_number }}</td>
-														<!--end::Phone Number=-->
-														<!--begin::Website=-->
-														<td data-filter="mastercard">
-                                                            <a href="#">{{ $customers->website }}</a>
-														</td>
-														<!--end::Website=-->
-														<!--begin::Date=-->
-														<td>{{ $customers->created_at }}</td>
-														<!--end::Date=-->
-														<!--begin::PIC=-->
-														<td>{{ $customers->name_pic }}</td>
-														<!--end::Date=-->
-														<!--begin::Action=-->
-														<td class="text-end">
-                                                            <center>
-                                                            <div>
-                                                                    <a href="/customer/view/{{ $customers->id_customer }}" class="btn btn-sm btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">View</a>
-                                                                    
-                                                                    <form action="/customer/delete/{{ $customers->id_customer }}" method="post" class="d-inline" >
-                                                                        @method('delete')
-                                                                        @csrf
-                                                                        <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                                                    </form>
-                                                            </div>
-                                                            </center>
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                    </tr>
-                                                        
-                                                    @endforeach
-                                                        
-                                                    </tbody>
-												<!--end::Table body-->
-											</table>
-											<!--end::Table-->
-										</div>
-										<!--end::Card body-->
-									</div>
-									<!--end::Card-->
-								<!--end::Container-->
-							<!--end::Post-->
-					
 
-					</div>
-					<!--end::Content-->
 
+                    <!--begin::Post-->
+                    <!--begin::Container-->
+                    <!--begin::Card-->
+                    <div class="card" Id="List-vv">
+
+
+                        <!--begin::Card header-->
+                        <div class="card-header border-0 pt-">
+                            <!--begin::Card title-->
+                            <div class="card-title">
+                                <!--begin::Search-->
+                                <div class="d-flex align-items-center position-relative my-1">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                            fill="none">
+                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
+                                                transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                            <path
+                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
+                                                fill="black" />
+                                        </svg>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    <input type="text" data-kt-customer-table-filter="search"
+                                        class="form-control form-control-solid w-250px ps-15"
+                                        placeholder="Search Customers" />
+                                </div>
+                                <!--end::Search-->
+                            </div>
+                            <!--begin::Card title-->
+                        </div>
+                        <!--end::Card header-->
+
+                        <!--begin::Card body-->
+                        <div class="card-body pt-0">
+                            <!--begin::Table-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Customer Name</th>
+                                        <th class="min-w-125px">Email</th>
+                                        <th class="min-w-125px">Phone Number</th>
+                                        <th class="min-w-125px">Website</th>
+                                        <th class="min-w-125px">Created Date</th>
+                                        <th class="min-w-125px">PIC</th>
+                                        <th class="text-end min-w-70px">Actions</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-600">
+                                    <tr>
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                Alpha Business
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                Alpha_business@gmail.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-8897-001</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">Alpha-business.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>14 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Indar Wiguna</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr style="background-color:#ebedf3;">
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                PERTAMINA (PERSERO), PT
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                pertami@pertamina.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-7897-201</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">pertamina.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>14 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Doni Saputra</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr>
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                PT KILANG PERTAMINA INTERNASIONAL
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                kilangpertamina@gmail.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-8897-001</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">pertamina.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>13 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Indar Wiguna</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr style="background-color:#ebedf3;">
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                CHIYODA COPORATION
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                hallo@chiyado.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-4152-101</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">chiyado.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>13 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Doni Saputra</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr>
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                LEIGHTON CONTRACTORS INDONESIA
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                LEIGHTON@gmail.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-4444-001</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">leighton.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>12 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Indar Wiguna</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr style="background-color:#ebedf3;">
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                MEDCO E & P INDONESIA
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                info@medco.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-7797-201</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">medco.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>12 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Doni Saputra</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr>
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                MEGA ANDALAN SUKSES, PT
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                kirim@megaandandalas.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-5557-001</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">megaandandalas.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>12 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Indar Wiguna</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                    <tr style="background-color:#ebedf3;">
+
+                                        <!--begin::Name=-->
+                                        <td>
+                                            <a href="Customer/view.html" class="text-gray-800 text-hover-primary mb-1">
+                                                JGC INDONESIA, PT
+                                            </a>
+                                        </td>
+                                        <!--end::Name=-->
+                                        <!--begin::Email=-->
+                                        <td>
+                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                jgc@jgc.com</a>
+                                        </td>
+                                        <!--end::Email=-->
+                                        <!--begin::Phone Number=-->
+                                        <td>021-4442-101</td>
+                                        <!--end::Phone Number=-->
+                                        <!--begin::Website=-->
+                                        <td data-filter="mastercard">
+                                            <a href="#">jgc.com</a>
+                                        </td>
+                                        <!--end::Website=-->
+                                        <!--begin::Date=-->
+                                        <td>12 Dec 2020</td>
+                                        <!--end::Date=-->
+                                        <!--begin::PIC=-->
+                                        <td>Doni Saputra</td>
+                                        <!--end::Date=-->
+                                        <!--begin::Action=-->
+                                        <td class="text-end">
+                                            <a href="#" class="btn btn-sm btn-light btn-active-light-primary"
+                                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+                                                <span class="svg-icon svg-icon-5 m-0">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                        viewBox="0 0 24 24" fill="none">
+                                                        <path
+                                                            d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z"
+                                                            fill="black" />
+                                                    </svg>
+                                                </span>
+                                                <!--end::Svg Icon-->
+                                            </a>
+                                            <!--begin::Menu-->
+                                            <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4"
+                                                data-kt-menu="true">
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="Customer/view.html" class="menu-link px-3">View</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                                <!--begin::Menu item-->
+                                                <div class="menu-item px-3">
+                                                    <a href="#" class="menu-link px-3"
+                                                        data-kt-customer-table-filter="delete_row">Delete</a>
+                                                </div>
+                                                <!--end::Menu item-->
+                                            </div>
+                                            <!--end::Menu-->
+                                        </td>
+                                        <!--end::Action=-->
+                                    </tr>
+
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                    <!--end::Card-->
+                    <!--end::Container-->
+                    <!--end::Post-->
+
+
+                </div>
+                <!--end::Content-->
                 <!--begin::Footer-->
 
                 <!--end::Footer-->
@@ -389,22 +848,5 @@
         <!--end::Page-->
     </div>
     <!--end::Root-->
-
-
-    <!--begin::Scrolltop-->
-    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-        <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-                <path
-                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                    fill="black" />
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
-    </div>
-    <!--end::Scrolltop-->
 @endsection
-{{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
-{{-- End::Main --}}
+@extends('template.footer')
