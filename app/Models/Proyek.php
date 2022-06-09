@@ -31,5 +31,10 @@ class Proyek extends Model
     {
         return $this->hasMany(Sbu::class);
     }
+    
+    public function UnitKerja()
+    {
+        return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
+    }
 
 }
