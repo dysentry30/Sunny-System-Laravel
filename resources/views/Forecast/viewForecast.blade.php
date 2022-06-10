@@ -276,70 +276,70 @@
                                             </tr>
                                             <tr>
                                                 <!--begin::Sub-Judul Januari-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Januari-->
                                                 <!--begin::Sub-Judul Februari-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Februari-->
                                                 <!--begin::Sub-Judul Maret-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Maret-->
                                                 <!--begin::Sub-Judul April-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul April-->
                                                 <!--begin::Sub-Judul Mei-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Mei-->
                                                 <!--begin::Sub-Judul Juni-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Juni-->
                                                 <!--begin::Sub-Judul Juli-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Juli-->
                                                 <!--begin::Sub-Judul Agustus-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Agustus-->
                                                 <!--begin::Sub-Judul September-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul September-->
                                                 <!--begin::Sub-Judul Oktober-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Oktober-->
                                                 <!--begin::Sub-Judul November-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul November-->
                                                 <!--begin::Sub-Judul Desember-->
-                                                <th class="min-w-125px"><center>Oke</center></th>
+                                                <th class="min-w-125px"><center>OK</center></th>
                                                 <th class="min-w-125px"><center>Forecast</center></th>
                                                 <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Desember-->
                                                 <!--begin::Sub-Judul Total-->
-                                                <th class="pinForecast HidePin min-w-100px"><center>Oke</center></th>
+                                                <th class="pinForecast HidePin min-w-100px"><center>OK</center></th>
                                                 <th class="pinForecast HidePin min-w-100px"><center>Forecast</center></th>
                                                 <th class="pinForecast HidePin min-w-100px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;"><center>Oke</center></th>
+                                                <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;"><center>OK</center></th>
                                                 <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;"><center>Forecast</center></th>
                                                 <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
                                                 <!--end::Sub-Judul Total-->
@@ -503,6 +503,237 @@
                                                 <!--end::Total Coloumn-->
                                             </tr>
                                             <tr id="flush-collapseTwo" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
+                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                    <!--begin::Child=-->
+                                                        <p class="ms-12">
+                                                            Pengadaan JPO Arkadia Tower
+                                                        </p>
+                                                    <!--end::Child=-->
+                                                </td>
+                                                <!--begin::Januari Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Februari Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Februari Coloumn-->
+                                                <!--begin::Maret Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Maret Coloumn-->
+                                                <!--begin::April Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::April Coloumn-->
+                                                <!--begin::Mei Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Mei Coloumn-->
+                                                <!--begin::Juni Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Juni Coloumn-->
+                                                <!--begin::Juli Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Juli Coloumn-->
+                                                <!--begin::Agustus Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Agustus Coloumn-->
+                                                <!--begin::September Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::September Coloumn-->
+                                                <!--begin::Oktober Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Oktober Coloumn-->
+                                                <!--begin::November Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::November Coloumn-->
+                                                <!--begin::Desember Coloumn-->
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <td>222,222</td>
+                                                <!--end::Desember Coloumn-->
+                                                <!--begin::Total Coloumn-->
+                                                <td class="pinForecast HidePin" >2,666,664</td>
+                                                <td class="pinForecast HidePin" >2,666,664</td>
+                                                <td class="pinForecast HidePin" >2,666,664</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">2,666,664</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">2,666,664</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
+                                                <!--end::Total Coloumn-->
+
+                                            </tr>
+                                            <tr style="text-align: right; ">
+                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                    <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
+                                                        <i class="bi bi-chevron-down"></i> DOP 2
+                                                    </a>
+                                                </td>
+
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Total Coloumn-->
+                                                <td class="pinForecast HidePin" >000,000</td>
+                                                <td class="pinForecast HidePin" >000,000</td>
+                                                <td class="pinForecast HidePin" >000,000</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">000,000</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">000,000</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">000,000</td>
+                                                <!--end::Total Coloumn-->
+                                            </tr>
+                                            <tr class="collapse accordion-header" id="collapse2" style="text-align: right;">
+                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                    <!--begin::Child=-->
+                                                        <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                            <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
+                                                        </a>
+                                                    <!--end::Child=-->
+                                                </td>
+                                                <!--begin::Januari Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Januari Coloumn-->
+                                                <!--begin::Februari Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Februari Coloumn-->
+                                                <!--begin::Maret Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Maret Coloumn-->
+                                                <!--begin::April Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::April Coloumn-->
+                                                <!--begin::Mei Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Mei Coloumn-->
+                                                <!--begin::Juni Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Juni Coloumn-->
+                                                <!--begin::Juli Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Juli Coloumn-->
+                                                <!--begin::Agustus Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Agustus Coloumn-->
+                                                <!--begin::September Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::September Coloumn-->
+                                                <!--begin::Oktober Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Oktober Coloumn-->
+                                                <!--begin::November Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::November Coloumn-->
+                                                <!--begin::Desember Coloumn-->
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <td>111,111</td>
+                                                <!--end::Desember Coloumn-->
+                                                <!--begin::Total Coloumn-->
+                                                <td class="pinForecast HidePin" >1,333,332</td>
+                                                <td class="pinForecast HidePin" >1,333,332</td>
+                                                <td class="pinForecast HidePin" >1,333,332</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">1,333,332</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">1,333,332</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">1,333,332</td>
+                                                <!--end::Total Coloumn-->
+                                            </tr>
+                                            <tr id="flush-collapseThree" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <!--begin::Child=-->
                                                         <p class="ms-12">
