@@ -4,15 +4,160 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use Illuminate\Http\Request;
+use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
+use App\Models\CustomerAttachments;
 
 class CustomerController extends Controller
 {
-    public function view() 
+    public function index () 
     {
-        // dd(Customer::all());
         return view('2_Customer',["customer" => Customer::all()]);
     }
+
+    public function delete ($id_customer) 
+    { 
+        $id_customer = Customer::find($id_customer)->delete();
+        return redirect("/customer")->with('status', 'Customer deleted');   
+    }
+
+    public function view ($id_customer) 
+    {
+        $customer = Customer::find($id_customer);
+        return view('Customer/viewCustomer', [
+            "customer" => $customer, 
+            "customers" => Customer::all(),
+            "attachment" => $customer->customerAttachments->all(),   
+            "proyekberjalan" => $customer->proyekBerjalans->all(),
+        ]);
+    }
+
+    public function saveEdit(
+        Request $request, 
+        Customer $editCustomer, 
+        CustomerAttachments $customerAttachments) 
+        {
+
+        $data = $request->all(); 
+        // dd($data); //tes log hasil $data 
+        $editCustomer=Customer::find($data["id-customer"]);
+        $editCustomer->name = $data["name-customer"];
+        $editCustomer->check_customer = $request->has("check-customer"); //boolean check
+        $editCustomer->check_partner = $request->has("check-partner"); //boolean check
+        $editCustomer->check_competitor = $request->has("check-competitor"); //boolean check
+        $editCustomer->address_1 = $data["AddressLine1"];
+        $editCustomer->address_2 = $data["AddressLine2"];
+        $editCustomer->email = $data["email"];
+        $editCustomer->phone_number = $data["phone-number"];
+        $editCustomer->website = $data["website"];
+
+        // form company information
+        $editCustomer->jenis_instansi = $data["jenis-instansi"];
+        $editCustomer->kode_proyek = $data["kodeproyek-company"];
+        $editCustomer->npwp_company = $data["npwp-company"];
+        $editCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $editCustomer->journey_company = $data["journey-company"];
+        $editCustomer->segmentation_company = $data["segmentation-company"];
+        $editCustomer->name_pic = $data["name-pic"];
+        $editCustomer->kode_pic = $data["kode-pic"];
+        $editCustomer->email_pic = $data["email-pic"];
+        $editCustomer->phone_number_pic = $data["phone-number-pic"];
+        
+        // form table performance
+        $editCustomer->nilaiok = $data["nilaiok-performance"];
+        $editCustomer->piutang = $data["piutang-performance"];
+        $editCustomer->laba = $data["laba-performance"];
+        $editCustomer->rugi = $data["rugi-performance"];
+
+        // form attachment
+        $editCustomer->note_attachment = $data["note-attachment"];
+        $customerAttachments->id_customer=$data["id-customer"];
+        $customerAttachments->name_customer=$data["name-customer"];
+        
+        
+        
+        if ($_FILES['doc-attachment']['size'] == 0)
+        {
+            // file is empty (and not an error)
+            $editCustomer->save();
+        }else{
+            $editCustomer->save();
+            $file_name = $request->file("doc-attachment")->getClientOriginalName();
+            $customerAttachments->name_attachment = $file_name;
+            $request->file("doc-attachment")->storeAs("public/CustomerAttachments", $file_name);
+            $customerAttachments->save();
+        }
+
+        return redirect()->back();
+    }
+
+    public function new () {
+        return view('Customer/newCustomer');
+    }
+
+    public function saveNew (Request $request, Customer $newCustomer) {
+        $data = $request->all(); 
+        // dd($request); //console log hasil $data
+        $newCustomer->name = $data["name-customer"];
+        $newCustomer->check_customer = $request->has("check-customer"); //boolean check
+        $newCustomer->check_partner = $request->has("check-partner"); //boolean check
+        $newCustomer->check_competitor = $request->has("check-competitor"); //boolean check
+        $newCustomer->address_1 = $data["AddressLine1"];
+        $newCustomer->address_2 = $data["AddressLine2"];
+        $newCustomer->email = $data["email"];
+        $newCustomer->phone_number = $data["phone-number"];
+        $newCustomer->website = $data["website"];
+
+        // form company information
+        $newCustomer->jenis_instansi = $data["jenis-instansi"];
+        $newCustomer->kode_proyek = $data["kodeproyek-company"];
+        $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $newCustomer->journey_company = $data["journey-company"];
+        $newCustomer->segmentation_company = $data["segmentation-company"];
+        $newCustomer->name_pic = $data["name-pic"];
+        $newCustomer->kode_pic = $data["kode-pic"];
+        $newCustomer->email_pic = $data["email-pic"];
+        $newCustomer->phone_number_pic = $data["phone-number-pic"];
+        
+        // form table performance
+        $newCustomer->nilaiok = $data["nilaiok-performance"];
+        $newCustomer->piutang = $data["piutang-performance"];
+        $newCustomer->laba = $data["laba-performance"];
+        $newCustomer->rugi = $data["rugi-performance"];
+        
+        // form attachment
+        // $newCustomer->note_attachment = $data["note-attachment"];
+
+        if ($newCustomer->save()) {
+            return redirect("/customer")->with("success", true);
+        }
+    }
+
+    public function customerHistory (
+        Request $request, 
+        Customer $modalCustomer, 
+        ProyekBerjalans $customerHistory) 
+        {
+
+        $data = $request->all(); 
+        $modalCustomer=Customer::find($data["id-customer"]);
+        $customerHistory->id_customer = $data["id-customer"];
+        $customerHistory->nama_proyek = $data["nama-proyek"];
+        $customerHistory->kode_proyek = $data["kode-proyek"];
+        $customerHistory->pic_proyek = $data["pic-proyek"];
+        $customerHistory->unit_kerja = $data["unit-kerja"];
+        $customerHistory->jenis_proyek = $data["jenis-proyek"];
+        $customerHistory->nilaiok_proyek = $data["nilaiok-proyek"];
+
+        $modalCustomer->save();
+        $customerHistory->save();
+        return redirect()->back();
+            
+    }
+
+
+
 
     
 }
