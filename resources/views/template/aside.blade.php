@@ -214,10 +214,23 @@
                             <a class="menu-link active" href="/unit-kerja" style="color:white;">
                                 <span class="menu-icon">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                    <i class="bi bi-at text-white"></i>
+                                    <i class="bi bi-diagram-3-fill text-white"></i>
                                     <!--end::Svg Icon-->
                                 </span>
                                 <span class="menu-title-2">Unit Kerja</span>
+                            </a>
+                        </div>
+                        <!--end::Menu Colapse-->
+                        <!--begin::Menu Colapse-->
+                        <div id="#kt_aside_menu" data-kt-menu="true"
+                            style="background-color:#0b89a9; padding:8px 0px 8px 40px;">
+                            <a class="menu-link active" href="/pasal/edit" style="color:white;">
+                                <span class="menu-icon">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                    <i class="bi bi-stack text-white"></i>
+                                    <!--end::Svg Icon-->
+                                </span>
+                                <span class="menu-title-2">Pasal</span>
                             </a>
                         </div>
                         <!--end::Menu Colapse-->

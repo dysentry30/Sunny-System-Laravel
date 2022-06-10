@@ -349,7 +349,7 @@
                     <tr style="text-align: right; ">
                         <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                             <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse" aria-expanded="false" aria-controls="collapse">
-                                <i class="bi bi-chevron-down"></i> collalpse 1
+                                <i class="bi bi-chevron-down"></i> DOP 1
                             </a>
                         </td>
 
@@ -423,7 +423,7 @@
                         <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                             <!--begin::Child=-->
                                 <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                    <i class="bi bi-chevron-down"></i> collalpse 2
+                                    <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
                                 </a>
                             <!--end::Child=-->
                         </td>
@@ -497,7 +497,7 @@
                         <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                             <!--begin::Child=-->
                                 <p class="ms-12">
-                                    Foreach Data
+                                    Pengadaan JPO Arkadia Tower
                                 </p>
                             <!--end::Child=-->
                         </td>

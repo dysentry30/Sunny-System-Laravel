@@ -213,16 +213,16 @@
                     <div class="d-flex align-items-center py-1">
 
                         <!--begin::Button-->
-                        <button type="button" class="btn btn-md btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal" style="background-color:#ffa62b;">
+                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal" style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
                             New</button>
                         <!--end::Button-->
 
                         <!--begin::Wrapper-->
                         <div class="me-4" style="margin-left:10px;">
                             <!--begin::Button-->
-                            <a href="/contract-management/view/29620" class="btn btn-md btn-primary" id="cloedButton"
-                                style="background-color:#f3f6f9;margin-left:10px;color: black;">
+                            <a href="/contract-management/view/29620" class="btn btn-sm btn-primary" id="cloedButton"
+                                style="background-color:#f3f6f9;margin-left:10px;color: black; padding: 7px 30px 7px 30px">
                                 Close</a>
                             <!--end::Button-->
 
@@ -284,7 +284,7 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">#</th>
+                                <th class="min-w-125px">No</th>
                                 <th class="min-w-125px">Pasal</th>
                             </tr>
                             <!--end::Table row-->
@@ -297,23 +297,23 @@
 
                                     <!--begin::Nomor=-->
                                     <td>
-                                        <h6 class="text-gray-700 text-hover-primary mb-1">
-                                            {{ ++$i }}</h6>
+                                        <p class="text-gray-700 mb-1">
+                                            {{ ++$i }}</p>
                                     </td>
                                     <!--end::Nomor=-->
 
                                     <!--begin::Pasal=-->
                                     <td>
-                                        <button type="button" data-bs-toggle="modal" onclick="editPasal(this)"
+                                        <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1">{{ $pasal->pasal }}</button>
+                                            class="text-gray-600 text-hover-primary mb-1"><i class="bi bi-pencil-square"></i> {{ $pasal->pasal }}</a>
                                     </td>
                                     <!--end::Pasal=-->
 
                                     <!--begin::Close Btn=-->
                                     <td>
-                                        <a href="/pasal/delete/{{ $pasal->id_pasal }}" class="btn-close btn-md"
-                                            aria-label="Close"></a>
+                                        <a onclick="return confirm('Deleted file can not be undo. Are You Sure ?')" href="/pasal/delete/{{ $pasal->id_pasal }}" class="btn btn-sm btn-light btn-active-primary"
+                                            aria-label="Close">Delete </a>
                                     </td>
                                     <!--end::Close Btn=-->
 
@@ -372,7 +372,7 @@
                         <div class="fv-row mb-5">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Pasal</span>
+                                <span style="font-weight: normal">Pasal :</span>
                             </label>
                             <!--end::Label-->
 
@@ -463,16 +463,15 @@
 
 
                         </div>
-                        <button type="button" id="edit-pasal-btn" style="background: #ffa62b; margin: 0 1rem 0 0;"
-                            class="btn btn-lg mt-5 btn-primary">
+                        <button type="button" id="edit-pasal-btn" style="background: #ffa62b; margin: 0 1rem 0 0; padding: 7px 30px 7px 30px"
+                            class="btn btn-sm mt-5 btn-primary">
                             <div class="d-flex justify-content-center align-items-center">
                                 <span><b style="color: white;">Update</b></span>
                                 <span class="spinner-border spinner-border-sm" id="loading-update"
                                     style="display: none; margin: 0 0 0 1rem;" aria-hidden="true" role="status"></span>
                             </div>
                         </button>
-                        <button type="button" role="button" id="close-edit-pasal" class="btn btn-lg mt-5 btn-secondary"
-                            data-bs-dismiss="modal">
+                        <button type="button" role="button" id="close-edit-pasal" class="btn btn-sm mt-5 btn-secondary" data-bs-dismiss="modal" style="padding: 7px 30px 7px 30px">
                             Close</b>
                     </div>
                     <!--end::Input group-->
