@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Validator;
 use PhpOffice\PhpWord\PhpWord;
 use App\Models\Customer;
 use App\Models\CustomerAttachments;
+use App\Http\Controllers\CustomerController;
 use App\Models\ProyekBerjalans;
 use App\Http\Controllers\ForecastController;
 
@@ -52,9 +53,6 @@ Route::get('/', function () {
     return view('1_Dashboard');
 });
 
-Route::get('/customer', function () {
-    return view('2_Customer');
-});
 
 // begin :: contract management
     Route::get('/contract-management', function () {
@@ -194,450 +192,323 @@ Route::get('/customer', function () {
 
 // end :: contract management
 
-Route::get('/pasal/edit', function () {
-    return view("pasals/view", ["pasals" => Pasals::all()]);
-});
 
-Route::get('/pasal/delete/{pasal}', function (Pasals $pasal) {
-    if ($pasal->delete()) {
-        return Redirect::back()->with("msg", "This pasal have been deleted");
-    }
-    return Redirect::back()->with("msg", "This pasal failed to delete");
-});
 
-Route::get('/pasal/{pasal}', function (Pasals $pasal) {
-    return response()->json([
-        "pasal" => $pasal,
-    ]);
-});
+// begin :: Pasal
+    Route::get('/pasal/edit', function () {
+        return view("pasals/view", ["pasals" => Pasals::all()]);
+    });
 
-Route::get('change-request', function () {
-    return view("changeRequest/view", ["addendumContracts" => AddendumContracts::all()]);
-});
+    Route::get('/pasal/delete/{pasal}', function (Pasals $pasal) {
+        if ($pasal->delete()) {
+            return Redirect::back()->with("msg", "This pasal have been deleted");
+        }
+        return Redirect::back()->with("msg", "This pasal failed to delete");
+    });
+
+    Route::get('/pasal/{pasal}', function (Pasals $pasal) {
+        return response()->json([
+            "pasal" => $pasal,
+        ]);
+    });
+
+    Route::get('change-request', function () {
+        return view("changeRequest/view", ["addendumContracts" => AddendumContracts::all()]);
+    });
+// end :: Pasal
 
 
 // begin :: Claim Management
-Route::get('claim-management', function () {
-    return view("claimManagement/view", ["claimManagements" => ClaimManagements::all()->sortByDesc("id_claim")]);
-});
-
-Route::get('claim-management/new', function () {
-    $no_urut = new ClaimManagements();
-    if (!empty($no_urut->all()->sortBy("id_claim")->last()->id_claim)) {
-        $no_urut = (int) explode(".", $no_urut->all()->sortBy("id_claim")->last()->id_claim ?? 0)[2];
-    } else {
-        $no_urut = 0;
-    }
-    if ($no_urut < 1) {
-        $no_urut = 1;
-    } else {
-        $no_urut += 1;
-    }
-    $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
-    $kode_claim = "CL." . date("Y") . "." . $no_urut;
-    return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "projects" => Proyek::all(), "kode_claim" => $kode_claim, "claimContract" => null]);
-});
-
-Route::get('claim-management/view/{claim_management}', function (ClaimManagements $claim_management) {
-    // dd($claim_management);
-    return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "claimContract" => $claim_management, "projects" => Proyek::all()]);
-});
-
-Route::post('/approval-claim/save', function (Request $request) {
-    $approval_name = trim(htmlspecialchars($request->get("approval-claim-name")));
-    $id_claim = $request->id_claim;
-    $total = $request->total;
-    $claimManagement = ClaimManagements::find($id_claim);
-    $approval_array = explode(";", trim($claimManagement->approval_claim));
-    $index_array = count($approval_array);
-    $claimManagement->nilai_claim += $total;
-    if ($index_array > 1) {
-        $store_data_array = [$index_array, $approval_name, $total];
-        $claimManagement->approval_claim = $claimManagement->approval_claim . json_encode($store_data_array) . ";";
-    } else {
-        $store_data_array = [$index_array, $approval_name, $total];
-        $claimManagement->approval_claim = json_encode($store_data_array) . ";";
-    }
-
-    if ($claimManagement->save()) {
-        return response()->json([
-            "status" => "success",
-            "message" => "Approval has been added",
-            "approval_name" => $approval_name,
-            "index_array" => $index_array,
-            "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
-        ]);
-    }
-    return response()->json([
-        "status" => "success",
-        "message" => "Approval failed to add",
-    ]);
-});
-
-Route::post('/approval-claim/delete', function (Request $request) {
-    $id_claim = $request->id_claim;
-    $id_requested = $request->index_array;
-    $claimManagement = ClaimManagements::find($id_claim);
-    $approval_array = explode(";", trim($claimManagement->approval_claim));
-    array_pop($approval_array); //remove last array because it's always an empty string
-    $approval_array = array_map(function($data){
-        $data_array = json_decode($data);
-        return $data_array;
-    }, $approval_array);
-    $total = array_map(function($data) {
-        return (int) $data[2];
-    }, $approval_array);
-    $approval_array = array_filter($approval_array, function($data) use ($id_requested) {
-        return $data[0] != $id_requested;
+    Route::get('claim-management', function () {
+        return view("claimManagement/view", ["claimManagements" => ClaimManagements::all()->sortByDesc("id_claim")]);
     });
-    $index_array = count($approval_array);
-    $total = array_sum($total);
-    $store_data_array = "";
-    foreach ($approval_array as $approval) {
-        $store_data_array .= json_encode($approval) . ";";
-        // $store_data_array += "";
-    }
-    dump($store_data_array);
-    // if ($index_array > 1) {
-    //     $claimManagement->approval_claim = json_encode($approval_array) . ";";
-    // } else {
-    //     $claimManagement->approval_claim = "";
-    // }
-    // $claimManagement->nilai_claim = $total;
-    // if ($claimManagement->save()) {
-    //     return response()->json([
-    //         "status" => "success",
-    //         "message" => "Selected approval has been deleted",
-    //         "approval_name" => $approval_name,
-    //         "index_array" => $index_array,
-    //         "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
-    //     ]);
-    // }
-    // return response()->json([
-    //     "status" => "success",
-    //     "message" => "Approval failed to add",
-    // ]);
-});
 
-Route::post('/claim-management/save', function (Request $request, ClaimManagements $claimManagements) {
-    $data = $request->all();
-    // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
-    //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
-    // }
+    Route::get('claim-management/new', function () {
+        $no_urut = new ClaimManagements();
+        if (!empty($no_urut->all()->sortBy("id_claim")->last()->id_claim)) {
+            $no_urut = (int) explode(".", $no_urut->all()->sortBy("id_claim")->last()->id_claim ?? 0)[2];
+        } else {
+            $no_urut = 0;
+        }
+        if ($no_urut < 1) {
+            $no_urut = 1;
+        } else {
+            $no_urut += 1;
+        }
+        $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+        $kode_claim = "CL." . date("Y") . "." . $no_urut;
+        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "projects" => Proyek::all(), "kode_claim" => $kode_claim, "claimContract" => null]);
+    });
 
-    $messages = [
-        "required" => "This field is required",
-        "numeric" => "This field must be numeric only",
-        "string" => "This field must be alphabet only",
-        "date" => "This field must be date format only",
-    ];
-    $rules = [
-        "approve-date" => "required|date",
-        "pic" => "required|string",
-        "project-id" => "required|string",
-        "id-contract" => "required|numeric",
-    ];
-    $validation = Validator::make($data, $rules, $messages);
-    if ($validation->fails()) {
-        $request->old("approve-date");
-        $request->old("pic");
-        $request->old("project-id");
-        $request->old("id-contract");
-        $request->old("number-claim");
-        dd($validation->errors());
-        return redirect()->back()->with("failed", "This claim failed to add");
-    }
-    $validation->validate();
-    $claimManagements->id_claim = $data["number-claim"];
-    $claimManagements->kode_proyek = $data["project-id"];
-    $claimManagements->id_contract = $data["id-contract"];
-    $claimManagements->stages = 1;
-    $claimManagements->nilai_claim = 0;
-    $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
-    $claimManagements->pic = $data["pic"];
+    Route::get('claim-management/view/{claim_management}', function (ClaimManagements $claim_management) {
+        // dd($claim_management);
+        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "claimContract" => $claim_management, "projects" => Proyek::all()]);
+    });
 
-    if ($claimManagements->save()) {
-        return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been added");
-    }
-    return redirect("/claim-management")->with("failed", "This claim failed to add");
-});
+    Route::post('/approval-claim/save', function (Request $request) {
+        $approval_name = trim(htmlspecialchars($request->get("approval-claim-name")));
+        $id_claim = $request->id_claim;
+        $total = $request->total;
+        $claimManagement = ClaimManagements::find($id_claim);
+        $approval_array = explode(";", trim($claimManagement->approval_claim));
+        $index_array = count($approval_array);
+        $claimManagement->nilai_claim += $total;
+        if ($index_array > 1) {
+            $store_data_array = [$index_array, $approval_name, $total];
+            $claimManagement->approval_claim = $claimManagement->approval_claim . json_encode($store_data_array) . ";";
+        } else {
+            $store_data_array = [$index_array, $approval_name, $total];
+            $claimManagement->approval_claim = json_encode($store_data_array) . ";";
+        }
 
-Route::post('/claim-management/update', function (Request $request) {
-    $data = $request->all();
-    // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
-    //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
-    // }
-    $claimManagements = ClaimManagements::find($data["id-claim"]);
-    $messages = [
-        "required" => "This field is required",
-        "numeric" => "This field must be numeric only",
-        "string" => "This field must be alphabet only",
-        "date" => "This field must be date format only",
-    ];
-    $rules = [
-        "approve-date" => "required|date",
-        "pic" => "required|string",
-        "project-id" => "required|numeric",
-        "id-claim" => "required|string",
-    ];
-    $validation = Validator::make($data, $rules, $messages);
-    if ($validation->fails()) {
-        $request->old("approve-date");
-        $request->old("pic");
-        $request->old("project-id");
-        $request->old("id-contract");
-        $request->old("id-claim");
-        return redirect()->back()->with("failed", "This claim failed to add");
-    }
-    $validation->validate();
-    $claimManagements->kode_proyek = $data["project-id"];
-    $claimManagements->id_contract = $data["id-contract"];
-    $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
-    $claimManagements->pic = $data["pic"];
-
-    if ($claimManagements->save()) {
-        return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been updated");
-    }
-    return redirect("/claim-management")->with("failed", "This claim failed to update");
-});
-
-Route::post('/detail-claim/save', function (Request $request, ClaimDetails $claimDetail) {
-    $data = $request->all();
-    $id_claim = $data["id-claim"];
-    $messages = [
-        "required" => "This field is required",
-        "numeric" => "This field must be numeric only",
-        "string" => "This field must be alphabet only",
-        "file" => "This field must be file only"
-    ];
-    $rules = [
-        "attach-file-claim-detail" => "required|file",
-        "document-name-claim-detail" => "required|string",
-        "note-claim-detail" => "required|string",
-    ];
-    $validation = Validator::make($data, $rules, $messages);
-    if ($validation->fails()) {
-        $request->old("attach-file-claim-detail");
-        $request->old("document-name-claim-detail");
-        $request->old("note-claim-detail");
-        return redirect()->back()->with("failed", "This claim failed to add");
-    }
-    $faker = new Uuid();
-    $id_document = $faker->uuid3();
-    $validation->validate();
-    $claimDetail->id_document = $id_document;
-    $claimDetail->document_name = $data["document-name-claim-detail"];
-    $claimDetail->id_claim = $id_claim;
-    $claimDetail->note_detail_claim = $data["note-claim-detail"];
-    if ($claimDetail->save()) {
-        moveFileTemp($data["attach-file-claim-detail"], $id_document);
-        return redirect("/claim-management/view/$id_claim")->with("success", "Detail Claim has been added");
-    }
-    $request->old("attach-file-claim-detail");
-    $request->old("document-name-claim-detail");
-    $request->old("note-claim-detail");
-    return redirect("/claim-management/view/$id_claim")->with("failed", "This claim failed to add");
-});
-
-Route::post('/claim/stage/save', function (Request $request) {
-    $id_claim = $request->id_claim;
-    $stage = $request->stage;
-    $claimManagement = ClaimManagements::find($id_claim);
-    if ($claimManagement instanceof ClaimManagements) {
-        $claimManagement->stages = $stage;
         if ($claimManagement->save()) {
             return response()->json([
                 "status" => "success",
-                "message" => "Stage has been updated",
+                "message" => "Approval has been added",
+                "approval_name" => $approval_name,
+                "index_array" => $index_array,
+                "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
             ]);
         }
-    }
-    return response()->json([
-        "status" => "failed",
-        "message" => "Stage failed to update",
-    ]);
-});
+        return response()->json([
+            "status" => "success",
+            "message" => "Approval failed to add",
+        ]);
+    });
+
+    Route::post('/approval-claim/delete', function (Request $request) {
+        $id_claim = $request->id_claim;
+        $id_requested = $request->index_array;
+        $claimManagement = ClaimManagements::find($id_claim);
+        $approval_array = explode(";", trim($claimManagement->approval_claim));
+        array_pop($approval_array); //remove last array because it's always an empty string
+        $approval_array = array_map(function($data){
+            $data_array = json_decode($data);
+            return $data_array;
+        }, $approval_array);
+        $total = array_map(function($data) {
+            return (int) $data[2];
+        }, $approval_array);
+        $approval_array = array_filter($approval_array, function($data) use ($id_requested) {
+            return $data[0] != $id_requested;
+        });
+        $index_array = count($approval_array);
+        $total = array_sum($total);
+        $store_data_array = "";
+        foreach ($approval_array as $approval) {
+            $store_data_array .= json_encode($approval) . ";";
+            // $store_data_array += "";
+        }
+        dump($store_data_array);
+        // if ($index_array > 1) {
+        //     $claimManagement->approval_claim = json_encode($approval_array) . ";";
+        // } else {
+        //     $claimManagement->approval_claim = "";
+        // }
+        // $claimManagement->nilai_claim = $total;
+        // if ($claimManagement->save()) {
+        //     return response()->json([
+        //         "status" => "success",
+        //         "message" => "Selected approval has been deleted",
+        //         "approval_name" => $approval_name,
+        //         "index_array" => $index_array,
+        //         "nilai_claim" => number_format($claimManagement->nilai_claim, 0, ",", ","),
+        //     ]);
+        // }
+        // return response()->json([
+        //     "status" => "success",
+        //     "message" => "Approval failed to add",
+        // ]);
+    });
+
+    Route::post('/claim-management/save', function (Request $request, ClaimManagements $claimManagements) {
+        $data = $request->all();
+        // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
+        //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
+        // }
+
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+            "string" => "This field must be alphabet only",
+            "date" => "This field must be date format only",
+        ];
+        $rules = [
+            "approve-date" => "required|date",
+            "pic" => "required|string",
+            "project-id" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("approve-date");
+            $request->old("pic");
+            $request->old("project-id");
+            $request->old("id-contract");
+            $request->old("number-claim");
+            dd($validation->errors());
+            return redirect()->back()->with("failed", "This claim failed to add");
+        }
+        $validation->validate();
+        $claimManagements->id_claim = $data["number-claim"];
+        $claimManagements->kode_proyek = $data["project-id"];
+        $claimManagements->id_contract = $data["id-contract"];
+        $claimManagements->stages = 1;
+        $claimManagements->nilai_claim = 0;
+        $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
+        $claimManagements->pic = $data["pic"];
+
+        if ($claimManagements->save()) {
+            return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been added");
+        }
+        return redirect("/claim-management")->with("failed", "This claim failed to add");
+    });
+
+    Route::post('/claim-management/update', function (Request $request) {
+        $data = $request->all();
+        // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
+        //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
+        // }
+        $claimManagements = ClaimManagements::find($data["id-claim"]);
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+            "string" => "This field must be alphabet only",
+            "date" => "This field must be date format only",
+        ];
+        $rules = [
+            "approve-date" => "required|date",
+            "pic" => "required|string",
+            "project-id" => "required|numeric",
+            "id-claim" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("approve-date");
+            $request->old("pic");
+            $request->old("project-id");
+            $request->old("id-contract");
+            $request->old("id-claim");
+            return redirect()->back()->with("failed", "This claim failed to add");
+        }
+        $validation->validate();
+        $claimManagements->kode_proyek = $data["project-id"];
+        $claimManagements->id_contract = $data["id-contract"];
+        $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
+        $claimManagements->pic = $data["pic"];
+
+        if ($claimManagements->save()) {
+            return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been updated");
+        }
+        return redirect("/claim-management")->with("failed", "This claim failed to update");
+    });
+
+    Route::post('/detail-claim/save', function (Request $request, ClaimDetails $claimDetail) {
+        $data = $request->all();
+        $id_claim = $data["id-claim"];
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only"
+        ];
+        $rules = [
+            "attach-file-claim-detail" => "required|file",
+            "document-name-claim-detail" => "required|string",
+            "note-claim-detail" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("attach-file-claim-detail");
+            $request->old("document-name-claim-detail");
+            $request->old("note-claim-detail");
+            return redirect()->back()->with("failed", "This claim failed to add");
+        }
+        $faker = new Uuid();
+        $id_document = $faker->uuid3();
+        $validation->validate();
+        $claimDetail->id_document = $id_document;
+        $claimDetail->document_name = $data["document-name-claim-detail"];
+        $claimDetail->id_claim = $id_claim;
+        $claimDetail->note_detail_claim = $data["note-claim-detail"];
+        if ($claimDetail->save()) {
+            moveFileTemp($data["attach-file-claim-detail"], $id_document);
+            return redirect("/claim-management/view/$id_claim")->with("success", "Detail Claim has been added");
+        }
+        $request->old("attach-file-claim-detail");
+        $request->old("document-name-claim-detail");
+        $request->old("note-claim-detail");
+        return redirect("/claim-management/view/$id_claim")->with("failed", "This claim failed to add");
+    });
+
+    Route::post('/claim/stage/save', function (Request $request) {
+        $id_claim = $request->id_claim;
+        $stage = $request->stage;
+        $claimManagement = ClaimManagements::find($id_claim);
+        if ($claimManagement instanceof ClaimManagements) {
+            $claimManagement->stages = $stage;
+            if ($claimManagement->save()) {
+                return response()->json([
+                    "status" => "success",
+                    "message" => "Stage has been updated",
+                ]);
+            }
+        }
+        return response()->json([
+            "status" => "failed",
+            "message" => "Stage failed to update",
+        ]);
+    });
 
 // end :: Claim Management
 
 // Begin :: Menu Document
-Route::get('/document', function () {
-    $all_document = [];
-    $tables = DB::select("SELECT table_name
-        FROM information_schema.columns
-       WHERE column_name='id_document';");
-    foreach ($tables as $table) {
-        $table_name = $table->table_name;
-        $data = DB::select("SELECT * FROM $table_name;");
-        if(!empty($data)) {
-            array_push($all_document, $data);
+    Route::get('/document', function () {
+        $all_document = [];
+        $tables = DB::select("SELECT table_name
+            FROM information_schema.columns
+        WHERE column_name='id_document';");
+        foreach ($tables as $table) {
+            $table_name = $table->table_name;
+            $data = DB::select("SELECT * FROM $table_name;");
+            if(!empty($data)) {
+                array_push($all_document, $data);
+            }
         }
-    }
-    $all_document = array_merge(...$all_document);
-    return view("document/view", ["all_document" => $all_document]);
-});
+        $all_document = array_merge(...$all_document);
+        return view("document/view", ["all_document" => $all_document]);
+    });
 // End :: Menu Document
 
+
 //Begin :: Customer
-
     // customer dashboard all database
-    // Route::get('/customer', [CustomerController::class, 'view']);
-    Route::get('/customer', function(){
-        return view('2_Customer', ["customer" => Customer::all()]);
-    }); 
-
+    Route::get('/customer', [CustomerController::class, 'index']);
 
 
     // DELETE data customer pada dasboard customer by ID 
-    Route::delete('customer/delete/{id_customer}', function ($id_customer) { 
-        $id_customer = Customer::find($id_customer)->delete();
-        return redirect("/customer")->with('status', 'Customer deleted');   
-    });
+    Route::delete('customer/delete/{id_customer}', [CustomerController::class, 'delete']);
 
 
     // view customer by id_customer #1
-    Route::get('/customer/view/{id_customer}', function ($id_customer) {
-        $customer = Customer::find($id_customer);
-        // dd($customer->proyekBerjalans); //tes log hasil 
-        return view('Customer/viewCustomer', [
-            "customer" => $customer, 
-            "customers" => Customer::all(),
-            "attachment" => $customer->customerAttachments->all(),   
-            "proyekberjalan" => $customer->proyekBerjalans->all(),
-        ]);
-    });
+    Route::get('/customer/view/{id_customer}', [CustomerController::class, 'view']);
 
 
 
     // EDIT customer by view id_customer #2   
-    Route::post('/customer/save-edit', function (
-        Request $request, 
-        Customer $editCustomer, 
-        CustomerAttachments $customerAttachments) 
-        {
+    Route::post('/customer/save-edit', [CustomerController::class, 'saveEdit']);
 
-        $data = $request->all(); 
-        // dd($data); //tes log hasil $data 
-        $editCustomer=Customer::find($data["id-customer"]);
-        $editCustomer->name = $data["name-customer"];
-        $editCustomer->check_customer = $request->has("check-customer"); //boolean check
-        $editCustomer->check_partner = $request->has("check-partner"); //boolean check
-        $editCustomer->check_competitor = $request->has("check-competitor"); //boolean check
-        $editCustomer->address_1 = $data["AddressLine1"];
-        $editCustomer->address_2 = $data["AddressLine2"];
-        $editCustomer->email = $data["email"];
-        $editCustomer->phone_number = $data["phone-number"];
-        $editCustomer->website = $data["website"];
-
-        // form company information
-        $editCustomer->jenis_instansi = $data["jenis-instansi"];
-        $editCustomer->kode_proyek = $data["kodeproyek-company"];
-        $editCustomer->npwp_company = $data["npwp-company"];
-        $editCustomer->kode_nasabah = $data["kodenasabah-company"];
-        $editCustomer->journey_company = $data["journey-company"];
-        $editCustomer->segmentation_company = $data["segmentation-company"];
-        $editCustomer->name_pic = $data["name-pic"];
-        $editCustomer->kode_pic = $data["kode-pic"];
-        $editCustomer->email_pic = $data["email-pic"];
-        $editCustomer->phone_number_pic = $data["phone-number-pic"];
-        
-        // form table performance
-        $editCustomer->nilaiok = $data["nilaiok-performance"];
-        $editCustomer->piutang = $data["piutang-performance"];
-        $editCustomer->laba = $data["laba-performance"];
-        $editCustomer->rugi = $data["rugi-performance"];
-
-        // form attachment
-        $editCustomer->note_attachment = $data["note-attachment"];
-        $customerAttachments->id_customer=$data["id-customer"];
-        $customerAttachments->name_customer=$data["name-customer"];
-        
-        
-        
-        if ($_FILES['doc-attachment']['size'] == 0)
-        {
-            // file is empty (and not an error)
-            $editCustomer->save();
-        }else{
-            $editCustomer->save();
-            $file_name = $request->file("doc-attachment")->getClientOriginalName();
-            $customerAttachments->name_attachment = $file_name;
-            $request->file("doc-attachment")->storeAs("public/CustomerAttachments", $file_name);
-            $customerAttachments->save();
-        }
-
-        return redirect()->back();
-    }); 
 
     // NEW to Create New customer #1 
-    Route::get('/customer/new', function () {
-        return view('Customer/newCustomer');
-    });
+    Route::get('/customer/new', [CustomerController::class, 'new']);
 
 
     // NEW to Create New customer #2
-    Route::post('/customer/save', function (Request $request, Customer $newCustomer) {
-        $data = $request->all(); 
-        // dd($request); //console log hasil $data
-        $newCustomer->name = $data["name-customer"];
-        $newCustomer->check_customer = $request->has("check-customer"); //boolean check
-        $newCustomer->check_partner = $request->has("check-partner"); //boolean check
-        $newCustomer->check_competitor = $request->has("check-competitor"); //boolean check
-        $newCustomer->address_1 = $data["AddressLine1"];
-        $newCustomer->address_2 = $data["AddressLine2"];
-        $newCustomer->email = $data["email"];
-        $newCustomer->phone_number = $data["phone-number"];
-        $newCustomer->website = $data["website"];
+    Route::post('/customer/save', [CustomerController::class, 'saveNew']);
+ 
 
-        // form company information
-        $newCustomer->jenis_instansi = $data["jenis-instansi"];
-        $newCustomer->kode_proyek = $data["kodeproyek-company"];
-        $newCustomer->npwp_company = $data["npwp-company"];
-        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
-        $newCustomer->journey_company = $data["journey-company"];
-        $newCustomer->segmentation_company = $data["segmentation-company"];
-        $newCustomer->name_pic = $data["name-pic"];
-        $newCustomer->kode_pic = $data["kode-pic"];
-        $newCustomer->email_pic = $data["email-pic"];
-        $newCustomer->phone_number_pic = $data["phone-number-pic"];
-        
-        // form table performance
-        $newCustomer->nilaiok = $data["nilaiok-performance"];
-        $newCustomer->piutang = $data["piutang-performance"];
-        $newCustomer->laba = $data["laba-performance"];
-        $newCustomer->rugi = $data["rugi-performance"];
-        
-        // form attachment
-        // $newCustomer->note_attachment = $data["note-attachment"];
-
-        if ($newCustomer->save()) {
-            return redirect("/customer")->with("success", true);
-        }
-    });
-
-    // Edit MODAL by view id_customer    
-    Route::post('/customer/save-modal', function (
-        Request $request, 
-        Customer $modalCustomer, 
-        ProyekBerjalans $customerHistory) 
-        {
-
-        $data = $request->all(); 
-        // dd($data); //tes log hasil $data 
-        $modalCustomer=Customer::find($data["id-customer"]);
-        $customerHistory->id_customer = $data["id-customer"];
-        $customerHistory->nama_proyek = $data["nama-proyek"];
-        $customerHistory->kode_proyek = $data["kode-proyek"];
-        $customerHistory->pic_proyek = $data["pic-proyek"];
-        $customerHistory->unit_kerja = $data["unit-kerja"];
-        $customerHistory->jenis_proyek = $data["jenis-proyek"];
-        $customerHistory->nilaiok_proyek = $data["nilaiok-proyek"];
-
-        $modalCustomer->save();
-        $customerHistory->save();
-        return redirect("/customer");
-            
-    }); 
+    // Edit Customer Proyek History by view id_customer    
+    Route::post('/customer/save-modal', [CustomerController::class, 'customerHistory']);
 //End :: Customer
 
 

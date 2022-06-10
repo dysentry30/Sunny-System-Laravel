@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('claim_managements', function (Blueprint $table) {
-            $table->mediumText('id_claim')->primary();
+            $table->string('id_claim', 15)->primary();
             $table->mediumText('kode_proyek');
             $table->integer('id_contract');
             $table->mediumText('pic');
