@@ -214,7 +214,8 @@
 
                         <!--begin::Button-->
                         <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal" style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+                            data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal"
+                            style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
                             New</button>
                         <!--end::Button-->
 
@@ -306,14 +307,16 @@
                                     <td>
                                         <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1"><i class="bi bi-pencil-square"></i> {{ $pasal->pasal }}</a>
+                                            class="text-gray-600 text-hover-primary mb-1"><i
+                                                class="bi bi-pencil-square"></i> {{ $pasal->pasal }}</a>
                                     </td>
                                     <!--end::Pasal=-->
 
                                     <!--begin::Close Btn=-->
                                     <td>
-                                        <a onclick="return confirm('Deleted file can not be undo. Are You Sure ?')" href="/pasal/delete/{{ $pasal->id_pasal }}" class="btn btn-sm btn-light btn-active-primary"
-                                            aria-label="Close">Delete </a>
+                                        <a onclick="return confirm('Deleted file can not be undo. Are You Sure ?')"
+                                            href="/pasal/delete/{{ $pasal->id_pasal }}"
+                                            class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a>
                                     </td>
                                     <!--end::Close Btn=-->
 
@@ -463,7 +466,8 @@
 
 
                         </div>
-                        <button type="button" id="edit-pasal-btn" style="background: #ffa62b; margin: 0 1rem 0 0; padding: 7px 30px 7px 30px"
+                        <button type="button" id="edit-pasal-btn"
+                            style="background: #ffa62b; margin: 0 1rem 0 0; padding: 7px 30px 7px 30px"
                             class="btn btn-sm mt-5 btn-primary">
                             <div class="d-flex justify-content-center align-items-center">
                                 <span><b style="color: white;">Update</b></span>
@@ -471,7 +475,8 @@
                                     style="display: none; margin: 0 0 0 1rem;" aria-hidden="true" role="status"></span>
                             </div>
                         </button>
-                        <button type="button" role="button" id="close-edit-pasal" class="btn btn-sm mt-5 btn-secondary" data-bs-dismiss="modal" style="padding: 7px 30px 7px 30px">
+                        <button type="button" role="button" id="close-edit-pasal" class="btn btn-sm mt-5 btn-secondary"
+                            data-bs-dismiss="modal" style="padding: 7px 30px 7px 30px">
                             Close</b>
                     </div>
                     <!--end::Input group-->
@@ -571,42 +576,49 @@
         // End Tambah Pasal
 
         // Begin Edit Pasal
+        const spinnerLoadingUpdate = document.querySelector("#loading-update");
+        const editPasalBtn = document.querySelector("#edit-pasal-btn");
+        editPasalBtn.addEventListener("click", updatePasal, true);
+        let id_pasal = 0;
         async function editPasal(elt) {
             // Begin Fetching Data pasal
-            const idPasal = elt.getAttribute("data-id");
+            id_pasal = elt.getAttribute("data-id");
             const editPasalModal = document.getElementById("kt_modal_edit_pasal");
             const inputGrupEditPasalElt = document.getElementById("input-grup-edit-pasal");
             const loadingEditElt = document.getElementById("loading-edit");
-            const editPasalBtn = document.querySelector("#edit-pasal-btn");
-            const spinnerLoadingUpdate = document.querySelector("#loading-update");
             loadingEditElt.style.display = "block";
             inputGrupEditPasalElt.style.display = "none";
-            const getResponse = await fetch(`/pasal/${idPasal}`).then(res => res.json());
+            const getResponse = await fetch(`/pasal/${id_pasal}`).then(res => res.json());
             if (getResponse.pasal) {
                 inputGrupEditPasalElt.style.display = "block";
                 loadingEditElt.style.display = "none";
                 document.getElementById("pasal-edit").value = getResponse.pasal.pasal;
                 document.getElementById("id-pasal").value = getResponse.pasal.id;
                 document.getElementById("pasal-edit").focus();
-                editPasalBtn.addEventListener("click", async e => {
-                    spinnerLoadingUpdate.style.display = "block";
-                    const formData = new FormData();
-                    const pasalChanges = document.querySelector("#pasal-edit").value;
-                    formData.append("_token", "{{ csrf_token() }}");
-                    formData.append("id_pasal", idPasal);
-                    formData.append("pasal", pasalChanges);
-                    const updatePasal = await fetch("/pasal/update", {
-                        method: "POST",
-                        header: {
-                            "content-type": "application/json",
-                        },
-                        body: formData,
-                    }).then(res => res.json());
-                    if (updatePasal.status == "success") {
-                        let html = "";
-                        const allPasalsData = updatePasal.pasals;
-                        allPasalsData.forEach((element, i) => {
-                            html += `
+
+            }
+            // End Fetching Data pasal
+        }
+
+        async function updatePasal() {
+            spinnerLoadingUpdate.style.display = "block";
+            const formData = new FormData();
+            const pasalChanges = document.querySelector("#pasal-edit").value;
+            formData.append("_token", "{{ csrf_token() }}");
+            formData.append("id_pasal", id_pasal);
+            formData.append("pasal", pasalChanges);
+            const updatePasal = await fetch("/pasal/update", {
+                method: "POST",
+                header: {
+                    "content-type": "application/json",
+                },
+                body: formData,
+            }).then(res => res.json());
+            if (updatePasal.status == "success") {
+                let html = "";
+                const allPasalsData = updatePasal.pasals;
+                allPasalsData.forEach((element, i) => {
+                    html += `
                     <tr>
                         <!--begin::Nomor=-->
                         <td>
@@ -615,10 +627,12 @@
                                ${++i}</h6>
                         </td>
                         <!--end::Nomor=-->
+
                         <!--begin::Pasal=-->
                         <td>
-                            <button type="button" data-bs-toggle="modal" onclick="editPasal(this)"
-                            data-id="${element.id_pasal}" data-bs-target="#kt_modal_edit_pasal" class="text-gray-600 text-hover-primary mb-1">${element.pasal}</button>
+                            <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
+                                data-id="${ element.id_pasal }" data-bs-target="#kt_modal_edit_pasal"
+                                class="text-gray-600 text-hover-primary mb-1"><i class="bi bi-pencil-square"></i> ${ element.pasal }</a>
                         </td>
                         <!--end::Pasal=-->
 
@@ -631,23 +645,20 @@
 
                     </tr>
                     `;
-                        });
-                        tableBodyElt.innerHTML = html;
-
-                        toastBodyElt.innerText = updatePasal.message;
-                        toaster.classList.add("text-bg-primary")
-                        toasterBoots.show()
-                    } else {
-                        toastBodyElt.innerText = updatePasal.message;
-                        toaster.classList.add("text-bg-danger")
-                        toasterBoots.show()
-                    }
-                    editPasalModalBoots.hide();
-                    document.querySelector(".modal-backdrop").remove();
-                    spinnerLoadingUpdate.style.display = "none";
                 });
+                tableBodyElt.innerHTML = html;
+
+                toastBodyElt.innerText = updatePasal.message;
+                toaster.classList.add("text-bg-primary")
+                toasterBoots.show()
+            } else {
+                toastBodyElt.innerText = updatePasal.message;
+                toaster.classList.add("text-bg-danger")
+                toasterBoots.show()
             }
-            // End Fetching Data pasal
+            editPasalModalBoots.hide();
+            document.querySelector(".modal-backdrop").remove();
+            spinnerLoadingUpdate.style.display = "none";
         }
         // End Edit Pasal
     </script>

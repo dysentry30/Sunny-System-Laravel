@@ -42,7 +42,7 @@ class PasalController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Pasals $pasal
      * @return \Illuminate\Http\Response
      */
     public function destroy(Pasals $pasal)
