@@ -99,7 +99,7 @@ Route::get('/', function () { return view('1_Dashboard'); });
 // begin :: Claim Management
     Route::get('claim-management', [ClaimController::class, 'index']);
 
-    Route::get('claim-management/new',  [ClaimController::class, 'new']);
+    Route::get('claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
@@ -280,6 +280,7 @@ Route::get('/', function () { return view('1_Dashboard'); });
 function moveFileTemp(UploadedFile $file, $file_name)
 {
     $result = $file->storeAs("public/words", $file_name . "." . $file->getClientOriginalExtension());
+    
     return $result;
 }
 

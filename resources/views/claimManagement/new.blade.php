@@ -149,7 +149,7 @@
                                 <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                                     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                                     Hi,<strong>Indar Wiguna</strong>
-                                    <img src="../../media/avatars/User-Icon.png" alt="user">
+                                    <img src="{{asset('/media/avatars/User-Icon.png')}}" alt="user">
                                 </div>
 
                                 <!--end::Menu wrapper-->
@@ -189,7 +189,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Contract
+                                <h1 class="d-flex align-items-center fs-3 my-1">Claim
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -225,41 +225,6 @@
                         <div id="kt_content_container" class="container-fluid">
                             <!--begin::Contacts App- Edit Contact-->
                             <div class="row g-7">
-
-                                <!--begin::Header Contract-->
-                                <div class="col-xl-15">
-                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
-
-                                        <div class="card-body pt-5"
-                                            style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
-
-                                            <div class="form-group">
-
-                                                <div id="stage-button" class="stage-list">
-
-                                                    <a href="#"
-                                                        class="stage-button color-is-default {{ $claimContract->stage ?? 1 > 0 ? 'stage-is-done' : 'stage-is-not-active' }}"
-                                                        style="outline: 0px;">
-                                                        Draft
-                                                    </a>
-                                                    <a href="#"
-                                                        class="stage-button color-is-default {{ $claimContract->stage ?? 1 > 1 ? 'stage-is-done' : 'stage-is-not-active' }}"
-                                                        style="outline: 0px;">
-                                                        Submit
-                                                    </a>
-                                                    <a href="#"
-                                                        class="stage-button color-is-default {{ $claimContract->stage ?? 1 > 2 ? 'stage-is-done' : 'stage-is-not-active' }}"
-                                                        style="outline: 0px;">
-                                                        Approve & Reject
-                                                    </a>
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--end::Header Contract-->
 
                                 {{-- begin::Alert --}}
                                 @if (Session::has('failed'))
@@ -455,7 +420,7 @@
                                                                 <option value=""></option>
                                                                 @foreach ($projects as $projectAll)
                                                                     <option value="{{ $projectAll->kode_proyek }}"
-                                                                        {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? '')) ? 'selected' : '' }}>
+                                                                        {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? $proyek->kode_proyek)) ? 'selected' : '' }}>
                                                                         {{ $projectAll->nama_proyek }}</option>
                                                                 @endforeach
                                                                 {{-- <option selected data-select2-id="select2-data-2-3jce">Pilih
@@ -491,7 +456,7 @@
                                                                 <option value=""></option>
                                                                 @foreach ($contractManagements as $contract)
                                                                     <option value="{{ $contract->id_contract }}"
-                                                                        {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? '')) ? 'selected' : '' }}>
+                                                                        {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>
                                                                         {{ $contract->id_contract }}</option>
                                                                 @endforeach
                                                             </select>
@@ -1263,40 +1228,40 @@
         // end tambah pengajuan claim
 
         // begin stage function
-        const stages = document.querySelectorAll(".stage-button");
-        stages.forEach((stage, i) => {
-            stage.setAttribute("stage", i + 1);
-            if (i + 1 <= Number("{{ $claimContract->stages ?? 0 }}")) {
-                stage.classList.add("stage-is-done");
-                stage.style.cursor = "cursor";
-            } else {
-                stage.classList.add("stage-is-not-active");
-                stage.style.cursor = "cursor";
-                if (i > Number("{{ $claimContract->stages ?? 0 }}")) {
-                    stage.style.cursor = "not-allowed";
-                    stage.style.pointerEvents = "none";
-                }
+        // const stages = document.querySelectorAll(".stage-button");
+        // stages.forEach((stage, i) => {
+        //     stage.setAttribute("stage", i + 1);
+        //     if (i + 1 <= Number("{{ $claimContract->stages ?? 0 }}")) {
+        //         stage.classList.add("stage-is-done");
+        //         stage.style.cursor = "cursor";
+        //     } else {
+        //         stage.classList.add("stage-is-not-active");
+        //         stage.style.cursor = "cursor";
+        //         if (i > Number("{{ $claimContract->stages ?? 0 }}")) {
+        //             stage.style.cursor = "not-allowed";
+        //             stage.style.pointerEvents = "none";
+        //         }
 
-            }
+        //     }
 
-            stage.addEventListener("click", async e => {
-                e.stopPropagation();
-                const stage = e.target.getAttribute("stage");
-                const formData = new FormData();
-                formData.append("_token", "{{ csrf_token() }}");
-                formData.append("stage", stage);
-                // formData.append("id", "");
-                formData.append("id_claim", "{{ $claimContract->id_claim ?? 0 }}");
-                const setStage = await fetch("/claim/stage/save", {
-                    method: "POST",
-                    body: formData
-                }).then(res => res.json());
-                if (setStage.status == "success") {
-                    // window.location.href = setStage.link;
-                    window.location.reload();
-                }
-            });
-        });
+        //     stage.addEventListener("click", async e => {
+        //         e.stopPropagation();
+        //         const stage = e.target.getAttribute("stage");
+        //         const formData = new FormData();
+        //         formData.append("_token", "{{ csrf_token() }}");
+        //         formData.append("stage", stage);
+        //         // formData.append("id", "");
+        //         formData.append("id_claim", "{{ $claimContract->id_claim ?? 0 }}");
+        //         const setStage = await fetch("/claim/stage/save", {
+        //             method: "POST",
+        //             body: formData
+        //         }).then(res => res.json());
+        //         if (setStage.status == "success") {
+        //             // window.location.href = setStage.link;
+        //             window.location.reload();
+        //         }
+        //     });
+        // });
         // end stage function
 
         // begin reformatNumber

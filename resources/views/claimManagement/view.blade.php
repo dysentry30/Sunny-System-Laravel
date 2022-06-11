@@ -188,11 +188,6 @@
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
 
-                        <!--begin::Button-->
-                        <a href="/claim-management/new" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
-                            style="background-color:#ffa62b;">New</a>
-                        <!--end::Button-->
-
                         <!--begin::Wrapper-->
                         {{-- <div class="me-4" style="margin-left:10px;">
                             <!--begin::Menu-->
@@ -312,40 +307,97 @@
 
                 <!--begin::Card body-->
                 <div class="card-body pt-0">
-                    <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">No.Claim</th>
-                                <th class="min-w-125px">No.Contract</th>
-                                <th class="min-w-125px">Nama Proyek</th>
-                                <th class="min-w-125px">Nilai Claim</th>
-                                <th class="min-w-125px">Tanggal Claim</th>
-                                <th class="min-w-125px">PIC</th>
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                            @foreach ($claimManagements as $claim)
-                                <tr>
-                                    <td><a href="/claim-management/view/{{$claim->id_claim}}" class="text-hover-primary text-gray-800">{{ $claim->id_claim }}</a></td>
-                                    <td><a href="/contract-management/view/{{$claim->id_contract}}" class="text-hover-primary text-gray-800">{{ $claim->id_contract }}</a>
-                                    </td>
-                                    <td class="text-gray-800">{{ $claim->project->nama_proyek }}</td>
-                                    <td class="text-gray-800">{{ number_format((int) $claim->nilai_claim, 0, ".", ",") }}</td>
-                                    <td class="text-gray-800">{{ date_format(new DateTime($claim->tanggal_claim), "d M Y") }}</td>
-                                    <td class="text-gray-800">{{ $claim->pic }}</td>
-                                </tr>
-                            @endforeach
-
-                        </tbody>
-                        <!--end::Table body-->
-                    </table>
-                    <!--end::Table-->
+                    <!--begin::Table Proyek-->
+											<table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
+												<!--begin::Table head-->
+												<thead>
+													<!--begin::Table row-->
+													<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+														<th class="min-w-auto">Kode Proyek</th>
+														<th class="min-w-auto">Nama Proyek</th>
+														<th class="min-w-auto">Unit Kerja</th>
+														{{-- <th class="min-w-auto">Stage</th> --}}
+														<th class="min-w-auto">Nilai RKAP</th>
+														<th class="min-w-auto">Nilai Forecast</th>
+														<th class="min-w-auto">Nilai Realisasi</th>
+														<th class="min-w-auto">Jenis Proyek</th>
+														<th class="min-w-auto">Tipe Proyek</th>
+														<th class=""><center>Action</center></th>
+													</tr>
+													<!--end::Table row-->
+												</thead>
+												<!--end::Table head-->
+												<!--begin::Table body-->
+												@foreach ($proyek_with_claim as $proyek)
+												<tbody class="fw-bold text-gray-600">
+													<tr>
+														
+														<!--begin::Name=-->
+														<td>
+															<a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+														</td>
+														<!--end::Name=-->
+														<!--begin::Email=-->
+														<td>
+															{{ $proyek->nama_proyek }}
+														</td>
+														<!--end::Email=-->
+														<!--begin::Company=-->
+														<td>
+															{{ $proyek->UnitKerja->unit_kerja }}
+														</td>
+														<!--end::Company=-->
+														
+														<!--begin::Date=-->
+														{{-- <td>
+															{{ $proyek->stage }}
+														</td> --}}
+														<!--end::Date=-->
+														<!--begin::Action=-->
+														<td>
+															{{ $proyek->nilai_rkap }}
+														</td>
+														<!--end::Action=-->
+														<!--begin::Action=-->
+														<td>
+															{{-- {{ $proyek->nilai_forecast }} --}}
+														</td>
+														<!--end::Action=-->
+														<!--begin::Action=-->
+														<td>
+															{{-- {{ $proyek->nilai_realisasi }} --}}
+														</td>
+														<!--end::Action=-->
+														<!--begin::Action=-->
+														<td>
+															{{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}
+														</td>
+														<!--end::Action=-->
+														<!--begin::Action=-->
+														<td>
+															{{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
+														</td>
+														<!--end::Action=-->
+														<!--begin::Action=-->
+														<td>
+														<!--begin::Button-->
+														<form action="/proyek/delete/{{ $proyek->id }}" method="post" class="d-inline" >
+															@method('delete')
+															@csrf
+															<center>
+																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+															</center>
+														</form>
+														<!--end::Button-->
+														</td>
+														<!--end::Action=-->
+													</tr>
+													@endforeach
+													
+												</tbody>
+												<!--end::Table body-->
+											</table>
+<!--end::Table Proyek-->
                 </div>
                 <!--end::Card body-->
             </div>
