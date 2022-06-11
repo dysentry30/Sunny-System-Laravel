@@ -164,7 +164,7 @@
                                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                             data-kt-menu-placement="bottom-end">
                                             Hi,<strong>Indar Wiguna</strong>
-                                            <img src="../../media/avatars/User-Icon.png" alt="user" />
+                                            <img src="{{asset('/media/avatars/User-Icon.png')}}" alt="user" />
                                         </div>
 
                                         <!--end::Menu wrapper-->
@@ -235,56 +235,6 @@
                                 <div id="kt_content_container" class="container-fluid">
                                     <!--begin::Contacts App- Edit Contact-->
                                     <div class="row g-7">
-
-                                        <!--begin::Header Contract-->
-                                        <div class="col-xl-15">
-                                            <div class="card card-flush h-lg-100" id="kt_contacts_main">
-
-                                                <div class="card-body pt-5"
-                                                    style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
-
-                                                    <div class="form-group">
-
-                                                        <div id="stage-button" class="stage-list">
-                                                            <a href="#" class="stage-button color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;">
-                                                                Draft
-                                                            </a>
-                                                            <a href="#"
-                                                                class="stage-button color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: pointer;">
-                                                                Terkontrak
-                                                            </a>
-                                                            <a href="#"
-                                                                class="stage-button color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: not-allowed;">
-                                                                Pelaksanaan
-                                                            </a>
-                                                            <a href="#"
-                                                                class="stage-button color-is-default stage-is-not-active"
-                                                                style="outline: 0px; cursor: not-allowed;">
-                                                                Addendum Kontrak
-                                                            </a>
-                                                            <a href="#"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                style="outline: 0px; cursor: not-allowed;">
-                                                                Serah Terima Pekerjaan
-                                                            </a>
-                                                            <a href="#"
-                                                                class="stage-button stage-is-not-active color-is-default"
-                                                                disabled="" style="outline: 0px; cursor: not-allowed;">
-                                                                Closing Proyek
-                                                            </a>
-
-                                                        </div>
-
-
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--end::Header Contract-->
 
                                         <!--begin::Header Contract-->
                                         <div class="col-xl-15">
@@ -1862,7 +1812,7 @@
                                         Id="Plus">+</a>
                                 </h3>
 
-                                <!--begin:Table: Laporan Bulanan-->
+                                <!--begin:Table: Addendum Kontrak-->
                                 <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                                     <!--begin::Table head-->
                                     <thead>
@@ -1922,7 +1872,74 @@
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>
-                                <!--End:Table: Laporan Bulanan-->
+                                <!--End:Table: Addendum Kontrak-->
+
+                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Klaim Kontrak
+                                    <a href="/claim-management/{{$contract->project->id}}/{{$contract->id_contract}}/new"
+                                        Id="Plus">+</a>
+                                </h3>
+                                <!--begin:Table: Claim Contract-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">No. Klaim</th>
+                                            <th class="min-w-125px">Dibuat Oleh
+                                            </th>
+                                            <th class="min-w-125px">Tanggal</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-600">
+                                        @if (isset($contract->project->ClaimManagements))
+                                            @forelse ($contract->project->ClaimManagements as $claimManagement)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank"
+                                                            href="/claim-management/view/{{$claimManagement->id_claim}}"
+                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $claimManagement->id_claim }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                            {{ $claimManagement->pic }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ date_format(new DateTime($claimManagement->tanggal_claim), 'd M, Y') }}</a>
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                </tr>
+                                            @empty
+                                                <tr>
+                                                    <td>
+                                                        <h6><b>There is no data</b></h6>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                        @else
+                                            <tr>
+                                                <td>
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--End:Table: Claim Contract-->
                             </div>
                         </div>
                         <!--end:::Tab pane Laporan Bulanan-->

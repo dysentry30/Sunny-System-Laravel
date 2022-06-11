@@ -36,4 +36,13 @@ class Proyek extends Model
         return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
     }
 
+    public function ClaimManagements() {
+        return $this->hasMany(ClaimManagements::class, "kode_proyek", "kode_proyek");
+    }
+
+    public function ContractManagements() {
+        return $this->hasOne(ContractManagements::class, "project_id", "kode_proyek");
+    }
+
+
 }

@@ -21,7 +21,15 @@ class ClaimController extends Controller
      */
     public function index()
     {
-        return view("claimManagement/view", ["claimManagements" => ClaimManagements::all()->sortByDesc("id_claim")]);
+        $all_proyek = Proyek::all();
+        $proyek_with_claim = [];
+        foreach ($all_proyek as $proyek) {
+            if(count($proyek->ClaimManagements) > 0) {
+                array_push($proyek_with_claim, $proyek);
+            }
+        }
+        // dd($proyek_with_claim);
+        return view("claimManagement/view", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
     }
 
     /**
@@ -29,7 +37,7 @@ class ClaimController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function new()
+    public function new(Proyek $proyek, ContractManagements $contract)
     {
         $no_urut = new ClaimManagements();
         if (!empty($no_urut->all()->sortBy("id_claim")->last()->id_claim)) {
@@ -44,58 +52,58 @@ class ClaimController extends Controller
         }
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
         $kode_claim = "CL." . date("Y") . "." . $no_urut;
-        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "projects" => Proyek::all(), "kode_claim" => $kode_claim, "claimContract" => null]);
+        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "currentContract" => $contract, "proyek" => $proyek, "projects" => Proyek::all(), "kode_claim" => $kode_claim, "claimContract" => null]);
     }
-    
-        /**
-         * Show the form for editing the specified resource.
-         *
-         * @param  int  $id
-         * @return \Illuminate\Http\Response
-         */
-        public function save(Request $request, ClaimManagements $claimManagements)
-        {
-            $data = $request->all();
-            // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
-            //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
-            // }
-    
-            $messages = [
-                "required" => "This field is required",
-                "numeric" => "This field must be numeric only",
-                "string" => "This field must be alphabet only",
-                "date" => "This field must be date format only",
-            ];
-            $rules = [
-                "approve-date" => "required|date",
-                "pic" => "required|string",
-                "project-id" => "required|string",
-                "id-contract" => "required|numeric",
-            ];
-            $validation = Validator::make($data, $rules, $messages);
-            if ($validation->fails()) {
-                $request->old("approve-date");
-                $request->old("pic");
-                $request->old("project-id");
-                $request->old("id-contract");
-                $request->old("number-claim");
-                dd($validation->errors());
-                return redirect()->back()->with("failed", "This claim failed to add");
-            }
-            $validation->validate();
-            $claimManagements->id_claim = $data["number-claim"];
-            $claimManagements->kode_proyek = $data["project-id"];
-            $claimManagements->id_contract = $data["id-contract"];
-            $claimManagements->stages = 1;
-            $claimManagements->nilai_claim = 0;
-            $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
-            $claimManagements->pic = $data["pic"];
-    
-            if ($claimManagements->save()) {
-                return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been added");
-            }
-            return redirect("/claim-management")->with("failed", "This claim failed to add");
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function save(Request $request, ClaimManagements $claimManagements)
+    {
+        $data = $request->all();
+        // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
+        //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
+        // }
+
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+            "string" => "This field must be alphabet only",
+            "date" => "This field must be date format only",
+        ];
+        $rules = [
+            "approve-date" => "required|date",
+            "pic" => "required|string",
+            "project-id" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("approve-date");
+            $request->old("pic");
+            $request->old("project-id");
+            $request->old("id-contract");
+            $request->old("number-claim");
+            dd($validation->errors());
+            return redirect()->back()->with("failed", "This claim failed to add");
         }
+        $validation->validate();
+        $claimManagements->id_claim = $data["number-claim"];
+        $claimManagements->kode_proyek = $data["project-id"];
+        $claimManagements->id_contract = $data["id-contract"];
+        $claimManagements->stages = 1;
+        $claimManagements->nilai_claim = 0;
+        $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
+        $claimManagements->pic = $data["pic"];
+
+        if ($claimManagements->save()) {
+            return redirect("/claim-management/view/" . $data["number-claim"])->with("success", "This claim has been added");
+        }
+        return redirect("/claim-management")->with("failed", "This claim failed to add");
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -160,14 +168,14 @@ class ClaimController extends Controller
         $claimManagement = ClaimManagements::find($id_claim);
         $approval_array = explode(";", trim($claimManagement->approval_claim));
         array_pop($approval_array); //remove last array because it's always an empty string
-        $approval_array = array_map(function($data){
+        $approval_array = array_map(function ($data) {
             $data_array = json_decode($data);
             return $data_array;
         }, $approval_array);
-        $total = array_map(function($data) {
+        $total = array_map(function ($data) {
             return (int) $data[2];
         }, $approval_array);
-        $approval_array = array_filter($approval_array, function($data) use ($id_requested) {
+        $approval_array = array_filter($approval_array, function ($data) use ($id_requested) {
             return $data[0] != $id_requested;
         });
         $index_array = count($approval_array);
@@ -205,7 +213,7 @@ class ClaimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request) 
+    public function update(Request $request)
     {
         $data = $request->all();
         // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
@@ -245,7 +253,7 @@ class ClaimController extends Controller
         return redirect("/claim-management")->with("failed", "This claim failed to update");
     }
 
-    public function detailSave (Request $request, ClaimDetails $claimDetail) 
+    public function detailSave(Request $request, ClaimDetails $claimDetail)
     {
         $data = $request->all();
         $id_claim = $data["id-claim"];
@@ -284,7 +292,7 @@ class ClaimController extends Controller
         return redirect("/claim-management/view/$id_claim")->with("failed", "This claim failed to add");
     }
 
-    public function claimStage (Request $request) 
+    public function claimStage(Request $request)
     {
         $id_claim = $request->id_claim;
         $stage = $request->stage;
@@ -303,5 +311,4 @@ class ClaimController extends Controller
             "message" => "Stage failed to update",
         ]);
     }
-
 }
