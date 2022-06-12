@@ -246,11 +246,14 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
+                            @php
+                                $counter = 0;
+                            @endphp
                             @foreach ($all_document as $i => $document)
                                 <tr>
-                                    <td>{{ ++$i }}</td>
-                                    <td><a href="#"
-                                            class="text-hover-primary text-gray-500">{{ $document->document_name }}</a>
+                                    <td>{{ ++$counter }}</td>
+                                    <td><a href="/document/view/{{$id_documents[$i][0]}}/{{$document->id_document}}"
+                                            class="text-hover-primary text-gray-500">{{ $documents_name[$i] }}</a>
                                     </td>
                                     <td>{{ date_format(date_create($document->created_at), 'd M Y') }}</td>
                                 </tr>
