@@ -348,171 +348,183 @@
                                         </thead>
                                         
                                     <!--begin::Table body-->
+                                        {{-- @foreach ($dops as $dop) --}}
+                                        
                                         <tbody class="fw-bold text-gray-600">
+                                            @foreach ($proyeks as $proyek)
+
                                             <tr style="text-align: right; ">
+
+
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse" aria-expanded="false" aria-controls="collapse">
-                                                        <i class="bi bi-chevron-down"></i> DOP 1
+                                                        <i class="bi bi-chevron-down"></i> 
+                                                        {{-- {{ $dop->dop }} --}}
+                                                        {{ $proyek->dop }}
                                                     </a>
                                                 </td>
-
+                                                
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">000,000</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">-</td>
                                                 <!--end::Total Coloumn-->
+                                                
                                             </tr>
                                             <tr class="collapse accordion-header" id="collapse" style="text-align: right;">
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <!--begin::Child=-->
-                                                        <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                            <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
-                                                        </a>
+                                                    <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                                                        <i class="bi bi-chevron-down"></i> 
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </a>
                                                     <!--end::Child=-->
                                                 </td>
                                                 <!--begin::Januari Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Februari Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Februari Coloumn-->
                                                 <!--begin::Maret Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Maret Coloumn-->
                                                 <!--begin::April Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::April Coloumn-->
                                                 <!--begin::Mei Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Mei Coloumn-->
                                                 <!--begin::Juni Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Juni Coloumn-->
                                                 <!--begin::Juli Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Juli Coloumn-->
                                                 <!--begin::Agustus Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Agustus Coloumn-->
                                                 <!--begin::September Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::September Coloumn-->
                                                 <!--begin::Oktober Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Oktober Coloumn-->
                                                 <!--begin::November Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::November Coloumn-->
                                                 <!--begin::Desember Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td>-</td>
                                                 <!--end::Desember Coloumn-->
                                                 <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">1,333,332</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast HidePin" >-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">-</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">-</td>
                                                 <!--end::Total Coloumn-->
                                             </tr>
                                             <tr id="flush-collapseTwo" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <!--begin::Child=-->
-                                                        <p class="ms-12">
-                                                            Pengadaan JPO Arkadia Tower
-                                                        </p>
+                                                    <p class="ms-12">
+                                                    {{ $proyek->nama_proyek }}
+                                                    </p>
                                                     <!--end::Child=-->
                                                 </td>
                                                 <!--begin::Januari Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
+                                                <td>{{ $proyek->nilai_rkap }}</td>
+                                                <td>
+                                                    <input type="text" class="form-control" style="border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
+                                                </td>
                                                 <td>222,222</td>
                                                 <!--end::Januari Coloumn-->
                                                 <!--begin::Februari Coloumn-->
@@ -571,247 +583,260 @@
                                                 <td>222,222</td>
                                                 <!--end::Desember Coloumn-->
                                                 <!--begin::Total Coloumn-->
+                                                <td class="pinForecast HidePin" >{{ $proyek->nilai_rkap }}</td>
+                                                <td class="pinForecast HidePin" >
+                                                    <input type="text" class="form-control" style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
+                                                </td>
                                                 <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">2,666,664</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">{{ $proyek->nilai_rkap }}</td>
+                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                    <input type="text" class="form-control" style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
+                                                </td>
                                                 <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
                                                 <!--end::Total Coloumn-->
-
+                                                
+                                                
                                             </tr>
-                                            <tr style="text-align: right; ">
+
+                                            @endforeach
+                                            
+                                            {{-- begin :: dop 2 --}}
+                                                {{-- <tr style="text-align: right; ">
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
                                                         <i class="bi bi-chevron-down"></i> DOP 2
                                                     </a>
                                                 </td>
+                                                
+                                                <!--begin::Januari Coloumn-->
+                                                <td>000,000</td>
+                                                <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <td>000,000</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Total Coloumn-->
+                                                    <td class="pinForecast HidePin" >000,000</td>
+                                                    <td class="pinForecast HidePin" >000,000</td>
+                                                    <td class="pinForecast HidePin" >000,000</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">000,000</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">000,000</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">000,000</td>
+                                                    <!--end::Total Coloumn-->
+                                                </tr>
+                                                <tr class="collapse accordion-header" id="collapse2" style="text-align: right;">
+                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                        <!--begin::Child=-->
+                                                            <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                                                                <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
+                                                            </a>
+                                                        <!--end::Child=-->
+                                                    </td>
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Februari Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Februari Coloumn-->
+                                                    <!--begin::Maret Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Maret Coloumn-->
+                                                    <!--begin::April Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::April Coloumn-->
+                                                    <!--begin::Mei Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Mei Coloumn-->
+                                                    <!--begin::Juni Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Juni Coloumn-->
+                                                    <!--begin::Juli Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Juli Coloumn-->
+                                                    <!--begin::Agustus Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Agustus Coloumn-->
+                                                    <!--begin::September Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::September Coloumn-->
+                                                    <!--begin::Oktober Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Oktober Coloumn-->
+                                                    <!--begin::November Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::November Coloumn-->
+                                                    <!--begin::Desember Coloumn-->
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <td>111,111</td>
+                                                    <!--end::Desember Coloumn-->
+                                                    <!--begin::Total Coloumn-->
+                                                    <td class="pinForecast HidePin" >1,333,332</td>
+                                                    <td class="pinForecast HidePin" >1,333,332</td>
+                                                    <td class="pinForecast HidePin" >1,333,332</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">1,333,332</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">1,333,332</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">1,333,332</td>
+                                                    <!--end::Total Coloumn-->
+                                                </tr>
+                                                <tr id="flush-collapseThree" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
+                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                        <!--begin::Child=-->
+                                                            <p class="ms-12">
+                                                                Pengadaan JPO Arkadia Tower
+                                                            </p>
+                                                        <!--end::Child=-->
+                                                    </td>
+                                                    <!--begin::Januari Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Januari Coloumn-->
+                                                    <!--begin::Februari Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Februari Coloumn-->
+                                                    <!--begin::Maret Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Maret Coloumn-->
+                                                    <!--begin::April Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::April Coloumn-->
+                                                    <!--begin::Mei Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Mei Coloumn-->
+                                                    <!--begin::Juni Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Juni Coloumn-->
+                                                    <!--begin::Juli Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Juli Coloumn-->
+                                                    <!--begin::Agustus Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Agustus Coloumn-->
+                                                    <!--begin::September Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::September Coloumn-->
+                                                    <!--begin::Oktober Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Oktober Coloumn-->
+                                                    <!--begin::November Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::November Coloumn-->
+                                                    <!--begin::Desember Coloumn-->
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <td>222,222</td>
+                                                    <!--end::Desember Coloumn-->
+                                                    <!--begin::Total Coloumn-->
+                                                    <td class="pinForecast HidePin" >2,666,664</td>
+                                                    <td class="pinForecast HidePin" >2,666,664</td>
+                                                    <td class="pinForecast HidePin" >2,666,664</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">2,666,664</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">2,666,664</td>
+                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
+                                                    <!--end::Total Coloumn-->
 
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast HidePin" >000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">000,000</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">000,000</td>
-                                                <!--end::Total Coloumn-->
-                                            </tr>
-                                            <tr class="collapse accordion-header" id="collapse2" style="text-align: right;">
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <!--begin::Child=-->
-                                                        <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                            <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
-                                                        </a>
-                                                    <!--end::Child=-->
-                                                </td>
-                                                <!--begin::Januari Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Februari Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Februari Coloumn-->
-                                                <!--begin::Maret Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Maret Coloumn-->
-                                                <!--begin::April Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::April Coloumn-->
-                                                <!--begin::Mei Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Mei Coloumn-->
-                                                <!--begin::Juni Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Juni Coloumn-->
-                                                <!--begin::Juli Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Juli Coloumn-->
-                                                <!--begin::Agustus Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Agustus Coloumn-->
-                                                <!--begin::September Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::September Coloumn-->
-                                                <!--begin::Oktober Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Oktober Coloumn-->
-                                                <!--begin::November Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::November Coloumn-->
-                                                <!--begin::Desember Coloumn-->
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <td>111,111</td>
-                                                <!--end::Desember Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast HidePin" >1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">1,333,332</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">1,333,332</td>
-                                                <!--end::Total Coloumn-->
-                                            </tr>
-                                            <tr id="flush-collapseThree" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <!--begin::Child=-->
-                                                        <p class="ms-12">
-                                                            Pengadaan JPO Arkadia Tower
-                                                        </p>
-                                                    <!--end::Child=-->
-                                                </td>
-                                                <!--begin::Januari Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Februari Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Februari Coloumn-->
-                                                <!--begin::Maret Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Maret Coloumn-->
-                                                <!--begin::April Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::April Coloumn-->
-                                                <!--begin::Mei Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Mei Coloumn-->
-                                                <!--begin::Juni Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Juni Coloumn-->
-                                                <!--begin::Juli Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Juli Coloumn-->
-                                                <!--begin::Agustus Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Agustus Coloumn-->
-                                                <!--begin::September Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::September Coloumn-->
-                                                <!--begin::Oktober Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Oktober Coloumn-->
-                                                <!--begin::November Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::November Coloumn-->
-                                                <!--begin::Desember Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Desember Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
-                                                <!--end::Total Coloumn-->
-
-                                            </tr>
+                                                </tr> --}}
+                                            {{-- end :: dop 2 --}}
+                                            
                                         </tbody>
+
+                                        {{-- @endforeach --}}
                                     <!--end::Table body-->
                                 </table>
                                 

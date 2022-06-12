@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Dop;
+use App\Models\Proyek;
 use App\Models\Forecast;
 use Illuminate\Http\Request;
+use App\Models\UnitKerja;
 
 class ForecastController extends Controller
 {
@@ -14,7 +17,14 @@ class ForecastController extends Controller
      */
     public function index()
     {
-        return view('Forecast/viewForecast');
+        // $id = Dop::find('id');
+        // $dopProyek = Proyek::find($id);
+        return view('Forecast/viewForecast', 
+        [
+            // 'forecast' => Forecast::all(), 
+            'dops' => Dop::all(), 
+            'proyeks' => Proyek::all()]); 
+            // 'unitkerjas' => UnitKerja::all()]);
     }
 
     /**
