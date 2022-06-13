@@ -137,6 +137,17 @@
     <script src="{{ asset('/js/custom/modals/create-app.js') }}"></script>
     <script src="{{ asset('/js/custom/modals/upgrade-plan.js') }}"></script>
     @yield('js-script')
+
+    <script>
+        // script reformat number by add class
+
+        function reformat() {
+        this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
+        }
+        document.querySelectorAll('.reformat').forEach(inp => {
+            inp.addEventListener('input', reformat);
+        });
+    </script>
     <!--end::Page Custom Javascript-->
 
     <!--end::Javascript-->
