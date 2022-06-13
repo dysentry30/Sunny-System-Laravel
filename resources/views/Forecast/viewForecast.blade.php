@@ -181,6 +181,23 @@
                 </div>
                 <!--end::Header-->
 
+                {{-- begin:: Toaster Notification --}}
+                <div aria-live="polite" aria-atomic="true" class="position-relative mx-5">
+                    <div class="toast-container top-0 end-0">
+                        <div class="toast fade align-items-center text-bg-success border-0 " role="alert"
+                            aria-live="assertive" aria-atomic="true">
+                            <div class="d-flex">
+                                <div class="toast-body text-white">
+                                    Hello, world! This is a toast message.
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                                    aria-label="Close"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- end:: Toaster Notification --}}
+
 
                 <!--begin::Form-->
                 <form action="#" method="post" enctype="multipart/form-data">
@@ -520,180 +537,89 @@
                                                     <!--begin::Table body-->
 
                                                     <tbody class="fw-bold text-gray-600">
+
                                                         @foreach ($dops as $dop)
-                                                            {{-- @foreach ($proyeks as $proyek) --}}
+                                                            @if (count($dop->UnitKerjas) > 0)
+                                                                {{-- @foreach ($proyeks as $proyek) --}}
 
-                                                            <tr style="text-align: right; ">
+                                                                <tr style="text-align: right; ">
 
-                                                                @php
-                                                                    $dop_name = str_replace(' ', '-', $dop->dop);
-                                                                @endphp
-                                                                <td
-                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                    <a name="collalpse1" class=""
-                                                                        data-bs-toggle="collapse"
-                                                                        href="#{{ $dop_name }}" aria-expanded="false"
-                                                                        aria-controls="{{ $dop_name }}">
-                                                                        <i class="bi bi-chevron-down"></i>
-                                                                        {{-- {{ $dop->dop }} --}}
-                                                                        {{ $dop->dop }}
-                                                                    </a>
-                                                                </td>
-
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <!--end::Januari Coloumn-->
-                                                                <!--begin::Total Coloumn-->
-                                                                <td class="pinForecast HidePin">-</td>
-                                                                <td class="pinForecast HidePin">-</td>
-                                                                <td class="pinForecast HidePin">-</td>
-                                                                <td class="pinForecast ShowPin"
-                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                    -</td>
-                                                                <td class="pinForecast ShowPin"
-                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                    -</td>
-                                                                <td class="pinForecast ShowPin"
-                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                    -</td>
-                                                                <!--end::Total Coloumn-->
-
-                                                            </tr>
-
-                                                            {{-- begin:: Foreach Unit Kerja --}}
-                                                            @foreach ($dop->UnitKerjas as $unitKerja)
-                                                                <tr class="collapse accordion-header"
-                                                                    id="{{ $dop_name }}" style="text-align: right;">
+                                                                    @php
+                                                                        $dop_name = str_replace(' ', '-', $dop->dop);
+                                                                    @endphp
                                                                     <td
                                                                         style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                        <!--begin::Child=-->
-                                                                        <a class="ms-6" type="button"
+                                                                        <a name="collalpse1" class=""
                                                                             data-bs-toggle="collapse"
-                                                                            data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                            href="#{{ $dop_name }}"
                                                                             aria-expanded="false"
-                                                                            aria-controls="{{ $unitKerja->divcode }}">
+                                                                            aria-controls="{{ $dop_name }} ">
                                                                             <i class="bi bi-chevron-down"></i>
-                                                                            {{ $unitKerja->unit_kerja }}
+                                                                            {{-- {{ $dop->dop }} --}}
+                                                                            {{ $dop->dop }}
                                                                         </a>
-                                                                        <!--end::Child=-->
                                                                     </td>
+
                                                                     <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <!--end::Januari Coloumn-->
-                                                                    <!--begin::Februari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Februari Coloumn-->
-                                                                    <!--begin::Maret Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Maret Coloumn-->
-                                                                    <!--begin::April Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::April Coloumn-->
-                                                                    <!--begin::Mei Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Mei Coloumn-->
-                                                                    <!--begin::Juni Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Juni Coloumn-->
-                                                                    <!--begin::Juli Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Juli Coloumn-->
-                                                                    <!--begin::Agustus Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Agustus Coloumn-->
-                                                                    <!--begin::September Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::September Coloumn-->
-                                                                    <!--begin::Oktober Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Oktober Coloumn-->
-                                                                    <!--begin::November Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::November Coloumn-->
-                                                                    <!--begin::Desember Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Januari Coloumn-->
                                                                     <td>-</td>
                                                                     <td>-</td>
                                                                     <td>-</td>
-                                                                    <!--end::Desember Coloumn-->
+                                                                    <!--end::Januari Coloumn-->
                                                                     <!--begin::Total Coloumn-->
                                                                     <td class="pinForecast HidePin">-</td>
                                                                     <td class="pinForecast HidePin">-</td>
@@ -708,353 +634,526 @@
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                         -</td>
                                                                     <!--end::Total Coloumn-->
-                                                                </tr>
 
-                                                                {{-- begin:: Foreach Proyek --}}
-                                                                @foreach ($unitKerja->proyeks as $proyek)
-                                                                    <tr id="{{ $unitKerja->divcode }}"
-                                                                        class="collapse"
-                                                                        aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                        data-bs-parent="#{{ $unitKerja->divcode }}"
-                                                                        style="text-align: right;">
-                                                                        <td
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                            <!--begin::Child=-->
-                                                                            <p class="ms-12">
-                                                                                {{ $proyek->nama_proyek }}
-                                                                            </p>
-                                                                            <!--end::Child=-->
-                                                                        </td>
-                                                                        <!--begin::Januari Coloumn-->
-                                                                        <td>{{ $proyek->nilai_rkap }}</td>
-                                                                        <td>
-                                                                            <input type="text" class="form-control"
-                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                id="nilai-forecast" name="nilai-forecast"
-                                                                                value="" placeholder=". . . , -" />
-                                                                        </td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Januari Coloumn-->
-                                                                        <!--begin::Februari Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Februari Coloumn-->
-                                                                        <!--begin::Maret Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Maret Coloumn-->
-                                                                        <!--begin::April Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::April Coloumn-->
-                                                                        <!--begin::Mei Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Mei Coloumn-->
-                                                                        <!--begin::Juni Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Juni Coloumn-->
-                                                                        <!--begin::Juli Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Juli Coloumn-->
-                                                                        <!--begin::Agustus Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Agustus Coloumn-->
-                                                                        <!--begin::September Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::September Coloumn-->
-                                                                        <!--begin::Oktober Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Oktober Coloumn-->
-                                                                        <!--begin::November Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::November Coloumn-->
-                                                                        <!--begin::Desember Coloumn-->
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <td>222,222</td>
-                                                                        <!--end::Desember Coloumn-->
-                                                                        <!--begin::Total Coloumn-->
-                                                                        <td class="pinForecast HidePin">test</td>
-                                                                        <td class="pinForecast HidePin">
-                                                                            <input type="text" class="form-control"
-                                                                                style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                id="nilai-forecast" name="nilai-forecast"
-                                                                                value="" placeholder=". . . , -" />
-                                                                        </td>
-                                                                        <td class="pinForecast HidePin">2,666,664</td>
-                                                                        <td class="pinForecast ShowPin"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            test</td>
-                                                                        <td class="pinForecast ShowPin"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            <input type="text" class="form-control"
-                                                                                style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                id="nilai-forecast" name="nilai-forecast"
-                                                                                value="" placeholder=". . . , -" />
-                                                                        </td>
-                                                                        <td class="pinForecast ShowPin"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            2,666,664</td>
-                                                                        <!--end::Total Coloumn-->
+                                                                </tr>
+                                                                {{-- begin:: Foreach Unit Kerja --}}
+                                                                @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                    @if (count($unitKerja->proyeks) > 0)
+                                                                        <tr class="collapse accordion-header"
+                                                                            id="{{ $dop_name }}"
+                                                                            style="text-align: right;">
+                                                                            <td
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                <!--begin::Child=-->
+                                                                                <a class="ms-6" type="button"
+                                                                                    data-bs-toggle="collapse"
+                                                                                    data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                    aria-expanded="false"
+                                                                                    aria-controls="{{ $unitKerja->divcode }}">
+                                                                                    <i class="bi bi-chevron-down"></i>
+                                                                                    {{ $unitKerja->unit_kerja }}
+                                                                                </a>
+                                                                                <!--end::Child=-->
+                                                                            </td>
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Februari Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Februari Coloumn-->
+                                                                            <!--begin::Maret Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Maret Coloumn-->
+                                                                            <!--begin::April Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::April Coloumn-->
+                                                                            <!--begin::Mei Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Mei Coloumn-->
+                                                                            <!--begin::Juni Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Juni Coloumn-->
+                                                                            <!--begin::Juli Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Juli Coloumn-->
+                                                                            <!--begin::Agustus Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Agustus Coloumn-->
+                                                                            <!--begin::September Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::September Coloumn-->
+                                                                            <!--begin::Oktober Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Oktober Coloumn-->
+                                                                            <!--begin::November Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::November Coloumn-->
+                                                                            <!--begin::Desember Coloumn-->
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <td>-</td>
+                                                                            <!--end::Desember Coloumn-->
+                                                                            <!--begin::Total Coloumn-->
+                                                                            <td class="pinForecast HidePin">-</td>
+                                                                            <td class="pinForecast HidePin">-</td>
+                                                                            <td class="pinForecast HidePin">-</td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                -</td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                -</td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                -</td>
+                                                                            <!--end::Total Coloumn-->
+                                                                        </tr>
+                                                                        {{-- begin:: Foreach Proyek --}}
+                                                                        @foreach ($unitKerja->proyeks as $proyek)
+                                                                            <tr id="{{ $unitKerja->divcode }}"
+                                                                                class="collapse"
+                                                                                aria-labelledby="{{ $unitKerja->divcode }}"
+                                                                                data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                style="text-align: right;">
+                                                                                <td
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                    <!--begin::Child=-->
+                                                                                    <p class="ms-12">
+                                                                                        {{ $proyek->nama_proyek }}
+                                                                                    </p>
+                                                                                    <!--end::Child=-->
+                                                                                </td>
+                                                                                @php
+                                                                                    $forecast = explode(';', $proyek->forecast);
+                                                                                    array_pop($forecast);
+                                                                                @endphp
+                                                                                @foreach ($forecast as $data_forecast)
+                                                                                
+                                                                                    <!--begin::Januari Coloumn-->
+                                                                                    <td>{{ $proyek->nilai_rkap }}</td>
+                                                                                    {{-- check if date same in data date --}}
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 1)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="1"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="1"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Januari Coloumn-->
+                                                                                    <!--begin::Februari Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 2)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="2"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="2"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Februari Coloumn-->
+                                                                                    <!--begin::Maret Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 3)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="3"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="3"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Maret Coloumn-->
+                                                                                    <!--begin::April Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 4)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="4"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="4"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::April Coloumn-->
+                                                                                    <!--begin::Mei Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 5)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="5"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="5"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Mei Coloumn-->
+                                                                                    <!--begin::Juni Coloumn-->
+                                                                                    <td>222,222</td>@if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 6)
+                                                                                    <td>
+                                                                                        <input type="text"
+                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                            data-month="6"
+                                                                                            class="form-control"
+                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            id="nilai-forecast"
+                                                                                            name="nilai-forecast"
+                                                                                            onkeyup="reformatNumber(this)"
+                                                                                            value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                            placeholder=". . . , -" />
+                                                                                    </td>
+                                                                                @else
+                                                                                    <td>
+                                                                                        <input type="text"
+                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                            data-month="6"
+                                                                                            class="form-control"
+                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            id="nilai-forecast"
+                                                                                            name="nilai-forecast"
+                                                                                            onkeyup="reformatNumber(this)"
+                                                                                            value=""
+                                                                                            placeholder=". . . , -" />
+                                                                                    </td>
+                                                                                @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Juni Coloumn-->
+                                                                                    <!--begin::Juli Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 7)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="7"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="7"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Juli Coloumn-->
+                                                                                    <!--begin::Agustus Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 8)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="8"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="8"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Agustus Coloumn-->
+                                                                                    <!--begin::September Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 9)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="9"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="9"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::September Coloumn-->
+                                                                                    <!--begin::Oktober Coloumn-->
+                                                                                    <td>222,222</td>@if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 10)
+                                                                                    <td>
+                                                                                        <input type="text"
+                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                            data-month="10"
+                                                                                            class="form-control"
+                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            id="nilai-forecast"
+                                                                                            name="nilai-forecast"
+                                                                                            onkeyup="reformatNumber(this)"
+                                                                                            value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                            placeholder=". . . , -" />
+                                                                                    </td>
+                                                                                @else
+                                                                                    <td>
+                                                                                        <input type="text"
+                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                            data-month="10"
+                                                                                            class="form-control"
+                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            id="nilai-forecast"
+                                                                                            name="nilai-forecast"
+                                                                                            onkeyup="reformatNumber(this)"
+                                                                                            value=""
+                                                                                            placeholder=". . . , -" />
+                                                                                    </td>
+                                                                                @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Oktober Coloumn-->
+                                                                                    <!--begin::November Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 11)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="11"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="11"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::November Coloumn-->
+                                                                                    <!--begin::Desember Coloumn-->
+                                                                                    <td>222,222</td>
+                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 12)
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="12"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->id }}"
+                                                                                                data-month="12"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <td>222,222</td>
+                                                                                    <!--end::Desember Coloumn-->
+                                                                                @endforeach
+                                                                                <!--begin::Total Coloumn-->
+                                                                                <td class="pinForecast HidePin">
+                                                                                    {{ $proyek->nilai_rkap }}</td>
+                                                                                <td class="pinForecast HidePin">
+                                                                                    {{ $proyek->forecast }}
+                                                                                </td>
+                                                                                <td class="pinForecast HidePin">
+                                                                                    2,666,664
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                    {{ $proyek->nilai_rkap }}</td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                    10000
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                    2,666,664</td>
+                                                                                <!--end::Total Coloumn-->
+                                                                        @endforeach
+                                                                        {{-- end:: Foreach Proyek --}}
+                                                                    @endif
+
+
+
+                                                                    </tr>
                                                                 @endforeach
-                                                                {{-- end:: Foreach Proyek --}}
-
-
-                                                                </tr>
-                                                            @endforeach
-                                                            {{-- end:: Foreach Unit Kerja --}}
+                                                                {{-- end:: Foreach Unit Kerja --}}
+                                                            @endif
                                                         @endforeach
-
-                                                        {{-- begin :: proyek 2 --}}
-                                                        {{-- <tr style="text-align: right; ">
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
-                                                        <i class="bi bi-chevron-down"></i> DOP 2
-                                                    </a>
-                                                </td>
-                                                
-                                                <!--begin::Januari Coloumn-->
-                                                <td>000,000</td>
-                                                <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <td>000,000</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Total Coloumn-->
-                                                    <td class="pinForecast HidePin" >000,000</td>
-                                                    <td class="pinForecast HidePin" >000,000</td>
-                                                    <td class="pinForecast HidePin" >000,000</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">000,000</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">000,000</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">000,000</td>
-                                                    <!--end::Total Coloumn-->
-                                                </tr>
-                                                <tr class="collapse accordion-header" id="collapse2" style="text-align: right;">
-                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                        <!--begin::Child=-->
-                                                            <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
-                                                                <i class="bi bi-chevron-down"></i> Divisi Bangun Gedung
-                                                            </a>
-                                                        <!--end::Child=-->
-                                                    </td>
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Februari Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Februari Coloumn-->
-                                                    <!--begin::Maret Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Maret Coloumn-->
-                                                    <!--begin::April Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::April Coloumn-->
-                                                    <!--begin::Mei Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Mei Coloumn-->
-                                                    <!--begin::Juni Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Juni Coloumn-->
-                                                    <!--begin::Juli Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Juli Coloumn-->
-                                                    <!--begin::Agustus Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Agustus Coloumn-->
-                                                    <!--begin::September Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::September Coloumn-->
-                                                    <!--begin::Oktober Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Oktober Coloumn-->
-                                                    <!--begin::November Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::November Coloumn-->
-                                                    <!--begin::Desember Coloumn-->
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <td>111,111</td>
-                                                    <!--end::Desember Coloumn-->
-                                                    <!--begin::Total Coloumn-->
-                                                    <td class="pinForecast HidePin" >1,333,332</td>
-                                                    <td class="pinForecast HidePin" >1,333,332</td>
-                                                    <td class="pinForecast HidePin" >1,333,332</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">1,333,332</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">1,333,332</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">1,333,332</td>
-                                                    <!--end::Total Coloumn-->
-                                                </tr>
-                                                <tr id="flush-collapseThree" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
-                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                        <!--begin::Child=-->
-                                                            <p class="ms-12">
-                                                                Pengadaan JPO Arkadia Tower
-                                                            </p>
-                                                        <!--end::Child=-->
-                                                    </td>
-                                                    <!--begin::Januari Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Januari Coloumn-->
-                                                    <!--begin::Februari Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Februari Coloumn-->
-                                                    <!--begin::Maret Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Maret Coloumn-->
-                                                    <!--begin::April Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::April Coloumn-->
-                                                    <!--begin::Mei Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Mei Coloumn-->
-                                                    <!--begin::Juni Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Juni Coloumn-->
-                                                    <!--begin::Juli Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Juli Coloumn-->
-                                                    <!--begin::Agustus Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Agustus Coloumn-->
-                                                    <!--begin::September Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::September Coloumn-->
-                                                    <!--begin::Oktober Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Oktober Coloumn-->
-                                                    <!--begin::November Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::November Coloumn-->
-                                                    <!--begin::Desember Coloumn-->
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <td>222,222</td>
-                                                    <!--end::Desember Coloumn-->
-                                                    <!--begin::Total Coloumn-->
-                                                    <td class="pinForecast HidePin" >2,666,664</td>
-                                                    <td class="pinForecast HidePin" >2,666,664</td>
-                                                    <td class="pinForecast HidePin" >2,666,664</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">2,666,664</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">2,666,664</td>
-                                                    <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
-                                                    <!--end::Total Coloumn-->
-
-                                                </tr> --}}
-                                                        {{-- end :: dop 2 --}}
 
                                                     </tbody>
 
@@ -1127,3 +1226,57 @@
     <!--end::Scrolltop-->
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
+
+{{-- begin:: JS script --}}
+@section('js-script')
+    <script>
+        const toaster = document.querySelector(".toast");
+        const toastBody = document.querySelector(".toast-body")
+        const toastBoots = new bootstrap.Toast(toaster, {});
+
+        function reformatNumber(elt) {
+            const valueFormatted = Intl.NumberFormat("en-US", {
+                maximumFractionDigits: 0,
+            }).format(elt.value.toString().replace(/[^0-9]/gi, ""));
+            elt.value = valueFormatted;
+        }
+
+        const inputForecasts = document.querySelectorAll("input[data-id-proyek]");
+        inputForecasts.forEach(input => {
+            input.addEventListener("focusout", async e => {
+                const nilaiForecast = e.target.value.toString().replaceAll(",", "");
+                const kodeProyek = input.getAttribute("data-id-proyek");
+                const dataMonth = input.getAttribute("data-month");
+                const formData = new FormData();
+                const date = new Date();
+                const data = [date.getFullYear(), dataMonth, nilaiForecast]
+
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("nilai_forecast", data);
+                formData.append("kode_proyek", kodeProyek);
+                const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
+                    method: "POST",
+                    header: {
+                        "content-type": "application/json"
+                    },
+                    body: formData
+                }).then(res => res.json());
+                if (saveNilaiForecastRes.status == "success") {
+                    const nilaiFormatted = Intl.NumberFormat("en-US", {
+                        maximumFractionDigits: 0,
+                    }).format(nilaiForecast.toString().replace(/[^0-9]/gi, ""));
+                    input.value = nilaiFormatted;
+                    toaster.classList.add("text-bg-success")
+                    toaster.classList.remove("text-bg-danger")
+                    toastBody.innerHTML = saveNilaiForecastRes.msg;
+                } else {
+                    toaster.classList.remove("text-bg-success")
+                    toaster.classList.add("text-bg-danger")
+                    toastBody.innerHTML = saveNilaiForecastRes.msg;
+                }
+                toastBoots.show();
+            });
+        });
+    </script>
+@endsection
+{{-- end:: JS script --}}
