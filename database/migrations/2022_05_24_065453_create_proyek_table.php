@@ -101,7 +101,9 @@ return new class extends Migration
             $table->string("jenis_terkontrak")->nullable();
             
             //# Approval Table
-
+            
+            // Table untuk Halaman Forecast
+            $table->bigInteger("forecast")->nullable();
         });
     }
 
