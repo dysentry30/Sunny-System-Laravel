@@ -199,6 +199,24 @@ Route::get('/', function () {
         }
     });
 
+    Route::post('/proyek/forecast/save', function (Request $request) {
+        $data = $request->all();    
+        $forecast_data = explode(",", $data["nilai_forecast"]);
+        if(!empty($data["nilai_forecast"])) {
+            $proyek = Proyek::find($data["kode_proyek"]);
+            $proyek->forecast = json_encode($forecast_data) . ";";
+            if($proyek->save()) {
+                return response()->json([
+                    "status" => "success",
+                    "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
+                ]);
+            }
+        }
+        return response()->json([
+            "status" => "failed",
+            "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
+        ]);
+    });
 //End :: Project
 
 
