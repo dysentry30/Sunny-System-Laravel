@@ -180,428 +180,650 @@
                     <!--end::Container-->
                 </div>
                 <!--end::Header-->
- 
+
 
                 <!--begin::Form-->
-                <form action="#" method="post" enctype="multipart/form-data"> 
+                <form action="#" method="post" enctype="multipart/form-data">
                     @csrf
-                    
-                    
+
+
                     <!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
                         <!--begin::Toolbar-->
-                            <div class="toolbar" id="kt_toolbar">
-                                <!--begin::Container-->
-                                <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                    <!--begin::Page title-->
-                                    <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                        <!--begin::Title-->
-                                        <h1 class="d-flex align-items-center fs-3 my-1">Forecast
-                                        </h1>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Page title-->
-                                    <!--begin::Actions-->
-                                    <div class="d-flex align-items-center py-1">
-                                        
-                                        <!--begin::Button-->
-                                        <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
+                        <div class="toolbar" id="kt_toolbar">
+                            <!--begin::Container-->
+                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                <!--begin::Page title-->
+                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                    <!--begin::Title-->
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast
+                                    </h1>
+                                    <!--end::Title-->
+                                </div>
+                                <!--end::Page title-->
+                                <!--begin::Actions-->
+                                <div class="d-flex align-items-center py-1">
+
+                                    <!--begin::Button-->
+                                    <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
                                         style="background-color:#ffa62b; margin-left:10px">
                                         Save</button>
-                                        <!--end::Button-->
+                                    <!--end::Button-->
 
-                                        <!--begin::Button-->
-                                        <a href="/project" class="btn btn-sm btn-primary" id="customer_new_close"
+                                    <!--begin::Button-->
+                                    <a href="/project" class="btn btn-sm btn-primary" id="customer_new_close"
                                         style="background-color:#f1f1f1; margin-left:10px; color: black;">
                                         Close</a>
-                                        <!--end::Button-->
-                                        
-                                        
-                                    </div>
-                                    <!--end::Actions-->
+                                    <!--end::Button-->
+
+
                                 </div>
-                                <!--end::Container-->
+                                <!--end::Actions-->
                             </div>
-                            <!--end::Toolbar-->
-                            
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Toolbar-->
 
 
 
-                            <!--begin::Post-->
-                            <div class="post d-flex flex-column-fluid" id="kt_post">
-                                <!--begin::Container-->
-                                <div id="kt_content_container" style="overflow: auto; background-color:white; white-space: nowrap;">
-                                    <!--begin::Contacts App- Edit Contact-->
-                                    <div class="">
+
+                        <!--begin::Post-->
+                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                            <!--begin::Container-->
+                            <div id="kt_content_container"
+                                style="overflow: auto; background-color:white; white-space: nowrap;">
+                                <!--begin::Contacts App- Edit Contact-->
+                                <div class="">
 
 
-                                <!--begin::All Content-->
-                                <div class="col-xl-15">
-                                    <!--begin::Contacts-->
-                                    <div class="card card-flush h-lg-100" id="kt_contacts_main" >
+                                    <!--begin::All Content-->
+                                    <div class="col-xl-15">
+                                        <!--begin::Contacts-->
+                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-                                        <!--begin::Card body-->
-                                        <div class="card-body" style="background-color: white">
-
-                                        
-                                                    
-<!--begin::Table Forecast-->
-                                <table class="table align-middle table-row-dashed fs-6" id="kt_customers_table">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <tr style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
-                                                <th class="min-w-auto"  rowspan="2" style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
-                                                    <!--Begin::Svg Icon and Input Searc-->
-                                                    <span class="svg-icon svg-icon-1 position-absolute ms-6 mt-5">
-                                                        <i class="bi bi-search"></i>
-                                                    </span>
-                                                    <input type="text" data-kt-customer-table-filter="search" class="form-control form-control w-250px ps-15" placeholder="Search" /><br>
-                                                    <!--end::Svg Icon and Input Searc-->
-                                                </th>
-                                                <th class="min-w-auto" colspan="3"><center>Januari</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Februari</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Maret</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>April</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Mei</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Juni</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Juli</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Agustus</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>September</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Oktober</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>November</center></th>
-                                                <th class="min-w-auto" colspan="3"><center>Desember</center></th>
-                                                <th class="pinForecast HidePin min-w-auto" colspan="3" ><center>Total &nbsp;&nbsp; <i class="bi bi-pin-angle-fill" onclick="hidePin()"></i></center></th>
-                                                <th class="pinForecast ShowPin min-w-auto" colspan="3" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;"><center>Total &nbsp;&nbsp; <i class="bi bi-pin-fill text-primary" onclick="hidePin()"></i></center></th>
-                                            </tr>
-                                            <tr>
-                                                <!--begin::Sub-Judul Januari-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Januari-->
-                                                <!--begin::Sub-Judul Februari-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Februari-->
-                                                <!--begin::Sub-Judul Maret-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Maret-->
-                                                <!--begin::Sub-Judul April-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul April-->
-                                                <!--begin::Sub-Judul Mei-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Mei-->
-                                                <!--begin::Sub-Judul Juni-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Juni-->
-                                                <!--begin::Sub-Judul Juli-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Juli-->
-                                                <!--begin::Sub-Judul Agustus-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Agustus-->
-                                                <!--begin::Sub-Judul September-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul September-->
-                                                <!--begin::Sub-Judul Oktober-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Oktober-->
-                                                <!--begin::Sub-Judul November-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul November-->
-                                                <!--begin::Sub-Judul Desember-->
-                                                <th class="min-w-125px"><center>OK</center></th>
-                                                <th class="min-w-125px"><center>Forecast</center></th>
-                                                <th class="min-w-125px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Desember-->
-                                                <!--begin::Sub-Judul Total-->
-                                                <th class="pinForecast HidePin min-w-100px"><center>OK</center></th>
-                                                <th class="pinForecast HidePin min-w-100px"><center>Forecast</center></th>
-                                                <th class="pinForecast HidePin min-w-100px"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;"><center>OK</center></th>
-                                                <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;"><center>Forecast</center></th>
-                                                <th class="pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;"><center>Realisasi <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a></center></th>
-                                                <!--end::Sub-Judul Total-->
-                                            </tr>
-                                            <!--end::Table head-->
-                                        </thead>
-                                        
-                                    <!--begin::Table body-->
-                                        {{-- @foreach ($dops as $dop) --}}
-                                        
-                                        <tbody class="fw-bold text-gray-600">
-                                            @foreach ($proyeks as $proyek)
-
-                                            <tr style="text-align: right; ">
+                                            <!--begin::Card body-->
+                                            <div class="card-body" style="background-color: white">
 
 
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse" aria-expanded="false" aria-controls="collapse">
-                                                        <i class="bi bi-chevron-down"></i> 
-                                                        {{-- {{ $dop->dop }} --}}
-                                                        {{ $proyek->dop }}
-                                                    </a>
-                                                </td>
-                                                
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">-</td>
-                                                <!--end::Total Coloumn-->
-                                                
-                                            </tr>
-                                            <tr class="collapse accordion-header" id="collapse" style="text-align: right;">
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <!--begin::Child=-->
-                                                    <a class="ms-6" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
-                                                        <i class="bi bi-chevron-down"></i> 
-                                                        {{ $proyek->UnitKerja->unit_kerja }}
-                                                    </a>
-                                                    <!--end::Child=-->
-                                                </td>
-                                                <!--begin::Januari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Februari Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Februari Coloumn-->
-                                                <!--begin::Maret Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Maret Coloumn-->
-                                                <!--begin::April Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::April Coloumn-->
-                                                <!--begin::Mei Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Mei Coloumn-->
-                                                <!--begin::Juni Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Juni Coloumn-->
-                                                <!--begin::Juli Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Juli Coloumn-->
-                                                <!--begin::Agustus Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Agustus Coloumn-->
-                                                <!--begin::September Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::September Coloumn-->
-                                                <!--begin::Oktober Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Oktober Coloumn-->
-                                                <!--begin::November Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::November Coloumn-->
-                                                <!--begin::Desember Coloumn-->
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <td>-</td>
-                                                <!--end::Desember Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast HidePin" >-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">-</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">-</td>
-                                                <!--end::Total Coloumn-->
-                                            </tr>
-                                            <tr id="flush-collapseTwo" class="collapse" aria-labelledby="flush-headingTwo" data-bs-parent="#accordionFlushExample" style="text-align: right;">
-                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                    <!--begin::Child=-->
-                                                    <p class="ms-12">
-                                                    {{ $proyek->nama_proyek }}
-                                                    </p>
-                                                    <!--end::Child=-->
-                                                </td>
-                                                <!--begin::Januari Coloumn-->
-                                                <td>{{ $proyek->nilai_rkap }}</td>
-                                                <td>
-                                                    <input type="text" class="form-control" style="border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
-                                                </td>
-                                                <td>222,222</td>
-                                                <!--end::Januari Coloumn-->
-                                                <!--begin::Februari Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Februari Coloumn-->
-                                                <!--begin::Maret Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Maret Coloumn-->
-                                                <!--begin::April Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::April Coloumn-->
-                                                <!--begin::Mei Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Mei Coloumn-->
-                                                <!--begin::Juni Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Juni Coloumn-->
-                                                <!--begin::Juli Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Juli Coloumn-->
-                                                <!--begin::Agustus Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Agustus Coloumn-->
-                                                <!--begin::September Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::September Coloumn-->
-                                                <!--begin::Oktober Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Oktober Coloumn-->
-                                                <!--begin::November Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::November Coloumn-->
-                                                <!--begin::Desember Coloumn-->
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <td>222,222</td>
-                                                <!--end::Desember Coloumn-->
-                                                <!--begin::Total Coloumn-->
-                                                <td class="pinForecast HidePin" >{{ $proyek->nilai_rkap }}</td>
-                                                <td class="pinForecast HidePin" >
-                                                    <input type="text" class="form-control" style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
-                                                </td>
-                                                <td class="pinForecast HidePin" >2,666,664</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">{{ $proyek->nilai_rkap }}</td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                    <input type="text" class="form-control" style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px" id="nilai-forecast" name="nilai-forecast" value="" placeholder=". . . , -"/>
-                                                </td>
-                                                <td class="pinForecast ShowPin" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">2,666,664</td>
-                                                <!--end::Total Coloumn-->
-                                                
-                                                
-                                            </tr>
 
-                                            @endforeach
-                                            
-                                            {{-- begin :: dop 2 --}}
-                                                {{-- <tr style="text-align: right; ">
+                                                <!--begin::Table Forecast-->
+                                                <table class="table align-middle table-row-dashed fs-6"
+                                                    id="kt_customers_table">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <tr
+                                                            style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
+                                                            <th class="min-w-auto" rowspan="2"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
+                                                                <!--Begin::Svg Icon and Input Searc-->
+                                                                <span
+                                                                    class="svg-icon svg-icon-1 position-absolute ms-6 mt-5">
+                                                                    <i class="bi bi-search"></i>
+                                                                </span>
+                                                                <input type="text" data-kt-customer-table-filter="search"
+                                                                    class="form-control form-control w-250px ps-15"
+                                                                    placeholder="Search" /><br>
+                                                                <!--end::Svg Icon and Input Searc-->
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Januari</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Februari</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Maret</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>April</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Mei</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Juni</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Juli</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Agustus</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>September</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Oktober</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>November</center>
+                                                            </th>
+                                                            <th class="min-w-auto" colspan="3">
+                                                                <center>Desember</center>
+                                                            </th>
+                                                            <th class="pinForecast HidePin min-w-auto" colspan="3">
+                                                                <center>Total &nbsp;&nbsp; <i class="bi bi-pin-angle-fill"
+                                                                        onclick="hidePin()"></i></center>
+                                                            </th>
+                                                            <th class="pinForecast ShowPin min-w-auto" colspan="3"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                <center>Total &nbsp;&nbsp; <i
+                                                                        class="bi bi-pin-fill text-primary"
+                                                                        onclick="hidePin()"></i></center>
+                                                            </th>
+                                                        </tr>
+                                                        <tr>
+                                                            <!--begin::Sub-Judul Januari-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Januari-->
+                                                            <!--begin::Sub-Judul Februari-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Februari-->
+                                                            <!--begin::Sub-Judul Maret-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Maret-->
+                                                            <!--begin::Sub-Judul April-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul April-->
+                                                            <!--begin::Sub-Judul Mei-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Mei-->
+                                                            <!--begin::Sub-Judul Juni-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Juni-->
+                                                            <!--begin::Sub-Judul Juli-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Juli-->
+                                                            <!--begin::Sub-Judul Agustus-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Agustus-->
+                                                            <!--begin::Sub-Judul September-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul September-->
+                                                            <!--begin::Sub-Judul Oktober-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Oktober-->
+                                                            <!--begin::Sub-Judul November-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul November-->
+                                                            <!--begin::Sub-Judul Desember-->
+                                                            <th class="min-w-125px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="min-w-125px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Desember-->
+                                                            <!--begin::Sub-Judul Total-->
+                                                            <th class="pinForecast HidePin min-w-100px">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="pinForecast HidePin min-w-100px">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="pinForecast HidePin min-w-100px">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <th class="pinForecast ShowPin min-w-100px"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                <center>OK</center>
+                                                            </th>
+                                                            <th class="pinForecast ShowPin min-w-100px"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                <center>Forecast</center>
+                                                            </th>
+                                                            <th class="pinForecast ShowPin min-w-100px"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                <center>Realisasi <a href="#" Id="Plus"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                </center>
+                                                            </th>
+                                                            <!--end::Sub-Judul Total-->
+                                                        </tr>
+                                                        <!--end::Table head-->
+                                                    </thead>
+
+                                                    <!--begin::Table body-->
+
+                                                    <tbody class="fw-bold text-gray-600">
+                                                        @foreach ($dops as $dop)
+                                                            {{-- @foreach ($proyeks as $proyek) --}}
+
+                                                            <tr style="text-align: right; ">
+
+                                                                @php
+                                                                    $dop_name = str_replace(' ', '-', $dop->dop);
+                                                                @endphp
+                                                                <td
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                    <a name="collalpse1" class=""
+                                                                        data-bs-toggle="collapse"
+                                                                        href="#{{ $dop_name }}" aria-expanded="false"
+                                                                        aria-controls="{{ $dop_name }}">
+                                                                        <i class="bi bi-chevron-down"></i>
+                                                                        {{-- {{ $dop->dop }} --}}
+                                                                        {{ $dop->dop }}
+                                                                    </a>
+                                                                </td>
+
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Januari Coloumn-->
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <td>-</td>
+                                                                <!--end::Januari Coloumn-->
+                                                                <!--begin::Total Coloumn-->
+                                                                <td class="pinForecast HidePin">-</td>
+                                                                <td class="pinForecast HidePin">-</td>
+                                                                <td class="pinForecast HidePin">-</td>
+                                                                <td class="pinForecast ShowPin"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                    -</td>
+                                                                <td class="pinForecast ShowPin"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                    -</td>
+                                                                <td class="pinForecast ShowPin"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                    -</td>
+                                                                <!--end::Total Coloumn-->
+
+                                                            </tr>
+
+                                                            {{-- begin:: Foreach Unit Kerja --}}
+                                                            @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                <tr class="collapse accordion-header"
+                                                                    id="{{ $dop_name }}" style="text-align: right;">
+                                                                    <td
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                        <!--begin::Child=-->
+                                                                        <a class="ms-6" type="button"
+                                                                            data-bs-toggle="collapse"
+                                                                            data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="{{ $unitKerja->divcode }}">
+                                                                            <i class="bi bi-chevron-down"></i>
+                                                                            {{ $unitKerja->unit_kerja }}
+                                                                        </a>
+                                                                        <!--end::Child=-->
+                                                                    </td>
+                                                                    <!--begin::Januari Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Januari Coloumn-->
+                                                                    <!--begin::Februari Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Februari Coloumn-->
+                                                                    <!--begin::Maret Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Maret Coloumn-->
+                                                                    <!--begin::April Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::April Coloumn-->
+                                                                    <!--begin::Mei Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Mei Coloumn-->
+                                                                    <!--begin::Juni Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Juni Coloumn-->
+                                                                    <!--begin::Juli Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Juli Coloumn-->
+                                                                    <!--begin::Agustus Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Agustus Coloumn-->
+                                                                    <!--begin::September Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::September Coloumn-->
+                                                                    <!--begin::Oktober Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Oktober Coloumn-->
+                                                                    <!--begin::November Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::November Coloumn-->
+                                                                    <!--begin::Desember Coloumn-->
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <td>-</td>
+                                                                    <!--end::Desember Coloumn-->
+                                                                    <!--begin::Total Coloumn-->
+                                                                    <td class="pinForecast HidePin">-</td>
+                                                                    <td class="pinForecast HidePin">-</td>
+                                                                    <td class="pinForecast HidePin">-</td>
+                                                                    <td class="pinForecast ShowPin"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                        -</td>
+                                                                    <td class="pinForecast ShowPin"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                        -</td>
+                                                                    <td class="pinForecast ShowPin"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                        -</td>
+                                                                    <!--end::Total Coloumn-->
+                                                                </tr>
+
+                                                                {{-- begin:: Foreach Proyek --}}
+                                                                @foreach ($unitKerja->proyeks as $proyek)
+                                                                    <tr id="{{ $unitKerja->divcode }}"
+                                                                        class="collapse"
+                                                                        aria-labelledby="{{ $unitKerja->divcode }}"
+                                                                        data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                        style="text-align: right;">
+                                                                        <td
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                            <!--begin::Child=-->
+                                                                            <p class="ms-12">
+                                                                                {{ $proyek->nama_proyek }}
+                                                                            </p>
+                                                                            <!--end::Child=-->
+                                                                        </td>
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>{{ $proyek->nilai_rkap }}</td>
+                                                                        <td>
+                                                                            <input type="text" class="form-control"
+                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                id="nilai-forecast" name="nilai-forecast"
+                                                                                value="" placeholder=". . . , -" />
+                                                                        </td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Februari Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Februari Coloumn-->
+                                                                        <!--begin::Maret Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Maret Coloumn-->
+                                                                        <!--begin::April Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::April Coloumn-->
+                                                                        <!--begin::Mei Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Mei Coloumn-->
+                                                                        <!--begin::Juni Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Juni Coloumn-->
+                                                                        <!--begin::Juli Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Juli Coloumn-->
+                                                                        <!--begin::Agustus Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Agustus Coloumn-->
+                                                                        <!--begin::September Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::September Coloumn-->
+                                                                        <!--begin::Oktober Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Oktober Coloumn-->
+                                                                        <!--begin::November Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::November Coloumn-->
+                                                                        <!--begin::Desember Coloumn-->
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <td>222,222</td>
+                                                                        <!--end::Desember Coloumn-->
+                                                                        <!--begin::Total Coloumn-->
+                                                                        <td class="pinForecast HidePin">test</td>
+                                                                        <td class="pinForecast HidePin">
+                                                                            <input type="text" class="form-control"
+                                                                                style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                id="nilai-forecast" name="nilai-forecast"
+                                                                                value="" placeholder=". . . , -" />
+                                                                        </td>
+                                                                        <td class="pinForecast HidePin">2,666,664</td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                            test</td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                            <input type="text" class="form-control"
+                                                                                style="background-color: transparent; border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                id="nilai-forecast" name="nilai-forecast"
+                                                                                value="" placeholder=". . . , -" />
+                                                                        </td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                            2,666,664</td>
+                                                                        <!--end::Total Coloumn-->
+                                                                @endforeach
+                                                                {{-- end:: Foreach Proyek --}}
+
+
+                                                                </tr>
+                                                            @endforeach
+                                                            {{-- end:: Foreach Unit Kerja --}}
+                                                        @endforeach
+
+                                                        {{-- begin :: proyek 2 --}}
+                                                        {{-- <tr style="text-align: right; ">
                                                 <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                     <a name="collalpse1" class="" data-bs-toggle="collapse" href="#collapse2" aria-expanded="false" aria-controls="collapse2">
                                                         <i class="bi bi-chevron-down"></i> DOP 2
@@ -832,59 +1054,59 @@
                                                     <!--end::Total Coloumn-->
 
                                                 </tr> --}}
-                                            {{-- end :: dop 2 --}}
-                                            
-                                        </tbody>
+                                                        {{-- end :: dop 2 --}}
 
-                                        {{-- @endforeach --}}
-                                    <!--end::Table body-->
-                                </table>
-                                
-                                <script>
-                                    function hidePin() {
-                                        var hide = document.getElementsByClassName('pinForecast');
-                                        hide.forEach(element => {
-                                            if (element.classList.contains("HidePin")) {
-                                                element.classList.add("ShowPin");
-                                                element.classList.remove("HidePin");
-                                            } else {
-                                                element.classList.add("HidePin");
-                                                element.classList.remove("ShowPin");
-                                            }
-                                        }); 
-                                    }
-                                </script>
-<!--end::Table Forecast-->
+                                                    </tbody>
+
+                                                    {{-- @endforeach --}}
+                                                    <!--end::Table body-->
+                                                </table>
+
+                                                <script>
+                                                    function hidePin() {
+                                                        var hide = document.getElementsByClassName('pinForecast');
+                                                        hide.forEach(element => {
+                                                            if (element.classList.contains("HidePin")) {
+                                                                element.classList.add("ShowPin");
+                                                                element.classList.remove("HidePin");
+                                                            } else {
+                                                                element.classList.add("HidePin");
+                                                                element.classList.remove("ShowPin");
+                                                            }
+                                                        });
+                                                    }
+                                                </script>
+                                                <!--end::Table Forecast-->
 
                                             </div>
                                         </div>
 
 
 
-                                        </div>
-                                        <!--end:::Tab isi content-->
-            
-                                        </div>
-                                        <!--end::Card body-->
-
-                                        
                                     </div>
-                                    <!--end::Contacts App- Edit Contact-->
-                                    
+                                    <!--end:::Tab isi content-->
+
                                 </div>
-                                <!--end::Container-->
+                                <!--end::Card body-->
+
+
                             </div>
-                            <!--end::Post-->
-                            
+                            <!--end::Contacts App- Edit Contact-->
+
+                        </div>
+                        <!--end::Container-->
                     </div>
-                    <!--end::Content-->                
-                </form>
-                <!--end::Form-->
+                    <!--end::Post-->
 
             </div>
-            <!--end::Wrapper-->
+            <!--end::Content-->
+            </form>
+            <!--end::Form-->
+
         </div>
-        <!--end::Page-->
+        <!--end::Wrapper-->
+    </div>
+    <!--end::Page-->
     </div>
     <!--end::Root-->
 
