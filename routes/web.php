@@ -331,6 +331,12 @@ Route::post('/pasal/add', [PasalController::class, "pasalAdd"]);
 
 Route::post('/pasal/update', [PasalController::class, "pasalUpdate"]);
 
+// begin route PIC
+    Route::get('/pic', function () {
+        return view("/MasterData/pic", ["all_proyek" => Proyek::all()->reverse()]);
+    });
+// end route PIC
+
 function writeDOCXFile($content)
 {
     // header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');

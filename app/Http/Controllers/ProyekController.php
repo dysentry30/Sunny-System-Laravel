@@ -94,6 +94,7 @@ class ProyekController extends Controller
         $dataProyek = $request->all(); 
         // dd($request); //console log hasil $dataProyek
         $newProyek=Proyek::find($dataProyek["id"]);
+        $allProyek = Proyek::all();
         
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
@@ -133,6 +134,11 @@ class ProyekController extends Controller
         $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
         $newProyek->hps_pagu = $dataProyek["hps-pagu"];
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
+        foreach($allProyek as $proyek) {
+            if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
+                return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");
+            }
+        }
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
         $newProyek->laporan_prakualifikasi = $dataProyek["laporan-prakualifikasi"];
         

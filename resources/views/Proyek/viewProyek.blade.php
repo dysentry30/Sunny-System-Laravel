@@ -179,6 +179,15 @@
                     <!--end::Container-->
                 </div>
                 <!--end::Header-->
+
+                {{-- Begin:: Alert --}}
+                @if (Session::has("failed"))
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    {{ Session::get("failed") }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                  @endif
+                  {{-- End:: Alert --}}
  
 
 					<!--begin::Content-->
