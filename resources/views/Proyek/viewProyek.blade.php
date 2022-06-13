@@ -427,7 +427,6 @@
                                             <!--end:::Tab item Terkontrak-->
                                             @endif
                                             
-                                            @if ($proyek->stage > 7)
                                             <!--begin:::Tab item Forecast-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
@@ -436,9 +435,7 @@
                                                 style="font-size:14px;">Forecast</a>
                                             </li>
                                             <!--end:::Tab item Forecast-->
-                                            @endif
-                                            
-                                            @if ($proyek->stage > 8)
+
                                             <!--begin:::Tab item Approval-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4"
@@ -447,6 +444,16 @@
                                                 style="font-size:14px;">Approval</a>
                                             </li>
                                             <!--end:::Tab item Approval-->
+
+                                            @if ($proyek->stage > 8)
+                                            <!--begin:::Tab item Feedback-->
+                                            <li class="nav-item">
+                                                <a class="nav-link text-active-primary pb-4"
+                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                href="#kt_user_view_overview_Feedback"
+                                                style="font-size:14px;">Feedback</a>
+                                            </li>
+                                            <!--end:::Tab item Feedback-->
                                             @endif
                                         </ul>
 
@@ -1980,12 +1987,12 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-125px">Kode Proyek</th>
-                                                            <th class="min-w-125px">Nama Proyek</th>
-                                                            <th class="min-w-125px">Unit Kerja</th>
-                                                            <th class="min-w-125px">Nilai RKAP</th>
-                                                            <th class="min-w-125px">Aprove By</th>
-                                                            <th class="min-w-125px">Approval Status</th>
+                                                            <th class="min-w-auto">Kode Proyek</th>
+                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                            <th class="min-w-auto">Unit Kerja</th>
+                                                            <th class="min-w-auto">Nilai RKAP</th>
+                                                            <th class="min-w-auto">Aprove By</th>
+                                                            <th class="min-w-auto">Approval Status</th>
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -2006,7 +2013,7 @@
                                                             <!--end::Email=-->
                                                             <!--begin::Company=-->
                                                             <td>
-                                                                {{ $proyek->customer_proyek }}
+                                                                {{ $proyek->UnitKerja->unit_kerja }}
                                                             </td>
                                                             <!--end::Company=-->
                                                             
@@ -2046,12 +2053,12 @@
                                                     <thead>
                                                         <!--begin::Table row-->
                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                            <th class="min-w-125px">Kode Proyek</th>
-                                                            <th class="min-w-125px">Nama Proyek</th>
-                                                            <th class="min-w-125px">Unit Kerja</th>
-                                                            <th class="min-w-125px">Nilai RKAP</th>
-                                                            <th class="min-w-125px text-center">Action</th>
-                                                            {{-- <th class="min-w-125px">Action</th> --}}
+                                                            <th class="min-w-auto">Kode Proyek</th>
+                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                            <th class="min-w-auto">Unit Kerja</th>
+                                                            <th class="min-w-auto">Nilai RKAP</th>
+                                                            <th class="min-w-auto text-center">Action</th>
+                                                            {{-- <th class="min-w-auto">Action</th> --}}
                                                         </tr>
                                                         <!--end::Table row-->
                                                     </thead>
@@ -2072,7 +2079,7 @@
                                                             <!--end::Email=-->
                                                             <!--begin::Company=-->
                                                             <td>
-                                                                {{ $proyek->customer_proyek }}
+                                                                {{ $proyek->UnitKerja->unit_kerja }}
                                                             </td>
                                                             <!--end::Company=-->
                                                             
@@ -2087,10 +2094,10 @@
                                                                     <!--begin::Button-->
                                                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
                                                                     style="background-color:#ffa62b; margin-left:10px">
-                                                                    Save</button>
+                                                                    Approve</button>
                                                                     <!--end::Button-->
                                                                     
-                                                                    <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+                                                                    <button class="btn btn-sm btn-light btn-active-danger" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Reject</button>
                                                                 </div>
                                                             </td>
                                                             <!--end::Action=-->
@@ -2107,6 +2114,59 @@
 
                                             </div>
 <!--end:::Tab Approval-->
+
+<!--begin:::Tab Feedback-->
+                                            <div class="tab-pane fade" id="kt_user_view_overview_feedback" role="tabpanel">
+
+                                                <!--Begin::Title Biru Form: Approval-->
+                                                &nbsp;<br>
+                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Proyek Feedback
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_feedback">+</a>
+                                                </h3>
+                                                &nbsp;<br>
+                                                <!--End::Title Biru Form: List Peserta Tender-->
+
+                                                <!--begin::Table-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-auto">Nama Customer</th>
+                                                            <th class="min-w-auto">Ratings</th>
+                                                            <th class="min-w-400px">Approval Status</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold text-gray-600">
+                                                        <tr>
+                                                            
+                                                            <!--begin::Email=-->
+                                                            <td>
+                                                                PT. Membangun Negeri
+                                                            </td>
+                                                            <!--end::Email=-->
+                                                            <!--begin::Company=-->
+                                                            <td>
+                                                                &#9733;&#9733;&#9733;&#9733;&#9733;
+                                                            </td>
+                                                            <!--end::Company=-->
+                                                            
+                                                            <!--begin::Action=-->
+                                                            <td>
+                                                                Lorem Ipsum dolor sit amet guido lan gustom inercos tanttio, el bro sautires ki del proesa bukari oresro.
+                                                            </td>
+                                                            <!--end::Action=-->
+                                                        </tr>
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table-->
+
+                                                
+<!--end:::Tab Feedback-->
 
 
                                         </div>
@@ -2208,6 +2268,106 @@
         </form>    
 
 <!--end::Modals-->
+<!--begin::Feedback Modals-->
+    
+    {{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
+    @csrf --}}
+    
+    <!--begin::Modal - Feedback-->
+    <div class="modal fade" id="kt_modal_feedback" tabindex="-1" aria-hidden="true">
+    
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Feedback</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-circle-fill ts-8"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
+                        <span>Nama Customer</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <input type="text" class="form-control form-control-solid" 
+                    id="nama-feedback" name="nama-feedback" value="" placeholder="Nama Customer" />
+                    <!--end::Input-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
+                        <span>Peringkat :&nbsp;&nbsp;</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                        <label class="form-check-label" for="inlineRadio1">1</label>
+                      </div>
+                      <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                        <label class="form-check-label" for="inlineRadio2">2</label>
+                      </div>
+                      <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3">
+                        <label class="form-check-label" for="inlineRadio3">3</label>
+                      </div>
+                      <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="option4">
+                        <label class="form-check-label" for="inlineRadio4">4</label>
+                      </div>
+                      <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5" value="option5">
+                        <label class="form-check-label" for="inlineRadio5">5</label>
+                      </div>
+                    <!--end::Input-->
+                    
+                    <!--begin::Label-->
+                    <div>
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Kritik dan saran</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        &nbsp;<br>
+                        <div class="form-group">
+                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid" id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                        </div>
+                        <!--end::Input-->
+                    </div>
+                    </div>
+                    <!--end::Input group-->
+                    
+                    <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
+                        
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    {{-- </form> --}}
+
+<!--end:: Feedback Modals-->
 
 
 

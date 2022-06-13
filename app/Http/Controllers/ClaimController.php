@@ -29,7 +29,7 @@ class ClaimController extends Controller
             }
         }
         // dd($proyek_with_claim);
-        return view("claimManagement/view", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
+        return view("claimManagement/viewClaim", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
     }
 
     /**
