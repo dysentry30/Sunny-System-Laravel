@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
                 'tahun_perolehan' => 2021,
                 'tipe_proyek' => "R",
                 'jenis_proyek' => "I",
+                'nilai_rkap' => "1,500,000,000",
                 'stage' => "1",
                 'sumber_dana' => "BUMN",
                 'bulan_pelaksanaan' => "Mei",
