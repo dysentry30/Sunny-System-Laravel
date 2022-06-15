@@ -118,6 +118,7 @@ class PasalController extends Controller
     }
 
     // update Pasal from input to database
+    
     public function pasalUpdate(Request $request) {
         $pasal = $request->get("pasal");
         $id_pasal = $request->get("id_pasal");
