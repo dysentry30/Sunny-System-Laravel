@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 
 class ClaimController extends Controller
@@ -28,9 +29,25 @@ class ClaimController extends Controller
                 array_push($proyek_with_claim, $proyek);
             }
         }
+        // ClaimManagements::groupBy('kode_proyek')->havingRaw('COUNT(*) > 1')->get();
         // dd($proyek_with_claim);
-        return view("claimManagement/viewClaim", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
+        return view("5_claim", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
+
+        // return view("5_claim", ['claims' => ClaimManagements::all() ]);
     }
+
+    public function viewClaim($id_proyek)
+    {   
+        $proyek = Proyek::find($id_proyek);
+        $claim = $proyek->ClaimManagements;
+        // dd($claim);
+
+        return view("claimManagement/viewClaim", ['claims' => $claim, 'proyek' => $proyek]);
+    }
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -52,7 +69,7 @@ class ClaimController extends Controller
         }
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
         $kode_claim = "CL." . date("Y") . "." . $no_urut;
-        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "currentContract" => $contract, "proyek" => $proyek, "projects" => Proyek::all(), "kode_claim" => $kode_claim, "claimContract" => null]);
+        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "currentContract" => $contract, "proyek" => $proyek, "kode_claim" => $kode_claim, "claimContract" => null]);
     }
 
     /**
@@ -84,10 +101,10 @@ class ClaimController extends Controller
         if ($validation->fails()) {
             $request->old("approve-date");
             $request->old("pic");
-            $request->old("project-id");
-            $request->old("id-contract");
+            // $request->old("project-id");
+            // $request->old("id-contract");
             $request->old("number-claim");
-            dd($validation->errors());
+            $request->old("jenis-claim");
             return redirect()->back()->with("failed", "This claim failed to add");
         }
         $validation->validate();
@@ -98,9 +115,10 @@ class ClaimController extends Controller
         $claimManagements->nilai_claim = 0;
         $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
         $claimManagements->pic = $data["pic"];
+        $claimManagements->jenis_claim = $data["jenis-claim"];
 
         if ($claimManagements->save()) {
-            return redirect("/claim-management/view/" . $data["number-claim"])->with("success", "This claim has been added");
+            return redirect("/contract-management/view/".$data["id-contract"])->with("success", "This claim has been added");
         }
         return redirect("/claim-management")->with("failed", "This claim failed to add");
     }
@@ -151,7 +169,7 @@ class ClaimController extends Controller
      */
     public function show(ClaimManagements $claim_management)
     {
-        return view("claimManagement/new", ["contractManagements" => ContractManagements::all(), "claimContract" => $claim_management, "projects" => Proyek::all()]);
+        return view("claimManagement/new", ["currentContract" => $claim_management->contract, "claimContract" => $claim_management, "proyek" => $claim_management->project]);
     }
 
     /**

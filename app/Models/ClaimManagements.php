@@ -15,7 +15,7 @@ class ClaimManagements extends Model
     ];
 
     public function contract() {
-        return $this->hasOne(ContractManagements::class, "id_contract");
+        return $this->hasOne(ContractManagements::class, "id_contract", "id_contract");
     }
 
     public function project() {

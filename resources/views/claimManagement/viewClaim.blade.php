@@ -289,14 +289,13 @@
                         <!--begin::Card body-->
                         <div class="card-body pt-5">
 
-
 <!--begin:::Tabs Navigasi-->
             <ul
                 class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                 <!--begin:::Tab item Claim-->
                 <li class="nav-item">
                     <a class="nav-link text-active-primary pb-4 active"
-                        data-bs-toggle="tab" href="#kt_user_view_overview_pasardini"
+                        data-bs-toggle="tab" href="#kt_user_view_claim"
                         style="font-size:14px;">Claim</a>
                 </li>
                 <!--end:::Tab item Claim-->
@@ -326,64 +325,65 @@
             <div class="tab-content" id="myTabContent">
 
 <!--begin:::Tab Claim-->
-                <div class="tab-pane fade show active" id="kt_user_view_overview_pasardini" role="tabpanel">
-
-                    <!--begin::Table Proyek-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Kode Proyek</th>
-                                        <th class="min-w-auto">Nama Proyek</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Nilai Claim</th>
-                                        <th class="min-w-auto">Jenis Proyek</th>
-                                        <th class="min-w-auto">Tipe Proyek</th>
-                                        <th class=""><center>Action</center></th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                @foreach ($proyek_with_claim as $proyek)
-                                <tbody class="fw-bold text-gray-600">
-                                    <tr>
-                                        
-                                        <!--begin::Name=-->
-                                        <td>
-                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                        </td>
-                                        <!--end::Name=-->
-                                        <!--begin::Email=-->
-                                        <td>
-                                            {{ $proyek->nama_proyek }}
-                                        </td>
-                                        <!--end::Email=-->
-                                        <!--begin::Company=-->
-                                        <td>
-                                            {{ $proyek->UnitKerja->unit_kerja }}
-                                        </td>
-                                        <!--end::Company=-->
-                                        <!--begin::Action=-->
-                                        <td>
-                                            {{-- {{ $proyek->nilai_rkap }} --}}
-                                        </td>
-                                        <!--end::Action=-->
-                                        <!--begin::Action=-->
-                                        <td>
-                                            {{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}
-                                        </td>
-                                        <!--end::Action=-->
-                                        <!--begin::Action=-->
-                                        <td>
-                                            {{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
-                                        </td>
-                                        <!--end::Action=-->
-                                        <!--begin::Action=-->
-                                        <td>
+                <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
+                    <!--begin::Table Claim-->
+                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-auto">ID Claim</th>
+                                <th class="min-w-auto">Kode Proyek</th>
+                                <th class="min-w-auto">Nama Proyek</th>
+                                <th class="min-w-auto">Unit Kerja</th>
+                                <th class="min-w-auto">Jenis Claim</th>
+                                <th class="min-w-auto">Approval Status</th>
+                                {{-- <th class=""><center>Action</center></th> --}}
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-600">
+                            @foreach ($claims as $claim)
+                            @if($claim->jenis_claim == "Claim")
+                                <tr>
+                                
+                                    <!--begin::Name=-->
+                                    <td>
+                                        {{ $claim->id_claim }}    
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Name=-->
+                                    <td>
+                                        {{ $claim->id_contract }}    
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Email=-->
+                                    <td>
+                                        {{ $proyek->kode_proyek }}
+                                    </td>
+                                    <!--end::Email=-->
+                                    <!--begin::Company=-->
+                                    <td>
+                                        {{ $proyek->nama_proyek }}
+                                        {{-- {{ $proyek->kode_proyek }} --}}
+                                    </td>
+                                    <!--end::Company=-->
+                                    <!--begin::Action=-->
+                                    <td>
+                                        {{ $claim->jenis_claim }}  
+                                    </td>
+                                    <!--end::Action=-->
+                                    <!--begin::Action=-->
+                                    <td>
+                                        Pending
+                                    </td>
+                                    <!--end::Action=-->
+                                    <!--begin::Action=-->
+                                    {{-- <td>
                                         <!--begin::Button-->
-                                        <form action="/proyek/delete/{{ $proyek->id }}" method="post" class="d-inline" >
+                                        <form action="/proyek/delete/" method="post" class="d-inline" >
                                             @method('delete')
                                             @csrf
                                             <center>
@@ -391,399 +391,172 @@
                                             </center>
                                         </form>
                                         <!--end::Button-->
-                                        </td>
-                                        <!--end::Action=-->
-                                    </tr>
-                                    @endforeach
-                                    
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            
-                    <!--end::Table Proyek-->
-
-                    <br>
-                    {{-- <hr style="border: dashed 0,5px gray" > --}}
-
-                    <!--Begin::Title Biru Form: Nilai RKAP Review-->
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Claim
-                        {{-- <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a> --}}
-                    </h3>
-                    &nbsp;<br>
-                    <!--End::Title Biru Form: Nilai RKAP Review-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">No. Claim</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" 
-                                    id="number-claim" name="number-claim" value="" placeholder="No. Claim" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Tanggal Pengajuan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-
-                                    <a href="#" class="btn btn-sm mx-3"
-                                        style="background: transparent;width:1rem;height:2.3rem;"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#kt_modal_calendar"><i
-                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                            style="color: #e08c16"></i></a>
-                                    <input type="Date" class="form-control form-control-solid ps-12"
-                                        placeholder="Select a date"
-                                        value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
-                                        name="approve-date" id="approve-date">
-
-                                    {{-- begin::erorr message --}}
-                                    @error('approve-date')
-                                        <h6 class="text-danger">{{ $message }}</h6>
-                                    @enderror
-                                    {{-- end::erorr message --}}
-
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">PIC</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" 
-                                    id="pic" name="pic" value="" placeholder="PIC" disabled/>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--end begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Total Claim</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid"
-                                        name="total-claim" id="total-claim"
-                                        onkeyup="reformatNumber(this)"
-                                        value="{{ number_format((int) ($claimContract->nilai_claim ?? 0), 0, ',', ',') }}"
-                                        placeholder="Type number here..." disabled>
-                                    <!--end::Input-->
-
-                                    {{-- begin::erorr message --}}
-                                    @error('total-claim')
-                                        <h6 class="text-danger">{{ $message }}</h6>
-                                    @enderror
-                                    {{-- end::erorr message --}}
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-                        
-                        
-                        {{-- <!--Begin::Title Biru Form: Nilai RKAP Review-->
-                        &nbsp;<br>
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Proyek Dan Contract
-                        </h3>
-                        &nbsp;<br>
-                        <!--End::Title Biru Form: Nilai RKAP Review-->
-
-                        
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select name="project-id" id="project-id"
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Proyek"
-                                        data-select2-id="select2-data-project-id" tabindex="-1"
-                                        aria-hidden="true">
-                                        <option value=""></option>
-                                        @foreach ($projects as $projectAll)
-                                            <option value="{{ $projectAll->kode_proyek }}"
-                                                {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? $proyek->kode_proyek)) ? 'selected' : '' }}>
-                                                {{ $projectAll->nama_proyek }}</option>
-                                        @endforeach
-                                        <option selected data-select2-id="select2-data-2-3jce">Pilih
-                                        Proyek...</option>
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Contract</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select
-                                        class="form-select form-select-solid select2-hidden-accessible"
-                                        name="id-contract" id="id-contract" value=""
-                                        data-control="select2" data-hide-search="true"
-                                        data-select2-id="select2-data-contract-id"
-                                        data-placeholder="Pilih Contract">
-                                        <option value=""></option>
-                                        @foreach ($contractManagements as $contract)
-                                            <option value="{{ $contract->id_contract }}"
-                                                {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>
-                                                {{ $contract->id_contract }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                    @error('id-contract')
-                                        <h6 class="text-danger">{{ $message }}</h6>
-                                    @enderror
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                        </div>
-                        <!--End::Row Kanan+Kiri--> --}}
-                        
-                        
-                                            
+                                    </td> --}}
+                                    <!--end::Action=-->
+                                </tr>
+                            @endif
+                            @endforeach
+                            </tbody>
+                    </table>
+                    <!--end::Table -->
                 </div>
-                
-                
 <!--end:::Tab Claim-->
                 
 
 <!--begin:::Tab Anti Claim-->
                 <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
-
-
-                    <!--begin::Table Proyek-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-auto">Kode Proyek</th>
-                                    <th class="min-w-auto">Nama Proyek</th>
-                                    <th class="min-w-auto">Unit Kerja</th>
-                                    <th class="min-w-auto">Nilai Claim</th>
-                                    <th class="min-w-auto">Jenis Proyek</th>
-                                    <th class="min-w-auto">Tipe Proyek</th>
-                                    <th class=""><center>Action</center></th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            @foreach ($proyek_with_claim as $proyek)
-                            <tbody class="fw-bold text-gray-600">
+                    <!--begin::Table Claim-->
+                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-auto">ID Claim</th>
+                                <th class="min-w-auto">Kode Proyek</th>
+                                <th class="min-w-auto">Nama Proyek</th>
+                                <th class="min-w-auto">Unit Kerja</th>
+                                <th class="min-w-auto">Jenis Claim</th>
+                                <th class="min-w-auto">Approval Status</th>
+                                {{-- <th class=""><center>Action</center></th> --}}
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-600">
+                            @foreach ($claims as $claim)
+                            @if($claim->jenis_claim == "Anti Claim")
                                 <tr>
-                                    
+                                
                                     <!--begin::Name=-->
                                     <td>
-                                        <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                        {{ $claim->id_claim }}    
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Name=-->
+                                    <td>
+                                        {{ $claim->id_contract }}    
                                     </td>
                                     <!--end::Name=-->
                                     <!--begin::Email=-->
                                     <td>
-                                        {{ $proyek->nama_proyek }}
+                                        {{ $proyek->kode_proyek }}
                                     </td>
                                     <!--end::Email=-->
                                     <!--begin::Company=-->
                                     <td>
-                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                        {{ $proyek->nama_proyek }}
+                                        {{-- {{ $proyek->kode_proyek }} --}}
                                     </td>
                                     <!--end::Company=-->
                                     <!--begin::Action=-->
                                     <td>
-                                        {{-- {{ $proyek->nilai_rkap }} --}}
+                                        {{ $claim->jenis_claim }}  
                                     </td>
                                     <!--end::Action=-->
                                     <!--begin::Action=-->
                                     <td>
-                                        {{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}
+                                        Pending
                                     </td>
                                     <!--end::Action=-->
                                     <!--begin::Action=-->
-                                    <td>
-                                        {{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                    <!--begin::Button-->
-                                    <form action="/proyek/delete/{{ $proyek->id }}" method="post" class="d-inline" >
-                                        @method('delete')
-                                        @csrf
-                                        <center>
-                                            <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                        </center>
-                                    </form>
-                                    <!--end::Button-->
-                                    </td>
+                                    {{-- <td>
+                                        <!--begin::Button-->
+                                        <form action="/proyek/delete/" method="post" class="d-inline" >
+                                            @method('delete')
+                                            @csrf
+                                            <center>
+                                                <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+                                            </center>
+                                        </form>
+                                        <!--end::Button-->
+                                    </td> --}}
                                     <!--end::Action=-->
                                 </tr>
-                                @endforeach
-                                
+                            @endif
+                            @endforeach
                             </tbody>
-                            <!--end::Table body-->
-                        </table>
-                    <!--end::Table Proyek-->
-                    
-                        
+                    </table>
+                    <!--end::Table -->
                 </div>
 <!--end:::Tab Anti Claim-->
 
 
 <!--begin:::Tab Claim Asuransi-->
                 <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
-
-                    <!--begin::Row Kanan+Kiri-->
-                    <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">No. Claim</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" 
-                                id="number-claim" name="number-claim" value="" placeholder="No. Claim" />
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Tanggal Pengajuan</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-
-                                <a href="#" class="btn btn-sm mx-3"
-                                    style="background: transparent;width:1rem;height:2.3rem;"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_calendar"><i
-                                        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                        style="color: #e08c16"></i></a>
-                                <input type="Date" class="form-control form-control-solid ps-12"
-                                    placeholder="Select a date"
-                                    value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
-                                    name="approve-date" id="approve-date">
-
-                                {{-- begin::erorr message --}}
-                                @error('approve-date')
-                                    <h6 class="text-danger">{{ $message }}</h6>
-                                @enderror
-                                {{-- end::erorr message --}}
-
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End::Col-->
-                    </div>
-                    <!--End::Row Kanan+Kiri-->
-
-                    <!--begin::Row Kanan+Kiri-->
-                    <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span class="required">PIC</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid" 
-                                id="pic" name="pic" value="" placeholder="PIC" disabled/>
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--end begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Total Claim</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text" class="form-control form-control-solid"
-                                    name="total-claim" id="total-claim"
-                                    onkeyup="reformatNumber(this)"
-                                    value="{{ number_format((int) ($claimContract->nilai_claim ?? 0), 0, ',', ',') }}"
-                                    placeholder="Type number here..." disabled>
-                                <!--end::Input-->
-
-                                {{-- begin::erorr message --}}
-                                @error('total-claim')
-                                    <h6 class="text-danger">{{ $message }}</h6>
-                                @enderror
-                                {{-- end::erorr message --}}
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        
-                    </div>
-                    <!--End::Row Kanan+Kiri-->
-
-
+                     <!--begin::Table Claim-->
+                     <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="min-w-auto">ID Claim</th>
+                                <th class="min-w-auto">Kode Proyek</th>
+                                <th class="min-w-auto">Nama Proyek</th>
+                                <th class="min-w-auto">Unit Kerja</th>
+                                <th class="min-w-auto">Jenis Claim</th>
+                                <th class="min-w-auto">Approval Status</th>
+                                {{-- <th class=""><center>Action</center></th> --}}
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-600">
+                            @foreach ($claims as $claim)
+                            @if($claim->jenis_claim == "Claim Asuransi")
+                                <tr>
+                                
+                                    <!--begin::Name=-->
+                                    <td>
+                                        {{ $claim->id_claim }}    
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Name=-->
+                                    <td>
+                                        {{ $claim->id_contract }}    
+                                    </td>
+                                    <!--end::Name=-->
+                                    <!--begin::Email=-->
+                                    <td>
+                                        {{ $proyek->kode_proyek }}
+                                    </td>
+                                    <!--end::Email=-->
+                                    <!--begin::Company=-->
+                                    <td>
+                                        {{ $proyek->nama_proyek }}
+                                        {{-- {{ $proyek->kode_proyek }} --}}
+                                    </td>
+                                    <!--end::Company=-->
+                                    <!--begin::Action=-->
+                                    <td>
+                                        {{ $claim->jenis_claim }}  
+                                    </td>
+                                    <!--end::Action=-->
+                                    <!--begin::Action=-->
+                                    <td>
+                                        Pending
+                                    </td>
+                                    <!--end::Action=-->
+                                    <!--begin::Action=-->
+                                    {{-- <td>
+                                        <!--begin::Button-->
+                                        <form action="/proyek/delete/" method="post" class="d-inline" >
+                                            @method('delete')
+                                            @csrf
+                                            <center>
+                                                <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+                                            </center>
+                                        </form>
+                                        <!--end::Button-->
+                                    </td> --}}
+                                    <!--end::Action=-->
+                                </tr>
+                            @endif
+                            @endforeach
+                            </tbody>
+                    </table>
+                    <!--end::Table -->                    
                 </div>
 <!--end:::Tab pane Claim Asuransi-->
 

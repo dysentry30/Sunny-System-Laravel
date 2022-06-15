@@ -237,7 +237,6 @@
                                                 <div class="card-body pt-5">
                                                     
                                                     <form id="kt_ecommerce_settings_general_form" class="form" action="#">
-                                                        
                                                         <!--begin::Input group Name-->
                                                         <div class="fv-row mb-7">
                                                             <!--begin::Label-->
@@ -248,6 +247,9 @@
                                                             <!--begin::Input-->
                                                             <input type="text" id="name-customer" name="name-customer"                                                            class="form-control form-control-solid" 
                                                             value="" placeholder="Name" />
+                                                            @error('name-customer')
+                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                            @enderror
                                                             <!--end::Input-->
                                                         </div>
                                                         <!--end::Input group Name-->
@@ -305,7 +307,7 @@
 														<div class="fv-row mb-7">
                                                             <!--begin::Label-->
 															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span >Email</span>
+                                                                <span class="required">Email</span>
 															</label>
 															<!--end::Label-->
 															<!--begin::Input-->
@@ -319,7 +321,7 @@
 														<div class="fv-row mb-7">
                                                             <!--begin::Label-->
 															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Phone Number</span>
+                                                                <span class="required">Phone Number</span>
 															</label>
 															<!--end::Label-->
 															<!--begin::Input-->

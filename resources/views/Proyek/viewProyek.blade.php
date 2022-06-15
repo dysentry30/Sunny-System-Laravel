@@ -180,14 +180,21 @@
                 </div>
                 <!--end::Header-->
 
-                {{-- Begin:: Alert --}}
-                @if (Session::has("failed"))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    {{ Session::get("failed") }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-                  @endif
-                  {{-- End:: Alert --}}
+{{-- Begin:: Alert --}}
+                {{-- @if (Session::has("failed"))
+                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        {{ Session::get("failed") }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif --}}
+                @if (Session::has("success"))
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                        {{ Session::get("success") }}
+                        <strong>Update data berhasil.</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
+                @endif
+{{-- End:: Alert --}}
  
 
 					<!--begin::Content-->
@@ -507,13 +514,13 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select name="unit-kerja" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Pilih Unit Kerja" disabled>
+                                                                data-placeholder="Pilih Unit Kerja">
                                                                     <option></option>
                                                                     @foreach ($unitkerjas as $unitkerja)
                                                                     @if ($unitkerja->divcode == $proyek->unit_kerja)
                                                                         <option value="{{ $unitkerja->divcode }}" selected>{{$unitkerja->unit_kerja }}</option>
-                                                                    @else
-                                                                        <option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option>
+                                                                    {{-- @else
+                                                                        <option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option> --}}
                                                                     @endif
                                                                     @endforeach
                                                                 </select>
@@ -560,10 +567,10 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                data-placeholder="Pilih Tipe Proyek" disabled>
-                                                                    <option ></option>
-                                                                    <option value="R" {{ $proyek->tipe_proyek == "R" ? "selected" : "" }}>Retail</option>
-                                                                    <option value="P" {{ $proyek->tipe_proyek == "P" ? "selected" : "" }}>Non-Retail</option>
+                                                                data-placeholder="Pilih Tipe Proyek">
+                                                                    <option selected>{{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}</option>
+                                                                    {{-- <option value="R" {{ $proyek->tipe_proyek == "R" ? "selected" : "" }}>Retail</option>
+                                                                    <option value="P" {{ $proyek->tipe_proyek == "P" ? "selected" : "" }}>Non-Retail</option> --}}
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
@@ -580,10 +587,10 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih Jenis Proyek" disabled>
-                                                                    <option ></option>
-                                                                    <option value="I" {{ $proyek->jenis_proyek == "I" ? "selected" : "" }}>Internal</option>
-                                                                    <option value="E" {{ $proyek->jenis_proyek == "E" ? "selected" : "" }}>External</option>
+                                                                    data-placeholder="Pilih Jenis Proyek">
+                                                                    <option selected>{{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}</option>
+                                                                    {{-- <option value="I" {{ $proyek->jenis_proyek == "I" ? "selected" : "" }}>Internal</option>
+                                                                    <option value="E" {{ $proyek->jenis_proyek == "E" ? "selected" : "" }}>External</option> --}}
                                                                 </select>
                                                                 <!--end::Input-->
                                                             </div>
@@ -601,7 +608,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Bulan Pelaksanaan</span>
+                                                                    <span class="required">Bulan Pelaksanaan</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--Begin::Input-->
@@ -631,11 +638,11 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai OK RKAP</span>
+                                                                    <span class="required">Nilai OK RKAP</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="nilai-rkap" name="nilai-rkap" value="{{ $proyek->nilai_rkap }}" placeholder="Nilai RKAP" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -654,7 +661,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Sumber Dana</span>
+                                                                    <span class="required">Sumber Dana</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -679,7 +686,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Tahun Perolehan</span>
+                                                                    <span class="required">Tahun Perolehan</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -713,7 +720,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="nilai-valas-review" name="nilai-valas-review" value="{{ $proyek->nilai_valas_review }}" placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -756,7 +763,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="kurs-review" name="kurs-review" value="{{ $proyek->kurs_review }}" placeholder="Kurs Review" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -808,7 +815,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="nilaiok-review" name="nilaiok-review" value="{{ $proyek->nilaiok_review }}" placeholder="Nilai OK (Exclude PPN)" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -839,7 +846,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="nilai-valas-awal" name="nilai-valas-awal" value="{{ $proyek->nilai_valas_awal }}" placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -883,7 +890,7 @@
                                                                 <!--end::Label-->
                                                                 
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="kurs-awal" name="kurs-awal" value="{{ $proyek->kurs_awal }}" placeholder="Kurs Review" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -936,7 +943,7 @@
                                                                 <!--end::Label-->
                                                                 
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid" 
+                                                                <input type="text" class="form-control form-control-solid reformat" 
                                                                 id="nilaiok-awal" name="nilaiok-awal" value="{{ $proyek->nilaiok_awal }}" placeholder="Nilai OK (Exclude PPN)" />
                                                                 <!--end::Input-->
                                                             </div>
@@ -1113,8 +1120,8 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="dop" name="dop" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih DOP" disabled>
-                                                                    <option>{{ $proyek->dop }}</option>
+                                                                    data-placeholder="Pilih DOP">
+                                                                    <option selected>{{ $proyek->dop }}</option>
                                                                     {{-- @foreach ($dops as $dop)
                                                                     @if ($dop->dop == $proyek->dop)
                                                                         <option value="{{ $dop->dop }}" selected>{{$dop->dop }}</option>
@@ -1138,8 +1145,8 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <select id="company" name="company" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-                                                                    data-placeholder="Pilih Company" disabled>
-                                                                    <option>{{ $proyek->company }}</option>
+                                                                    data-placeholder="Pilih Company">
+                                                                    <option selected>{{ $proyek->company }}</option>
                                                                     {{-- @foreach ($companies as $company)
                                                                     @if ($company->nama_company == $proyek->company)
                                                                         <option value="{{ $company->nama_company }}" selected>{{$company->nama_company }}</option>
@@ -1209,7 +1216,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="hps-pagu" name="hps-pagu" value="{{ $proyek->hps_pagu }}" placeholder="HPS / Pagu" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1375,7 +1382,7 @@
                                                             <!--end::Label-->
 
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="penawaran-tender" name="penawaran-tender" value="{{ $proyek->penawaran_tender }}" placeholder="Nilai Penawaran" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1391,7 +1398,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="hps-tender" name="hps-tender" value="{{ $proyek->hps_tender }}" placeholder="HPS/Pagu Rupiah" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1432,7 +1439,7 @@
                                                             <!--end::Label-->
 
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="biaya-praproyek" name="biaya-praproyek" value="{{ $proyek->biaya_praproyek }}" placeholder="Total Biaya Pra-Proyek" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1471,7 +1478,7 @@
                                                             <!--end::Label-->
 
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="hps-perolehan" name="hps-perolehan" value="{{ $proyek->hps_perolehan }}" placeholder="HPS/Pagu Rupiah" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1695,7 +1702,7 @@
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
                                                             <input type="number" class="form-control form-control-solid" 
-                                                            id="" name="tahun-ri-perolehan" min="2020" max="2099" step="1" value="{{ $proyek->tahun_ri_perolehan }}" />
+                                                            id="" name="tahun-ri-perolehan" min="2020" max="2099" step="1" value="{{ $proyek->tahun_ri_perolehan }}" placeholder="Tahun Ri Perolehan"/>
                                                             <!--end::Input-->
                                                         </div>
                                                     <!--end::Input group-->
@@ -1710,7 +1717,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="nilaiok-terkontrak" name="nilaiok-terkontrak" value="{{ $proyek->nilaiok_terkontrak }}" placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1805,7 +1812,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="kurs-review-terkontrak" name="kurs-review-terkontrak" value="{{ $proyek->kursreview_terkontrak }}" placeholder="Kurs Review" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1844,7 +1851,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="nilai-kontrak-keseluruhan" name="nilai-kontrak-keseluruhan" value="{{ $proyek->nilai_kontrak_keseluruhan}}" placeholder="Nilai Kontrak Keseluruhan" />
                                                             <!--end::Input-->
                                                         </div>
@@ -1883,7 +1890,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid" 
+                                                            <input type="text" class="form-control form-control-solid reformat" 
                                                             id="nilai-wika-terkontrak" name="nilai-wika-terkontrak" value="{{ $proyek->nilai_wika_terkontrak }}" placeholder="Nilai Kontrak (Porsi WIKA)" />
                                                             <!--end::Input-->
                                                         </div>
@@ -2215,12 +2222,8 @@
 
 <!--begin::Modal-->
 
-			<form action="/project" method="post" enctype="multipart/form-data"> 
-				@csrf
-				
-				<!--begin::Modal - Create App-->
-				{{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
-				
+			{{-- <form action="/project" method="post" enctype="multipart/form-data"> 
+				@csrf --}}
 				
 				<!--begin::Modal - Create Proyek-->
 				<div class="modal fade" id="kt_modal_create_approval" tabindex="-1" aria-hidden="true">
@@ -2274,7 +2277,7 @@
                 <!--end::Modal dialog-->
             </div>
             <!--end::Modal - Create App-->
-        </form>    
+        {{-- </form>     --}}
 
 <!--end::Modals-->
 <!--begin::Feedback Modals-->

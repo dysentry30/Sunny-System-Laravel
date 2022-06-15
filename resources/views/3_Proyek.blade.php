@@ -152,13 +152,29 @@
 					</div>
 					<!--end::Header-->
 						
-						
+					
+{{-- Begin:: Alert --}}
 					<!--begin::Delete Alert -->
 					{{-- <div class="alert alert-success" role="alert">
 						Delete Success !
 					</div> --}}
 					<!--end::Delete Alert -->
-					
+					@if (Session::has("success"))
+					<div class="alert alert-success alert-dismissible fade show" role="alert">
+						{{ Session::get("success") }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+					@endif
+					@if (Session::has("failed"))
+					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+						{{ Session::get("failed") }}
+						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+					</div>
+					@endif
+{{-- End:: Alert --}}					
+
+
+
 					<!--begin::Content-->
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 						<!--begin::Toolbar-->
@@ -296,7 +312,6 @@
 														<th class="min-w-auto">Kode Proyek</th>
 														<th class="min-w-auto">Nama Proyek</th>
 														<th class="min-w-auto">Unit Kerja</th>
-														{{-- <th class="min-w-auto">Stage</th> --}}
 														<th class="min-w-auto">Nilai RKAP</th>
 														<th class="min-w-auto">Nilai Forecast</th>
 														<th class="min-w-auto">Nilai Realisasi</th>
@@ -332,36 +347,31 @@
 														</td>
 														<!--end::Company=-->
 														
-														<!--begin::Date=-->
-														{{-- <td>
-															{{ $proyek->stage }}
-														</td> --}}
-														<!--end::Date=-->
-														<!--begin::Action=-->
+														<!--begin::Nilai OK=-->
 														<td>
 															{{ $proyek->nilai_rkap }}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Nilai OK=-->
+														<!--begin::Forecast=-->
 														<td>
 															{{-- {{ $proyek->nilai_forecast }} --}}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Forecast=-->
+														<!--begin::Realisasi=-->
 														<td>
 															{{-- {{ $proyek->nilai_realisasi }} --}}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Realisasi=-->
+														<!--begin::Jenis Proyek=-->
 														<td>
 															{{ $proyek->jenis_proyek == "I" ? "Internal" : "External" }}
 														</td>
-														<!--end::Action=-->
-														<!--begin::Action=-->
+														<!--end::Jenis Proyek=-->
+														<!--begin::Tipe Proyek=-->
 														<td>
 															{{ $proyek->tipe_proyek == "R" ? "Retail" : "Non-Retail" }}
 														</td>
-														<!--end::Action=-->
+														<!--end::Tipe Proyek=-->
 														<!--begin::Action=-->
 														<td>
 														<!--begin::Button-->
@@ -383,7 +393,21 @@
 											</table>
 <!--end::Table Proyek-->
 
+
+
+{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
+@if (count($errors) > 0)
+    $('#kt_modal_create_proyek').modal('show');
+@endif
+</script> --}}
 											
+{{-- <script type="text/javascript">
+	@if (count($errors) > 0)
+	const modalNew = document.getElementById("#kt_modal_create_proyek");
+		console.log("eror modal");
+	@endif
+</script> --}}
+
 
 										</div>
 										<!--end::Card body-->
@@ -451,7 +475,10 @@
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="nama-proyek" name="nama-proyek" value="" placeholder="Nama Proyek" />
+											id="nama-proyek" name="nama-proyek" value="{{ old('nama-proyek') }}" placeholder="Nama Proyek" />
+											@error('nama-proyek')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -472,13 +499,12 @@
 												data-placeholder="Unit Kerja">
 												<option></option>
 												@foreach ($unitkerjas as $unitkerja)
-												@if ($unitkerja->unit_kerja == null)
-													<option value="{{ $unitkerja->divcode }}" selected>{{$unitkerja->unit_kerja }}</option>
-												@else
-													<option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option>
-												@endif
+													<option value="{{ $unitkerja->divcode }}" {{ old ('unit-kerja' ) == $unitkerja->divcode ? "selected" : "" }}>{{$unitkerja->unit_kerja }}</option>
 												@endforeach
 											</select>
+											@error('unit-kerja')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -502,9 +528,12 @@
 											<select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
 												data-placeholder="Jenis Proyek">
 												<option selected></option>
-												<option value="I">Internal</option>
-												<option value="E">External</option>
+												<option value="I" {{ old ('jenis-proyek' ) == "I" ? "selected" : "" }}>Internal</option>
+												<option value="E" {{ old ('jenis-proyek' ) == "E" ? "selected" : "" }}>External</option>
 											</select>
+											@error('jenis-proyek')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -522,9 +551,12 @@
 											<select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
 											data-placeholder="Tipe Proyek">
 												<option selected></option>
-												<option value="R">Retail</option>
-												<option value="P">Non-Retail</option>
+												<option value="R" {{ old ('tipe-proyek' ) == "R" ? "selected" : "" }}>Retail</option>
+												<option value="P" {{ old ('tipe-proyek' ) == "P" ? "selected" : "" }}>Non-Retail</option>
 											</select>
+											@error('tipe-proyek')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -541,12 +573,15 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Nilai OK RKAP</span>
+												<span class="required">Nilai OK RKAP</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid reformat" 
-											id="nilai-rkap" name="nilai-rkap" value="" placeholder="Nilai OK RKAP" />
+											id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}" placeholder="Nilai OK RKAP" />
+											@error('nilai-rkap')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -557,7 +592,7 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Sumber Dana</span>
+												<span class="required">Sumber Dana</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
@@ -565,13 +600,12 @@
 												data-placeholder="Sumber Dana">
 												<option></option>
 												@foreach ($sumberdanas as $sumberdana)
-												@if ($sumberdana->nama_sumber == null)
-													<option value="{{ $sumberdana->nama_sumber }}" selected>{{$sumberdana->nama_sumber }}</option>
-												@else
-													<option value="{{ $sumberdana->nama_sumber }}">{{$sumberdana->nama_sumber }}</option>
-												@endif
+													<option value="{{ $sumberdana->nama_sumber }}" {{ old ('sumber-dana' ) == $sumberdana->nama_sumber ? "selected" : "" }}>{{$sumberdana->nama_sumber }}</option>
 												@endforeach
 											</select>
+											@error('sumber-dana')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -590,12 +624,15 @@
 											<!--begin::Label-->
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Tahun Perolehan</span>
+												<span class="required">Tahun Perolehan</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="number" class="form-control form-control-solid" 
-											id="tahun-perolehan" name="tahun-perolehan" min="2021" max="2099" step="1" value="2022" />
+											id="tahun-perolehan" name="tahun-perolehan" min="2021" max="2099" step="1" value="{{ old('tahun-perolehan') }}" placeholder="Tahun Perolehan"/>
+											@error('tahun-perolehan')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -606,26 +643,29 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Bulan Pelaksanaan</span>
+												<span class="required">Bulan Pelaksanaan</span>
 											</label>
 											<!--end::Label-->
 											<!--Begin::Input-->
 											<select id="bulan-pelaksanaan" name="bulan-pelaksanaan" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
 											data-placeholder="Bulan Pelaksanaan">
 												<option selected></option>
-												<option value="Januari">Januari</option>
-												<option value="Februari">Februari</option>
-												<option value="Maret">Maret</option>
-												<option value="April">April</option>
-												<option value="Mei">Mei</option>
-												<option value="Juni">Juni</option>
-												<option value="Juli">Juli</option>
-												<option value="Agustus">Agustus</option>
-												<option value="September">September</option>
-												<option value="Oktober">Oktober</option>
-												<option value="November">November</option>
-												<option value="Desember">Desember</option>
+												<option value="Januari" {{ old ('bulan-pelaksanaan' ) == "Januari" ? "selected" : "" }}>Januari</option>
+												<option value="Februari" {{ old ('bulan-pelaksanaan' ) == "Februari" ? "selected" : "" }}>Februari</option>
+												<option value="Maret" {{ old ('bulan-pelaksanaan' ) == "Maret" ? "selected" : "" }}>Maret</option>
+												<option value="April" {{ old ('bulan-pelaksanaan' ) == "April" ? "selected" : "" }}>April</option>
+												<option value="Mei" {{ old ('bulan-pelaksanaan' ) == "Mei" ? "selected" : "" }}>Mei</option>
+												<option value="Juni" {{ old ('bulan-pelaksanaan' ) == "Juni" ? "selected" : "" }}>Juni</option>
+												<option value="Juli" {{ old ('bulan-pelaksanaan' ) == "Juli" ? "selected" : "" }}>Juli</option>
+												<option value="Agustus" {{ old ('bulan-pelaksanaan' ) == "Agustus" ? "selected" : "" }}>Agustus</option>
+												<option value="September" {{ old ('bulan-pelaksanaan' ) == "September" ? "selected" : "" }}>September</option>
+												<option value="Oktober" {{ old ('bulan-pelaksanaan' ) == "Oktober" ? "selected" : "" }}>Oktober</option>
+												<option value="November" {{ old ('bulan-pelaksanaan' ) == "November" ? "selected" : "" }}>November</option>
+												<option value="Desember" {{ old ('bulan-pelaksanaan' ) == "Desember" ? "selected" : "" }}>Desember</option>
 											</select>
+											@error('bulan-pelaksanaan')
+												<h6 class="text-danger">{{ $message }}</h6>
+											@enderror
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -656,10 +696,11 @@
 						inp.addEventListener('input', reformat);
 					});
 				</script>
-
+				
 <!--end::Modal New Proyek-->
 
-					
+
+			
 		
 			<!--begin::Scrolltop-->
 			<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">

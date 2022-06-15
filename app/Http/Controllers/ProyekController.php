@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Proyek;
-use App\Models\Company;
 use App\Models\Dop;
 use App\Models\Sbu;
-use App\Models\SumberDana;
+use App\Models\Proyek;
+use App\Models\Company;
 use App\Models\UnitKerja;
+use App\Models\SumberDana;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Validator;
 
 class ProyekController extends Controller
 {
@@ -20,7 +21,7 @@ class ProyekController extends Controller
     }
 
 
-    public function  new()
+    public function new()
     {
         return view('Proyek/newProyek');   
     }
@@ -32,11 +33,41 @@ class ProyekController extends Controller
         $proyekAll = Proyek::all();
         $unitKerja = DB::table('unit_kerjas')->where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
+        $messages = [
+            "required" => "This field is required",
+            // "numeric" => "This field must be numeric only",
+            // "string" => "This field must be alphabet only",
+            // "date" => "This field must be date format only",
+        ];
+        $rules = [
+            "nama-proyek" => "required",
+            "unit-kerja" => "required",
+            "jenis-proyek" => "required",
+            "tipe-proyek" => "required",
+            "nilai-rkap" => "required",
+            "sumber-dana" => "required",
+            "tahun-perolehan" => "required",
+            "bulan-pelaksanaan" => "required",
+        ];
+        $validation = Validator::make($dataProyek, $rules, $messages);
+        if ($validation->fails()) {
+            $validation->validate();
+            $request->old("nama-proyek");
+            $request->old("unit-kerja");
+            $request->old("jenis-proyek");
+            $request->old("tipe-proyek");
+            $request->old("nilai-rkap");
+            $request->old("sumber-dana");
+            $request->old("tahun-perolehan");
+            $request->old("bulan-pelaksanaan");
+            return redirect()->with("failed", "Proyek gagal dibuat, Periksa kembali !");
+            // dd($validation->errors());
+        }
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];
-        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
+        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         $newProyek->sumber_dana= $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan= $dataProyek["bulan-pelaksanaan"];
@@ -70,7 +101,7 @@ class ProyekController extends Controller
         //end::Generate Kode Proyek
         
         if ($newProyek->save()) {
-            return redirect("/project")->with("success", true);
+            return redirect("/project")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
         }
     }
     
@@ -94,14 +125,14 @@ class ProyekController extends Controller
         $dataProyek = $request->all(); 
         // dd($request); //console log hasil $dataProyek
         $newProyek=Proyek::find($dataProyek["id"]);
-        $allProyek = Proyek::all();
+        // $allProyek = Proyek::all();
         
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         // $newProyek->kode_proyek = $dataProyek["kode-proyek"];
-        $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-        $newProyek->sumber_dana = $dataProyek["sumber-dana"];
+        // $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+        // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
         // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
@@ -134,11 +165,12 @@ class ProyekController extends Controller
         $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
         $newProyek->hps_pagu = $dataProyek["hps-pagu"];
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
-        foreach($allProyek as $proyek) {
-            if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
-                return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");
-            }
-        }
+        $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+        // foreach($allProyek as $proyek) {
+        //     if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
+        //         return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");
+        //     }
+        // }
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
         $newProyek->laporan_prakualifikasi = $dataProyek["laporan-prakualifikasi"];
         
@@ -184,7 +216,7 @@ class ProyekController extends Controller
         
         
         if ($newProyek->save()) {
-            return redirect("/project")->with("success", true);
+            return redirect()->back()->with("success", "Success,");
         }
     }
     
@@ -192,7 +224,7 @@ class ProyekController extends Controller
     {
         $kode_proyek = Proyek::find($kode_proyek)->delete();
         // dd($proyek); //tes log hasil 
-        return redirect("/project")->with('status', 'Proyek deleted');;
+        return redirect("/project")->with("success", "Proyek Berhasil Dihapus");;
     }
 
 }

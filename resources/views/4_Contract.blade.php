@@ -339,7 +339,7 @@
                                             <!--begin::Email=-->
                                             <td>
                                                 @isset($contract->project)
-                                                    <a href="/proyek/{{ $contract->project->id}}" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="/proyek/view/{{ $contract->project->id}}" class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $contract->project->nama_proyek }}</a>
                                                 @else
                                                     <a href="#" class="text-gray-600 text-hover-primary mb-1">

@@ -59,7 +59,7 @@ class ContractManagementsController extends Controller
             ];
             $validation = Validator::make($data, $rules, $messages);
             if ($validation->fails()) {
-                dd($validation->errors());
+                // dd($validation->errors());
                 return redirect()->back()->with("failed", "this contract failed to add");
             }
             $validation->validate();
