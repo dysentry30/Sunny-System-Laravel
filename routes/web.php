@@ -19,6 +19,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
 use App\Models\Forecast;
@@ -44,6 +45,10 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('0_Welcome');
 });
+
+Route::post('/login', [LoginController::class, 'auth']);
+
+
 
 
 // begin :: contract management
