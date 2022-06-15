@@ -53,29 +53,29 @@ Route::post('/login', [UserController::class, 'authen']);
 
 
 // begin :: contract management
-    Route::get('/contract-management', [ContractManagementsController::class, 'index']);
+Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 
-    Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
+Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
 
-    Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
+Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
 
-    Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
+Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
 
-    Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
+Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
 
-    Route::get('/contract-management/view/{id_contract}/addendum-contract', [ContractManagementsController::class, 'addendumContract']);
+Route::get('/contract-management/view/{id_contract}/addendum-contract', [ContractManagementsController::class, 'addendumContract']);
 
-    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}', [ContractManagementsController::class, 'addendumView']);
+Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}', [ContractManagementsController::class, 'addendumView']);
 
-    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/new', [ContractManagementsController::class, 'addendumNew']);
+Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/new', [ContractManagementsController::class, 'addendumNew']);
 
-    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/{addendumDraft}', [ContractManagementsController::class, 'addendumDraft']);
+Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/{addendumDraft}', [ContractManagementsController::class, 'addendumDraft']);
 
-    Route::get('/contract-management/view/{id_contract}/draft-contract', [ContractManagementsController::class, 'draftContract']);
+Route::get('/contract-management/view/{id_contract}/draft-contract', [ContractManagementsController::class, 'draftContract']);
 
-    Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
+Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
-    Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'tenderMenang']);
+Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'tenderMenang']);
 
 // end :: contract management
 
@@ -94,25 +94,25 @@ Route::get('change-request', [PasalController::class, 'changeRequest']);
 
 
 // begin :: Claim Management
-    Route::get('claim-management', [ClaimController::class, 'index']);
+Route::get('claim-management', [ClaimController::class, 'index']);
 
-    Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
+Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
-    Route::get('claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
+Route::get('claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
-    Route::post('/claim-management/save', [ClaimController::class, 'save']);
+Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
-    Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
+Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
 
-    Route::post('/approval-claim/save', [ClaimController::class, 'store']);
+Route::post('/approval-claim/save', [ClaimController::class, 'store']);
 
-    Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);
+Route::post('/approval-claim/delete', [ClaimController::class, 'delete']);
 
-    Route::post('/claim-management/update', [ClaimController::class, 'update']);
+Route::post('/claim-management/update', [ClaimController::class, 'update']);
 
-    Route::post('/detail-claim/save', [ClaimController::class, 'detailSave']);
+Route::post('/detail-claim/save', [ClaimController::class, 'detailSave']);
 
-    Route::post('/claim/stage/save', [ClaimController::class, 'claimStage']);
+Route::post('/claim/stage/save', [ClaimController::class, 'claimStage']);
 
 // end :: Claim Management
 
@@ -148,100 +148,100 @@ Route::get('/document', function () {
 
 
 //Begin :: Customer
-    // customer dashboard all database
-    Route::get('/customer', [CustomerController::class, 'index']);
+// customer dashboard all database
+Route::get('/customer', [CustomerController::class, 'index']);
 
 
-    // DELETE data customer pada dasboard customer by ID 
-    Route::delete('customer/delete/{id_customer}', [CustomerController::class, 'delete']);
-
-    
-    // NEW to Create New customer #1 
-    Route::get('/customer/new', [CustomerController::class, 'new']);
+// DELETE data customer pada dasboard customer by ID 
+Route::delete('customer/delete/{id_customer}', [CustomerController::class, 'delete']);
 
 
-    // NEW to Create New customer #2
-    Route::post('/customer/save', [CustomerController::class, 'saveNew']);
-
-    // view customer by id_customer #1
-    Route::get('/customer/view/{id_customer}', [CustomerController::class, 'view']);
+// NEW to Create New customer #1 
+Route::get('/customer/new', [CustomerController::class, 'new']);
 
 
-    // EDIT customer by view id_customer #2   
-    Route::post('/customer/save-edit', [CustomerController::class, 'saveEdit']);
+// NEW to Create New customer #2
+Route::post('/customer/save', [CustomerController::class, 'saveNew']);
+
+// view customer by id_customer #1
+Route::get('/customer/view/{id_customer}', [CustomerController::class, 'view']);
 
 
-    // Edit Customer Proyek History by view id_customer    
-    Route::post('/customer/save-modal', [CustomerController::class, 'customerHistory']);
+// EDIT customer by view id_customer #2   
+Route::post('/customer/save-edit', [CustomerController::class, 'saveEdit']);
+
+
+// Edit Customer Proyek History by view id_customer    
+Route::post('/customer/save-modal', [CustomerController::class, 'customerHistory']);
 //End :: Customer
 
 
 
 //Begin :: Project
 
-    // Home Page Proyek
-    Route::get('/project', [ProyekController::class, 'view']);
+// Home Page Proyek
+Route::get('/project', [ProyekController::class, 'view']);
 
-    // to NEW page 
-    Route::get('/proyek/new', [ProyekController::class, 'new']);
+// to NEW page 
+Route::get('/proyek/new', [ProyekController::class, 'new']);
 
-    // direct to proyek after SAVE page 
-    Route::post('/proyek/save', [ProyekController::class, 'save']);
+// direct to proyek after SAVE page 
+Route::post('/proyek/save', [ProyekController::class, 'save']);
 
-    // VIEW to proyek and EDIT 
-    Route::get('/proyek/view/{id}', [ProyekController::class, 'edit']);
+// VIEW to proyek and EDIT 
+Route::get('/proyek/view/{id}', [ProyekController::class, 'edit']);
 
-    // direct to Project after EDIT 
-    Route::post('/proyek/update', [ProyekController::class, 'update']);
+// direct to Project after EDIT 
+Route::post('/proyek/update', [ProyekController::class, 'update']);
 
-    // DELETE data customer pada dasboard customer by ID 
-    Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+// DELETE data customer pada dasboard customer by ID 
+Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
 
-    // Stage Update 
-    Route::post('/proyek/stage-save', function (Request $request) {
-        $id = $request->id;
-        $proyekStage = Proyek::find($id);
-        $proyekStage->stage = $request->stage;
-        // dd($proyekStage);
-        if ($proyekStage->save()) {
+// Stage Update 
+Route::post('/proyek/stage-save', function (Request $request) {
+    $id = $request->id;
+    $proyekStage = Proyek::find($id);
+    $proyekStage->stage = $request->stage;
+    // dd($proyekStage);
+    if ($proyekStage->save()) {
+        return response()->json([
+            "status" => "success",
+            "link" => true,
+        ]);
+    }
+});
+
+Route::post('/proyek/forecast/save', function (Request $request) {
+    $data = $request->all();
+    $proyek = Proyek::find($data["kode_proyek"]);
+    $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->orderByDesc("created_at")->first();
+    // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
+    if (!empty($forecast)) {
+        // $forecast->nilai_forecast = (int) $data["nilai_forecast"];
+        if ($forecast->update(["nilai_forecast" => (int) $data["nilai_forecast"]])) {
             return response()->json([
                 "status" => "success",
-                "link" => true,
+                "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
             ]);
         }
-    });
-
-    Route::post('/proyek/forecast/save', function (Request $request) {
-        $data = $request->all();
-        $proyek = Proyek::find($data["kode_proyek"]);
-        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->orderByDesc("created_at")->first();
-        dd($forecast);
-        if (!empty($forecast)) {
-            $forecast->nilai_forecast = (int) $data["nilai_forecast"];
-            if ($forecast->save()) {
-                return response()->json([
-                    "status" => "success",
-                    "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
-                ]);
-            }
-        } else {
-            $forecast = new Forecast();
-            $forecast->nilai_forecast = (int) $data["nilai_forecast"];
-            $forecast->month_forecast = (int) $data["forecast_month"];
-            $forecast->kode_proyek = $data["kode_proyek"];
-            if ($forecast->save()) {
-                return response()->json([
-                    "status" => "success",
-                    "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
-                ]);
-            }
+    } else {
+        $forecast = new Forecast();
+        $forecast->nilai_forecast = (int) $data["nilai_forecast"];
+        $forecast->month_forecast = (int) $data["forecast_month"];
+        $forecast->kode_proyek = $data["kode_proyek"];
+        if ($forecast->save()) {
+            return response()->json([
+                "status" => "success",
+                "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
+            ]);
         }
+    }
 
-        return response()->json([
-            "status" => "failed",
-            "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
-        ]);
-    });
+    return response()->json([
+        "status" => "failed",
+        "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
+    ]);
+});
 //End :: Project
 
 
@@ -250,6 +250,9 @@ Route::get('/document', function () {
 // Home Page Forecast
 Route::get('/forecast', [ForecastController::class, 'index']);
 
+// Get all data from database
+Route::post('/forecast', [ForecastController::class, 'getAllData']);
+Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
 // to NEW page 
 // Route::get('/proyek/new', [ProyekController::class, 'new']);
 

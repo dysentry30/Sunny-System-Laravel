@@ -221,24 +221,6 @@
                                     <!--end::Title-->
                                 </div>
                                 <!--end::Page title-->
-                                <!--begin::Actions-->
-                                <div class="d-flex align-items-center py-1">
-
-                                    <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b; margin-left:10px">
-                                        Save</button>
-                                    <!--end::Button-->
-
-                                    <!--begin::Button-->
-                                    <a href="/project" class="btn btn-sm btn-primary" id="customer_new_close"
-                                        style="background-color:#f1f1f1; margin-left:10px; color: black;">
-                                        Close</a>
-                                    <!--end::Button-->
-
-
-                                </div>
-                                <!--end::Actions-->
                             </div>
                             <!--end::Container-->
                         </div>
@@ -536,7 +518,7 @@
 
                                                     <!--begin::Table body-->
 
-                                                    <tbody class="fw-bold text-gray-600">
+                                                    <tbody class="fw-bold text-gray-600" id="table-body">
 
                                                         @php
                                                             $month_counter = 1;
@@ -823,7 +805,8 @@
                                                                                 <center><b>{{ $total_ok }}</b>
                                                                                 </center>
                                                                             </td>
-                                                                            <td class="pinForecast HidePin">
+                                                                            <td class="pinForecast HidePin"
+                                                                                data-id-proyek="{{ $proyek->id }}">
                                                                                 <center>
                                                                                     <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
                                                                                 </center>
@@ -838,6 +821,7 @@
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
+                                                                                data-id-proyek="{{ $proyek->id }}"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                 <center>
                                                                                     <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
@@ -875,8 +859,8 @@
                                                                 <td>
                                                                     <center><b>10000</b></center>
                                                                 </td>
-                                                                <td data-total-column={{$i + 1}}>
-                                                                    
+                                                                <td data-total-column={{ $i + 1 }}>
+
                                                                 </td>
                                                                 <td>
                                                                     <center><b>10000</b></center>
@@ -1002,12 +986,33 @@
     const inputForecasts = document.querySelectorAll("input[data-id-proyek]");
     inputForecasts.forEach(input => {
         input.addEventListener("focusout", async e => {
-            const nilaiForecast = e.target.value.toString().replaceAll(",", "");
+            const nilaiForecast = Number(e.target.value.toString().replaceAll(",", ""));
             const kodeProyek = input.getAttribute("data-id-proyek");
             const dataMonth = input.getAttribute("data-month");
+            const dataColumn = input.getAttribute("data-column");
+            const columnForecastElt = document.querySelectorAll(
+                `input[data-column="${dataColumn}"]`);
+            const rowForecastElt = document.querySelectorAll(
+                `input[data-id-proyek="${kodeProyek}"]`);
+            const rowTotalForecastElt = document.querySelectorAll(
+                `td[data-id-proyek="${kodeProyek}"]`);
+            const totalColumn = document.querySelector(`td[data-total-column="${dataColumn}"]`);
+            let totalColumnForecast = 0;
+            let totalRowForecast = 0;
+            columnForecastElt.forEach(columnForecast => {
+                if (columnForecast.value != null) {
+                    totalColumnForecast += Number(columnForecast.value.toString()
+                        .replaceAll(",", ""));
+                }
+            })
+            rowForecastElt.forEach(rowForecast => {
+                if (rowForecast.value != null) {
+                    totalRowForecast += Number(rowForecast.value.toString().replaceAll(",",
+                        ""));
+                }
+            });
             const formData = new FormData();
             const date = new Date();
-            const data = [date.getFullYear(), dataMonth, nilaiForecast]
 
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("nilai_forecast", nilaiForecast);
@@ -1023,11 +1028,29 @@
             if (saveNilaiForecastRes.status == "success") {
                 const nilaiFormatted = Intl.NumberFormat("en-US", {
                     maximumFractionDigits: 0,
-                }).format(nilaiForecast.toString().replace(/[^0-9]/gi, ""));
+                }).format(nilaiForecast);
+                const rowValueFormatted = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalRowForecast);
+                const columnValueFormatted = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalColumnForecast);
                 input.value = nilaiFormatted;
                 toaster.classList.add("text-bg-success")
                 toaster.classList.remove("text-bg-danger")
                 toastBody.innerHTML = saveNilaiForecastRes.msg;
+                rowTotalForecastElt.forEach(rowForecast => {
+                    rowForecast.innerHTML = `
+                    <center>
+                        <b>${rowValueFormatted}</b>
+                    </center>
+                    `;
+                });
+                totalColumn.innerHTML = `
+                <td>
+                    <center><b>${columnValueFormatted}</b></center>
+                </td>
+                `;
             } else {
                 toaster.classList.remove("text-bg-success")
                 toaster.classList.add("text-bg-danger")
@@ -1037,7 +1060,7 @@
         });
     });
 
-    // Calculate Total Column
+    // begin Calculate Total Column
     const dataColumnTotalForecast = document.querySelectorAll(`td[data-total-column]`);
     let totalForecast = 0;
     dataColumnTotalForecast.forEach((forecast, i) => {
@@ -1046,10 +1069,10 @@
         dataColumnForecast.forEach(dataForecast => {
             totalForecast += Number(dataForecast.value.replaceAll(",", ""));
         });
-        if(totalColumnForecast) {
+        if (totalColumnForecast) {
             const formattedForecastValue = Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 0,
-        }).format(totalForecast);
+                maximumFractionDigits: 0,
+            }).format(totalForecast);
             forecast.innerHTML = `
             <td>
                 <center><b>${formattedForecastValue}</b></center>
@@ -1058,6 +1081,7 @@
         }
         totalForecast = 0;
     });
+    // end Calculate Total Column
 </script>
 @endsection
 {{-- end:: JS script --}}

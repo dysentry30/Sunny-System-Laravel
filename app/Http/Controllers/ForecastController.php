@@ -7,6 +7,7 @@ use App\Models\Proyek;
 use App\Models\Forecast;
 use Illuminate\Http\Request;
 use App\Models\UnitKerja;
+use Illuminate\Support\Facades\DB;
 
 class ForecastController extends Controller
 {
@@ -19,12 +20,15 @@ class ForecastController extends Controller
     {
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
-        return view('Forecast/viewForecast', 
-        [
-            // 'forecast' => Forecast::all(), 
-            'dops' => Dop::all(), 
-            'proyeks' => Proyek::all()]); 
-            // 'unitkerjas' => UnitKerja::all()]);
+        return view(
+            'Forecast/viewForecast',
+            [
+                // 'forecast' => Forecast::all(), 
+                'dops' => Dop::all(),
+                'proyeks' => Proyek::all()
+            ]
+        );
+        // 'unitkerjas' => UnitKerja::all()]);
     }
 
     /**
@@ -70,5 +74,32 @@ class ForecastController extends Controller
     public function destroy(Forecast $forecast)
     {
         //
+    }
+
+    /**
+     * Getting all data when reload trigger in forecast page
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllData()
+    {
+        return response()->json([
+            'dops' => Dop::all(),
+            'proyeks' => Proyek::all()
+        ]);
+    }
+
+    /**
+     * Getting all data from unit kerja
+     * @param Request $request
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function getAllDataUnitKerjas(Request $request) {
+        $dop_name = $request->dop_name;
+        $unit_kerjas = DB::table('unit_kerjas')->where("dop", "=", $dop_name)->get();
+        return response()->json([
+            "unit_kerjas" => $unit_kerjas,
+        ]);
     }
 }
