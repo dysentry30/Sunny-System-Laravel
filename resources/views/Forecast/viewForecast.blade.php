@@ -538,6 +538,16 @@
 
                                                     <tbody class="fw-bold text-gray-600">
 
+                                                        @php
+                                                            $month_counter = 1;
+                                                            $is_data_found = false;
+                                                            $total_ok = 0;
+                                                            $total_year_ok = 0;
+                                                            $total_forecast = 0;
+                                                            $total_month_forecast = 0;
+                                                            $total_year_forecast = 0;
+                                                            $index = 1;
+                                                        @endphp
                                                         @foreach ($dops as $dop)
                                                             @if (count($dop->UnitKerjas) > 0)
                                                                 {{-- @foreach ($proyeks as $proyek) --}}
@@ -636,6 +646,7 @@
                                                                     <!--end::Total Coloumn-->
 
                                                                 </tr>
+
                                                                 {{-- begin:: Foreach Unit Kerja --}}
                                                                 @foreach ($dop->UnitKerjas as $unitKerja)
                                                                     @if (count($unitKerja->proyeks) > 0)
@@ -745,18 +756,28 @@
                                                                                     </p>
                                                                                     <!--end::Child=-->
                                                                                 </td>
-                                                                                @php
-                                                                                    $month_counter = 1;
-                                                                                @endphp
-                                                                                @for ($i = 0; $i < 11; $i++)
+
+                                                                                @for ($i = 0; $i < 12; $i++)
+                                                                                    @if ($index > 3)
+                                                                                        @php
+                                                                                            $index = 1;
+                                                                                        @endphp
+                                                                                    @endif
                                                                                     @foreach ($proyek->Forecasts as $forecast)
-                                                                                        @if ($forecast->month_forecast == $month_counter)
+                                                                                        @if ($forecast->month_forecast == $i + 1)
+                                                                                            @php
+                                                                                                // if ($index % 2 == 0) {
+                                                                                                // }
+                                                                                                $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                // $total_ok += (int)
+                                                                                            @endphp
                                                                                             <td>{{ $proyek->nilai_rkap }}
                                                                                             </td>
                                                                                             <td>
                                                                                                 <input type="text"
-                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                    data-month="{{ $month_counter++ }}"
+                                                                                                    data-id-proyek="{{ $proyek->id }}"
+                                                                                                    data-month="{{ $month_counter }}"
+                                                                                                    data-column="{{ $month_counter }}"
                                                                                                     class="form-control"
                                                                                                     style="border: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                     id="nilai-forecast"
@@ -766,55 +787,131 @@
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
                                                                                             <td>10000</td>
+                                                                                            @php
+                                                                                                $is_data_found = true;
+                                                                                            @endphp
                                                                                         @break
                                                                                     @endif
+                                                                                    @php
+                                                                                        $index++;
+                                                                                    @endphp
                                                                                 @endforeach
-                                                                                <td>10000</td>
-                                                                                <td>
-                                                                                    <input type="text"
-                                                                                        data-id-proyek="{{ $proyek->id }}"
-                                                                                        data-month="{{ $month_counter++ }}"
-                                                                                        class="form-control"
-                                                                                        style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                        id="nilai-forecast"
-                                                                                        name="nilai-forecast"
-                                                                                        onkeyup="reformatNumber(this)"
-                                                                                        value=""
-                                                                                        placeholder=". . . , -" />
-                                                                                </td>
-                                                                                <td>100000</td>
+                                                                                @if (!$is_data_found)
+                                                                                    <td>10000</td>
+                                                                                    <td>
+                                                                                        <input type="text"
+                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                            data-month="{{ $month_counter }}"
+                                                                                            data-column="{{ $month_counter }}"
+                                                                                            class="form-control"
+                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            id="nilai-forecast"
+                                                                                            name="nilai-forecast"
+                                                                                            onkeyup="reformatNumber(this)"
+                                                                                            value=""
+                                                                                            placeholder=". . . , -" />
+                                                                                    </td>
+                                                                                    <td>100000</td>
+                                                                                @endif
+                                                                                @php
+                                                                                    $is_data_found = false;
+                                                                                    $month_counter++;
+                                                                                @endphp
                                                                             @endfor
                                                                             <!--begin::Total Coloumn-->
                                                                             <td class="pinForecast HidePin">
-                                                                                {{ $proyek->nilai_rkap }}</td>
-                                                                            <td class="pinForecast HidePin">
-                                                                                {{ $proyek->forecast }}
+                                                                                <center><b>{{ $total_ok }}</b>
+                                                                                </center>
                                                                             </td>
                                                                             <td class="pinForecast HidePin">
-                                                                                2,666,664
+                                                                                <center>
+                                                                                    <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                </center>
+                                                                            </td>
+                                                                            <td class="pinForecast HidePin">
+                                                                                <center><b>2,666,664</b></center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                {{ $proyek->nilai_rkap }}</td>
+                                                                                <center>
+                                                                                    <b>{{ $proyek->nilai_rkap }}</b>
+                                                                                </center>
+                                                                            </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                10000
+                                                                                <center>
+                                                                                    <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                2,666,664</td>
+                                                                                <center><b>2,666,664</b></center>
+                                                                            </td>
                                                                             <!--end::Total Coloumn-->
                                                                     @endforeach
                                                                     {{-- end:: Foreach Proyek --}}
                                                                 @endif
-
-
-
-                                                                </tr>
+                                                                @php
+                                                                    $total_year_forecast += $total_forecast;
+                                                                    $total_forecast = 0;
+                                                                    $month_counter = 1;
+                                                                @endphp
                                                             @endforeach
                                                             {{-- end:: Foreach Unit Kerja --}}
                                                         @endif
                                                     @endforeach
+
+                                                <tfoot
+                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
+                                                    <div class="m-4">
+                                                        <tr>
+                                                            <td
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 20px; text-align: left">
+                                                                <!--begin::Child=-->
+                                                                Total
+                                                                <!--end::Child=-->
+                                                            </td>
+                                                            @for ($i = 0; $i < 12; $i++)
+                                                                <td>
+                                                                    <center><b>10000</b></center>
+                                                                </td>
+                                                                <td data-total-column={{$i + 1}}>
+                                                                    
+                                                                </td>
+                                                                <td>
+                                                                    <center><b>10000</b></center>
+                                                                </td>
+                                                            @endfor
+                                                            {{-- begin::Total Year --}}
+                                                            <td class="pinForecast HidePin">
+                                                                <center>{{ $proyek->nilai_rkap }}</center>
+                                                            </td>
+                                                            <td class="pinForecast HidePin">
+                                                                <center>
+                                                                    <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
+                                                                </center>
+                                                            </td>
+                                                            <td class="pinForecast HidePin">
+                                                                <center><b>2,666,664</b></center>
+                                                            </td>
+                                                            <td class="pinForecast ShowPin"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                <center><b>{{ $proyek->nilai_rkap }}</b></center>
+                                                            </td>
+                                                            <td class="pinForecast ShowPin"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                <center>
+                                                                    <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
+                                                                </center>
+                                                            </td>
+                                                            <td class="pinForecast ShowPin"
+                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                <center><b>2,666,664</b></center>
+                                                            </td>
+                                                            {{-- end::Total Year --}}
+                                                        </tr>
+                                                    </div>
+                                                </tfoot>
 
                                                 </tbody>
 
@@ -938,6 +1035,28 @@
             }
             toastBoots.show();
         });
+    });
+
+    // Calculate Total Column
+    const dataColumnTotalForecast = document.querySelectorAll(`td[data-total-column]`);
+    let totalForecast = 0;
+    dataColumnTotalForecast.forEach((forecast, i) => {
+        const totalColumnForecast = forecast.getAttribute("data-total-column");
+        const dataColumnForecast = document.querySelectorAll(`input[data-column="${totalColumnForecast}"]`);
+        dataColumnForecast.forEach(dataForecast => {
+            totalForecast += Number(dataForecast.value.replaceAll(",", ""));
+        });
+        if(totalColumnForecast) {
+            const formattedForecastValue = Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 0,
+        }).format(totalForecast);
+            forecast.innerHTML = `
+            <td>
+                <center><b>${formattedForecastValue}</b></center>
+            </td>
+            `;
+        }
+        totalForecast = 0;
     });
 </script>
 @endsection

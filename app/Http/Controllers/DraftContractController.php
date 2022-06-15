@@ -14,6 +14,13 @@ class DraftContractController extends Controller
 {
     
     // Upload Data to server or database
+
+    /**
+     * @param Request $request
+     * @param DraftContracts $draftContracts
+     * 
+     * @return [Redirect]
+     */
     public function save(Request $request, DraftContracts $draftContracts) {
 
         $data = $request->all();
