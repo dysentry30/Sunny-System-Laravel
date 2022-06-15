@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
@@ -90,14 +91,27 @@ class CustomerController extends Controller
 
         return redirect()->back();
     }
-
+    
     public function new () {
         return view('Customer/newCustomer');
     }
-
+    
     public function saveNew (Request $request, Customer $newCustomer) {
         $data = $request->all(); 
-        // dd($request); //console log hasil $data
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-customer" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        $validation->validate();
+        if ($validation->fails()) {
+            // $request->old("name-customer");
+            // dd(session()->all());
+            return redirect()->back();
+        }
+        
         $newCustomer->name = $data["name-customer"];
         $newCustomer->check_customer = $request->has("check-customer"); //boolean check
         $newCustomer->check_partner = $request->has("check-partner"); //boolean check
