@@ -9,6 +9,10 @@ class Forecast extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        "nilai_forecast"
+    ];
+    protected $primaryKey = "id_forecast";
     public function Dop()
     {
         // return $this->hasMany(Dop::class);

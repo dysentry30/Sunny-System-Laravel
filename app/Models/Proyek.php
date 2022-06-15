@@ -48,6 +48,6 @@ class Proyek extends Model
 
     public function Forecasts()
     {
-        return $this->hasMany(Forecast::class, "kode_proyek", "kode_proyek");
+        return $this->hasMany(Forecast::class, "kode_proyek");
     }
 }
