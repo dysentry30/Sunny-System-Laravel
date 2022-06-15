@@ -15,12 +15,12 @@ class Proyek extends Model
     {
         return $this->hasMany(Company::class);
     }
-    
+
     public function SumberDana()
     {
         return $this->hasMany(SumberDana::class);
     }
-    
+
     public function Dop()
     {
         return $this->hasMany(Dop::class);
@@ -30,19 +30,24 @@ class Proyek extends Model
     {
         return $this->hasMany(Sbu::class);
     }
-    
+
     public function UnitKerja()
     {
         return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
     }
 
-    public function ClaimManagements() {
+    public function ClaimManagements()
+    {
         return $this->hasMany(ClaimManagements::class, "kode_proyek", "kode_proyek");
     }
 
-    public function ContractManagements() {
+    public function ContractManagements()
+    {
         return $this->hasOne(ContractManagements::class, "project_id", "kode_proyek");
     }
 
-
+    public function Forecasts()
+    {
+        return $this->hasMany(Forecast::class, "kode_proyek", "kode_proyek");
+    }
 }
