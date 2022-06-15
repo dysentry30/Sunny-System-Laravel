@@ -746,537 +746,199 @@
                                                                                     <!--end::Child=-->
                                                                                 </td>
                                                                                 @php
-                                                                                    $forecast = explode(';', $proyek->forecast);
-                                                                                    array_pop($forecast);
+                                                                                    $month_counter = 1;
                                                                                 @endphp
-                                                                                @foreach ($forecast as $data_forecast)
-                                                                                
-                                                                                    <!--begin::Januari Coloumn-->
-                                                                                    <td>{{ $proyek->nilai_rkap }}</td>
-                                                                                    {{-- check if date same in data date --}}
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 1)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="1"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="1"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
+                                                                                @for ($i = 0; $i < 11; $i++)
+                                                                                    @foreach ($proyek->Forecasts as $forecast)
+                                                                                        @if ($forecast->month_forecast == $month_counter)
+                                                                                            <td>{{ $proyek->nilai_rkap }}
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <input type="text"
+                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                    data-month="{{ $month_counter++ }}"
+                                                                                                    class="form-control"
+                                                                                                    style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                    id="nilai-forecast"
+                                                                                                    name="nilai-forecast"
+                                                                                                    onkeyup="reformatNumber(this)"
+                                                                                                    value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
+                                                                                                    placeholder=". . . , -" />
+                                                                                            </td>
+                                                                                            <td>10000</td>
+                                                                                        @break
                                                                                     @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Januari Coloumn-->
-                                                                                    <!--begin::Februari Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 2)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="2"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="2"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Februari Coloumn-->
-                                                                                    <!--begin::Maret Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 3)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="3"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="3"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Maret Coloumn-->
-                                                                                    <!--begin::April Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 4)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="4"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="4"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::April Coloumn-->
-                                                                                    <!--begin::Mei Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 5)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="5"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="5"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Mei Coloumn-->
-                                                                                    <!--begin::Juni Coloumn-->
-                                                                                    <td>222,222</td>@if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 6)
-                                                                                    <td>
-                                                                                        <input type="text"
-                                                                                            data-id-proyek="{{ $proyek->id }}"
-                                                                                            data-month="6"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                            id="nilai-forecast"
-                                                                                            name="nilai-forecast"
-                                                                                            onkeyup="reformatNumber(this)"
-                                                                                            value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                            placeholder=". . . , -" />
-                                                                                    </td>
-                                                                                @else
-                                                                                    <td>
-                                                                                        <input type="text"
-                                                                                            data-id-proyek="{{ $proyek->id }}"
-                                                                                            data-month="6"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                            id="nilai-forecast"
-                                                                                            name="nilai-forecast"
-                                                                                            onkeyup="reformatNumber(this)"
-                                                                                            value=""
-                                                                                            placeholder=". . . , -" />
-                                                                                    </td>
-                                                                                @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Juni Coloumn-->
-                                                                                    <!--begin::Juli Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 7)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="7"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="7"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Juli Coloumn-->
-                                                                                    <!--begin::Agustus Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 8)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="8"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="8"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Agustus Coloumn-->
-                                                                                    <!--begin::September Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 9)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="9"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="9"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::September Coloumn-->
-                                                                                    <!--begin::Oktober Coloumn-->
-                                                                                    <td>222,222</td>@if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 10)
-                                                                                    <td>
-                                                                                        <input type="text"
-                                                                                            data-id-proyek="{{ $proyek->id }}"
-                                                                                            data-month="10"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                            id="nilai-forecast"
-                                                                                            name="nilai-forecast"
-                                                                                            onkeyup="reformatNumber(this)"
-                                                                                            value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                            placeholder=". . . , -" />
-                                                                                    </td>
-                                                                                @else
-                                                                                    <td>
-                                                                                        <input type="text"
-                                                                                            data-id-proyek="{{ $proyek->id }}"
-                                                                                            data-month="10"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                            id="nilai-forecast"
-                                                                                            name="nilai-forecast"
-                                                                                            onkeyup="reformatNumber(this)"
-                                                                                            value=""
-                                                                                            placeholder=". . . , -" />
-                                                                                    </td>
-                                                                                @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Oktober Coloumn-->
-                                                                                    <!--begin::November Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 11)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="11"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="11"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::November Coloumn-->
-                                                                                    <!--begin::Desember Coloumn-->
-                                                                                    <td>222,222</td>
-                                                                                    @if (date('Y') == $data_forecast[0] && (int) $date_forecast[1] == 12)
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="12"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value="{{ number_format((int) $data_forecast[2], 0, ',', ',') }}"
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @else
-                                                                                        <td>
-                                                                                            <input type="text"
-                                                                                                data-id-proyek="{{ $proyek->id }}"
-                                                                                                data-month="12"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                id="nilai-forecast"
-                                                                                                name="nilai-forecast"
-                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                value=""
-                                                                                                placeholder=". . . , -" />
-                                                                                        </td>
-                                                                                    @endif
-                                                                                    <td>222,222</td>
-                                                                                    <!--end::Desember Coloumn-->
                                                                                 @endforeach
-                                                                                <!--begin::Total Coloumn-->
-                                                                                <td class="pinForecast HidePin">
-                                                                                    {{ $proyek->nilai_rkap }}</td>
-                                                                                <td class="pinForecast HidePin">
-                                                                                    {{ $proyek->forecast }}
+                                                                                <td>10000</td>
+                                                                                <td>
+                                                                                    <input type="text"
+                                                                                        data-id-proyek="{{ $proyek->id }}"
+                                                                                        data-month="{{ $month_counter++ }}"
+                                                                                        class="form-control"
+                                                                                        style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                        id="nilai-forecast"
+                                                                                        name="nilai-forecast"
+                                                                                        onkeyup="reformatNumber(this)"
+                                                                                        value=""
+                                                                                        placeholder=". . . , -" />
                                                                                 </td>
-                                                                                <td class="pinForecast HidePin">
-                                                                                    2,666,664
-                                                                                </td>
-                                                                                <td class="pinForecast ShowPin"
-                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                    {{ $proyek->nilai_rkap }}</td>
-                                                                                <td class="pinForecast ShowPin"
-                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                    10000
-                                                                                </td>
-                                                                                <td class="pinForecast ShowPin"
-                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                    2,666,664</td>
-                                                                                <!--end::Total Coloumn-->
-                                                                        @endforeach
-                                                                        {{-- end:: Foreach Proyek --}}
-                                                                    @endif
+                                                                                <td>100000</td>
+                                                                            @endfor
+                                                                            <!--begin::Total Coloumn-->
+                                                                            <td class="pinForecast HidePin">
+                                                                                {{ $proyek->nilai_rkap }}</td>
+                                                                            <td class="pinForecast HidePin">
+                                                                                {{ $proyek->forecast }}
+                                                                            </td>
+                                                                            <td class="pinForecast HidePin">
+                                                                                2,666,664
+                                                                            </td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                {{ $proyek->nilai_rkap }}</td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                10000
+                                                                            </td>
+                                                                            <td class="pinForecast ShowPin"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                2,666,664</td>
+                                                                            <!--end::Total Coloumn-->
+                                                                    @endforeach
+                                                                    {{-- end:: Foreach Proyek --}}
+                                                                @endif
 
 
 
-                                                                    </tr>
-                                                                @endforeach
-                                                                {{-- end:: Foreach Unit Kerja --}}
-                                                            @endif
-                                                        @endforeach
+                                                                </tr>
+                                                            @endforeach
+                                                            {{-- end:: Foreach Unit Kerja --}}
+                                                        @endif
+                                                    @endforeach
 
-                                                    </tbody>
+                                                </tbody>
 
-                                                    {{-- @endforeach --}}
-                                                    <!--end::Table body-->
-                                                </table>
+                                                {{-- @endforeach --}}
+                                                <!--end::Table body-->
+                                            </table>
 
-                                                <script>
-                                                    function hidePin() {
-                                                        var hide = document.getElementsByClassName('pinForecast');
-                                                        hide.forEach(element => {
-                                                            if (element.classList.contains("HidePin")) {
-                                                                element.classList.add("ShowPin");
-                                                                element.classList.remove("HidePin");
-                                                            } else {
-                                                                element.classList.add("HidePin");
-                                                                element.classList.remove("ShowPin");
-                                                            }
-                                                        });
-                                                    }
-                                                </script>
-                                                <!--end::Table Forecast-->
+                                            <script>
+                                                function hidePin() {
+                                                    var hide = document.getElementsByClassName('pinForecast');
+                                                    hide.forEach(element => {
+                                                        if (element.classList.contains("HidePin")) {
+                                                            element.classList.add("ShowPin");
+                                                            element.classList.remove("HidePin");
+                                                        } else {
+                                                            element.classList.add("HidePin");
+                                                            element.classList.remove("ShowPin");
+                                                        }
+                                                    });
+                                                }
+                                            </script>
+                                            <!--end::Table Forecast-->
 
-                                            </div>
                                         </div>
-
-
-
                                     </div>
-                                    <!--end:::Tab isi content-->
+
+
 
                                 </div>
-                                <!--end::Card body-->
-
+                                <!--end:::Tab isi content-->
 
                             </div>
-                            <!--end::Contacts App- Edit Contact-->
+                            <!--end::Card body-->
+
 
                         </div>
-                        <!--end::Container-->
-                    </div>
-                    <!--end::Post-->
+                        <!--end::Contacts App- Edit Contact-->
 
-            </div>
-            <!--end::Content-->
-            </form>
-            <!--end::Form-->
+                    </div>
+                    <!--end::Container-->
+                </div>
+                <!--end::Post-->
 
         </div>
-        <!--end::Wrapper-->
+        <!--end::Content-->
+        </form>
+        <!--end::Form-->
+
     </div>
-    <!--end::Page-->
-    </div>
-    <!--end::Root-->
+    <!--end::Wrapper-->
+</div>
+<!--end::Page-->
+</div>
+<!--end::Root-->
 
 
-    <!--begin::Scrolltop-->
-    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-        <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-                <path
-                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                    fill="black" />
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
-    </div>
-    <!--end::Scrolltop-->
+<!--begin::Scrolltop-->
+<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+    <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+    <span class="svg-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
+            <path
+                d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
+                fill="black" />
+        </svg>
+    </span>
+    <!--end::Svg Icon-->
+</div>
+<!--end::Scrolltop-->
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
 
 {{-- begin:: JS script --}}
 @section('js-script')
-    <script>
-        const toaster = document.querySelector(".toast");
-        const toastBody = document.querySelector(".toast-body")
-        const toastBoots = new bootstrap.Toast(toaster, {});
+<script>
+    const toaster = document.querySelector(".toast");
+    const toastBody = document.querySelector(".toast-body")
+    const toastBoots = new bootstrap.Toast(toaster, {});
 
-        function reformatNumber(elt) {
-            const valueFormatted = Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 0,
-            }).format(elt.value.toString().replace(/[^0-9]/gi, ""));
-            elt.value = valueFormatted;
-        }
+    function reformatNumber(elt) {
+        const valueFormatted = Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 0,
+        }).format(elt.value.toString().replace(/[^0-9]/gi, ""));
+        elt.value = valueFormatted;
+    }
 
-        const inputForecasts = document.querySelectorAll("input[data-id-proyek]");
-        inputForecasts.forEach(input => {
-            input.addEventListener("focusout", async e => {
-                const nilaiForecast = e.target.value.toString().replaceAll(",", "");
-                const kodeProyek = input.getAttribute("data-id-proyek");
-                const dataMonth = input.getAttribute("data-month");
-                const formData = new FormData();
-                const date = new Date();
-                const data = [date.getFullYear(), dataMonth, nilaiForecast]
+    const inputForecasts = document.querySelectorAll("input[data-id-proyek]");
+    inputForecasts.forEach(input => {
+        input.addEventListener("focusout", async e => {
+            const nilaiForecast = e.target.value.toString().replaceAll(",", "");
+            const kodeProyek = input.getAttribute("data-id-proyek");
+            const dataMonth = input.getAttribute("data-month");
+            const formData = new FormData();
+            const date = new Date();
+            const data = [date.getFullYear(), dataMonth, nilaiForecast]
 
-                formData.append("_token", "{{ csrf_token() }}");
-                formData.append("nilai_forecast", data);
-                formData.append("kode_proyek", kodeProyek);
-                const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
-                    method: "POST",
-                    header: {
-                        "content-type": "application/json"
-                    },
-                    body: formData
-                }).then(res => res.json());
-                if (saveNilaiForecastRes.status == "success") {
-                    const nilaiFormatted = Intl.NumberFormat("en-US", {
-                        maximumFractionDigits: 0,
-                    }).format(nilaiForecast.toString().replace(/[^0-9]/gi, ""));
-                    input.value = nilaiFormatted;
-                    toaster.classList.add("text-bg-success")
-                    toaster.classList.remove("text-bg-danger")
-                    toastBody.innerHTML = saveNilaiForecastRes.msg;
-                } else {
-                    toaster.classList.remove("text-bg-success")
-                    toaster.classList.add("text-bg-danger")
-                    toastBody.innerHTML = saveNilaiForecastRes.msg;
-                }
-                toastBoots.show();
-            });
+            formData.append("_token", "{{ csrf_token() }}");
+            formData.append("nilai_forecast", nilaiForecast);
+            formData.append("forecast_month", dataMonth);
+            formData.append("kode_proyek", kodeProyek);
+            const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
+                method: "POST",
+                header: {
+                    "content-type": "application/json"
+                },
+                body: formData
+            }).then(res => res.json());
+            if (saveNilaiForecastRes.status == "success") {
+                const nilaiFormatted = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(nilaiForecast.toString().replace(/[^0-9]/gi, ""));
+                input.value = nilaiFormatted;
+                toaster.classList.add("text-bg-success")
+                toaster.classList.remove("text-bg-danger")
+                toastBody.innerHTML = saveNilaiForecastRes.msg;
+            } else {
+                toaster.classList.remove("text-bg-success")
+                toaster.classList.add("text-bg-danger")
+                toastBody.innerHTML = saveNilaiForecastRes.msg;
+            }
+            toastBoots.show();
         });
-    </script>
+    });
+</script>
 @endsection
 {{-- end:: JS script --}}

@@ -14,8 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('forecasts', function (Blueprint $table) {
-            $table->id();
+            $table->id("id_forecast");
+            $table->string("kode_proyek");
             $table->integer('nilai_forecast');
+            $table->mediumInteger('month_forecast');
             $table->timestamps();
         });
     }
