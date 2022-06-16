@@ -48,6 +48,10 @@ class DatabaseSeeder extends Seeder
             ]);
         // end :: Proyek.
 
+        // begin :: Contract Management
+        ContractManagements::factory(1)->create();
+        // end :: Contract Management
+
 
         // begin :: Unit Kerja.
             UnitKerja::create([
