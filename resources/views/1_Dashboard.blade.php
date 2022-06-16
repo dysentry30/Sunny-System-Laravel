@@ -157,12 +157,40 @@
                                     <!--begin::User-->
                                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                                         <!--begin::Menu wrapper-->
-                                        <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
-                                            data-kt-menu-trigger="click" data-kt-menu-attach="parent"
-                                            data-kt-menu-placement="bottom-end">
-                                            Hi,<strong>Indar Wiguna</strong>
-                                            <img src="/media/avatars/User-Icon.png" alt="user" />
-                                        </div>
+                                        @auth
+                                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
+                                                data-kt-menu-trigger="click" data-kt-menu-attach="parent"
+                                                data-kt-menu-placement="bottom-end">
+                                                Hi,<strong> {{ auth()->user()->name }}&nbsp;</strong>
+                                                    <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
+                                                    &nbsp;
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                        <li>
+                                                            <form action="/logout" method="post" class="form w-100" id="kt_sign_in_form" action="#">
+                                                                @csrf
+                                                                <button type="submit" class="dropdown-item">Logout</button>
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                            </div>
+                                        
+                                        @else
+
+                                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
+                                                    data-kt-menu-trigger="click" data-kt-menu-attach="parent"
+                                                    data-kt-menu-placement="bottom-end">
+                                                    Hi,<strong> Tes Login &nbsp;</strong>
+                                                        {{-- begin logo dropdown --}}
+                                                        <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
+                                                        &nbsp;
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                            <li>
+                                                                <a class="dropdown-item" href="/welcome ">Login</a>
+                                                            </li>
+                                                        </ul>
+                                                </div>
+
+                                        @endauth
 
                                         <!--end::Menu wrapper-->
                                     </div>
