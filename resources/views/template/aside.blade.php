@@ -6,7 +6,7 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
         <!--begin::Logo-->
-        <a href="/" style="background-color:#0db0d9;">
+        <a href="#" style="background-color:#0db0d9;">
             <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
                 style="margin-top:30px;margin-left:-20px;" />
         </a>
@@ -24,7 +24,7 @@
             <!--begin::Menu-->
             <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
                 <div class="menu-item">
-                    <a class="menu-link active" href="/" style="color:white;">
+                    <a class="menu-link active" href="/dashboard" style="color:white;">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
