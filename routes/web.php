@@ -38,14 +38,19 @@ use App\Models\Forecast;
 
 
 
-Route::get('/', function () {
+
+// Route::get('/', function () {
+//     return view('1_Dashboard');
+// });
+
+Route::get('/dashboard', function () {
     return view('1_Dashboard');
 });
 
 
-
 // begin :: Login
-    Route::get('/welcome', [UserController::class, 'welcome'])->middleware('guest');
+    Route::get('/', [UserController::class, 'welcome'])->middleware('guest');
+    // Route::get('/welcome', [UserController::class, 'welcome'])->middleware('guest');
 
     Route::post('/login', [UserController::class, 'authen']);
 

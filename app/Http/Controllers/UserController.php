@@ -23,7 +23,7 @@ class UserController extends Controller
         ]);
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->intended("/");
+            return redirect()->intended("/dashboard");
         }
         
         // dd("gagal login");
@@ -38,7 +38,7 @@ class UserController extends Controller
     
         Request()->session()->regenerateToken();
     
-        return redirect('/welcome');
+        return redirect('/');
     }
 
     // public function createUser()
