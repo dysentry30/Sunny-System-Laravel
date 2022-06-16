@@ -19,7 +19,7 @@ class ContractManagementsFactory extends Factory
     {
         return [
             "id_contract"       => $this->faker->unique()->randomNumber(5, true),
-            "project_id"      => $this->faker->unique()->randomNumber(6),
+            "project_id"      => "FIRA001",
             "contract_proceed"  => $this->faker->randomElement(["Pelaksanaan", "Sudah Selesai"]),
             "contract_in"       => $this->faker->dateTime(),
             "stages"       => $this->faker->randomElement([1, 2, 3, 4, 5, 6]),
