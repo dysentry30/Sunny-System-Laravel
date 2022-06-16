@@ -820,7 +820,7 @@
                                                                                     <b>{{ $proyek->nilai_rkap }}</b>
                                                                                 </center>
                                                                             </td>
-                                                                            <td class="pinForecast ShowPin"
+                                                                            <td class="pinForecast ShowPin total-month-x-forecast"
                                                                                 data-id-proyek="{{ $proyek->id }}"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                 <center>
@@ -870,7 +870,7 @@
                                                             <td class="pinForecast HidePin">
                                                                 <center>{{ $proyek->nilai_rkap }}</center>
                                                             </td>
-                                                            <td class="pinForecast HidePin">
+                                                            <td class="pinForecast HidePin total-year-forecast">
                                                                 <center>
                                                                     <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
                                                                 </center>
@@ -882,7 +882,7 @@
                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                 <center><b>{{ $proyek->nilai_rkap }}</b></center>
                                                             </td>
-                                                            <td class="pinForecast ShowPin"
+                                                            <td class="pinForecast ShowPin total-year-forecast"
                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                 <center>
                                                                     <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
@@ -990,6 +990,8 @@
             const kodeProyek = input.getAttribute("data-id-proyek");
             const dataMonth = input.getAttribute("data-month");
             const dataColumn = input.getAttribute("data-column");
+            const columnTotalYearForecast = document.querySelectorAll(`.total-year-forecast`);
+            const columnDataYearForecast = document.querySelectorAll(`.total-month-x-forecast`);
             const columnForecastElt = document.querySelectorAll(
                 `input[data-column="${dataColumn}"]`);
             const rowForecastElt = document.querySelectorAll(
@@ -998,6 +1000,7 @@
                 `td[data-id-proyek="${kodeProyek}"]`);
             const totalColumn = document.querySelector(`td[data-total-column="${dataColumn}"]`);
             let totalColumnForecast = 0;
+            let totalColumnYearForecast = 0;
             let totalRowForecast = 0;
             columnForecastElt.forEach(columnForecast => {
                 if (columnForecast.value != null) {
@@ -1011,6 +1014,7 @@
                         ""));
                 }
             });
+
             const formData = new FormData();
             const date = new Date();
 
@@ -1035,6 +1039,8 @@
                 const columnValueFormatted = Intl.NumberFormat("en-US", {
                     maximumFractionDigits: 0,
                 }).format(totalColumnForecast);
+
+
                 input.value = nilaiFormatted;
                 toaster.classList.add("text-bg-success")
                 toaster.classList.remove("text-bg-danger")
@@ -1051,6 +1057,27 @@
                     <center><b>${columnValueFormatted}</b></center>
                 </td>
                 `;
+
+                columnDataYearForecast.forEach(columnDataTotalYear => {
+                    if (columnDataTotalYear.innerText != null || columnDataTotalYear
+                        .innerText != "0") {
+                        totalColumnYearForecast += Number(columnDataTotalYear.innerText
+                            .toString().replaceAll(",",
+                                ""));
+                    }
+                });
+
+                const columnTotalYearForecastFormatted = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalColumnYearForecast);
+
+                columnTotalYearForecast.forEach(colTotal => {
+                    colTotal.innerHTML = `
+                    <center>
+                        <b>${columnTotalYearForecastFormatted}</b>
+                    </center>
+                    `;
+                });
             } else {
                 toaster.classList.remove("text-bg-success")
                 toaster.classList.add("text-bg-danger")
