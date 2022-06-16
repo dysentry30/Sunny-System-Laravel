@@ -6,7 +6,7 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
         <!--begin::Logo-->
-        <a href="/welcome" style="background-color:#0db0d9;">
+        <a href="/" style="background-color:#0db0d9;">
             <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
                 style="margin-top:30px;margin-left:-20px;" />
         </a>

@@ -38,7 +38,8 @@
 					<!--begin::Wrapper-->
 					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
 						<!--begin::Form-->
-						<form action="/login" method="post" class="form w-100" novalidate="novalidate" id="kt_sign_in_form" action="#">
+						{{-- <form action="/createUser" method="post" class="form w-100" id="kt_sign_in_form" action="#"> --}}
+						<form action="/login" method="post" class="form w-100" id="kt_sign_in_form" action="#">
                             @csrf
 
                             

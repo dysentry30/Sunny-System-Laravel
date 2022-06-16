@@ -43,11 +43,16 @@ Route::get('/', function () {
 });
 
 
-Route::get('/welcome', function () {
-    return view('0_Welcome');
-});
 
-Route::post('/login', [UserController::class, 'authen']);
+// begin :: Login
+    Route::get('/welcome', [UserController::class, 'welcome'])->middleware('guest');
+
+    Route::post('/login', [UserController::class, 'authen']);
+
+    Route::post('/logout', [UserController::class, 'logout']);
+
+    // Route::post('/createUser', [UserController::class, 'testLogin']);
+// end :: Login
 
 
 

@@ -2,18 +2,20 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\ContractManagements;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\DraftContracts;
-use App\Models\Pasals;
-use App\Models\Proyek;
-use App\Models\UnitKerja;
-use App\Models\SumberDana;
-use App\Models\Company;
-use App\Models\Customer;
 use App\Models\Dop;
 use App\Models\Sbu;
+use App\Models\User;
+use App\Models\Pasals;
+use App\Models\Proyek;
+use App\Models\Company;
+use App\Models\Customer;
+use App\Models\UnitKerja;
+use App\Models\SumberDana;
+use App\Models\DraftContracts;
+use Illuminate\Database\Seeder;
+use App\Models\ContractManagements;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -51,6 +53,19 @@ class DatabaseSeeder extends Seeder
         // begin :: Contract Management
         ContractManagements::factory(1)->create();
         // end :: Contract Management
+
+        // begin :: Proyek.
+            User::create([
+                'name' => "Admin Sunny",
+                'email' => "admin@sunny.com",
+                'password' => Hash::make('password'),
+            ]);
+            User::create([
+                'name' => "User Sunny",
+                'email' => "user@sunny.com",
+                'password' => Hash::make('password'),
+            ]);
+        // end :: Proyek.
 
 
         // begin :: Unit Kerja.
