@@ -24,6 +24,7 @@ use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
 use App\Models\Forecast;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,10 +43,7 @@ use App\Models\Forecast;
 // Route::get('/', function () {
 //     return view('1_Dashboard');
 // });
-
-Route::get('/dashboard', function () {
-    return view('1_Dashboard');
-});
+Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 
 // begin :: Login
@@ -62,32 +60,39 @@ Route::get('/dashboard', function () {
 
 
 
-// begin :: contract management
-Route::get('/contract-management', [ContractManagementsController::class, 'index']);
+Route::group(['middleware' => ["userAuth"]], function () {
+    Route::get('/dashboard', function () {
+        \Illuminate\Support\Facades\Artisan::call("storage:link");
+        return view('1_Dashboard');
+    });
 
-Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
-
-Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
-
-Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
-
-Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
-
-Route::get('/contract-management/view/{id_contract}/addendum-contract', [ContractManagementsController::class, 'addendumContract']);
-
-Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}', [ContractManagementsController::class, 'addendumView']);
-
-Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/new', [ContractManagementsController::class, 'addendumNew']);
-
-Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/{addendumDraft}', [ContractManagementsController::class, 'addendumDraft']);
-
-Route::get('/contract-management/view/{id_contract}/draft-contract', [ContractManagementsController::class, 'draftContract']);
-
-Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
-
-Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'tenderMenang']);
-
-// end :: contract management
+    // begin :: contract management
+    Route::get('/contract-management', [ContractManagementsController::class, 'index']);
+    
+    Route::get('/contract-management/view', [ContractManagementsController::class, 'new']);
+    
+    Route::post('/contract-management/save', [ContractManagementsController::class, 'save']);
+    
+    Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
+    
+    Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
+    
+    Route::get('/contract-management/view/{id_contract}/addendum-contract', [ContractManagementsController::class, 'addendumContract']);
+    
+    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}', [ContractManagementsController::class, 'addendumView']);
+    
+    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/new', [ContractManagementsController::class, 'addendumNew']);
+    
+    Route::get('/contract-management/view/{id_contract}/addendum-contract/{addendumContract}/{addendumDraft}', [ContractManagementsController::class, 'addendumDraft']);
+    
+    Route::get('/contract-management/view/{id_contract}/draft-contract', [ContractManagementsController::class, 'draftContract']);
+    
+    Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
+    
+    Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'tenderMenang']);
+    
+    // end :: contract management
+});
 
 
 
@@ -104,7 +109,11 @@ Route::get('change-request', [PasalController::class, 'changeRequest']);
 
 
 // begin :: Claim Management
+
+
 Route::get('claim-management', [ClaimController::class, 'index']);
+
+Route::get('claim-management/proyek/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
 Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 

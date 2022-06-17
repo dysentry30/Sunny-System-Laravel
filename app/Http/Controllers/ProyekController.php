@@ -31,7 +31,7 @@ class ProyekController extends Controller
     {
         $dataProyek = $request->all(); 
         $proyekAll = Proyek::all();
-        $unitKerja = DB::table('unit_kerjas')->where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
+        $unitKerja = UnitKerja::where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
         $messages = [
             "required" => "This field is required",

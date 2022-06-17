@@ -60,6 +60,7 @@ class DraftContractController extends Controller
             foreach (Session::get("pasals") as $pasal) {
                 array_push($pasals, $pasal->id_pasal);
             }
+            Session::forget("pasals");
         }
         $faker = new Uuid();
         $id_document = $faker->uuid3();
