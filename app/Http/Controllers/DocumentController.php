@@ -78,7 +78,7 @@ class DocumentController extends Controller
             }
         }
         // dd($file_documents);
-        return view("document-history", ["files" => $file_documents, "id" => $id]);
+        return view("/document/document-history", ["files" => $file_documents, "id" => $id]);
     }
 
     // View Document to Document Viewer
@@ -87,7 +87,7 @@ class DocumentController extends Controller
         $id = $request->id;
         // dd($request->id_document);
         $document_path = asset("/storage/words/" . $id_document . ".docx");
-        return view("document", ["document" => $document_path, "id" => $id, "id_document" => $id_document]);
+        return view("/document/document", ["document" => $document_path, "id" => $id, "id_document" => $id_document]);
         // return view("document", ["document" => $document_path]);
     }
 }

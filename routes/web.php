@@ -161,7 +161,7 @@ Route::get('/document', function () {
             }
         }
     }, $all_document);
-    return view("document/view", ["all_document" => $all_document, "id_documents" => $id_documents, "documents_name" => $documents_name]);
+    return view("6_Document", ["all_document" => $all_document, "id_documents" => $id_documents, "documents_name" => $documents_name]);
 });
 // End :: Menu Document
 
