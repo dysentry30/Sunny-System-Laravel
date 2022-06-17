@@ -40,15 +40,10 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-// Route::get('/', function () {
-//     return view('1_Dashboard');
-// });
 Route::get('/', [UserController::class, 'welcome'])->middleware("userNotAuth");
 
 
 // begin :: Login
-    Route::get('/', [UserController::class, 'welcome'])->middleware('guest');
-    // Route::get('/welcome', [UserController::class, 'welcome'])->middleware('guest');
 
     Route::post('/login', [UserController::class, 'authen']);
 
