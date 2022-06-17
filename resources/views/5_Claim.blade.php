@@ -311,7 +311,7 @@
 								
 							<!--begin::Name=-->
 							<td>
-								<a href="claim-management/view/{{ $claimProyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->kode_proyek }}</a>
+								<a href="/claim-management/proyek/{{ $claimProyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->kode_proyek }}</a>
 							</td>
 							<!--end::Name=-->
 							<!--begin::Email=-->

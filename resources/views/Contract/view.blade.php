@@ -286,7 +286,7 @@
                                                                     data-placeholder="Pilih Proyek">
                                                                     <option value=""></option>
                                                                     @foreach ($projects as $project)
-                                                                        <option value="{{ $project->kode_proyek ?? 0}}">
+                                                                        <option value="{{ $project->kode_proyek}}">
                                                                             {{ $project->nama_proyek }}
                                                                         </option>
                                                                     @endforeach

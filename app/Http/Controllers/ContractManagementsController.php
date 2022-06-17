@@ -92,7 +92,7 @@ class ContractManagementsController extends Controller
         ];
         $rules = [
             "number-contract" => "required|numeric",
-            "project-id" => "required|numeric",
+            "project-id" => "required|string",
             "start-date" => "required|date|before:due-date",
             "due-date" => "required|date|after:start-date",
             "value" => "required",
@@ -100,12 +100,13 @@ class ContractManagementsController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
+
             return redirect()->back()->with("failed", "This contract failed to update");
         }
         $validation->validate();
         $contractManagements = ContractManagements::find($data["number-contract"]);
         // dd($data);
-        $contractManagements->project_id = (int) $data["project-id"];
+        $contractManagements->project_id = $data["project-id"];
         // $contractManagements->contract_proceed = "Belum Selesai";
         $contractManagements->contract_in = new DateTime($data["start-date"]);
         $contractManagements->contract_out = new DateTime($data["due-date"]);
@@ -179,7 +180,18 @@ class ContractManagementsController extends Controller
 
     public function draftContractView ($id_contract, DraftContracts $draftContracts) 
     {
-        return view("DraftContract/view", ["contract" => ContractManagements::find($id_contract), "id_contract" => $id_contract, "draftContract" => $draftContracts]);
+        $id_pasals = explode(",", $draftContracts->pasals);
+        $res_pasals = [];
+        foreach ($id_pasals as $id_pasal) {
+            $get_pasal = Pasals::find($id_pasal);
+            if ($get_pasal instanceof Pasals) {
+                array_push($res_pasals, $get_pasal);
+            }
+        }
+        if (!Session::has("pasals")) {
+            Session::put("pasals", $res_pasals);
+        }
+        return view("DraftContract/view", ["contract" => ContractManagements::find($id_contract), "pasals" => Pasals::all(), "pasalsDraft" => $res_pasals, "id_contract" => $id_contract, "draftContract" => $draftContracts]);
     }
 
     // Upload Review of Contract to Server or Database

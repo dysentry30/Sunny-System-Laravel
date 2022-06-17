@@ -188,7 +188,7 @@
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
 
-<!--begin::Wrapper-->
+                        <!--begin::Wrapper-->
                         {{-- <div class="me-4" style="margin-left:10px;">
                             <!--begin::Menu-->
                             <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
@@ -235,7 +235,7 @@
                             <!--end::Menu 1-->
                             <!--end::Menu-->
                         </div> --}}
-<!--end::Wrapper-->
+                        <!--end::Wrapper-->
 
 
                     </div>
@@ -281,107 +281,108 @@
                     <div class="row">
 
 
-                <!--begin::All Content-->
-                <div class="col-xl-15">
-                    <!--begin::Contacts-->
-                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                        <!--begin::All Content-->
+                        <div class="col-xl-15">
+                            <!--begin::Contacts-->
+                            <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-                        <!--begin::Card body-->
-                        <div class="card-body pt-5">
+                                <!--begin::Card body-->
+                                <div class="card-body pt-5">
 
-<!--begin:::Tabs Navigasi-->
-            <ul
-                class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                <!--begin:::Tab item Claim-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4 active"
-                        data-bs-toggle="tab" href="#kt_user_view_claim"
-                        style="font-size:14px;">Claim</a>
-                </li>
-                <!--end:::Tab item Claim-->
-                
-                <!--begin:::Tab item Anti Claim-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4"
-                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                    href="#kt_user_view_overview_potensial"
-                    style="font-size:14px;">Anti Claim</a>
-                </li>
-                <!--end:::Tab item Anti Claim-->
-                
-                <!--begin:::Tab item Prakualifikasi-->
-                <li class="nav-item">
-                    <a class="nav-link text-active-primary pb-4"
-                    data-kt-countup-tabs="true" data-bs-toggle="tab"
-                    href="#kt_user_view_overview_asuransi"
-                    style="font-size:14px;">Claim Asuransi</a>
-                </li>
-                <!--end:::Tab item Prakualifikasi-->
-            </ul>
+                                    <!--begin:::Tabs Navigasi-->
+                                    <ul
+                                        class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                        <!--begin:::Tab item Claim-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
+                                        </li>
+                                        <!--end:::Tab item Claim-->
 
-<!--end:::Tabs Navigasi-->
+                                        <!--begin:::Tab item Anti Claim-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                data-bs-toggle="tab" href="#kt_user_view_overview_potensial"
+                                                style="font-size:14px;">Anti Claim</a>
+                                        </li>
+                                        <!--end:::Tab item Anti Claim-->
 
-            <!--begin:::Tab isi content  -->
-            <div class="tab-content" id="myTabContent">
+                                        <!--begin:::Tab item Prakualifikasi-->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                data-bs-toggle="tab" href="#kt_user_view_overview_asuransi"
+                                                style="font-size:14px;">Claim Asuransi</a>
+                                        </li>
+                                        <!--end:::Tab item Prakualifikasi-->
+                                    </ul>
 
-<!--begin:::Tab Claim-->
-                <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
-                    <!--begin::Table Claim-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-auto">ID Claim</th>
-                                <th class="min-w-auto">Kode Proyek</th>
-                                <th class="min-w-auto">Nama Proyek</th>
-                                <th class="min-w-auto">Unit Kerja</th>
-                                <th class="min-w-auto">Jenis Claim</th>
-                                <th class="min-w-auto">Approval Status</th>
-                                {{-- <th class=""><center>Action</center></th> --}}
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                            @foreach ($claims as $claim)
-                            @if($claim->jenis_claim == "Claim")
-                                <tr>
-                                
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_claim }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_contract }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Email=-->
-                                    <td>
-                                        {{ $proyek->kode_proyek }}
-                                    </td>
-                                    <!--end::Email=-->
-                                    <!--begin::Company=-->
-                                    <td>
-                                        {{ $proyek->nama_proyek }}
-                                        {{-- {{ $proyek->kode_proyek }} --}}
-                                    </td>
-                                    <!--end::Company=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        {{ $claim->jenis_claim }}  
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        Pending
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    {{-- <td>
+                                    <!--end:::Tabs Navigasi-->
+
+                                    <!--begin:::Tab isi content  -->
+                                    <div class="tab-content" id="myTabContent">
+
+                                        <!--begin:::Tab Claim-->
+                                        <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
+                                            <!--begin::Table Claim-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_proyek_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-auto">ID Claim</th>
+                                                        <th class="min-w-auto">Kode Proyek</th>
+                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                        <th class="min-w-auto">Unit Kerja</th>
+                                                        <th class="min-w-auto">Jenis Claim</th>
+                                                        <th class="min-w-auto">Approval Status</th>
+                                                        {{-- <th class=""><center>Action</center></th> --}}
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-600">
+                                                    @foreach ($claims as $claim)
+                                                        @if ($claim->jenis_claim == 'Claim')
+                                                            <tr>
+
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a class="text-hover-primary text-gray-500"
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
+                                                                    </a>
+
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    {{ $claim->id_contract }}
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Email=-->
+                                                                <td>
+                                                                    {{ $proyek->kode_proyek }}
+                                                                </td>
+                                                                <!--end::Email=-->
+                                                                <!--begin::Company=-->
+                                                                <td>
+                                                                    {{ $proyek->nama_proyek }}
+                                                                    {{-- {{ $proyek->kode_proyek }} --}}
+                                                                </td>
+                                                                <!--end::Company=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    {{ $claim->jenis_claim }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    Pending
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                {{-- <td>
                                         <!--begin::Button-->
                                         <form action="/proyek/delete/" method="post" class="d-inline" >
                                             @method('delete')
@@ -392,75 +393,78 @@
                                         </form>
                                         <!--end::Button-->
                                     </td> --}}
-                                    <!--end::Action=-->
-                                </tr>
-                            @endif
-                            @endforeach
-                            </tbody>
-                    </table>
-                    <!--end::Table -->
-                </div>
-<!--end:::Tab Claim-->
-                
+                                                                <!--end::Action=-->
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <!--end::Table -->
+                                        </div>
+                                        <!--end:::Tab Claim-->
 
-<!--begin:::Tab Anti Claim-->
-                <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
-                    <!--begin::Table Claim-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-auto">ID Claim</th>
-                                <th class="min-w-auto">Kode Proyek</th>
-                                <th class="min-w-auto">Nama Proyek</th>
-                                <th class="min-w-auto">Unit Kerja</th>
-                                <th class="min-w-auto">Jenis Claim</th>
-                                <th class="min-w-auto">Approval Status</th>
-                                {{-- <th class=""><center>Action</center></th> --}}
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                            @foreach ($claims as $claim)
-                            @if($claim->jenis_claim == "Anti Claim")
-                                <tr>
-                                
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_claim }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_contract }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Email=-->
-                                    <td>
-                                        {{ $proyek->kode_proyek }}
-                                    </td>
-                                    <!--end::Email=-->
-                                    <!--begin::Company=-->
-                                    <td>
-                                        {{ $proyek->nama_proyek }}
-                                        {{-- {{ $proyek->kode_proyek }} --}}
-                                    </td>
-                                    <!--end::Company=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        {{ $claim->jenis_claim }}  
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        Pending
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    {{-- <td>
+
+                                        <!--begin:::Tab Anti Claim-->
+                                        <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
+                                            <!--begin::Table Claim-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_proyek_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-auto">ID Claim</th>
+                                                        <th class="min-w-auto">Kode Proyek</th>
+                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                        <th class="min-w-auto">Unit Kerja</th>
+                                                        <th class="min-w-auto">Jenis Claim</th>
+                                                        <th class="min-w-auto">Approval Status</th>
+                                                        {{-- <th class=""><center>Action</center></th> --}}
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-600">
+                                                    @foreach ($claims as $claim)
+                                                        @if ($claim->jenis_claim == 'Anti Claim')
+                                                            <tr>
+
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a class="text-hover-primary text-gray-500"
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
+                                                                    </a>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    {{ $claim->id_contract }}
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Email=-->
+                                                                <td>
+                                                                    {{ $proyek->kode_proyek }}
+                                                                </td>
+                                                                <!--end::Email=-->
+                                                                <!--begin::Company=-->
+                                                                <td>
+                                                                    {{ $proyek->nama_proyek }}
+                                                                    {{-- {{ $proyek->kode_proyek }} --}}
+                                                                </td>
+                                                                <!--end::Company=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    {{ $claim->jenis_claim }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    Pending
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                {{-- <td>
                                         <!--begin::Button-->
                                         <form action="/proyek/delete/" method="post" class="d-inline" >
                                             @method('delete')
@@ -471,75 +475,79 @@
                                         </form>
                                         <!--end::Button-->
                                     </td> --}}
-                                    <!--end::Action=-->
-                                </tr>
-                            @endif
-                            @endforeach
-                            </tbody>
-                    </table>
-                    <!--end::Table -->
-                </div>
-<!--end:::Tab Anti Claim-->
+                                                                <!--end::Action=-->
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <!--end::Table -->
+                                        </div>
+                                        <!--end:::Tab Anti Claim-->
 
 
-<!--begin:::Tab Claim Asuransi-->
-                <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
-                     <!--begin::Table Claim-->
-                     <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-                        <!--begin::Table head-->
-                        <thead>
-                            <!--begin::Table row-->
-                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-auto">ID Claim</th>
-                                <th class="min-w-auto">Kode Proyek</th>
-                                <th class="min-w-auto">Nama Proyek</th>
-                                <th class="min-w-auto">Unit Kerja</th>
-                                <th class="min-w-auto">Jenis Claim</th>
-                                <th class="min-w-auto">Approval Status</th>
-                                {{-- <th class=""><center>Action</center></th> --}}
-                            </tr>
-                            <!--end::Table row-->
-                        </thead>
-                        <!--end::Table head-->
-                        <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
-                            @foreach ($claims as $claim)
-                            @if($claim->jenis_claim == "Claim Asuransi")
-                                <tr>
-                                
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_claim }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Name=-->
-                                    <td>
-                                        {{ $claim->id_contract }}    
-                                    </td>
-                                    <!--end::Name=-->
-                                    <!--begin::Email=-->
-                                    <td>
-                                        {{ $proyek->kode_proyek }}
-                                    </td>
-                                    <!--end::Email=-->
-                                    <!--begin::Company=-->
-                                    <td>
-                                        {{ $proyek->nama_proyek }}
-                                        {{-- {{ $proyek->kode_proyek }} --}}
-                                    </td>
-                                    <!--end::Company=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        {{ $claim->jenis_claim }}  
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    <td>
-                                        Pending
-                                    </td>
-                                    <!--end::Action=-->
-                                    <!--begin::Action=-->
-                                    {{-- <td>
+                                        <!--begin:::Tab Claim Asuransi-->
+                                        <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
+                                            <!--begin::Table Claim-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_proyek_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-auto">ID Claim</th>
+                                                        <th class="min-w-auto">Kode Proyek</th>
+                                                        <th class="min-w-auto">Nama Proyek</th>
+                                                        <th class="min-w-auto">Unit Kerja</th>
+                                                        <th class="min-w-auto">Jenis Claim</th>
+                                                        <th class="min-w-auto">Approval Status</th>
+                                                        {{-- <th class=""><center>Action</center></th> --}}
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-600">
+                                                    @foreach ($claims as $claim)
+                                                        @if ($claim->jenis_claim == 'Claim Asuransi')
+                                                            <tr>
+
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a class="text-hover-primary text-gray-500"
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
+                                                                    </a>
+
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    {{ $claim->id_contract }}
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Email=-->
+                                                                <td>
+                                                                    {{ $proyek->kode_proyek }}
+                                                                </td>
+                                                                <!--end::Email=-->
+                                                                <!--begin::Company=-->
+                                                                <td>
+                                                                    {{ $proyek->nama_proyek }}
+                                                                    {{-- {{ $proyek->kode_proyek }} --}}
+                                                                </td>
+                                                                <!--end::Company=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    {{ $claim->jenis_claim }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    Pending
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                {{-- <td>
                                         <!--begin::Button-->
                                         <form action="/proyek/delete/" method="post" class="d-inline" >
                                             @method('delete')
@@ -550,95 +558,97 @@
                                         </form>
                                         <!--end::Button-->
                                     </td> --}}
-                                    <!--end::Action=-->
-                                </tr>
-                            @endif
-                            @endforeach
-                            </tbody>
-                    </table>
-                    <!--end::Table -->                    
-                </div>
-<!--end:::Tab pane Claim Asuransi-->
+                                                                <!--end::Action=-->
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                            <!--end::Table -->
+                                        </div>
+                                        <!--end:::Tab pane Claim Asuransi-->
 
 
-                </div>
-                <!--end:::Tab isi content-->
+                                    </div>
+                                    <!--end:::Tab isi content-->
 
-                </div>
-                <!--end::Card body-->
+                                </div>
+                                <!--end::Card body-->
 
-            </div>
-            <!--end::Content-->
-            </form>
-            <!--end::Form-->
-            
-        </div>
-        <!--end::Contacts App- Edit Contact-->
-
-
-<!--begin::Modal-->
-    {{-- begin::Calendar --}}
-    <!--begin::Modal - Calendar Start -->
-    <div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-300px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Approval Date</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                    </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
-
-                    <!--begin:: Calendar-->
-                    <div class="fv-row mb-5">
-                        <div class="calendar" id="approval-date">
-                            <div class="calendar__opts">
-                                <select name="calendar__month" id="calendar__month">
-                                    <option value="1" selected>Jan</option>
-                                    <option value="2">Feb</option>
-                                    <option value="3">Mar</option>
-                                    <option value="4">Apr</option>
-                                    <option value="5">May</option>
-                                    <option value="6">Jun</option>
-                                    <option value="7">Jul</option>
-                                    <option value="8">Aug</option>
-                                    <option value="9">Sep</option>
-                                    <option value="10">Oct</option>
-                                    <option value="11">Nov</option>
-                                    <option value="12">Dec</option>
-                                </select>
-
-                                <select name="calendar__year" id="calendar__year">
-                                    <option>2017</option>
-                                    <option>2018</option>
-                                    <option>2019</option>
-                                    <option selected>2020</option>
-                                    <option>2021</option>
-                                    <option>2022</option>
-                                </select>
                             </div>
+                            <!--end::Content-->
+                            </form>
+                            <!--end::Form-->
 
-                            <div class="calendar__body">
-                                {{-- <div class="calendar__days">
+                        </div>
+                        <!--end::Contacts App- Edit Contact-->
+
+
+                        <!--begin::Modal-->
+                        {{-- begin::Calendar --}}
+                        <!--begin::Modal - Calendar Start -->
+                        <div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1"
+                            aria-hidden="true">
+                            <!--begin::Modal dialog-->
+                            <div class="modal-dialog modal-dialog-centered mw-300px">
+                                <!--begin::Modal content-->
+                                <div class="modal-content">
+                                    <!--begin::Modal header-->
+                                    <div class="modal-header">
+                                        <!--begin::Modal title-->
+                                        <h2>Approval Date</h2>
+                                        <!--end::Modal title-->
+                                        <!--begin::Close-->
+                                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                            <span class="svg-icon svg-icon-1">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none">
+                                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                                        transform="rotate(-45 6 17.3137)" fill="black" />
+                                                    <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                                        transform="rotate(45 7.41422 6)" fill="black" />
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </div>
+                                        <!--end::Close-->
+                                    </div>
+                                    <!--end::Modal header-->
+                                    <!--begin::Modal body-->
+                                    <div class="modal-body py-lg-6 px-lg-6">
+
+                                        <!--begin:: Calendar-->
+                                        <div class="fv-row mb-5">
+                                            <div class="calendar" id="approval-date">
+                                                <div class="calendar__opts">
+                                                    <select name="calendar__month" id="calendar__month">
+                                                        <option value="1" selected>Jan</option>
+                                                        <option value="2">Feb</option>
+                                                        <option value="3">Mar</option>
+                                                        <option value="4">Apr</option>
+                                                        <option value="5">May</option>
+                                                        <option value="6">Jun</option>
+                                                        <option value="7">Jul</option>
+                                                        <option value="8">Aug</option>
+                                                        <option value="9">Sep</option>
+                                                        <option value="10">Oct</option>
+                                                        <option value="11">Nov</option>
+                                                        <option value="12">Dec</option>
+                                                    </select>
+
+                                                    <select name="calendar__year" id="calendar__year">
+                                                        <option>2017</option>
+                                                        <option>2018</option>
+                                                        <option>2019</option>
+                                                        <option selected>2020</option>
+                                                        <option>2021</option>
+                                                        <option>2022</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="calendar__body">
+                                                    {{-- <div class="calendar__days">
                                 <div>M</div>
                                 <div>T</div>
                                 <div>W</div>
@@ -648,84 +658,87 @@
                                 <div>S</div>
                                 </div> --}}
 
-                                <div class="calendar__dates">
-                                    {{-- <div class="calendar__date calendar__date--grey"><span>27</span></div>
+                                                    <div class="calendar__dates">
+                                                        {{-- <div class="calendar__date calendar__date--grey"><span>27</span></div>
                                     <div class="calendar__date calendar__date--grey"><span>28</span></div>
                                     <div class="calendar__date calendar__date--grey"><span>29</span></div>
                                     <div class="calendar__date calendar__date--grey"><span>30</span></div> --}}
-                                    <div class="calendar__date"><span>1</span></div>
-                                    <div class="calendar__date"><span>2</span></div>
-                                    <div class="calendar__date"><span>3</span></div>
-                                    <div class="calendar__date"><span>4</span></div>
-                                    <div class="calendar__date"><span>5</span></div>
-                                    <div class="calendar__date"><span>6</span></div>
-                                    <div class="calendar__date"><span>7</span></div>
-                                    <div class="calendar__date"><span>8</span></div>
-                                    <div class="calendar__date"><span>9</span></div>
-                                    <div class="calendar__date"><span>10</span></div>
-                                    <div class="calendar__date"><span>11</span></div>
-                                    <div class="calendar__date"><span>12</span></div>
-                                    <div class="calendar__date"><span>13</span></div>
-                                    <div class="calendar__date"><span>14</span></div>
-                                    <div class="calendar__date"><span>15</span></div>
-                                    <div class="calendar__date">
-                                        <span>16</span>
+                                                        <div class="calendar__date"><span>1</span></div>
+                                                        <div class="calendar__date"><span>2</span></div>
+                                                        <div class="calendar__date"><span>3</span></div>
+                                                        <div class="calendar__date"><span>4</span></div>
+                                                        <div class="calendar__date"><span>5</span></div>
+                                                        <div class="calendar__date"><span>6</span></div>
+                                                        <div class="calendar__date"><span>7</span></div>
+                                                        <div class="calendar__date"><span>8</span></div>
+                                                        <div class="calendar__date"><span>9</span></div>
+                                                        <div class="calendar__date"><span>10</span></div>
+                                                        <div class="calendar__date"><span>11</span></div>
+                                                        <div class="calendar__date"><span>12</span></div>
+                                                        <div class="calendar__date"><span>13</span></div>
+                                                        <div class="calendar__date"><span>14</span></div>
+                                                        <div class="calendar__date"><span>15</span></div>
+                                                        <div class="calendar__date">
+                                                            <span>16</span>
+                                                        </div>
+                                                        <div class="calendar__date">
+                                                            <span>17</span>
+                                                        </div>
+                                                        <div class="calendar__date">
+                                                            <span>18</span>
+                                                        </div>
+                                                        <div class="calendar__date"><span>19</span></div>
+                                                        <div class="calendar__date"><span>20</span></div>
+                                                        <div class="calendar__date">
+                                                            <span>21</span>
+                                                        </div>
+                                                        <div class="calendar__date"><span>22</span></div>
+                                                        <div class="calendar__date"><span>23</span></div>
+                                                        <div class="calendar__date"><span>24</span></div>
+                                                        <div class="calendar__date"><span>25</span></div>
+                                                        <div class="calendar__date"><span>26</span></div>
+                                                        <div class="calendar__date"><span>27</span></div>
+                                                        <div class="calendar__date"><span>28</span></div>
+                                                        <div class="calendar__date"><span>29</span></div>
+                                                        <div class="calendar__date"><span>30</span></div>
+                                                        <div class="calendar__date"><span>31</span></div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="calendar__buttons">
+                                                    <button class="btn btn-sm fw-normal btn-primary"
+                                                        style="background: #f3f6f9;color:black;" data-bs-dismiss="modal"
+                                                        id="cancel-date-btn-start">Back</button>
+
+                                                    <button class="btn btn-sm fw-normal btn-primary"
+                                                        data-bs-dismiss="modal"
+                                                        style="background-color: #e08c16;color: white;"
+                                                        id="set-calendar-start">Apply</button>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end::Calendar-->
+
                                     </div>
-                                    <div class="calendar__date">
-                                        <span>17</span>
-                                    </div>
-                                    <div class="calendar__date">
-                                        <span>18</span>
-                                    </div>
-                                    <div class="calendar__date"><span>19</span></div>
-                                    <div class="calendar__date"><span>20</span></div>
-                                    <div class="calendar__date">
-                                        <span>21</span>
-                                    </div>
-                                    <div class="calendar__date"><span>22</span></div>
-                                    <div class="calendar__date"><span>23</span></div>
-                                    <div class="calendar__date"><span>24</span></div>
-                                    <div class="calendar__date"><span>25</span></div>
-                                    <div class="calendar__date"><span>26</span></div>
-                                    <div class="calendar__date"><span>27</span></div>
-                                    <div class="calendar__date"><span>28</span></div>
-                                    <div class="calendar__date"><span>29</span></div>
-                                    <div class="calendar__date"><span>30</span></div>
-                                    <div class="calendar__date"><span>31</span></div>
+                                    <!--end::Input group-->
+
                                 </div>
+                                <!--end::Modal body-->
                             </div>
-
-                            <div class="calendar__buttons">
-                                <button class="btn btn-sm fw-normal btn-primary" style="background: #f3f6f9;color:black;"
-                                    data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
-
-                                <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                    style="background-color: #e08c16;color: white;" id="set-calendar-start">Apply</button>
-
-                            </div>
+                            <!--end::Modal content-->
                         </div>
+                        <!--end::Modal dialog-->
                     </div>
-                    <!--end::Calendar-->
+                    <!--end::Modal - Calendar Start -->
+                    {{-- end::Calendar --}}
+                    <!--end::Modal-->
+
 
                 </div>
-                <!--end::Input group-->
-
+                <!--end::Container-->
             </div>
-            <!--end::Modal body-->
-        </div>
-        <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Calendar Start -->
-    {{-- end::Calendar --}}
-<!--end::Modal-->
-
-        
-    </div>
-    <!--end::Container-->
-    </div>
-    <!--end::Post-->
+            <!--end::Post-->
 
 
         </div>
@@ -928,7 +941,6 @@
             elt.value = valueFormatted;
         }
         // end reformatNumber
-
     </script>
 
 @endsection
