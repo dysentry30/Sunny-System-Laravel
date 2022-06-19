@@ -790,12 +790,11 @@
                                                                                             @foreach ($proyek->Forecasts as $forecast)
                                                                                                 @if ($forecast->month_forecast == $i + 1)
                                                                                                     @php
-                                                                                                        // if ($index % 2 == 0) {
-                                                                                                        // }
                                                                                                         $total_forecast += (int) $forecast->nilai_forecast;
-                                                                                                        // $total_ok += (int)
                                                                                                     @endphp
-                                                                                                    <td>{{ $proyek->nilai_rkap }}
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->id }}">
+                                                                                                        {{ $proyek->nilai_rkap }}
                                                                                                     </td>
                                                                                                     <td>
                                                                                                         <input
@@ -811,7 +810,20 @@
                                                                                                             value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                             placeholder=". . . , -" />
                                                                                                     </td>
-                                                                                                    <td>10000</td>
+                                                                                                    @php
+                                                                                                        $arrNamaBulan = array("1"=>"Januari", "2"=>"Februari", "3"=>"Maret", "4"=>"April", "5"=>"Mei", "6"=>"Juni", "7"=>"Juli", "8"=>"Agustus", "9"=>"September", "10"=>"Oktober", "11"=>"November", "12"=>"Desember");
+                                                                                                        $getBulanRIPerolehanNumberOfMonth = array_search($proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+                                                                                                    @endphp
+                                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            {{number_format($nilai_terkontrak_formatted, 0, ",", ",")}}</td>
+                                                                                                    @else
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            -</td>
+                                                                                                    @endif
                                                                                                     @php
                                                                                                         $is_data_found = true;
                                                                                                     @endphp
@@ -822,7 +834,9 @@
                                                                                             @endphp
                                                                                         @endforeach
                                                                                         @if (!$is_data_found)
-                                                                                            <td>{{ $proyek->nilai_rkap }}
+                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->id }}">
+                                                                                                {{ $proyek->nilai_rkap }}
                                                                                             </td>
                                                                                             <td>
                                                                                                 <input type="text"
@@ -837,17 +851,30 @@
                                                                                                     value=""
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            <td>100000</td>
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            {{number_format($nilai_terkontrak_formatted, 0, ",", ",")}}</td>
+                                                                                                    @else
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            -</td>
+                                                                                                    @endif
                                                                                         @endif
                                                                                         @php
                                                                                             $is_data_found = false;
+                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
                                                                                             $month_counter++;
                                                                                         @endphp
                                                                                     @endfor
-                                                                                    <!--begin::Total Coloumn-->
-                                                                                    <td class="pinForecast HidePin">
+                                                                                    <!--begin::Total Side Coloumn-->
+                                                                                    @php
+                                                                                        $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                    @endphp
+                                                                                    <td data-id-proyek-ok-bulanan-total="{{ $proyek->id }}"
+                                                                                        class="pinForecast HidePin">
                                                                                         <center>
-                                                                                            <b>{{ $total_ok }}</b>
+                                                                                            <b>{{ $total_ok_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
@@ -856,14 +883,16 @@
                                                                                             <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
                                                                                         </center>
                                                                                     </td>
-                                                                                    <td class="pinForecast HidePin">
+                                                                                    <td class="pinForecast HidePin"
+                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->id }}">
                                                                                         <center><b>2,666,664</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin"
+                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->id }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                         <center>
-                                                                                            <b>{{ $proyek->nilai_rkap }}</b>
+                                                                                            <b>{{ $total_ok_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-forecast"
@@ -874,11 +903,12 @@
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin"
+                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->id }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                         <center><b>2,666,664</b>
                                                                                         </center>
                                                                                     </td>
-                                                                                    <!--end::Total Coloumn-->
+                                                                                    <!--end::Total Side Coloumn-->
                                                                             @endforeach
                                                                             {{-- end:: Foreach Proyek --}}
                                                                         @endif
@@ -903,20 +933,43 @@
                                                                         <!--end::Child=-->
                                                                     </td>
                                                                     @for ($i = 0; $i < 12; $i++)
-                                                                        <td>
-                                                                            <center><b>10000</b></center>
+                                                                        <td
+                                                                            data-total-ok-bulanan-column={{ $i + 1 }}>
+                                                                            <center>
+                                                                                <p class="placeholder-wave">
+                                                                                    <span
+                                                                                        class="placeholder col-4"></span>
+                                                                                </p>
+                                                                            </center>
                                                                         </td>
                                                                         <td
                                                                             data-total-forecast-column={{ $i + 1 }}>
-
+                                                                            <center>
+                                                                                <p class="placeholder-wave">
+                                                                                    <span
+                                                                                        class="placeholder col-4"></span>
+                                                                                </p>
+                                                                            </center>
                                                                         </td>
-                                                                        <td>
-                                                                            <center><b>10000</b></center>
+                                                                        <td
+                                                                            data-total-realisasi-bulanan-column={{ $i + 1 }}>
+                                                                            <center>
+                                                                                <p class="placeholder-wave">
+                                                                                    <span
+                                                                                        class="placeholder col-4"></span>
+                                                                                </p>
+                                                                            </center>
                                                                         </td>
                                                                     @endfor
                                                                     {{-- begin::Total Year --}}
-                                                                    <td class="pinForecast HidePin">
-                                                                        <center>{{ $proyek->nilai_rkap }}</center>
+                                                                    <td
+                                                                        class="pinForecast HidePin total-year-ok-bulanan">
+                                                                        <center>
+                                                                            <p class="placeholder-wave">
+                                                                                <span
+                                                                                    class="placeholder col-4"></span>
+                                                                            </p>    
+                                                                        </center>
                                                                     </td>
                                                                     <td
                                                                         class="pinForecast HidePin total-year-forecast-bulanan">
@@ -924,12 +977,17 @@
                                                                             <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
                                                                         </center>
                                                                     </td>
-                                                                    <td class="pinForecast HidePin">
+                                                                    <td
+                                                                        class="pinForecast HidePin total-year-realisasi-bulanan">
                                                                         <center><b>2,666,664</b></center>
                                                                     </td>
-                                                                    <td class="pinForecast ShowPin"
+                                                                    <td class="pinForecast ShowPin total-year-ok-bulanan"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                        <center><b>{{ $proyek->nilai_rkap }}</b>
+                                                                        <center>
+                                                                            <p class="placeholder-wave">
+                                                                                <span
+                                                                                    class="placeholder col-4"></span>
+                                                                            </p>
                                                                         </center>
                                                                     </td>
                                                                     <td class="pinForecast ShowPin total-year-forecast-bulanan"
@@ -938,7 +996,7 @@
                                                                             <b>{{ number_format((int) $total_year_forecast, 0, ',', ',') }}</b>
                                                                         </center>
                                                                     </td>
-                                                                    <td class="pinForecast ShowPin"
+                                                                    <td class="pinForecast ShowPin total-year-realisasi-bulanan"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                         <center><b>2,666,664</b></center>
                                                                     </td>
@@ -2452,7 +2510,6 @@
                 });
 
                 const formData = new FormData();
-                const date = new Date();
                 const dataColumnSame = document.querySelectorAll(`input[data-month="${dataMonth}"]`)
 
                 formData.append("_token", "{{ csrf_token() }}");
@@ -2489,9 +2546,9 @@
                     </center>
                     `;
                     });
-                    dataColumnSame.forEach(dataColumn => {
-                        dataColumn.value = nilaiFormatted;
-                    });
+                    // dataColumnSame.forEach(dataColumn => {
+                    //     dataColumn.value = nilaiFormatted;
+                    // });
                     totalColumn.innerHTML = `
                 <td>
                     <center><b>${columnValueFormatted}</b></center>
@@ -2536,81 +2593,152 @@
 
     function recalculateColumn() {
         // begin Calculate Total Column Forecast Bulanan 
-    const dataColumnTotalForecast = document.querySelectorAll(`td[data-total-forecast-column]`);
-    let totalForecast = 0;
-    dataColumnTotalForecast.forEach((forecast, i) => {
-        const totalColumnForecast = forecast.getAttribute("data-total-forecast-column");
-        const dataColumnForecast = document.querySelectorAll(
-            `input[data-column-forecast="${totalColumnForecast}"]`);
-        dataColumnForecast.forEach(dataForecast => {
-            totalForecast += Number(dataForecast.value.replaceAll(",", ""));
-        });
-        if (totalColumnForecast) {
-            const formattedForecastValue = Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 0,
-            }).format(totalForecast);
-            forecast.innerHTML = `
+        const dataColumnTotalForecast = document.querySelectorAll(`td[data-total-forecast-column]`);
+        let totalForecast = 0;
+        dataColumnTotalForecast.forEach((forecast, i) => {
+            const totalColumnForecast = forecast.getAttribute("data-total-forecast-column");
+            const dataColumnForecast = document.querySelectorAll(
+                `input[data-column-forecast="${totalColumnForecast}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalForecast += Number(dataForecast.value.replaceAll(",", ""));
+            });
+            if (totalColumnForecast) {
+                const formattedForecastValue = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalForecast);
+                forecast.innerHTML = `
             <td>
                 <center><b>${formattedForecastValue}</b></center>
             </td>
             `;
-        }
-        totalForecast = 0;
-    });
-    // end Calculate Total Column Forecast Bulanan
+            }
+            totalForecast = 0;
+        });
+        // end Calculate Total Column Forecast Bulanan
 
-    // begin Calculate Total Column Forecast Internal 
-    const dataColumnTotalForecastInternal = document.querySelectorAll(`td[data-total-forecast-internal-column]`);
-    let totalForecastInternal = 0;
-    dataColumnTotalForecastInternal.forEach((forecast, i) => {
-        const totalColumnForecast = forecast.getAttribute("data-total-forecast-internal-column");
-        const dataColumnForecast = document.querySelectorAll(
-            `input[data-column-forecast-internal="${totalColumnForecast}"]`);
-        dataColumnForecast.forEach(dataForecast => {
-            totalForecastInternal += Number(dataForecast.value.replaceAll(",", ""));
-        });
-        if (totalColumnForecast) {
-            const formattedForecastValue = Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 0,
-            }).format(totalForecastInternal);
-            forecast.innerHTML = `
+        // begin Calculate Total Column Forecast Internal 
+        const dataColumnTotalForecastInternal = document.querySelectorAll(`td[data-total-forecast-internal-column]`);
+        let totalForecastInternal = 0;
+        dataColumnTotalForecastInternal.forEach((forecast, i) => {
+            const totalColumnForecast = forecast.getAttribute("data-total-forecast-internal-column");
+            const dataColumnForecast = document.querySelectorAll(
+                `input[data-column-forecast-internal="${totalColumnForecast}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalForecastInternal += Number(dataForecast.value.replaceAll(",", ""));
+            });
+            if (totalColumnForecast) {
+                const formattedForecastValue = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalForecastInternal);
+                forecast.innerHTML = `
             <td>
                 <center><b>${formattedForecastValue}</b></center>
             </td>
             `;
-        }
-        totalForecastInternal = 0;
-    });
-    // end Calculate Total Column Forecast Internal
+            }
+            totalForecastInternal = 0;
+        });
+        // end Calculate Total Column Forecast Internal
 
-    // begin Calculate Total Column Forecast S/D 
-    const dataColumnTotalForecastSD = document.querySelectorAll(`td[data-total-column-forecast-sd]`);
-    let totalForecastSD = 0;
-    dataColumnTotalForecastSD.forEach((forecast, i) => {
-        const totalColumnForecast = forecast.getAttribute("data-total-column-forecast-sd");
-        const dataColumnForecast = document.querySelectorAll(
-            `input[data-column-forecast-sd="${totalColumnForecast}"]`);
-        dataColumnForecast.forEach(dataForecast => {
-            totalForecastSD += Number(dataForecast.value.replaceAll(",", ""));
-        });
-        if (totalColumnForecast) {
-            const formattedForecastValue = Intl.NumberFormat("en-US", {
-                maximumFractionDigits: 0,
-            }).format(totalForecastSD);
-            forecast.innerHTML = `
+        // begin Calculate Total Column Forecast S/D 
+        const dataColumnTotalForecastSD = document.querySelectorAll(`td[data-total-column-forecast-sd]`);
+        let totalForecastSD = 0;
+        dataColumnTotalForecastSD.forEach((forecast, i) => {
+            const totalColumnForecast = forecast.getAttribute("data-total-column-forecast-sd");
+            const dataColumnForecast = document.querySelectorAll(
+                `td[data-column-forecast-sd="${totalColumnForecast}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalForecastSD += Number(dataForecast.value.replaceAll(",", ""));
+            });
+            if (totalColumnForecast) {
+                const formattedForecastValue = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalForecastSD);
+                forecast.innerHTML = `
             <td>
                 <center><b>${formattedForecastValue}</b></center>
             </td>
             `;
-        }
-        totalForecastSD = 0;
-    });
-    // end Calculate Total Column Forecast S/D
+            }
+            totalForecastSD = 0;
+        });
+        // end Calculate Total Column Forecast S/D
+
+        // begin calculate total column OK Bulanan
+        const dataColumnTotalOKBulanan = document.querySelectorAll(`td[data-total-ok-bulanan-column]`);
+        let totalOKBulanan = 0;
+        dataColumnTotalOKBulanan.forEach((forecast, i) => {
+            const totalColumnForecast = forecast.getAttribute("data-total-ok-bulanan-column");
+            const dataColumnForecast = document.querySelectorAll(
+                `td[data-column-ok-bulanan="${totalColumnForecast}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalOKBulanan += Number(dataForecast.innerText.replaceAll(",", ""));
+            });
+            if (totalColumnForecast) {
+                const formattedForecastValue = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalOKBulanan);
+                forecast.innerHTML = `
+            <td>
+                <center><b>${formattedForecastValue}</b></center>
+            </td>
+            `;
+            }
+            totalOKBulanan = 0;
+        });
+        // end calculate total column OK Bulanan
+
+        // begin calculate total column Realisasi Bulanan
+        const dataColumnTotalRealisasiBulanan = document.querySelectorAll(`td[data-total-realisasi-bulanan-column]`);
+        let totalRealisasiBulanan = 0;
+        dataColumnTotalRealisasiBulanan.forEach((forecast, i) => {
+            const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
+            const dataColumnForecast = document.querySelectorAll(
+                `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, "") ?? 0);
+            });
+            if (totalColumnForecast) {
+                const formattedForecastValue = Intl.NumberFormat("en-US", {
+                    maximumFractionDigits: 0,
+                }).format(totalRealisasiBulanan);
+                forecast.innerHTML = `
+            <td>
+                <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+            </td>
+            `;
+            }
+            totalRealisasiBulanan = 0;
+        });
+        // end calculate total column Realisasi Bulanan
+
+        // begin calculate Total Year OK Column
+        // data-id-proyek-ok-bulanan
+        const dataColumnTotalYearOKBulanan = document.querySelectorAll(`.total-year-ok-bulanan`);
+        let totalYearOKBulanan = 0;
+        const dataColumnForecast = document.querySelectorAll(
+            `td[data-id-proyek-ok-bulanan-total]`);
+        dataColumnForecast.forEach(dataForecast => {
+            if(dataForecast.classList.contains("ShowPin")) {
+                totalYearOKBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
+            }
+        });
+        const formattedForecastValue = Intl.NumberFormat("en-US", {
+            maximumFractionDigits: 0,
+        }).format(totalYearOKBulanan);
+        totalYearOKBulanan = 0;
+        dataColumnTotalYearOKBulanan.forEach((forecast, i) => {
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+        // end calculate Total Year OK Column
+
     }
 
     recalculateColumn()
-
-    
 </script>
 @endsection
 {{-- end:: JS script --}}
