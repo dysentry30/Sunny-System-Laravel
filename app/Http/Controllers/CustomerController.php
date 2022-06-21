@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use App\Models\Proyek;
+use App\Models\UnitKerja;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
@@ -27,9 +29,12 @@ class CustomerController extends Controller
         $customer = Customer::find($id_customer);
         return view('Customer/viewCustomer', [
             "customer" => $customer, 
-            "customers" => Customer::all(),
+            // "customers" => Customer::all(),
             "attachment" => $customer->customerAttachments->all(),   
             "proyekberjalan" => $customer->proyekBerjalans->all(),
+            // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
+            // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
+            "proyeks" => Proyek::all(),
         ]);
     }
 
@@ -151,18 +156,23 @@ class CustomerController extends Controller
     public function customerHistory (
         Request $request, 
         Customer $modalCustomer, 
-        ProyekBerjalans $customerHistory) 
+        ProyekBerjalans $customerHistory,) 
         {
 
         $data = $request->all(); 
+        // $proyekAll = Proyek::all();
+
         $modalCustomer=Customer::find($data["id-customer"]);
         $customerHistory->id_customer = $data["id-customer"];
         $customerHistory->nama_proyek = $data["nama-proyek"];
-        $customerHistory->kode_proyek = $data["kode-proyek"];
-        $customerHistory->pic_proyek = $data["pic-proyek"];
-        $customerHistory->unit_kerja = $data["unit-kerja"];
-        $customerHistory->jenis_proyek = $data["jenis-proyek"];
-        $customerHistory->nilaiok_proyek = $data["nilaiok-proyek"];
+        
+        $dataProyek = Proyek::where('nama_proyek', "=", $data["nama-proyek"])->get()->first();
+        $customerHistory->kode_proyek = $dataProyek->kode_proyek;
+        $customerHistory->pic_proyek = $dataProyek->ketua_tender;
+        $customerHistory->unit_kerja = $dataProyek->unit_kerja;
+        $customerHistory->jenis_proyek = $dataProyek->jenis_proyek;
+        $customerHistory->nilaiok_proyek = $dataProyek->nilai_rkap;
+        $customerHistory->stage = $dataProyek->stage;
 
         $modalCustomer->save();
         $customerHistory->save();

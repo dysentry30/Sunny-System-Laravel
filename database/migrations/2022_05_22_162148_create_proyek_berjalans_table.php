@@ -15,13 +15,14 @@ return new class extends Migration
     {
         Schema::create('proyek_berjalans', function (Blueprint $table) {
             $table->id("id_proyek");
-            $table->mediumInteger("id_customer")->nullable();
+            $table->mediumInteger("id_customer");
             $table->mediumText("nama_proyek");
             $table->string("kode_proyek");
-            $table->string("pic_proyek");
+            $table->string("pic_proyek")->nullable();
             $table->string("unit_kerja");
             $table->string("jenis_proyek");
             $table->string("nilaiok_proyek");
+            $table->string("stage");
             // $table->timestamp("created_at")->useCurrent();
             $table->timestamps();
         });

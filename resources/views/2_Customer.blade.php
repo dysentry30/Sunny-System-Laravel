@@ -42,7 +42,7 @@
 										<a href="customer/new" class="btn btn-sm btn-primary"
 										
 										id="kt_toolbar_primary_button"
-										style="background-color:#ffa62b;">
+										style="background-color:#ffa62b; padding: 6px 30px 6px 30px"">
 										New</a>
 									   <!--end::Button-->
 
@@ -142,7 +142,7 @@
 														<th class="min-w-auto">Website</th>
 														<th class="min-w-auto">Created Date</th>
 														<th class="min-w-auto">PIC</th>
-														<th class="max-w-120px"><center>Action</center></th>
+														{{-- <th class="max-w-120px"><center>Action</center></th> --}}
 													</tr>
 													<!--end::Table row-->
 												</thead>
@@ -159,9 +159,10 @@
                                                         
                                                         <!--begin::Name=-->
 														<td>
-                                                            <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">
+                                                            {{-- <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a> --}}
+															<a class="text-gray-800 text-hover-primary mb-1" data-bs-toggle="collapse" href="#collapse{{ $customers->id_customer }}" role="button" aria-expanded="false" aria-controls="collapse{{ $customers->id_customer }}">
 																{{ $customers->name }}
-															</a>
+															  </a>
 														</td>
 														<!--end::Name=-->
 														<!--begin::Email=-->
@@ -186,7 +187,7 @@
 														<td>{{ $customers->name_pic }}</td>
 														<!--end::Date=-->
 														<!--begin::Action=-->
-														<td class="text-end">
+														{{-- <td class="text-end">
                                                             <center>
                                                             <div>
                                                                     <a href="/customer/view/{{ $customers->id_customer }}" class="btn btn-sm btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">View</a>
@@ -198,10 +199,22 @@
                                                                     </form>
                                                             </div>
                                                             </center>
-                                                        </td>
+															
+                                                        </td> --}}
                                                         <!--end::Action=-->
                                                     </tr>
-                                                        
+													<tr>
+														<td class="collapse" id="collapse{{ $customers->id_customer }}" colspan="6" >
+																<a href="/customer/view/{{ $customers->id_customer }}" class="btn btn-sm btn-light btn-active-primary min-w-100px" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">View</a>
+																
+																<form action="/customer/delete/{{ $customers->id_customer }}" method="post" class="d-inline" >
+																	@method('delete')
+																	@csrf
+																	<button class="btn btn-sm btn-light btn-active-danger min-w-100px" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+																</form>
+														</td>
+													</tr>
+													
                                                     @endforeach
                                                         
                                                     </tbody>
