@@ -187,56 +187,11 @@
                     <!--end::Page title-->
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
-
-                        <!--begin::Wrapper-->
-                        {{-- <div class="me-4" style="margin-left:10px;">
-                            <!--begin::Menu-->
-                            <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
-                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                                <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none">
-                                        <path
-                                            d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
-                                            fill="black"></path>
-                                    </svg>
-                                </span>
-                                <!--end::Svg Icon-->Action
-                            </a>
-                            <!--begin::Menu 1-->
-                            <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
-                                id="kt_menu_6155ac804a1c2">
-                                <!--begin::Header-->
-                                <div class="px-7 py-5">
-                                    <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-                                </div>
-                                <!--end::Header-->
-                                <!--begin::Menu separator-->
-                                <div class="separator border-gray-200"></div>
-                                <!--end::Menu separator-->
-                                <!--begin::Form-->
-                                <div class="px-7 py-5">
-                                    <!--begin::Input group-->
-                                    <div class="mb-10">
-                                        <!--begin::Label-->
-
-                                        <i class="fas fa-file-excel"></i>
-                                        <label class="form-label" style="margin-left:5px;">
-                                            Export Excel</label><br>
-                                        <i class="fas fa-file"></i>
-                                        <label class="form-label" style="margin-left:5px;">
-                                            Import Excel</label><br>
-                                        <!--end::Label-->
-                                    </div>
-                                </div>
-                                <!--end::Form-->
-                            </div>
-                            <!--end::Menu 1-->
-                            <!--end::Menu-->
-                        </div> --}}
-                        <!--end::Wrapper-->
-
+                    <!--begin::Button-->
+                    <a href="/claim-management" class="btn btn-sm btn-primary" id="customer_new_close"
+                    style="background-color:#f1f1f1; margin-left:10px; color: black;">
+                    Close</a>
+                    <!--end::Button-->
 
                     </div>
                     <!--end::Actions-->
@@ -289,7 +244,7 @@
                                 <!--begin::Card body-->
                                 <div class="card-body pt-5">
 
-                                    <!--begin:::Tabs Navigasi-->
+{{-- <!--begin:::Tabs Navigasi-->
                                     <ul
                                         class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                         <!--begin:::Tab item Claim-->
@@ -307,21 +262,25 @@
                                         </li>
                                         <!--end:::Tab item Anti Claim-->
 
-                                        <!--begin:::Tab item Prakualifikasi-->
+                                        <!--begin:::Tab item -->
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                 data-bs-toggle="tab" href="#kt_user_view_overview_asuransi"
                                                 style="font-size:14px;">Claim Asuransi</a>
                                         </li>
-                                        <!--end:::Tab item Prakualifikasi-->
+                                        <!--end:::Tab item -->
                                     </ul>
-
-                                    <!--end:::Tabs Navigasi-->
+<!--end:::Tabs Navigasi--> --}}
 
                                     <!--begin:::Tab isi content  -->
                                     <div class="tab-content" id="myTabContent">
+                                        <!--begin::Title-->
+                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">{{ $proyek->kode_proyek }} - {{ $proyek->nama_proyek }}  
+                                        </h3>
+                                        <br>
+                                        <!--end::Title-->
 
-                                        <!--begin:::Tab Claim-->
+<!--begin:::Tab Claim-->
                                         <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
                                             <!--begin::Table Claim-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -344,7 +303,7 @@
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-600">
                                                     @foreach ($claims as $claim)
-                                                        @if ($claim->jenis_claim == 'Claim')
+                                                        {{-- @if ($claim->jenis_claim == 'Claim') --}}
                                                             <tr>
 
                                                                 <!--begin::Name=-->
@@ -383,28 +342,28 @@
                                                                 <!--end::Action=-->
                                                                 <!--begin::Action=-->
                                                                 {{-- <td>
-                                        <!--begin::Button-->
-                                        <form action="/proyek/delete/" method="post" class="d-inline" >
-                                            @method('delete')
-                                            @csrf
-                                            <center>
-                                                <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                            </center>
-                                        </form>
-                                        <!--end::Button-->
-                                    </td> --}}
+                                                                <!--begin::Button-->
+                                                                <form action="/proyek/delete/" method="post" class="d-inline" >
+                                                                    @method('delete')
+                                                                    @csrf
+                                                                    <center>
+                                                                        <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+                                                                    </center>
+                                                                </form>
+                                                                <!--end::Button-->
+                                                                </td> --}}
                                                                 <!--end::Action=-->
                                                             </tr>
-                                                        @endif
+                                                        {{-- @endif --}}
                                                     @endforeach
                                                 </tbody>
                                             </table>
                                             <!--end::Table -->
                                         </div>
-                                        <!--end:::Tab Claim-->
+<!--end:::Tab Claim-->
 
 
-                                        <!--begin:::Tab Anti Claim-->
+{{-- <!--begin:::Tab Anti Claim-->
                                         <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
                                             <!--begin::Table Claim-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -419,7 +378,6 @@
                                                         <th class="min-w-auto">Unit Kerja</th>
                                                         <th class="min-w-auto">Jenis Claim</th>
                                                         <th class="min-w-auto">Approval Status</th>
-                                                        {{-- <th class=""><center>Action</center></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -450,7 +408,6 @@
                                                                 <!--begin::Company=-->
                                                                 <td>
                                                                     {{ $proyek->nama_proyek }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
                                                                 </td>
                                                                 <!--end::Company=-->
                                                                 <!--begin::Action=-->
@@ -463,19 +420,6 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
-                                                                {{-- <td>
-                                        <!--begin::Button-->
-                                        <form action="/proyek/delete/" method="post" class="d-inline" >
-                                            @method('delete')
-                                            @csrf
-                                            <center>
-                                                <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                            </center>
-                                        </form>
-                                        <!--end::Button-->
-                                    </td> --}}
-                                                                <!--end::Action=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -483,10 +427,10 @@
                                             </table>
                                             <!--end::Table -->
                                         </div>
-                                        <!--end:::Tab Anti Claim-->
+<!--end:::Tab Anti Claim--> --}}
 
 
-                                        <!--begin:::Tab Claim Asuransi-->
+{{-- <!--begin:::Tab Claim Asuransi-->
                                         <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
                                             <!--begin::Table Claim-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -501,7 +445,6 @@
                                                         <th class="min-w-auto">Unit Kerja</th>
                                                         <th class="min-w-auto">Jenis Claim</th>
                                                         <th class="min-w-auto">Approval Status</th>
-                                                        {{-- <th class=""><center>Action</center></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
                                                 </thead>
@@ -511,13 +454,11 @@
                                                     @foreach ($claims as $claim)
                                                         @if ($claim->jenis_claim == 'Claim Asuransi')
                                                             <tr>
-
                                                                 <!--begin::Name=-->
                                                                 <td>
                                                                     <a class="text-hover-primary text-gray-500"
                                                                         href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                                     </a>
-
                                                                 </td>
                                                                 <!--end::Name=-->
                                                                 <!--begin::Name=-->
@@ -533,7 +474,6 @@
                                                                 <!--begin::Company=-->
                                                                 <td>
                                                                     {{ $proyek->nama_proyek }}
-                                                                    {{-- {{ $proyek->kode_proyek }} --}}
                                                                 </td>
                                                                 <!--end::Company=-->
                                                                 <!--begin::Action=-->
@@ -546,19 +486,6 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
-                                                                {{-- <td>
-                                        <!--begin::Button-->
-                                        <form action="/proyek/delete/" method="post" class="d-inline" >
-                                            @method('delete')
-                                            @csrf
-                                            <center>
-                                                <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                            </center>
-                                        </form>
-                                        <!--end::Button-->
-                                    </td> --}}
-                                                                <!--end::Action=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -566,7 +493,7 @@
                                             </table>
                                             <!--end::Table -->
                                         </div>
-                                        <!--end:::Tab pane Claim Asuransi-->
+<!--end:::Tab pane Claim Asuransi--> --}}
 
 
                                     </div>
@@ -584,7 +511,7 @@
                         <!--end::Contacts App- Edit Contact-->
 
 
-                        <!--begin::Modal-->
+<!--begin::Modal-->
                         {{-- begin::Calendar --}}
                         <!--begin::Modal - Calendar Start -->
                         <div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1"

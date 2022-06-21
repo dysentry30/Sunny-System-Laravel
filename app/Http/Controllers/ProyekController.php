@@ -21,10 +21,10 @@ class ProyekController extends Controller
     }
 
 
-    public function new()
-    {
-        return view('Proyek/newProyek');   
-    }
+    // public function new()
+    // {
+    //     return view('Proyek/newProyek');   
+    // }
 
 
     public function save(Request $request, Proyek $newProyek)

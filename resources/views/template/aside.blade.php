@@ -49,7 +49,7 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title-2">Account</span>
+                        <span class="menu-title-2">Pelanggan</span>
                     </a>
                 </div>
             </div>

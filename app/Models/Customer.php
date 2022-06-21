@@ -20,5 +20,10 @@ class Customer extends Model
     {
         return $this->hasMany(ProyekBerjalans::class, "id_customer");
     }
+    
+    public function proyek()
+    {
+        return $this->hasMany(Proyek::class);
+    }
 
 }

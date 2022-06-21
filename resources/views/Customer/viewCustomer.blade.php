@@ -638,72 +638,84 @@
 															<!--end:::Tab pane Informasi Perusahaan-->
 
                                                             
-															<!--begin:::Tab pane History-->
+<!--begin:::Tab pane History-->
 															<div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
-                                                                <!--begin::Card title-->
-                                                                <div class="card-title m-0">
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                                        Proyek Berjalan
-                                                                        <a href="#" Id="Plus"
-                                                                        data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a>
-                                                                    </h3>
-                                                                    &nbsp;<br>
-                                                                    <!--begin::Table-->
-                                                                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                                                        <!--begin::Table head-->
-                                                                        <thead>
-                                                                            <!--begin::Table row-->
-                                                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                                <th class="min-w-auto">Nama Proyek</th>
-                                                                                <th class="min-w-auto">Kode Proyek</th>
-                                                                                <th class="min-w-auto">Unit kerja</th>
-                                                                                <th class="min-w-auto">Jenis Proyek</th>
-                                                                                <th class="min-w-auto">Nama PIC</th>
-                                                                                <th class="min-w-auto">Nilai OK</th>
-                                                                            </tr>
-                                                                            <!--end::Table row-->
-                                                                        </thead>
-                                                                        <!--end::Table head-->
-                                                                        <!--begin::Table body-->
+
+                                                            {{-- @if ($proyekberjalan->stage > 0) --}}
+                                                            <!--begin::Proyek Berjalan-->
+                                                            <div class="card-title m-0">
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                    Proyek Berjalan
+                                                                    <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a>
+                                                                </h3>
+                                                                &nbsp;<br>
+
+                                                                <!--begin::Table-->
+                                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Kode Proyek</th>
+                                                                            <th class="min-w-auto">Unit kerja</th>
+                                                                            <th class="min-w-auto">Jenis Proyek</th>
+                                                                            <th class="min-w-auto">Nama PIC</th>
+                                                                            <th class="min-w-auto">Nilai OK</th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
                                                                     <tbody class="fw-bold text-gray-600">
                                                                         @if (isset($proyekberjalan))
-                                                                        @foreach ($proyekberjalan as $proyekberjalan)
-                                                                            
+                                                                        @foreach ($proyekberjalan as $proyekberjalan0)
+                                                                        @if ( $proyekberjalan0->stage <= 6)
                                                                         <tr>
                                                                             <!--begin::Name=-->
                                                                             <td>
                                                                                 <a href="#" class="text-gray-800 text-hover-primary mb-1">
-                                                                                    {{ $proyekberjalan->nama_proyek }}
+                                                                                    {{ $proyekberjalan0->nama_proyek }}
                                                                                 </a>
                                                                             </td>
                                                                             <!--end::Name=-->
                                                                             <!--begin::Kode=-->
                                                                             <td>
                                                                                 <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                                                    {{ $proyekberjalan->kode_proyek }}</a>
-                                                                                </td>
-                                                                                <!--end::Kode=-->
-                                                                                <!--begin::Unit=-->
-                                                                                <td>{{ $proyekberjalan->unit_kerja }}</td>
-                                                                                <!--end::Unit=-->
-                                                                                <!--begin::Jenis=-->
-                                                                                <td>{{ $proyekberjalan->jenis_proyek }}</td>
-                                                                                <!--end::Jenis=-->
-                                                                                <!--begin::PIC=-->
-                                                                                <td>{{ $proyekberjalan->jenis_proyek }}</td>
-                                                                                <!--end::PIC=-->
-                                                                                <!--begin::Nilai OK=-->
-                                                                                <td>{{ $proyekberjalan->nilaiok_proyek }}</td>
-                                                                                <!--end::Nilai OK=-->
-                                                                            </tr>
-                                                                            
-                                                                            @endforeach
-                                                                            @endif
-                                                                        </tbody>
-                                                                            <!--end::Table body-->
-                                                                        </table>
-                                                                        <!--end::Table-->
-                                                                    </div>
+                                                                                    {{ $proyekberjalan0->kode_proyek }}
+                                                                                </a>
+                                                                            </td>
+                                                                            <!--end::Kode=-->
+                                                                            <!--begin::Unit=-->
+                                                                            <td>
+                                                                                {{ $proyekberjalan0->UnitKerja->unit_kerja }}
+                                                                            </td>
+                                                                            <!--end::Unit=-->
+                                                                            <!--begin::Jenis=-->
+                                                                            <td>{{ $proyekberjalan0->jenis_proyek == "I" ? "Internal" : "External"}}</td>
+                                                                            <!--end::Jenis=-->
+                                                                            <!--begin::PIC=-->
+                                                                            <td>{{ $proyekberjalan0->pic_proyek ?? "Belum ditetapkan" }}</td>
+                                                                            <!--end::PIC=-->
+                                                                            <!--begin::Nilai OK=-->
+                                                                            <td>{{ $proyekberjalan0->nilaiok_proyek }}</td>
+                                                                            <!--end::Nilai OK=-->
+
+                                                                        </tr>
+                                                                        @endif
+                                                                        @endforeach
+                                                                        @endif
+                                                                        
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
+                                                            <!--end::Proyek Berjalan-->
+                                                            {{-- @endif --}}
+
+
                                                                     &nbsp;<br>
                                                                     &nbsp;<br>
                                                                     &nbsp;<br>
@@ -729,64 +741,74 @@
                                                                                     <th class="min-w-auto">Tanggal Mulai Kontrak</th>
                                                                                     <th class="min-w-auto">No.SPK</th>
                                                                                 </tr>
-																			<!--end::Table row-->
-																		</thead>
-																		<!--end::Table head-->
-																		<!--begin::Table body-->
-																		<tbody class="fw-bold text-gray-600">
-																			<tr>
-																				<!--begin::Name=-->
-																				<td>
-																					<a href="#" class="text-gray-800 text-hover-primary mb-1">
-																						Proyek Pembangun Gedung Baru K4
-																					</a>
-																				</td>
-																				<!--end::Name=-->
-																				<!--begin::Kode=-->
-																				<td>
-																					<a href="#" class="text-gray-600 text-hover-primary mb-1">
-																						3EPD172</a>
-																				</td>
-																				<!--end::Kode=-->
-																				<!--begin::Unit=-->
-																				<td>Wika Bangun Gedung</td>
-																				<!--end::Unit=-->
-																				<!--begin::Jenis=-->
-																				<td>External</td>
-																				<!--end::Jenis=-->
-																				<!--begin::PIC=-->
-																				<td>Joe Satriani</td>
-																				<!--end::PIC=-->
-																				<!--begin::Nilai OK=-->
-																				<td>19,122,000,000</td>
-																				<!--end::Nilai OK=-->
-																				<!--begin::Nilai Kontrak=-->
-																				<td>19,000,000,000</td>
-																				<!--end::Nilai Kontrak=-->
-																				<!--begin::Tanggal Mulai Kontrak=-->
-																				<td>04/27/2022</td>
-																				<!--end::Tanggal Mulai Kontrak=-->
-																				<!--begin::No.SPK=-->
-																				<td>SPK/XII/202/2022</td>
-																				<!--end::No.SPK=-->
-																			</tr>
-																			
-																		</tbody>
-																		<!--end::Table body-->
-																	</table>
-																<!--end::Table-->
-															</div>
-                                                            <!--end::Card title-->
+																			    <!--end::Table row-->
+                                                                            </thead>
+                                                                            <!--end::Table head-->
+                                                                            <!--begin::Table body-->
+                                                                            <tbody class="fw-bold text-gray-600">
+
+
+                                                                                @if (isset($proyekberjalan))
+                                                                                @foreach ($proyekberjalan as $proyekberjalan6)
+                                                                                @if ( $proyekberjalan6->stage > 6)
+                                                                                <tr>
+                                                                                    <!--begin::Name=-->
+                                                                                    <td>
+                                                                                        <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                                            {{ $proyekberjalan6->nama_proyek }}
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <!--end::Name=-->
+                                                                                    <!--begin::Kode=-->
+                                                                                    <td>
+                                                                                        <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                                            {{ $proyekberjalan6->kode_proyek }}
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <!--end::Kode=-->
+                                                                                    <!--begin::Unit=-->
+                                                                                    <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}</td>
+                                                                                    <!--end::Unit=-->
+                                                                                    <!--begin::Jenis=-->
+                                                                                    <td>{{ $proyekberjalan6->jenis_proyek == "I" ? "Internal" : "External"}}</td>
+                                                                                    <!--end::Jenis=-->
+                                                                                    <!--begin::PIC=-->
+                                                                                    <td>{{ $proyekberjalan6->pic_proyek ?? "Belum ditetapkan" }}</td>
+                                                                                    <!--end::PIC=-->
+                                                                                    <!--begin::Nilai OK=-->
+                                                                                    <td>{{ $proyekberjalan6->nilaiok_proyek }}</td>
+                                                                                    <!--end::Nilai OK=-->
+                                                                                    <!--begin::Nilai Kontrak=-->
+                                                                                    <td>-</td>
+                                                                                    <!--end::Nilai Kontrak=-->
+                                                                                    <!--begin::Tanggal Mulai Kontrak=-->
+                                                                                    <td>-</td>
+                                                                                    <!--end::Tanggal Mulai Kontrak=-->
+                                                                                    <!--begin::No.SPK=-->
+                                                                                    <td>-</td>
+                                                                                    <!--end::No.SPK=-->
+                                                                                </tr>
+                                                                                @endif
+
+                                                                                @endforeach
+                                                                                @endif
+                                                                                
+                                                                            </tbody>
+                                                                            <!--end::Table body-->
+                                                                        </table>
+                                                                        <!--end::Table-->
+                                                                    </div>
+                                                                    <!--end::Card title-->
                                                             <!--begin::Menu separator-->
-                                                            <!-- <div class="separator border-gray-200" style="margin-top: 10px;"></div> -->
+                                                            <div class="separator border-gray-200" style="margin-top: 10px;"></div>
                                                             <!--end::Menu separator-->
 															</div>
-                                                    <!--end:::Tab pane History-->
+<!--end:::Tab pane History-->
 
 
 
 
-															<!--begin:::Tab pane Atachment & Notes-->
+<!--begin:::Tab pane Atachment & Notes-->
 															<div class="tab-pane fade" id="kt_user_view_overview_AttNotes" role="tabpanel">
 																<input type="file" id="file" class="file" hidden>
 																<!--begin::Attachment-->
@@ -859,7 +881,7 @@
                                                                 &nbsp;<br>
                                                                 &nbsp;<br>
 
-                                                            <!--EDITED end::Attachement Table-->
+<!--end::Attachement Table-->
 
 
 
@@ -899,8 +921,8 @@
 																				</label>
 																				<!--end::Label-->
 																				<!--begin::Input-->
-																				<input type="text" class="form-control form-control-solid" 
-																				id="nilaiok-performance" name="nilaiok-performance" value="{{ $customer->nilaiok }}" placeholder="Nilai OK" onkeyup="reformatNilaiOk()" />
+																				<input type="text" class="form-control form-control-solid reformat" 
+																				id="nilaiok-performance" name="nilaiok-performance" value="{{ $customer->nilaiok }}" placeholder="Nilai OK" />
 																				<!--end::Input-->
 																			</div>
 																		<!--end::Input group-->
@@ -915,8 +937,8 @@
 																				</label>
 																				<!--end::Label-->
 																				<!--begin::Input-->
-																				<input type="text" class="form-control form-control-solid" 
-																				name="piutang-performance" value="{{ $customer->piutang }}" placeholder="Piutang" onkeyup="reformatPiutang()" />
+																				<input type="text" class="form-control form-control-solid reformat" 
+																				name="piutang-performance" value="{{ $customer->piutang }}" placeholder="Piutang" />
 																				<!--end::Input-->
 																			</div>
 																		<!--end::Input group-->
@@ -936,8 +958,8 @@
 																				</label>
 																				<!--end::Label-->
 																				<!--begin::Input-->
-																				<input type="text" class="form-control form-control-solid" 
-																				name="laba-performance" value="{{ $customer->laba }}" placeholder="Laba" onkeyup="reformatlaba()"/>
+																				<input type="text" class="form-control form-control-solid reformat" 
+																				name="laba-performance" value="{{ $customer->laba }}" placeholder="Laba"/>
 																				<!--end::Input-->
 																			</div>
 																		<!--end::Input group-->
@@ -952,8 +974,8 @@
 																				</label>
 																				<!--end::Label-->
 																				<!--begin::Input-->
-																				<input type="text" class="form-control form-control-solid" 
-																				name="rugi-performance" value="{{ $customer->rugi }}" placeholder="Rugi" onkeyup="reformatRugi()"/>
+																				<input type="text" class="form-control form-control-solid reformat" 
+																				name="rugi-performance" value="{{ $customer->rugi }}" placeholder="Rugi"/>
 																				<!--end::Input-->
 																			</div>
 																		<!--end::Input group-->
@@ -963,28 +985,6 @@
 																	<!--End begin::Row-->
 																</div>
 															</div>
-                                                            <script>
-                                                                var nilaiOk = document.getElementById("nilaiok-performance");
-                                                                function reformatNilaiOk() {
-                                                                const valueFormatted = Intl.NumberFormat("en-US").format(nilaiOk.value.toString().replace(/[^0-9]/gi, ""));
-                                                                nilaiOk.value = valueFormatted;
-                                                                }
-                                                                var piutang = document.getElementById("piutang-performance");
-                                                                function reformatPiutang() {
-                                                                const valueFormatted = Intl.NumberFormat("en-US").format(piutang.value.toString().replace(/[^0-9]/gi, ""));
-                                                                piutang.value = valueFormatted;
-                                                                }
-                                                                var laba = document.getElementById("laba-performance");
-                                                                function reformatLaba() {
-                                                                const valueFormatted = Intl.NumberFormat("en-US").format(laba.value.toString().replace(/[^0-9]/gi, ""));
-                                                                laba.value = valueFormatted;
-                                                                }
-                                                                var rugi = document.getElementById("rugi-performance");
-                                                                function reformatRugi() {
-                                                                const valueFormatted = Intl.NumberFormat("en-US").format(rugi.value.toString().replace(/[^0-9]/gi, ""));
-                                                                rugi.value = valueFormatted;
-                                                                }
-                                                            </script>
 															<!--end:::Tab pane Performance-->
 
 															</div>
@@ -1002,13 +1002,12 @@
 							<!--end::Container-->
 						</div>
 						<!--end::Post-->
-                        </form>
-					    <!--end::Form-->                
-                    
-                    </div>
+                    </form>
+                    <!--end::Form-->                
+                </div>
 					<!--end::Content-->                
 
-                <!--begin::Footer-->
+                    <!--begin::Footer-->
 
                 <!--end::Footer-->
             </div>
@@ -1017,7 +1016,6 @@
         <!--end::Page-->
     </div>
     <!--end::Root-->
-
 
 
     <!--begin::Modal-->
@@ -1055,26 +1053,59 @@
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
                     
+                    
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-5">
-                        <!--begin::Label-->
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Name Proyek</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" 
-                        id="nama-proyek" name="nama-proyek" value="" placeholder="Name Proyek" />
-                        <!--end::Input-->
+
+                        {{-- @dd($proyekberjalan) --}}
+                        {{-- @foreach ($proyekberjalan as $proyekberjalan ) --}}
                         
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Kode Proyek</span>
+                            <span class="required">Name Proyek</span>
                         </label>
                         <!--end::Label-->
                         <!--begin::Input-->
-                        <input type="text" class="form-control form-control-solid" 
-                        id="kode-proyek" name="kode-proyek" value="" placeholder="Kode Proyek" />
+                            <select name="nama-proyek" 
+                                class="form-select form-select-solid" 
+                                data-control="select2" data-hide-search="true" 
+                                data-placeholder="Nama Proyek">
+                                <option></option>
+                                @foreach ($proyeks as $proyek)
+                                    {{-- @if ( $proyekberjalans->nama_proyek == $proyek->nama_proyek )
+                                        <option value="{{ $proyek->nama_proyek }}" disabled>{{$proyek->nama_proyek }}</option>
+                                    @else --}}
+                                        <option value="{{ $proyek->nama_proyek }}" >{{$proyek->nama_proyek }}</option>
+                                    {{-- @endif --}}
+                                @endforeach
+                                
+                            </select>
+                            @error('nama-proyek')
+                                <h6 class="text-danger">{{ $message }}</h6>
+                            @enderror
+                        <!--end::Input-->
+
+                        {{-- @endforeach --}}
+
+                        
+                        {{-- <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span class="required">Kode Proyek</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                            <select name="kode-proyek" 
+                                class="form-select form-select-solid" 
+                                data-control="select2" data-hide-search="true" 
+                                data-placeholder="Nama Proyek">
+                                <option></option>
+                                @foreach ($proyeks as $proyek)
+                                    <option value="{{ $proyek->kode_proyek }}" >{{$proyek->kode_proyek }}</option>
+                                @endforeach
+                            </select>
+                            @error('kode-proyek')
+                                <h6 class="text-danger">{{ $message }}</h6>
+                            @enderror
                         <!--end::Input-->
                         
                         <!--begin::Label-->
@@ -1144,7 +1175,7 @@
                                 nilaiOkProyek.value = valueFormatted;
                                 }
                             </script>
-                            <!--end::Input-->
+                            <!--end::Input--> --}}
                             
                             <!--begin::Label-->
                             {{-- <label class="fs-6 fw-bold form-label mt-3">
