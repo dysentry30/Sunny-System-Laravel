@@ -204,7 +204,7 @@
                         
 
                     <!--begin:: id_customer selected-->
-                    <input type="hidden" name="id" value="{{ $proyek->id }}" id="id">
+                    <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}" id="kode-proyek">
                     <!--end:: id_customerid-->
                     
                     
@@ -599,7 +599,8 @@
                                                         <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
-                                                    
+
+
                                                     <!--begin::Row Kanan+Kiri-->
                                                     <div class="row fv-row">
                                                         <!--begin::Col-->
@@ -638,12 +639,11 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Nilai OK RKAP</span>
+                                                                    <span class="required">Tahun Perolehan</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid reformat" 
-                                                                id="nilai-rkap" name="nilai-rkap" value="{{ $proyek->nilai_rkap }}" placeholder="Nilai RKAP" />
+                                                                <input type="number" class="form-control form-control-solid" name="tahun-perolehan" min="2021" max="2099" step="1" value="{{ $proyek->tahun_perolehan }}" disabled/>
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->
@@ -651,8 +651,8 @@
                                                         <!--End::Col-->
                                                     </div>
                                                     <!--End::Row Kanan+Kiri-->
-
-
+                                                    
+                                                    
                                                     <!--begin::Row Kanan+Kiri-->
                                                     <div class="row fv-row">
                                                         <!--begin::Col-->
@@ -686,11 +686,67 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Tahun Perolehan</span>
+                                                                    <span class="required">Nilai OK RKAP</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="number" class="form-control form-control-solid" name="tahun-perolehan" min="2021" max="2099" step="1" value="{{ $proyek->tahun_perolehan }}" />
+                                                                <input type="text" class="form-control form-control-solid reformat" 
+                                                                id="nilai-rkap" name="nilai-rkap" value="{{ $proyek->nilai_rkap }}" placeholder="Nilai OK RKAP" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End::Col-->
+                                                    </div>
+                                                    <!--End::Row Kanan+Kiri-->
+
+
+                                                    <!--begin::Row Kanan+Kiri-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Customer</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
+                                                                <select id="customer" name="customer" class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
+                                                                    data-placeholder="Pilih Customer">
+                                                                    <option></option>
+                                                                    @if (isset($proyekberjalans))
+                                                                        @foreach ($customers as $customer)
+                                                                        @if ($customer->id_customer == $proyekberjalans->id_customer)
+                                                                        <option value="{{ $customer->name }}" selected>{{$customer->name }}</option>
+                                                                        @else
+                                                                        <option value="{{ $customer->id_customer }}">{{$customer->name }}</option>
+                                                                        @endif
+                                                                        @endforeach
+                                                                    @else
+                                                                        @foreach ($customers as $customer)
+                                                                        <option value="{{ $customer->id_customer }}">{{$customer->name }}</option>
+                                                                        @endforeach
+                                                                    @endif
+                                                                </select>
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span >Nama PIC</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text" class="form-control form-control-solid" 
+                                                                id="pic" name="pic" value="{{ $proyek->pic }}" placeholder="Nama PIC" />
                                                                 <!--end::Input-->
                                                             </div>
                                                             <!--end::Input group-->

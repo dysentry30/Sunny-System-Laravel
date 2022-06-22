@@ -22,30 +22,50 @@ class ClaimController extends Controller
      */
     public function index()
     {
-        $all_proyek = Proyek::all();
-        $proyek_with_claim = [];
-        foreach ($all_proyek as $proyek) {
-            if(count($proyek->ClaimManagements) > 0) {
-                array_push($proyek_with_claim, $proyek);
-            }
-        }
-        // ClaimManagements::groupBy('kode_proyek')->havingRaw('COUNT(*) > 1')->get();
-        // dd($proyek_with_claim);
-        return view("5_claim", ["proyek_with_claim" => array_reverse($proyek_with_claim)]);
+        // $all_proyek = Proyek::all();
+        // $proyek_with_claim = [];
+        // foreach ($all_proyek as $proyek) {
+        //     if(count($proyek->ClaimManagements) > 0) {
+        //         array_push($proyek_with_claim, $proyek);
+        //     }
+        // }
+        
+        $proyekClaim = Proyek::WhereHas('ClaimManagements', function ($claim){
+            $claim->where('jenis_claim', '=', "Claim");
+        })->get();
+        
+        $proyekAnti = Proyek::WhereHas('ClaimManagements', function ($claim){
+            $claim->where('jenis_claim', '=', "Anti Claim");
+        })->get();
 
-        // return view("5_claim", ['claims' => ClaimManagements::all() ]);
+        $proyekAsuransi = Proyek::WhereHas('ClaimManagements', function ($claim){
+            $claim->where('jenis_claim', '=', "Claim Asuransi");
+        })->get();
+        
+        // dd($proyekClaim);
+        return view("5_claim", ["proyekClaim" => $proyekClaim, "proyekAnti" => $proyekAnti, "proyekAsuransi" => $proyekAsuransi]);
     }
 
-    public function viewClaim($id_proyek)
+    public function viewClaim($id_proyek, $jenis_claim)
     {   
         $proyek = Proyek::find($id_proyek);
         $claim = $proyek->ClaimManagements;
-        // dd($claim);
+        $jenis_claim = str_replace('-', ' ', $jenis_claim);
+        $proyekClaim = [];
+        foreach ($claim as $claims) {
+                if($claims->jenis_claim == $jenis_claim) {
+                    array_push($proyekClaim, $claims);
+                }
+            }
 
-        return view("claimManagement/viewClaim", ['claims' => $claim, 'proyek' => $proyek]);
+        // dd($jenis_claim);
+        // dd($proyekClaim);
+        
+        // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
+
+
+        return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek]);
     }
-
-
 
 
 

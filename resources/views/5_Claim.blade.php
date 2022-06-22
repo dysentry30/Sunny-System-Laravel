@@ -147,7 +147,7 @@
                                 <!--begin:::Tab item Anti Claim-->
                                 <li class="nav-item">
                                     <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                        data-bs-toggle="tab" href="#kt_user_view_overview_potensial"
+                                        data-bs-toggle="tab" href="#kt_user_view_overview_anticlaim"
                                         style="font-size:14px;">Anti Claim</a>
                                 </li>
                                 <!--end:::Tab item Anti Claim-->
@@ -179,16 +179,14 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
-                                                <th class="min-w-auto">Total</th>
+                                                {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
-                                            {{-- @foreach ($claims as $claim) --}}
-                                            @foreach ($proyek_with_claim as $claimProyek)
-                                                {{-- @if ($claim->jenis_claim == 'Claim') --}}
+                                            @foreach ($proyekClaim as $proyekClaims)
                                                     <tr>
 
                                                         <!--begin::Name=-->
@@ -196,17 +194,17 @@
                                                             {{-- <a class="text-hover-primary text-gray-500"
                                                                 href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                             </a> --}}
-                                                            <a href="/claim-management/proyek/{{ $claimProyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekClaims->id }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{ $claimProyek->nama_proyek }}
+                                                            {{ $proyekClaims->nama_proyek }}
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->
                                                         <td>
-                                                            {{ $claimProyek->UnitKerja->unit_kerja }}
+                                                            {{ $proyekClaims->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Email=-->
                                                         <!--begin::Action=-->
@@ -216,16 +214,15 @@
                                                         <!--end::Action=-->
                                                         <!--begin::Action=-->
                                                         <td>
-                                                            <a href="/contract-management/view/{{ $claimProyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->ContractManagements->id_contract }}</a>
+                                                            <a href="/contract-management/view/{{ $proyekClaims->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a>
                                                         </td>
                                                         <!--end::Action=-->
                                                         <!--begin::Action=-->
-                                                        <td>
-                                                            {{-- {{ count($claimProyek->kode_proyek) }} --}}
-                                                        </td>
+                                                        {{-- <td>
+                                                            {{ count($proyekClaim) }}
+                                                        </td> --}}
                                                         <!--end::Action=-->
                                                     </tr>
-                                                {{-- @endif --}}
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -235,7 +232,7 @@
 
 
 <!--begin:::Tab Anti Claim-->
-                                <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
+                                <div class="tab-pane fade" id="kt_user_view_overview_anticlaim" role="tabpanel">
                                     <!--begin::Table Claim-->
                                     <table class="table align-middle table-row-dashed fs-6 gy-2"
                                         id="kt_proyek_table">
@@ -248,7 +245,7 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
-                                                <th class="min-w-auto">Total</th>
+                                                {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -256,26 +253,22 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
                                         {{-- @foreach ($claims as $claim) --}}
-                                            @foreach ($proyek_with_claim as $claimProyek)
-                                            {{-- @if ($claim->jenis_claim == 'Claim') --}}
+                                            @foreach ($proyekAnti as $proyekAntis)
                                                 <tr>
 
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        {{-- <a class="text-hover-primary text-gray-500"
-                                                            href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                        </a> --}}
-                                                        <a href="/claim-management/proyek/{{ $claimProyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->kode_proyek }}</a>
+                                                        <a href="/claim-management/proyek/{{ $proyekAntis->id }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        {{ $claimProyek->nama_proyek }}
+                                                        {{ $proyekAntis->nama_proyek }}
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Email=-->
                                                     <td>
-                                                        {{ $claimProyek->UnitKerja->unit_kerja }}
+                                                        {{ $proyekAntis->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Email=-->
                                                     <!--begin::Action=-->
@@ -285,11 +278,15 @@
                                                     <!--end::Action=-->
                                                     <!--begin::Action=-->
                                                     <td>
-                                                        <a href="/contract-management/view/{{ $claimProyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->ContractManagements->id_contract }}</a>
+                                                        <a href="/contract-management/view/{{ $proyekAntis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->ContractManagements->id_contract }}</a>
                                                     </td>
                                                     <!--end::Action=-->
+                                                    <!--begin::Action=-->
+                                                    {{-- <td>
+                                                        {{ count($proyekAnti) }}
+                                                    </td> --}}
+                                                    <!--end::Action=-->
                                                 </tr>
-                                            {{-- @endif --}}
                                         @endforeach
                                         </tbody>
                                     </table>
@@ -298,7 +295,7 @@
 <!--end:::Tab Anti Claim-->
 
 
-{{-- <!--begin:::Tab Claim Asuransi-->
+<!--begin:::Tab Claim Asuransi-->
                                 <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
                                     <!--begin::Table Claim-->
                                     <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -307,129 +304,61 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">ID Claim</th>
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">Jenis Claim</th>
                                                 <th class="min-w-auto">Approval Status</th>
+                                                <th class="min-w-auto">ID Contract</th>
+                                                {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
-                                            @foreach ($claims as $claim)
-                                                @if ($claim->jenis_claim == 'Claim Asuransi')
+                                            @foreach ($proyekAsuransi as $proyekAsuransis)
                                                     <tr>
 
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a class="text-hover-primary text-gray-500"
-                                                                href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                            </a>
-
-                                                        </td>
+                                                            <a href="/claim-management/proyek/{{ $proyekAsuransis->id }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{ $claim->id_contract }}
+                                                            {{ $proyekAsuransis->nama_proyek }}
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->
                                                         <td>
-                                                            {{ $proyek->kode_proyek }}
+                                                            {{ $proyekAsuransis->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Email=-->
                                                         <!--begin::Company=-->
                                                         <td>
-                                                            {{ $proyek->nama_proyek }}
+                                                            Pending
                                                         </td>
                                                         <!--end::Company=-->
                                                         <!--begin::Action=-->
                                                         <td>
-                                                            {{ $claim->jenis_claim }}
+                                                            <a href="/contract-management/view/{{ $proyekAsuransis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagements->id_contract }}</a>
                                                         </td>
                                                         <!--end::Action=-->
                                                         <!--begin::Action=-->
-                                                        <td>
-                                                            Pending
-                                                        </td>
+                                                        {{-- <td>
+                                                            {{ count($proyekAsuransi) }}
+                                                        </td> --}}
                                                         <!--end::Action=-->
                                                     </tr>
-                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
                                 </div>
-<!--end:::Tab pane Claim Asuransi--> --}}
+<!--end:::Tab pane Claim Asuransi-->
 
 
                                 </div>
                                 <!--end:::Tab isi content-->                            
-
-{{-- <!--begin::Table-->
-				<table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_proyek_table">
-					<!--begin::Table head-->
-					<thead>
-						<!--begin::Table row-->
-						<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-							<th class="min-w-auto">Kode Proyek</th>
-							<th class="min-w-auto">Nama Proyek</th>
-							<th class="min-w-auto">ID Contract</th>
-							<th class="min-w-auto"><center>Total Claim</center></th>
-							<th class=""><center>Action</center></th>
-						</tr>
-						<!--end::Table row-->
-						</thead>
-						<!--end::Table head-->
-						<!--begin::Table body-->
-						@foreach ($proyek_with_claim as $claimProyek)
-						<tbody class="fw-bold text-gray-600">
-							<tr>
-								
-							<!--begin::Name=-->
-							<td>
-								<a href="/claim-management/proyek/{{ $claimProyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->kode_proyek }}</a>
-							</td>
-							<!--end::Name=-->
-							<!--begin::Email=-->
-							<td>
-                                {{ $claimProyek->nama_proyek }}
-							</td>
-							<!--end::Email=-->
-							<!--begin::Email=-->
-							<td>
-                                <a href="/contract-management/view/{{ $claimProyek->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $claimProyek->ContractManagements->id_contract }}</a>
-							</td>
-							<!--end::Email=-->
-							<!--begin::Company=-->
-							<td>
-								<center>
-                                    {{ count($claimProyek->ClaimManagements) }}
-                                </center>
-							</td>
-							<!--end::Company=-->
-							<!--begin::Action=-->
-							<td>
-							<!--begin::Button-->
-							<form action="/claim/delete/{{ $proyek->id }}" method="post" class="d-inline" >
-								@method('delete')
-								@csrf
-								<center>
-									<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-								</center>
-							</form>
-							<!--end::Button-->
-							</td>
-							<!--end::Action=-->
-						</tr>
-						@endforeach
-							
-					</tbody>
-				</table>
-<!--end::Table --> --}}
 
                 </div>
                 <!--end:::Tab isi content-->

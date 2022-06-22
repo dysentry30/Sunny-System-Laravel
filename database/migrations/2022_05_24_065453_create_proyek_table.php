@@ -19,15 +19,17 @@ return new class extends Migration
 
             //#table PASAR DINI
             $table->string("nama_proyek");
-            $table->string("kode_proyek");
+            $table->string("kode_proyek")->unique();
             $table->string("unit_kerja");
             $table->integer("tahun_perolehan");
             $table->string('jenis_proyek');
             $table->string('tipe_proyek');
             $table->integer('stage');
+            // $table->string('customer')->nullable();
+            $table->string('pic')->nullable();
             $table->string('sumber_dana')->nullable();
-            // $table->integer('tahun_pelaksanaan')->nullable();
             $table->string('bulan_pelaksanaan')->nullable();
+            // $table->integer('tahun_pelaksanaan')->nullable();
             $table->string("nilai_rkap")->nullable();
             $table->string("nilai_valas_review")->nullable();
             $table->string("mata_uang_review")->nullable();

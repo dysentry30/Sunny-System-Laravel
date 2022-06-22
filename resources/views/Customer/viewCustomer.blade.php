@@ -646,8 +646,8 @@
                                                             <div class="card-title m-0">
                                                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                     Proyek Berjalan
-                                                                    <a href="#" Id="Plus"
-                                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a>
+                                                                    {{-- <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a> --}}
                                                                 </h3>
                                                                 &nbsp;<br>
 
