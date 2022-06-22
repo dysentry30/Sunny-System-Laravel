@@ -280,7 +280,7 @@
                                         <br>
                                         <!--end::Title-->
 
-<!--begin:::Tab Claim-->
+<!--begin:::Tab Jenis Claim-->
                                         <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
                                             <!--begin::Table Claim-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -302,16 +302,14 @@
                                                 <!--end::Table head-->
                                                 <!--begin::Table body-->
                                                 <tbody class="fw-bold text-gray-600">
-                                                    @foreach ($claims as $claim)
-                                                        {{-- @if ($claim->jenis_claim == 'Claim') --}}
+                                                    @foreach ($proyekClaims as $claim)
+                                                        @if ($claim->jenis_claim == 'Claim')
                                                             <tr>
 
                                                                 <!--begin::Name=-->
                                                                 <td>
                                                                     <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                                    </a>
-
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
                                                                 </td>
                                                                 <!--end::Name=-->
                                                                 <!--begin::Name=-->
@@ -340,125 +338,16 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
-                                                                {{-- <td>
-                                                                <!--begin::Button-->
-                                                                <form action="/proyek/delete/" method="post" class="d-inline" >
-                                                                    @method('delete')
-                                                                    @csrf
-                                                                    <center>
-                                                                        <button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                                                    </center>
-                                                                </form>
-                                                                <!--end::Button-->
-                                                                </td> --}}
-                                                                <!--end::Action=-->
                                                             </tr>
-                                                        {{-- @endif --}}
+                                                            @endif
                                                     @endforeach
-                                                </tbody>
-                                            </table>
-                                            <!--end::Table -->
-                                        </div>
-<!--end:::Tab Claim-->
-
-
-{{-- <!--begin:::Tab Anti Claim-->
-                                        <div class="tab-pane fade" id="kt_user_view_overview_potensial" role="tabpanel">
-                                            <!--begin::Table Claim-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                id="kt_proyek_table">
-                                                <!--begin::Table head-->
-                                                <thead>
-                                                    <!--begin::Table row-->
-                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-auto">ID Claim</th>
-                                                        <th class="min-w-auto">Kode Proyek</th>
-                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                        <th class="min-w-auto">Unit Kerja</th>
-                                                        <th class="min-w-auto">Jenis Claim</th>
-                                                        <th class="min-w-auto">Approval Status</th>
-                                                    </tr>
-                                                    <!--end::Table row-->
-                                                </thead>
-                                                <!--end::Table head-->
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold text-gray-600">
-                                                    @foreach ($claims as $claim)
-                                                        @if ($claim->jenis_claim == 'Anti Claim')
-                                                            <tr>
-
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                                    </a>
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Name=-->
-                                                                <td>
-                                                                    {{ $claim->id_contract }}
-                                                                </td>
-                                                                <!--end::Name=-->
-                                                                <!--begin::Email=-->
-                                                                <td>
-                                                                    {{ $proyek->kode_proyek }}
-                                                                </td>
-                                                                <!--end::Email=-->
-                                                                <!--begin::Company=-->
-                                                                <td>
-                                                                    {{ $proyek->nama_proyek }}
-                                                                </td>
-                                                                <!--end::Company=-->
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    {{ $claim->jenis_claim }}
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                                <!--begin::Action=-->
-                                                                <td>
-                                                                    Pending
-                                                                </td>
-                                                                <!--end::Action=-->
-                                                            </tr>
-                                                        @endif
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                            <!--end::Table -->
-                                        </div>
-<!--end:::Tab Anti Claim--> --}}
-
-
-{{-- <!--begin:::Tab Claim Asuransi-->
-                                        <div class="tab-pane fade" id="kt_user_view_overview_asuransi" role="tabpanel">
-                                            <!--begin::Table Claim-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                id="kt_proyek_table">
-                                                <!--begin::Table head-->
-                                                <thead>
-                                                    <!--begin::Table row-->
-                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-auto">ID Claim</th>
-                                                        <th class="min-w-auto">Kode Proyek</th>
-                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                        <th class="min-w-auto">Unit Kerja</th>
-                                                        <th class="min-w-auto">Jenis Claim</th>
-                                                        <th class="min-w-auto">Approval Status</th>
-                                                    </tr>
-                                                    <!--end::Table row-->
-                                                </thead>
-                                                <!--end::Table head-->
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold text-gray-600">
-                                                    @foreach ($claims as $claim)
+                                                    @foreach ($proyekClaims as $claim)
                                                         @if ($claim->jenis_claim == 'Claim Asuransi')
                                                             <tr>
                                                                 <!--begin::Name=-->
                                                                 <td>
                                                                     <a class="text-hover-primary text-gray-500"
-                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                                    </a>
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
                                                                 </td>
                                                                 <!--end::Name=-->
                                                                 <!--begin::Name=-->
@@ -474,6 +363,7 @@
                                                                 <!--begin::Company=-->
                                                                 <td>
                                                                     {{ $proyek->nama_proyek }}
+                                                                    {{-- {{ $proyek->kode_proyek }} --}}
                                                                 </td>
                                                                 <!--end::Company=-->
                                                                 <!--begin::Action=-->
@@ -493,7 +383,7 @@
                                             </table>
                                             <!--end::Table -->
                                         </div>
-<!--end:::Tab pane Claim Asuransi--> --}}
+<!--end:::Tab Jenis Claim-->
 
 
                                     </div>
@@ -509,6 +399,9 @@
 
                         </div>
                         <!--end::Contacts App- Edit Contact-->
+
+
+
 
 
 <!--begin::Modal-->

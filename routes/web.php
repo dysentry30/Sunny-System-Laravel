@@ -18,14 +18,18 @@ use PhpOffice\PhpWord\PhpWord;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DraftContractController;
+use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
+use App\Models\faqs;
 use App\Models\Forecast;
 use App\Models\ProyekBerjalans;
 use Illuminate\Support\Facades\Auth;
+
+use function PHPUnit\Framework\returnSelf;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,10 +110,9 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // begin :: Claim Management
 
-
     Route::get('claim-management', [ClaimController::class, 'index']);
 
-    Route::get('claim-management/proyek/{kode_proyek}', [ClaimController::class, 'viewClaim']);
+    Route::get('claim-management/proyek/{kode_proyek}/{jenis_claim}', [ClaimController::class, 'viewClaim']);
 
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
@@ -200,14 +203,11 @@ Route::group(['middleware' => ["userAuth"]], function () {
     // Home Page Proyek
     Route::get('/project', [ProyekController::class, 'view']);
 
-    // to NEW page 
-    // Route::get('/proyek/new', [ProyekController::class, 'new']);
-
     // direct to proyek after SAVE page 
     Route::post('/proyek/save', [ProyekController::class, 'save']);
 
     // VIEW to proyek and EDIT 
-    Route::get('/proyek/view/{id}', [ProyekController::class, 'edit']);
+    Route::get('/proyek/view/{kode_proyek}', [ProyekController::class, 'edit']);
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
@@ -216,29 +216,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
 
     // Stage Update 
-    Route::post('/proyek/stage-save', function (Request $request) {
-        $id = $request->id;
-        $proyekStage = Proyek::find($id);
-        $proyekStage->stage = $request->stage;
-        // $proyekStage->proyekBerjalan->stage = $request->stage;
-        // dd($proyekStage->kode_proyek);
-        
-        $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
-        if ( $proyekBerjalans == null ){
-            $proyekStage->save();
-            return response()->json([
-                "status" => "success",
-                "link" => true,
-            ]);
-        } else {
-            $proyekBerjalans->stage = $request->stage;
-            $proyekBerjalans->save();
-            $proyekStage->save();
-            return response()->json([
-                "status" => "success",
-                "link" => true,
-            ]);}
-    });
+    Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
 
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
@@ -321,7 +299,16 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::post('/unit-kerja/save', [UnitKerjaController::class, 'store']);
 
     //End :: Master Data
+    
+    //Begin :: FAQ - KnowledgeBase
+    Route::get('/knowledge-base',  [FaqsController::class, 'index']);
+    
+    Route::post('/knowledge-base/new',  [FaqsController::class, 'create']);
 
+    Route::post('/knowledge-base/update',  [FaqsController::class, 'update']);
+    //End :: FAQ - KnowledgeBase
+
+    
     // Route::post("/contract-management/save/{id_contract}", function (Request $request, $id_contract) {
     //     $contract_management = ContractManagements::find($id_contract);
     //     $contract_management->id_contract = $request->number_contract;

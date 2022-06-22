@@ -37,7 +37,7 @@ class PasalController extends Controller
      */
     public function changeRequest()
     {
-        return view("changeRequest/view", ["addendumContracts" => AddendumContracts::all()]);
+        return view("9_Change_request", ["addendumContracts" => AddendumContracts::all()]);
     }
 
     /**

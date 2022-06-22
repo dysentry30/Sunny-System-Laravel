@@ -9,7 +9,10 @@ use Illuminate\Pagination\Paginator;
 class Proyek extends Model
 {
     use HasFactory;
-    // protected $primaryKey   = 'kode_proyek';
+    protected $primaryKey   = 'kode_proyek';
+    protected $casts = [
+        "kode_proyek" => "string"
+    ];
 
     public function Company()
     {
@@ -39,6 +42,11 @@ class Proyek extends Model
     public function ClaimManagements()
     {
         return $this->hasMany(ClaimManagements::class, "kode_proyek", "kode_proyek");
+    }
+
+    public function Customer()
+    {
+        return $this->hasOne(Customer::class);
     }
     
     public function ContractManagements()

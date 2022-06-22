@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Dop;
 use App\Models\Sbu;
+use App\Models\Faqs;
 use App\Models\User;
 use App\Models\Pasals;
 use App\Models\Proyek;
@@ -29,7 +30,8 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // ContractManagements::factory(5)->create();
         Pasals::factory(5)->create();
-        Customer::factory(4)->create();
+        Customer::factory(3)->create();
+        Faqs::factory(7)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.

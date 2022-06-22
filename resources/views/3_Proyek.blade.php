@@ -203,7 +203,7 @@
 														
 														<!--begin::Name=-->
 														<td>
-															<a href="/proyek/view/{{ $proyek->id }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+															<a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
 														</td>
 														<!--end::Name=-->
 														<!--begin::Email=-->
@@ -245,7 +245,7 @@
 														<!--begin::Action=-->
 														<td>
 														<!--begin::Button-->
-														<form action="/proyek/delete/{{ $proyek->id }}" method="post" class="d-inline" >
+														<form action="/proyek/delete/{{ $proyek->kode_proyek }}" method="post" class="d-inline" >
 															@method('delete')
 															@csrf
 															<center>
