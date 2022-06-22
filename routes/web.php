@@ -26,6 +26,7 @@ use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
 use App\Models\faqs;
 use App\Models\Forecast;
+use App\Models\HistoryForecast;
 use App\Models\ProyekBerjalans;
 use Illuminate\Support\Facades\Auth;
 
@@ -262,6 +263,31 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
     // to NEW page 
     // Route::get('/proyek/new', [ProyekController::class, 'new']);
+
+// begin :: Set lock / unlock data month forecast
+    Route::post('/forecast/set-lock', function (Request $request) {
+        $data = $request->all();
+        Forecast::query()->each(function($oldRecord) use ($data){
+            $duplicateRecord = $oldRecord->replicate();
+            $duplicateRecord->setTable("history_forecast");
+            $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
+            $duplicateRecord->save();
+        });
+        return response()->json([
+            "status" => "success",
+            "msg" => "Forecast has been locked",
+        ]);
+    });
+
+    Route::post('/forecast/set-unlock', function (Request $request) {
+        $data = $request->all();
+        HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
+        return response()->json([
+            "status" => "success",
+            "msg" => "Forecast has been unlocked",
+        ]);
+    });
+// end :: Set lock / unlock data month forecast
 
     //End :: Forecast
 

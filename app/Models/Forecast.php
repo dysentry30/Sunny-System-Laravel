@@ -13,6 +13,7 @@ class Forecast extends Model
         "nilai_forecast"
     ];
     protected $primaryKey = "id_forecast";
+    protected $table = "forecasts";
     public function Dop()
     {
         // return $this->hasMany(Dop::class);

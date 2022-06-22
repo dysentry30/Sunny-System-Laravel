@@ -2240,6 +2240,86 @@
                                                 
 <!--end:::Tab Feedback-->
 
+<!--begin:::Tab Forecast-->
+    <div class="tab-pane fade" id="kt_user_view_overview_forecast" role="tabpanel">
+
+        <!--Begin::Title Biru Form: Approval-->
+        &nbsp;<br>
+        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">History Forecast</h3>
+        &nbsp;<br>
+        <!--End::Title Biru Form: List Peserta Tender-->
+
+        {{-- begin::Detail History Forecast --}}
+        <div class="d-flex flex-row-reverse mb-5">
+            <div>
+                Periode Prognosa
+                @php
+                    setlocale(LC_TIME, 'id.UTF-8');
+                    $periode_prognosa = count($historyForecast) > 0 ? strftime('%B', mktime(0, 0, 0, $historyForecast[0]->periode_prognosa)) : "Belum Dibuat";                                              
+                @endphp
+                <b class="mx-4">{{$periode_prognosa}}</b>
+            </div>
+        </div>
+        {{-- end::Detail History Forecast --}}
+
+        <!--begin::Table-->
+        <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+            <!--begin::Table head-->
+            <thead>
+                <!--begin::Table row-->
+                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                    <th class="min-w-auto">Nama Proyek</th>
+                    <th class="min-w-auto">Nilai OK</th>
+                </tr>
+                <!--end::Table row-->
+            </thead>
+            <!--end::Table head-->
+            <!--begin::Table body-->
+            <tbody class="fw-bold text-gray-600">
+                @for ($i = 0; $i < 12; $i++)
+                    <tr>
+                        
+                        <!--begin::Name=-->
+                        <td>
+                            <h6 class="text-gray-600 fw-light">{{ $proyek->nama_proyek }}</h6>
+                        </td>
+                        <!--end::Name=-->
+                        @if(count($historyForecast) > 0)
+                        @foreach ($historyForecast as $history)
+                            @if ($i + 1 == $history->periode_prognosa)
+                                <!--begin::Nilai OK=-->
+                                <td class="text-dark">
+                                    {{ $proyek->nilai_rkap }}
+                                </td>
+                                <!--end::Nilai OK=-->
+                                @break
+                                @else 
+                                <!--begin::Nilai OK=-->
+                                <td class="text-dark">
+                                    0
+                                </td>
+                                <!--end::Nilai OK=-->
+                                @break
+
+                            @endif
+                        @endforeach
+                        @else 
+                                <!--begin::Nilai OK=-->
+                                <td class="text-dark">
+                                    0
+                                </td>
+                                <!--end::Nilai OK=-->
+                        @endif
+
+                    </tr>
+                @endfor
+            </tbody>
+            <!--end::Table body-->
+        </table>
+        <!--end::Table-->
+    </div>
+<!--end:::Tab Forecast-->
+
 
                                         </div>
                                         <!--end:::Tab isi content-->

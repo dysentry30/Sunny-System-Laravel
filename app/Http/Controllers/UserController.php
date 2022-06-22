@@ -21,8 +21,18 @@ class UserController extends Controller
             'email' => 'required|email',
             'password' => 'required' 
         ]);
-        if(Auth::attempt($credentials)){
+        if(Auth::attempt($credentials) && Auth::check()){
             $request->session()->regenerate();
+
+            // if request from API
+            if(str_contains($request->url(), "api")) {
+                $user = auth()->user();
+                return response()->json([
+                    "token" => $user->createToken($user->name)->plainTextToken,
+                    "user" => $user,
+                ]);
+            }
+
             return redirect()->intended("/dashboard");
         }
         
@@ -30,14 +40,23 @@ class UserController extends Controller
         return back()->with('LoginError', "Login Gagal Pastikan Email dan Password Benar");
     }
     
-    public function logout ()
+    public function logout (Request $request)
     {
+
         Auth::logout();
-    
+        
         Request()->session()->invalidate();
-    
+        
         Request()->session()->regenerateToken();
-    
+        
+        if(str_contains($request->url(), "api")) {
+
+            return response()->json([
+                "status" => "success",
+                "msg" => "Logged out",
+            ]); 
+        }
+
         return redirect('/');
     }
 

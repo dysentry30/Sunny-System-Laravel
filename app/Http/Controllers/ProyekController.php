@@ -7,6 +7,7 @@ use App\Models\Sbu;
 use App\Models\Proyek;
 use App\Models\Company;
 use App\Models\Customer;
+use App\Models\HistoryForecast;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use Illuminate\Http\Request;
@@ -114,6 +115,8 @@ class ProyekController extends Controller
     public function  edit($kode_proyek)
     {
         $proyek = Proyek::find($kode_proyek);
+        $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
+
         // dd($kode_proyek);
         // dd($proyek); //tes log hasil 
         return view('Proyek/viewProyek', 
@@ -124,7 +127,8 @@ class ProyekController extends Controller
         'sbus' => Sbu::all(),
         'unitkerjas' => UnitKerja::all(),
         'customers' => Customer::all(),
-        'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first()]
+        'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
+        "historyForecast" => $historyForecast]
         );
     }
 

@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 @php
-    $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April', '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
+$arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April', '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
 @endphp
 
 {{-- Begin::Title --}}
@@ -232,13 +232,21 @@
                                                     style="font-size:14px;">Forecast
                                                     Bulanan</a>
 
-                                                    
-                                                    <button type="button" style="background-color: #ffa62b;" onclick="lockMonthForecastBulanan(this)"
-                                                        class="btn btn-primary mt-4">
+
+                                                <button type="button" style="background-color: #ffa62b;"
+                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-primary mt-4">
+                                                    <script>
+                                                        const historyForecast = "{{count($historyForecast)}}";
+                                                    </script>
+                                                    @if (count($historyForecast) > 0)
+                                                        <span class="text-white mx-2">Lock Forecast</span>
+                                                        <i class="bi bi-lock-fill"></i>
+                                                    @else
                                                         <span class="text-white mx-2">Lock Forecast</span>
                                                         <i class="bi bi-unlock-fill"></i>
-                                                    </button>
-                                                </li>
+                                                    @endif
+                                                </button>
+                                            </li>
                                             <!--end:::Tab item Forecast Bulanan-->
 
                                             <!--begin:::Tab item Forecast Internal-->
@@ -310,18 +318,9 @@
                                                             <thead>
                                                                 <tr
                                                                     style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
-                                                                    <th class="min-w-auto" rowspan="2"
+                                                                    <th class="min-w-250px text-center" rowspan="2"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
-                                                                        <!--Begin::Svg Icon and Input Searc-->
-                                                                        <span
-                                                                            class="svg-icon svg-icon-1 position-absolute ms-6 mt-5">
-                                                                            <i class="bi bi-search"></i>
-                                                                        </span>
-                                                                        <input type="text"
-                                                                            data-kt-customer-table-filter="search"
-                                                                            class="form-control form-control w-250px ps-15"
-                                                                            placeholder="Search" /><br>
-                                                                        <!--end::Svg Icon and Input Searc-->
+                                                                        Proyek
                                                                     </th>
                                                                     <th class="min-w-auto" colspan="3">
                                                                         <center>
@@ -913,6 +912,8 @@
                                                                                     <!--begin::Total Side Coloumn-->
                                                                                     @php
                                                                                         $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                        $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                        $total_forecast = 0;
                                                                                         $total_ok = 0;
                                                                                     @endphp
                                                                                     <td class="pinForecast HidePin">
@@ -923,7 +924,7 @@
                                                                                     <td class="pinForecast HidePin"
                                                                                         data-id-proyek="{{ $proyek->id }}">
                                                                                         <center>
-                                                                                            <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
@@ -943,7 +944,7 @@
                                                                                         data-id-proyek="{{ $proyek->id }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                         <center>
-                                                                                            <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
@@ -960,6 +961,7 @@
                                                                         @php
                                                                             $total_year_forecast += $total_forecast;
                                                                             $total_forecast = 0;
+                                                                            $total_ok = 0;
                                                                             $month_counter = 1;
                                                                         @endphp
                                                                     @endforeach
@@ -1575,7 +1577,7 @@
                                                                                             @foreach ($proyek->Forecasts as $forecast)
                                                                                                 @if ($forecast->month_forecast == $i + 1)
                                                                                                     @php
-                                                                                                        $total_forecast += (int) str_replace(',', '', $forecast->nilai_forecast);
+                                                                                                        $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-OK-internal="{{ $month_counter }}">
@@ -1653,17 +1655,25 @@
                                                                                             $month_counter++;
                                                                                         @endphp
                                                                                     @endfor
+                                                                                    @php
+                                                                                        $total_year_forecast += $total_forecast;
+                                                                                        $total_forecast_formatted = number_format((int) $total_forecast, 0, ',', ',');
+                                                                                        $total_ok_formatted = number_format((int) $total_ok, 0, ',', ',');
+                                                                                        $total_forecast = 0;
+                                                                                        $month_counter = 1;
+                                                                                        $total_ok = 0;
+                                                                                    @endphp
                                                                                     <!--begin::Total Coloumn-->
                                                                                     <td
                                                                                         class="pinForecast HidePin">
                                                                                         <center>
-                                                                                            <b>{{ number_format($total_ok, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_ok_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
                                                                                         data-id-proyek-forecast-internal="{{ $proyek->id }}">
                                                                                         <center>
-                                                                                            <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td
@@ -1675,14 +1685,14 @@
                                                                                     <td class="pinForecast ShowPin total-month-x-ok-internal"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                         <center>
-                                                                                            <b>{{ number_format($total_ok, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_ok_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-forecast-internal"
                                                                                         data-id-proyek-forecast-internal="{{ $proyek->id }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                         <center>
-                                                                                            <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                            <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-realisasi-internal"
@@ -1698,9 +1708,9 @@
 
                                                                     @endif
                                                                     @php
-                                                                        $total_year_forecast += $total_forecast;
-                                                                        $total_forecast = 0;
-                                                                        $total_ok = 0;
+                                                                        // $total_year_forecast += $total_forecast;
+                                                                        // $total_forecast = 0;
+                                                                        // $total_ok = 0;
                                                                         $month_counter = 1;
                                                                     @endphp
                                                                 @endforeach
@@ -2388,18 +2398,23 @@
                                                                             @endfor
                                                                             @php
                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $total_realisasi) ?? 0;
+                                                                                $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                $total_forecast = 0;
+                                                                                $total_ok = 0;
+                                                                                $total_realisasi = 0;
                                                                             @endphp
                                                                             <!--begin::Total Coloumn-->
                                                                             <td
                                                                                 class="pinForecast HidePin total-month-x-ok-sd">
                                                                                 <center>
-                                                                                    <b>{{ number_format($total_ok, 0, ',', ',') }}</b>
+                                                                                    <b>{{ $total_ok_formatted }}</b>
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast HidePin"
                                                                                 data-id-proyek-forecast-sd="{{ $proyek->id }}">
                                                                                 <center>
-                                                                                    <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                    <b>{{ $total_forecast_formatted }}</b>
                                                                                 </center>
                                                                             </td>
                                                                             <td
@@ -2411,14 +2426,14 @@
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                 <center>
-                                                                                    <b>{{ number_format($total_ok, 0, ',', ',') }}</b>
+                                                                                    <b>{{ $total_ok_formatted }}</b>
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin total-month-x-forecast-sd"
                                                                                 data-id-proyek-forecast-sd="{{ $proyek->id }}"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                 <center>
-                                                                                    <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
+                                                                                    <b>{{ $total_forecast_formatted }}</b>
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
@@ -3328,7 +3343,6 @@
     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
 <div class="modal-body">
-    <p></p>
 </div>
 <div class="modal-footer">
     <button type="button" class="btn btn-secondary" onclick="cancelLock()"
@@ -3367,6 +3381,10 @@ fill="none">
     const toaster = document.querySelector(".toast");
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
+
+    if(historyForecast > 0) {
+        disabledAllInputs();
+    }
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat("en-US", {
@@ -3871,12 +3889,18 @@ fill="none">
         const getIconElt = monthEltBulanan.querySelector("i");
         if (getIconElt.classList.contains("bi-lock-fill")) {
             modalBody.innerHTML = `
-                <p>Apakah ingin membuka forecast pada bulan tersebut?</p>
+                @php
+                setlocale(LC_TIME, 'id.UTF-8');
+                @endphp
+                <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date("m"))) }}</b>?</p>
             `;
             modalFooterBtn.innerText = "Request Authorize";
         } else {
             modalBody.innerHTML = `
-                <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{date("F")}}</b>?</p>
+                @php
+                setlocale(LC_TIME, 'id.UTF-8');
+                @endphp
+                <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date("m"))) }}</b>?</p>
             `;
             modalFooterBtn.innerText = "Lanjut";
         }
@@ -3884,11 +3908,11 @@ fill="none">
     }
 
     async function confirmedLock() {
-        // const getDataMonth = monthEltBulanan.getAttribute("data-header-forecast-bulanan-month");
         const getIconElt = monthEltBulanan.querySelector("i");
         const formData = new FormData();
         if (monthEltBulanan) {
             formData.append("_token", "{{ csrf_token() }}");
+            formData.append("periode_prognosa", "{{ date('m') }}");
             if (getIconElt.classList.contains("bi-unlock-fill")) {
                 const getLockRes = await fetch("/forecast/set-lock", {
                     method: "POST",
@@ -3896,9 +3920,11 @@ fill="none">
                         "content-type": "application/json",
                     },
                     body: formData,
-                })
+                }).then(res => res.json());
                 getIconElt.classList.remove("bi-unlock-fill");
                 getIconElt.classList.add("bi-lock-fill");
+                toaster.classList.add("text-bg-success");
+                toastBody.innerText = getLockRes.msg;
             } else {
                 const getLockRes = await fetch("/forecast/set-unlock", {
                     method: "POST",
@@ -3906,24 +3932,31 @@ fill="none">
                         "content-type": "application/json",
                     },
                     body: formData,
-                })
+                }).then(res => res.json());
                 getIconElt.classList.add("bi-unlock-fill");
                 getIconElt.classList.remove("bi-lock-fill");
+                toaster.classList.add("text-bg-success");
+                toastBody.innerText = getLockRes.msg;
             }
-            const allInputsForecast = document.querySelectorAll("input[data-month]");
-            allInputsForecast.forEach(input => {
-                if(input.hasAttribute("disabled")) {
-                    input.removeAttribute("disabled");
-                } else {
-                    input.setAttribute("disabled", "");
-                }
-            });
+            toastBoots.show();
+            disabledAllInputs();
             modalBoots.hide();
         }
     }
 
     function cancelLock() {
         monthEltBulanan = null;
+    }
+
+    function disabledAllInputs() {
+        const allInputsForecast = document.querySelectorAll("input[data-month]");
+        allInputsForecast.forEach(input => {
+            if (input.hasAttribute("disabled")) {
+                input.removeAttribute("disabled");
+            } else {
+                input.setAttribute("disabled", "");
+            }
+        });
     }
 </script>
 @endsection
