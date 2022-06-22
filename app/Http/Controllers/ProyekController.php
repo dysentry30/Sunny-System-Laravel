@@ -293,9 +293,9 @@ class ProyekController extends Controller
 
     public function stage (Request $request) 
     {
-        $id = $request->id;
-        $proyekStage = Proyek::find($id);
-        $proyekStage->stage = $request->stage;
+        $kodeProyek = $request->kode_proyek;
+        // dd($kodeProyek);
+        $proyekStage = Proyek::find($kodeProyek);
         // $proyekStage->proyekBerjalan->stage = $request->stage;
         // dd($proyekStage->kode_proyek);
         
