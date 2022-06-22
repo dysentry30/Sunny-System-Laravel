@@ -339,7 +339,7 @@
                                                     formData.append("_token", "{{ csrf_token() }}");
                                                     formData.append("stage", stage);
                                                     // formData.append("id", "");
-                                                    formData.append("id", "{{ $proyek->id }}");
+                                                    formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
                                                     const setStage = await fetch("/proyek/stage-save", {
                                                         method: "POST",
                                                         body: formData

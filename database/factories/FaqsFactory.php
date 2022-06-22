@@ -17,7 +17,7 @@ class FaqsFactory extends Factory
     public function definition()
     {
         return [
-            "judul" => $this->faker->text(15),
+            "judul" => $this->faker->jobTitle(15),
             "deskripsi" => $this->faker->text(220),
         ];
     }
