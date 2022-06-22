@@ -16,6 +16,15 @@ class UserNotAuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if(str_contains($request->url(), "api")) {
+            if(auth()->user() != null) {
+                return response()->json([
+                    "status" => "Terautentikasi",
+                ]);
+            }
+            return $next($request);
+        }
+        
         if(auth()->user() == null) {
             return $next($request);
         }

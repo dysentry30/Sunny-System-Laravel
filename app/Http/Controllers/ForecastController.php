@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Dop;
 use App\Models\Proyek;
 use App\Models\Forecast;
+use App\Models\HistoryForecast;
 use Illuminate\Http\Request;
 use App\Models\UnitKerja;
 use Illuminate\Support\Facades\DB;
@@ -20,10 +21,12 @@ class ForecastController extends Controller
     {
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
+        $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->get();
         return view(
             'Forecast/viewForecast',
             [
-                // 'forecast' => Forecast::all(), 
+                // 'forecast' => Forecast::all(),
+                "historyForecast" => $historyForecast, 
                 'dops' => Dop::all(),
                 'proyeks' => Proyek::all()
             ]

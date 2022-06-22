@@ -16,6 +16,15 @@ class UserAuthenticatedMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
+        if(str_contains($request->url(), "api")) {
+            if(auth()->user() != null) {
+                return $next($request);
+            }
+            return response()->json([
+                "status" => "Login terlebih dahulu",
+            ]);
+        }
+
         if(auth()->user() != null) {
             return $next($request);
         }

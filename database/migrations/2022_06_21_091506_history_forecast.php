@@ -17,7 +17,8 @@ return new class extends Migration
             $table->bigIncrements('id_history_forecast');
             $table->string('kode_proyek');
             $table->bigInteger('nilai_forecast');
-            $table->mediumInteger('month_history_forecast');
+            $table->mediumInteger('periode_prognosa');
+            $table->mediumInteger('month_forecast');
             $table->timestamps();
         });
     }
