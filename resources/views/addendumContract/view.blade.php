@@ -69,7 +69,7 @@
                             <!--begin::Container-->
                             <div id="kt_content_container" class="container-fluid">
                                 <div class="col-xl-15">
-                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                    <div class="card card-flush" id="kt_contacts_main">
 
                                         <div class="card-body pt-5"
                                             style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
@@ -95,6 +95,16 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="toast align-items-center text-bg-primary border-0 position-relative end-0 top-0 my-5" role="alert" aria-live="assertive" aria-atomic="true">
+                                    <div class="d-flex">
+                                      <div class="toast-body text-white">
+                                        
+                                      </div>
+                                      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                                    </div>
+                                  </div>
+
                                 @if (Session::has('error'))
                                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                         {{ Session::get('error') }}
