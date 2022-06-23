@@ -49,7 +49,7 @@
 
                 <!--begin::Card header-->
                 <div class="card-header border-0 pt-">
-                    @if (count($all_document) > 0)
+                    {{-- @if (count($all_document) > 0) --}}
 
                         <!--begin::Card title-->
                         <div class="card-title">
@@ -113,13 +113,13 @@
                     <!--end::Table-->
                 </div>
                 <!--end::Card body-->
-            @else
+            {{-- @else
                 <div class="text-center">
                     <img class="img-fluid my-5" height="300" width="300"
                         src="{{ asset('/media/illustrations/dozzy-1/18-dark.png') }}">
                     <h3 class=""><b>Data not found</b></h3>
                 </div>
-                @endif
+                @endif --}}
 
             </div>
             <!--end::Card-->
