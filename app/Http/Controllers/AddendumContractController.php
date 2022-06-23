@@ -94,6 +94,91 @@ class AddendumContractController extends Controller
         return Redirect::back()->with("error", "Your Addendum Contract failed to save");
     }
 
+    // upload data addendum to server or database
+    function update(Request $request) {
+
+        $data = $request->all();
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+            "file" => "This field must be file only",
+            "string" => "This field must be alphabet only",
+            "date" => "This field must be date format only",
+        ];
+        $rules = [
+            // "document-name-addendum-menang" => "required|string",
+            "addendum-contract-title" => "required|string",
+            "addendum-contract-version" => "required|numeric",
+            "id-addendum" => "required|numeric",
+            "addendum-contract-start-date" => "required|date",
+            "addendum-contract-create-by" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if (!Session::has("pasals")) {
+            $request->old("addendum-contract-title");
+            $request->old("addendum-contract-version");
+            $request->old("addendum-contract-start-date");
+            $request->old("addendum-contract-create-by");
+            $request->old("id-addendum");
+            $validation->validate();
+            return Redirect::back()->with("error", "Pastikan pasal-pasal sudah di ceklis");
+        }
+        if (Session::has("pasals")) {
+            $pasals = [];
+            foreach (Session::get("pasals") as $pasal) {
+                array_push($pasals, $pasal->id_pasal);
+            }
+        }
+    
+        if ($validation->fails()) {
+            // Session::flash("failed", "Please fill 'Draft Contract' empty field");
+            $request->old("addendum-contract-title");
+            $request->old("addendum-contract-version");
+            $request->old("addendum-contract-start-date");
+            $request->old("addendum-contract-create-by");
+    
+            return Redirect::back()->with("error", "Please fill 'Addendum Contract' empty field");
+        }
+    
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+    
+        if (empty($is_id_contract_exist)) {
+            $request->old("addendum-contract-title");
+            $request->old("addendum-contract-version");
+            $request->old("addendum-contract-start-date");
+            $request->old("addendum-contract-create-by");
+            return Redirect::back()->with("error", "Contract not exist");
+        }
+    
+        $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+        // if ($is_tender_menang == 1) {
+        //     $rules["document-name-addendum-menang"] = "required|string";
+        //     $addendumContracts->document_name = $data["document-name-addendum-menang"];
+        // } else {
+        // }
+        $validation->validate();
+
+        $addendumContracts = AddendumContracts::find($data["id-addendum"]);
+    
+        // Update Stages Contract
+        $is_id_contract_exist->stages = 4;
+        // $addendumContracts->document_name = $data["document-name-addendum"];
+        $addendumContracts->created_by = $data["addendum-contract-create-by"];
+        $addendumContracts->start_date = $data["addendum-contract-start-date"];
+        $addendumContracts->id_contract = $data["id-contract"];
+        $addendumContracts->tender_menang = $is_tender_menang;
+        $addendumContracts->stages = 1;
+        $addendumContracts->pasals = join(",", $pasals) ?? "";
+        $addendumContracts->addendum_contract_version = $data["addendum-contract-version"];
+        $addendumContracts->no_addendum = $data["addendum-contract-title"];
+        if ($addendumContracts->save() && $is_id_contract_exist->save()) {
+            Session::forget("pasals");
+            return Redirect::to("/contract-management/view/$addendumContracts->id_contract")->with("success", "Your Addendum Contract has been updated");
+        }
+        return Redirect::back()->with("error", "Your Addendum Contract failed to update");
+    }
+
     // Save Draft of Addendum to Server or Database
     function draftUpload(Request $request, AddendumContractDrafts $addendumContractDrafts) {
 
