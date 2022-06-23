@@ -57,7 +57,7 @@
                 </div>
 
                 <div class="menu-item">
-                    <a class="menu-link " href="/project" style="color:white; {{ (Request::Path() == 'project') ? 'background-color:#ffa62b' : '' }}">
+                    <a class="menu-link " href="/proyek" style="color:white; {{ (Request::Path() == 'proyek') ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
