@@ -4,6 +4,10 @@
 <style>
     body{
         background-color: #0db0d9 !important;
+		background-image: url('/media/logos/welcome.png');
+		background-repeat: no-repeat;
+		/* background-attachment: fixed; */
+		background-size: cover;
     }
 </style>
 
@@ -28,6 +32,7 @@
 			<div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed" style="background-image: url(assets/media/illustrations/sketchy-1/14.png">
 				<!--begin::Content-->
 				<div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+					{{-- <img src="/media/logos/welcome.png" style="" alt=""> --}}
 					<!--begin::Logo-->
                     <a href="/" style="background-color:#0db0d9;">
                         <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
@@ -36,7 +41,12 @@
                     <br>
 					<!--end::Logo-->
 					<!--begin::Wrapper-->
-					<div class="w-lg-500px bg-body rounded shadow-sm p-10 p-lg-15 mx-auto">
+					<div class="w-lg-450px shadow-md p-10 p-lg-15 mx-auto rounded-5" 
+							style="background: rgba(255, 255, 255, 0.71);
+							border-radius: 16px;
+							box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+							backdrop-filter: blur(8.7px);
+							-webkit-backdrop-filter: blur(8.7px);">
 						<!--begin::Form-->
 						{{-- <form action="/createUser" method="post" class="form w-100" id="kt_sign_in_form" action="#"> --}}
 						<form action="/login" method="post" class="form w-100" id="kt_sign_in_form" action="#">
