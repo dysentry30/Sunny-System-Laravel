@@ -191,7 +191,11 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
                     <!--begin::Toolbar-->
+                    @isset($addendumContract)
                     <form action="/addendum-contract/upload" method="post" enctype="multipart/form-data">
+                        @else
+                        <form action="/addendum-contract/update" method="post" enctype="multipart/form-data">
+                    @endisset
                         @csrf
                         {{-- begin::input --}}
                         <input type="hidden" value="{{ $id_contract ?? 0 }}" id="id-contract" name="id-contract">

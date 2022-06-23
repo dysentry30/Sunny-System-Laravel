@@ -379,6 +379,44 @@
                                                             </tr>
                                                         @endif
                                                     @endforeach
+                                                    @foreach ($proyekClaims as $claim)
+                                                        @if ($claim->jenis_claim == 'Anti Claim')
+                                                            <tr>
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    <a class="text-hover-primary text-gray-500"
+                                                                        href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}</a>
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Name=-->
+                                                                <td>
+                                                                    {{ $claim->id_contract }}
+                                                                </td>
+                                                                <!--end::Name=-->
+                                                                <!--begin::Email=-->
+                                                                <td>
+                                                                    {{ $proyek->kode_proyek }}
+                                                                </td>
+                                                                <!--end::Email=-->
+                                                                <!--begin::Company=-->
+                                                                <td>
+                                                                    {{ $proyek->nama_proyek }}
+                                                                    {{-- {{ $proyek->kode_proyek }} --}}
+                                                                </td>
+                                                                <!--end::Company=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    {{ $claim->jenis_claim }}
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    Pending
+                                                                </td>
+                                                                <!--end::Action=-->
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                             <!--end::Table -->

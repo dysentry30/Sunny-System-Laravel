@@ -1876,7 +1876,7 @@
 
                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                     Klaim Kontrak
-                                    <a href="/claim-management/{{$contract->project->id}}/{{$contract->id_contract}}/new"
+                                    <a href="/claim-management/{{$contract->project->kode_proyek}}/{{$contract->id_contract}}/new"
                                         Id="Plus">+</a>
                                 </h3>
                                 <!--begin:Table: Claim Contract-->

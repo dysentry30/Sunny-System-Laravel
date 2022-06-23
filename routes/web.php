@@ -90,7 +90,16 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     Route::get('/contract-management/view/{id_contract}/draft-contract/{draftContracts}', [ContractManagementsController::class, 'draftContractView']);
 
-    Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'tenderMenang']);
+    // Route::get('/contract-management/view/{id_contract}/draft-contract/{is_tender_menang}', [ContractManagementsController::class, 'draftContractView']);
+    Route::get('/contract-management/view/{id_contract}/draft-contract/tender-menang/1', [ContractManagementsController::class, 'tenderMenang']);
+
+    Route::post("/draft-contract/upload", [DraftContractController::class, "save"]);
+
+    Route::post("/addendum-contract/upload", [AddendumContractController::class, "upload"]);
+
+    Route::post("/addendum-contract/draft/upload", [AddendumContractController::class, "draftUpload"]);
+
+    Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
     // end :: contract management
 
@@ -117,7 +126,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // Route::get('claim-management/view/{kode_proyek}', [ClaimController::class, 'viewClaim']);
 
-    Route::get('claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
+    Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
 
@@ -361,13 +370,6 @@ Route::group(['middleware' => ["userAuth"]], function () {
     //     // $contract_management->num = $request->number_contract;
     // });
 
-    Route::post("/draft-contract/upload", [DraftContractController::class, "save"]);
-
-    Route::post("/addendum-contract/upload", [AddendumContractController::class, "upload"]);
-
-    Route::post("/addendum-contract/draft/upload", [AddendumContractController::class, "draftUpload"]);
-
-    Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
 
     Route::post("/review-contract/upload", [ContractManagementsController::class, "reviewContractUpload"]);
