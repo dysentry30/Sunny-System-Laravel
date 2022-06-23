@@ -107,7 +107,7 @@ class ProyekController extends Controller
         //end::Generate Kode Proyek
         
         if ($newProyek->save()) {
-            return redirect("/project")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
+            return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
         }
     }
     
@@ -288,7 +288,7 @@ class ProyekController extends Controller
         // dd($deleteProyek->kode_proyek);
         
 
-        return redirect("/project")->with("success", "Proyek Berhasil Dihapus");;
+        return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");;
     }
 
     public function stage (Request $request) 
