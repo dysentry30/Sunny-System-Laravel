@@ -96,6 +96,8 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::post("/draft-contract/upload", [DraftContractController::class, "save"]);
 
     Route::post("/addendum-contract/upload", [AddendumContractController::class, "upload"]);
+    
+    Route::post("/addendum-contract/update", [AddendumContractController::class, "update"]);
 
     Route::post("/addendum-contract/draft/upload", [AddendumContractController::class, "draftUpload"]);
 
