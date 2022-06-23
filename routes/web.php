@@ -211,7 +211,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
     //Begin :: Project
 
     // Home Page Proyek
-    Route::get('/project', [ProyekController::class, 'view']);
+    Route::get('/proyek', [ProyekController::class, 'view']);
 
     // direct to proyek after SAVE page 
     Route::post('/proyek/save', [ProyekController::class, 'save']);
