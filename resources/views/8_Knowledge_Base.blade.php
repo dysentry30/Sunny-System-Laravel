@@ -172,6 +172,12 @@
 												style="font-weight: normal" value="{{ $faq->deskripsi }}" placeholder="Input Deskripsi"> --}}
 											<textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;">{{ $faq->deskripsi }}</textarea>
 											<!--end::Input-->
+
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span style="font-weight: normal">Attachement : File Lorem Ipsum.docx</span>
+                                            </label>
+                                            <!--end::Label-->
 				
 				
 										</div><br>
@@ -253,6 +259,19 @@
 
                             <!--begin::Input-->
 							<textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;" placeholder="Input Deskripsi"></textarea>
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachement :</span>
+                            </label>
+                            <!--end::Label-->
+                            
+                            <!--begin::Input-->
+                            <div>
+                                <label for="attachment" class="form-label"></label>
+                                <input class="form-control form-control-md form-control-solid" id="doc-attachment" name="doc-attachment" type="file">
+                            </div>
                             <!--end::Input-->
 
 

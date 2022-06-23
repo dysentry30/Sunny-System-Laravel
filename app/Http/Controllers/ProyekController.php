@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClaimManagements;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\Proyek;
 use App\Models\Company;
+use App\Models\ContractManagements;
 use App\Models\Customer;
 use App\Models\HistoryForecast;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
+use Google\Service\FactCheckTools\Resource\Claims;
 use Illuminate\support\Facades\DB;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Validator;
@@ -276,12 +279,23 @@ class ProyekController extends Controller
         $deleteProyek = Proyek::find($kode_proyek);
         
         $proyekBerjalan = ProyekBerjalans::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get()->first();
+        $contractManagement = ContractManagements::where('project_id', "=", $deleteProyek->kode_proyek)->get()->first();
+        $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
+        $claimManagement->each(function ($claim) { $claim->delete(); });
         
-        if ($proyekBerjalan ==  null){
+        
+        if ($proyekBerjalan == null && $contractManagement == null){
             $deleteProyek->delete();
+        }elseif($proyekBerjalan == null){
+            $deleteProyek->delete();
+            $contractManagement->delete();
+        }elseif($contractManagement ==  null){
+            $deleteProyek->delete();
+            $proyekBerjalan->delete();
         }else{
             $deleteProyek->delete();
             $proyekBerjalan->delete();
+            $contractManagement->delete();
         }
 
         // dd($proyekBerjalan); 
