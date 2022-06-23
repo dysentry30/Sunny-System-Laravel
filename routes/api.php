@@ -16,9 +16,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 // Route::post('/proyek/save', function (Request $request) {
 //     $data = $request->all();
@@ -34,5 +34,11 @@ Route::middleware(["web"])->group(function () {
     Route::post('/login', [UserController::class, 'authen'])->middleware("userNotAuth");
     Route::post('/logout', [UserController::class, 'logout'])->middleware("userAuth");
     // End Login / Logout
+
+    // Begin RKAP
+    Route::post('/rkap/save', function (Request $request) {
+        $data = $request->all();
+    });
+    // End RKAP
 
 });
