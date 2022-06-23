@@ -676,13 +676,13 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                         $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                     @endphp
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->id }}">
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                         {{ $proyek->nilai_rkap }}
                                                                                                     </td>
                                                                                                     <td>
                                                                                                         <input
                                                                                                             type="text"
-                                                                                                            data-id-proyek="{{ $proyek->id }}"
+                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                             data-month="{{ $month_counter }}"
                                                                                                             data-column-forecast="{{ $month_counter }}"
                                                                                                             class="form-control"
@@ -718,12 +718,12 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         @endforeach
                                                                                         @if (!$is_data_found)
                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->id }}">
+                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                 {{ $proyek->nilai_rkap }}
                                                                                             </td>
                                                                                             <td>
                                                                                                 <input type="text"
-                                                                                                    data-id-proyek="{{ $proyek->id }}"
+                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast="{{ $month_counter }}"
                                                                                                     class="form-control"
@@ -765,33 +765,33 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
-                                                                                        data-id-proyek="{{ $proyek->id }}">
+                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}">
                                                                                         <center>
                                                                                             <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->id }}">
+                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
                                                                                         <center>
                                                                                             <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin"
-                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->id }}"
+                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                         <center>
                                                                                             <b>{{ $total_ok_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                        data-id-proyek="{{ $proyek->id }}"
+                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                         <center>
                                                                                             <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->id }}"
+                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                         <center>
                                                                                             <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
@@ -1431,7 +1431,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                     <td>
                                                                                                         <input
                                                                                                             type="text"
-                                                                                                            data-id-proyek-forecast-internal="{{ $proyek->id }}"
+                                                                                                            data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}"
                                                                                                             data-month="{{ $month_counter }}"
                                                                                                             data-column-forecast-internal="{{ $month_counter }}"
                                                                                                             class="form-control"
@@ -1471,7 +1471,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
-                                                                                                    data-id-proyek-forecast-internal="{{ $proyek->id }}"
+                                                                                                    data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-internal="{{ $month_counter }}"
                                                                                                     class="form-control"
@@ -1514,7 +1514,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast HidePin"
-                                                                                        data-id-proyek-forecast-internal="{{ $proyek->id }}">
+                                                                                        data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}">
                                                                                         <center>
                                                                                             <b>{{ $total_forecast_formatted }}</b>
                                                                                         </center>
@@ -1532,7 +1532,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin total-month-x-forecast-internal"
-                                                                                        data-id-proyek-forecast-internal="{{ $proyek->id }}"
+                                                                                        data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                         <center>
                                                                                             <b>{{ $total_forecast_formatted }}</b>
@@ -2173,7 +2173,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
-                                                                                                    data-id-proyek-forecast-sd="{{ $proyek->id }}"
+                                                                                                    data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-sd="{{ $month_counter }}"
                                                                                                     class="form-control"
@@ -2212,7 +2212,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                     </td>
                                                                                     <td>
                                                                                         <input type="text"
-                                                                                            data-id-proyek-forecast-sd="{{ $proyek->id }}"
+                                                                                            data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
                                                                                             data-month="{{ $month_counter }}"
                                                                                             data-column-forecast-sd="{{ $month_counter }}"
                                                                                             class="form-control"
@@ -2255,7 +2255,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast HidePin"
-                                                                                data-id-proyek-forecast-sd="{{ $proyek->id }}">
+                                                                                data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}">
                                                                                 <center>
                                                                                     <b>{{ $total_forecast_formatted }}</b>
                                                                                 </center>
@@ -2273,7 +2273,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin total-month-x-forecast-sd"
-                                                                                data-id-proyek-forecast-sd="{{ $proyek->id }}"
+                                                                                data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                 <center>
                                                                                     <b>{{ $total_forecast_formatted }}</b>
@@ -2914,7 +2914,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
-                                                                                                    data-id-proyek-forecast-sd-eksternal="{{ $proyek->id }}"
+                                                                                                    data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-sd-eksternal="{{ $month_counter }}"
                                                                                                     class="form-control"
@@ -2954,7 +2954,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                     <td>
                                                                                         <input
                                                                                             type="text"
-                                                                                            data-id-proyek-forecast-sd-eksternal="{{ $proyek->id }}"
+                                                                                            data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
                                                                                             data-month="{{ $month_counter }}"
                                                                                             data-column-forecast-sd-eksternal="{{ $month_counter }}"
                                                                                             class="form-control"
@@ -2992,7 +2992,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast HidePin"
-                                                                                data-id-proyek-forecast-sd-eksternal="{{ $proyek->id }}">
+                                                                                data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}">
                                                                                 <center>
                                                                                     <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
                                                                                 </center>
@@ -3010,7 +3010,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                 </center>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin total-month-x-forecast-sd-eksternal"
-                                                                                data-id-proyek-forecast-sd-eksternal="{{ $proyek->id }}"
+                                                                                data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
                                                                                 <center>
                                                                                     <b>{{ number_format((int) $total_forecast, 0, ',', ',') }}</b>
