@@ -296,7 +296,7 @@ class ProyekController extends Controller
         $kodeProyek = $request->kode_proyek;
         // dd($kodeProyek);
         $proyekStage = Proyek::find($kodeProyek);
-        // $proyekStage->proyekBerjalan->stage = $request->stage;
+        $proyekStage->stage = $request->stage;
         // dd($proyekStage->kode_proyek);
         
         $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
