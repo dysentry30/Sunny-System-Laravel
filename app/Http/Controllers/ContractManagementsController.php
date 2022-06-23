@@ -128,11 +128,9 @@ class ContractManagementsController extends Controller
     }
 
 
-    public function tenderMenang ($id_contract, $is_tender_menang) 
+    public function tenderMenang ($id_contract) 
     {
-        if ($is_tender_menang == "tender-menang") {
-            $is_tender_menang = true;
-        }
+        $is_tender_menang = true;
         return view("DraftContract/view", ["contract" => ContractManagements::find($id_contract), "pasals" => Pasals::all(), "id_contract" => $id_contract, "is_tender_menang" => $is_tender_menang]);
     }
 
@@ -180,6 +178,12 @@ class ContractManagementsController extends Controller
 
     public function draftContractView ($id_contract, DraftContracts $draftContracts) 
     {
+
+        if (!$draftContracts instanceof DraftContracts) {
+            $is_tender_menang = true;
+            return view("DraftContract/view", ["contract" => ContractManagements::find($id_contract), "pasals" => Pasals::all(), "id_contract" => $id_contract, "is_tender_menang" => $is_tender_menang]);
+        }
+    
         $id_pasals = explode(",", $draftContracts->pasals);
         $res_pasals = [];
         foreach ($id_pasals as $id_pasal) {

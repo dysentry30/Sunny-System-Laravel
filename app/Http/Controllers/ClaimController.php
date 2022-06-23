@@ -59,7 +59,6 @@ class ClaimController extends Controller
             }
 
         // dd($jenis_claim);
-        // dd($proyekClaim);
         
         // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
 

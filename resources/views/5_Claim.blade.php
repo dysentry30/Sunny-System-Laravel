@@ -194,7 +194,7 @@
                                                             {{-- <a class="text-hover-primary text-gray-500"
                                                                 href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                             </a> --}}
-                                                            <a href="/claim-management/proyek/{{ $proyekClaims->id }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekClaims->kode_proyek }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
@@ -258,7 +258,7 @@
 
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a href="/claim-management/proyek/{{ $proyekAntis->id }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
+                                                        <a href="/claim-management/proyek/{{ $proyekAntis->kode_proyek }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
@@ -321,7 +321,7 @@
 
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            <a href="/claim-management/proyek/{{ $proyekAsuransis->id }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
+                                                            <a href="/claim-management/proyek/{{ $proyekAsuransis->kode_proyek }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
