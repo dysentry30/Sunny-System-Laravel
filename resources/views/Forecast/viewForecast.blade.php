@@ -913,6 +913,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                     @php
                                                                                         $total_ok_formatted = number_format($total_ok, 0, ',', ',');
                                                                                         $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         $total_forecast = 0;
                                                                                         $total_ok = 0;
                                                                                     @endphp
@@ -930,7 +931,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                     <td class="pinForecast HidePin"
                                                                                         data-id-proyek-realisasi-bulanan="{{ $proyek->id }}">
                                                                                         <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
+                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <td class="pinForecast ShowPin"
@@ -951,7 +952,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         data-id-proyek-realisasi-bulanan="{{ $proyek->id }}"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                         <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
+                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
                                                                                         </center>
                                                                                     </td>
                                                                                     <!--end::Total Side Coloumn-->
