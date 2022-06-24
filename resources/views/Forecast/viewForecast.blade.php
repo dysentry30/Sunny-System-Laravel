@@ -21,7 +21,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                
+
                 <!--begin::Header-->
                 @extends('template.header')
                 <!--end::Header-->
@@ -35,8 +35,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                 <div class="toast-body text-white">
                                     Hello, world! This is a toast message.
                                 </div>
-                                <button type="button" class="btn-close btn-close-white me-2 m-auto"
-                                    data-bs-dismiss="toast" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                                    aria-label="Close"></button>
                             </div>
                         </div>
                     </div>
@@ -76,18 +76,19 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
 
 
                                                 <button type="button" style="background-color: #ffa62b;"
-                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-primary mt-4">
+                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-active-primary mt-4">
                                                     <script>
-                                                        const historyForecast = "{{count($historyForecast)}}";
+                                                        const historyForecast = "{{ count($historyForecast) }}";
                                                     </script>
                                                     @if (count($historyForecast) > 0)
                                                         <span class="text-white mx-2">Lock Forecast</span>
-                                                        <i class="bi bi-lock-fill"></i>
+                                                        <i class="bi bi-lock-fill text-white"></i>
                                                     @else
                                                         <span class="text-white mx-2">Lock Forecast</span>
-                                                        <i class="bi bi-unlock-fill"></i>
+                                                        <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
                                                 </button>
+
                                             </li>
                                             <!--end:::Tab item Forecast Bulanan-->
 
@@ -110,8 +111,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                             <!--begin:::Tab item Forecast S/D-->
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                    data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_forecast_sd_eksternal"
+                                                    data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
                                                     style="font-size:14px;">Forecast S/D Eksternal</a>
                                             </li>
                                             <!--end:::Tab item Forecast S/D-->
@@ -2509,8 +2509,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2523,8 +2523,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2537,8 +2537,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2551,8 +2551,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2565,8 +2565,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2579,8 +2579,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2593,8 +2593,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2607,8 +2607,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2621,8 +2621,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="min-w-125px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2635,8 +2635,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                             <center>Forecast</center>
                                                         </th>
                                                         <th class="pinForecast HidePin min-w-100px">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -2650,8 +2650,8 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                         </th>
                                                         <th class="pinForecast ShowPin min-w-100px"
                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                            <center>Realisasi <a href="#"
-                                                                    Id="Plus" data-bs-toggle="modal"
+                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                    data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_create_namemodal">+</a>
                                                             </center>
                                                         </th>
@@ -3225,7 +3225,7 @@ fill="none">
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
 
-    if(historyForecast > 0) {
+    if (historyForecast > 0) {
         disabledAllInputs();
     }
 
@@ -3285,25 +3285,13 @@ fill="none">
                 const rowTotalForecastElt = document.querySelectorAll(
                     `td[${attribute}="${kodeProyek}"]`);
 
-                const totalColumn = document.querySelector(
-                    `td[${totalColumnAttribute}="${dataColumn}"]`);
+                // const totalColumn = document.querySelector(
+                //     `td[${totalColumnAttribute}="${dataColumn}"]`);
                 let totalColumnForecast = 0;
                 let totalColumnYearForecast = 0;
                 let totalRowForecast = 0;
 
-                columnForecastElt.forEach(columnForecast => {
-                    if (columnForecast.value != null) {
-                        totalColumnForecast += Number(columnForecast.value.toString()
-                            .replaceAll(",", ""));
-                    }
-                })
-                rowForecastElt.forEach(rowForecast => {
-                    if (rowForecast.value != null) {
-                        totalRowForecast += Number(rowForecast.value.toString().replaceAll(
-                            ",",
-                            ""));
-                    }
-                });
+
 
                 const formData = new FormData();
 
@@ -3322,12 +3310,6 @@ fill="none">
                     const nilaiFormatted = Intl.NumberFormat("en-US", {
                         maximumFractionDigits: 0,
                     }).format(nilaiForecast);
-                    const rowValueFormatted = Intl.NumberFormat("en-US", {
-                        maximumFractionDigits: 0,
-                    }).format(totalRowForecast);
-                    const columnValueFormatted = Intl.NumberFormat("en-US", {
-                        maximumFractionDigits: 0,
-                    }).format(totalColumnForecast);
 
                     dataColumnSame.forEach(dataColumn => {
                         const getAttributeIdProyek = dataColumn.getAttributeNames()[1];
@@ -3337,6 +3319,27 @@ fill="none">
                         }
                     });
 
+                    columnForecastElt.forEach(columnForecast => {
+                        if (columnForecast.value != null) {
+                            totalColumnForecast += Number(columnForecast.value.toString()
+                                .replaceAll(",", ""));
+                        }
+                    })
+                    rowForecastElt.forEach(rowForecast => {
+                        if (rowForecast.value != null) {
+                            totalRowForecast += Number(rowForecast.value.toString()
+                                .replaceAll(
+                                    ",",
+                                    ""));
+                        }
+                    });
+
+                    const rowValueFormatted = Intl.NumberFormat("en-US", {
+                        maximumFractionDigits: 0,
+                    }).format(totalRowForecast);
+                    const columnValueFormatted = Intl.NumberFormat("en-US", {
+                        maximumFractionDigits: 0,
+                    }).format(totalColumnForecast);
 
                     input.value = nilaiFormatted;
                     toaster.classList.add("text-bg-success")
@@ -3350,11 +3353,11 @@ fill="none">
                     `;
                     });
 
-                    totalColumn.innerHTML = `
-                <td>
-                    <center><b>${columnValueFormatted}</b></center>
-                </td>
-                `;
+                //     totalColumn.innerHTML = `
+                // <td>
+                //     <center><b>${columnValueFormatted}</b></center>
+                // </td>
+                // `;
 
                     columnDataYearForecast.forEach(columnDataTotalYear => {
                         if (columnDataTotalYear.innerText != null || columnDataTotalYear
@@ -3595,6 +3598,10 @@ fill="none">
             "data-column-realisasi-internal");
         // end Realisasi
 
+        // // begin Total Forecast Column
+        // sumColumnYear(".total-year-forecast", ".total-month-x-forecast");
+        // // end Total Forecast Column
+
         // begin Total Forecast Column Internal
         sumColumnYear(".total-year-forecast-interal", ".total-month-x-forecast-internal");
         // end Total Forecast Column Internal
@@ -3733,17 +3740,17 @@ fill="none">
         if (getIconElt.classList.contains("bi-lock-fill")) {
             modalBody.innerHTML = `
                 @php
-                setlocale(LC_TIME, 'id.UTF-8');
+                    setlocale(LC_TIME, 'id.UTF-8');
                 @endphp
-                <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date("m"))) }}</b>?</p>
+                <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
             `;
             modalFooterBtn.innerText = "Request Authorize";
         } else {
             modalBody.innerHTML = `
                 @php
-                setlocale(LC_TIME, 'id.UTF-8');
+                    setlocale(LC_TIME, 'id.UTF-8');
                 @endphp
-                <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date("m"))) }}</b>?</p>
+                <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
             `;
             modalFooterBtn.innerText = "Lanjut";
         }

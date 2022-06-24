@@ -33,8 +33,8 @@
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
                     <!--begin::Button-->
-                    <a href="/claim-management" class="btn btn-sm btn-primary" id="customer_new_close"
-                    style="background-color:#f1f1f1; margin-left:10px; color: black;">
+                    <a href="/claim-management" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" id="customer_new_close"
+                    style="background-color:#f1f1f1; margin-left:10px;">
                     Close</a>
                     <!--end::Button-->
 
@@ -141,6 +141,7 @@
                                                         <th class="min-w-auto">Jenis Claim</th>
                                                         <th class="min-w-auto">Approval Status</th>
                                                         <th class="min-w-auto">PIC</th>
+                                                        <th class="min-w-auto">Action</th>
                                                         {{-- <th class=""><center>Action</center></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
@@ -150,7 +151,7 @@
                                                 <tbody class="fw-bold text-gray-600">
                                                     @foreach ($proyekClaims as $claim)
                                                         @if ($claim->jenis_claim == 'Claim')
-                                                            <tr>
+                                                            <tr class="align-middle">
 
                                                                 <!--begin::Name=-->
                                                                 <td>
@@ -189,6 +190,16 @@
                                                                     {{ $claim->pic }}
                                                                 </td>
                                                                 <!--end::PIC=-->
+                                                                
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    <form action="/claim-management/delete" style="height: 1.5rem" method="POST">
+                                                                        @csrf
+                                                                        <button type="submit" name="delete-claim" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" >Delete</button>
+                                                                        <input type="hidden" value="{{$claim->id_claim }}" name="id-claim">
+                                                                    </form>
+                                                                </td>
+                                                                <!--end::Action=-->
                                                             </tr>
                                                             @endif
                                                     @endforeach
@@ -232,6 +243,16 @@
                                                                     {{ $claim->pic }}
                                                                 </td>
                                                                 <!--end::PIC=-->
+
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    <form action="/claim-management/delete" style="height: 1.5rem" method="POST">
+                                                                        @csrf
+                                                                        <button type="submit" name="delete-claim" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" >Delete</button>
+                                                                        <input type="hidden" value="{{$claim->id_claim }}" name="id-claim">
+                                                                    </form>
+                                                                </td>
+                                                                <!--end::Action=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -275,6 +296,16 @@
                                                                     {{ $claim->pic }}
                                                                 </td>
                                                                 <!--end::PIC=-->
+
+                                                                <!--begin::Action=-->
+                                                                <td>
+                                                                    <form action="/claim-management/delete" style="height: 1.5rem" method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" value="{{$claim->id_claim }}" name="id-claim">
+                                                                        <button type="submit" name="delete-claim" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" >Delete</button>
+                                                                    </form>
+                                                                </td>
+                                                                <!--end::Action=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach

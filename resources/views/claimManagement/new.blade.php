@@ -11,7 +11,7 @@
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
         <!--begin::Header-->
-            @extends('template.header')
+        @extends('template.header')
         <!--end::Header-->
 
 
@@ -128,6 +128,7 @@
                                 <div class="col-xl-15">
                                     <div class="card card-flush h-lg-100" id="kt_contacts_main">
                                         <form action="/claim-management/save" method="POST">
+                                            @csrf
                                             <div class="card-body pt-5">
 
                                                 <!--begin::Row-->
@@ -170,15 +171,16 @@
                                                                 data-bs-target="#kt_modal_calendar"><i
                                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                     style="color: #e08c16"></i></a>
-                                                            <input type="Date" class="form-control form-control-solid ps-12"
+                                                            <input type="Date"
+                                                                class="form-control form-control-solid ps-12"
                                                                 placeholder="Select a date"
                                                                 value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
                                                                 name="approve-date" id="approve-date">
-                                                                
-                                                                {{-- begin::erorr message --}}
-                                                                @error('approve-date')
+
+                                                            {{-- begin::erorr message --}}
+                                                            @error('approve-date')
                                                                 <h6 class="text-danger">{{ $message }}</h6>
-                                                                @enderror
+                                                            @enderror
                                                             {{-- end::erorr message --}}
 
                                                             <!--end::Input-->
@@ -187,10 +189,10 @@
                                                     </div>
                                                     <!--End begin::Col-->
                                                 </div>
-                                                
+
                                                 <!--End begin::Row-->
                                                 {{-- @dd($proyek); --}}
-                                                
+
                                                 <div class="row fv-row">
 
                                                     <div class="col-6">
@@ -208,7 +210,8 @@
                                                                 data-placeholder="Pilih Proyek"
                                                                 data-select2-id="select2-data-project-id" tabindex="-1"
                                                                 aria-hidden="true">
-                                                                <option value="{{ $proyek->kode_proyek }}" selected>{{ $proyek->nama_proyek }}</option>
+                                                                <option value="{{ $proyek->kode_proyek }}" selected>
+                                                                    {{ $proyek->nama_proyek }}</option>
                                                                 {{-- @foreach ($projects as $projectAll)
                                                                     <option value="{{ $projectAll->kode_proyek }}"
                                                                         {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? $proyek->kode_proyek)) ? 'selected' : '' }}>
@@ -244,7 +247,8 @@
                                                                 data-control="select2" data-hide-search="true"
                                                                 data-select2-id="select2-data-contract-id"
                                                                 data-placeholder="Pilih Contract">
-                                                                <option value="{{ $currentContract->id_contract }}" sel>{{ $currentContract->id_contract }}</option>
+                                                                <option value="{{ $currentContract->id_contract }}" sel>
+                                                                    {{ $currentContract->id_contract }}</option>
                                                                 {{-- @foreach ($contractManagements as $contract)
                                                                     <option value="{{ $contract->id_contract }}"
                                                                         {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>
@@ -280,8 +284,8 @@
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
                                                             <input type="text" class="form-control form-control-solid"
-                                                                placeholder="Who is responsible for this contract?" id="pic"
-                                                                name="pic"
+                                                                placeholder="Who is responsible for this contract?"
+                                                                id="pic" name="pic"
                                                                 value="{{ old('pic') ?? ($claimContract->pic ?? '') }}">
                                                             <!--end::Input-->
 
@@ -342,10 +346,14 @@
                                                                 data-placeholder="Pilih Jenis Claim"
                                                                 data-select2-id="select2-data-jenis-claim" tabindex="-1"
                                                                 aria-hidden="true">
-                                                                <option value="{{$claimContract->jenis_claim}}" selected>{{$claimContract->jenis_claim}}</option>
-                                                                {{-- <option value="Claim">Claim</option>
-                                                                <option value="Anti Claim">Anti Claim</option>
-                                                                <option value="Claim Asuransi">Claim Asuransi</option> --}}
+                                                                @isset($claimContract)
+                                                                    <option value="{{ $claimContract->jenis_claim }}"
+                                                                        selected>{{ $claimContract->jenis_claim }}</option>
+                                                                @else
+                                                                    <option value="Claim">Claim</option>
+                                                                    <option value="Anti Claim">Anti Claim</option>
+                                                                    <option value="Claim Asuransi">Claim Asuransi</option>
+                                                                @endisset
                                                             </select>
                                                             <!--end::Input-->
 
@@ -357,7 +365,7 @@
                                                         </div>
                                                         <!--end::Input group-->
                                                     </div>
-                                                   
+
                                                 </div>
 
                                                 <!--End begin::Row-->
@@ -481,7 +489,8 @@
                                                 <!--end:::Tab pane Informasi Perusahaan-->
 
                                                 <!--begin:::Tab pane History-->
-                                                <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
+                                                <div class="tab-pane fade" id="kt_user_view_overview_history"
+                                                    role="tabpanel">
                                                     <!--begin::Card title-->
                                                     <div class="card-title m-0">
 
@@ -576,11 +585,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -719,12 +729,12 @@
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                        transform="rotate(-45 6 17.3137)" fill="black"></rect>
-                                    <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                        fill="black"></rect>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none">
+                                    <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                        rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                    <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                        transform="rotate(45 7.41422 6)" fill="black"></rect>
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
@@ -737,11 +747,8 @@
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
-                            @isset($claimContract)
-                                <form action="/claim-management/update" method="POST" enctype="multipart/form-data">
-                            @else
-                                <form action="/detail-claim/save" method="POST" enctype="multipart/form-data">
-                            @endisset
+
+                            <form action="/detail-claim/save" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
                                 <!--begin::Label-->
@@ -751,9 +758,9 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <input type="hidden" value="12312" name="id-contract">
-                                <input type="file" class="form-control form-control-solid" name="attach-file-claim-detail"
-                                    id="attach-file-claim-detail" value="" style="font-weight: normal" accept=".docx"
-                                    placeholder="Name Proyek">
+                                <input type="file" class="form-control form-control-solid"
+                                    name="attach-file-claim-detail" id="attach-file-claim-detail" value=""
+                                    style="font-weight: normal" accept=".docx" placeholder="Name Proyek">
                                 <!--end::Input-->
 
                                 <!--begin::Label-->
@@ -1192,7 +1199,7 @@
             const formData = new FormData();
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("index_array", indexArray);
-            formData.append("id_claim", "{{ $claimContract->id_claim ?? 0}}");
+            formData.append("id_claim", "{{ $claimContract->id_claim ?? 0 }}");
             const deleteArrayApprovalRes = await fetch("/approval-claim/delete", {
                 method: "POST",
                 header: {

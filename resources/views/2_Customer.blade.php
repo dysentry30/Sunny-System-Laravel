@@ -171,10 +171,7 @@
 
                                             <!--begin::Name=-->
                                             <td>
-                                                {{-- <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a> --}}
-                                                <a class="text-gray-800 text-hover-primary mb-1" role="button">
-                                                    {{ $customers->name }}
-                                                </a>
+                                                <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a>
                                             </td>
                                             <!--end::Name=-->
                                             <!--begin::Email=-->
