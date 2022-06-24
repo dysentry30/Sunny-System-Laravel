@@ -266,7 +266,7 @@ class ClaimController extends Controller
         $rules = [
             "approve-date" => "required|date",
             "pic" => "required|string",
-            "project-id" => "required|numeric",
+            "project-id" => "required|string",
             "id-claim" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
@@ -276,6 +276,7 @@ class ClaimController extends Controller
             $request->old("project-id");
             $request->old("id-contract");
             $request->old("id-claim");
+            dd($validation->errors());
             return redirect()->back()->with("failed", "This claim failed to add");
         }
         $validation->validate();

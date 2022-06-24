@@ -140,6 +140,7 @@
                                                         <th class="min-w-auto">Unit Kerja</th>
                                                         <th class="min-w-auto">Jenis Claim</th>
                                                         <th class="min-w-auto">Approval Status</th>
+                                                        <th class="min-w-auto">PIC</th>
                                                         {{-- <th class=""><center>Action</center></th> --}}
                                                     </tr>
                                                     <!--end::Table row-->
@@ -183,6 +184,11 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
+                                                                <!--begin::PIC=-->
+                                                                <td>
+                                                                    {{ $claim->pic }}
+                                                                </td>
+                                                                <!--end::PIC=-->
                                                             </tr>
                                                             @endif
                                                     @endforeach
@@ -221,6 +227,11 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
+                                                                <!--begin::PIC=-->
+                                                                <td>
+                                                                    {{ $claim->pic }}
+                                                                </td>
+                                                                <!--end::PIC=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach
@@ -259,6 +270,11 @@
                                                                     Pending
                                                                 </td>
                                                                 <!--end::Action=-->
+                                                                <!--begin::PIC=-->
+                                                                <td>
+                                                                    {{ $claim->pic }}
+                                                                </td>
+                                                                <!--end::PIC=-->
                                                             </tr>
                                                         @endif
                                                     @endforeach

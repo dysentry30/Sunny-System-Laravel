@@ -179,7 +179,6 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
-                                                {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -216,11 +215,6 @@
                                                         <td>
                                                             <a href="/contract-management/view/{{ $proyekClaims->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a>
                                                         </td>
-                                                        <!--end::Action=-->
-                                                        <!--begin::Action=-->
-                                                        {{-- <td>
-                                                            {{ count($proyekClaim) }}
-                                                        </td> --}}
                                                         <!--end::Action=-->
                                                     </tr>
                                             @endforeach
@@ -309,6 +303,7 @@
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
+                                                <th class="min-w-auto">PIC</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -342,11 +337,6 @@
                                                         <td>
                                                             <a href="/contract-management/view/{{ $proyekAsuransis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagements->id_contract }}</a>
                                                         </td>
-                                                        <!--end::Action=-->
-                                                        <!--begin::Action=-->
-                                                        {{-- <td>
-                                                            {{ count($proyekAsuransi) }}
-                                                        </td> --}}
                                                         <!--end::Action=-->
                                                     </tr>
                                             @endforeach

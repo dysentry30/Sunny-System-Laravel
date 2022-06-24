@@ -76,6 +76,8 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
 
+    Route::get('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
+
     Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
 
     Route::get('/contract-management/view/{id_contract}/addendum-contract', [ContractManagementsController::class, 'addendumContract']);

@@ -161,6 +161,7 @@
                                         <th class="min-w-125px">Tanggal Mulai Kontrak</th>
                                         <th class="min-w-125px">Tanggal Akhir kontrak</th>
                                         <th class="min-w-125px">Nilai Perolehan</th>
+                                        <th class="min-w-125px"><center>Action</center></th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -206,6 +207,16 @@
                                                 {{ number_format($contract->value, 3, ',', ',') }}
                                             </td>
                                             <!--end::Action=-->
+
+                                            <!--begin::Button Delete=-->
+                                            <td>
+                                                <center>
+                                                    <a href="/contract-management/{{ $contract->id_contract }}/delete" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                        Delete
+                                                    </a>
+                                                </center>
+                                            </td>
+                                            <!--end::Button Delete=-->
                                         </tr>
                                     @endforeach
 
