@@ -144,15 +144,17 @@
                                 data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                                 data-kt-menu-placement="bottom-end">
                                 Hi,<strong> {{ auth()->user()->name }}&nbsp;</strong>
-                                    <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
-                                    &nbsp;
+                                    {{-- <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
+                                    &nbsp; --}}
+                                    <div class="d-inline-flex justify-content-center align-self-center" 
+                                    style="background-color:#0db0d9; width: 35px; height: 35px; border-radius: 50%;" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <a class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
+                                    </div>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                        <li>
                                             <form action="/logout" method="post" class="form w-100" id="kt_sign_in_form" action="#">
                                                 @csrf
-                                                <button type="submit" class="dropdown-item">Logout</button>
+                                                <button type="submit" class="btn btn-active-primary dropdown-item">Logout</button>
                                             </form>
-                                        </li>
                                     </ul>
                             </div>
                         
