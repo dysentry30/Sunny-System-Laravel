@@ -43,7 +43,7 @@ class ClaimController extends Controller
         })->get();
         
         // dd($proyekClaim);
-        return view("5_claim", ["proyekClaim" => $proyekClaim, "proyekAnti" => $proyekAnti, "proyekAsuransi" => $proyekAsuransi]);
+        return view("5_Claim", ["proyekClaim" => $proyekClaim, "proyekAnti" => $proyekAnti, "proyekAsuransi" => $proyekAsuransi]);
     }
 
     public function viewClaim($id_proyek, $jenis_claim)
