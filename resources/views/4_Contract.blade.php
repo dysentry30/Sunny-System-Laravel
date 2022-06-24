@@ -97,6 +97,46 @@
                     </div>
                     <!--end::Toolbar-->
 
+                    {{-- begin::Alert --}}
+                    {{-- Display Error --}}
+                    @if (Session::has('success'))
+                        <div class="alert fade alert-success d-flex align-items-center mx-9" style="margin-bottom: 2rem;" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="check-circle-fill" fill="#0f5132" viewBox="0 0 16 16">
+                                    <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                                </symbol>
+                            </svg>
+
+                            <div style="color: #0f5132;">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                    aria-label="Info:">
+                                    <use xlink:href="#check-circle-fill" />
+                                </svg>
+                                {{Session::get("success")}}
+                            </div>
+                        </div>
+                    @endif
+                    @if (Session::has('failed'))
+                        <div class="alert fade alert-danger d-flex align-items-center mx-9" style="margin-bottom: 2rem;" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="exclamation-triangle-fill" fill="#842029" viewBox="0 0 16 16">
+                                    <path
+                                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
+                                </symbol>
+                            </svg>
+
+                            <div style="color: #842029;">
+                                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
+                                    aria-label="Info:">
+                                    <use xlink:href="#exclamation-triangle-fill" />
+                                </svg>
+                                {{Session::get("failed")}}
+                            </div>
+                        </div>
+                    @endif
+                    {{-- end::Alert --}}
+
                     <!--begin::Post-->
                     <!--begin::Container-->
                     <!--begin::Card-->
@@ -112,10 +152,11 @@
                                 <div class="d-flex align-items-center my-1" style="width: 100%;">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                            fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                                transform="rotate(45 17.0365 15.1223)" fill="black" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                            viewBox="0 0 24 24" fill="none">
+                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
+                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
+                                                fill="black" />
                                             <path
                                                 d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
                                                 fill="black" />
@@ -127,17 +168,7 @@
                                         placeholder="Search Contract" />
                                     <!--end::Search-->
 
-                                    {{-- Display Error --}}
-                                    @if (Session::get('success'))
-                                        <div class="success-msg">
-                                            <h6 style="color: green"><b>{{ Session::get('success') }}</b></h6>
-                                        </div>
-                                    @endif
-                                    @if (Session::get('failed'))
-                                        <div class="success-msg">
-                                            <h6 style="color: rgb(201, 30, 30)"><b>{{ Session::get('failed') }}</b></h6>
-                                        </div>
-                                    @endif
+
                                     {{-- begin::pagination --}}
                                     {{-- end::pagination --}}
                                 </div>
@@ -161,7 +192,9 @@
                                         <th class="min-w-125px">Tanggal Mulai Kontrak</th>
                                         <th class="min-w-125px">Tanggal Akhir kontrak</th>
                                         <th class="min-w-125px">Nilai Perolehan</th>
-                                        <th class="min-w-125px"><center>Action</center></th>
+                                        <th class="min-w-125px">
+                                            <center>Action</center>
+                                        </th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -181,7 +214,8 @@
                                             <!--begin::Email=-->
                                             <td>
                                                 @isset($contract->project)
-                                                    <a href="/proyek/view/{{ $contract->project->id}}" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="/proyek/view/{{ $contract->project->id }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $contract->project->nama_proyek }}</a>
                                                 @else
                                                     <a href="#" class="text-gray-600 text-hover-primary mb-1">
@@ -211,7 +245,9 @@
                                             <!--begin::Button Delete=-->
                                             <td>
                                                 <center>
-                                                    <a href="/contract-management/{{ $contract->id_contract }}/delete" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                                    <a href="/contract-management/{{ $contract->id_contract }}/delete"
+                                                        class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
+                                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                                         Delete
                                                     </a>
                                                 </center>
@@ -260,11 +296,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -423,7 +460,8 @@
                                                                 <!--begin::Svg Icon | path: icons/duotune/maps/map004.svg-->
                                                                 <span class="svg-icon svg-icon-1 svg-icon-primary">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                        height="24" viewBox="0 0 24 24" fill="none">
+                                                                        height="24" viewBox="0 0 24 24"
+                                                                        fill="none">
                                                                         <path opacity="0.3"
                                                                             d="M18.4 5.59998C21.9 9.09998 21.9 14.8 18.4 18.3C14.9 21.8 9.2 21.8 5.7 18.3L18.4 5.59998Z"
                                                                             fill="black" />
@@ -466,14 +504,21 @@
                                                                         height="24px" viewBox="0 0 24 24">
                                                                         <g stroke="none" stroke-width="1" fill="none"
                                                                             fill-rule="evenodd">
-                                                                            <rect x="5" y="5" width="5" height="5" rx="1"
-                                                                                fill="#000000" />
-                                                                            <rect x="14" y="5" width="5" height="5" rx="1"
-                                                                                fill="#000000" opacity="0.3" />
-                                                                            <rect x="5" y="14" width="5" height="5" rx="1"
-                                                                                fill="#000000" opacity="0.3" />
-                                                                            <rect x="14" y="14" width="5" height="5" rx="1"
-                                                                                fill="#000000" opacity="0.3" />
+                                                                            <rect x="5" y="5"
+                                                                                width="5" height="5"
+                                                                                rx="1" fill="#000000" />
+                                                                            <rect x="14" y="5"
+                                                                                width="5" height="5"
+                                                                                rx="1" fill="#000000"
+                                                                                opacity="0.3" />
+                                                                            <rect x="5" y="14"
+                                                                                width="5" height="5"
+                                                                                rx="1" fill="#000000"
+                                                                                opacity="0.3" />
+                                                                            <rect x="14" y="14"
+                                                                                width="5" height="5"
+                                                                                rx="1" fill="#000000"
+                                                                                opacity="0.3" />
                                                                         </g>
                                                                     </svg>
                                                                 </span>
@@ -509,7 +554,8 @@
                                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen013.svg-->
                                                                 <span class="svg-icon svg-icon-1 svg-icon-success">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24"
-                                                                        height="24" viewBox="0 0 24 24" fill="none">
+                                                                        height="24" viewBox="0 0 24 24"
+                                                                        fill="none">
                                                                         <path opacity="0.3"
                                                                             d="M20.9 12.9C20.3 12.9 19.9 12.5 19.9 11.9C19.9 11.3 20.3 10.9 20.9 10.9H21.8C21.3 6.2 17.6 2.4 12.9 2V2.9C12.9 3.5 12.5 3.9 11.9 3.9C11.3 3.9 10.9 3.5 10.9 2.9V2C6.19999 2.5 2.4 6.2 2 10.9H2.89999C3.49999 10.9 3.89999 11.3 3.89999 11.9C3.89999 12.5 3.49999 12.9 2.89999 12.9H2C2.5 17.6 6.19999 21.4 10.9 21.8V20.9C10.9 20.3 11.3 19.9 11.9 19.9C12.5 19.9 12.9 20.3 12.9 20.9V21.8C17.6 21.3 21.4 17.6 21.8 12.9H20.9Z"
                                                                             fill="black" />
@@ -885,22 +931,23 @@
                                                 <!--begin::Label-->
                                                 <label class="d-flex align-items-center fs-6 fw-bold form-label mb-2">
                                                     <span class="required">CVV</span>
-                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
-                                                        title="Enter a card CVV code"></i>
+                                                    <i class="fas fa-exclamation-circle ms-2 fs-7"
+                                                        data-bs-toggle="tooltip" title="Enter a card CVV code"></i>
                                                 </label>
                                                 <!--end::Label-->
                                                 <!--begin::Input wrapper-->
                                                 <div class="position-relative">
                                                     <!--begin::Input-->
                                                     <input type="text" class="form-control form-control-solid"
-                                                        minlength="3" maxlength="4" placeholder="CVV" name="card_cvv" />
+                                                        minlength="3" maxlength="4" placeholder="CVV"
+                                                        name="card_cvv" />
                                                     <!--end::Input-->
                                                     <!--begin::CVV icon-->
                                                     <div class="position-absolute translate-middle-y top-50 end-0 me-3">
                                                         <!--begin::Svg Icon | path: icons/duotune/finance/fin002.svg-->
                                                         <span class="svg-icon svg-icon-2hx">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                                viewBox="0 0 24 24" fill="none">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                                                                height="24" viewBox="0 0 24 24" fill="none">
                                                                 <path d="M22 7H2V11H22V7Z" fill="black" />
                                                                 <path opacity="0.3"
                                                                     d="M21 19H3C2.4 19 2 18.6 2 18V6C2 5.4 2.4 5 3 5H21C21.6 5 22 5.4 22 6V18C22 18.6 21.6 19 21 19ZM14 14C14 13.4 13.6 13 13 13H5C4.4 13 4 13.4 4 14C4 14.6 4.4 15 5 15H13C13.6 15 14 14.6 14 14ZM16 15.5C16 16.3 16.7 17 17.5 17H18.5C19.3 17 20 16.3 20 15.5C20 14.7 19.3 14 18.5 14H17.5C16.7 14 16 14.7 16 15.5Z"
@@ -967,8 +1014,8 @@
                                             <span class="svg-icon svg-icon-3 me-1">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="6" y="11" width="13" height="2" rx="1"
-                                                        fill="black" />
+                                                    <rect opacity="0.5" x="6" y="11" width="13"
+                                                        height="2" rx="1" fill="black" />
                                                     <path
                                                         d="M8.56569 11.4343L12.75 7.25C13.1642 6.83579 13.1642 6.16421 12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75L5.70711 11.2929C5.31658 11.6834 5.31658 12.3166 5.70711 12.7071L11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25C13.1642 17.8358 13.1642 17.1642 12.75 16.75L8.56569 12.5657C8.25327 12.2533 8.25327 11.7467 8.56569 11.4343Z"
                                                         fill="black" />
@@ -987,7 +1034,8 @@
                                                 <span class="svg-icon svg-icon-3 ms-2 me-0">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                         viewBox="0 0 24 24" fill="none">
-                                                        <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
+                                                        <rect opacity="0.5" x="18" y="13"
+                                                            width="13" height="2" rx="1"
                                                             transform="rotate(-180 18 13)" fill="black" />
                                                         <path
                                                             d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
@@ -1006,8 +1054,9 @@
                                             <span class="svg-icon svg-icon-3 ms-1 me-0">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                     viewBox="0 0 24 24" fill="none">
-                                                    <rect opacity="0.5" x="18" y="13" width="13" height="2" rx="1"
-                                                        transform="rotate(-180 18 13)" fill="black" />
+                                                    <rect opacity="0.5" x="18" y="13" width="13"
+                                                        height="2" rx="1" transform="rotate(-180 18 13)"
+                                                        fill="black" />
                                                     <path
                                                         d="M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z"
                                                         fill="black" />

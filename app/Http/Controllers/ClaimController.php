@@ -11,7 +11,7 @@ use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Storage;
 
 class ClaimController extends Controller
 {
@@ -66,7 +66,18 @@ class ClaimController extends Controller
         return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek]);
     }
 
-
+    public function claimDelete(Request $request) {
+        $data = $request->all();
+        $claim = ClaimManagements::find($data["id-claim"]);
+        ClaimDetails::where("id_claim", "=", $claim->id_claim)->get()->each(function($approval) {
+            Storage::disk("public/words")->delete($approval->id_document . ".docx");
+            $approval->delete();
+        });
+        if($claim->delete()) {
+            return redirect("/claim-management")->with("success", "Claim berhasil dihapus");
+        }
+        return redirect("/claim-management")->with("success", "Claim gagal dihapus");
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -276,7 +287,6 @@ class ClaimController extends Controller
             $request->old("project-id");
             $request->old("id-contract");
             $request->old("id-claim");
-            dd($validation->errors());
             return redirect()->back()->with("failed", "This claim failed to add");
         }
         $validation->validate();

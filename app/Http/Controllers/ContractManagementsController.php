@@ -10,6 +10,7 @@ use App\Models\DraftContracts;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
+use App\Models\ClaimDetails;
 use App\Models\ClaimManagements;
 use App\Models\HandOvers;
 use App\Models\InputRisks;
@@ -22,6 +23,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class ContractManagementsController extends Controller
@@ -40,11 +42,23 @@ class ContractManagementsController extends Controller
         return view('Contract/view', ["contracts" => ContractManagements::all(), "projects" => Proyek::all()]);
     }
 
-    function deleteModelArray(Collection $model) {
-        $data = $model;
-        $data->each(function($draft) {
-            $draft->delete();
-        });
+    function deleteModelArray(Collection $model, $child = false, string $childColllection = null) {
+        if($child && !empty($childColllection)) {
+            $model->each(function($draft) use ($childColllection) {
+                $childColllection::where("id_claim", "=", $draft->id_claim)->get()->each(function($dataChild) {
+                    Storage::disk("public/words")->delete($dataChild->id_document . ".docx");
+                    $dataChild->delete();
+                }); 
+                Storage::disk("public/words")->delete($draft->id_document . ".docx");
+                $draft->delete();
+            });
+
+        } else {
+            $model->each(function($draft) {
+                Storage::disk("public/words")->delete($draft->id_document . ".docx");
+                $draft->delete();
+            });
+        }
     }
 
     public function delete(ContractManagements $contractManagement) {
@@ -68,7 +82,7 @@ class ContractManagementsController extends Controller
             $this->deleteModelArray($addendumContract);
         }
         if(!empty($claimManagements)) {
-            $this->deleteModelArray($claimManagements);
+            $this->deleteModelArray($claimManagements, true, ClaimDetails::class);
         }
         if(!empty($handOver)) {
             $this->deleteModelArray($handOver);
