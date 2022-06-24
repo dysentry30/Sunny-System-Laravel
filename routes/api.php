@@ -38,6 +38,7 @@ Route::middleware(["web"])->group(function () {
     // Begin RKAP
     Route::post('/rkap/save', function (Request $request) {
         $data = $request->all();
+        return response()->json($data);
     });
     // End RKAP
 

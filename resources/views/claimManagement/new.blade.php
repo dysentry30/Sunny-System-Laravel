@@ -342,10 +342,10 @@
                                                                 data-placeholder="Pilih Jenis Claim"
                                                                 data-select2-id="select2-data-jenis-claim" tabindex="-1"
                                                                 aria-hidden="true">
-                                                                <option value=""></option>
-                                                                <option value="Claim">Claim</option>
+                                                                <option value="{{$claimContract->jenis_claim}}" selected>{{$claimContract->jenis_claim}}</option>
+                                                                {{-- <option value="Claim">Claim</option>
                                                                 <option value="Anti Claim">Anti Claim</option>
-                                                                <option value="Claim Asuransi">Claim Asuransi</option>
+                                                                <option value="Claim Asuransi">Claim Asuransi</option> --}}
                                                             </select>
                                                             <!--end::Input-->
 
@@ -737,7 +737,11 @@
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
-                            <form action="/detail-claim/save" method="POST" enctype="multipart/form-data">
+                            @isset($claimContract)
+                                <form action="/claim-management/update" method="POST" enctype="multipart/form-data">
+                            @else
+                                <form action="/detail-claim/save" method="POST" enctype="multipart/form-data">
+                            @endisset
                                 @csrf
                                 <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
                                 <!--begin::Label-->

@@ -10,6 +10,7 @@ use App\Models\DraftContracts;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
+use App\Models\ClaimManagements;
 use App\Models\HandOvers;
 use App\Models\InputRisks;
 use App\Models\IssueProjects;
@@ -17,6 +18,8 @@ use App\Models\MonthlyReports;
 use App\Models\Questions;
 use App\Models\ReviewContracts;
 use Faker\Core\Uuid;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -37,8 +40,58 @@ class ContractManagementsController extends Controller
         return view('Contract/view', ["contracts" => ContractManagements::all(), "projects" => Proyek::all()]);
     }
 
+    function deleteModelArray(Collection $model) {
+        $data = $model;
+        $data->each(function($draft) {
+            $draft->delete();
+        });
+    }
 
-     
+    public function delete(ContractManagements $contractManagement) {
+        $draftContracts = DraftContracts::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $reviewContracts = ReviewContracts::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $addendumContract = AddendumContracts::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $claimManagements = ClaimManagements::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $handOver = HandOvers::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $inputRisks = InputRisks::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $issueProjects = IssueProjects::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $monthlyReports = MonthlyReports::where("id_contract", "=", $contractManagement->id_contract)->get();
+        $questions = Questions::where("id_contract", "=", $contractManagement->id_contract)->get();
+
+        if(!empty($draftContracts)) {
+            $this->deleteModelArray($draftContracts);
+        }
+        if(!empty($reviewContracts)) {
+            $this->deleteModelArray($reviewContracts);
+        }
+        if(!empty($addendumContract)) {
+            $this->deleteModelArray($addendumContract);
+        }
+        if(!empty($claimManagements)) {
+            $this->deleteModelArray($claimManagements);
+        }
+        if(!empty($handOver)) {
+            $this->deleteModelArray($handOver);
+        }
+        if(!empty($inputRisks)) {
+            $this->deleteModelArray($inputRisks);
+        }
+        if(!empty($issueProjects)) {
+            $this->deleteModelArray($issueProjects);
+        }
+        if(!empty($monthlyReports)) {
+            $this->deleteModelArray($monthlyReports);
+        }
+        if(!empty($questions)) {
+            $this->deleteModelArray($questions);
+        }
+        
+        if($contractManagement->delete()) {
+            return redirect()->back()->with("success", "Contract berhasil dihapus");
+        }
+        return redirect()->back()->with("gagal", "Contract berhasil dihapus");
+    }
+
     public function save (Request $request, ContractManagements $contractManagements)
     {
             $data = $request->all();
@@ -59,9 +112,17 @@ class ContractManagementsController extends Controller
             ];
             $validation = Validator::make($data, $rules, $messages);
             if ($validation->fails()) {
-                // dd($validation->errors());
-                return redirect()->back()->with("failed", "this contract failed to add");
+                return redirect()->back()->with("failed", "This contract failed to add");
             }
+
+            // begin:: check if id contract exist and has same project id
+            $is_contract_exist = ContractManagements::where("id_contract", "=", (int) $data["number-contract"])->orWhere("project_id", "=", $data["project-id"])->get()->first();
+            if(!empty($is_contract_exist)) {
+                return redirect()->back()->with("failed", "Nomor Kontrak atau Proyek sudah ada, Pastikan Proyek tidak melebihi dari 2 kontrak");
+            }
+            // end:: check if id contract exist and has same project id
+
+
             $validation->validate();
             $contractManagements->id_contract = (int) $data["number-contract"];
             $contractManagements->project_id = $data["project-id"];

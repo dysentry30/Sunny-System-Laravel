@@ -27,8 +27,12 @@ class UserController extends Controller
             // if request from API
             if(str_contains($request->url(), "api")) {
                 $user = auth()->user();
+                $token_user = $user->createToken($user->name)->plainTextToken;
+                auth()->user()->forceFill([
+                    "remember_token" => $token_user,
+                ])->save();
                 return response()->json([
-                    "token" => $user->createToken($user->name)->plainTextToken,
+                    "token" => $token_user,
                     "user" => $user,
                 ]);
             }
@@ -42,12 +46,16 @@ class UserController extends Controller
     
     public function logout (Request $request)
     {
+        auth()->user()->forceFill([
+            "remember_token" => null,
+        ])->save();
 
         Auth::logout();
         
         Request()->session()->invalidate();
         
         Request()->session()->regenerateToken();
+        
         
         if(str_contains($request->url(), "api")) {
 
