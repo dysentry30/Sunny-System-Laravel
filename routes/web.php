@@ -28,6 +28,7 @@ use App\Models\faqs;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\ProyekBerjalans;
+use App\Models\UnitKerja;
 use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\returnSelf;
@@ -408,8 +409,17 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::post('/pasal/update', [PasalController::class, "pasalUpdate"]);
 
     // begin route PIC
-    Route::get('/pic', function () {
-        return view("/MasterData/pic", ["all_proyek" => Proyek::all()->reverse()]);
+    Route::get('/user', function () {
+        return view("/MasterData/User", ["all_proyek" => Proyek::all()->reverse()]);
+    });
+    Route::get('/team-proyek', function () {
+        return view("/MasterData/TeamProyek", ["all_proyek" => Proyek::all()->reverse()]);
+    });
+    // end route PIC
+
+    // begin route PIC
+    Route::get('/rkap', function () {
+        return view("/11_Rkap", ["all_proyek" => Proyek::all()->reverse(), "unitkerjas" => UnitKerja::all()]);
     });
     // end route PIC
 

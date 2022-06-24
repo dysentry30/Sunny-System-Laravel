@@ -75,7 +75,7 @@
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                             <span class="svg-icon svg-icon-2">
-                                <i class="bi bi-wallet-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                <i class="bi bi-graph-up-arrow text-white" style="font-size: 18px; margin-left:7px"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </span>
@@ -136,8 +136,7 @@
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                            <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
-                                                class="h-30px logo" />
+                                            <i class="bi bi-cloud-download-fill text-white" style="font-size: 18px; margin-left:7px"></i>
                                         </span>
                                         <!--end::Svg Icon-->
                                     </span>
@@ -227,14 +226,27 @@
                                 <!--end::Menu Colapse-->
                                 <!--begin::Menu Colapse-->
                                 <div id="#kt_aside_menu" data-kt-menu="true"
-                                    style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'pic' ? 'background-color:#ffa62b' : '' }}">
-                                    <a class="menu-link " href="/pic" style="color:white;">
+                                    style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#ffa62b' : '' }}">
+                                    <a class="menu-link " href="/user" style="color:white;">
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                            <i class="bi bi-person-fill text-white"></i>
+                                            <i class="bi bi-people-fill text-white"></i>
                                             <!--end::Svg Icon-->
                                         </span>
-                                        <span class="menu-title-2">PIC</span>
+                                        <span class="menu-title-2">Users</span>
+                                    </a>
+                                </div>
+                                <!--end::Menu Colapse-->
+                                <!--begin::Menu Colapse-->
+                                <div id="#kt_aside_menu" data-kt-menu="true"
+                                    style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#ffa62b' : '' }}">
+                                    <a class="menu-link " href="/team-proyek" style="color:white;">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <i class="bi bi-person-lines-fill text-white"></i>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title-2">User Proyek</span>
                                     </a>
                                 </div>
                                 <!--end::Menu Colapse-->
@@ -248,6 +260,19 @@
                 <!--end::Master Data Expand-->
 
 
+                <div class="menu-item">
+                    <a class="menu-link " href="/rkap" style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <i class="bi bi-chat-left-dots-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </span>
+                        <span class="menu-title-2">Group RKAP</span>
+                    </a>
+                </div>
+                
                 <div class="menu-item">
                     <a class="menu-link " href="/kpi" style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">

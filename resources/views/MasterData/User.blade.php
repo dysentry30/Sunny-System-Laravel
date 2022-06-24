@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'PIC')
+@section('title', 'Users')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -37,7 +37,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center fs-3 my-1">PIC
+									<h1 class="d-flex align-items-center fs-3 my-1">Users
 									</h1>
 									<!--end::Title-->
 								</div>
@@ -146,10 +146,10 @@
 													<!--begin::Table row-->
 													<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 														<th class="min-w-auto">No.</th>
-														<th class="min-w-auto">PIC Name</th>
-														<th class="min-w-auto">Nama Proyek</th>
-														<th class="min-w-auto">Status Proyek</th>
-														<th class="min-w-auto">Created at</th>
+														<th class="min-w-auto">User Name</th>
+														<th class="min-w-auto">Email</th>
+														<th class="min-w-auto">Unit Kerja</th>
+														<th class="min-w-auto">Role</th>
 														<th class=""><center>Action</center></th>
 													</tr>
 													<!--end::Table row-->
