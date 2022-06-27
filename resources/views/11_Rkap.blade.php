@@ -138,15 +138,25 @@
 										<!--begin::Card body-->
 										<div class="card-body pt-0 ">
 
-										@foreach($unitkerjas as $unitkerja)
+										@foreach($unitkerjas as $unitKerja)
 											<p>
-												<a class="" data-bs-toggle="collapse" href="#collapseRKAP{{ $unitkerja->id }}" role="button" aria-expanded="false" aria-controls="collapseRKAP">
-												  {{ $unitkerja->unit_kerja }}
+												<a class="" data-bs-toggle="collapse" href="#collapseRKAP{{ $unitKerja->divcode }}" role="button" aria-expanded="false" aria-controls="collapseRKAP{{$unitKerja->divcode}}">
+												  {{ $unitKerja->unit_kerja }}
 												</a>
 												
 											</p>
-											  <div class="collapse" id="collapseRKAP{{ $unitkerja->id }}">
-												  Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+											  <div class="collapse bg-dark" id="collapseRKAP{{ $unitKerja->divcode }}">
+												<ul class="list-group list-group-flush">
+													@if (!empty($unitKerja->Users))
+														@foreach ($unitKerja->Users as $user)
+														<a href="#" class="list-group-item list-group-item-action" aria-current="true">
+															{{$user->name}}
+														  </a>
+														@endforeach
+													@else
+														<li class="list-group-item">There is no data</li>
+													@endif
+												  </ul>
 											  </div>
 										@endforeach
 											

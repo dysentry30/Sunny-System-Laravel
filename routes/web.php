@@ -29,6 +29,7 @@ use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\ProyekBerjalans;
 use App\Models\UnitKerja;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 
 use function PHPUnit\Framework\returnSelf;
@@ -410,7 +411,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // begin route PIC
     Route::get('/user', function () {
-        return view("/MasterData/User", ["all_proyek" => Proyek::all()->reverse()]);
+        return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     Route::get('/team-proyek', function () {
         return view("/MasterData/TeamProyek", ["all_proyek" => Proyek::all()->reverse()]);
@@ -419,7 +420,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // begin route PIC
     Route::get('/rkap', function () {
-        return view("/11_Rkap", ["all_proyek" => Proyek::all()->reverse(), "unitkerjas" => UnitKerja::all()]);
+        return view("/11_Rkap", ["unitkerjas" => UnitKerja::all()]);
     });
     // end route PIC
 

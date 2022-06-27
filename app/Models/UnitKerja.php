@@ -11,4 +11,8 @@ class UnitKerja extends Model
     public function proyeks() {
         return $this->hasMany(Proyek::class, "unit_kerja", "divcode");
     }
+
+    public function Users() {
+        return $this->hasMany(User::class, "unit_kerja", "divcode");
+    }
 }

@@ -51,8 +51,6 @@
 						{{-- <form action="/createUser" method="post" class="form w-100" id="kt_sign_in_form" action="#"> --}}
 						<form action="/login" method="post" class="form w-100" id="kt_sign_in_form" action="#">
                             @csrf
-
-                            
 							<!--begin::Heading-->
 							{{-- <div class="text-center mb-10">
 								<!--begin::Title-->
@@ -64,7 +62,6 @@
 								<!--end::Link-->
 							</div> --}}
 							<!--begin::Heading-->
-							
                             
                             <!--begin::Input group-->
 							<div class="fv-row mb-10">

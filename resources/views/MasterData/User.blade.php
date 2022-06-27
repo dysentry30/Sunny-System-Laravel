@@ -146,7 +146,7 @@
 													<!--begin::Table row-->
 													<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
 														<th class="min-w-auto">No.</th>
-														<th class="min-w-auto">User Name</th>
+														<th class="min-w-auto">Name</th>
 														<th class="min-w-auto">Email</th>
 														<th class="min-w-auto">Unit Kerja</th>
 														<th class="min-w-auto">Role</th>
@@ -160,7 +160,7 @@
 												// $companies = $companies->reverse();
 												$no = 1;
 												@endphp
-												@foreach ($all_proyek as $proyek)
+												@foreach ($users as $user)
 												
 												<tbody class="fw-bold text-gray-600">
 													<tr>
@@ -173,55 +173,46 @@
 
 														<!--begin::Ketua tender=-->
 														<td>
-															{{ $proyek->ketua_tender ?? "Belum Ditetapkan"}}
+															{{ $user->name }}
 														</td>
 														<!--end::Ketua tender=-->
 
-														<!--begin::Nama Proyek=-->
+														<!--begin::Email=-->
 														<td>
-															<a href="/proyek/view/{{ $proyek->id }}" class="text-hover-primary text-gray-500">{{ $proyek->nama_proyek }}</a>
+															{{$user->email}}
 														</td>
-														<!--end::Nama Proyek=-->
+														<!--end::Email=-->
+														
+														<!--begin::unit=-->
+														<td>
+															{{$user->UnitKerja->unit_kerja ?? "-"}}
+														</td>
+														<!--end::unit=-->
 
-														<!--begin::Nama Proyek=-->
+														<!--begin::Role=-->
 														<td>
-                                                            @switch($proyek->stage)
-                                                                @case("1")
-                                                                    Pasar Dini
-                                                                    @break
-                                                                @case("2")
-                                                                    Pasar Potensial
-                                                                    @break
-                                                                @case("3")
-                                                                    Prakualifikasi
-                                                                    @break
-                                                                @case("4")
-                                                                    Tender Diikuti
-                                                                    @break
-                                                                @case("5")
-                                                                    Perolehan
-                                                                    @break
-                                                                @case("6")
-                                                                    Menang
-                                                                    @break
-                                                                @case("7")
-                                                                    Terkontrak
-                                                                    @break
-                                                                @case("8")
-                                                                    Approval
-                                                                    @break
-                                                                @case("9")
-                                                                    Selesai
-                                                                    @break
-                                                                @default
-                                                                    Kosong
-                                                            @endswitch
+															@switch($user->role_id)
+																@case(1)
+																	Administrator
+																	@break
+																@case(2)
+																	Admin Kontrak
+																	@break
+																@case(3)
+																	User Sales
+																	@break
+																@case(4)
+																	Team Proyek
+																	@break
+																@default
+																	
+															@endswitch
 														</td>
-														<!--end::Nama Proyek=-->
+														<!--end::Role=-->
 
 														<!--begin::Created at=-->
 														<td>
-															{{ date_format(new DateTime($proyek->created_at), "d M Y") }}
+															{{ date_format(new DateTime($user->created_at), "d M Y") }}
 														</td>
 														<!--end::Created at=-->
 														
@@ -232,7 +223,7 @@
 															<form action="#" method="post" class="d-inline" >
 																@method('delete')
 																@csrf
-																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted user can not be undo. Are You Sure ?')">Delete</button>
 															</form>
 														</center>
 														<!--end::Button-->
