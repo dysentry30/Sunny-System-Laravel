@@ -76,15 +76,15 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
 
 
                                                 <button type="button" style="background-color: #ffa62b;"
-                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-active-primary mt-4">
+                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-sm btn-active-primary mt-4">
                                                     <script>
                                                         const historyForecast = "{{ count($historyForecast) }}";
                                                     </script>
                                                     @if (count($historyForecast) > 0)
-                                                        <span class="text-white mx-2">Lock Forecast</span>
+                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                         <i class="bi bi-lock-fill text-white"></i>
                                                     @else
-                                                        <span class="text-white mx-2">Lock Forecast</span>
+                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                         <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
                                                 </button>
