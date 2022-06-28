@@ -24,6 +24,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\UserController;
+use App\Mail\UserPasswordEmail;
 use App\Models\faqs;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
@@ -64,6 +65,9 @@ Route::post('/logout', [UserController::class, 'logout']);
 
 
 Route::group(['middleware' => ["userAuth"]], function () {
+    
+    Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
+    });
     Route::get('/dashboard', function () {
         \Illuminate\Support\Facades\Artisan::call("storage:link");
         return view('1_Dashboard');
@@ -418,6 +422,15 @@ Route::group(['middleware' => ["userAuth"]], function () {
     Route::get('/user', function () {
         return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
+
+    Route::get('/user/new', function () {
+        return view("/User/newUser", ["unit_kerjas" => UnitKerja::all()]);
+    });
+    
+    Route::post('/user/save', [UserController::class, "save"]);
+    
+    Route::get('/user/view/{user}', [UserController::class, "view"]);
+
     Route::get('/team-proyek', function () {
         return view("/MasterData/TeamProyek", ["all_proyek" => Proyek::all()->reverse()]);
     });
@@ -428,6 +441,12 @@ Route::group(['middleware' => ["userAuth"]], function () {
         return view("/11_Rkap", ["unitkerjas" => UnitKerja::all()]);
     });
     // end route PIC
+
+    // begin email testing
+    Route::get('/email', function () {
+        return new UserPasswordEmail(auth()->user(), "test");
+    });
+    // end email testing
 
     function writeDOCXFile($content)
     {
