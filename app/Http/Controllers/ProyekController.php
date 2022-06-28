@@ -15,6 +15,8 @@ use App\Models\ProyekBerjalans;
 use App\Models\ClaimManagements;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
+use App\Models\TeamProyek;
+use App\Models\User;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -133,6 +135,8 @@ class ProyekController extends Controller
         'sbus' => Sbu::all(),
         'unitkerjas' => UnitKerja::all(),
         'customers' => Customer::all(),
+        'users' => User::all(),
+        'teams' => TeamProyek::all(),
         'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
         "historyForecast" => $historyForecast]
         );
@@ -285,9 +289,9 @@ class ProyekController extends Controller
         $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $claimManagement->each(function ($claim) { $claim->delete(); });
         
+        Alert::success('Delete', $deleteProyek->nama_proyek.", Berhasil Dihapus");
         
         if ($proyekBerjalan == null && $contractManagement == null){
-            Alert::success('Delete', $deleteProyek->nama_proyek.", Berhasil Dihapus");
             $deleteProyek->delete();
         }elseif($proyekBerjalan == null){
             $deleteProyek->delete();
@@ -307,6 +311,22 @@ class ProyekController extends Controller
 
         return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");
     }
+
+    public function assignTeam (Request $request, TeamProyek $newTeam, Proyek $proyek) 
+    {
+        $assignTeam = $request->all();
+        // $proyek=Proyek::find($proyek["kode-proyek"]);
+        // dd($proyek);
+
+        $newTeam->nama_team = $assignTeam["nama-team"];
+        $newTeam->nama_proyek = $assignTeam["assign-proyek"];
+        $newTeam->kode_proyek = $assignTeam["assign-kode-proyek"];
+        $newTeam->stage = $assignTeam["assign-stage"];
+        
+        $newTeam->save();
+        return redirect()->back();       
+    }
+
 
     public function stage (Request $request) 
     {

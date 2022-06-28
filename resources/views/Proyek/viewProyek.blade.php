@@ -1189,10 +1189,58 @@
                                                 <!--Begin::Title Biru Form: SKT Personil-->
                                                 &nbsp;<br>
                                                 <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">SKT Personil
-                                                    <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                    <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_add_user">+</a>
                                                 </h3>
                                                 &nbsp;<br>
                                                 <!--End::Title Biru Form: SKT Personil-->
+
+                                                <!--begin::Row-->
+                                                <div class="row fv-row">
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <!--begin::Table-->
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-auto">Nomor</th>
+                                                                        <th class="max-w-50px">Nama</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                @php
+                                                                    $no=1;
+                                                                @endphp
+                                                                @foreach ($teams as $team)
+                                                                <tbody class="fw-bold text-gray-600">
+
+                                                                    <tr>
+                                                                        <!--begin::Name=-->
+                                                                        <td>
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name=-->
+                                                                        <!--begin::Email=-->
+                                                                        <td>
+                                                                            {{ $team->nama_team }}
+                                                                        </td>
+                                                                        <!--end::Email=-->
+                                                                </tbody>
+                                                                @endforeach
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                            <!--end::Table-->
+                                                        </div>
+                                                        <!--end::Input group-->
+                                                    </div>
+                                                </div>
+                                                <!--End begin::Row-->
                                                 
                                                 <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                 &nbsp;<br>
@@ -2184,6 +2232,89 @@
 
 <!--begin::Modal-->
 
+<!--begin::modal ADD USER-->
+			<form action="/proyek/user/add" method="post" enctype="multipart/form-data"> 
+				@csrf
+				
+				<input type="hidden" name="assign-proyek" value="{{ $proyek->nama_proyek }}" id="id-customer">
+				<input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}" id="id-customer">
+				<input type="hidden" name="assign-stage" value="{{ $proyek->stage }}" id="id-customer">
+
+				<!--begin::Modal - Create Proyek-->
+				<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+				<!--begin::Modal dialog-->
+				<div class="modal-dialog modal-dialog-centered mw-600px">
+					<!--begin::Modal content-->
+					<div class="modal-content">
+						<!--begin::Modal header-->
+						<div class="modal-header">
+							<!--begin::Modal title-->
+							<h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
+							<!--end::Modal title-->
+							<!--begin::Close-->
+							<div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+								<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+								<span class="svg-icon svg-icon-1">
+									<i class="bi bi-x-circle-fill ts-8"></i>
+								</span>
+								<!--end::Svg Icon-->
+							</div>
+							<!--end::Close-->
+						</div>
+						<!--end::Modal header-->
+
+							<!--begin::Modal body-->
+							<div class="modal-body py-lg-6 px-lg-6">
+
+							
+								<!--begin::Row Kanan+Kiri-->
+								<div class="row fv-row">
+									<!--begin::Col-->
+									<div class="">
+										<!--begin::Input group Website-->
+										<div class="fv-row mb-7">
+											{{-- <!--begin::Label-->
+											<label class="fs-6 fw-bold form-label mt-3">
+												<span class="required">Nama Company</span>
+											</label>
+											<!--end::Label--> --}}
+											<!--begin::Input-->
+                                            <select name="nama-team" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilih Team">
+                                                <option></option>
+                                                @foreach ($users as $user)
+                                                {{-- @if ($user->name == $proyek->name) --}}
+                                                    {{-- <option value="{{ $user->name }}" selected>{{$user->name }}</option> --}}
+                                                {{-- @else --}}
+                                                    <option value="{{ $user->name }}">{{$user->name }}</option>
+                                                {{-- @endif --}}
+                                                @endforeach
+                                            </select>
+											<!--end::Input-->
+										</div>
+										<!--end::Input group-->
+									</div>
+									<!--End begin::Col-->
+								</div>
+								<!--End::Row Kanan+Kiri-->
+
+														
+							
+								
+								<button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#ffa62b">Save</button>
+									
+								</div>
+								<!--end::Modal body-->
+							</div>
+							<!--end::Modal content-->
+						</div>
+						<!--end::Modal dialog-->
+					</div>
+					<!--end::Modal - Create App-->
+				</form>    
+<!--end::modal ADD USER-->
+
+<!--begin::modal APPROVAL-->
 			{{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
 				@csrf --}}
 				
@@ -2240,7 +2371,7 @@
             </div>
             <!--end::Modal - Create App-->
         {{-- </form>     --}}
-
+<!--begin::modal APPROVAL-->
 <!--end::Modals-->
 
 <!--begin::Feedback Modals-->
