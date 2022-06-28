@@ -29,8 +29,10 @@ class UserSalesAuth
         if(auth()->user()->check_user_sales) {
             return $next($request);
         }
-        Alert::error('Error', 'Tidak bisa mengakses halaman ' . $request->path());
+        // Alert::error('Error', 'Tidak bisa mengakses halaman ' . $request->path());
 
-        return redirect()->back();
+        // return redirect()->back();
+        return app(TeamProyekAuth::class)->handle($request, $next);
+
     }
 }

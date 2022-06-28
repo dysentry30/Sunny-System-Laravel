@@ -6,7 +6,7 @@
         <!--begin::Header-->
         @extends('template.header')
         <!--end::Header-->
-        
+
         <!--begin::Content-->
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
             <!--begin::Toolbar-->
@@ -23,22 +23,23 @@
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
-                    <!--begin::Actions-->
-                    <div class="d-flex align-items-center py-1">
 
-                        <!--begin::Button-->
-                        <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                            data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal"
-                            style="background-color:#ffa62b; padding: 6px">
-                            New</button>
-                        <a href="/contract-management/" class="btn btn-sm btn-active-primary w-80px"
-                            style="background-color:#f3f6f9; margin-left:10px; padding: 6px">
-                            Back</a>
-                        <!--end::Button-->
+                    @if (auth()->user()->check_administrator)
+                        <!--begin::Actions-->
+                        <div class="d-flex align-items-center py-1">
 
-
-                    </div>
-                    <!--end::Actions-->
+                            <!--begin::Button-->
+                            <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal"
+                                style="background-color:#ffa62b; padding: 6px">
+                                New</button>
+                            <a href="/contract-management/" class="btn btn-sm btn-active-primary w-80px"
+                                style="background-color:#f3f6f9; margin-left:10px; padding: 6px">
+                                Back</a>
+                            <!--end::Button-->
+                        </div>
+                        <!--end::Actions-->
+                    @endif
                 </div>
                 <!--end::Container-->
             </div>
@@ -61,8 +62,8 @@
                             <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none">
-                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1"
-                                        transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
+                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
+                                        rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
                                     <path
                                         d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
                                         fill="black"></path>
@@ -117,14 +118,17 @@
                                     </td>
                                     <!--end::Pasal=-->
 
-                                    <!--begin::Close Btn=-->
-                                    <td>
-                                        {{-- <a href="/pasal/delete/{{ $pasal->id_pasal }}"
+                                    @if (auth()->user()->check_administrator)
+                                        <!--begin::Close Btn=-->
+                                        <td>
+                                            {{-- <a href="/pasal/delete/{{ $pasal->id_pasal }}"
                                             class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a> --}}
-                                        <a data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
-                                            class="btn btn-sm btn-light btn-active-primary">Delete</a>
-                                    </td>
-                                    <!--end::Close Btn=-->
+                                            <a data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
+                                                class="btn btn-sm btn-light btn-active-primary">Delete</a>
+                                        </td>
+                                        <!--end::Close Btn=-->
+                                    @endif
 
                                 </tr>
                             @endforeach
@@ -188,7 +192,7 @@
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#ffa62b">Save</button> --}}
-                        
+
                         <button type="button" id="add-pasal" style="background-color:#ffa62b"
                             class="btn btn-sm btn-light btn-active-primary text-white">
                             <div class="d-flex justify-content-center align-items-center">
@@ -224,11 +228,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black"></rect>
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black"></rect>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black"></rect>
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -257,19 +262,20 @@
                             <!--end::Label-->
 
                             <!--begin::Input-->
-                            <input type="hidden" class="form-control form-control-solid" name="id-pasal" id="id-pasal">
+                            <input type="hidden" class="form-control form-control-solid" name="id-pasal"
+                                id="id-pasal">
                             <!--end::Input-->
                             <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="pasal-edit" id="pasal-edit"
-                                style="font-weight: normal" value="" placeholder="Ketikan pasal disini...">
+                            <input type="text" class="form-control form-control-solid" name="pasal-edit"
+                                id="pasal-edit" style="font-weight: normal" value=""
+                                placeholder="Ketikan pasal disini...">
                             <!--end::Input-->
 
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
 
-                        <button type="button" id="edit-pasal-btn"
-                            style="background-color:#ffa62b"
+                        <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
                             class="btn btn-sm btn-light btn-active-primary text-white">
                             <div class="d-flex justify-content-center align-items-center">
                                 <span class="text-white">Update</span>
@@ -289,55 +295,55 @@
     </div>
     {{-- end::modal Edit Pasal --}}
 
-<!--begin::modal DELETE-->
+    <!--begin::modal DELETE-->
     @foreach ($pasals as $pasal)
-	<form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
-        @method('delete')
-        @csrf
-        <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Hapus Pasal :</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg text-white"></i>
-                            </span>
-                            <!--end::Svg Icon-->
+        <form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus Pasal :</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg text-white"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
                         </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-                        <strong> &bull; {{ $pasal->pasal }}</strong>
-                        <br>
-                        <br>
-                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                        <br>
-                        <br>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            <strong> &bull; {{ $pasal->pasal }}</strong>
+                            <br>
+                            <br>
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                            <br>
 
-                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->
-    
+
                     </div>
                     <!--end::Modal body-->
                 </div>
                 <!--end::Modal content-->
             </div>
             <!--end::Modal dialog-->
-        </div>
-    </form>
+            </div>
+        </form>
     @endforeach
-<!--end::modal DELETE-->
+    <!--end::modal DELETE-->
     {{-- end::modal --}}
 @endsection
 

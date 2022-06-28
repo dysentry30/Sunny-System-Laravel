@@ -64,7 +64,7 @@ Route::post('/logout', [UserController::class, 'logout']);
 
 
 
-Route::group(['middleware' => ["userAuth"]], function () {
+Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
     });
