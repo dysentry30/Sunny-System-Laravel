@@ -83,7 +83,7 @@
                                         <!--end::Button-->
                                                                                 
                                         <!--begin::Button-->
-                                        <a href="/project" class="btn btn-sm btn-primary" id="customer_new_close"
+                                        <a href="/proyek" class="btn btn-sm btn-primary" id="customer_new_close"
                                         style="background-color:#f1f1f1; margin-left:10px; color: black;">
                                         Close</a>
                                         <!--end::Button-->
@@ -2200,7 +2200,7 @@
 
 <!--begin::Modal-->
 
-			{{-- <form action="/project" method="post" enctype="multipart/form-data"> 
+			{{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
 				@csrf --}}
 				
 				<!--begin::Modal - Create Proyek-->

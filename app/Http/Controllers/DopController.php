@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Dop;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class DopController extends Controller
 {
@@ -25,46 +27,43 @@ class DopController extends Controller
              */
     public function store(Request $request, Dop $newDop)
     {
-        $dataDop = $request->all(); 
+        $dataDop = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "dop" => "required",
+        ];
+        $validation = Validator::make($dataDop, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "DOP gagal dibuat !");
+        }
         
+        $validation->validate(); 
         $newDop->dop = $dataDop["dop"];
 
+        Alert::success('Success', $dataDop["dop"].", Berhasil Ditambahkan");
+
         if ($newDop->save()) {
-            return redirect("/dop")->with("success", true);
+            return redirect()->back();
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Dop  $dop
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Dop $dop)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Dop  $dop
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Dop $dop)
-    {
-        //
-    }
-
+    
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\Dop  $dop
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Dop $dop)
+    public function delete($id)
     {
-        //
+        $id = Dop::find($id);
+        $dop = $id->dop;
+        
+        $id->delete();
+        Alert::success('Delete', $dop.", Berhasil Dihapus")->hideCloseButton();
+
+        return redirect()->back();
     }
 }

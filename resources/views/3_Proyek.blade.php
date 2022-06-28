@@ -30,15 +30,21 @@
 					</div> --}}
 					<!--end::Delete Alert -->
 					@if (Session::has("success"))
-					<div class="alert alert-success alert-dismissible fade show" role="alert">
+					<div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
 						{{ Session::get("success") }}
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						{{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
+					</div>
+					@endif
+					@if (Session::has("delete"))
+					<div class="alert alert-warning alert-dismissible fade show rounded-0" role="alert">
+						{{ Session::get("delete") }}
+						{{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
 					</div>
 					@endif
 					@if (Session::has("failed"))
-					<div class="alert alert-danger alert-dismissible fade show" role="alert">
+					<div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
 						{{ Session::get("failed") }}
-						<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+						{{-- <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> --}}
 					</div>
 					@endif
 {{-- End:: Alert --}}					
@@ -187,7 +193,7 @@
 														<th class="min-w-auto">Nilai Realisasi</th>
 														<th class="min-w-auto">Jenis Proyek</th>
 														<th class="min-w-auto">Tipe Proyek</th>
-														<th class=""><center>Action</center></th>
+														<th class="min-w-auto text-center">Action</th>
 													</tr>
 													<!--end::Table row-->
 												</thead>
@@ -243,14 +249,11 @@
 														</td>
 														<!--end::Tipe Proyek=-->
 														<!--begin::Action=-->
-														<td>
+														<td class="text-center">
 														<!--begin::Button-->
-														<form action="/proyek/delete/{{ $proyek->kode_proyek }}" method="post" class="d-inline" >
-															@method('delete')
-															@csrf
-															<center>
-																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-															</center>
+															<button data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}" id="modal-delete"
+																class="btn btn-sm btn-light btn-active-primary">Delete
+															</button>
 														</form>
 														<!--end::Button-->
 														</td>
@@ -262,22 +265,7 @@
 												<!--end::Table body-->
 											</table>
 <!--end::Table Proyek-->
-
-
-
-{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js">
-@if (count($errors) > 0)
-    $('#kt_modal_create_proyek').modal('show');
-@endif
-</script> --}}
 											
-{{-- <script type="text/javascript">
-	@if (count($errors) > 0)
-	const modalNew = document.getElementById("#kt_modal_create_proyek");
-		console.log("eror modal");
-	@endif
-</script> --}}
-
 
 										</div>
 										<!--end::Card body-->
@@ -569,22 +557,55 @@
 				
 <!--end::Modal New Proyek-->
 
+<!--begin::modal DELETE-->
+    @foreach ($proyeks as $proyek)
+	<form action="/proyek/delete/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_modal_delete{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-750px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header" 
+                    style="background-color: #ffa62b; background-image: url('/media/logos/delete.png');
+                            background-repeat: no-repeat; background-size: cover">
+                        <!--begin::Modal title-->
+                        <h2 class="text-white">Hapus : {{ $proyek->kode_proyek }} - {{ $proyek->nama_proyek }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg text-white"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                        <br>
 
+                        <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+    
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+<!--end::modal DELETE-->
 			
 		
-			<!--begin::Scrolltop-->
-			<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-				<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-				<span class="svg-icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-						<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="black" />
-					</svg>
-				</span>
-				<!--end::Svg Icon-->
-			</div>
-			@endsection
-
-			<!--end::Scrolltop-->
 		<!--end::Main-->
 

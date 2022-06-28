@@ -155,3 +155,5 @@
 <!--end::Body-->
 
 </html>
+
+@include('sweetalert::alert')

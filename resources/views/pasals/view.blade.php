@@ -128,9 +128,10 @@
 
                                     <!--begin::Close Btn=-->
                                     <td>
-                                        <a onclick="return confirm('Deleted file can not be undo. Are You Sure ?')"
-                                            href="/pasal/delete/{{ $pasal->id_pasal }}"
-                                            class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a>
+                                        {{-- <a href="/pasal/delete/{{ $pasal->id_pasal }}"
+                                            class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a> --}}
+                                        <a data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
+                                            class="btn btn-sm btn-light btn-active-primary">Delete</a>
                                     </td>
                                     <!--end::Close Btn=-->
 
@@ -298,6 +299,58 @@
         <!--end::Modal dialog-->
     </div>
     {{-- end::modal Edit Pasal --}}
+
+<!--begin::modal DELETE-->
+    @foreach ($pasals as $pasal)
+	<form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-750px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header" 
+                    style="background-color: #ffa62b; background-image: url('/media/logos/delete.png');
+                            background-repeat: no-repeat; background-size: cover">
+                        <!--begin::Modal title-->
+                        <h2 class="text-white">Hapus Pasal :</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg text-white"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <strong> &bull; {{ $pasal->pasal }}</strong>
+                        <br>
+                        <hr>
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                        <br>
+
+                        <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+    
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+<!--end::modal DELETE-->
     {{-- end::modal --}}
 @endsection
 
