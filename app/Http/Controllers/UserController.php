@@ -2,10 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\UserPasswordEmail;
+use App\Models\UnitKerja;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class UserController extends Controller
 {
@@ -66,6 +72,66 @@ class UserController extends Controller
         }
 
         return redirect('/');
+    }
+
+    public function save(Request $request, User $user) {
+        
+        $data = $request->all();
+        $is_administrator = $request->has("administrator") ?? false;
+        $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
+        $is_user_sales = $request->has("user-sales") ?? false;
+        $is_team_proyek = $request->has("team-proyek") ?? false;
+
+        $password = Str::random(20);
+        $user->name = $data["name-user"];
+        $user->email = $data["email"];
+        $user->no_hp = $data["phone-number"];
+        $user->unit_kerja = $data["unit-kerja"];
+        $user->alamat = $data["alamat"];
+        $user->check_administrator = $is_administrator;
+        $user->check_admin_kontrak = $is_admin_kontrak;
+        $user->check_user_sales = $is_user_sales;
+        $user->check_team_proyek = $is_team_proyek;
+        $user->password = Hash::make($password);
+
+        if($user->save()) {
+            Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
+            return redirect("/user")->with("success", 'User berhasil ditambahkan.<br> Informasi Akun akan dikirimkan melalu email.');
+        }
+
+    }
+
+    public function view($user) {
+        $user = User::find($user);
+        if(empty($user)) {
+            Alert::error("Error", "User tidak ditemukan");
+            return redirect("user");
+        }
+        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all()]);
+    }
+
+    public function update(Request $request) {
+        $data = $request->all();
+        $is_administrator = $request->has("administrator") ?? false;
+        $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
+        $is_user_sales = $request->has("user-sales") ?? false;
+        $is_team_proyek = $request->has("team-proyek") ?? false;
+
+        $user->name = $data["name-user"];
+        $user->email = $data["email"];
+        $user->no_hp = $data["phone-number"];
+        $user->unit_kerja = $data["unit-kerja"];
+        $user->alamat = $data["alamat"];
+        $user->check_administrator = $is_administrator;
+        $user->check_admin_kontrak = $is_admin_kontrak;
+        $user->check_user_sales = $is_user_sales;
+        $user->check_team_proyek = $is_team_proyek;
+        $user->password = Hash::make($password);
+
+        if($user->save()) {
+            Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
+            return redirect("/user")->with("success", 'User berhasil ditambahkan.<br> Informasi Akun akan dikirimkan melalu email.');
+        }
     }
 
     // public function createUser()

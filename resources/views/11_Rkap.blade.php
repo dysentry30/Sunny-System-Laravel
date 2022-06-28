@@ -42,6 +42,8 @@
 									<!--end::Title-->
 								</div>
 								<!--end::Page title-->
+								@if (auth()->user()->check_administrator)
+
 								<!--begin::Actions-->
 								<div class="d-flex align-items-center py-1">
 
@@ -99,6 +101,7 @@
 									
 								</div>
 								<!--end::Actions-->
+								@endif
 							</div>
 							<!--end::Container-->
 						</div>
@@ -140,7 +143,7 @@
 
 										@foreach($unitkerjas as $unitKerja)
 											<p>
-												<a class="" data-bs-toggle="collapse" href="#collapseRKAP{{ $unitKerja->divcode }}" role="button" aria-expanded="false" aria-controls="collapseRKAP{{$unitKerja->divcode}}">
+												<a class="#" data-bs-toggle="collapse" href="#collapseRKAP{{ $unitKerja->divcode }}" role="button" aria-expanded="false" aria-controls="collapseRKAP{{$unitKerja->divcode}}">
 												  {{ $unitKerja->unit_kerja }}
 												</a>
 												
@@ -149,9 +152,16 @@
 												<ul class="list-group list-group-flush">
 													@if (!empty($unitKerja->Users))
 														@foreach ($unitKerja->Users as $user)
-														<a href="#" class="list-group-item list-group-item-action" aria-current="true">
+														@if (auth()->user()->check_administrator)
+														
+														<a href="/user/view/{{$user->id}}" class="list-group-item list-group-item-action text-hover-primary" aria-current="true">
 															{{$user->name}}
-														  </a>
+														</a>
+														@else
+														<a href="#" class="list-group-item list-group-item-action text-hover-primary" aria-current="true">
+															{{$user->name}}
+														</a>
+														@endif
 														@endforeach
 													@else
 														<li class="list-group-item">There is no data</li>

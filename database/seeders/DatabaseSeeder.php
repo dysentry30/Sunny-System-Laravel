@@ -35,21 +35,21 @@ class DatabaseSeeder extends Seeder
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.
-            Proyek::create([
-                'nama_proyek' => "Pengadaan JPO Arkadia Tower",
-                'kode_proyek' => "FIRA001",
-                'unit_kerja' => "F",
-                'tahun_perolehan' => 2021,
-                'tipe_proyek' => "R",
-                'jenis_proyek' => "I",
-                'nilai_rkap' => "1,500,000,000",
-                'stage' => "1",
-                'sumber_dana' => "BUMN",
-                'bulan_pelaksanaan' => "Mei",
-                'dop' => "DOP 1",
-                'company' => "Wika Gedung",
-                
-            ]);
+        Proyek::create([
+            'nama_proyek' => "Pengadaan JPO Arkadia Tower",
+            'kode_proyek' => "FIRA001",
+            'unit_kerja' => "F",
+            'tahun_perolehan' => 2021,
+            'tipe_proyek' => "R",
+            'jenis_proyek' => "I",
+            'nilai_rkap' => "1,500,000,000",
+            'stage' => "1",
+            'sumber_dana' => "BUMN",
+            'bulan_pelaksanaan' => "Mei",
+            'dop' => "DOP 1",
+            'company' => "Wika Gedung",
+
+        ]);
         // end :: Proyek.
 
         // begin :: Contract Management
@@ -57,18 +57,18 @@ class DatabaseSeeder extends Seeder
         // end :: Contract Management
 
         // begin :: Proyek.
-            User::create([
-                'name' => "Admin Sunny",
-                'email' => "admin@sunny.com",
-                'password' => Hash::make('password'),
-                "role_id" => 1,
-            ]);
-            User::create([
-                'name' => "User Sunny",
-                'email' => "user@sunny.com",
-                'password' => Hash::make('password'),
-                "role_id" => 3,
-            ]);
+        User::create([
+            'name' => "Admin Sunny",
+            'email' => "admin@sunny.com",
+            'password' => Hash::make('password'),
+            "check_administrator" => 1,
+        ]);
+        User::create([
+            'name' => "User Sunny",
+            'email' => "user@sunny.com",
+            'password' => Hash::make('password'),
+            "check_team_proyek" => 1,
+        ]);
         // end :: Proyek.
 
         // begin :: User
@@ -77,102 +77,102 @@ class DatabaseSeeder extends Seeder
 
 
         // begin :: Unit Kerja.
-            UnitKerja::create([
-                'nomor_unit' => 1,
-                'unit_kerja' => "Divisi Bangun Gedung",
-                'divcode' => "F",
-                'dop' => "DOP 1",
-                'company' => "Wika Gedung",
-            ]);
-            
-            UnitKerja::create([
-                'nomor_unit' => 2,
-                'unit_kerja' => "Divisi Industri Plant",
-                'divcode' => "U",
-                'dop' => "DOP 1",
-                'company' => "Wika Gedung",
-            ]);
-            
-            UnitKerja::create([
-                'nomor_unit' => 3,
-                'unit_kerja' => "Industri Infrastruktur 1",
-                'divcode' => "G",
-                'dop' => "DOP 2",
-                'company' => "PT Wijaya Karya",
-            ]);
-            
-            UnitKerja::create([
-                'nomor_unit' => 4,
-                'unit_kerja' => "Industri Infrastruktur 2",
-                'divcode' => "H",
-                'dop' => "EA",
-                'company' => "Wika Industri & Konstruksi",
-            ]);
-            
-            UnitKerja::create([
-                'nomor_unit' => 5,
-                'unit_kerja' => "Divisi Luar Negeri",
-                'divcode' => "L",
-                'dop' => "DOP 1",
-                'company' => "PT Wijaya Karya",
-            ]);
-            
-            UnitKerja::create([
-                'nomor_unit' => 6,
-                'unit_kerja' => "Industri Power Energi",
-                'divcode' => "O",
-                'dop' => "DOP 2",
-                'company' => "PT Wijaya Karya",
-            ]);
+        UnitKerja::create([
+            'nomor_unit' => 1,
+            'unit_kerja' => "Divisi Bangun Gedung",
+            'divcode' => "F",
+            'dop' => "DOP 1",
+            'company' => "Wika Gedung",
+        ]);
+
+        UnitKerja::create([
+            'nomor_unit' => 2,
+            'unit_kerja' => "Divisi Industri Plant",
+            'divcode' => "U",
+            'dop' => "DOP 1",
+            'company' => "Wika Gedung",
+        ]);
+
+        UnitKerja::create([
+            'nomor_unit' => 3,
+            'unit_kerja' => "Industri Infrastruktur 1",
+            'divcode' => "G",
+            'dop' => "DOP 2",
+            'company' => "PT Wijaya Karya",
+        ]);
+
+        UnitKerja::create([
+            'nomor_unit' => 4,
+            'unit_kerja' => "Industri Infrastruktur 2",
+            'divcode' => "H",
+            'dop' => "EA",
+            'company' => "Wika Industri & Konstruksi",
+        ]);
+
+        UnitKerja::create([
+            'nomor_unit' => 5,
+            'unit_kerja' => "Divisi Luar Negeri",
+            'divcode' => "L",
+            'dop' => "DOP 1",
+            'company' => "PT Wijaya Karya",
+        ]);
+
+        UnitKerja::create([
+            'nomor_unit' => 6,
+            'unit_kerja' => "Industri Power Energi",
+            'divcode' => "O",
+            'dop' => "DOP 2",
+            'company' => "PT Wijaya Karya",
+        ]);
         // end :: Unit Kerja
-        
+
         // begin :: Company
-            Company::create([
-                'nama_company' => "PT Wijaya Karya",
-            ]);
-            Company::create([
-                'nama_company' => "Wika Gedung",
-            ]);
-            Company::create([
-                'nama_company' => "Wika Industri & Konstruksig",
-            ]);
+        Company::create([
+            'nama_company' => "PT Wijaya Karya",
+        ]);
+        Company::create([
+            'nama_company' => "Wika Gedung",
+        ]);
+        Company::create([
+            'nama_company' => "Wika Industri & Konstruksig",
+        ]);
         // end :: Company
 
         // begin :: DOP
-            Dop::create([
-                'dop' => "DOP 1",
-            ]);
-            Dop::create([
-                'dop' => "DOP 2",
-            ]);
-            Dop::create([
-                'dop' => "EA",
-            ]);
+        Dop::create([
+            'dop' => "DOP 1",
+        ]);
+        Dop::create([
+            'dop' => "DOP 2",
+        ]);
+        Dop::create([
+            'dop' => "EA",
+        ]);
         // end :: DOP
 
         // begin :: Sumber Dana.
-            SumberDana::create([
-                'nama_sumber' => "BUMN",
-                'kategori' => "BUMN",
-                'unique_code' => "NPWP",
-            ]);
-            SumberDana::create([
-                'nama_sumber' => "SWASTA",
-                'kategori' => "LOAN",
-                'unique_code' => "Bussines Permite License",
-            ]);
+        SumberDana::create([
+            'nama_sumber' => "BUMN",
+            'kategori' => "BUMN",
+            'unique_code' => "NPWP",
+        ]);
+        SumberDana::create([
+            'nama_sumber' => "SWASTA",
+            'kategori' => "LOAN",
+            'unique_code' => "Bussines Permite License",
+        ]);
         // begin :: Sumber Dana.
-        
+
         // begin :: SBU.
-            Sbu::create([
-                'sbu' => "SBU1",
-                'kode_sbu' => "D06E",
-                'klasifikasi' => "Minyak dan Gas",
-                'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
-                'referensi1' => "LPJK 3/2015",
-                'referensi2' => "LPJK 4/2015",
-                'referensi3' => "LPJK 6/2018",
-            ]);
+        Sbu::create([
+            'sbu' => "SBU1",
+            'kode_sbu' => "D06E",
+            'klasifikasi' => "Minyak dan Gas",
+            'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
+            'referensi1' => "LPJK 3/2015",
+            'referensi2' => "LPJK 4/2015",
+            'referensi3' => "LPJK 6/2018",
+        ]);
         // begin :: SBU.
     }
 }

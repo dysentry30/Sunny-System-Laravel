@@ -27,7 +27,7 @@
             <!--begin::Menu-->
             <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
 
-
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                 <div class="menu-item">
                     <a class="menu-link " href="/dashboard" style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -41,8 +41,9 @@
                         <span class="menu-title-2">Dashboard</span>
                     </a>
                 </div>
+                @endif
 
-
+                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                 <div class="menu-item">
                     <a class="menu-link " href="/customer" style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -55,7 +56,10 @@
                         <span class="menu-title-2">Pelanggan</span>
                     </a>
                 </div>
+                @endif
 
+                    
+                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
                 <div class="menu-item">
                     <a class="menu-link " href="/proyek" style="color:white; {{ (Request::Path() == 'proyek') ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -69,7 +73,9 @@
                         <span class="menu-title-2">Proyek</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/forecast" style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -82,7 +88,9 @@
                         <span class="menu-title-2">Forecast</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/contract-management" style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -96,7 +104,9 @@
                         <span class="menu-title-2">Contract Management</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/claim-management" style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -110,7 +120,9 @@
                         <span class="menu-title-2">Claim Management</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak )
                 <div class="menu-item">
                     <a class="menu-link " href="/document" style="color:white; {{ Request::Path() == 'document' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -124,9 +136,10 @@
                         <span class="menu-title-2">Document</span>
                     </a>
                 </div>
+                @endif
                 
 
-
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <!--Begin::Master Data Expand-->
                     {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;"> --}}
                         <div class="menu-item">
@@ -258,8 +271,9 @@
                         </div>
                     {{-- </div> --}}
                 <!--end::Master Data Expand-->
+                @endif
 
-
+                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                 <div class="menu-item">
                     <a class="menu-link " href="/rkap" style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -272,7 +286,9 @@
                         <span class="menu-title-2">Group RKAP</span>
                     </a>
                 </div>
+                @endif
                 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/kpi" style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -286,7 +302,9 @@
                         <span class="menu-title-2">KPI</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                 <div class="menu-item">
                     <a class="menu-link " href="/knowledge-base" style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -300,7 +318,9 @@
                         <span class="menu-title-2">Knowledge Base</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/change-request" style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -313,7 +333,9 @@
                         <span class="menu-title-2">Change Request</span>
                     </a>
                 </div>
+                @endif
 
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="stakeholder-communication" style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -326,6 +348,7 @@
                         <span class="menu-title-2">Stakeholder Communication</span>
                     </a>
                 </div>
+                @endif
                 
                 <br><br><br>
                 

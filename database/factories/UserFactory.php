@@ -23,7 +23,12 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             "unit_kerja" => $this->faker->randomElement(["F", "U", "G", "H", "L", "O"]),
-            "role_id" => $this->faker->randomElement([1,2,3,4]),
+            "check_administrator" => $this->faker->boolean(30),
+            "check_admin_kontrak" => $this->faker->boolean(30),
+            "check_user_sales" => $this->faker->boolean(30),
+            "check_team_proyek" => $this->faker->boolean(30),
+            "alamat" => $this->faker->address(),
+            "no_hp" => $this->faker->phoneNumber(),
             'remember_token' => Str::random(10),
         ];
     }

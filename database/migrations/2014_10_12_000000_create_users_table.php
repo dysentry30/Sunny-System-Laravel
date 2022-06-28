@@ -19,8 +19,13 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->mediumInteger("role_id");
+            $table->boolean("check_administrator")->default(0);
+            $table->boolean("check_admin_kontrak")->default(0);
+            $table->boolean("check_user_sales")->default(0);
+            $table->boolean("check_team_proyek")->default(0);
             $table->mediumText("unit_kerja")->nullable();
+            $table->longText("alamat")->nullable();
+            $table->mediumText("no_hp")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

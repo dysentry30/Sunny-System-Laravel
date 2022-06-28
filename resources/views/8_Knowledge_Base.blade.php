@@ -36,6 +36,8 @@
                         <!--end::Title-->
                     </div>
                     <!--end::Page title-->
+                    @if (auth()->user()->check_administrator)
+                    
                     <!--begin::Actions-->
                     <div class="d-flex align-items-center py-1">
 
@@ -60,6 +62,7 @@
 
                     </div>
                     <!--end::Actions-->
+                    @endif
                 </div>
                 <!--end::Container-->
             </div>
@@ -112,6 +115,7 @@
 						  <p class="card-text">{{ $faq->deskripsi }}</p>
 						  <hr class="text-secondary border-1 opacity-75">
 					</div>
+                    @if (auth()->user()->check_administrator)
 
 {{-- begin::modal Edit faq --}}
 				<form action="/knowledge-base/update" method="post" enctype="multipart/form-data"> 
@@ -195,6 +199,78 @@
 						<!--end::Modal dialog-->
 					</div>
 				</form>
+                @else 
+                <div class="modal fade" id="kt_modal_edit_faq{{ $faq->id }}" tabindex="-1" aria-hidden="true">
+                    <!--begin::Modal dialog-->
+                    <div class="modal-dialog modal-dialog-centered mw-900px">
+                        <!--begin::Modal content-->
+                        <div class="modal-content">
+                            <!--begin::Modal header-->
+                            <div class="modal-header">
+                                <!--begin::Modal title-->
+                                <h2>{{ $faq->judul }}</h2>
+                                <!--end::Modal title-->
+                                <!--begin::Close-->
+                                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                    <span class="svg-icon svg-icon-1">
+                                        <span class="svg-icon svg-icon-1">
+                                            <i class="bi bi-x-lg"></i>
+                                        </span>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                </div>
+                                <!--end::Close-->
+                            </div>
+                            <!--end::Modal header-->
+                            <!--begin::Modal body-->
+                            <div class="modal-body py-lg-6 px-lg-6">
+
+                                <!--begin::Input group Website-->
+                                <div class="fv-row">
+                                    <div class="fv-row">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Judul :</span>
+                                        </label>
+                                        <!--end::Label-->
+            
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" name="judul" id="judul"
+                                            style="font-weight: normal" value="{{ $faq->judul }}" placeholder="Input Judul">
+                                        <!--end::Input-->
+            
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Deskripsi :</span>
+                                        </label>
+                                        <!--end::Label-->
+            
+                                        <!--begin::Input-->
+                                        {{-- <input type="text" class="form-control form-control-solid" name="deskripsi" id="deskripsi"
+                                            style="font-weight: normal" value="{{ $faq->deskripsi }}" placeholder="Input Deskripsi"> --}}
+                                        <textarea class="form-control form-control-solid" name="deskripsi" id="deskripsi" style="min-height:100px;">{{ $faq->deskripsi }}</textarea>
+                                        <!--end::Input-->
+
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span style="font-weight: normal">Attachement : File Lorem Ipsum.docx</span>
+                                        </label>
+                                        <!--end::Label-->
+            
+                                    </div><br>
+            
+                                </div>
+                                <!--end::Input group-->
+
+                            </div>
+                            <!--end::Modal body-->
+                        </div>
+                        <!--end::Modal content-->
+                    </div>
+                    <!--end::Modal dialog-->
+                </div>
+                @endif
 {{-- end::modal Edit faq --}}
 					@endforeach
 
