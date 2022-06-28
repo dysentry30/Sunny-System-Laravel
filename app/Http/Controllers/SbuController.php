@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Sbu;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class SbuController extends Controller
 {
@@ -14,7 +16,7 @@ class SbuController extends Controller
              */
     public function index()
     {
-        return view('/MasterData/Sbu', ['sbu' => Sbu::all()]);
+        return view('/MasterData/Sbu', ['sbus' => Sbu::all()]);
     }
 
             /**
@@ -25,7 +27,25 @@ class SbuController extends Controller
      */
     public function store(Request $request, Sbu $newSbu)
     {
-        $dataSbu = $request->all(); 
+        $dataSbu = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "sbu" => "required",
+            "kode-sbu" => "required",
+            "klasifikasi" => "required",
+            "sub-klasifikasi" => "required",
+        ];
+        $validation = Validator::make($dataSbu, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("sbu");
+            $request->old("kode-sbu");
+            $request->old("klasifikasi");
+            $request->old("sub-klasifikasi");
+            Alert::error('Error', "SBU Gagal Dibuat, Periksa Kembali !");
+        }
+        $validation->validate();  
         
         $newSbu->sbu = $dataSbu["sbu"];
         $newSbu->kode_sbu = $dataSbu["kode-sbu"];
@@ -35,8 +55,10 @@ class SbuController extends Controller
         $newSbu->referensi2 = $dataSbu["referensi2"];
         $newSbu->referensi3 = $dataSbu["referensi3"];
 
+        Alert::success('Success', $dataSbu["sbu"].", Berhasil Ditambahkan");
+
         if ($newSbu->save()) {
-            return redirect('/sbu')->with("success", true);
+            return redirect('/sbu')->back();
         }
     }
 
@@ -69,8 +91,14 @@ class SbuController extends Controller
      * @param  \App\Models\Sbu  $sbu
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sbu $sbu)
+    public function delete($id)
     {
-        //
+        $id = Sbu::find($id);
+        $sbu = $id->sbu;
+        
+        $id->delete();
+        Alert::success('Delete', $sbu.", Berhasil Dihapus");
+
+        return redirect()->back();
     }
 }

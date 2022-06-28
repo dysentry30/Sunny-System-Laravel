@@ -36,7 +36,7 @@ class DopController extends Controller
         ];
         $validation = Validator::make($dataDop, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "DOP gagal dibuat !");
+            Alert::error('Error', "DOP Fagal Dibuat !");
         }
         
         $validation->validate(); 

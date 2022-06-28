@@ -88,7 +88,7 @@
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
                                                             <input type="text" id="name-customer" name="name-customer"                                                            class="form-control form-control-solid" 
-                                                            value="" placeholder="Name" />
+                                                            value="{{ old('name-customer') }}" placeholder="Name" />
                                                             @error('name-customer')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                             @enderror
@@ -96,8 +96,42 @@
                                                         </div>
                                                         <!--end::Input group Name-->
                                                         
-                                                        <!--begin::Options-->
-                                                        <div class="d-flex" style="flex-direction: column;">
+                                                        <!--begin::Input group Email-->
+														<div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+															<label class="fs-6 fw-bold form-label mt-3">
+                                                                <span class="required">Email</span>
+															</label>
+															<!--end::Label-->
+															<!--begin::Input-->
+															<input type="email" class="form-control form-control-solid" 
+															id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                                            @error('email')
+                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                            @enderror
+															<!--end::Input-->
+														</div>
+														<!--end::Input group-->
+                                                        
+														<!--begin::Input group Phone-->
+														<div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+															<label class="fs-6 fw-bold form-label mt-3">
+                                                                <span class="required">Phone Number</span>
+															</label>
+															<!--end::Label-->
+															<!--begin::Input-->
+															<input type="text" class="form-control form-control-solid" 
+															id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                                            @error('phone-number')
+                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                            @enderror
+															<!--end::Input-->
+														</div>
+														<!--end::Input group-->
+
+                                                          <!--begin::Options-->
+                                                          <div class="d-flex" style="flex-direction: column;">
                                                             <!--begin::Options-->
                                                             <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                                                                 <input class="form-check-input" type="checkbox" value="" id="check-customer" name="check-customer" />
@@ -119,6 +153,20 @@
                                                         </div>
                                                         <!--end::Options-->
                                                         
+														<!--begin::Input group Website-->
+														<div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+															<label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Website</span>
+															</label>
+															<!--end::Label-->
+															<!--begin::Input-->
+															<input type="text" class="form-control form-control-solid" 
+															id="website" name="website" value="" placeholder="Website" />
+															<!--end::Input-->
+														</div>
+														<!--end::Input group-->
+
                                                         <!--begin::Input group Address 2-->
                                                         <div class="fv-row mb-7" style="margin-top:10px;">
                                                             <!--begin::Label-->
@@ -144,48 +192,7 @@
                                                             <!--end::Input-->
                                                         </div>
                                                         <!--end::Input group-->
-                                                        
-                                                        <!--begin::Input group Email-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">Email</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="email" class="form-control form-control-solid" 
-															id="email" name="email" value="" placeholder="Email" />
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
-                                                        
-														<!--begin::Input group Phone-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">Phone Number</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="text" class="form-control form-control-solid" 
-															id="phone-number" name="phone-number" value="" placeholder="Phone Number" />
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
-                                                        
-														<!--begin::Input group Website-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Website</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="text" class="form-control form-control-solid" 
-															id="website" name="website" value="" placeholder="Website" />
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
+
                                                     </div>
                                                     <!--end::Card body-->
                                                 </div>

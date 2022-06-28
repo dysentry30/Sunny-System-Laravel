@@ -22,12 +22,6 @@
 					@extends('template.header')
 					<!--end::Header-->
 						
-						
-					<!--begin::Delete Alert -->
-					{{-- <div class="alert alert-success" role="alert">
-						Delete Success !
-					</div> --}}
-					<!--end::Delete Alert -->
 					
 					<!--begin::Content-->
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
@@ -47,55 +41,48 @@
 								<div class="d-flex align-items-center py-1">
 
 									<!--begin::Button-->
-									<a href="#" class="btn btn-sm btn-primary"
+									<a href="#" class="btn btn-sm btn-primary w-80px"
 									data-bs-toggle="modal" 
 									data-bs-target="#kt_modal_create" 
 									id="kt_toolbar_primary_button"
-									style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+									style="background-color:#ffa62b; padding: 6px">
 									New</a>
 
 								<!--begin::Wrapper-->
 								<div class="me-4" style="margin-left:10px;">
-										<!--begin::Menu-->
-										<a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-										<!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-										<span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
-											</svg>
-										</span>
-										<!--end::Svg Icon-->Action</a>
-										<!--begin::Menu 1-->
-										<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-											<!--begin::Header-->
-											<div class="px-7 py-5">
-												<div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-											</div>
-											<!--end::Header-->
-											<!--begin::Menu separator-->
-											<div class="separator border-gray-200"></div>
-											<!--end::Menu separator-->
-											<!--begin::Form-->
-											<div class="px-7 py-5">
-												<!--begin::Input group-->
-												<div class="mb-10">
-													<!--begin::Label-->
-													
-													<i class="fas fa-file-excel"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Export Excel</label><br>
-													<i class="fas fa-file"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Import Excel</label><br>
-													<!--end::Label-->
-												</div>
-											</div>
-											<!--end::Form-->
+									<!--begin::Menu-->
+									<a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+										<i class="bi bi-folder2-open"></i>Action</a>
+									<!--begin::Menu 1-->
+									<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+										<!--begin::Header-->
+										<div class="px-7 py-5">
+											<div class="fs-5 text-dark fw-bolder">Choose actions:</div>
 										</div>
-										<!--end::Menu 1-->
-										<!--end::Menu-->
+										<!--end::Header-->
+										<!--begin::Menu separator-->
+										<div class="separator border-gray-200"></div>
+										<!--end::Menu separator-->
+										<!--begin::Form-->
+										<div class="px-7 py-5">
+											<!--begin::Input group-->
+											<div class="mb-10">
+												<!--begin::Label-->
+												<i class="bi bi-file-earmark-spreadsheet"></i>
+												<label class="form-label" style="margin-left:5px;">
+													Export Excel</label><br>
+												<i class="bi bi-file-earmark-word"></i>
+												<label class="form-label" style="margin-left:5px;">
+													Import Excel</label><br>
+												<!--end::Label-->
+											</div>
+										</div>
+										<!--end::Form-->
 									</div>
-									<!--end::Wrapper-->
+									<!--end::Menu 1-->
+									<!--end::Menu-->
+								</div>
+								<!--end::Wrapper--> 	
 									
 									
 								</div>
@@ -153,7 +140,7 @@
 														<th class="min-w-auto">Referensi 1</th>
 														<th class="min-w-auto">Referensi 2</th>
 														<th class="min-w-auto">Referensi 3</th>
-														<th class=""><center>Action</center></th>
+														<th class="text-center">Action</th>
 													</tr>
 													<!--end::Table row-->
 												</thead>
@@ -162,7 +149,7 @@
 												{{-- @php
 												$proyeks = $proyeks->reverse();
 												@endphp --}}
-												@foreach ($sbu as $sbu)
+												@foreach ($sbus as $sbu)
 												
 												<tbody class="fw-bold text-gray-600">
 													<tr>
@@ -204,16 +191,12 @@
 														<!--end::Coloumn=-->
 
 														<!--begin::Action=-->
-														<td>
-														<!--begin::Button-->
-														<center>
-															<form action="#" method="post" class="d-inline" >
-																@method('delete')
-																@csrf
-																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-															</form>
-														</center>
-														<!--end::Button-->
+														<td class="text-center">
+															<!--begin::Button-->
+															<button data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $sbu->id }}" id="modal-delete"
+																class="btn btn-sm btn-light btn-active-primary">Delete
+															</button>
+															<!--end::Button-->
 														</td>
 														<!--end::Action=-->
 													</tr>
@@ -247,14 +230,13 @@
 					<!--end::Root-->
 
 <!--begin::Modal-->
-
 			<form action="/sbu/save" method="post" enctype="multipart/form-data"> 
 				@csrf
 				
 				<!--begin::Modal - Create Proyek-->
 				<div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
 				<!--begin::Modal dialog-->
-				<div class="modal-dialog modal-dialog-centered mw-900px">
+				<div class="modal-dialog modal-dialog-centered mw-800px">
 					<!--begin::Modal content-->
 					<div class="modal-content">
 						<!--begin::Modal header-->
@@ -291,7 +273,7 @@
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="sbu" name="sbu" value="" placeholder="Nama SBU" />
+											id="sbu" name="sbu" value="{{ old('sbu') }}" placeholder="Nama SBU" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -302,12 +284,12 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Kode SBU</span>
+												<span class="required">Kode SBU</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="kode-sbu" name="kode-sbu" value="" placeholder="Kode SBU" />
+											id="kode-sbu" name="kode-sbu" value="{{ old('kode-sbu') }}" placeholder="Kode SBU" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -324,7 +306,7 @@
 										<div class="fv-row mb-7">
 											<!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
-												<span>Klasifikasi</span>
+												<span class="required">Klasifikasi</span>
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
@@ -352,7 +334,7 @@
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="sub-klasifikasi" name="sub-klasifikasi" value="" placeholder="Sub-Klasifikasi" />
+											id="sub-klasifikasi" name="sub-klasifikasi" value="{{ old('sub-klasifikasi') }}" placeholder="Sub-Klasifikasi" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -373,7 +355,7 @@
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid reformat" 
+											<input type="text" class="form-control form-control-solid" 
 											id="referensi1" name="referensi1" value="" placeholder="Referensi 1" />
 											<!--end::Input-->
 										</div>
@@ -389,7 +371,7 @@
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid reformat" 
+											<input type="text" class="form-control form-control-solid" 
 											id="referensi2" name="referensi2" value="" placeholder="Referensi 2" />
 											<!--end::Input-->
 										</div>
@@ -412,7 +394,7 @@
 											</label>
 											<!--end::Label-->
 											<!--begin::Input-->
-											<input type="text" class="form-control form-control-solid reformat" 
+											<input type="text" class="form-control form-control-solid" 
 											id="referensi3" name="referensi3" value="" placeholder="Referensi 3" />
 											<!--end::Input-->
 										</div>
@@ -423,7 +405,7 @@
 							
 							
 								
-								<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
+								<button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#ffa62b">Save</button>
 									
 								</div>
 								<!--end::Modal body-->
@@ -437,41 +419,52 @@
 
 <!--end::Modals-->
 
-					
+<!--begin::modal DELETE-->
+    @foreach ($sbus as $sbu)
+	<form action="/sbu/delete/{{ $sbu->id }}" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_modal_delete{{ $sbu->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $sbu->nama_sbu }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg text-white"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                        <br>
+
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+    
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+<!--end::modal DELETE-->
+
+@endsection
 		
-			<!--begin::Scrolltop-->
-			<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-				<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-				<span class="svg-icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-						<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="black" />
-					</svg>
-				</span>
-				<!--end::Svg Icon-->
-			</div>
-			@endsection
-
-			<!--end::Scrolltop-->
-		<!--end::Main-->
-
-		<script>var hostUrl = "assets/";</script>
-		<!--begin::Javascript-->
-		<!--begin::Global Javascript Bundle(used by all pages)-->
-		<script src="assets/plugins/global/plugins.bundle.js"></script>
-		<script src="assets/js/scripts.bundle.js"></script>
-		<!--end::Global Javascript Bundle-->
-		<!--begin::Page Vendors Javascript(used by this page)-->
-		<script src="assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"></script>
-		<!--end::Page Vendors Javascript-->
-		<!--begin::Page Custom Javascript(used by this page)-->
-		<script src="assets/js/custom/widgets.js"></script>
-		<script src="assets/js/custom/apps/chat/chat.js"></script>
-		<script src="assets/js/custom/modals/create-app.js"></script>
-		<script src="assets/js/custom/modals/upgrade-plan.js"></script>
-		<!--end::Page Custom Javascript-->
-		<!--end::Javascript-->
-
-	</body>
-	<!--end::Body-->
-</html>

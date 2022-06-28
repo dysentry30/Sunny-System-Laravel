@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Pasals;
 use Illuminate\Http\Request;
 use App\Models\AddendumContracts;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class PasalController extends Controller
 {
@@ -49,7 +50,10 @@ class PasalController extends Controller
     public function destroy(Pasals $pasal)
     {
         if ($pasal->delete()) {
-            return Redirect::back()->with("msg", "This pasal have been deleted");
+            Alert::success('Delete', $pasal->pasal.", Berhasil Dihapus");
+            
+            return Redirect::back();
+            // return Redirect::back()->with("msg", "This pasal have been deleted");
         }
         return Redirect::back()->with("msg", "This pasal failed to delete");
     }
@@ -105,6 +109,7 @@ class PasalController extends Controller
         $pasal = $request->get("pasal");
         $pasals->pasal = $pasal;
         if ($pasals->save()) {
+            Alert::success('Success', $pasal.", Berhasil Ditambahkan");
             return response()->json([
                 "status" => "success",
                 "message" => "Your pasal have been added",
@@ -116,7 +121,7 @@ class PasalController extends Controller
             "message" => "Your pasal cannot be added",
         ]);
     }
-
+    
     // update Pasal from input to database
     
     public function pasalUpdate(Request $request) {
@@ -125,6 +130,7 @@ class PasalController extends Controller
         $pasals = Pasals::find($id_pasal);
         $pasals->pasal = $pasal;
         if ($pasals->save()) {
+            Alert::success('Success', $pasal.", Berhasil Diedit");
             return response()->json([
                 "status" => "success",
                 "message" => "Your pasal have been updated",

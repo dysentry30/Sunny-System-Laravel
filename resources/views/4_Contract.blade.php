@@ -35,30 +35,18 @@
                             <div class="d-flex align-items-center py-1">
 
                                 <!--begin::Button-->
-                                <a href="contract-management/view" class="btn btn-sm btn-primary"
-                                    id="kt_toolbar_primary_button" style="background-color:#ffa62b;">
+                                <a href="contract-management/view" class="btn btn-sm btn-primary w-80px"
+                                    id="kt_toolbar_primary_button" style="background-color:#ffa62b; padding: 6px">
                                     New</a>
                                 <!--end::Button-->
 
                                 <!--begin::Wrapper-->
                                 <div class="me-4" style="margin-left:10px;">
                                     <!--begin::Menu-->
-                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder"
-                                        data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-                                        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                viewBox="0 0 24 24" fill="none">
-                                                <path
-                                                    d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z"
-                                                    fill="black" />
-                                            </svg>
-                                        </span>
-                                        <!--end::Svg Icon-->Action
-                                    </a>
+                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="bi bi-folder2-open"></i>Action</a>
                                     <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
-                                        id="kt_menu_6155ac804a1c2">
+                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
                                         <!--begin::Header-->
                                         <div class="px-7 py-5">
                                             <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -72,11 +60,10 @@
                                             <!--begin::Input group-->
                                             <div class="mb-10">
                                                 <!--begin::Label-->
-
-                                                <i class="fas fa-file-excel"></i>
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>
                                                 <label class="form-label" style="margin-left:5px;">
                                                     Export Excel</label><br>
-                                                <i class="fas fa-file"></i>
+                                                <i class="bi bi-file-earmark-word"></i>
                                                 <label class="form-label" style="margin-left:5px;">
                                                     Import Excel</label><br>
                                                 <!--end::Label-->
@@ -99,7 +86,7 @@
 
                     {{-- begin::Alert --}}
                     {{-- Display Error --}}
-                    @if (Session::has('success'))
+                    {{-- @if (Session::has('success'))
                         <div class="alert fade alert-success d-flex align-items-center show" style="margin-bottom: 2rem;" role="alert">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24">
                                 <symbol id="check-circle-fill" fill="#0f5132" viewBox="0 0 16 16">
@@ -134,7 +121,7 @@
                                 {{Session::get("failed")}}
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
                     {{-- end::Alert --}}
 
                     <!--begin::Post-->
@@ -292,11 +279,9 @@
                 <!--begin::Modal content-->
                 <div class="modal-content">
                     <!--begin::Modal header-->
-                    <div class="modal-header" 
-                    style="background-color: #ffa62b; background-image: url('/media/logos/delete.png');
-                            background-repeat: no-repeat; background-size: cover">
+                    <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2 class="text-white">Hapus : Nomor Kontrak {{ $contract->id_contract }}</h2>
+                        <h2>Hapus : Nomor Kontrak {{ $contract->id_contract }}</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -315,7 +300,7 @@
                         <br>
                         <br>
 
-                        <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->
     

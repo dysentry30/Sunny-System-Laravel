@@ -23,12 +23,6 @@
 					<!--end::Header-->
 						
 						
-					<!--begin::Delete Alert -->
-					{{-- <div class="alert alert-success" role="alert">
-						Delete Success !
-					</div> --}}
-					<!--end::Delete Alert -->
-					
 					<!--begin::Content-->
 					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 						<!--begin::Toolbar-->
@@ -47,55 +41,48 @@
 								<div class="d-flex align-items-center py-1">
 
 									<!--begin::Button-->
-									<a href="#" class="btn btn-sm btn-primary"
+									<a href="#" class="btn btn-sm btn-primary w-80px"
 									data-bs-toggle="modal" 
 									data-bs-target="#kt_modal_create" 
 									id="kt_toolbar_primary_button"
-									style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+									style="background-color:#ffa62b; padding: 6px">
 									New</a>
 
 								<!--begin::Wrapper-->
 								<div class="me-4" style="margin-left:10px;">
-										<!--begin::Menu-->
-										<a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-										<!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
-										<span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
-											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-												<path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
-											</svg>
-										</span>
-										<!--end::Svg Icon-->Action</a>
-										<!--begin::Menu 1-->
-										<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-											<!--begin::Header-->
-											<div class="px-7 py-5">
-												<div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-											</div>
-											<!--end::Header-->
-											<!--begin::Menu separator-->
-											<div class="separator border-gray-200"></div>
-											<!--end::Menu separator-->
-											<!--begin::Form-->
-											<div class="px-7 py-5">
-												<!--begin::Input group-->
-												<div class="mb-10">
-													<!--begin::Label-->
-													
-													<i class="fas fa-file-excel"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Export Excel</label><br>
-													<i class="fas fa-file"></i>
-													<label class="form-label" style="margin-left:5px;">
-														Import Excel</label><br>
-													<!--end::Label-->
-												</div>
-											</div>
-											<!--end::Form-->
+									<!--begin::Menu-->
+									<a href="#" class="btn btn-sm btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+										<i class="bi bi-folder2-open"></i>Action</a>
+									<!--begin::Menu 1-->
+									<div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+										<!--begin::Header-->
+										<div class="px-7 py-5">
+											<div class="fs-5 text-dark fw-bolder">Choose actions:</div>
 										</div>
-										<!--end::Menu 1-->
-										<!--end::Menu-->
+										<!--end::Header-->
+										<!--begin::Menu separator-->
+										<div class="separator border-gray-200"></div>
+										<!--end::Menu separator-->
+										<!--begin::Form-->
+										<div class="px-7 py-5">
+											<!--begin::Input group-->
+											<div class="mb-10">
+												<!--begin::Label-->
+												<i class="bi bi-file-earmark-spreadsheet"></i>
+												<label class="form-label" style="margin-left:5px;">
+													Export Excel</label><br>
+												<i class="bi bi-file-earmark-word"></i>
+												<label class="form-label" style="margin-left:5px;">
+													Import Excel</label><br>
+												<!--end::Label-->
+											</div>
+										</div>
+										<!--end::Form-->
 									</div>
-									<!--end::Wrapper-->
+									<!--end::Menu 1-->
+									<!--end::Menu-->
+								</div>
+								<!--end::Wrapper-->
 									
 									
 								</div>
@@ -156,6 +143,7 @@
 														<th class="min-w-auto">Kode Proyek ID</th>
 														<th class="min-w-auto">Tipe Perusahaan</th>
 														<th class="min-w-auto">COT ID</th>
+														<th class="text-center">Action</th>
 														{{-- <th class=""><center>Action</center></th> --}}
 													</tr>
 													<!--end::Table row-->
@@ -165,75 +153,71 @@
 												{{-- @php
 												$proyeks = $proyeks->reverse();
 												@endphp --}}
-												@foreach ($sumberdana as $sumberdana)
+												@foreach ($sumberdana as $sumberdanas)
 												
 												<tbody class="fw-bold text-gray-600">
 													<tr>
 														
 														<!--begin::Name=-->
 														<td>
-															<a href="#" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $sumberdana->nama_sumber }}</a>
+															<a href="#" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $sumberdanas->nama_sumber }}</a>
 														</td>
 														<!--end::Name=-->
 														<!--begin::Email=-->
 														<td>
-															{{ $sumberdana->kategori }}
+															{{ $sumberdanas->kategori }}
 														</td>
 														<!--end::Email=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->unique_code }}
+															{{ $sumberdanas->unique_code }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->jenis_perusahaan }}
+															{{ $sumberdanas->jenis_perusahaan }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->tipe_lain }}
+															{{ $sumberdanas->tipe_lain }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->kode_sumber }}
+															{{ $sumberdanas->kode_sumber }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->sumber_dana_id }}
+															{{ $sumberdanas->sumber_dana_id }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->kode_proyek_id }}
+															{{ $sumberdanas->kode_proyek_id }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->tipe_perusahaan }}
+															{{ $sumberdanas->tipe_perusahaan }}
 														</td>
 														<!--end::Coloumn=-->
 														<!--begin::Coloumn=-->
 														<td>
-															{{ $sumberdana->cot_id }}
+															{{ $sumberdanas->cot_id }}
 														</td>
 														<!--end::Coloumn=-->
 
-														{{-- <!--begin::Action=-->
-														<td>
-														<!--begin::Button-->
-														<center>
-															<form action="#" method="post" class="d-inline" >
-																@method('delete')
-																@csrf
-																<button class="btn btn-sm btn-light btn-active-primary" onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-															</form>
-														</center>
-														<!--end::Button-->
+														<!--begin::Action=-->
+														<td class="text-center">
+															<!--begin::Button-->
+															<button data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $sumberdanas->id }}" id="modal-delete"
+																class="btn btn-sm btn-light btn-active-primary">Delete
+															</button>
+															<!--end::Button-->
 														</td>
-														<!--end::Action=--> --}}
+														<!--end::Action=-->
 													</tr>
 
 													@endforeach
@@ -266,19 +250,16 @@
 
 
 <!--begin::Modal-->
-
 			<form action="/sumber-dana/save" method="post" enctype="multipart/form-data"> 
 				@csrf
 				
 				<!--begin::Modal - Create App-->
 				{{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
 				
-				
-				
 				<!--begin::Modal - Create Proyek-->
 				<div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
 				<!--begin::Modal dialog-->
-				<div class="modal-dialog modal-dialog-centered mw-900px">
+				<div class="modal-dialog modal-dialog-centered mw-800px">
 					<!--begin::Modal content-->
 					<div class="modal-content">
 						<!--begin::Modal header-->
@@ -315,7 +296,7 @@
 											<!--end::Label-->
 											<!--begin::Input-->
 											<input type="text" class="form-control form-control-solid" 
-											id="nama-sumber" name="nama-sumber" value="" placeholder="Nama Pemberi Dana" />
+											id="nama-sumber" name="nama-sumber" value="{{ old('nama-sumber') }}" placeholder="Nama Pemberi Dana" />
 											<!--end::Input-->
 										</div>
 										<!--end::Input group-->
@@ -512,35 +493,69 @@
 								<!--End::Row Kanan+Kiri-->
 							
 								
-								<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
+								<button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="proyek_new_save" style="background-color:#ffa62b">Save</button>
 									
-								</div>
-								<!--end::Modal body-->
 							</div>
-							<!--end::Modal content-->
+							<!--end::Modal body-->
 						</div>
-						<!--end::Modal dialog-->
+						<!--end::Modal content-->
 					</div>
-					<!--end::Modal - Create App-->
-				</form>    
+					<!--end::Modal dialog-->
+				</div>
+				<!--end::Modal - Create App-->
+			</form>    
+<!--end::Modals-->
 
-		<!--end::Modals-->
+<!--begin::modal DELETE-->
+    @foreach ($sumberdana as $sumberdanas)
+	<form action="/sumber-dana/delete/{{ $sumberdanas->id }}" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_modal_delete{{ $sumberdanas->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $sumberdanas->nama_sumber }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg text-white"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                        <br>
+
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+    
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+<!--end::modal DELETE-->
 
 					
 		
-			<!--begin::Scrolltop-->
-			<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-				<!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-				<span class="svg-icon">
-					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-						<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-						<path d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z" fill="black" />
-					</svg>
-				</span>
-				<!--end::Svg Icon-->
-			</div>
-			@endsection
+@endsection
 
-			<!--end::Scrolltop-->
 		<!--end::Main-->
 

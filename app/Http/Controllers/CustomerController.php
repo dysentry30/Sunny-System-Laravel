@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Proyek;
 use App\Models\Customer;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
-use App\Models\Proyek;
-use App\Models\UnitKerja;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
@@ -20,7 +21,9 @@ class CustomerController extends Controller
 
     public function delete ($id_customer) 
     { 
-        $id_customer = Customer::find($id_customer)->delete();
+        $id_customer = Customer::find($id_customer);
+        $id_customer->delete();
+        Alert::success('Delete', $id_customer->name.", Berhasil Dihapus");
         return redirect("/customer")->with('status', 'Customer deleted');   
     }
 
@@ -83,7 +86,8 @@ class CustomerController extends Controller
         
         
         if ($_FILES['doc-attachment']['size'] == 0)
-        {
+        {   
+            Alert::success('Success', "Edit Berhasil")->autoClose(2500);
             // file is empty (and not an error)
             $editCustomer->save();
         }else{
@@ -105,15 +109,20 @@ class CustomerController extends Controller
         $data = $request->all(); 
         $messages = [
             "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
         ];
         $rules = [
             "name-customer" => "required",
+            "email" => "required",
+            "phone-number" => "required|numeric",
         ];
         $validation = Validator::make($data, $rules, $messages);
         $validation->validate();
         if ($validation->fails()) {
-            // $request->old("name-customer");
-            // dd(session()->all());
+            // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
+            $request->old("name-customer");
+            $request->old("email");
+            $request->old("phone-number");
             return redirect()->back();
         }
         
@@ -146,7 +155,7 @@ class CustomerController extends Controller
         $newCustomer->rugi = $data["rugi-performance"];
         
         // form attachment
-        // $newCustomer->note_attachment = $data["note-attachment"];
+        Alert::success('Success', $data["name-customer"].", Berhasil Ditambahkan");
 
         if ($newCustomer->save()) {
             return redirect("/customer")->with("success", true);
