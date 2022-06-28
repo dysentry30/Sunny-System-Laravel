@@ -17,6 +17,7 @@ use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Google\Service\FactCheckTools\Resource\Claims;
 
@@ -55,6 +56,7 @@ class ProyekController extends Controller
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
+            Alert::error('Error', "Proyek Gagal Dibuat, Periksa Kembali !");
             $request->old("nama-proyek");
             $request->old("unit-kerja");
             $request->old("jenis-proyek");
@@ -106,6 +108,8 @@ class ProyekController extends Controller
 
                 $newProyek->kode_proyek = $kode_proyek;
         //end::Generate Kode Proyek
+
+        Alert::success('Success', $dataProyek["nama-proyek"].", Berhasil Ditambahkan");
         
         if ($newProyek->save()) {
             return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
@@ -137,7 +141,7 @@ class ProyekController extends Controller
     public function update(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)
     {
         $dataProyek = $request->all(); 
-        // dd($request); //console log hasil $dataProyek
+        // dd($dataProyek); //console log hasil $dataProyek
         $newProyek=Proyek::find($dataProyek["kode-proyek"]);
         // $allProyek = Proyek::all();
         
@@ -146,7 +150,7 @@ class ProyekController extends Controller
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         // $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         // $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-        // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
+        $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
         // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
 
@@ -229,14 +233,13 @@ class ProyekController extends Controller
         $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
         $newProyek->tanggal_selesai_terkontrak = $dataProyek["tanggal-selesai-kontrak"];
         $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
-
-
         
         $idCustomer = $dataProyek["customer"];
-        
 
         // Form update Customer dan auto Proyek Berjalan
         // $newProyek->customer= $dataProyek["customer"];
+
+        Alert::success('Success', "Edit Berhasil")->autoClose(2500);
         
         if ($idCustomer != null){
             
@@ -284,6 +287,7 @@ class ProyekController extends Controller
         
         
         if ($proyekBerjalan == null && $contractManagement == null){
+            Alert::success('Delete', $deleteProyek->nama_proyek.", Berhasil Dihapus");
             $deleteProyek->delete();
         }elseif($proyekBerjalan == null){
             $deleteProyek->delete();

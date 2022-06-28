@@ -27,22 +27,14 @@
                     <div class="d-flex align-items-center py-1">
 
                         <!--begin::Button-->
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal"
-                            style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+                            style="background-color:#ffa62b; padding: 6px">
                             New</button>
+                        <a href="/contract-management/" class="btn btn-sm btn-active-primary w-80px"
+                            style="background-color:#f3f6f9; margin-left:10px; padding: 6px">
+                            Back</a>
                         <!--end::Button-->
-
-                        <!--begin::Wrapper-->
-                        <div class="me-4" style="margin-left:10px;">
-                            <!--begin::Button-->
-                            <a href="/contract-management/view/29620" class="btn btn-sm btn-primary" id="cloedButton"
-                                style="background-color:#f3f6f9;margin-left:10px;color: black; padding: 7px 30px 7px 30px">
-                                Close</a>
-                            <!--end::Button-->
-
-                        </div>
-                        <!--end::Wrapper-->
 
 
                     </div>
@@ -99,7 +91,7 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="min-w-125px">No</th>
+                                <th class="w-75px">No</th>
                                 <th class="min-w-125px">Pasal</th>
                             </tr>
                             <!--end::Table row-->
@@ -121,8 +113,7 @@
                                     <td>
                                         <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1"><i
-                                                class="bi bi-pencil-square"></i> {{ $pasal->pasal }}</a>
+                                            class="text-gray-600 text-hover-primary mb-1">{{ $pasal->pasal }}</a>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -196,17 +187,16 @@
 
 
                         </div>
-                        <button type="button" id="add-pasal" style="background: #ffa62b; margin: 0 1rem 0 0;"
-                            class="btn btn-lg mt-5 btn-primary">
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#ffa62b">Save</button> --}}
+                        
+                        <button type="button" id="add-pasal" style="background-color:#ffa62b"
+                            class="btn btn-sm btn-light btn-active-primary text-white">
                             <div class="d-flex justify-content-center align-items-center">
-                                <span><b style="color: white;">Save</b></span>
+                                <span class="text-white">Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none; margin: 0 0 0 1rem;"
                                     aria-hidden="true" role="status"></span>
                             </div>
                         </button>
-                        <button type="button" role="button" id="close-pasal" class="btn btn-lg mt-5 btn-secondary"
-                            data-bs-dismiss="modal">
-                            Close</b>
                     </div>
                     <!--end::Input group-->
 
@@ -276,18 +266,17 @@
 
 
                         </div>
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
+
                         <button type="button" id="edit-pasal-btn"
-                            style="background: #ffa62b; margin: 0 1rem 0 0; padding: 7px 30px 7px 30px"
-                            class="btn btn-sm mt-5 btn-primary">
+                            style="background-color:#ffa62b"
+                            class="btn btn-sm btn-light btn-active-primary text-white">
                             <div class="d-flex justify-content-center align-items-center">
-                                <span><b style="color: white;">Update</b></span>
+                                <span class="text-white">Update</span>
                                 <span class="spinner-border spinner-border-sm" id="loading-update"
                                     style="display: none; margin: 0 0 0 1rem;" aria-hidden="true" role="status"></span>
                             </div>
                         </button>
-                        <button type="button" role="button" id="close-edit-pasal" class="btn btn-sm mt-5 btn-secondary"
-                            data-bs-dismiss="modal" style="padding: 7px 30px 7px 30px">
-                            Close</b>
                     </div>
                     <!--end::Input group-->
 
@@ -307,15 +296,13 @@
         @csrf
         <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-750px">
+            <div class="modal-dialog modal-dialog-centered mw-800px">
                 <!--begin::Modal content-->
                 <div class="modal-content">
                     <!--begin::Modal header-->
-                    <div class="modal-header" 
-                    style="background-color: #ffa62b; background-image: url('/media/logos/delete.png');
-                            background-repeat: no-repeat; background-size: cover">
+                    <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2 class="text-white">Hapus Pasal :</h2>
+                        <h2>Hapus Pasal :</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -332,12 +319,12 @@
                     <div class="modal-body py-lg-6 px-lg-6">
                         <strong> &bull; {{ $pasal->pasal }}</strong>
                         <br>
-                        <hr>
+                        <br>
                         Data yang dihapus tidak dapat dipulihkan, anda yakin ?
                         <br>
                         <br>
 
-                        <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->
     
@@ -386,6 +373,7 @@
             }).then(res => res.json());
 
             if (responsePasal.status == "success") {
+                window.location.reload();
                 let html = "";
                 const allPasalsData = responsePasal.pasals;
                 allPasalsData.forEach((element, i) => {
@@ -477,6 +465,7 @@
                 body: formData,
             }).then(res => res.json());
             if (updatePasal.status == "success") {
+                window.location.reload();
                 let html = "";
                 const allPasalsData = updatePasal.pasals;
                 allPasalsData.forEach((element, i) => {

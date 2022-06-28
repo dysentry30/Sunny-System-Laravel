@@ -327,6 +327,9 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // NEW Sumber Dana after SAVE
     Route::post('/sumber-dana/save', [SumberDanaController::class, 'store']);
+    
+    // DELETE Sumber Dana
+    Route::delete('/sumber-dana/delete/{id}', [SumberDanaController::class, 'delete']);
 
     // Home DOP
     Route::get('/dop', [DopController::class, 'index']);
@@ -341,14 +344,20 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // NEW SBU after SAVE
     Route::post('/sbu/save', [SbuController::class, 'store']);
+    
+    // DELETE SBU
+    Route::delete('/sbu/delete/{id}', [SbuController::class, 'delete']);
 
     // Home Unit Kerja
     Route::get('/unit-kerja', [UnitKerjaController::class, 'index']);
 
     // NEW Unit Kerja after SAVE
     Route::post('/unit-kerja/save', [UnitKerjaController::class, 'store']);
-
+    
+    // NEW Unit Kerja after SAVE
+    Route::delete('/unit-kerja/delete/{id}', [UnitKerjaController::class, 'delete']);
     //End :: Master Data
+    
     
     //Begin :: FAQ - KnowledgeBase
     Route::get('/knowledge-base',  [FaqsController::class, 'index']);

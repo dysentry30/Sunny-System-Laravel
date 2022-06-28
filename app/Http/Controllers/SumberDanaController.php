@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\SumberDana;
 use Illuminate\Http\Request;
 use Illuminate\support\Facades\DB;
+use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 
 class SumberDanaController extends Controller
@@ -28,8 +30,22 @@ class SumberDanaController extends Controller
              */
     public function store(Request $request, SumberDana $newSumber)
     {
-        $dataSumber = $request->all(); 
-        
+        $dataSumber = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "nama-sumber" => "required",
+            "kategori" => "required",
+            "unique-code" => "required",
+        ];
+        $validation = Validator::make($dataSumber, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nama-sumber");
+            Alert::error('Error', "Sumber Dana Gagal Dibuat, Periksa Kembali !");
+        }
+        $validation->validate();  
+
         $newSumber->nama_sumber = $dataSumber["nama-sumber"];
         $newSumber->kategori = $dataSumber["kategori"];
         $newSumber->unique_code = $dataSumber["unique-code"];
@@ -42,8 +58,10 @@ class SumberDanaController extends Controller
         $newSumber->tipe_perusahaan = $dataSumber["tipe-perusahaan"];
         $newSumber->cot_id = $dataSumber["cot-id"];
 
+        Alert::success('Success', $dataSumber["nama-sumber"].", Berhasil Ditambahkan");
+
         if ($newSumber->save()) {
-            return redirect('/sumber-dana')->with("success", true);
+            return redirect()->back();
         }
     }
 
@@ -76,8 +94,14 @@ class SumberDanaController extends Controller
      * @param  \App\Models\SumberDana  $sumberDana
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SumberDana $sumberDana)
+    public function delete($id)
     {
-        //
+        $id = SumberDana::find($id);
+        $sumber = $id->nama_sumber;
+        
+        $id->delete();
+        Alert::success('Delete', $sumber.", Berhasil Dihapus");
+
+        return redirect()->back();
     }
 }

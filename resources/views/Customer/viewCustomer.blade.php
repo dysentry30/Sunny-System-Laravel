@@ -127,32 +127,6 @@
                                                         </div>
                                                         <!--end::Options-->
                                                         
-                                                        <!--begin::Input group Address 1-->
-                                                        <div class="fv-row mb-7" style="margin-top:10px;">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Address Line 1</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <textarea class="form-control form-control-solid" name="AddressLine1">{{ $customer->address_1 }}</textarea>
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
-                                                        <!--begin::Input group Address 2-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Address Line 2</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <textarea class="form-control form-control-solid" name="AddressLine2">{{ $customer->address_2 }}</textarea>
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                        
                                                         <!--begin::Input group Email-->
                                                         <div class="fv-row mb-7">
                                                             <!--begin::Label-->
@@ -191,6 +165,32 @@
                                                             <!--begin::Input-->
                                                             <input type="text" class="form-control form-control-solid" 
                                                             id="website" name="website" value="{{ $customer->website }}" placeholder="Website" />
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                         <!--begin::Input group Address 1-->
+                                                         <div class="fv-row mb-7" style="margin-top:10px;">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Address Line 1</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <textarea class="form-control form-control-solid" name="AddressLine1">{{ $customer->address_1 }}</textarea>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                        <!--begin::Input group Address 2-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Address Line 2</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <textarea class="form-control form-control-solid" name="AddressLine2">{{ $customer->address_2 }}</textarea>
                                                             <!--end::Input-->
                                                         </div>
                                                         <!--end::Input group-->

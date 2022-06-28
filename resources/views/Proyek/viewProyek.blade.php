@@ -22,22 +22,6 @@
                 @extends('template.header')
                 <!--end::Header-->
 
-{{-- Begin:: Alert --}}
-                {{-- @if (Session::has("failed"))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ Session::get("failed") }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif --}}
-                @if (Session::has("success"))
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        {{ Session::get("success") }}
-                        <strong>Update data berhasil.</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                  </div>
-                @endif
-{{-- End:: Alert --}}
- 
 
 					<!--begin::Content-->
 					<!--begin::Form-->
@@ -562,7 +546,7 @@
                                                                     @if (isset($proyekberjalans))
                                                                         @foreach ($customers as $customer)
                                                                         @if ($customer->id_customer == $proyekberjalans->id_customer)
-                                                                        <option value="{{ $customer->name }}" selected>{{$customer->name }}</option>
+                                                                        <option value="{{ $customer->id_customer }}" selected>{{$customer->name }}</option>
                                                                         @else
                                                                         <option value="{{ $customer->id_customer }}">{{$customer->name }}</option>
                                                                         @endif
@@ -2258,6 +2242,7 @@
         {{-- </form>     --}}
 
 <!--end::Modals-->
+
 <!--begin::Feedback Modals-->
     
     {{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
