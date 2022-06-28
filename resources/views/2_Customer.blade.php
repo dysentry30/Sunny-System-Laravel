@@ -154,7 +154,7 @@
                                         <th class="min-w-auto">Website</th>
                                         <th class="min-w-auto">Created Date</th>
                                         <th class="min-w-auto">PIC</th>
-                                        <th class="min-w-auto">Action</th>
+                                        <th class="min-w-auto text-center">Action</th>
                                         {{-- <th class="max-w-120px"><center>Action</center></th> --}}
                                     </tr>
                                     <!--end::Table row-->
@@ -196,18 +196,10 @@
                                             <td>{{ $customers->name_pic }}</td>
                                             <!--end::Date=-->
                                             <!--begin::Action=-->
-                                            <td class="text-end">
-                                                <center>
-                                                    <form action="/customer/delete/{{ $customers->id_customer }}"
-                                                        method="post" class="d-inline">
-                                                        @method('delete')
-                                                        @csrf
-                                                        <button
-                                                            class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6"
-                                                            onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
-                                                    </form>
-                                                </center>
-
+                                            <td class="text-center">
+                                                <button data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $customers->id_customer }}" id="modal-delete"
+                                                    class="btn btn-sm btn-light btn-active-primary">Delete
+                                                </button>
                                             </td>
                                             <!--end::Action=-->
                                         </tr>
@@ -218,9 +210,6 @@
                                                     class="btn btn-sm btn-light btn-active-primary min-w-100px fs-5"
                                                     data-kt-menu-trigger="click"
                                                     data-kt-menu-placement="bottom-end">View</a>
-
-
-                                            </td>
                                         </tr> --}}
                                     @endforeach
 
@@ -249,6 +238,65 @@
     </div>
     <!--end::Root-->
 
+
+{{-- begin::modal DELETE --}}
+    @foreach ($customer as $customers)
+	<form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_modal_delete{{ $customers->id_customer }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-750px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header" 
+                    style="background-color: #ffa62b; background-image: url('/media/logos/delete.png');
+                            background-repeat: no-repeat; background-size: cover">
+                        <!--begin::Modal title-->
+                        <h2 class="text-white">Hapus : {{ $customers->name }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg text-white"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                        <br>
+
+                        <button class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+    
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+{{-- end::modal DELETE --}}
+
+
 @endsection
-{{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
 {{-- End::Main --}}
+
+{{-- <form action="/customer/delete/{{ $customers->id_customer }}"
+    method="post" class="d-inline">
+    @method('delete')
+    @csrf
+    <button
+        class="btn btn-sm btn-light btn-active-primary min-w-100px fs-6"
+        onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Delete</button>
+</form> --}}

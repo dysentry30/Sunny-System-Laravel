@@ -78,7 +78,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
 
-    Route::get('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
+    Route::delete('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
 
     Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
 
@@ -115,7 +115,7 @@ Route::group(['middleware' => ["userAuth"]], function () {
     // begin :: Pasal
     Route::get('/pasal/edit', [PasalController::class, 'index']);
 
-    Route::get('/pasal/delete/{pasal}', [PasalController::class, 'destroy']);
+    Route::delete('/pasal/delete/{pasal}', [PasalController::class, 'destroy']);
 
     Route::get('/pasal/{pasal}', [PasalController::class, 'show']);
 
@@ -314,6 +314,9 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // NEW Company after SAVE 
     Route::post('/company/save', [CompanyController::class, 'store']);
+    
+    // Delete Company  
+    Route::delete('/company/delete/{id}', [CompanyController::class, 'delete']);
 
     // Home Sumber Dana
     Route::get('/sumber-dana', [SumberDanaController::class, 'index']);
@@ -326,6 +329,8 @@ Route::group(['middleware' => ["userAuth"]], function () {
 
     // NEW DOP after SAVE
     Route::post('/dop/save', [DopController::class, 'store']);
+    // NEW DOP after SAVE
+    Route::delete('/dop/delete/{id}', [DopController::class, 'delete']);
 
     // Home SBU
     Route::get('/sbu', [SbuController::class, 'index']);

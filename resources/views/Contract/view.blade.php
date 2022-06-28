@@ -146,7 +146,7 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid"
-                                                                    id="number-contract" name="number-contract" value=""
+                                                                    id="number-contract" name="number-contract" value="{{ old('number-contract') }}"
                                                                     placeholder="No. Contract" />
                                                                 @error('number-contract')
                                                                     <h6>
@@ -175,9 +175,7 @@
                                                                     data-placeholder="Pilih Proyek">
                                                                     <option value=""></option>
                                                                     @foreach ($projects as $project)
-                                                                        <option value="{{ $project->kode_proyek}}">
-                                                                            {{ $project->nama_proyek }}
-                                                                        </option>
+                                                                        <option value="{{ $project->kode_proyek}}" {{ old ('project-id' ) == $project->kode_proyek ? "selected" : "" }}>{{ $project->nama_proyek }}</option>
                                                                     @endforeach
                                                                 </select>
 
@@ -213,7 +211,7 @@
                                                                         style="color: #e08c16"></i></a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12"
-                                                                    placeholder="Select a date" value="" name="start-date"
+                                                                    placeholder="Select a date" value="{{ old('start-date') }}" name="start-date"
                                                                     id="start-date" />
 
                                                                 @error('start-date')
@@ -243,7 +241,7 @@
                                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                         style="color: #e08c16"></i></a>
                                                                 <input type="Date"
-                                                                    class="form-control form-control-solid ps-12" value=""
+                                                                    class="form-control form-control-solid ps-12" value="{{ old('due-date') }}"
                                                                     placeholder="Select a date" id="due-date"
                                                                     name="due-date" />
                                                                 @error('due-date')
@@ -273,7 +271,7 @@
                                                                 <!--begin::Input-->
 
                                                                 <input type="text" class="form-control form-control-solid"
-                                                                    name="number-spk" id="number-spk" value=""
+                                                                    name="number-spk" id="number-spk" value="{{ old('number-spk') }}"
                                                                     placeholder="No. SPK" />
                                                                 @error('number-spk')
                                                                     <h6>
@@ -297,7 +295,7 @@
                                                                 <!--begin::Input-->
                                                                 <input type="decimal" id="value-contract"
                                                                     class="form-control form-control-solid" name="value"
-                                                                    value="" placeholder="Nilai Kontrak" />
+                                                                    value="{{ old('value') }}" placeholder="Nilai Kontrak" />
                                                                 @error('value')
                                                                     <h6>
                                                                         <b

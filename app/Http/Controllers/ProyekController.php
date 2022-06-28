@@ -2,22 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClaimManagements;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\Proyek;
 use App\Models\Company;
-use App\Models\ContractManagements;
 use App\Models\Customer;
-use App\Models\HistoryForecast;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use Illuminate\Http\Request;
+use App\Models\HistoryForecast;
 use App\Models\ProyekBerjalans;
-use Google\Service\FactCheckTools\Resource\Claims;
+use App\Models\ClaimManagements;
 use Illuminate\support\Facades\DB;
+use App\Models\ContractManagements;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+use Google\Service\FactCheckTools\Resource\Claims;
 
 class ProyekController extends Controller
 {
@@ -41,9 +42,6 @@ class ProyekController extends Controller
 
         $messages = [
             "required" => "This field is required",
-            // "numeric" => "This field must be numeric only",
-            // "string" => "This field must be alphabet only",
-            // "date" => "This field must be date format only",
         ];
         $rules = [
             "nama-proyek" => "required",
@@ -57,7 +55,6 @@ class ProyekController extends Controller
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
-            $validation->validate();
             $request->old("nama-proyek");
             $request->old("unit-kerja");
             $request->old("jenis-proyek");
@@ -66,9 +63,10 @@ class ProyekController extends Controller
             $request->old("sumber-dana");
             $request->old("tahun-perolehan");
             $request->old("bulan-pelaksanaan");
-            return redirect()->with("failed", "Proyek gagal dibuat, Periksa kembali !");
-            // dd($validation->errors());
+            Session::flash('failed','Proyek gagal dibuat, Periksa kembali button "NEW" !');
+            
         }
+        $validation->validate();
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];
@@ -112,6 +110,7 @@ class ProyekController extends Controller
         if ($newProyek->save()) {
             return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
         }
+        // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
     
     
@@ -302,7 +301,7 @@ class ProyekController extends Controller
         // dd($deleteProyek->kode_proyek);
         
 
-        return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");;
+        return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");
     }
 
     public function stage (Request $request) 

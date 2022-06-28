@@ -124,20 +124,34 @@ class ContractManagementsController extends Controller
                 "value" => "required",
                 "number-spk" => "required|numeric",
             ];
+            
             $validation = Validator::make($data, $rules, $messages);
             if ($validation->fails()) {
+                $request->old("number-contract");
+                $request->old("project-id");
+                $request->old("start-date");
+                $request->old("due-date");
+                $request->old("value");
+                $request->old("number-spk");
+                $validation->validate();
                 return redirect()->back()->with("failed", "This contract failed to add");
             }
-
+            
             // begin:: check if id contract exist and has same project id
             $is_contract_exist = ContractManagements::where("id_contract", "=", (int) $data["number-contract"])->orWhere("project_id", "=", $data["project-id"])->get()->first();
             if(!empty($is_contract_exist)) {
+                $request->old("number-contract");
+                $request->old("project-id");
+                $request->old("start-date");
+                $request->old("due-date");
+                $request->old("value");
+                $request->old("number-spk");
+                $validation->validate();
                 return redirect()->back()->with("failed", "Nomor Kontrak atau Proyek sudah ada, Pastikan Proyek tidak melebihi dari 2 kontrak");
             }
             // end:: check if id contract exist and has same project id
 
 
-            $validation->validate();
             $contractManagements->id_contract = (int) $data["number-contract"];
             $contractManagements->project_id = $data["project-id"];
             $contractManagements->contract_proceed = "Belum Selesai";
