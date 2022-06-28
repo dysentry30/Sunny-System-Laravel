@@ -29,8 +29,10 @@ class AdminKontrakAuth
         if(auth()->user()->check_admin_kontrak ) {
             return $next($request);
         }
-        Alert::error('Error', 'Tidak bisa mengakses halaman '  . $request->path());
+        // Alert::error('Error', 'Tidak bisa mengakses halaman '  . $request->path());
 
-        return redirect()->back();
+        // return redirect()->back();
+        return app(UserSalesAuth::class)->handle($request, $next);
+        
     }
 }

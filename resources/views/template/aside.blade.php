@@ -6,7 +6,7 @@
     <!--begin::Brand-->
     <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
         <!--begin::Logo-->
-        <a style="background-color:#0db0d9;">
+        <a href="#" style="background-color:#0db0d9;">
             <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
                 style="margin-top:30px;margin-left:-20px;" />
         </a>
@@ -75,7 +75,7 @@
                 </div>
                 @endif
 
-                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                 <div class="menu-item">
                     <a class="menu-link " href="/forecast" style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -90,7 +90,7 @@
                 </div>
                 @endif
 
-                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
                 <div class="menu-item">
                     <a class="menu-link " href="/contract-management" style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -106,7 +106,7 @@
                 </div>
                 @endif
 
-                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
                 <div class="menu-item">
                     <a class="menu-link " href="/claim-management" style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">
@@ -139,7 +139,7 @@
                 @endif
                 
 
-                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                 <!--Begin::Master Data Expand-->
                     {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;"> --}}
                         <div class="menu-item">
@@ -273,7 +273,7 @@
                 <!--end::Master Data Expand-->
                 @endif
 
-                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                 <div class="menu-item">
                     <a class="menu-link " href="/rkap" style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
                         <span class="menu-icon">

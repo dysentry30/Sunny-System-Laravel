@@ -32,5 +32,7 @@ class TeamProyekAuth
         Alert::error('Error', 'Tidak bisa mengakses halaman ' . $request->path());
 
         return redirect()->back();
+        // return app(UserSalesAuth::class)->handle($request, $next);
+
     }
 }
