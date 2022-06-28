@@ -572,18 +572,6 @@
         </div>
         <!--end::Modal - Create App-->
     </form>
-
-    <script>
-        // <input id="nilaiok-performance" class="reformat">
-
-        function reformat() {
-            this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
-        }
-        document.querySelectorAll('.reformat').forEach(inp => {
-            inp.addEventListener('input', reformat);
-        });
-    </script>
-
     <!--end::Modal New Proyek-->
 
     <!--begin::modal DELETE-->

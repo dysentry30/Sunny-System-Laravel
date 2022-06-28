@@ -3,28 +3,29 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Faker\Core\Uuid;
 use App\Models\Pasals;
 use App\Models\Proyek;
+use App\Models\HandOvers;
+use App\Models\Questions;
+use App\Models\InputRisks;
+use App\Models\ClaimDetails;
 use Illuminate\Http\Request;
+use App\Models\IssueProjects;
 use App\Models\DraftContracts;
+use App\Models\MonthlyReports;
+use App\Models\ReviewContracts;
+use App\Models\ClaimManagements;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
-use App\Models\ClaimDetails;
-use App\Models\ClaimManagements;
-use App\Models\HandOvers;
-use App\Models\InputRisks;
-use App\Models\IssueProjects;
-use App\Models\MonthlyReports;
-use App\Models\Questions;
-use App\Models\ReviewContracts;
-use Faker\Core\Uuid;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Redirect;
+use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\Collection;
 
 class ContractManagementsController extends Controller
 {
@@ -71,6 +72,8 @@ class ContractManagementsController extends Controller
         $issueProjects = IssueProjects::where("id_contract", "=", $contractManagement->id_contract)->get();
         $monthlyReports = MonthlyReports::where("id_contract", "=", $contractManagement->id_contract)->get();
         $questions = Questions::where("id_contract", "=", $contractManagement->id_contract)->get();
+
+        Alert::success('Delete', $contractManagement->id_contract.", Berhasil Dihapus");
 
         if(!empty($draftContracts)) {
             $this->deleteModelArray($draftContracts);
@@ -160,6 +163,8 @@ class ContractManagementsController extends Controller
             $contractManagements->number_spk = (int) $data["number-spk"];
             $contractManagements->stages = (int) 1;
             $contractManagements->value = (int) preg_replace("/[^0-9]/i", "", $data["value"]);
+
+            Alert::success('Success', $data["number-contract"].", Berhasil Ditambahkan");
             if ($contractManagements->save()) {
                 // echo "sukses";
                 return redirect("/contract-management")->with("success", "This contract has been added");

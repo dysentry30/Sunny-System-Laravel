@@ -235,6 +235,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE data customer pada dasboard customer by ID 
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
 
+    // ADD Team Proyek 
+    Route::post('proyek/user/add', [ProyekController::class, 'assignTeam']);
+
     // Stage Update 
     Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
 
