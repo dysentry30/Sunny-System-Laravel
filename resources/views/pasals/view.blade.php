@@ -257,7 +257,7 @@
                         <div class="fv-row mb-5" id="input-grup-edit-pasal" style="display: none;">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Pasal</span>
+                                <span style="font-weight: normal">Pasal :</span>
                             </label>
                             <!--end::Label-->
 
@@ -274,7 +274,8 @@
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
-
+                    </div>
+                    <div class="modal-footer">
                         <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
                             class="btn btn-sm btn-light btn-active-primary text-white">
                             <div class="d-flex justify-content-center align-items-center">
@@ -328,8 +329,8 @@
                             <br>
                             Data yang dihapus tidak dapat dipulihkan, anda yakin ?
                             <br>
-                            <br>
-
+                        </div>
+                        <div class="modal-footer">
                             <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->
