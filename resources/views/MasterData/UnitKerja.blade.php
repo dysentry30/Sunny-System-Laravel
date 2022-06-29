@@ -337,7 +337,7 @@
 
                                                                 <div class="modal-footer">
                                                                     <button type="button"
-                                                                        class="btn btn-active-primary text-white"
+                                                                        class="btn btn-sm btn-active-primary text-white"
                                                                         style="background-color: #ffa62b;">Save
                                                                         Setting</button>
                                                                 </div>
@@ -602,8 +602,8 @@
                         <div class="modal-body py-lg-6 px-lg-6">
                             Data yang dihapus tidak dapat dipulihkan, anda yakin ?
                             <br>
-                            <br>
-
+                        </div>
+                        <div class="modal-footer">
                             <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->

@@ -75,7 +75,7 @@
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>
                                                     <label class="form-label" style="margin-left:5px;">
                                                         Export Excel</label><br>
-                                                    <i class="bi bi-file-earmark-word"></i>
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>
                                                     <label class="form-label" style="margin-left:5px;">
                                                         Import Excel</label><br>
                                                     <!--end::Label-->
@@ -422,8 +422,7 @@
 
 
 
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#ffa62b">Save</button>
+                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#ffa62b">Save</button>
 
                     </div>
                     <!--end::Modal body-->
@@ -467,8 +466,8 @@
                         <div class="modal-body py-lg-6 px-lg-6">
                             Data yang dihapus tidak dapat dipulihkan, anda yakin ?
                             <br>
-                            <br>
-
+                        </div>
+                        <div class="modal-footer">
                             <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                         </div>
                         <!--end::Input group-->
