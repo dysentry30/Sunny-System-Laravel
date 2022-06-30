@@ -30,7 +30,7 @@
                     <!--begin::Toolbar-->
                     <form action="/user/update" method="post" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" name="user-id" id="user-id" value="{{$user->id}}">
+                        <input type="hidden" name="user-id" id="user-id" value="{{ $user->id }}">
                         <div class="toolbar" id="kt_toolbar">
                             <!--begin::Container-->
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -54,7 +54,8 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-4" id="customer_new_close">
+                                    <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="customer_new_close">
                                         Close</a>
                                     <!--end::Button-->
 
@@ -82,66 +83,66 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
 
-                                                    <!--begin::Input group Name-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">Name</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text" id="name-user" name="name-user"
-                                                            class="form-control form-control-solid" value="{{$user->name}}"
-                                                            placeholder="Name" />
-                                                        @error('name-user')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
-                                                        @enderror
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group Name-->
+                                                <!--begin::Input group Name-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span class="required">Name</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <input type="text" id="name-user" name="name-user"
+                                                        class="form-control form-control-solid" value="{{ $user->name }}"
+                                                        placeholder="Name" />
+                                                    @error('name-user')
+                                                        <h6 class="text-danger">{{ $message }}eror</h6>
+                                                    @enderror
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group Name-->
 
-                                                    <!--begin::Input group Email-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">Email</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="email" class="form-control form-control-solid"
-                                                            id="email" name="email" value="{{$user->email}}"
-                                                            placeholder="Email" />
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
+                                                <!--begin::Input group Email-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span class="required">Email</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <input type="email" class="form-control form-control-solid"
+                                                        id="email" name="email" value="{{ $user->email }}"
+                                                        placeholder="Email" />
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
 
-                                                    <!--begin::Input group Phone-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">Phone Number</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid"
-                                                            id="phone-number" name="phone-number" value="{{$user->no_hp}}"
-                                                            placeholder="Phone Number" />
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
+                                                <!--begin::Input group Phone-->
+                                                <div class="fv-row mb-7">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span class="required">Phone Number</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <input type="text" class="form-control form-control-solid"
+                                                        id="phone-number" name="phone-number" value="{{ $user->no_hp }}"
+                                                        placeholder="Phone Number" />
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
 
-                                                    <!--begin::Input group Address 2-->
-                                                    <div class="fv-row mb-7" style="margin-top:10px;">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Alamat</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <textarea class="form-control form-control-solid" name="alamat">{{$user->alamat}}</textarea>
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
+                                                <!--begin::Input group Address 2-->
+                                                <div class="fv-row mb-7" style="margin-top:10px;">
+                                                    <!--begin::Label-->
+                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                        <span>Alamat</span>
+                                                    </label>
+                                                    <!--end::Label-->
+                                                    <!--begin::Input-->
+                                                    <textarea class="form-control form-control-solid" name="alamat">{{ $user->alamat }}</textarea>
+                                                    <!--end::Input-->
+                                                </div>
+                                                <!--end::Input group-->
 
                                             </div>
                                             <!--end::Card body-->
@@ -193,8 +194,9 @@
                                                             {{-- begin:: Form Input Administrator --}}
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    value="" {{$user->check_administrator == 1 ? "checked" : ""}} name="administrator"
-                                                                    id="administrator">
+                                                                    value=""
+                                                                    {{ $user->check_administrator == 1 ? 'checked' : '' }}
+                                                                    name="administrator" id="administrator">
                                                                 <label class="form-check-label" for="administrator">
                                                                     Administrator
                                                                 </label>
@@ -204,8 +206,9 @@
                                                             {{-- begin:: Form Input Admin Kontrak --}}
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    value="" {{$user->check_admin_kontrak == 1 ? "checked" : ""}} name="admin-kontrak"
-                                                                    id="admin-kontrak">
+                                                                    value=""
+                                                                    {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
+                                                                    name="admin-kontrak" id="admin-kontrak">
                                                                 <label class="form-check-label" for="admin-kontrak">
                                                                     Admin Kontrak
                                                                 </label>
@@ -215,8 +218,9 @@
                                                             {{-- begin:: Form Input User Sales --}}
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    value="" {{$user->check_user_sales == 1 ? "checked" : ""}} name="user-sales"
-                                                                    id="user-sales">
+                                                                    value=""
+                                                                    {{ $user->check_user_sales == 1 ? 'checked' : '' }}
+                                                                    name="user-sales" id="user-sales">
                                                                 <label class="form-check-label" for="user-sales">
                                                                     User Sales
                                                                 </label>
@@ -226,8 +230,9 @@
                                                             {{-- begin:: Form Input Team Proyek --}}
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox"
-                                                                    value="" {{$user->check_team_proyek == 1 ? "checked" : ""}} name="team-proyek"
-                                                                    id="team-proyek">
+                                                                    value=""
+                                                                    {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
+                                                                    name="team-proyek" id="team-proyek">
                                                                 <label class="form-check-label" for="team-proyek">
                                                                     Team Proyek
                                                                 </label>
@@ -247,55 +252,55 @@
                                                         <!--begin:: D-flex -->
                                                         <div class="d-flex flex-column h-100px justify-content-between">
                                                             <select name="unit-kerja"
-                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                class="form-select form-select-solid"
                                                                 data-control="select2" data-hide-search="true"
                                                                 data-placeholder="Unit Kerja"
-                                                                data-select2-id="select2-data-4-1hgp" tabindex="-1"
                                                                 aria-hidden="true">
                                                                 <option data-select2-id="select2-data-6-c3oy"></option>
                                                                 @isset($user->unit_kerja)
-                                                                @foreach ($unit_kerjas as $unitKerja)
-                                                                    @if ($user->unit_kerja == $unitKerja->divcode)
+                                                                    @foreach ($unit_kerjas as $unitKerja)
+                                                                        @if ($user->unit_kerja == $unitKerja->divcode)
+                                                                            <option value="{{ $unitKerja->divcode }}"
+                                                                                selected
+                                                                                data-select2-id="{{ $unitKerja->divcode }}">
+                                                                                {{ $unitKerja->unit_kerja }}</option>
+                                                                        @endif
+                                                                    @endforeach
+                                                                @else
+                                                                    @foreach ($unit_kerjas as $unitKerja)
                                                                         <option value="{{ $unitKerja->divcode }}"
-                                                                            selected
                                                                             data-select2-id="{{ $unitKerja->divcode }}">
                                                                             {{ $unitKerja->unit_kerja }}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                                    @else
-                                                                    @foreach ($unit_kerjas as $unitKerja)
-                                                                    <option value="{{ $unitKerja->divcode }}"
-                                                                        data-select2-id="{{ $unitKerja->divcode }}">
-                                                                        {{ $unitKerja->unit_kerja }}</option>
                                                                     @endforeach
                                                                 @endisset
                                                             </select>
-                                                        </form>
+                    </form>
 
-                                                            <form action="/user/password/reset" method="post">
-                                                                @csrf
-                                                                <input type="hidden" value="{{$user->id}}" name="id-user">
-                                                                <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white" style="background-color: #ffa62b;">Reset Password</button>
-                                                            </form>
-                                                        </div>
-                                                        <!--end:: D-flex -->
-
-                                                    </div>
-                                                    {{-- end:: Hak Akses --}}
-                                                </div>
-                                                <!--end:::Tab content-->
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <form action="/user/password/reset" method="post">
+                        @csrf
+                        <input type="hidden" value="{{ $user->id }}" name="id-user">
+                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                            style="background-color: #ffa62b;">Reset Password</button>
+                    </form>
                 </div>
-                <!--end::Card body-->
+                <!--end:: D-flex -->
+
             </div>
-            <!--end::Contacts-->
+            {{-- end:: Hak Akses --}}
         </div>
-        <!--end::Content-->
+        <!--end:::Tab content-->
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    <!--end::Card body-->
+    </div>
+    <!--end::Contacts-->
+    </div>
+    <!--end::Content-->
     </div>
     <!--end::Contacts App- Edit Contact-->
     </div>
