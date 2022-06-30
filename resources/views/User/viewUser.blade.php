@@ -254,7 +254,7 @@
                                                             <select name="unit-kerja"
                                                                 class="form-select form-select-solid"
                                                                 data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Unit Kerja"
+                                                                data-placeholder="Unit Kerja" tabindex="-1"
                                                                 aria-hidden="true">
                                                                 <option data-select2-id="select2-data-6-c3oy"></option>
                                                                 @isset($user->unit_kerja)
