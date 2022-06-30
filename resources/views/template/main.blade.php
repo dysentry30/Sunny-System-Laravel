@@ -74,8 +74,8 @@
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
         <span class="svg-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)"
-                    fill="black" />
+                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
+                    transform="rotate(90 13 6)" fill="black" />
                 <path
                     d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
                     fill="black" />
@@ -89,9 +89,195 @@
         var hostUrl = "../";
     </script>
     <!--begin::Javascript-->
+    <script src="{{ asset('/js/app.js') }}"></script>
+    {{-- begin::Pusher --}}
+    <script>
+        window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
+            const notificationCounter = document.querySelector("#notification-counter");
+            const mainNotifContent = document.querySelector("#main-content-notif");
+            const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
+            const idUser = Number("{{ auth()->user()->id ?? 0 }}");
+            // const idNotification = data.id_notification;
+            notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
+            const dataDate = new Date(data.timestamp.date);
+            const nowDate = new Date();
+            const diff = Math.abs(dataDate - nowDate);
+            let time = "";
+
+            console.log(data);
+
+            if (diff < 1000) {
+                time = `now`;
+            } else if (diff % 1000 == 0) {
+                time = `${diff} sec`;
+            }
+
+            if (isAdministrator == 1) {
+                let html = `
+                <!--begin::Item-->
+                    <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+                        <!--begin::Section-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-35px me-4">
+                                <span class="symbol-label bg-light-primary">
+                                    <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                </span>
+                            </div>
+                            <!--end::Symbol-->
+                            <!--begin::Title-->
+                            <div class="mb-0 me-2">
+                                <a href="/user/view/${data.id_notification}"
+                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+                                <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                </div>
+                                <br>
+                                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
+                                <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #ffa62b;">Authorize</button>
+                            </div>
+                            <!--end::Title-->
+                            
+                        </div>
+                        <!--end::Section-->
+                        <!--begin::Label-->
+                        <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+                        <!--end::Label-->
+                    </div>
+                <!--end::Item-->
+                `;
+                mainNotifContent.innerHTML += html;
+            } else if (data.to_user.id == idUser) {
+                let actionNotifBtn = ``;
+                if (!data.is_rejected) {
+                    actionNotifBtn = `
+                    <form action="/user/password/reset/new" method="POST">
+                        @csrf
+                        <input type="hidden" name="id-notification" value="${data.id_notification}">
+                        <button type="submit"
+                            name="reset-password"
+                            class="btn btn-sm btn-active-primary text-white"
+                            style="background-color: #ffa62b;">Buat password baru</button>
+                    </form>
+                    `;
+                }
+                let html = `
+                <!--begin::Item-->
+                    <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.from_user.id}">
+                        <!--begin::Section-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-35px me-4">
+                                <span class="symbol-label bg-light-primary">
+                                    <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                </span>
+                            </div>
+                            <!--end::Symbol-->
+                            <!--begin::Title-->
+                            <div class="mb-0 me-2">
+                                <a href="#"
+                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">Admin</a>
+                                <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                </div>
+                                <br>
+                                
+                                ${actionNotifBtn}
+                                
+                            </div>
+                            <!--end::Title-->
+                            
+                        </div>
+                        <!--end::Section-->
+                        <!--begin::Label-->
+                        <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+                        <!--end::Label-->
+                    </div>
+                <!--end::Item-->
+                `;
+                mainNotifContent.innerHTML += html;
+
+            }
+        });
+
+        // begin Reset Password Authorization
+        async function resetPasswordAuthorize(elt, is_rejected = false) {
+            const getParentID = elt.getAttribute("data-parent-item");
+            const parentElt = document.querySelector(`#item-${getParentID}`);
+            const name = parentElt.querySelector("#title-notif");
+            const message = parentElt.querySelector("#msg-notif");
+            const time = parentElt.querySelector("#timestamp-notif");
+            const formData = new FormData();
+            let actionButtonAdmin = '';
+            formData.append("_token", "{{ csrf_token() }}");
+            if (is_rejected) {
+                formData.append("is_rejected", true);
+                actionButtonAdmin = `
+                    <button type="button"
+                        class="btn btn-sm btn-secondary disabled">Sudah tidak
+                        disetujui</button>
+                `;
+            } else {
+                actionButtonAdmin = `
+                    <button type="button"
+                        class="btn btn-sm btn-secondary disabled">Sudah
+                        disetujui</button>
+                `;
+            }
+            formData.append("id-user", getParentID);
+            // formData.append("id-notif", idNotification);
+            const resetPasswordRes = await fetch("/user/password/reset", {
+                method: "POST",
+                body: formData,
+                headers: {
+                    "X-Socket-ID": window.Echo.socketId(),
+                }
+            }).then(res => res.json);
+
+
+            let html = `
+            <!--begin::Item-->
+                    <div class="d-flex flex-stack py-4 border-bottom" id="item-${getParentID}">
+                        <!--begin::Section-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-35px me-4">
+                                <span class="symbol-label bg-light-primary">
+                                    <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                </span>
+                            </div>
+                            <!--end::Symbol-->
+                            <!--begin::Title-->
+                            <div class="mb-0 me-2">
+                                <a href="#"
+                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${name.innerText}</a>
+                                <div class="text-gray-400 fs-7" id="msg-notif">${message.innerText}
+                                </div>
+                                <br>
+                                ${actionButtonAdmin}
+                            </div>
+                            <!--end::Title-->
+                            
+                        </div>
+                        <!--end::Section-->
+                        <!--begin::Label-->
+                        <span class="badge badge-light fs-8" id="timestamp-notif">${time.innerText}</span>
+                        <!--end::Label-->
+                    </div>
+                <!--end::Item-->
+            `;
+
+            // console.log(parentElt);
+            parentElt.innerHTML = html;
+            // parentElt.remove();
+        }
+        // end Reset Password Authorization
+    </script>
+    {{-- end::Pusher --}}
     {{-- begin::Bootstrap JS --}}
-        {{-- NEW :: Bootstrap SCRIPT --}} <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-        {{-- OLD :: Bootstrap SCRIPT --}} {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+    {{-- NEW :: Bootstrap SCRIPT --}}
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+    </script>
+    {{-- OLD :: Bootstrap SCRIPT --}} {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
     </script> --}}
     {{-- end::Bootstrap JS --}}
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -142,7 +328,7 @@
         // script reformat number by add class
 
         function reformat() {
-        this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
+            this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
         }
         document.querySelectorAll('.reformat').forEach(inp => {
             inp.addEventListener('input', reformat);

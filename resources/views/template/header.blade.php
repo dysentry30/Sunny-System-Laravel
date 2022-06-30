@@ -9,12 +9,11 @@
             <!--begin::Navbar-->
             <div class="d-flex align-items-stretch" id="kt_header_nav">
                 <!--begin::Menu wrapper-->
-                <div class="header-menu align-items-stretch" data-kt-drawer="true"
-                    data-kt-drawer-name="header-menu" data-kt-drawer-activate="{default: true, lg: false}"
-                    data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'200px', '300px': '250px'}"
-                    data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_header_menu_mobile_toggle"
-                    data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                    data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
+                <div class="header-menu align-items-stretch" data-kt-drawer="true" data-kt-drawer-name="header-menu"
+                    data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
+                    data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="end"
+                    data-kt-drawer-toggle="#kt_header_menu_mobile_toggle" data-kt-swapper="true"
+                    data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_body', lg: '#kt_header_nav'}">
 
                 </div>
                 <!--end::Menu wrapper-->
@@ -50,24 +49,26 @@
                                 </svg>
                             </span>
                             <!--end::Svg Icon-->
+                            <span
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                <span id="notification-counter"></span>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
                         </div>
                         <!--begin::Menu-->
-                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px"
-                            data-kt-menu="true">
+                        <div class="menu menu-sub menu-sub-dropdown menu-column w-350px w-lg-375px" data-kt-menu="true">
                             <!--begin::Heading-->
                             <div class="d-flex flex-column bgi-no-repeat rounded-top"
                                 style="background-image:url('/media/misc/pattern-1.jpg')">
                                 <!--begin::Title-->
                                 <h3 class="text-white fw-bold px-9 mt-10 mb-6">Notifications
-                                    <span class="fs-8 opacity-75 ps-3">0 reports</span>
                                 </h3>
                                 <!--end::Title-->
                                 <!--begin::Tabs-->
                                 <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
-                                    <li class="nav-item">
+                                    <li class="nav-item ">
                                         <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 "
-                                            data-bs-toggle="tab"
-                                            href="#kt_topbar_notifications_1">Alerts</a>
+                                            data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
                                     </li>
 
                                 </ul>
@@ -79,47 +80,191 @@
                                 <!--begin::Tab panel-->
                                 <div class="tab-pane fade" id="kt_topbar_notifications_1" role="tabpanel">
                                     <!--begin::Items-->
-                                    <div class="scroll-y mh-325px my-5 px-8">
-                                        <!--begin::Item-->
-                                        <div class="d-flex flex-stack py-4">
-                                            <!--begin::Section-->
-                                            <div class="d-flex align-items-center">
-                                                <!--begin::Symbol-->
-                                                <div class="symbol symbol-35px me-4">
-                                                    <span class="symbol-label bg-light-primary">
-                                                        <!--begin::Svg Icon | path: icons/duotune/technology/teh008.svg-->
-                                                        <span class="svg-icon svg-icon-2 svg-icon-primary">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                width="24" height="24" viewBox="0 0 24 24"
-                                                                fill="none">
-                                                                <path opacity="0.3"
-                                                                    d="M11 6.5C11 9 9 11 6.5 11C4 11 2 9 2 6.5C2 4 4 2 6.5 2C9 2 11 4 11 6.5ZM17.5 2C15 2 13 4 13 6.5C13 9 15 11 17.5 11C20 11 22 9 22 6.5C22 4 20 2 17.5 2ZM6.5 13C4 13 2 15 2 17.5C2 20 4 22 6.5 22C9 22 11 20 11 17.5C11 15 9 13 6.5 13ZM17.5 13C15 13 13 15 13 17.5C13 20 15 22 17.5 22C20 22 22 20 22 17.5C22 15 20 13 17.5 13Z"
-                                                                    fill="black" />
-                                                                <path
-                                                                    d="M17.5 16C17.5 16 17.4 16 17.5 16L16.7 15.3C16.1 14.7 15.7 13.9 15.6 13.1C15.5 12.4 15.5 11.6 15.6 10.8C15.7 9.99999 16.1 9.19998 16.7 8.59998L17.4 7.90002H17.5C18.3 7.90002 19 7.20002 19 6.40002C19 5.60002 18.3 4.90002 17.5 4.90002C16.7 4.90002 16 5.60002 16 6.40002V6.5L15.3 7.20001C14.7 7.80001 13.9 8.19999 13.1 8.29999C12.4 8.39999 11.6 8.39999 10.8 8.29999C9.99999 8.19999 9.20001 7.80001 8.60001 7.20001L7.89999 6.5V6.40002C7.89999 5.60002 7.19999 4.90002 6.39999 4.90002C5.59999 4.90002 4.89999 5.60002 4.89999 6.40002C4.89999 7.20002 5.59999 7.90002 6.39999 7.90002H6.5L7.20001 8.59998C7.80001 9.19998 8.19999 9.99999 8.29999 10.8C8.39999 11.5 8.39999 12.3 8.29999 13.1C8.19999 13.9 7.80001 14.7 7.20001 15.3L6.5 16H6.39999C5.59999 16 4.89999 16.7 4.89999 17.5C4.89999 18.3 5.59999 19 6.39999 19C7.19999 19 7.89999 18.3 7.89999 17.5V17.4L8.60001 16.7C9.20001 16.1 9.99999 15.7 10.8 15.6C11.5 15.5 12.3 15.5 13.1 15.6C13.9 15.7 14.7 16.1 15.3 16.7L16 17.4V17.5C16 18.3 16.7 19 17.5 19C18.3 19 19 18.3 19 17.5C19 16.7 18.3 16 17.5 16Z"
-                                                                    fill="black" />
-                                                            </svg>
-                                                        </span>
-                                                        <!--end::Svg Icon-->
-                                                    </span>
-                                                </div>
-                                                <!--end::Symbol-->
-                                                <!--begin::Title-->
-                                                <div class="mb-0 me-2">
-                                                    <a href="#"
-                                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder">Project
-                                                        Alice</a>
-                                                    <div class="text-gray-400 fs-7">Phase 1 development
+                                    <div class="scroll-y mh-325px my-5 px-8" id="main-content-notif">
+                                        @if (auth()->user()->check_administrator)
+                                            @php
+                                                $user_notif = auth()
+                                                    ->user()
+                                                    ->Notifications->sortByDesc('created_at');
+                                            @endphp
+                                            @foreach ($user_notif as $notif)
+                                                <!--begin::Item-->
+                                                <div class="d-flex flex-stack py-4 border-bottom"
+                                                    id="item-{{ $notif->FromUser->id }}">
+                                                    <!--begin::Section-->
+                                                    <div class="d-flex align-items-center">
+                                                        <!--begin::Symbol-->
+                                                        <div class="symbol symbol-35px me-4">
+                                                            <span class="symbol-label bg-light-primary">
+                                                                @if (str_contains($notif->message, 'ganti password'))
+                                                                    <i class="bi bi-key-fill fs-2" id="icon-notif"
+                                                                        style="color: rgb(223, 155, 28)"></i>
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                        <!--end::Symbol-->
+                                                        <!--begin::Title-->
+                                                        <div class="mb-0 me-2">
+                                                            <a href="/user/view/{{ $notif->FromUser->id }}"
+                                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder"
+                                                                id="title-notif">{{ $notif->FromUser->name }}</a>
+                                                            <div class="text-gray-400 fs-7" id="msg-notif">
+                                                                {!! $notif->message !!}
+                                                            </div>
+                                                            <br>
+
+                                                            @switch($notif->is_approved)
+                                                                @case(true)
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-secondary disabled">Sudah
+                                                                        disetujui</button>
+                                                                @break
+
+                                                                @case(false)
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-secondary disabled">Sudah tidak
+                                                                        disetujui</button>
+                                                                @break
+
+                                                                @default
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-light btn-active-primary"
+                                                                        data-parent-item="{{ $notif->id_notification }}"
+                                                                        onclick="resetPasswordAuthorize(this, true)">Cancel</button>
+                                                                    <button type="button"
+                                                                        class="btn btn-sm btn-active-primary text-white"
+                                                                        data-parent-item="{{ $notif->id_notification }}"
+                                                                        onclick="resetPasswordAuthorize(this)"
+                                                                        style="background-color: #ffa62b;">Authorize</button>
+                                                            @endswitch
+                                                        </div>
+                                                        <!--end::Title-->
+
                                                     </div>
+                                                    <!--end::Section-->
+                                                    <!--begin::Label-->
+                                                    @php
+                                                        $date_now = date_create('now');
+                                                        $date_notif = date_create($notif->created_at);
+                                                        $date_differ = date_diff($date_now, $date_notif);
+                                                        // dd($date_differ);
+                                                    @endphp
+
+                                                    @if ($date_differ->y != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->y }} yr</span>
+                                                    @elseif($date_differ->m != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->m }} mo</span>
+                                                    @elseif($date_differ->d != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->d }} day</span>
+                                                    @elseif($date_differ->h != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->h }} hr</span>
+                                                    @elseif($date_differ->i != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->i }} min</span>
+                                                    @elseif($date_differ->s != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->s }} sec</span>
+                                                    @else
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">now</span>
+                                                    @endif
+                                                    <!--end::Label-->
                                                 </div>
-                                                <!--end::Title-->
-                                            </div>
-                                            <!--end::Section-->
-                                            <!--begin::Label-->
-                                            <span class="badge badge-light fs-8">1 hr</span>
-                                            <!--end::Label-->
-                                        </div>
-                                        <!--end::Item-->
+                                                <!--end::Item-->
+                                            @endforeach
+                                        @else
+                                            @php
+                                                $user_notif = auth()
+                                                    ->user()
+                                                    ->Notifications->sortByDesc('created_at');
+                                            @endphp
+                                            @foreach ($user_notif as $notif)
+                                                <!--begin::Item-->
+                                                <div class="d-flex flex-stack py-4 border-bottom"
+                                                    id="item-{{ $notif->from_id_user }}">
+                                                    <!--begin::Section-->
+                                                    <div class="d-flex align-items-center">
+                                                        <!--begin::Symbol-->
+                                                        <div class="symbol symbol-35px me-4">
+                                                            <span class="symbol-label bg-light-primary">
+                                                                @if (str_contains($notif->message, 'ganti password'))
+                                                                    <i class="bi bi-key-fill fs-2" id="icon-notif"
+                                                                        style="color: rgb(223, 155, 28)"></i>
+                                                                @endif
+                                                            </span>
+                                                        </div>
+                                                        <!--end::Symbol-->
+                                                        <!--begin::Title-->
+                                                        <div class="mb-0 me-2">
+                                                            <a href="#"
+                                                                class="fs-6 text-gray-800 text-hover-primary fw-bolder"
+                                                                id="title-notif">Admin</a>
+                                                            <div class="text-gray-400 fs-7" id="msg-notif">
+                                                                {!! $notif->message !!}
+                                                            </div>
+                                                            <br>
+                                                            @if (!empty($notif->token_reset_password) && !$notif->is_rejected)
+                                                                <form action="/user/password/reset/new"
+                                                                    method="POST">
+                                                                    @csrf
+                                                                    <input type="hidden" name="id-notification"
+                                                                        value="{{ $notif->id_notification }}">
+                                                                    <button type="submit" name="reset-password"
+                                                                        class="btn btn-sm btn-active-primary text-white"
+                                                                        style="background-color: #ffa62b;">Buat
+                                                                        password baru</button>
+                                                                </form>
+                                                            @elseif(empty($notif->token_reset_password) && $notif->is_rejected)
+                                                                {{-- !MAKE THIS EMPTY --}}
+                                                            @else
+                                                                <button type="button" name="reset-password"
+                                                                    class="btn btn-sm btn-secondary text-dark disabled">Request
+                                                                    sudah terpakai</button>
+                                                            @endif
+                                                        </div>
+                                                        <!--end::Title-->
+
+                                                    </div>
+                                                    <!--end::Section-->
+                                                    <!--begin::Label-->
+                                                    @php
+                                                        $date_now = date_create('now');
+                                                        $date_notif = date_create($notif->created_at);
+                                                        $date_differ = date_diff($date_now, $date_notif);
+                                                        // dd($date_differ);
+                                                    @endphp
+
+                                                    @if ($date_differ->y != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->y }} yr</span>
+                                                    @elseif($date_differ->m != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->m }} mo</span>
+                                                    @elseif($date_differ->d != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->d }} day</span>
+                                                    @elseif($date_differ->h != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->h }} hr</span>
+                                                    @elseif($date_differ->i != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->i }} min</span>
+                                                    @elseif($date_differ->s != 0)
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">{{ $date_differ->s }} sec</span>
+                                                    @else
+                                                        <span class="badge badge-light fs-8"
+                                                            id="timestamp-notif">now</span>
+                                                    @endif
+                                                    <!--end::Label-->
+                                                </div>
+                                                <!--end::Item-->
+                                            @endforeach
+                                        @endif
                                     </div>
                                     <!--end::Items-->
 
@@ -140,39 +285,42 @@
                     <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                         <!--begin::Menu wrapper-->
                         @auth
-                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
-                                data-kt-menu-trigger="click" data-kt-menu-attach="parent"
-                                data-kt-menu-placement="bottom-end">
+                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
+                                data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                                 Hi,<strong> {{ auth()->user()->name }}&nbsp;</strong>
-                                    {{-- <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
+                                {{-- <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
                                     &nbsp; --}}
-                                    <div class="d-inline-flex justify-content-center align-self-center" 
-                                    style="background-color:#0db0d9; width: 35px; height: 35px; border-radius: 50%;" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <a class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
-                                    </div>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <form action="/logout" method="post" class="form w-100" id="kt_sign_in_form" action="#">
-                                                @csrf
-                                                <button type="submit" class="btn btn-active-primary dropdown-item">Logout</button>
-                                            </form>
-                                    </ul>
-                            </div>
-                        
-                        @else
-
-                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
-                                    data-kt-menu-trigger="click" data-kt-menu-attach="parent"
-                                    data-kt-menu-placement="bottom-end">
-                                    Hi,<strong> Tes Login &nbsp;</strong>
-                                        {{-- begin logo dropdown --}}
-                                        <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" />
-                                        &nbsp;
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li>
-                                                <a class="dropdown-item" href="/">Login</a>
-                                            </li>
-                                        </ul>
+                                <div class="d-inline-flex justify-content-center align-self-center"
+                                    style="background-color:#0db0d9; width: 35px; height: 35px; border-radius: 50%;"
+                                    type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <a
+                                        class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
                                 </div>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <form action="/logout" method="post" class="form w-100" id="kt_sign_in_form"
+                                        action="#">
+                                        @csrf
+                                        <button type="submit"
+                                            class="btn btn-active-primary dropdown-item">Logout</button>
+                                    </form>
+                                </ul>
+                            </div>
+                        @else
+                            <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
+                                data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
+                                Hi,<strong> Tes Login &nbsp;</strong>
+                                {{-- begin logo dropdown --}}
+                                <img src="/media/avatars/User-Icon.png" alt="user" class="dropdown-toggle"
+                                    type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                                    aria-expanded="false" />
+                                &nbsp;
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li>
+                                        <a class="dropdown-item" href="/">Login</a>
+                                    </li>
+                                </ul>
+                            </div>
 
                         @endauth
 

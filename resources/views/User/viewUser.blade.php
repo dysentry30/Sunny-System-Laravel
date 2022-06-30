@@ -28,8 +28,9 @@
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::form-->
                     <!--begin::Toolbar-->
-                    <form action="/user/save" method="post" enctype="multipart/form-data">
+                    <form action="/user/update" method="post" enctype="multipart/form-data">
                         @csrf
+                        <input type="hidden" name="user-id" id="user-id" value="{{$user->id}}">
                         <div class="toolbar" id="kt_toolbar">
                             <!--begin::Container-->
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
@@ -82,7 +83,6 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
 
-                                                <form id="kt_ecommerce_settings_general_form" class="form" action="#">
                                                     <!--begin::Input group Name-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
@@ -246,7 +246,7 @@
                                                     <div class="tab-pane fade" id="kt_user_view_overview_user_information"
                                                         role="tabpanel">
                                                         <!--begin:: D-flex -->
-                                                        <div class="d-flex flex-column h-150px justify-content-between">
+                                                        <div class="d-flex flex-column h-100px justify-content-between">
                                                             <select name="unit-kerja"
                                                                 class="form-select form-select-solid select2-hidden-accessible"
                                                                 data-control="select2" data-hide-search="true"
@@ -254,6 +254,7 @@
                                                                 data-select2-id="select2-data-4-1hgp" tabindex="-1"
                                                                 aria-hidden="true">
                                                                 <option data-select2-id="select2-data-6-c3oy"></option>
+                                                                @isset($user->unit_kerja)
                                                                 @foreach ($unit_kerjas as $unitKerja)
                                                                     @if ($user->unit_kerja == $unitKerja->divcode)
                                                                         <option value="{{ $unitKerja->divcode }}"
@@ -262,7 +263,21 @@
                                                                             {{ $unitKerja->unit_kerja }}</option>
                                                                     @endif
                                                                 @endforeach
+                                                                    @else
+                                                                    @foreach ($unit_kerjas as $unitKerja)
+                                                                    <option value="{{ $unitKerja->divcode }}"
+                                                                        data-select2-id="{{ $unitKerja->divcode }}">
+                                                                        {{ $unitKerja->unit_kerja }}</option>
+                                                                    @endforeach
+                                                                @endisset
                                                             </select>
+                                                        </form>
+
+                                                            <form action="/user/password/reset" method="post">
+                                                                @csrf
+                                                                <input type="hidden" value="{{$user->id}}" name="id-user">
+                                                                <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white" style="background-color: #ffa62b;">Reset Password</button>
+                                                            </form>
                                                         </div>
                                                         <!--end:: D-flex -->
 
@@ -276,7 +291,6 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
                 </div>
                 <!--end::Card body-->
             </div>
@@ -289,8 +303,6 @@
     <!--end::Container-->
     </div>
     <!--end::Post-->
-    </form>
-    <!--end::Form-->
 
     </div>
     <!--end::Content-->
@@ -442,9 +454,7 @@
                         <!--begin::Content-->
                         <div class="flex-row-fluid py-lg-5 px-lg-15">
                             <!--begin::Form-->
-                            <form class="form" novalidate="novalidate" id="kt_modal_create_app_form" method="POST"
-                                action="/user/update">
-                                <input type="hidden" name="user-id" id="user-id" value="{{$user->id}}">
+                            <form class="form" novalidate="novalidate" id="kt_modal_create_app_form" method="POST">
                                 <!--begin::Step 1-->
                                 <div class="current" data-kt-stepper-element="content">
                                     <div class="w-100">
