@@ -50,4 +50,8 @@ class User extends Authenticatable
     public function UnitKerja() {
         return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");
     }
+
+    public function Notifications() {
+        return $this->hasMany(NotificationsModel::class, "to_user", "id");
+    }
 }

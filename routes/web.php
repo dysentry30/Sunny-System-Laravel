@@ -440,6 +440,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
     
     Route::post('/user/save', [UserController::class, "save"]);
+
+    Route::post('/user/update', [UserController::class, "update"]);
+
+    Route::post('/user/password/reset', [UserController::class, "userResetPassword"]);
+
+    Route::post('/user/password/reset/new', [UserController::class, "userNewPassword"]);
+    
+    Route::post('/user/password/reset/save', [UserController::class, "userNewPasswordSave"]);
     
     Route::get('/user/view/{user}', [UserController::class, "view"]);
 
