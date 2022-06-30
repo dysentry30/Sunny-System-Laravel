@@ -51,6 +51,7 @@ class NotificationPasswordReset implements ShouldBroadcast
         $is_notif_exist = new NotificationsModel();
         if(!$is_rejected && $from_user->check_administrator == 0) {   
             $is_notif_exist->token_reset_password = Str::random(30);
+            $is_notif_exist->is_approved = true;
         } else {
             $is_notif_exist->is_rejected = $is_rejected; 
         }

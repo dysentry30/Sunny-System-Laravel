@@ -184,10 +184,11 @@ class UserController extends Controller
         }
         $data = $request->all();
         $notification = NotificationsModel::find($data["id-notification"]);
+        dd($notification);
         if (!empty($notification->token_reset_password) && $notification->is_approved) {
             return view("User/createUserPassword", ["reset_password_token" => $notification->token_reset_password]);
         }
-        Alert::error("Error", "Tidak terauthorisasi dalam melakukan reset password");
+        Alert::error("Error", "Tidak terauthorisasi untuk melakukan reset password");
         return redirect()->back();
     }
 
@@ -197,7 +198,7 @@ class UserController extends Controller
         $notif = NotificationsModel::where("token_reset_password", "=", $data["reset-password-token"])->get()->first();
         $user = User::find($notif->to_user);
         if (!empty($notif) && !empty($user)) {
-            $user->password = HASH::make($data["reset-password-new"]);
+            $user->password = Hash::make($data["reset-password-new"]);
             $notif->token_reset_password = null;
             $notif->is_approved = false;
             if ($user->save() && $notif->save()) {
