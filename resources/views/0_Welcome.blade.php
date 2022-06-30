@@ -4,10 +4,10 @@
 <style>
     body{
         background-color: #0db0d9 !important;
-		background-image: url('/media/logos/welcome.png');
+		/* background-image: url('/media/logos/welcome.png');
 		background-repeat: no-repeat;
 		/* background-attachment: fixed; */
-		background-size: cover;
+		/* background-size: cover; */ */
     }
 </style>
 

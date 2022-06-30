@@ -317,6 +317,9 @@
     <!--begin::Page Vendors Javascript(used by this page)-->
     <script src="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
     <!--end::Page Vendors Javascript-->
+    <!--begin::JQUERY by google-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--end::JQUERY by google-->
     <!--begin::Page Custom Javascript(used by this page)-->
     <script src="{{ asset('/js/custom/widgets.js') }}"></script>
     <script src="{{ asset('/js/custom/apps/chat/chat.js') }}"></script>

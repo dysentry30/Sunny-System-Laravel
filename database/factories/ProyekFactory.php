@@ -18,12 +18,13 @@ class ProyekFactory extends Factory
     {
         return [
             "nama_proyek" => $this->faker->company(9),
-            "kode_proyek" => $this->faker->randomNumber(6), 
-            "unit_kerja" => $this->faker->randomElement(["Divisi Bangun Gedung", "Divisi Industri Plant", "Industri Infrastruktur 1", "Divisi Luar Negeri", "Industri Power Energi", "Wika Beton", "Wika Bitumen", "Wika Industri & Konstruksi"]),
+            "kode_proyek" => $this->faker->randomElement(["FIRA000", "FERA000", "FIPA000", "FEPA000", "LIRA000", "LERA000", "LIPA000", "LEPA000", "UIRA000", "UERA000", "UIPA000", "UEPA000", "HIRA000", "HERA000", "HIPA000", "HEPA000", "GIRA000", "GERA000", "GIPA000", "GEPA000"]), 
+            "unit_kerja" => $this->faker->randomElement(["F", "u", "G", "H", "L", "O"]),
             "tahun_perolehan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]), 
             "sumber_dana" => $this->faker->randomElement(["Sendiri", "Pinjam", "Sharing"]),
-            "jenis_proyek" => $this->faker->randomElement(["Internal", "External"]),
-            "tipe_proyek" => $this->faker->randomElement(["Retail", "Non-Retail"]),
+            "jenis_proyek" => $this->faker->randomElement(["I", "E"]),
+            "tipe_proyek" => $this->faker->randomElement(["R", "P"]),
+            "stage" => $this->faker->randomElement([1, 2, 3, 4]),
             // "tahun_pelaksanaan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]),
             "bulan_pelaksanaan" => $this->faker->randomElement(["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]),
             "nilai_rkap" => $this->faker->numerify('##,###,000,00'),
