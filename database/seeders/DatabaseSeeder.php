@@ -30,8 +30,11 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // ContractManagements::factory(5)->create();
         Pasals::factory(5)->create();
-        Customer::factory(8)->create();
+        Customer::factory(100)->create();
         Faqs::factory(7)->create();
+        ContractManagements::factory(1)->create();
+        User::factory(10)->create();
+        // Proyek::factory(8)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.
@@ -50,11 +53,22 @@ class DatabaseSeeder extends Seeder
             'company' => "Wika Gedung",
 
         ]);
-        // end :: Proyek.
+        Proyek::create([
+            'nama_proyek' => "Pembangunan Masjid Raya Ragunan",
+            'kode_proyek' => "HEPO003",
+            'unit_kerja' => "H",
+            'tahun_perolehan' => 2022,
+            'tipe_proyek' => "P",
+            'jenis_proyek' => "E",
+            'nilai_rkap' => "23,500,000,000",
+            'stage' => "4",
+            'sumber_dana' => "BUMN",
+            'bulan_pelaksanaan' => "Juni",
+            'dop' => "EA",
+            'company' => "Wika Industry & Konstruksi",
 
-        // begin :: Contract Management
-        ContractManagements::factory(1)->create();
-        // end :: Contract Management
+        ]);
+        // end :: Proyek.
 
         // begin :: Proyek.
         User::create([
@@ -70,10 +84,6 @@ class DatabaseSeeder extends Seeder
             "check_team_proyek" => 1,
         ]);
         // end :: Proyek.
-
-        // begin :: User
-        User::factory(10)->create();
-        // end :: User 
 
 
         // begin :: Unit Kerja.

@@ -106,18 +106,15 @@
                             <div class="card-title">
                                 <!--begin::Search-->
                                 <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Pelanggan" />
+                                    <form class="d-flex input-group mb-3" role="search">
+                                        <input class="form-control form-control-solid w-250px ps-5" type="search" placeholder="Search" aria-label="Search">
+                                        <button class="btn btn-sm btn-outline-success btn-active-secondary" type="submit"><i class="bi bi-search"></i></button>
+                                    </form>
                                 </div>
                                 <!--end::Search-->
                                 <!--begin::Paginate-->
-                                {{-- <div class="align-items-center d-flex justify-content-end">
-                                    <div class="p-2" style="color:gray">
+                                <div class="align-items-center d-flex justify-content-end">
+                                    {{-- <div class="p-2" style="color:gray">
                                         Showing
                                         {{ $customer->firstItem() }}
                                         to
@@ -125,13 +122,13 @@
                                         of
                                         {{ $customer->total()}}
                                         entries
-                                    </div>
+                                    </div> --}}
                                     
                                     <div>
                                         {{ $customer->links() }}
                                     </div>
                                     
-                                </div> --}}
+                                </div>
                                 <!--end::Paginate-->
                             </div>
                             <!--end::Card header-->
@@ -139,13 +136,13 @@
                         <!--begin::Card title-->
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0">
+                        <div class="card-body pt-0" id="tabel-paginate">
+                            <!--begin::Table-->
                             <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        {{-- <th class="min-w-auto">No.</th> --}}
                                         <th class="min-w-auto">Customer Name</th>
                                         <th class="max-w-50px">Email</th>
                                         <th class="min-w-auto">Phone Number</th>
@@ -153,41 +150,84 @@
                                         <th class="min-w-auto">Created Date</th>
                                         <th class="min-w-auto">PIC</th>
                                         @if (auth()->user()->check_administrator)
-                                        <th class="min-w-auto text-center">Action</th>
+                                            <th class="min-w-auto text-center">Action</th>
                                         @endif
                                         {{-- <th class="max-w-120px"><center>Action</center></th> --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
-                                
-                               
-                                    <!-- Begin :: Results -->
-                                    <tbody class="fw-bold text-gray-600" id="data-wrapper">
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-600">
 
-                                        <!-- Results :: Data Tabel Infinite Scroll -->
+                                    @php
+                                        $customer = $customer->reverse();
+                                    @endphp
+                                    @foreach ($customer as $customers)
+                                        <tr>
 
-                                    </tbody>
-                                    <!-- End :: Results -->
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <a href="/customer/view/{{ $customers->id_customer }}"
+                                                    class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Email=-->
+                                            <td>
+                                                {{-- <a href="#" class="text-gray-600 text-hover-primary mb-1"> --}}
+                                                {{ $customers->email }}
+                                                {{-- </a> --}}
+                                            </td>
+                                            <!--end::Email=-->
+                                            <!--begin::Phone Number=-->
+                                            <td>{{ $customers->phone_number }}</td>
+                                            <!--end::Phone Number=-->
+                                            <!--begin::Website=-->
+                                            <td data-filter="mastercard">
+                                                <a href="#">{{ $customers->website }}</a>
+                                            </td>
+                                            <!--end::Website=-->
+                                            <!--begin::Date=-->
+                                            <td>{{ $customers->created_at }}</td>
+                                            <!--end::Date=-->
+                                            <!--begin::PIC=-->
+                                            <td>{{ $customers->name_pic }}</td>
+                                            <!--end::Date=-->
+                                            <!--begin::Action=-->
+                                            @if (auth()->user()->check_administrator)
+                                                <td class="text-center">
+                                                    <button data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                </td>
+                                                <!--end::Action=-->
+                                            @endif
+                                        </tr>
+                                    @endforeach
 
+                                </tbody>
+                                <!--end::Table body-->
                             </table>
                             <!--end::Table-->
 
-                        <!-- Data Loader -->
-                        <div class="auto-load text-center">
+                            <!--begin::Loading Pagination-->
                             <div class="d-flex justify-content-center">
-                                <div class="spinner-border text-primary" role="status">
+                                <div class="ajax-load spinner-border text-primary" role="status" style="display:none">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>
-                        </div>
-                            
+                            <!--begin::Loading Pagination-->
+
                         </div>
                         <!--end::Card body-->
                     </div>
                     <!--end::Card-->
                     <!--end::Container-->
                     <!--end::Post-->
+
+
                 </div>
                 <!--end::Content-->
 
@@ -203,7 +243,7 @@
 
 
 {{-- begin::modal DELETE --}}
-    {{-- @foreach ($customer as $customers)
+    @foreach ($customer as $customers)
         <form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
@@ -246,46 +286,12 @@
             <!--end::Modal dialog-->
             </div>
         </form>
-    @endforeach --}}
+    @endforeach
 {{-- end::modal DELETE --}}
 
 
 @endsection
 {{-- End::Main --}}
 
-@section("js-script")
-{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> --}}
-<script>
-    var ENDPOINT = "{{ url('/') }}";
-    var page = 1;
-    infinteLoadMore(page);
-    $(window).scroll(function () {
-        if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
-            page++;
-            infinteLoadMore(page);
-        }
-    });
-    function infinteLoadMore(page) {
-        $.ajax({
-                url: ENDPOINT + "/customer?page=" + page,
-                datatype: "html",
-                type: "get",
-                beforeSend: function () {
-                    $('.auto-load').show();
-                }
-            })
-            .done(function (response) {
-                if (response.length == 0) {
-                    $('.auto-load').html("Data Tidak Ditemukan");
-                    return;
-                }
-                $('.auto-load').hide();
-                $("#data-wrapper").append(response);
-            })
-            .fail(function (jqXHR, ajaxOptions, thrownError) {
-                console.log('Server error occured');
-            });
-    }
-</script>
-@endsection
+
 

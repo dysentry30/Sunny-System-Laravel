@@ -58,7 +58,7 @@ class SbuController extends Controller
         Alert::success('Success', $dataSbu["sbu"].", Berhasil Ditambahkan");
 
         if ($newSbu->save()) {
-            return redirect('/sbu')->back();
+            return redirect()->back();
         }
     }
 

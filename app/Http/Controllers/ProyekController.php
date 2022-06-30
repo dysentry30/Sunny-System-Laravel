@@ -27,7 +27,7 @@ class ProyekController extends Controller
 {
     public function view() 
     {
-        return view ('3_Proyek', ['proyeks' => Proyek::all(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::all()]);
+        return view ('3_Proyek', ['proyeks' => Proyek::with('UnitKerja')->get(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::get()]);
     }
 
 

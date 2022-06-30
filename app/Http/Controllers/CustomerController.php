@@ -14,10 +14,83 @@ use Illuminate\Support\Facades\Validator;
 
 class CustomerController extends Controller
 {
-    public function index () 
+    public function getIndex(Request $request)
     {
-        return view('2_Customer',["customer" => Customer::all()]);
+        $results = Customer::orderBy('id_customer')->paginate(10);
+        $artilces = '';
+        // dd($artilces);
+        if ($request->ajax()) {
+            $no=1;
+            foreach ($results as $customers) {
+                $artilces.=
+                // '<div class="card mb-2"> 
+                //     <div class="card-body">'.$customers->id_customer.' 
+                //         <h5 class="card-title">'.$customers->name.'</h5> '.$customers->email.
+                //     '</div>
+                // </div>';
+                // <!--begin::Email=-->
+                // <td>'
+                // .$no++.
+                // '</td>
+                // <!--end::Email=-->
+
+                '<tr>
+                    <!--begin::Name=-->
+                    <td>
+                    <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
+                    </td>
+                    <!--end::Name=-->
+                    <!--begin::Email=-->
+                    <td>
+                    '.$customers->email.'
+                    </td>
+                    <!--end::Email=-->
+                    <!--begin::Phone Number=-->
+                    <td>
+                    '.$customers->phone_number.'
+                    </td>
+                    <!--end::Phone Number=-->
+                    <!--begin::Website=-->
+                    <td data-filter="mastercard">
+                    <a href="#">'.$customers->website.'</a>
+                    </td>
+                    <!--end::Website=-->
+                    <!--begin::Date=-->
+                    <td>
+                    '.$customers->created_at.'</td>
+                    <!--end::Date=-->
+                    <!--begin::PIC=-->
+                    <td>
+                    '.$customers->name_pic.'
+                    </td>
+                    <!--end::Date=-->
+                    <!--begin::Action=-->
+                    @if (auth()->user()->check_administrator)
+                        <td class="text-center">
+                            <button data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_delete$customers->id_customer"
+                                id="modal-delete"
+                                class="btn btn-sm btn-light btn-active-primary">Delete
+                            </button>
+                        </td>
+                        <!--end::Action=-->
+                    @endif
+                </tr>';
+                
+
+
+            }
+            return $artilces;
+        }
+        return view('2_Customer');
     }
+
+    // public function index (Request $request) 
+    // {   
+    //     $customer = Customer::paginate(15);
+    //     return view('2_Customer',["customer" => $customer]);
+
+    // }
 
     public function delete ($id_customer) 
     { 

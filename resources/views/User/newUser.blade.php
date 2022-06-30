@@ -53,8 +53,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/customer" class="btn btn-sm btn-primary" id="customer_new_close    "
-                                        style="background-color:#f3f6f9;margin-left:10px;color: black;">
+                                    <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-4" id="customer_new_close">
                                         Close</a>
                                     <!--end::Button-->
 

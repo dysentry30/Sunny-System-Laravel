@@ -42,7 +42,7 @@
                     <div class="d-flex align-items-center py-1">
 
                         <!--begin::Button-->
-                        <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                        <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_tambah_faq" id="tambah-faq"
                             style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
                             New</button>
@@ -50,12 +50,39 @@
 
                         <!--begin::Wrapper-->
                         <div class="me-4" style="margin-left:10px;">
-                            <!--begin::Button-->
-                            <a href="/contract-management/view/29620" class="btn btn-sm btn-primary" id="cloedButton"
-                                style="background-color:#f3f6f9;margin-left:10px;color: black; padding: 7px 30px 7px 30px">
-                                Close</a>
-                            <!--end::Button-->
-
+                            <!--begin::Menu-->
+                            <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <i class="bi bi-folder2-open"></i>Action</a>
+                            <!--begin::Menu 1-->
+                            <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                id="kt_menu_6155ac804a1c2">
+                                <!--begin::Header-->
+                                <div class="px-7 py-5">
+                                    <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                </div>
+                                <!--end::Header-->
+                                <!--begin::Menu separator-->
+                                <div class="separator border-gray-200"></div>
+                                <!--end::Menu separator-->
+                                <!--begin::Form-->
+                                <div class="px-7 py-5">
+                                    <!--begin::Input group-->
+                                    <div class="mb-10">
+                                        <!--begin::Label-->
+                                        <i class="bi bi-file-earmark-spreadsheet"></i>
+                                        <label class="form-label" style="margin-left:5px;">
+                                            Export Excel</label><br>
+                                        <i class="bi bi-file-earmark-spreadsheet"></i>
+                                        <label class="form-label" style="margin-left:5px;">
+                                            Import Excel</label><br>
+                                        <!--end::Label-->
+                                    </div>
+                                </div>
+                                <!--end::Form-->
+                            </div>
+                            <!--end::Menu 1-->
+                            <!--end::Menu-->
                         </div>
                         <!--end::Wrapper-->
 

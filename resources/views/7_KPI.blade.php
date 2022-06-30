@@ -374,11 +374,11 @@
 								<div class="d-flex align-items-center py-1">
 
 									<!--begin::Button-->
-									<a href="#" class="btn btn-sm btn-primary"
+									<a href="#" class="btn btn-sm btn-primary w-80px"
 									data-bs-toggle="modal" 
 									data-bs-target="#kt_modal_create_app" 
 									id="kt_toolbar_primary_button"
-									style="background-color:#ffa62b;">
+									style="background-color:#ffa62b; padding: 6px">
 									New</a>
 								   <!--end::Button-->
 
@@ -412,7 +412,7 @@
 													<i class="fas fa-file-excel"></i>
 													<label class="form-label" style="margin-left:5px;">
 														Export Excel</label><br>
-													<i class="fas fa-file"></i>
+													<i class="fas fa-file-excel"></i>
 													<label class="form-label" style="margin-left:5px;">
 														Import Excel</label><br>
 													<!--end::Label-->

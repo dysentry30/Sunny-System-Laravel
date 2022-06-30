@@ -186,8 +186,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     //Begin :: Customer
+    // Customer with Auto Scrol
+    Route::get('/customer', [CustomerController::class, 'getIndex']);
+    
     // customer dashboard all database
-    Route::get('/customer', [CustomerController::class, 'index']);
+    // Route::get('/customer', [CustomerController::class, 'index']);
 
 
     // DELETE data customer pada dasboard customer by ID 
@@ -430,10 +433,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/pasal/update', [PasalController::class, "pasalUpdate"]);
 
-    // begin route PIC
+    // begin :: USERS
     Route::get('/user', function () {
-        return view("/MasterData/User", ["users" => User::all()->reverse()]);
+        //Menggunakan metode Eager Loading agar memangkas loading query database 
+        return view("/MasterData/User", ["users" => User::with('UnitKerja')->get()->reverse()]);
+        // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
+    // Route::get('/user', [UserController::class, 'index']);
 
     Route::get('/user/new', function () {
         return view("/User/newUser", ["unit_kerjas" => UnitKerja::all()]);
@@ -454,13 +460,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/team-proyek', function () {
         return view("/MasterData/TeamProyek", ["all_proyek" => Proyek::all()->reverse()]);
     });
-    // end route PIC
+    // end :: USERS
 
-    // begin route PIC
+    // begin RKAP
     Route::get('/rkap', function () {
         return view("/11_Rkap", ["unitkerjas" => UnitKerja::all()]);
     });
-    // end route PIC
+    // end RKAP
 
     // begin email testing
     Route::get('/email', function () {
