@@ -138,7 +138,7 @@
 							data-id="{{ $faq->id }}" data-bs-target="#kt_modal_edit_faq{{ $faq->id }}"
 							class="text-gray-500 text-hover-primary">
 							{{ ++$i }}. {{ $faq->judul }}</h6>
-						  <p class="card-text">{{ $faq->deskripsi }}</p>
+						  <pre class="card-text" style="font-family: Poppins;">{{ $faq->deskripsi }}</pre>
 						  <hr class="text-secondary border-1 opacity-75">
 					</div>
                     @if (auth()->user()->check_administrator)
@@ -153,7 +153,7 @@
 
 					<div class="modal fade" id="kt_modal_edit_faq{{ $faq->id }}" tabindex="-1" aria-hidden="true">
 						<!--begin::Modal dialog-->
-						<div class="modal-dialog modal-dialog-centered mw-900px">
+						<div class="modal-dialog modal-dialog-centered mw-800px">
 							<!--begin::Modal content-->
 							<div class="modal-content">
 								<!--begin::Modal header-->
@@ -228,7 +228,7 @@
                 @else 
                 <div class="modal fade" id="kt_modal_edit_faq{{ $faq->id }}" tabindex="-1" aria-hidden="true">
                     <!--begin::Modal dialog-->
-                    <div class="modal-dialog modal-dialog-centered mw-900px">
+                    <div class="modal-dialog modal-dialog-centered mw-800px">
                         <!--begin::Modal content-->
                         <div class="modal-content">
                             <!--begin::Modal header-->
@@ -317,7 +317,7 @@
     @csrf
     <div class="modal fade" id="kt_modal_tambah_faq" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-800px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
