@@ -103,13 +103,6 @@
 @endsection
 {{-- End::Content --}}
 
-{{-- Begin::Aside --}}
-@section('aside')
-    @extends('template.aside')
-@endsection
-{{-- End::Aside --}}
-
-
 {{-- Begin:: JS SCRIPT --}}
 @section('js-script')
     <script>

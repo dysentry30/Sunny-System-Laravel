@@ -3,10 +3,11 @@
 <html lang="en">
 
 <!--begin::Head-->
+
 <head>
     <base href="">
     <title>@yield('title')</title>
-    
+
     <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
     <!--begin::Fonts-->
 
@@ -53,164 +54,177 @@
 
 
 <!--begin::Body-->
+
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
 
-<!--begin::Aside-->
+    <!--begin::Aside-->
     {{-- @yield('aside') --}}
-    <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
-        data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
-        data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
-        data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9">
-        <!--begin::Brand-->
-        <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
-            <!--begin::Logo-->
-            <a href="#" style="background-color:#0db0d9;">
-                <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
-                    style="margin-top:30px;margin-left:-20px;" />
-            </a>
-            <!--end::Logo-->
+    @if (auth()->user())
+        <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
+            data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
+            data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
+            data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9">
+            <!--begin::Brand-->
+            <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
+                <!--begin::Logo-->
+                <a href="#" style="background-color:#0db0d9;">
+                    <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
+                        style="margin-top:30px;margin-left:-20px;" />
+                </a>
+                <!--end::Logo-->
 
-        </div>
-        <!--end::Brand-->
-        <!--begin::Aside menu-->
-        <div class="aside-menu flex-column-fluid" style="background-color:#0db0d9;margin-top:40px;">
-            <!--begin::Aside Menu-->
-            <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
-                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
-                data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"
-                data-kt-scroll-offset="0">
+            </div>
+            <!--end::Brand-->
+            <!--begin::Aside menu-->
+            <div class="aside-menu flex-column-fluid" style="background-color:#0db0d9;margin-top:40px;">
+                <!--begin::Aside Menu-->
+                <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
+                    data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
+                    data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
+                    data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0">
 
-                {{-- #ffa62b --}}
+                    {{-- #ffa62b --}}
 
-                <!--begin::Menu-->
-                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
+                    <!--begin::Menu-->
+                    <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/dashboard" style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
-                                        class="h-35px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Dashboard</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/dashboard"
+                                    style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
+                                                class="h-35px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Dashboard</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/customer" style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/account.svg" class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Pelanggan</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/customer"
+                                    style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/account.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Pelanggan</span>
+                                </a>
+                            </div>
+                        @endif
 
-                        
-                    @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/proyek" style="color:white; {{ (Request::Path() == 'proyek') ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Proyek</span>
-                        </a>
-                    </div>
-                    @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/forecast" style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <i class="bi bi-graph-up-arrow text-white" style="font-size: 18px; margin-left:7px"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Forecast</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/proyek"
+                                    style="color:white; {{ Request::Path() == 'proyek' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Proyek</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/contract-management" style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Contract Management</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/forecast"
+                                    style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-graph-up-arrow text-white"
+                                                style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Forecast</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/claim-management" style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Claim Management</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/contract-management"
+                                    style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Contract Management</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak )
-                    <div class="menu-item">
-                        <a class="menu-link " href="/document" style="color:white; {{ Request::Path() == 'document' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Document</span>
-                        </a>
-                    </div>
-                    @endif
-                    
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/claim-management"
+                                    style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Claim Management</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
-                    <!--Begin::Master Data Expand-->
-                        {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;"> --}}
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/document"
+                                    style="color:white; {{ Request::Path() == 'document' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Document</span>
+                                </a>
+                            </div>
+                        @endif
+
+
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <!--Begin::Master Data Expand-->
+                            {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;"> --}}
                             <div class="menu-item">
                                 <p>
-                                    <a class="menu-link" id="collapse-button" style="color:white;" data-bs-toggle="collapse"
-                                        href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                    <a class="menu-link" id="collapse-button" style="color:white;"
+                                        data-bs-toggle="collapse" href="#collapseExample" role="button"
+                                        aria-expanded="false" aria-controls="collapseExample">
                                         <span class="menu-icon">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                             <span class="svg-icon svg-icon-2">
-                                                <i class="bi bi-cloud-download-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                                <i class="bi bi-cloud-download-fill text-white"
+                                                    style="font-size: 18px; margin-left:7px"></i>
                                             </span>
                                             <!--end::Svg Icon-->
                                         </span>
@@ -326,114 +340,124 @@
                                     <!--end::Menu Colapse-->
                                 </div>
                                 <!--end::Colapse-->
-                                        <!--end::Svg Icon-->
-                                    </span>
+                                <!--end::Svg Icon-->
+                                </span>
                                 </a>
                             </div>
-                        {{-- </div> --}}
-                    <!--end::Master Data Expand-->
-                    @endif
+                            {{-- </div> --}}
+                            <!--end::Master Data Expand-->
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/rkap" style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <i class="bi bi-chat-left-dots-fill text-white" style="font-size: 18px; margin-left:7px"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Group RKAP</span>
-                        </a>
-                    </div>
-                    @endif
-                    
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/kpi" style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/bonus_rules.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">KPI</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/rkap"
+                                    style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-chat-left-dots-fill text-white"
+                                                style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Group RKAP</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/knowledge-base" style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/knowledge_base.svg"
-                                        class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Knowledge Base</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/kpi"
+                                    style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/bonus_rules.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">KPI</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                    <div class="menu-item">
-                        <a class="menu-link " href="/change-request" style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/changes.svg" class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Change Request</span>
-                        </a>
-                    </div>
-                    @endif
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/knowledge-base"
+                                    style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/knowledge_base.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Knowledge Base</span>
+                                </a>
+                            </div>
+                        @endif
 
-                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                    <div class="menu-item">
-                        <a class="menu-link " href="stakeholder-communication" style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#ffa62b' : '' }}">
-                            <span class="menu-icon">
-                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                <span class="svg-icon svg-icon-2">
-                                    <img alt="Logo" src="/media/icons/duotune/creatio/feed.svg" class="h-30px logo" />
-                                </span>
-                                <!--end::Svg Icon-->
-                            </span>
-                            <span class="menu-title-2">Stakeholder Communication</span>
-                        </a>
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/change-request"
+                                    style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/changes.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Change Request</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="menu-item">
+                                <a class="menu-link " href="stakeholder-communication"
+                                    style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#ffa62b' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/feed.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">Stakeholder Communication</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        <br><br><br>
+
                     </div>
-                    @endif
-                    
-                    <br><br><br>
-                    
+                    <!--end::Menu-->
                 </div>
-                <!--end::Menu-->
+                <!--end::Aside Menu-->
             </div>
-            <!--end::Aside Menu-->
+            <!--end::Aside menu-->
+
         </div>
-        <!--end::Aside menu-->
-
-    </div>
-<!--end::Aside-->
+        <!--end::Aside-->
+    @endif
 
 
 
-<!--begin:: CONTENT-->
+    <!--begin:: CONTENT-->
     @yield('content')
-<!--end :: CONTENT-->
+    <!--end :: CONTENT-->
 
-<!--begin::Scrolltop-->
+    <!--begin::Scrolltop-->
     <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
         <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none">
                 <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
                     transform="rotate(90 13 6)" fill="black" />
                 <path
@@ -443,12 +467,12 @@
         </span>
         <!--end::Svg Icon-->
     </div>
-<!--end::Scrolltop-->
+    <!--end::Scrolltop-->
 
 
 
-<!--end::Main-->
-<!--begin::Javascript-->
+    <!--end::Main-->
+    <!--begin::Javascript-->
     <script>
         var hostUrl = "../";
     </script>
@@ -570,7 +594,6 @@
                     mainNotifContent.innerHTML += html;
                 }
             } else {
-                console.log(isNotifExist);
                 let actionNotifBtn = "";
                 if (data.is_rejected) {
                     actionNotifBtn = `
@@ -719,8 +742,8 @@
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'>
     </script>
     {{-- end::Froala Editor JS --}}
- 
- 
+
+
     {{-- FUNGSI UNKNOWN - begin::Support Plugin for Word Editor --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.29.4/docxtemplater.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
@@ -763,7 +786,7 @@
     </script>
     <!--end::Page Custom Javascript-->
 
-<!--end::Javascript-->
+    <!--end::Javascript-->
 
 </body>
 <!--end::Body-->

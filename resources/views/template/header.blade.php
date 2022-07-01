@@ -104,13 +104,22 @@
                                                             </span>
                                                         </div>
                                                         <!--end::Symbol-->
+                                                        @php
+                                                            $is_msg_contain_user_name = str_contains($notif->message, "<b>" . auth()->user()->name . "</b>");
+                                                            $msg = "Request ganti password sudah disetujui oleh <b>Anda</b>";
+                                                            // dd($is_msg_contain_user_name);
+                                                        @endphp
                                                         <!--begin::Title-->
                                                         <div class="mb-0 me-2">
                                                             <a href="/user/view/{{ $notif->FromUser->id }}"
                                                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder"
                                                                 id="title-notif">{{ $notif->FromUser->name }}</a>
                                                             <div class="text-gray-400 fs-7" id="msg-notif">
-                                                                {!! $notif->message !!}
+                                                                @if ($is_msg_contain_user_name)
+                                                                    {!! $msg !!}
+                                                                @else 
+                                                                    {!! $notif->message !!}
+                                                                @endif
                                                             </div>
                                                             <br>
 
@@ -196,6 +205,7 @@
                                                         </div>
                                                         <!--end::Symbol-->
                                                         <!--begin::Title-->
+                                                        
                                                         <div class="mb-0 me-2">
                                                             <a href="#"
                                                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder"
