@@ -234,6 +234,3 @@
     <!--end::Root-->
 @endsection
 
-@section('aside')
-    @extends('template.aside')
-@endsection

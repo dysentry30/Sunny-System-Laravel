@@ -21,7 +21,7 @@
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
             <!--begin::Aside-->
-            @extends('template.aside')
+            {{-- @extends('template.aside') --}}
             <!--end::Aside-->
             <!--begin::Wrapper-->
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
@@ -4305,7 +4305,7 @@
 
 
 <!--begin::Aside-->
-@section('aside')
+{{-- @section('aside')
 @include('template.aside')
-@endsection
+@endsection --}}
 <!--end::Aside-->

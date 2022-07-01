@@ -497,11 +497,6 @@
 @endsection
 {{-- end:: content --}}
 
-@section('aside')
-    @include('template.aside')
-@endsection
-
-
 @section('js-script')
 
     <script>

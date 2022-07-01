@@ -523,7 +523,7 @@
 @endsection
 
 <!--begin::Aside-->
-@section('aside')
+{{-- @section('aside')
     @include('template.aside')
-@endsection
+@endsection --}}
 <!--end::Aside-->

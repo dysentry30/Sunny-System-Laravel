@@ -309,7 +309,7 @@
 
 @endsection
 
-@include('template.aside')
+{{-- @include('template.aside') --}}
 
 @section('js-script')
 <script>
