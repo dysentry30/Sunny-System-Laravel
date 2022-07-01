@@ -276,7 +276,7 @@
             })
             .done(function (response) {
                 if (response.length == 0) {
-                    $('.auto-load').html("Data Tidak Ditemukan");
+                    $('.auto-load').html('<div class="alert alert-secondary rounded-0" role="alert">Opss, Data Tidak Ditemukan !</div>');
                     return;
                 }
                 $('.auto-load').hide();
