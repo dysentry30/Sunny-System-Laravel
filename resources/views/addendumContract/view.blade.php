@@ -1209,6 +1209,6 @@
 
 @endsection
 
-@section('aside')
+{{-- @section('aside')
     @include('template.aside')
-@endsection
+@endsection --}}

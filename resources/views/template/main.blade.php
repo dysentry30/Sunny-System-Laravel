@@ -1,41 +1,34 @@
 <!DOCTYPE html>
 
 <html lang="en">
-<!--begin::Head-->
 
+<!--begin::Head-->
 <head>
     <base href="">
     <title>@yield('title')</title>
-    <meta name="description"
-        content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
-    <meta name="keywords"
-        content="Metronic, bootstrap, bootstrap 5, Angular, VueJs, React, Laravel, admin themes, web design, figma, web development, free templates, free admin themes, bootstrap theme, bootstrap template, bootstrap dashboard, bootstrap dak mode, bootstrap button, bootstrap datepicker, bootstrap timepicker, fullcalendar, datatables, flaticon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="article" />
-    <meta property="og:title"
-        content="Metronic - Bootstrap 5 HTML, VueJS, React, Angular &amp; Laravel Admin Dashboard Theme" />
-    <meta property="og:url" content="https://keenthemes.com/metronic" />
-    <meta property="og:site_name" content="Keenthemes | Metronic" />
-    <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
+    
     <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
     <!--begin::Fonts-->
+
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
+
     {{-- begin::Bootstrap CSS --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
     {{-- end::Bootstrap CSS --}}
+
     {{-- begin::Froala CSS --}}
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
         type='text/css' />
     {{-- end::Froala CSS --}}
+
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     <link href="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
         type="text/css" />
     <!--end::Page Vendor Stylesheets-->
+
     <!--begin::Global Stylesheets Bundle(used by all pages)-->
     <link href="{{ asset('/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
@@ -57,19 +50,386 @@
     {{-- end:: Disable Native Date Browser --}}
 </head>
 <!--end::Head-->
-<!--begin::Body-->
 
+
+<!--begin::Body-->
 <body id="kt_body"
     class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
-    <!--begin::Aside-->
-    @yield('aside')
-    <!--end::Aside-->
 
-    {{-- begin::content --}}
+
+<!--begin::Aside-->
+    {{-- @yield('aside') --}}
+    <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
+        data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
+        data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
+        data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9">
+        <!--begin::Brand-->
+        <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
+            <!--begin::Logo-->
+            <a href="#" style="background-color:#0db0d9;">
+                <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
+                    style="margin-top:30px;margin-left:-20px;" />
+            </a>
+            <!--end::Logo-->
+
+        </div>
+        <!--end::Brand-->
+        <!--begin::Aside menu-->
+        <div class="aside-menu flex-column-fluid" style="background-color:#0db0d9;margin-top:40px;">
+            <!--begin::Aside Menu-->
+            <div class="hover-scroll-overlay-y my-5 my-lg-5" id="kt_aside_menu_wrapper" data-kt-scroll="true"
+                data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-height="auto"
+                data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer" data-kt-scroll-wrappers="#kt_aside_menu"
+                data-kt-scroll-offset="0">
+
+                {{-- #ffa62b --}}
+
+                <!--begin::Menu-->
+                <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/dashboard" style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/dashboards.svg"
+                                        class="h-35px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Dashboard</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/customer" style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/account.svg" class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Pelanggan</span>
+                        </a>
+                    </div>
+                    @endif
+
+                        
+                    @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/proyek" style="color:white; {{ (Request::Path() == 'proyek') ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/opportunity.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Proyek</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/forecast" style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="bi bi-graph-up-arrow text-white" style="font-size: 18px; margin-left:7px"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Forecast</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/contract-management" style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/contract.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Contract Management</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/claim-management" style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/releases.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Claim Management</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak )
+                    <div class="menu-item">
+                        <a class="menu-link " href="/document" style="color:white; {{ Request::Path() == 'document' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/documents.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Document</span>
+                        </a>
+                    </div>
+                    @endif
+                    
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                    <!--Begin::Master Data Expand-->
+                        {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;margin-top:8px;"> --}}
+                            <div class="menu-item">
+                                <p>
+                                    <a class="menu-link" id="collapse-button" style="color:white;" data-bs-toggle="collapse"
+                                        href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                                        <span class="menu-icon">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                            <span class="svg-icon svg-icon-2">
+                                                <i class="bi bi-cloud-download-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                        <span class="menu-title-2">Master Data <i
+                                                class="bi bi-caret-down-fill text-white"></i></span>
+                                    </a>
+                                </p>
+                                <!--begin::Colapse-->
+                                <div class="collapse" id="collapseExample">
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'company' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/company" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-building text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Company</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sumber-dana' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/sumber-dana" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-wallet text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Sumber Dana</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'dop' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/dop" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-bar-chart text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">DOP</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sbu' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/sbu" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-bar-chart text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">SBU</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'unit-kerja' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/unit-kerja" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-diagram-3-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Unit Kerja</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/pasal/edit" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-stack text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Pasal</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/user" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-people-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Users</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#ffa62b' : '' }}">
+                                        <a class="menu-link " href="/team-proyek" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-person-lines-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">User Proyek</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                </div>
+                                <!--end::Colapse-->
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                </a>
+                            </div>
+                        {{-- </div> --}}
+                    <!--end::Master Data Expand-->
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/rkap" style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <i class="bi bi-chat-left-dots-fill text-white" style="font-size: 18px; margin-left:7px"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Group RKAP</span>
+                        </a>
+                    </div>
+                    @endif
+                    
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/kpi" style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/bonus_rules.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">KPI</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/knowledge-base" style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/knowledge_base.svg"
+                                        class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Knowledge Base</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                    <div class="menu-item">
+                        <a class="menu-link " href="/change-request" style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/changes.svg" class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Change Request</span>
+                        </a>
+                    </div>
+                    @endif
+
+                    @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                    <div class="menu-item">
+                        <a class="menu-link " href="stakeholder-communication" style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#ffa62b' : '' }}">
+                            <span class="menu-icon">
+                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                <span class="svg-icon svg-icon-2">
+                                    <img alt="Logo" src="/media/icons/duotune/creatio/feed.svg" class="h-30px logo" />
+                                </span>
+                                <!--end::Svg Icon-->
+                            </span>
+                            <span class="menu-title-2">Stakeholder Communication</span>
+                        </a>
+                    </div>
+                    @endif
+                    
+                    <br><br><br>
+                    
+                </div>
+                <!--end::Menu-->
+            </div>
+            <!--end::Aside Menu-->
+        </div>
+        <!--end::Aside menu-->
+
+    </div>
+<!--end::Aside-->
+
+
+
+<!--begin:: CONTENT-->
     @yield('content')
+<!--end :: CONTENT-->
 
-    <!--begin::Scrolltop-->
+<!--begin::Scrolltop-->
     <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
         <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
         <span class="svg-icon">
@@ -83,12 +443,17 @@
         </span>
         <!--end::Svg Icon-->
     </div>
-    <!--end::Scrolltop-->
-    <!--end::Main-->
+<!--end::Scrolltop-->
+
+
+
+<!--end::Main-->
+<!--begin::Javascript-->
     <script>
         var hostUrl = "../";
     </script>
-    <!--begin::Javascript-->
+
+
     <script src="{{ asset('/js/app.js') }}"></script>
     {{-- begin::Pusher --}}
     <script>
@@ -328,40 +693,47 @@
         // end Reset Password Authorization
     </script>
     {{-- end::Pusher --}}
+
+
     {{-- begin::Bootstrap JS --}}
-    {{-- NEW :: Bootstrap SCRIPT --}}
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
     </script>
-    {{-- OLD :: Bootstrap SCRIPT --}} {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
-    </script> --}}
     {{-- end::Bootstrap JS --}}
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+    {{-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> --}}
+
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('/plugins/global/plugins.bundle.js') }}"></script>
     <script src="{{ asset('/js/scripts.bundle.js') }}"></script>
     <!--end::Global Javascript Bundle-->
+
     {{-- begin::html2pdf JS --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- end::html2pdf JS --}}
+
+
     {{-- begin::Froala Editor JS --}}
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'>
     </script>
     {{-- end::Froala Editor JS --}}
-    {{-- begin::Support Plugin for Word Editor --}}
+ 
+ 
+    {{-- FUNGSI UNKNOWN - begin::Support Plugin for Word Editor --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/docxtemplater/3.29.4/docxtemplater.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script src="https://unpkg.com/pizzip@3.1.1/dist/pizzip-utils.js"></script>
     {{-- end::Support Plugin for Word Editor --}}
+
     {{-- begin::docx4js Library --}}
     {{-- <script src="https://cdn.jsdelivr.net/npm/docx4js@3.2.20/dist/docx4js.js"></script> --}}
-    {{-- <script>
-    import * as docx from "docx";
-    </script> --}}
+    {{-- <script>import * as docx from "docx";</script> --}}
     {{-- end::docx4js Library --}}
+
+
     {{-- begin::Mammoth Library --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"
         integrity="sha512-bGuEL2NBSooMeQLM6bf6Xdywje4PWKegNTuKpghz2xgFXtRjEs4B3X1ql7nghiCvt8gXBAks5S3KN3Jp3Jgtow=="
@@ -382,7 +754,6 @@
 
     <script>
         // script reformat number by add class
-
         function reformat() {
             this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
         }
@@ -392,7 +763,8 @@
     </script>
     <!--end::Page Custom Javascript-->
 
-    <!--end::Javascript-->
+<!--end::Javascript-->
+
 </body>
 <!--end::Body-->
 

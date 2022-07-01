@@ -377,9 +377,9 @@
 @endsection
 {{-- end:: content --}}
 
-@section('aside')
+{{-- @section('aside')
     @include('template.aside')
-@endsection
+@endsection --}}
 
 
 @section('js-script')
