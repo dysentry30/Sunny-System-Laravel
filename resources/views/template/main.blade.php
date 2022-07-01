@@ -93,12 +93,15 @@
     {{-- begin::Pusher --}}
     <script>
         window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
+            let isNotifExist = "";
+            if (data.id_notification != "") {
+                isNotifExist = document.querySelector(`#item-${data.id_notification}`);
+            }
             const notificationCounter = document.querySelector("#notification-counter");
             const mainNotifContent = document.querySelector("#main-content-notif");
             const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
             const idUser = Number("{{ auth()->user()->id ?? 0 }}");
             // const idNotification = data.id_notification;
-            notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
             const dataDate = new Date(data.timestamp.date);
             const nowDate = new Date();
             const diff = Math.abs(dataDate - nowDate);
@@ -112,89 +115,142 @@
                 time = `${diff} sec`;
             }
 
-            if (isAdministrator == 1) {
-                let html = `
-                <!--begin::Item-->
-                    <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
-                        <!--begin::Section-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Symbol-->
-                            <div class="symbol symbol-35px me-4">
-                                <span class="symbol-label bg-light-primary">
-                                    <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                </span>
-                            </div>
-                            <!--end::Symbol-->
-                            <!--begin::Title-->
-                            <div class="mb-0 me-2">
-                                <a href="/user/view/${data.id_notification}"
-                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
-                                <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                </div>
-                                <br>
-                                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
-                                <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #ffa62b;">Authorize</button>
-                            </div>
-                            <!--end::Title-->
-                            
-                        </div>
-                        <!--end::Section-->
-                        <!--begin::Label-->
-                        <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
-                        <!--end::Label-->
-                    </div>
-                <!--end::Item-->
-                `;
-                mainNotifContent.innerHTML += html;
-            } else if (data.to_user.id == idUser) {
-                let actionNotifBtn = ``;
-                if (!data.is_rejected) {
-                    actionNotifBtn = `
-                    <form action="/user/password/reset/new" method="POST">
-                        @csrf
-                        <input type="hidden" name="id-notification" value="${data.id_notification}">
-                        <button type="submit"
-                            name="reset-password"
-                            class="btn btn-sm btn-active-primary text-white"
-                            style="background-color: #ffa62b;">Buat password baru</button>
-                    </form>
-                    `;
-                }
-                let html = `
-                <!--begin::Item-->
-                    <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.from_user.id}">
-                        <!--begin::Section-->
-                        <div class="d-flex align-items-center">
-                            <!--begin::Symbol-->
-                            <div class="symbol symbol-35px me-4">
-                                <span class="symbol-label bg-light-primary">
-                                    <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                </span>
-                            </div>
-                            <!--end::Symbol-->
-                            <!--begin::Title-->
-                            <div class="mb-0 me-2">
-                                <a href="#"
-                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">Admin</a>
-                                <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                </div>
-                                <br>
-                                
-                                ${actionNotifBtn}
-                                
-                            </div>
-                            <!--end::Title-->
-                            
-                        </div>
-                        <!--end::Section-->
-                        <!--begin::Label-->
-                        <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
-                        <!--end::Label-->
-                    </div>
-                <!--end::Item-->
-                `;
-                mainNotifContent.innerHTML += html;
+            if (isNotifExist == "" || isNotifExist == null) {
 
+                if (isAdministrator == 1 && data.to_user.id == idUser) {
+                    notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
+
+                    let html = `
+                    <!--begin::Item-->
+                        <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+                            <!--begin::Section-->
+                            <div class="d-flex align-items-center">
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-35px me-4">
+                                    <span class="symbol-label bg-light-primary">
+                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                    </span>
+                                </div>
+                                <!--end::Symbol-->
+                                <!--begin::Title-->
+                                <div class="mb-0 me-2">
+                                    <a href="/user/view/${data.from_user.id}"
+                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                    </div>
+                                    <br>
+                                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
+                                    <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #ffa62b;">Authorize</button>
+                                </div>
+                                <!--end::Title-->
+                                
+                            </div>
+                            <!--end::Section-->
+                            <!--begin::Label-->
+                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+                            <!--end::Label-->
+                        </div>
+                    <!--end::Item-->
+                    `;
+                    mainNotifContent.innerHTML += html;
+                } else if (data.to_user.id == idUser && data.to_user.check_administrator != 1) {
+                    notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
+
+                    let actionNotifBtn = ``;
+                    if (!data.is_rejected) {
+                        actionNotifBtn = `
+                        <form action="/user/password/reset/new" method="POST">
+                            @csrf
+                            <input type="hidden" name="id-notification" value="${data.id_notification}">
+                            <button type="submit"
+                                name="reset-password"
+                                class="btn btn-sm btn-active-primary text-white"
+                                style="background-color: #ffa62b;">Buat password baru</button>
+                        </form>
+                        `;
+                    }
+                    let html = `
+                    <!--begin::Item-->
+                        <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.from_user.id}">
+                            <!--begin::Section-->
+                            <div class="d-flex align-items-center">
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-35px me-4">
+                                    <span class="symbol-label bg-light-primary">
+                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                    </span>
+                                </div>
+                                <!--end::Symbol-->
+                                <!--begin::Title-->
+                                <div class="mb-0 me-2">
+                                    <a href="/user/view/${data.from_user.id}"
+                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                    </div>
+                                    <br>
+                                    
+                                    ${actionNotifBtn}
+                                    
+                                </div>
+                                <!--end::Title-->
+                                
+                            </div>
+                            <!--end::Section-->
+                            <!--begin::Label-->
+                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+                            <!--end::Label-->
+                        </div>
+                    <!--end::Item-->
+                    `;
+                    mainNotifContent.innerHTML += html;
+                }
+            } else {
+                console.log(isNotifExist);
+                let actionNotifBtn = "";
+                if (data.is_rejected) {
+                    actionNotifBtn = `
+                            <button type="button"
+                                class="btn btn-sm btn-secondary disabled">Sudah tidak
+                                disetujui</button>
+                        `;
+                } else {
+                    actionNotifBtn = `
+                            <button type="button"
+                                class="btn btn-sm btn-secondary disabled">Sudah
+                                disetujui</button>
+                        `;
+                }
+
+                let html = `
+                            <!--begin::Section-->
+                            <div class="d-flex align-items-center">
+                                <!--begin::Symbol-->
+                                <div class="symbol symbol-35px me-4">
+                                    <span class="symbol-label bg-light-primary">
+                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                    </span>
+                                </div>
+                                <!--end::Symbol-->
+                                <!--begin::Title-->
+                                <div class="mb-0 me-2">
+                                    <a href="/user/view/${data.to_user.id}"
+                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.to_user.name}</a>
+                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                    </div>
+                                    <br>
+
+                                    ${actionNotifBtn}
+
+                                </div>
+                                <!--end::Title-->
+                                
+                            </div>
+                            <!--end::Section-->
+                            <!--begin::Label-->
+                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+                            <!--end::Label-->
+                    `;
+                isNotifExist.innerHTML = html;
             }
         });
 
@@ -247,7 +303,7 @@
                             <!--end::Symbol-->
                             <!--begin::Title-->
                             <div class="mb-0 me-2">
-                                <a href="#"
+                                <a href="/user/view/${getParentID}"
                                     class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${name.innerText}</a>
                                 <div class="text-gray-400 fs-7" id="msg-notif">${message.innerText}
                                 </div>
@@ -317,9 +373,6 @@
     <!--begin::Page Vendors Javascript(used by this page)-->
     <script src="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.js') }}"></script>
     <!--end::Page Vendors Javascript-->
-    <!--begin::JQUERY by google-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <!--end::JQUERY by google-->
     <!--begin::Page Custom Javascript(used by this page)-->
     <script src="{{ asset('/js/custom/widgets.js') }}"></script>
     <script src="{{ asset('/js/custom/apps/chat/chat.js') }}"></script>

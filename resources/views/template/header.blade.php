@@ -68,7 +68,8 @@
                                 <ul class="nav nav-line-tabs nav-line-tabs-2x nav-stretch fw-bold px-9">
                                     <li class="nav-item ">
                                         <a class="nav-link text-white opacity-75 opacity-state-100 pb-4 "
-                                            data-bs-toggle="tab" href="#kt_topbar_notifications_1">Alerts</a>
+                                            data-bs-toggle="tab" id="notif-alert"
+                                            href="#kt_topbar_notifications_1">Alerts</a>
                                     </li>
 
                                 </ul>
@@ -90,7 +91,7 @@
                                             @foreach ($user_notif as $notif)
                                                 <!--begin::Item-->
                                                 <div class="d-flex flex-stack py-4 border-bottom"
-                                                    id="item-{{ $notif->FromUser->id }}">
+                                                    id="item-{{ $notif->id_notification }}">
                                                     <!--begin::Section-->
                                                     <div class="d-flex align-items-center">
                                                         <!--begin::Symbol-->
@@ -113,30 +114,26 @@
                                                             </div>
                                                             <br>
 
-                                                            @switch($notif->is_approved)
-                                                                @case(true)
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-secondary disabled">Sudah
-                                                                        disetujui</button>
-                                                                @break
-
-                                                                @case(false)
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-secondary disabled">Sudah tidak
-                                                                        disetujui</button>
-                                                                @break
-
-                                                                @default
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-light btn-active-primary"
-                                                                        data-parent-item="{{ $notif->id_notification }}"
-                                                                        onclick="resetPasswordAuthorize(this, true)">Cancel</button>
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-active-primary text-white"
-                                                                        data-parent-item="{{ $notif->id_notification }}"
-                                                                        onclick="resetPasswordAuthorize(this)"
-                                                                        style="background-color: #ffa62b;">Authorize</button>
-                                                            @endswitch
+                                                            @if ($notif->is_rejected)
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-secondary disabled">Sudah
+                                                                    tidak
+                                                                    disetujui</button>
+                                                            @elseif($notif->is_approved)
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-secondary disabled">Sudah
+                                                                    disetujui</button>
+                                                            @else
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-light btn-active-primary"
+                                                                    data-parent-item="{{ $notif->id_notification }}"
+                                                                    onclick="resetPasswordAuthorize(this, true)">Cancel</button>
+                                                                <button type="button"
+                                                                    class="btn btn-sm btn-active-primary text-white"
+                                                                    data-parent-item="{{ $notif->id_notification }}"
+                                                                    onclick="resetPasswordAuthorize(this)"
+                                                                    style="background-color: #ffa62b;">Authorize</button>
+                                                            @endif
                                                         </div>
                                                         <!--end::Title-->
 
@@ -202,7 +199,7 @@
                                                         <div class="mb-0 me-2">
                                                             <a href="#"
                                                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder"
-                                                                id="title-notif">Admin</a>
+                                                                id="title-notif">{{$notif->FromUser->name}}</a>
                                                             <div class="text-gray-400 fs-7" id="msg-notif">
                                                                 {!! $notif->message !!}
                                                             </div>
@@ -340,3 +337,11 @@
     <!--end::Container-->
 </div>
 <!--end::Header-->
+
+@section('js-script')
+    <script>
+        const tabNotif = document.querySelector("#notif-alert");
+        const tabNotifBoots = new bootstrap.Tab(tabNotif, {});
+        tabNotifBoots.show();
+    </script>
+@endsection
