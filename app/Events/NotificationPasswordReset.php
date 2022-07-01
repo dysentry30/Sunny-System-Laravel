@@ -38,7 +38,7 @@ class NotificationPasswordReset implements ShouldBroadcast
      * 
      * @return void
      */
-    public function __construct(User $from_user, string $message, string $id_notification = "", User $to_user, $is_rejected = true)
+    public function __construct(User $from_user, string $message, string $id_notification = "", User $to_user, $is_rejected = true, $save_to_database = true)
     {
         $this->from_user = $from_user;
         $this->to_user = $to_user;
@@ -48,18 +48,24 @@ class NotificationPasswordReset implements ShouldBroadcast
         $this->is_rejected = $is_rejected;
         // dd($this);
         $this->dontBroadcastToCurrentUser();
-        $is_notif_exist = new NotificationsModel();
-        if(!$is_rejected && $from_user->check_administrator == 0) {   
-            $is_notif_exist->token_reset_password = Str::random(30);
-            $is_notif_exist->is_approved = true;
-        } else {
-            $is_notif_exist->is_rejected = $is_rejected; 
+
+        if($save_to_database) {
+            $is_notif_exist = new NotificationsModel();
+            if(!$is_rejected && $from_user->check_administrator == 1) {   
+                $is_notif_exist->token_reset_password = Str::random(30);
+                $is_notif_exist->is_approved = true;
+            }
+    
+            if($is_rejected) {
+                $is_notif_exist->is_rejected = $is_rejected; 
+            }
+            
+            $is_notif_exist->id_notification = $this->id_notification;
+            $is_notif_exist->from_id_user = $this->from_user->id;
+            $is_notif_exist->message = $this->message;
+            $is_notif_exist->to_user = $to_user->id;
+            $is_notif_exist->save();
         }
-        $is_notif_exist->id_notification = $this->id_notification;
-        $is_notif_exist->from_id_user = $this->from_user->id;
-        $is_notif_exist->message = $this->message;
-        $is_notif_exist->to_user = $to_user->id;
-        $is_notif_exist->save();
 
     }
 
