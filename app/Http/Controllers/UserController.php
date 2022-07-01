@@ -151,15 +151,16 @@ class UserController extends Controller
             $current_notif = NotificationsModel::find($data["id-user"]);
             $to_user = User::find($current_notif->from_id_user);
             $all_notif_related_to_user = NotificationsModel::where("from_id_user", "=", $current_notif->from_id_user)->get();
-            $all_notif_related_to_user->each(function($notif) use($request, $to_user) {
+            $all_notif_related_to_user->each(function($notif) use($request, $to_user, $current_notif) {
+                $msg = "Request ganti password sudah disetujui oleh <b>" . $current_notif->ToUser->name . "</b>";
                 $user = User::find($notif->to_user);
                 if ($request->is_rejected) {
                     $notif->is_rejected = true;
                 } else {
                     $notif->is_approved = true;
-                    
                 }
-                NotificationPasswordReset::dispatch($user, "Request ganti password sudah disetujui oleh <b>" . $notif->FromUser->name . "</b>", $notif->id_notification, $to_user, false, false);
+                NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, false, false);
+                $notif->message = $msg;
                 $notif->save();
             });
 
