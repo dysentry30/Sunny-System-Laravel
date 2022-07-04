@@ -276,6 +276,7 @@
                     <form action="/user/password/reset" method="post">
                         @csrf
                         <input type="hidden" value="{{ $user->id }}" name="id-user">
+                        <input type="hidden" value="" id="socket-id" name="socket-id">
                         <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
                             style="background-color: #ffa62b;">Reset Password</button>
                     </form>

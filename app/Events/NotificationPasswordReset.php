@@ -23,6 +23,7 @@ class NotificationPasswordReset implements ShouldBroadcast
     public DateTime $timestamp;
     public string $id_notification;
     public bool $is_rejected;
+    public string $socket_id;
     /**
      * Create a new event instance.
      *
@@ -35,10 +36,12 @@ class NotificationPasswordReset implements ShouldBroadcast
      * @param string $message
      * @param string $id_notification
      * @param User $to_user
-     * 
+     * @param bool $is_rejected
+     * @param bool $save_to_database
+     *
      * @return void
      */
-    public function __construct(User $from_user, string $message, string $id_notification = "", User $to_user, $is_rejected = true, $save_to_database = true)
+    public function __construct(User $from_user, string $message, string $id_notification = "", User $to_user, $is_rejected = true, $save_to_database = true, $socket_id = "")
     {
         $this->from_user = $from_user;
         $this->to_user = $to_user;
@@ -46,7 +49,7 @@ class NotificationPasswordReset implements ShouldBroadcast
         $this->timestamp = new DateTime("now");
         $this->id_notification = $id_notification;
         $this->is_rejected = $is_rejected;
-        // dd($this);
+        $this->socket_id = $socket_id;
         $this->dontBroadcastToCurrentUser();
 
         if($save_to_database) {

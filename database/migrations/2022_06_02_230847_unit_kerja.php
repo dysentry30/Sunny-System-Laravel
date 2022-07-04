@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('dop');
             $table->string('company');
             $table->string('pic')->nullable();
+            $table->string('metode_approval')->nullable();
+            $table->longText('user_1')->nullable();
+            $table->longText('user_2')->nullable();
+            $table->longText('user_3')->nullable();
             $table->timestamps();
         });
     }

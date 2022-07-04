@@ -48,7 +48,7 @@ class UserController extends Controller
 
             return redirect()->intended("/dashboard");
         }
-
+        Alert::error("Error", "Login Gagal Pastikan Email dan Password Benar");
         // dd("gagal login");
         return back()->with('LoginError', "Login Gagal Pastikan Email dan Password Benar");
     }
@@ -149,17 +149,20 @@ class UserController extends Controller
         $is_uuid = Str::isUuid($data["id-user"]);
         if ($is_uuid) {
             $current_notif = NotificationsModel::find($data["id-user"]);
+            // $socket_id_from_user = $data["socket-id"];
             $to_user = User::find($current_notif->from_id_user);
             $all_notif_related_to_user = NotificationsModel::where("from_id_user", "=", $current_notif->from_id_user)->get();
             $all_notif_related_to_user->each(function($notif) use($request, $to_user, $current_notif) {
-                $msg = "Request ganti password sudah disetujui oleh <b>" . $current_notif->ToUser->name . "</b>";
                 $user = User::find($notif->to_user);
                 if ($request->is_rejected) {
                     $notif->is_rejected = true;
+                    $msg = "Request ganti password ditolak oleh <b>" . $current_notif->ToUser->name . "</b>";
+                    NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, true, false);
                 } else {
+                    $msg = "Request ganti password disetujui oleh <b>" . $current_notif->ToUser->name . "</b>";
                     $notif->is_approved = true;
+                    NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, false, false);
                 }
-                NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, false, false);
                 $notif->message = $msg;
                 $notif->save();
             });
@@ -179,9 +182,9 @@ class UserController extends Controller
         if ($user->check_administrator) {
 
             if ($request->is_rejected) {
-                NotificationPasswordReset::dispatch($user, "Request ganti password ditolak oleh <b>" . $user->name . "</b>", $id_notif, $to_user);
+                NotificationPasswordReset::dispatch($user, "Request ganti password ditolak oleh <b>" . $user->name . "</b>", $id_notif, $to_user, true, true);
             } else {
-                NotificationPasswordReset::dispatch($user, "Request ganti password sudah disetujui oleh <b>" . $user->name . "</b>", $id_notif, $to_user, false);
+                NotificationPasswordReset::dispatch($user, "Request ganti password sudah disetujui oleh <b>" . $user->name . "</b>", $id_notif, $to_user, false, true);
             }
         } else {
             $to_user = User::where("check_administrator", "=", "1")->get();
