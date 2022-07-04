@@ -307,11 +307,9 @@
                     <!--begin::Modal content-->
                     <div class="modal-content">
                         <!--begin::Modal header-->
-                        <div class="modal-header"
-                            style="background-color: #0db0d9; background-image: url('/media/logos/delete.png');
-                            background-repeat: no-repeat; background-size: cover">
+                        <div class="modal-header">
                             <!--begin::Modal title-->
-                            <h2 class="text-white">Hapus : {{ $company->nama_company }}</h2>
+                            <h2>Hapus : {{ $company->nama_company }}</h2>
                             <!--end::Modal title-->
                             <!--begin::Close-->
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
