@@ -107,6 +107,7 @@ class PasalController extends Controller
     // Save Pasal to database or server
     public function pasalAdd(Request $request, Pasals $pasals) {
         $pasal = $request->get("pasal");
+        dd($request->all());
         $pasals->pasal = $pasal;
         if ($pasals->save()) {
             Alert::success('Success', $pasal.", Berhasil Ditambahkan");

@@ -29,14 +29,45 @@
                         <div class="d-flex align-items-center py-1">
 
                             <!--begin::Button-->
-                            <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_tambah_pasal" id="tambah-pasal"
+                                <a class="btn btn-sm btn-primary w-80px" 
+                                data-bs-toggle="modal" data-bs-target="#kt_modal_tambah_pasal"  id="kt_toolbar_primary_button"
                                 style="background-color:#ffa62b; padding: 6px">
-                                New</button>
-                            <a href="/contract-management/" class="btn btn-sm btn-active-primary w-80px"
-                                style="background-color:#f3f6f9; margin-left:10px; padding: 6px">
-                                Back</a>
+                                New</a>
                             <!--end::Button-->
+                                <!--begin::Wrapper-->
+                                <div class="me-4" style="margin-left:10px;">
+                                    <!--begin::Menu-->
+                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <i class="bi bi-folder2-open"></i>Action</a>
+                                    <!--begin::Menu 1-->
+                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                        <!--begin::Header-->
+                                        <div class="px-7 py-5">
+                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                        </div>
+                                        <!--end::Header-->
+                                        <!--begin::Menu separator-->
+                                        <div class="separator border-gray-200"></div>
+                                        <!--end::Menu separator-->
+                                        <!--begin::Form-->
+                                        <div class="">
+                                            <!--begin::Item-->
+                                            <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                            </button>
+                                            <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                            </button>
+                                            <!--end::Item-->
+                                        </div>
+                                        <!--end::Form-->
+                                    </div>
+                                    <!--end::Menu 1-->
+                                    <!--end::Menu-->
+                                </div>
+                                <!--end::Wrapper--> 
                         </div>
                         <!--end::Actions-->
                     @endif
@@ -101,7 +132,7 @@
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
                             @foreach ($pasals as $i => $pasal)
-                                <tr>
+                                <tr class="align-baseline">
 
                                     <!--begin::Nomor=-->
                                     <td>
@@ -112,9 +143,9 @@
 
                                     <!--begin::Pasal=-->
                                     <td>
-                                        <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
+                                        <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1">{{ $pasal->pasal }}</a>
+                                            class="text-gray-600 text-hover-primary mb-1" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -153,7 +184,7 @@
     {{-- begin::modal Tambah Pasal --}}
     <div class="modal fade" id="kt_modal_tambah_pasal" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-800px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -173,11 +204,11 @@
                 </div>
                 <!--end::Modal header-->
                 <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
+                <div class="modal-body">
 
                     <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <div class="fv-row mb-5">
+                    <div class="fv-row">
+                        <div class="fv-row">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
                                 <span style="font-weight: normal">Pasal :</span>
@@ -185,27 +216,28 @@
                             <!--end::Label-->
 
                             <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="pasal" id="pasal"
-                                style="font-weight: normal" value="" placeholder="Ketikan pasal disini...">
+                            <textarea class="form-control form-control-solid" name="pasal" id="pasal"
+                                style="font-weight: normal" rows="10" value="" placeholder="Ketikan pasal disini..."></textarea>
                             <!--end::Input-->
 
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#ffa62b">Save</button> --}}
-
-                        <button type="button" id="add-pasal" style="background-color:#ffa62b"
-                            class="btn btn-sm btn-light btn-active-primary text-white">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <span class="text-white">Save</span>
-                                <span class="spinner-border spinner-border-sm" style="display: none; margin: 0 0 0 1rem;"
-                                    aria-hidden="true" role="status"></span>
-                            </div>
-                        </button>
                     </div>
-                    <!--end::Input group-->
-
                 </div>
                 <!--end::Modal body-->
+                <div class="modal-footer">
+                    <button type="button" id="add-pasal" style="background-color:#ffa62b"
+                        class="btn btn-sm btn-light btn-active-primary text-white">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span class="text-white">Save</span>
+                            <span class="spinner-border spinner-border-sm" style="display: none; margin: 0 0 0 1rem;"
+                            aria-hidden="true" role="status"></span>
+                        </div>
+                    </button>
+                </div>
+                <!--end::Input group-->
+
             </div>
             <!--end::Modal content-->
         </div>
@@ -216,7 +248,7 @@
     {{-- begin::modal Edit Pasal --}}
     <div class="modal fade" id="kt_modal_edit_pasal" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
+        <div class="modal-dialog modal-dialog-centered mw-800px">
             <!--begin::Modal content-->
             <div class="modal-content">
                 <!--begin::Modal header-->
@@ -265,30 +297,29 @@
                             <input type="hidden" class="form-control form-control-solid" name="id-pasal"
                                 id="id-pasal">
                             <!--end::Input-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="pasal-edit"
-                                id="pasal-edit" style="font-weight: normal" value=""
-                                placeholder="Ketikan pasal disini...">
+                            <textarea type="text" class="form-control form-control-solid" name="pasal-edit"
+                                id="pasal-edit" style="font-weight: normal" rows="10" value=""
+                                placeholder="Ketikan pasal disini..."></textarea>
                             <!--end::Input-->
 
+                            <!--end::Input-->
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
-                            class="btn btn-sm btn-light btn-active-primary text-white">
-                            <div class="d-flex justify-content-center align-items-center">
-                                <span class="text-white">Update</span>
-                                <span class="spinner-border spinner-border-sm" id="loading-update"
-                                    style="display: none; margin: 0 0 0 1rem;" aria-hidden="true" role="status"></span>
-                            </div>
-                        </button>
-                    </div>
-                    <!--end::Input group-->
-
                 </div>
                 <!--end::Modal body-->
+                <div class="modal-footer">
+                    <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
+                        class="btn btn-sm btn-light btn-active-primary text-white">
+                        <div class="d-flex justify-content-center align-items-center">
+                            <span class="text-white">Update</span>
+                            <span class="spinner-border spinner-border-sm" id="loading-update"
+                                style="display: none; margin: 0 0 0 1rem;" aria-hidden="true" role="status"></span>
+                        </div>
+                    </button>
+                </div>
+                <!--end::Input group-->
             </div>
             <!--end::Modal content-->
         </div>
@@ -345,7 +376,115 @@
         </form>
     @endforeach
     <!--end::modal DELETE-->
-    {{-- end::modal --}}
+    <!--begin::modal DELETE-->
+    @foreach ($pasals as $pasal)
+        <form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus Pasal :</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg text-white"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            <strong> &bull; {{ $pasal->pasal }}</strong>
+                            <br>
+                            <br>
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::modal DELETE-->
+
+    <!--begin::Modal IMPORT-->
+	<form action="/pasal/new" method="post" enctype="multipart/form-data"> 
+        @csrf
+        <div class="modal fade" id="kt_modal_import" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Import File</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+    
+                        <!--begin::Input group Website-->
+                        <div class="fv-row">
+                            <div class="fv-row">
+                                    
+                                <!--begin::Input-->
+                                <div>
+                                    <label for="attachment" class="form-label">Import Pasal :</label>
+                                    <input class="form-control form-control-md form-control-solid" id="doc-attachment" name="doc-attachment" type="file">
+                                </div>
+                                <!--end::Input-->
+    
+    
+                            </div><br>
+
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#ffa62b" >Save</button>
+                    </div>
+                    <!--end::Input group-->
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+    </form>
+    <!--end::Modal IMPORT-->
+    
+{{-- end::modal --}}
 @endsection
 
 @section('js-script')
