@@ -160,7 +160,7 @@
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                        <a class="nav-link text-active-primary pb-4 active required"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_tab"
                                                             style="font-size:14px;">HAK AKSES</a>
                                                     </li>
@@ -271,15 +271,26 @@
                                                                     @endforeach
                                                                 @endisset
                                                             </select>
+                                                            <br>
                     </form>
-
+                    @if ($user->check_administrator == false)
                     <form action="/user/password/reset" method="post">
                         @csrf
                         <input type="hidden" value="{{ $user->id }}" name="id-user">
                         <input type="hidden" value="" id="socket-id" name="socket-id">
                         <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                            style="background-color: #ffa62b;">Reset Password</button>
+                        style="background-color: #ffa62b;">Reset Password</button>
                     </form>
+                    @endif
+                    @if ($user->check_administrator == true)
+                    <form action="/user/password/reset" method="post">
+                        @csrf
+                        <input type="hidden" value="{{ $user->id }}" name="id-user">
+                        <input type="hidden" value="" id="socket-id" name="socket-id">
+                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                        style="background-color: #ffa62b;">Reset Password By Request</button>
+                    </form>
+                    @endif
                 </div>
                 <!--end:: D-flex -->
 

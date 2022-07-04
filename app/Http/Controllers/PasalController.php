@@ -131,7 +131,7 @@ class PasalController extends Controller
         $pasals = Pasals::find($id_pasal);
         $pasals->pasal = $pasal;
         if ($pasals->save()) {
-            Alert::success('Success', $pasal.", Berhasil Diedit");
+            Alert::success('Success', $pasal.", Berhasil Diubah")->autoClose(3000);
             return response()->json([
                 "status" => "success",
                 "message" => "Your pasal have been updated",

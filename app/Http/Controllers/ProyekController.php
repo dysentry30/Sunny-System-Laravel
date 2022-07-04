@@ -243,7 +243,7 @@ class ProyekController extends Controller
         // Form update Customer dan auto Proyek Berjalan
         // $newProyek->customer= $dataProyek["customer"];
 
-        Alert::success('Success', "Edit Berhasil")->autoClose(2500);
+        Alert::success('Success', "Edit Berhasil")->autoClose(3000);
         
         if ($idCustomer != null){
             

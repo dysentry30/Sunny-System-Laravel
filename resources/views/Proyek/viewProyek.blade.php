@@ -55,17 +55,17 @@
                                         <!--end::Button-->
 
                                         <!--begin::Button-->
-                                        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" 
+                                        <a href="#" class="btn btn-sm btn-light btn-active-primary" data-bs-toggle="modal" 
                                         data-bs-target="#kt_modal_create_approval" 
                                         id="kt_toolbar_primary_button"
-                                        style="background-color:#f1f1f1; margin-left:10px; font-size: 13px; color: black; padding: 8px 15px 8px 15px">
+                                        style="margin-left:10px; font-size: 13px; padding: 8px 15px 8px 15px">
                                         Req Approval
                                         </a>
                                         <!--end::Button-->
                                                                                 
                                         <!--begin::Button-->
-                                        <a href="/proyek" class="btn btn-sm btn-primary" id="customer_new_close"
-                                        style="background-color:#f1f1f1; margin-left:10px; color: black;">
+                                        <a href="/proyek" class="btn btn-sm btn-light btn-active-primary" id="customer_new_close"
+                                        style="margin-left:10px">
                                         Close</a>
                                         <!--end::Button-->
                                         
