@@ -382,7 +382,3 @@ a{{-- Begin::Extend Header --}}
         }
     </script>
 @endsection
-
-@section('aside')
-    @extends('template.aside')
-@endsection

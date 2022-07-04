@@ -224,6 +224,7 @@
                                                 <div class="modal fade" id="kt_modal_unit_kerja{{ $unitkerja->id }}"
                                                     tabindex="-1" aria-hidden="true">
                                                     <form action="/unit-kerja/setting/save" method="post">
+                                                        @csrf
                                                         <!--begin::Modal dialog-->
                                                         <div class="modal-dialog modal-dialog-centered mw-500px">
                                                             <!--begin::Modal content-->
@@ -255,23 +256,16 @@
                                                                     <!--begin::Input group Website-->
                                                                     <h6 class="">Metode Approval</h6>
                                                                     <div
-                                                                        class="d-flex flex-column h-80px justify-content-evenly">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                name="metode-approval" id="paralel">
-                                                                            <label class="form-check-label"
-                                                                                for="paralel">
-                                                                                Paralel
-                                                                            </label>
-                                                                        </div>
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="radio"
-                                                                                name="metode-approval" id="sequence">
-                                                                            <label class="form-check-label"
-                                                                                for="sequence">
-                                                                                Sequence
-                                                                            </label>
-                                                                        </div>
+                                                                        class="d-flex flex-column h-50px justify-content-evenly">
+                                                                        <select name="metode-approval"
+                                                                            class="form-select form-select-solid select2-hidden-accessible"
+                                                                            data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Pilih Metode Approval"
+                                                                            tabindex="-1" aria-hidden="true">
+                                                                            <option></option>
+                                                                            <option value="Paralel">Paralel</option>
+                                                                            <option value="Sequence">Sequence</option>
+                                                                        </select>
                                                                     </div>
                                                                     <!--end::Input group-->
 
@@ -279,346 +273,434 @@
                                                                     <hr>
                                                                     <div
                                                                         class="d-flex flex-column justify-content-between">
-                                                                        <div class="">
-                                                                            <h6>User 1</h6>
-                                                                            <select name="user"
-                                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                                data-control="select2"
-                                                                                data-hide-search="true"
-                                                                                data-placeholder="Pilih User"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option></option>
-                                                                                @foreach ($unitkerja->Users as $user)
-                                                                                    <option value="{{ $user->id }}"
-                                                                                        data-select2-id="{{ $user->id }}">
-                                                                                        {{ $user->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
+                                                                    @if(count($unitkerja->Users) < 1)
+                                                                        <div class="text-center">
+                                                                            <h6>Data user tidak ditemukan</h6>
+                                                                            <a href="/user/new"
+                                                                                class="btn btn-sm btn-active-primary text-white"
+                                                                                style="background-color: #ffa62b;">Tambah
+                                                                                User</a>
                                                                         </div>
-                                                                        <br>
-                                                                        <div class="">
-                                                                            <h6>User 2</h6>
-                                                                            <select name="user"
-                                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                                data-control="select2"
-                                                                                data-hide-search="true"
-                                                                                data-placeholder="Pilih User"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option></option>
-                                                                                @foreach ($unitkerja->Users as $user)
-                                                                                    <option value="{{ $user->id }}"
-                                                                                        data-select2-id="{{ $user->id }}">
-                                                                                        {{ $user->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                        <br>
-                                                                        <div class="">
-                                                                            <h6>User 3</h6>
-                                                                            <select name="user"
-                                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                                data-control="select2"
-                                                                                data-hide-search="true"
-                                                                                data-placeholder="Pilih User"
-                                                                                tabindex="-1" aria-hidden="true">
-                                                                                <option></option>
-                                                                                @foreach ($unitkerja->Users as $user)
-                                                                                    <option value="{{ $user->id }}"
-                                                                                        data-select2-id="{{ $user->id }}">
-                                                                                        {{ $user->name }}</option>
-                                                                                @endforeach
-                                                                            </select>
-                                                                        </div>
-                                                                    </div>
-                                                                    {{-- End:: Input Group --}}
-                                                                </div>
-                                                                <!--end::Modal body-->
+                                                                    @else
+                                                                        @if (count($unitkerja->Users) > 0)
+                                                                            <div class="">
+                                                                                <h6>User 1</h6>
+                                                                                <select name="user-1"
+                                                                                    onchange="refreshUserData(this)"
+                                                                                    class="form-select form-select-solid select2-hidden-accessible select-user"
+                                                                                    data-control="select2"
+                                                                                    data-hide-search="true"
+                                                                                    data-placeholder="Pilih User"
+                                                                                    tabindex="-1" aria-hidden="true">
+                                                                                    <option></option>
+                                                                                    @foreach ($unitkerja->Users as $user)
+                                                                                        <option
+                                                                                            value="{{ $user->id }}">
+                                                                                            {{ $user->name }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                            <br>
+                                                                        @endif
 
-                                                                <div class="modal-footer">
-                                                                    <button type="button"
-                                                                        class="btn btn-sm btn-active-primary text-white"
-                                                                        style="background-color: #ffa62b;">Save
-                                                                        Setting</button>
+                                                                        @if (count($unitkerja->Users) > 1)
+                                                                            <div class="">
+                                                                                <h6>User 2</h6>
+                                                                                <select name="user-2"
+                                                                                    onchange="refreshUserData(this)"
+                                                                                    class="form-select form-select-solid select2-hidden-accessible select-user"
+                                                                                    data-control="select2"
+                                                                                    data-hide-search="true"
+                                                                                    data-placeholder="Pilih User"
+                                                                                    tabindex="-1" aria-hidden="true">
+                                                                                    <option></option>
+                                                                                    @foreach ($unitkerja->Users as $user)
+                                                                                        <option
+                                                                                            value="{{ $user->id }}">
+                                                                                            {{ $user->name }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                            <br>
+                                                                        @endif
+
+                                                                        @if (count($unitkerja->Users) > 2)
+                                                                            <div class="">
+                                                                                <h6>User 3</h6>
+                                                                                <select name="user-3"
+                                                                                    onchange="refreshUserData(this)"
+                                                                                    class="form-select form-select-solid select2-hidden-accessible select-user"
+                                                                                    data-control="select2"
+                                                                                    data-hide-search="true"
+                                                                                    data-placeholder="Pilih User"
+                                                                                    tabindex="-1" aria-hidden="true">
+                                                                                    <option></option>
+                                                                                    @foreach ($unitkerja->Users as $user)
+                                                                                        <option
+                                                                                            value="{{ $user->id }}">
+                                                                                            {{ $user->name }}</option>
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                        @endif
+                                                                    @endempty
                                                                 </div>
+                                                                {{-- End:: Input Group --}}
                                                             </div>
-                                                            <!--end::Modal content-->
+                                                            <!--end::Modal body-->
+
+                                                            <div class="modal-footer">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-active-primary text-white"
+                                                                    style="background-color: #ffa62b;">Save
+                                                                    Setting</button>
+                                                                <button type="button" id="button-reset"
+                                                                    name="button-reset"
+                                                                    onclick="resetSelectOptions(this)"
+                                                                    {{-- onclick="this.form.reset()" --}}
+                                                                    class="btn btn-sm btn-light btn-active-primary">Reset
+                                                                    Pilihan</button>
+                                                            </div>
                                                         </div>
-                                                        <!--end::Modal dialog-->
-                                                    </form>
-                                                </div>
-                                            @endif
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                                <!--end::Table body-->
-                            </table>
-                            <!--end::Table-->
+                                                        <!--end::Modal content-->
+                                                    </div>
+                                                    <!--end::Modal dialog-->
+                                                </form>
+                                            </div>
+                                        @endif
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
 
 
 
-                        </div>
-                        <!--end::Card body-->
                     </div>
-                    <!--end::Card-->
-                    <!--end::Container-->
-                    <!--end::Post-->
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+                <!--end::Container-->
+                <!--end::Post-->
 
+
+            </div>
+            <!--end::Content-->
+            <!--begin::Footer-->
+
+            <!--end::Footer-->
+        </div>
+        <!--end::Wrapper-->
+    </div>
+    <!--end::Page-->
+</div>
+<!--end::Root-->
+
+
+<!--begin::Modal-->
+
+<form action="/unit-kerja/save" method="post" enctype="multipart/form-data">
+    @csrf
+
+    <!--begin::Modal - Create App-->
+    {{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
+
+    <!--begin::Modal - Create Proyek-->
+    <div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Unit Kerja</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-circle-fill ts-8"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nomer ID</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" id="nomor-unit"
+                                    name="nomor-unit" value="{{ old('nomor-unit') }}" placeholder="Nomer ID" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Unit Kerja</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" id="unit-kerja"
+                                    name="unit-kerja" value="{{ old('unit-kerja') }}" placeholder="Unit Kerja" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Div Code</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" id="divcode"
+                                    name="divcode" value="{{ old('divcode') }}" placeholder="Div Code" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">DOP</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="dop" name="dop" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="DOP">
+                                    <option></option>
+                                    @foreach ($dops as $dop)
+                                        @if ($dop->dop == null)
+                                            <option value="{{ $dop->dop }}" selected>{{ $dop->dop }}</option>
+                                        @else
+                                            <option value="{{ $dop->dop }}">{{ $dop->dop }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Company</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="company" name="company" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true" data-placeholder="Company">
+                                    <option></option>
+                                    @foreach ($companies as $company)
+                                        @if ($company->nama_company == null)
+                                            <option value="{{ $company->nama_company }}" selected>
+                                                {{ $company->nama_company }}</option>
+                                        @else
+                                            <option value="{{ $company->nama_company }}">
+                                                {{ $company->nama_company }}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>PIC</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" id="pic"
+                                    name="pic" value="" placeholder="PIC" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+
+
+                    <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
 
                 </div>
-                <!--end::Content-->
-                <!--begin::Footer-->
-
-                <!--end::Footer-->
+                <!--end::Modal body-->
             </div>
-            <!--end::Wrapper-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Page-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Root-->
+    <!--end::Modal - Create App-->
+</form>
 
+<script>
+    // <input id="nilaiok-performance" class="reformat">
 
-    <!--begin::Modal-->
+    function reformat() {
+        this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
+    }
+    document.querySelectorAll('.reformat').forEach(inp => {
+        inp.addEventListener('input', reformat);
+    });
+</script>
+<!--end::Modals-->
 
-    <form action="/unit-kerja/save" method="post" enctype="multipart/form-data">
+<!--begin::modal DELETE-->
+@foreach ($unitkerjas as $unitkerja)
+    <form action="/unit-kerja/delete/{{ $unitkerja->id }}" method="post" enctype="multipart/form-data">
+        @method('delete')
         @csrf
-
-        <!--begin::Modal - Create App-->
-        {{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
-
-        <!--begin::Modal - Create Proyek-->
-        <div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
+        <div class="modal fade" id="kt_modal_delete{{ $unitkerja->id }}" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-900px">
+            <div class="modal-dialog modal-dialog-centered mw-800px">
                 <!--begin::Modal content-->
                 <div class="modal-content">
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Unit Kerja</h2>
+                        <h2>Hapus : {{ $unitkerja->unit_kerja }}</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
+                                <i class="bi bi-x-lg text-white"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </div>
                         <!--end::Close-->
                     </div>
                     <!--end::Modal header-->
-
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
-
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nomer ID</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="nomor-unit"
-                                        name="nomor-unit" value="{{ old('nomor-unit') }}" placeholder="Nomer ID" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Unit Kerja</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="unit-kerja"
-                                        name="unit-kerja" value="{{ old('unit-kerja') }}" placeholder="Unit Kerja" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Div Code</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="divcode"
-                                        name="divcode" value="{{ old('divcode') }}" placeholder="Div Code" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">DOP</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="dop" name="dop" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="DOP">
-                                        <option></option>
-                                        @foreach ($dops as $dop)
-                                            @if ($dop->dop == null)
-                                                <option value="{{ $dop->dop }}" selected>{{ $dop->dop }}</option>
-                                            @else
-                                                <option value="{{ $dop->dop }}">{{ $dop->dop }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Company</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="company" name="company" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Company">
-                                        <option></option>
-                                        @foreach ($companies as $company)
-                                            @if ($company->nama_company == null)
-                                                <option value="{{ $company->nama_company }}" selected>
-                                                    {{ $company->nama_company }}</option>
-                                            @else
-                                                <option value="{{ $company->nama_company }}">
-                                                    {{ $company->nama_company }}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>PIC</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="pic"
-                                        name="pic" value="" placeholder="PIC" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-
-
-                        <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button>
-
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
                     </div>
-                    <!--end::Modal body-->
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
                 </div>
-                <!--end::Modal content-->
+                <!--end::Modal body-->
             </div>
-            <!--end::Modal dialog-->
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal - Create App-->
+        <!--end::Modal dialog-->
+        </div>
     </form>
-
-    <script>
-        // <input id="nilaiok-performance" class="reformat">
-
-        function reformat() {
-            this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
-        }
-        document.querySelectorAll('.reformat').forEach(inp => {
-            inp.addEventListener('input', reformat);
-        });
-    </script>
-    <!--end::Modals-->
-
-    <!--begin::modal DELETE-->
-    @foreach ($unitkerjas as $unitkerja)
-        <form action="/unit-kerja/delete/{{ $unitkerja->id }}" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_modal_delete{{ $unitkerja->id }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus : {{ $unitkerja->unit_kerja }}</h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg text-white"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-    @endforeach
-    <!--end::modal DELETE-->
+@endforeach
+<!--end::modal DELETE-->
 
 
 @endsection
 
 <!--end::Main-->
+
+@section('js-script')
+<script>
+    // let choosenUserIDArray = {
+    //     user_1: 0,
+    //     user_2: 0,
+    //     user_3: 0,
+    // };
+    let choosenUserIDArray = [];
+
+    function refreshUserData(elt) {
+        const choosenUserID = elt.value;
+        const thisSelectName = elt.getAttribute("name");
+        const selectElts = elt.parentElement.parentElement.querySelectorAll(".select-user");
+
+        choosenUserIDArray = choosenUserIDArray.filter(item => {
+            return item != choosenUserID;
+        });
+        choosenUserIDArray.push(choosenUserID);
+        // if (thisSelectName == "user-1") {
+        //     choosenUserIDArray.user_1 = choosenUserID;
+        // } else if (thisSelectName == "user-2") {
+        //     choosenUserIDArray.user_2 = choosenUserID;
+        // } else {
+        //     choosenUserIDArray.user_3 = choosenUserID;
+        // }
+
+        selectElts.forEach(select => {
+            const options = select.querySelectorAll("option");
+            const selectName = select.getAttribute("name");
+            options.forEach(option => {
+                const userID = option.getAttribute("value");
+                if (choosenUserIDArray.includes(userID)) {
+                    option.setAttribute("disabled", "");
+                } else {
+                    option.removeAttribute("disabled");
+                }
+            })
+        });
+    }
+
+    // Begin :: Reset Options for Setting Approval
+    function resetSelectOptions(elt) {
+        const selectElts = elt.parentElement.parentElement.querySelectorAll("select");
+        $(selectElts).select2("val", "All");
+        selectElts.forEach(select => {
+            const options = select.querySelectorAll("option");
+            const selectName = select.getAttribute("name");
+            options.forEach(option => {
+                const userID = option.getAttribute("value");
+                if (choosenUserIDArray.includes(userID)) {
+                    choosenUserIDArray = choosenUserIDArray.filter(item => item != userID);
+                }
+            });
+        });
+        choosenUserIDArray = choosenUserIDArray.filter(item => item != "");
+        refreshUserData(elt);
+    }
+    // End :: Reset Options for Setting Approval
+</script>
+@endsection

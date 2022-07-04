@@ -481,7 +481,9 @@
     <script src="{{ asset('/js/app.js') }}"></script>
     {{-- begin::Pusher --}}
     <script>
+        let userSocketID = "";
         window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
+            userSocketID = window.Echo.socketId();
             let isNotifExist = "";
             if (data.id_notification != "") {
                 isNotifExist = document.querySelector(`#item-${data.id_notification}`);
@@ -495,8 +497,6 @@
             const nowDate = new Date();
             const diff = Math.abs(dataDate - nowDate);
             let time = "";
-
-            console.log(data);
 
             if (diff < 1000) {
                 time = `now`;
@@ -542,7 +542,7 @@
                     <!--end::Item-->
                     `;
                     mainNotifContent.innerHTML += html;
-                } else if (data.to_user.id == idUser && data.to_user.check_administrator != 1) {
+                } else if (data.to_user.id == idUser && data.to_user.check_administrator != 1 && data.message.includes("sudah")) {
                     notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
 
                     let actionNotifBtn = ``;
@@ -641,6 +641,10 @@
                 isNotifExist.innerHTML = html;
             }
         });
+
+        // window.Echo.on('connect', function(){
+        //     console.log('connected', window.Echo.socketId());
+        // });
 
         // begin Reset Password Authorization
         async function resetPasswordAuthorize(elt, is_rejected = false) {

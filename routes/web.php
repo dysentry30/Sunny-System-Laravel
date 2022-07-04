@@ -359,6 +359,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // NEW Unit Kerja after SAVE
     Route::post('/unit-kerja/save', [UnitKerjaController::class, 'store']);
+
+    // Setting Unit Kerja
+    Route::post('/unit-kerja/setting/save', [UnitKerjaController::class, 'update']);
     
     // NEW Unit Kerja after SAVE
     Route::delete('/unit-kerja/delete/{id}', [UnitKerjaController::class, 'delete']);

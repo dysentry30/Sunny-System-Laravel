@@ -50,7 +50,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                class="position-absolute top-0 start-100 translate-middle badge rounded-circle p-2 bg-danger">
                                 <span id="notification-counter"></span>
                                 <span class="visually-hidden">unread messages</span>
                             </span>
@@ -106,7 +106,7 @@
                                                         <!--end::Symbol-->
                                                         @php
                                                             $is_msg_contain_user_name = str_contains($notif->message, "<b>" . auth()->user()->name . "</b>");
-                                                            $msg = "Request ganti password sudah disetujui oleh <b>Anda</b>";
+                                                            $msg = $notif->is_rejected ? "Request ganti password ditolak oleh <b>Anda</b>" : "Request ganti password sudah disetujui oleh <b>Anda</b>";
                                                             // dd($is_msg_contain_user_name);
                                                         @endphp
                                                         <!--begin::Title-->

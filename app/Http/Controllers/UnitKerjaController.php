@@ -85,7 +85,44 @@ class UnitKerjaController extends Controller
      */
     public function update(Request $request, UnitKerja $unitKerja)
     {
-        //
+        $data = $request->all();
+        dd($data);
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "nomor-unit" => "required",
+            "unit-kerja" => "required",
+            "divcode" => "required",
+            "dop" => "required",
+            "company" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-unit");
+            $request->old("unit-kerja");
+            $request->old("divcode");
+            $request->old("dop");
+            $request->old("company");
+            Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
+        }
+        $validation->validate();   
+        
+        $unitKerja->nomor_unit = $data["nomor-unit"];
+        $unitKerja->unit_kerja = $data["unit-kerja"];
+        $unitKerja->divcode = $data["divcode"];
+        $unitKerja->dop = $data["dop"];
+        $unitKerja->company = $data["company"];
+        $unitKerja->pic = $data["pic"];
+
+        
+        if ($unitKerja->save()) {
+            Alert::success('Success', $data["unit-kerja"].", Berhasil Ditambahkan");
+            return redirect('/unit-kerja')->with("success", true);
+        }
+        Alert::error('Error', "Setting Approval untuk <b>" . $data["unit-kerja"]. "</b> gagal disimpan");
+        return redirect()->back();
+
     }
 
     /**
