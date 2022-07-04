@@ -1,10 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Http\Request;
 
 use App\Models\TeamProyek;
-use App\Http\Requests\StoreTeamProyekRequest;
-use App\Http\Requests\UpdateTeamProyekRequest;
 
 class TeamProyekController extends Controller
 {
@@ -15,7 +14,7 @@ class TeamProyekController extends Controller
      */
     public function index()
     {
-        //
+        return view("/MasterData/TeamProyek", ["teams" => TeamProyek::all()->reverse()]);
     }
 
     /**
@@ -34,7 +33,7 @@ class TeamProyekController extends Controller
      * @param  \App\Http\Requests\StoreTeamProyekRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreTeamProyekRequest $request)
+    public function store(Request $request)
     {
         //
     }
@@ -68,7 +67,7 @@ class TeamProyekController extends Controller
      * @param  \App\Models\TeamProyek  $teamProyek
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateTeamProyekRequest $request, TeamProyek $teamProyek)
+    public function update(Request $request, TeamProyek $teamProyek)
     {
         //
     }

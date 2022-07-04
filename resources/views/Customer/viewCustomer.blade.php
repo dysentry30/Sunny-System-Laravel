@@ -52,8 +52,8 @@
                                            <!--end::Button-->
     
                                            <!--begin::Button-->
-                                            <a href="/customer" class="btn btn-sm btn-primary"	id="customer-edit-close"
-                                            style="background-color:#f3f6f9;margin-left:10px;color: black;">
+                                            <a href="/customer" class="btn btn-sm btn-light btn-active-primary"	id="customer-edit-close"
+                                            style="margin-left:10px;">
                                             Close</a>
                                            <!--end::Button-->
     

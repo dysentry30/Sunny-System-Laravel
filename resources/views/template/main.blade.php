@@ -334,7 +334,7 @@
                                                 <i class="bi bi-person-lines-fill text-white"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title-2">User Proyek</span>
+                                            <span class="menu-title-2">Team Proyek</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->

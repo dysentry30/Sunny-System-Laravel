@@ -55,18 +55,17 @@
                                         <div class="separator border-gray-200"></div>
                                         <!--end::Menu separator-->
                                         <!--begin::Form-->
-                                        <div class="px-7 py-5">
-                                            <!--begin::Input group-->
-                                            <div class="mb-10">
-                                                <!--begin::Label-->
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                <label class="form-label" style="margin-left:5px;">
-                                                    Export Excel</label><br>
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                <label class="form-label" style="margin-left:5px;">
-                                                    Import Excel</label><br>
-                                                <!--end::Label-->
-                                            </div>
+                                        <div class="">
+                                            <!--begin::Item-->
+                                            <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                            </button>
+                                            <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                            </button>
+                                            <!--end::Item-->
                                         </div>
                                         <!--end::Form-->
                                     </div>
