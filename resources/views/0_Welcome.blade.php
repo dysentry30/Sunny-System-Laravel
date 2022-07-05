@@ -18,12 +18,12 @@
 <!--begin::Main-->
 @section('content')
 
-@if (Session::has("LoginError"))
+{{-- @if (Session::has("LoginError"))
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         {{ Session::get("LoginError") }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-@endif
+@endif --}}
 
 <div >
         <!--begin::Main-->

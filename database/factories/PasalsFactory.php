@@ -17,6 +17,7 @@ class PasalsFactory extends Factory
     public function definition()
     {
         return [
+            "tipe_pasal" => $this->faker->randomElement(["Pasal Tenaga Kerja", "Pasal Keuangan", "Pasal Perizinan"]),
             "pasal" => $this->faker->realText(100),
         ];
     }

@@ -57,9 +57,9 @@ class UserController extends Controller
 
             return redirect()->intended("/dashboard");
         }
-        Alert::error("Error", "Login Gagal Pastikan Email dan Password Benar");
+        Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
         // dd("gagal login");
-        return back()->with('LoginError', "Login Gagal Pastikan Email dan Password Benar");
+        return back();
     }
 
     public function logout(Request $request)
