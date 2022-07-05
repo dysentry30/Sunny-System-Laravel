@@ -68,7 +68,7 @@ class CustomerController extends Controller
                     @if (auth()->user()->check_administrator)
                         <td class="text-center">
                             <button data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_delete$customers->id_customer"
+                                data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
                                 id="modal-delete"
                                 class="btn btn-sm btn-light btn-active-primary">Delete
                             </button>
@@ -82,7 +82,7 @@ class CustomerController extends Controller
             }
             return $artilces;
         }
-        return view('2_Customer');
+        return view('2_Customer', ['results' => $results]);
     }
 
     // public function index (Request $request) 
@@ -160,7 +160,7 @@ class CustomerController extends Controller
         
         if ($_FILES['doc-attachment']['size'] == 0)
         {   
-            Alert::success('Success', "Edit Berhasil")->autoClose(2500);
+            Alert::success('Success', "Edit Berhasil")->autoClose(3000);
             // file is empty (and not an error)
             $editCustomer->save();
         }else{

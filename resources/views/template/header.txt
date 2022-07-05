@@ -105,8 +105,8 @@
                                                         </div>
                                                         <!--end::Symbol-->
                                                         @php
-                                                            $is_msg_contain_user_name = str_contains($notif->message, '<b>' . auth()->user()->name . '</b>');
-                                                            $msg = $notif->is_rejected ? 'Request ganti password ditolak oleh <b>Anda</b>' : 'Request ganti password sudah disetujui oleh <b>Anda</b>';
+                                                            $is_msg_contain_user_name = str_contains($notif->message, "<b>" . auth()->user()->name . "</b>");
+                                                            $msg = $notif->is_rejected ? "Request ganti password ditolak oleh <b>Anda</b>" : "Request ganti password sudah disetujui oleh <b>Anda</b>";
                                                             // dd($is_msg_contain_user_name);
                                                         @endphp
                                                         <!--begin::Title-->
@@ -117,7 +117,7 @@
                                                             <div class="text-gray-400 fs-7" id="msg-notif">
                                                                 @if ($is_msg_contain_user_name)
                                                                     {!! $msg !!}
-                                                                @else
+                                                                @else 
                                                                     {!! $notif->message !!}
                                                                 @endif
                                                             </div>
@@ -205,11 +205,11 @@
                                                         </div>
                                                         <!--end::Symbol-->
                                                         <!--begin::Title-->
-
+                                                        
                                                         <div class="mb-0 me-2">
                                                             <a href="#"
                                                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder"
-                                                                id="title-notif">{{ $notif->FromUser->name }}</a>
+                                                                id="title-notif">{{$notif->FromUser->name}}</a>
                                                             <div class="text-gray-400 fs-7" id="msg-notif">
                                                                 {!! $notif->message !!}
                                                             </div>
@@ -227,50 +227,6 @@
                                                                 </form>
                                                             @elseif(empty($notif->token_reset_password) && $notif->is_rejected)
                                                                 {{-- !MAKE THIS EMPTY --}}
-                                                            @elseif(empty($notif->token_reset_password) && $notif->is_rejected && $notif->is_approved)
-                                                                @php
-                                                                    $from_user = $notif->FromUser;
-                                                                    $to_user = $notif->ToUser;
-                                                                @endphp
-                                                                <!--begin::Section-->
-                                                                <div class="d-flex align-items-center">
-                                                                    <!--begin::Symbol-->
-                                                                    <div class="symbol symbol-35px me-4">
-                                                                        <span class="symbol-label bg-light-primary">
-                                                                            <i class="bi bi-lock-fill fs-2"
-                                                                                id="icon-notif"
-                                                                                style="color: rgb(223, 155, 28)"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                    <!--end::Symbol-->
-                                                                    <!--begin::Title-->
-                                                                    <div class="mb-0 me-2">
-                                                                        <a href="#"
-                                                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder"
-                                                                            id="title-notif">{{ $from_user->name }}</a>
-                                                                        <div class="text-gray-400 fs-7"
-                                                                            id="msg-notif">{!! $notif->message !!}
-                                                                        </div>
-                                                                        <br>
-                                                                        <button type="button"
-                                                                            class="btn btn-sm btn-light btn-active-primary"
-                                                                            data-parent-item="${data.id_notification}"
-                                                                            onclick="lockUnlockForecast(this, true, {{ $to_user->id }}, {{ $from_user->id }})">Reject</button>
-                                                                        <button type="button"
-                                                                            class="btn btn-sm btn-active-primary text-white"
-                                                                            data-parent-item="${data.id_notification}"
-                                                                            onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]"
-                                                                            ? data.from_user.id : data.to_user.id })"
-                                                                            style="background-color: #ffa62b;">Accept</button>
-                                                                    </div>
-                                                                    <!--end::Title-->
-
-                                                                </div>
-                                                                <!--end::Section-->
-                                                                <!--begin::Label-->
-                                                                <span class="badge badge-light fs-8"
-                                                                    id="timestamp-notif">${"Now"}</span>
-                                                                <!--end::Label-->
                                                             @else
                                                                 <button type="button" name="reset-password"
                                                                     class="btn btn-sm btn-secondary text-dark disabled">Request
@@ -345,8 +301,7 @@
                                     style="background-color:#0db0d9; width: 35px; height: 35px; border-radius: 50%;"
                                     type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
                                     aria-expanded="false">
-                                    <a
-                                        class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
+                                    <a class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
                                 </div>
                                 <ul class="dropdown-menu pt-6" aria-labelledby="dropdownMenuButton1">
                                     <form action="/logout" method="post" class="form" id="kt_sign_in_form"
@@ -356,7 +311,7 @@
                                     </form>
                                 </ul>
                             </div>
-                            {{-- @else
+                        {{-- @else
                             <div class="cursor-pointer symbol symbol-30px symbol-md-40px" data-kt-menu-trigger="click"
                                 data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
                                 Hi,<strong> Tes Login &nbsp;</strong>

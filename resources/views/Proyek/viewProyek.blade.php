@@ -50,22 +50,20 @@
                                         
                                         <!--begin::Button-->
                                         <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b; margin-left:10px">
+                                        style="background-color:#008CB4">
                                         Save</button>
                                         <!--end::Button-->
 
                                         <!--begin::Button-->
-                                        <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" 
+                                        <a class="btn btn-sm btn-light btn-active-primary fs-7 px-4 mx-3" data-bs-toggle="modal" 
                                         data-bs-target="#kt_modal_create_approval" 
-                                        id="kt_toolbar_primary_button"
-                                        style="background-color:#f1f1f1; margin-left:10px; font-size: 13px; color: black; padding: 8px 15px 8px 15px">
+                                        id="kt_toolbar_primary_button" style="padding: 8px">
                                         Req Approval
                                         </a>
                                         <!--end::Button-->
                                                                                 
                                         <!--begin::Button-->
-                                        <a href="/proyek" class="btn btn-sm btn-primary" id="customer_new_close"
-                                        style="background-color:#f1f1f1; margin-left:10px; color: black;">
+                                        <a href="/proyek" class="btn btn-sm btn-light btn-active-primary" id="customer_new_close">
                                         Close</a>
                                         <!--end::Button-->
                                         
@@ -1204,7 +1202,7 @@
                                                                 <thead>
                                                                     <!--begin::Table row-->
                                                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nomor</th>
+                                                                        <th class="w-50px text-center">No.</th>
                                                                         <th class="max-w-50px">Nama</th>
                                                                     </tr>
                                                                     <!--end::Table row-->
@@ -1219,13 +1217,13 @@
 
                                                                     <tr>
                                                                         <!--begin::Name=-->
-                                                                        <td>
+                                                                        <td class="text-center">
                                                                             {{ $no++ }}
                                                                         </td>
                                                                         <!--end::Name=-->
                                                                         <!--begin::Email=-->
                                                                         <td>
-                                                                            {{ $team->nama_team }}
+                                                                            {{ $team->User->name }}
                                                                         </td>
                                                                         <!--end::Email=-->
                                                                 </tbody>
@@ -2036,7 +2034,7 @@
                                                                 <div class="d-grid gap-2 d-md-block">
                                                                     <!--begin::Button-->
                                                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                                                    style="background-color:#ffa62b; margin-left:10px">
+                                                                    style="background-color:#008CB4; margin-left:10px">
                                                                     Approve</button>
                                                                     <!--end::Button-->
                                                                     
@@ -2233,7 +2231,6 @@
 			<form action="/proyek/user/add" method="post" enctype="multipart/form-data"> 
 				@csrf
 				
-				<input type="hidden" name="assign-proyek" value="{{ $proyek->nama_proyek }}" id="id-customer">
 				<input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}" id="id-customer">
 				<input type="hidden" name="assign-stage" value="{{ $proyek->stage }}" id="id-customer">
 
@@ -2269,7 +2266,7 @@
 									<!--begin::Col-->
 									<div class="">
 										<!--begin::Input group Website-->
-										<div class="fv-row mb-7">
+										<div class="fv-row">
 											{{-- <!--begin::Label-->
 											<label class="fs-6 fw-bold form-label mt-3">
 												<span class="required">Nama Company</span>
@@ -2283,7 +2280,7 @@
                                                 {{-- @if ($user->name == $proyek->name) --}}
                                                     {{-- <option value="{{ $user->name }}" selected>{{$user->name }}</option> --}}
                                                 {{-- @else --}}
-                                                    <option value="{{ $user->name }}">{{$user->name }}</option>
+                                                    <option value="{{ $user->id }}">{{$user->name }}</option>
                                                 {{-- @endif --}}
                                                 @endforeach
                                             </select>
@@ -2295,10 +2292,10 @@
 								</div>
 								<!--End::Row Kanan+Kiri-->
 
-														
-							
+                            </div>														
+                                <div class="modal-footer">
 								
-								<button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#ffa62b">Save</button>
+								    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 									
 								</div>
 								<!--end::Modal body-->

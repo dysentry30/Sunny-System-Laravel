@@ -46,18 +46,16 @@
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
-                                        style="background-color:#ffa62b; padding: 6px">
+                                        style="background-color:#008CB4; padding: 6px">
                                         New</a>
 
                                     <!--begin::Wrapper-->
                                     <div class="me-4" style="margin-left:10px;">
                                         <!--begin::Menu-->
-                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
-                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                             <i class="bi bi-folder2-open"></i>Action</a>
                                         <!--begin::Menu 1-->
-                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
-                                            id="kt_menu_6155ac804a1c2">
+                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
                                             <!--begin::Header-->
                                             <div class="px-7 py-5">
                                                 <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -67,18 +65,17 @@
                                             <div class="separator border-gray-200"></div>
                                             <!--end::Menu separator-->
                                             <!--begin::Form-->
-                                            <div class="px-7 py-5">
-                                                <!--begin::Input group-->
-                                                <div class="mb-10">
-                                                    <!--begin::Label-->
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                    <label class="form-label" style="margin-left:5px;">
-                                                        Export Excel</label><br>
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                    <label class="form-label" style="margin-left:5px;">
-                                                        Import Excel</label><br>
-                                                    <!--end::Label-->
-                                                </div>
+                                            <div class="">
+                                                <!--begin::Item-->
+                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                                </button>
+                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                                </button>
+                                                <!--end::Item-->
                                             </div>
                                             <!--end::Form-->
                                         </div>
@@ -421,7 +418,7 @@
 
 
 
-                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#ffa62b">Save</button>
+                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#008CB4">Save</button>
 
                     </div>
                     <!--end::Modal body-->

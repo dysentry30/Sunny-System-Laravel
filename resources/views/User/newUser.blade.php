@@ -45,7 +45,7 @@
 
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b;">
+                                        style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
 
@@ -88,15 +88,15 @@
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" id="name-user" name="name-user"
-                                                            class="form-control form-control-solid" value=""
+                                                            class="form-control form-control-solid" value="{{ old("name-user") }}"
                                                             placeholder="Name" />
                                                         @error('name-user')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                            <h6 class="text-danger">{{ $message }}</h6>
                                                         @enderror
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Name-->
-
+                                                    
                                                     <!--begin::Input group Email-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
@@ -106,12 +106,15 @@
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="email" class="form-control form-control-solid"
-                                                            id="email" name="email" value=""
-                                                            placeholder="Email" />
+                                                        id="email" name="email" value="{{ old("email") }}"
+                                                        placeholder="Email" />
+                                                        @error('email')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
-
+                                                    
                                                     <!--begin::Input group Phone-->
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
@@ -121,8 +124,11 @@
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control form-control-solid"
-                                                            id="phone-number" name="phone-number" value=""
-                                                            placeholder="Phone Number" />
+                                                        id="phone-number" name="phone-number" value="{{ old("phone-number") }}"
+                                                        placeholder="Phone Number" />
+                                                        @error('phone-number')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -159,7 +165,7 @@
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                        <a class="nav-link text-active-primary pb-4 active required"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_tab"
                                                             style="font-size:14px;">HAK AKSES</a>
                                                     </li>

@@ -86,7 +86,7 @@
                     data-kt-scroll-dependencies="#kt_aside_logo, #kt_aside_footer"
                     data-kt-scroll-wrappers="#kt_aside_menu" data-kt-scroll-offset="0">
 
-                    {{-- #ffa62b --}}
+                    {{-- #008CB4 --}}
 
                     <!--begin::Menu-->
                     <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#0db0d9;">
@@ -94,7 +94,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/dashboard"
-                                    style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'dashboard' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -111,7 +111,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/customer"
-                                    style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'customer' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -129,7 +129,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
-                                    style="color:white; {{ Request::Path() == 'proyek' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'proyek' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -146,7 +146,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/forecast"
-                                    style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'forecast' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -163,7 +163,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/contract-management"
-                                    style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'contract-management' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -180,7 +180,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/claim-management"
-                                    style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'claim-management' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -197,7 +197,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/document"
-                                    style="color:white; {{ Request::Path() == 'document' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'document' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -236,7 +236,7 @@
                                 <div class="collapse" id="collapseExample">
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'company' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'company' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/company" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -249,7 +249,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sumber-dana' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sumber-dana' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/sumber-dana" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -262,7 +262,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'dop' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'dop' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/dop" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -275,7 +275,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sbu' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'sbu' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/sbu" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -288,7 +288,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'unit-kerja' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'unit-kerja' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/unit-kerja" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -301,7 +301,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/pasal/edit" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -314,7 +314,7 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/user" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -327,14 +327,14 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#ffa62b' : '' }}">
+                                        style="background-color:#0b89a9; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/team-proyek" style="color:white;">
                                             <span class="menu-icon">
                                                 <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                                 <i class="bi bi-person-lines-fill text-white"></i>
                                                 <!--end::Svg Icon-->
                                             </span>
-                                            <span class="menu-title-2">User Proyek</span>
+                                            <span class="menu-title-2">Team Proyek</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
@@ -351,7 +351,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/rkap"
-                                    style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'rkap' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -368,7 +368,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/kpi"
-                                    style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'kpi' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -385,7 +385,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/knowledge-base"
-                                    style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'knowledge-base' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -402,7 +402,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/change-request"
-                                    style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'change-request' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -419,7 +419,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="stakeholder-communication"
-                                    style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#ffa62b' : '' }}">
+                                    style="color:white; {{ Request::Path() == 'stakeholder-communication' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -529,7 +529,7 @@
                                     </div>
                                     <br>
                                     <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
-                                    <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #ffa62b;">Authorize</button>
+                                    <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #008CB4;">Authorize</button>
                                 </div>
                                 <!--end::Title-->
                                 
@@ -554,7 +554,7 @@
                             <button type="submit"
                                 name="reset-password"
                                 class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #ffa62b;">Buat password baru</button>
+                                style="background-color: #008CB4;">Buat password baru</button>
                         </form>
                         `;
                     }

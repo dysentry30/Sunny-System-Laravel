@@ -24,6 +24,7 @@ use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
+use App\Http\Controllers\TeamProyekController;
 use App\Http\Controllers\UserController;
 use App\Mail\UserPasswordEmail;
 use App\Models\faqs;
@@ -453,6 +454,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/pasal/update', [PasalController::class, "pasalUpdate"]);
 
+    Route::post('/pasal/import', [PasalController::class, "importPasal"]);
+
     // begin :: USERS
     Route::get('/user', function () {
         //Menggunakan metode Eager Loading agar memangkas loading query database 
@@ -468,6 +471,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/user/save', [UserController::class, "save"]);
 
     Route::post('/user/update', [UserController::class, "update"]);
+    
+    Route::delete('/user/delete/{id}', [UserController::class, "delete"]);
 
     Route::post('/user/password/reset', [UserController::class, "userResetPassword"]);
 
@@ -477,9 +482,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     Route::get('/user/view/{user}', [UserController::class, "view"]);
 
-    Route::get('/team-proyek', function () {
-        return view("/MasterData/TeamProyek", ["all_proyek" => Proyek::all()->reverse()]);
-    });
+    Route::get('/team-proyek', [TeamProyekController::class, "index"]);
     // end :: USERS
 
     // begin RKAP

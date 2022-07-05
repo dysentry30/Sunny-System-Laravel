@@ -35,7 +35,7 @@
 
                                 <!--begin::Button-->
                                 <a href="contract-management/view" class="btn btn-sm btn-primary w-80px"
-                                    id="kt_toolbar_primary_button" style="background-color:#ffa62b; padding: 6px">
+                                    id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                     New</a>
                                 <!--end::Button-->
 
@@ -55,18 +55,17 @@
                                         <div class="separator border-gray-200"></div>
                                         <!--end::Menu separator-->
                                         <!--begin::Form-->
-                                        <div class="px-7 py-5">
-                                            <!--begin::Input group-->
-                                            <div class="mb-10">
-                                                <!--begin::Label-->
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                <label class="form-label" style="margin-left:5px;">
-                                                    Export Excel</label><br>
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                <label class="form-label" style="margin-left:5px;">
-                                                    Import Excel</label><br>
-                                                <!--end::Label-->
-                                            </div>
+                                        <div class="">
+                                            <!--begin::Item-->
+                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                            </button>
+                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                            </button>
+                                            <!--end::Item-->
                                         </div>
                                         <!--end::Form-->
                                     </div>
