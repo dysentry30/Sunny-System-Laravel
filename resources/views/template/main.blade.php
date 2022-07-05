@@ -800,7 +800,7 @@
                                         </div>
                                         <br>
                                         <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, true, ${data.to_user.id}, ${data.from_user.id})">Reject</button>
-                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]" ? data.from_user.id : data.to_user.id })" style="background-color: #ffa62b;">Accept</button>
+                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]" ? data.from_user.id : data.to_user.id })" style="background-color: #008CB4;">Accept</button>
                                     </div>
                                     <!--end::Title-->
                                     

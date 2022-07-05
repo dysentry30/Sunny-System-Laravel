@@ -261,7 +261,7 @@
                                                                             data-parent-item="${data.id_notification}"
                                                                             onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]"
                                                                             ? data.from_user.id : data.to_user.id })"
-                                                                            style="background-color: #ffa62b;">Accept</button>
+                                                                            style="background-color: #008CB4;">Accept</button>
                                                                     </div>
                                                                     <!--end::Title-->
 

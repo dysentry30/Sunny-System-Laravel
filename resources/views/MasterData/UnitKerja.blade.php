@@ -286,7 +286,7 @@
                                                                                 <h6>Data user tidak ditemukan</h6>
                                                                                 <a href="/user/new"
                                                                                     class="btn btn-sm btn-active-primary text-white"
-                                                                                    style="background-color: #ffa62b;">Tambah
+                                                                                    style="background-color: #008CB4;">Tambah
                                                                                     User</a>
                                                                             </div>
                                                                         @else
@@ -425,7 +425,7 @@
                                                                 <div class="modal-footer">
                                                                     <button type="submit"
                                                                         class="btn btn-sm btn-active-primary text-white"
-                                                                        style="background-color: #ffa62b;">Save
+                                                                        style="background-color: #008CB4;">Save
                                                                         Setting</button>
                                                                     <button type="button" id="button-reset"
                                                                         name="button-reset"
