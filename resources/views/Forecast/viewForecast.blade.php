@@ -452,7 +452,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                     $index = 1;
                                                                 @endphp
                                                                 @foreach ($dops as $dop)
-                                                                    @if (count($dop->UnitKerjas) > 0)
+                                                                    {{-- @if (count($dop->UnitKerjas) > 0) --}}
                                                                         {{-- @foreach ($proyeks as $proyek) --}}
 
                                                                         <tr style="text-align: right; ">
@@ -806,7 +806,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                         @endphp
                                                                     @endforeach
                                                                     {{-- end:: Foreach Unit Kerja --}}
-                                                                @endif
+                                                                {{-- @endif --}}
                                                             @endforeach
 
                                                         <tfoot
