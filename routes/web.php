@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\LockForeacastEvent;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ClaimController;
 use Illuminate\Support\Facades\Route;
@@ -292,16 +293,32 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 // begin :: Set lock / unlock data month forecast
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
-        Forecast::query()->each(function($oldRecord) use ($data){
-            $duplicateRecord = $oldRecord->replicate();
-            $duplicateRecord->setTable("history_forecast");
-            $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
-            $duplicateRecord->save();
-        });
+        $from_user = Auth::user();
+        // Forecast::query()->each(function($oldRecord) use ($data){
+        //     $duplicateRecord = $oldRecord->replicate();
+        //     $duplicateRecord->setTable("history_forecast");
+        //     $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
+        //     $duplicateRecord->save();
+        // });
+        $unit_kerjas = UnitKerja::find(5);
+        if($unit_kerjas->metode_approval == "Sequence" && auth()->user()->check_administrator) {
+            $next_user = [];
+            $to_user = $unit_kerjas->User_1;
+            // $next_user = $unit_kerjas->user_2;
+            array_push($next_user, $unit_kerjas->User_2->id ?? null, $unit_kerjas->User_3->id ?? null);
+            LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast", $next_user, 0, 0);
+            // Alert::success("Success", "Forecast has been locked");
+            return response()->json([
+                "status" => "success",
+                "msg" => "Forecast has been locked",
+            ]);
+        }
         return response()->json([
-            "status" => "success",
-            "msg" => "Forecast has been locked",
+            "status" => "failed",
+            "msg" => "Maaf, anda bukan admin",
         ]);
+        // $unit_kerjas->each(function($unit_kerja) {
+        // });
     });
 
     Route::post('/forecast/set-unlock', function (Request $request) {
