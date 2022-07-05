@@ -27,7 +27,7 @@ class AdminAuth
         }
         $allowed_url_admin_kontrak = join(" ", ["dashboard", "customer", "forecast", "proyek", "knowledge-base", "company", "sumber-dana", "dop", "pasal", "user", "team-proyek", "sbu", "unit-kerja", "document", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim", "claim-management", "approval-claim", "detail-claim", "kpi", "change-request", "rkap"]);
         $allowed_url_user_sales = join(" ", ["dashboard", "customer", "forecast", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "user", "team-proyek", "dop", "sbu", "unit-kerja"]);
-        $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document"]);
+        $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
 
         if (auth()->user()->check_administrator) {
@@ -37,7 +37,7 @@ class AdminAuth
             $concat_allowed_url .= $allowed_url_admin_kontrak;
         }
         if (auth()->user()->check_user_sales) {
-            $concat_allowed_url .= $allowed_url_admin_kontrak;
+            $concat_allowed_url .= $allowed_url_user_sales;
 
         }
         if (auth()->user()->check_team_proyek) {

@@ -63,6 +63,8 @@
     <!--begin::Aside-->
     {{-- @yield('aside') --}}
     @if (auth()->user())
+    @if (!str_contains(Request::path(), "document/view"))
+
         <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
             data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
             data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
@@ -444,6 +446,7 @@
 
         </div>
         <!--end::Aside-->
+    @endif
     @endif
 
 

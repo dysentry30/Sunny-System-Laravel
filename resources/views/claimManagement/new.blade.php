@@ -286,7 +286,8 @@
                                                             <input type="text" class="form-control form-control-solid"
                                                                 placeholder="Who is responsible for this contract?"
                                                                 id="pic" name="pic"
-                                                                value="{{ old('pic') ?? ($claimContract->pic ?? '') }}">
+                                                                {{-- value="{{ old('pic') ?? ($claimContract->pic ?? '') ?? auth()->user()->name }}"> --}}
+                                                                value="{{ auth()->user()->name }}" readonly>
                                                             <!--end::Input-->
 
                                                             {{-- begin::erorr message --}}

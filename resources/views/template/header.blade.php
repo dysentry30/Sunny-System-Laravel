@@ -389,11 +389,3 @@
     <!--end::Container-->
 </div>
 <!--end::Header-->
-
-@section('js-script')
-    <script>
-        const tabNotif = document.querySelector("#notif-alert");
-        const tabNotifBoots = new bootstrap.Tab(tabNotif, {});
-        tabNotifBoots.show();
-    </script>
-@endsection

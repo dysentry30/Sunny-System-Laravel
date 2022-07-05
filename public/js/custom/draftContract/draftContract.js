@@ -269,7 +269,7 @@ async function readFile(content, show = true) {
             // }
             document.querySelector(".fr-view").innerHTML = html;
             data = html;
-            // document.getElementById("A").remove();
+            document.querySelectorAll("#A")[document.querySelectorAll("#A").length - 1].remove();
         });
     }
     file.readAsBinaryString(content);
