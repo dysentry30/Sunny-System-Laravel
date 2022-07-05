@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\NotificationPasswordReset;
-use App\Mail\UserPasswordEmail;
-use App\Models\NotificationsModel;
-use App\Models\UnitKerja;
 use App\Models\User;
 use Faker\Core\Uuid;
+use App\Models\UnitKerja;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Mail\UserPasswordEmail;
+use App\Models\NotificationsModel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Events\NotificationPasswordReset;
+use Illuminate\Support\Facades\Validator;
 
 
 class UserController extends Controller
@@ -21,6 +22,14 @@ class UserController extends Controller
     public function welcome()
     {
         return view('0_Welcome');
+    }
+
+    public function delete ($id) 
+    { 
+        $id = User::find($id);
+        $id->delete();
+        Alert::success('Delete', $id->name.", Berhasil Dihapus");
+        return redirect("/user")->with('status', 'User Deleted');   
     }
 
 
@@ -81,11 +90,37 @@ class UserController extends Controller
     {
 
         $data = $request->all();
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+        ];
+        $rules = [
+            "name-user" => "required",
+            "email" => "required",
+            "phone-number" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
+            $request->old("name-user");
+            $request->old("email");
+            $request->old("phone-number");
+            // return redirect()->back();
+        }
+        
+        $validation->validate();
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
-
+        if($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false){
+            $request->old("name-user");
+            $request->old("email");
+            $request->old("phone-number");
+            Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
+            return redirect()->back();   
+        }
+        // dd($is_administrator, $is_admin_kontrak, $is_user_sales, $is_team_proyek);
         $password = Str::random(20);
         $user->name = $data["name-user"];
         $user->email = $data["email"];
@@ -100,8 +135,8 @@ class UserController extends Controller
 
         if ($user->save()) {
             Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
-            Alert::error("Error", 'User berhasil ditambahkan.<br> Informasi Akun akan dikirimkan melalu email.');
-            // return redirect("/user")->with("success", );
+            Alert::success("Success", 'User berhasil ditambahkan. Informasi Akun akan dikirimkan melalu email.');
+            return redirect("/user");
         }
     }
 
@@ -118,10 +153,36 @@ class UserController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+        $messages = [
+            "required" => "This field is required",
+            "numeric" => "This field must be numeric only",
+        ];
+        $rules = [
+            "name-user" => "required",
+            "email" => "required",
+            "phone-number" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
+            $request->old("name-user");
+            $request->old("email");
+            $request->old("phone-number");
+            // return redirect()->back();
+        }
+        
+        $validation->validate();
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
+        if($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false){
+            $request->old("name-user");
+            $request->old("email");
+            $request->old("phone-number");
+            Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
+            return redirect()->back();   
+        }
 
         $user = User::find($data["user-id"]);
         $user->name = $data["name-user"];
@@ -135,7 +196,7 @@ class UserController extends Controller
         $user->check_team_proyek = $is_team_proyek;
 
         if ($user->save()) {
-            Alert::success("Success", "User berhasil diperbarui.");
+            Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
             return redirect("/user");
         }
     }

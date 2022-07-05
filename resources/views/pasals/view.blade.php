@@ -31,43 +31,43 @@
                             <!--begin::Button-->
                                 <a class="btn btn-sm btn-primary w-80px" 
                                 data-bs-toggle="modal" data-bs-target="#kt_modal_tambah_pasal"  id="kt_toolbar_primary_button"
-                                style="background-color:#ffa62b; padding: 6px">
+                                style="background-color:#008CB4; padding: 6px">
                                 New</a>
                             <!--end::Button-->
-                                <!--begin::Wrapper-->
-                                <div class="me-4" style="margin-left:10px;">
-                                    <!--begin::Menu-->
-                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-folder2-open"></i>Action</a>
-                                    <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-                                        <!--begin::Header-->
-                                        <div class="px-7 py-5">
-                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-                                        </div>
-                                        <!--end::Header-->
-                                        <!--begin::Menu separator-->
-                                        <div class="separator border-gray-200"></div>
-                                        <!--end::Menu separator-->
-                                        <!--begin::Form-->
-                                        <div class="">
-                                            <!--begin::Item-->
-                                            <button type="submit" class="btn btn-active-primary dropdown-item"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                            </button>
-                                            <button type="submit" class="btn btn-active-primary dropdown-item"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
-                                            </button>
-                                            <!--end::Item-->
-                                        </div>
-                                        <!--end::Form-->
+                            <!--begin::Wrapper-->
+                            <div class="me-4" style="margin-left:10px;">
+                                <!--begin::Menu-->
+                                <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                    <i class="bi bi-folder2-open"></i>Action</a>
+                                <!--begin::Menu 1-->
+                                <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                    <!--begin::Header-->
+                                    <div class="px-7 py-5">
+                                        <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
                                     </div>
-                                    <!--end::Menu 1-->
-                                    <!--end::Menu-->
+                                    <!--end::Header-->
+                                    <!--begin::Menu separator-->
+                                    <div class="separator border-gray-200"></div>
+                                    <!--end::Menu separator-->
+                                    <!--begin::Form-->
+                                    <div class="">
+                                        <!--begin::Item-->
+                                        <button type="submit" class="btn btn-active-primary dropdown-item rounded-0 rounded-0"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                            <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                        </button>
+                                        <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export" disabled>
+                                            <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                        </button>
+                                        <!--end::Item-->
+                                    </div>
+                                    <!--end::Form-->
                                 </div>
-                                <!--end::Wrapper--> 
+                                <!--end::Menu 1-->
+                                <!--end::Menu-->
+                            </div>
+                            <!--end::Wrapper--> 
                         </div>
                         <!--end::Actions-->
                     @endif
@@ -91,21 +91,12 @@
                         <div class="d-flex align-items-center my-1" style="width: 100%;">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                             <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                    fill="none">
-                                    <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2"
-                                        rx="1" transform="rotate(45 17.0365 15.1223)" fill="black"></rect>
-                                    <path
-                                        d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                        fill="black"></path>
-                                </svg>
+                                <i class="bi bi-search"></i>
                             </span>
                             <!--end::Svg Icon-->
                             <input type="text" data-kt-customer-table-filter="search"
                                 class="form-control form-control-solid w-250px ps-15" placeholder="Search Contract">
                             <!--end::Search-->
-
-
 
 
                         </div>
@@ -124,7 +115,7 @@
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="w-75px">No</th>
-                                <th class="min-w-125px">Pasal</th>
+                                <th class="w-700px text-break">Pasal</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -145,7 +136,7 @@
                                     <td>
                                         <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
+                                            class="text-gray-600 text-hover-primary mb-1 w-800px text-break" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -222,12 +213,12 @@
 
 
                         </div>
-                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#ffa62b">Save</button> --}}
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#008CB4">Save</button> --}}
                     </div>
                 </div>
                 <!--end::Modal body-->
                 <div class="modal-footer">
-                    <button type="button" id="add-pasal" style="background-color:#ffa62b"
+                    <button type="button" id="add-pasal" style="background-color:#008CB4"
                         class="btn btn-sm btn-light btn-active-primary text-white">
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-white">Save</span>
@@ -305,12 +296,12 @@
                             <!--end::Input-->
 
                         </div>
-                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#008CB4">Update</button> --}}
                     </div>
                 </div>
                 <!--end::Modal body-->
                 <div class="modal-footer">
-                    <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
+                    <button type="button" id="edit-pasal-btn" style="background-color:#008CB4"
                         class="btn btn-sm btn-light btn-active-primary text-white">
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-white">Update</span>
@@ -427,7 +418,7 @@
     <!--end::modal DELETE-->
 
     <!--begin::Modal IMPORT-->
-	<form action="/pasal/new" method="post" enctype="multipart/form-data"> 
+	<form action="/pasal/import" method="post" enctype="multipart/form-data"> 
         @csrf
         <div class="modal fade" id="kt_modal_import" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -460,7 +451,7 @@
                                 <!--begin::Input-->
                                 <div>
                                     <label for="attachment" class="form-label">Import Pasal :</label>
-                                    <input class="form-control form-control-md form-control-solid" id="doc-attachment" name="doc-attachment" type="file">
+                                    <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file">
                                 </div>
                                 <!--end::Input-->
     
@@ -472,7 +463,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#ffa62b" >Save</button>
+                        <button type="submit" name="file-submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Import File</button>
                     </div>
                     <!--end::Input group-->
                     <!--end::Modal body-->

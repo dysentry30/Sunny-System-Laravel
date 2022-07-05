@@ -71,6 +71,6 @@ class Proyek extends Model
 
     public function TeamProyek()
     {
-        return $this->hasOne(TeamProyek::class);
+        return $this->hasMany(TeamProyek::class, "kode_proyek", "kode_proyek");
     }
 }

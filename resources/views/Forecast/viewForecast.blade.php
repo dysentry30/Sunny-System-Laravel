@@ -72,7 +72,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                     Bulanan</a>
 
 
-                                                <button type="button" style="background-color: #ffa62b;"
+                                                <button type="button" style="background-color: #008CB4;"
                                                     onclick="lockMonthForecastBulanan(this)" class="btn btn-sm btn-active-primary mt-4">
                                                     <script>
                                                         const historyForecast = "{{ count($historyForecast) }}";
@@ -3188,7 +3188,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
     <button type="button" class="btn btn-secondary" onclick="cancelLock()"
         data-bs-dismiss="modal">Cancel</button>
     <button type="button" class="btn btn-primary" onclick="confirmedLock()"
-        style="background-color: #ffa62b;">Lanjut</button>
+        style="background-color: #008CB4;">Lanjut</button>
 </div>
 </div>
 </div>

@@ -31,7 +31,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Account
+                                <h1 class="d-flex align-items-center fs-3 my-1">Pelanggan
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -43,7 +43,7 @@
                                         <!--begin::Button-->
                                         <a href="customer/new" class="btn btn-sm btn-primary w-80px"
                                         id="kt_toolbar_primary_button"
-                                        style="background-color:#ffa62b; padding: 6px">
+                                        style="background-color:#008CB4; padding: 6px">
                                         New</a>
 
                                         <!--begin::Wrapper-->
@@ -62,18 +62,17 @@
                                                 <div class="separator border-gray-200"></div>
                                                 <!--end::Menu separator-->
                                                 <!--begin::Form-->
-                                                <div class="px-7 py-5">
-                                                    <!--begin::Input group-->
-                                                    <div class="mb-10">
-                                                        <!--begin::Label-->
-                                                        <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                        <label class="form-label" style="margin-left:5px;">
-                                                            Export Excel</label><br>
-                                                        <i class="bi bi-file-earmark-spreadsheet"></i>
-                                                        <label class="form-label" style="margin-left:5px;">
-                                                            Import Excel</label><br>
-                                                        <!--end::Label-->
-                                                    </div>
+                                                <div class="">
+                                                    <!--begin::Item-->
+                                                    <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                        data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                        <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                                    </button>
+                                                    <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                        data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                        <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                                    </button>
+                                                    <!--end::Item-->
                                                 </div>
                                                 <!--end::Form-->
                                             </div>
@@ -202,7 +201,7 @@
 
 
 {{-- begin::modal DELETE --}}
-    {{-- @foreach ($customer as $customers)
+    @foreach ($results as $customers)
         <form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
@@ -245,7 +244,7 @@
             <!--end::Modal dialog-->
             </div>
         </form>
-    @endforeach --}}
+    @endforeach
 {{-- end::modal DELETE --}}
 
 
