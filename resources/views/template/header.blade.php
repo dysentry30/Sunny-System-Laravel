@@ -307,7 +307,7 @@
                                     <form action="/logout" method="post" class="form" id="kt_sign_in_form"
                                         action="#">
                                         @csrf
-                                        <button type="submit" class="btn btn-active-primary dropdown-item">Logout</button>
+                                        <button type="submit" class="btn btn-active-primary dropdown-item rounded-0">Logout</button>
                                     </form>
                                 </ul>
                             </div>
