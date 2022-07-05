@@ -15,11 +15,11 @@ return new class extends Migration
     {
         Schema::create('team_proyeks', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_team');
-            $table->string('nama_proyek');
+            $table->integer('id_user');
+            // $table->string('nama_user');
             $table->string('kode_proyek');
-            $table->integer('stage');
-            $table->timestamp('proyek_selesai')->nullable();
+            $table->boolean('proyek_selesai')->nullable();
+            $table->timestamp('exp_proyek')->nullable();
             $table->timestamps();
         });
     }

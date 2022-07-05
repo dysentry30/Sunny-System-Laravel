@@ -124,6 +124,7 @@ class ProyekController extends Controller
     {
         $proyek = Proyek::find($kode_proyek);
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
+        $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
 
         // dd($kode_proyek);
         // dd($proyek); //tes log hasil 
@@ -136,7 +137,7 @@ class ProyekController extends Controller
         'unitkerjas' => UnitKerja::all(),
         'customers' => Customer::all(),
         'users' => User::all(),
-        'teams' => TeamProyek::all(),
+        'teams' => $teamProyek,
         'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
         "historyForecast" => $historyForecast]
         );
@@ -317,11 +318,8 @@ class ProyekController extends Controller
         $assignTeam = $request->all();
         // $proyek=Proyek::find($proyek["kode-proyek"]);
         // dd($proyek);
-
-        $newTeam->nama_team = $assignTeam["nama-team"];
-        $newTeam->nama_proyek = $assignTeam["assign-proyek"];
+        $newTeam->id_user = $assignTeam["nama-team"];
         $newTeam->kode_proyek = $assignTeam["assign-kode-proyek"];
-        $newTeam->stage = $assignTeam["assign-stage"];
         
         $newTeam->save();
         return redirect()->back();       
@@ -334,8 +332,18 @@ class ProyekController extends Controller
         // dd($kodeProyek);
         $proyekStage = Proyek::find($kodeProyek);
         $proyekStage->stage = $request->stage;
-        // dd($proyekStage->kode_proyek);
+        // dd($proyekStage->stage);
         
+        $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
+        if ( $teamProyek != null ){
+            $teamProyek->each(function ($stage) use ($proyekStage){
+                if ($proyekStage->stage > 8){
+                    $stage->proyek_selesai = true;    
+                    $stage->save();
+                }
+            });
+        } 
+
         $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
         if ( $proyekBerjalans == null ){
             $proyekStage->save();

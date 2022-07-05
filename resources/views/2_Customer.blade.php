@@ -31,7 +31,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Account
+                                <h1 class="d-flex align-items-center fs-3 my-1">Pelanggan
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -64,11 +64,11 @@
                                                 <!--begin::Form-->
                                                 <div class="">
                                                     <!--begin::Item-->
-                                                    <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                    <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
                                                         data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
                                                         <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                                     </button>
-                                                    <button type="submit" class="btn btn-active-primary dropdown-item"
+                                                    <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
                                                         data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
                                                         <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                                     </button>

@@ -8,6 +8,7 @@ use App\Models\AddendumContracts;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
+use Illuminate\Support\Facades\Validator;
 
 class PasalController extends Controller
 {
@@ -143,4 +144,59 @@ class PasalController extends Controller
             "message" => "Your pasal cannot be updated",
         ]);
     }
+
+    //IMPORT pasal
+    public function importPasal(Request $request)
+    {
+        $file = $request -> file('import-file'); //get temp data
+        // dd($file);
+        
+        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file);
+        $reader->setReadDataOnly(true);
+        $spreadsheet = $reader->load($file);
+        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+        // dd(count($sheetData));
+        
+        $data = 0;
+        for($i=3; $i<count($sheetData); $i++){
+            $pasal = $sheetData[$i]['1'];
+
+            $newPasal = new Pasals();
+            $newPasal->pasal = $pasal;
+            $newPasal->save();
+            $data++;
+            // dump($pasal);
+        }
+        // dd();
+        if($data > 0){
+            Alert::success('Success', "Data Berhasil di Import");
+            return redirect()->back();
+        }
+        return redirect()->back();
+
+        // $file_name = $_FILES['import-file']['name']; //get file name yg di upload
+        // if(isset($_POST['file-submit'])){
+        //     $err = "";
+        //     $ekstensi = "";
+        //     $success = "";
+        //     $file_name = $_FILES['import-file']['name']; //get file name yg di upload
+        //     $file_data = $_FILES['import-file']['tmp_name']; //get temp data
+        // }
+        // if(empty($file_name)){
+        //     $err .= "<p>nama file error</p>";
+        //     Alert::error('Error', "Nama file kosong");
+        // } else {
+        //     $ekstensi = pathinfo($file_name)['extension'];
+        //     // dd($ekstensi);
+        //     // return redirect()->back();
+        // }
+        // $ekstensi_allowed = array("xls","xlsx");
+        // if (!in_array($ekstensi, $ekstensi_allowed)) {
+        //     $err .= "<p>format file error (xls/xlsx)</p>";
+        //     Alert::error('Error', "Gunakan format xls / xlsx. File yang anda gunakan .".$ekstensi);
+        //     // return redirect()->back();
+        // }
+    }
+
+
 }

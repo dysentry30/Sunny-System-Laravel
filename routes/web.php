@@ -437,6 +437,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/pasal/update', [PasalController::class, "pasalUpdate"]);
 
+    Route::post('/pasal/import', [PasalController::class, "importPasal"]);
+
     // begin :: USERS
     Route::get('/user', function () {
         //Menggunakan metode Eager Loading agar memangkas loading query database 
