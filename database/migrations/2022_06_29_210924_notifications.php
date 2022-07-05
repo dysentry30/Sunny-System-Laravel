@@ -19,6 +19,7 @@ return new class extends Migration
             $table->longText("message");
             $table->json("to_user");
             $table->longText("token_reset_password")->nullable();
+            $table->longText("next_user")->nullable();
             $table->boolean("is_approved")->nullable();
             $table->boolean("is_rejected")->nullable();
             $table->timestamps();

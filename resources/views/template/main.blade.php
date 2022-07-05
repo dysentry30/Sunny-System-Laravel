@@ -718,6 +718,175 @@
             // parentElt.remove();
         }
         // end Reset Password Authorization
+
+        // Begin Lock/Unlock Forecast
+        window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent", data => {
+            console.log("Data Received");
+            console.log(data);
+
+            const mainNotifContent = document.querySelector("#main-content-notif");
+            const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
+            const idUser = Number("{{ auth()->user()->id ?? 0 }}");
+            // const dataDate = new Date(data.timestamp.date);
+            // const nowDate = new Date();
+            // const diff = Math.abs(dataDate - nowDate);
+            // let time = "";
+
+            // if (diff < 1000) {
+            //     time = `now`;
+            // } else if (diff % 1000 == 0) {
+            //     time = `${diff} sec`;
+            // }
+            let html = "";
+            if (data.to_user.check_administrator == isAdministrator && data.is_rejected) {
+                let actionBtn = "";
+                if (data.is_rejected) {
+                    actionBtn = `
+                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock tidak disetujui</button>
+                `;
+                }
+
+                html = `
+                        <!--begin::Item-->
+                            <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+                                <!--begin::Section-->
+                                <div class="d-flex align-items-center">
+                                    <!--begin::Symbol-->
+                                    <div class="symbol symbol-35px me-4">
+                                        <span class="symbol-label bg-light-primary">
+                                            <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                        </span>
+                                    </div>
+                                    <!--end::Symbol-->
+                                    <!--begin::Title-->
+                                    <div class="mb-0 me-2">
+                                        <a href="#"
+                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+                                        <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                        </div>
+                                        <br>
+                                        ${actionBtn}
+                                    </div>
+                                    <!--end::Title-->
+                                    
+                                </div>
+                                <!--end::Section-->
+                                <!--begin::Label-->
+                                <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
+                                <!--end::Label-->
+                            </div>
+                        <!--end::Item-->
+                        `;
+                mainNotifContent.innerHTML += html;
+            } else {
+                if (data.to_user.id == idUser)
+                    html = `
+                        <!--begin::Item-->
+                            <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+                                <!--begin::Section-->
+                                <div class="d-flex align-items-center">
+                                    <!--begin::Symbol-->
+                                    <div class="symbol symbol-35px me-4">
+                                        <span class="symbol-label bg-light-primary">
+                                            <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                        </span>
+                                    </div>
+                                    <!--end::Symbol-->
+                                    <!--begin::Title-->
+                                    <div class="mb-0 me-2">
+                                        <a href="#"
+                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+                                        <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+                                        </div>
+                                        <br>
+                                        <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, true, ${data.to_user.id}, ${data.from_user.id})">Reject</button>
+                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]" ? data.from_user.id : data.to_user.id })" style="background-color: #ffa62b;">Accept</button>
+                                    </div>
+                                    <!--end::Title-->
+                                    
+                                </div>
+                                <!--end::Section-->
+                                <!--begin::Label-->
+                                <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
+                                <!--end::Label-->
+                            </div>
+                        <!--end::Item-->
+                        `;
+                mainNotifContent.innerHTML += html;
+            }
+        });
+
+        async function lockUnlockForecast(elt, isRejected = false, nextUser, fromUser) {
+            const idNotification = elt.getAttribute("data-parent-item");
+            const parentElt = document.querySelector(`#item-${idNotification}`);
+            const nameFrom = parentElt.querySelector("#title-notif").innerText;
+            const message = parentElt.querySelector("#msg-notif").innerText;
+            let actionBtn = "";
+
+            const formData = new FormData();
+            formData.append("_token", "{{ csrf_token() }}");
+            if (isRejected) {
+                formData.append("is_rejected", isRejected);
+            } else {
+                formData.append("is_approved", true);
+            }
+
+            if(nextUser.length < 1) {
+                formData.append("notif_end", true);
+            } else {
+                formData.append("next_user", nextUser);
+            }
+            formData.append("id_notification", idNotification);
+            formData.append("from_user", fromUser);
+
+            const nextApprovalUserLock = await fetch("/user/forecast/set-lock", {
+                method: "POST",
+                header: {
+                    "Content-Type": "application/json",
+                    // "X-Socket-ID": window.Echo.socketId(),
+                },
+                body: formData,
+            });
+
+            if (isRejected) {
+                actionBtn = `
+                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${idNotification}" disabled>Lock tidak disetujui</button>
+                `;
+            } else {
+                actionBtn = `
+                <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${idNotification}" disabled>Lock disetujui</button>
+                `;
+            }
+            const html = `
+                        <!--begin::Section-->
+                        <div class="d-flex align-items-center">
+                            <!--begin::Symbol-->
+                            <div class="symbol symbol-35px me-4">
+                                <span class="symbol-label bg-light-primary">
+                                    <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+                                </span>
+                            </div>
+                            <!--end::Symbol-->
+                            <!--begin::Title-->
+                            <div class="mb-0 me-2">
+                                <a href="#"
+                                    class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${nameFrom}</a>
+                                <div class="text-gray-400 fs-7" id="msg-notif">${message}
+                                </div>
+                                <br>
+                                ${actionBtn}
+                            </div>
+                            <!--end::Title-->
+                            
+                        </div>
+                        <!--end::Section-->
+                        <!--begin::Label-->
+                        <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
+                        <!--end::Label-->
+                `;
+            parentElt.innerHTML = html;
+        }
+        // End Lock/Unlock Forecast
     </script>
     {{-- end::Pusher --}}
 
@@ -790,6 +959,14 @@
     </script>
     <!--end::Page Custom Javascript-->
 
+    {{-- End :: Notif Open --}}
+    <script>
+        const tabNotif = document.querySelector("#notif-alert");
+        const tabNotifBoots = new bootstrap.Tab(tabNotif, {});
+        tabNotifBoots.show();
+    </script>
+    {{-- Begin :: Notif Open --}}
+    
     <!--end::Javascript-->
 
 </body>
