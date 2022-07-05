@@ -151,18 +151,18 @@
                                     <div class="collapse bg-dark" id="collapseRKAP{{ $unitKerja->divcode }}">
                                         <ul class="list-group list-group-flush">
                                             @if (!empty($unitKerja->Users))
-                                                @foreach ($unitKerja->Users as $user)
+                                                @foreach ($unitKerja->proyeks as $proyek)
                                                     @if (auth()->user()->check_administrator)
-                                                        <a href="/user/view/{{ $user->id }}"
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                             class="list-group-item list-group-item-action text-hover-primary"
                                                             aria-current="true">
-                                                            {{ $user->name }}
+                                                            {{ $proyek->nama_proyek }}
                                                         </a>
                                                     @else
                                                         <a href="#"
                                                             class="list-group-item list-group-item-action text-hover-primary"
                                                             aria-current="true">
-                                                            {{ $user->name }}
+                                                            {{ $proyek->nama_proyek }}
                                                         </a>
                                                     @endif
                                                 @endforeach
