@@ -39,7 +39,7 @@
 
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="kt_toolbar_primary_button"
-                                        style="background-color:#ffa62b;">
+                                        style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
 
@@ -950,7 +950,7 @@
                                 </ul>
                             </div>
                         @endisset
-                        <button type="button" id="save-pasal" style="background: #ffa62b" data-bs-dismiss="modal"
+                        <button type="button" id="save-pasal" style="background: #008CB4" data-bs-dismiss="modal"
                             class="btn btn-lg mt-5 btn-primary">
                             <span>Save</span>
                             <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"

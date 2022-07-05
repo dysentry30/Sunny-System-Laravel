@@ -51,7 +51,7 @@ a{{-- Begin::Extend Header --}}
 
                                     <!--begin::Button-->
                                     <a href="/user/new" class="btn btn-sm btn-primary w-80px"
-                                        style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+                                        style="background-color:#008CB4; padding: 7px 30px 7px 30px">
                                         New</a>
 
                                     <!--begin::Wrapper-->

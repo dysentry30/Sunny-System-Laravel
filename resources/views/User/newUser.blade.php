@@ -45,7 +45,7 @@
 
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b;">
+                                        style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
 

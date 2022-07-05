@@ -155,24 +155,24 @@
 
     /* default */
     .stage-is-done.color-is-default {
-        background-color: #ffa62b;
+        background-color: #008CB4;
         color: #fff;
     }
     .stage-is-done.color-is-default:after {
-        border-left-color: #ffa62b;
+        border-left-color: #008CB4;
     }
     .stage-is-before.color-is-default {
-        background-color: #FFB062;
+        background-color: #007BA2;
         color: #fff;
     }
     .stage-is-before.color-is-default:after {
-        border-left-color: #FFB062;
+        border-left-color: #007BA2;
     }
     .stage-button.stage-is-not-active.color-is-default:hover {
-        background-color: #FFB062;
+        background-color: #007BA2;
     }
     .stage-button.stage-is-not-active.color-is-default:hover:after {
-        border-left-color: #FFB062;
+        border-left-color: #007BA2;
     }
     
 /* End Color */

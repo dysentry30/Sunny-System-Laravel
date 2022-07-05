@@ -31,7 +31,7 @@
                             <!--begin::Button-->
                                 <a class="btn btn-sm btn-primary w-80px" 
                                 data-bs-toggle="modal" data-bs-target="#kt_modal_tambah_pasal"  id="kt_toolbar_primary_button"
-                                style="background-color:#ffa62b; padding: 6px">
+                                style="background-color:#008CB4; padding: 6px">
                                 New</a>
                             <!--end::Button-->
                             <!--begin::Wrapper-->
@@ -213,12 +213,12 @@
 
 
                         </div>
-                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#ffa62b">Save</button> --}}
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="add-pasal" style="background-color:#008CB4">Save</button> --}}
                     </div>
                 </div>
                 <!--end::Modal body-->
                 <div class="modal-footer">
-                    <button type="button" id="add-pasal" style="background-color:#ffa62b"
+                    <button type="button" id="add-pasal" style="background-color:#008CB4"
                         class="btn btn-sm btn-light btn-active-primary text-white">
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-white">Save</span>
@@ -296,12 +296,12 @@
                             <!--end::Input-->
 
                         </div>
-                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#ffa62b">Update</button> --}}
+                        {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#008CB4">Update</button> --}}
                     </div>
                 </div>
                 <!--end::Modal body-->
                 <div class="modal-footer">
-                    <button type="button" id="edit-pasal-btn" style="background-color:#ffa62b"
+                    <button type="button" id="edit-pasal-btn" style="background-color:#008CB4"
                         class="btn btn-sm btn-light btn-active-primary text-white">
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-white">Update</span>
@@ -463,7 +463,7 @@
                     </div>
                     
                     <div class="modal-footer">
-                        <button type="submit" name="file-submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#ffa62b" >Import File</button>
+                        <button type="submit" name="file-submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Import File</button>
                     </div>
                     <!--end::Input group-->
                     <!--end::Modal body-->

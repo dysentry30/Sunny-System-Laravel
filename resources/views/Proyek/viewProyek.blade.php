@@ -50,7 +50,7 @@
                                         
                                         <!--begin::Button-->
                                         <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b">
+                                        style="background-color:#008CB4">
                                         Save</button>
                                         <!--end::Button-->
 
@@ -2034,7 +2034,7 @@
                                                                 <div class="d-grid gap-2 d-md-block">
                                                                     <!--begin::Button-->
                                                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                                                    style="background-color:#ffa62b; margin-left:10px">
+                                                                    style="background-color:#008CB4; margin-left:10px">
                                                                     Approve</button>
                                                                     <!--end::Button-->
                                                                     
@@ -2295,7 +2295,7 @@
                             </div>														
                                 <div class="modal-footer">
 								
-								    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#ffa62b">Save</button>
+								    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 									
 								</div>
 								<!--end::Modal body-->

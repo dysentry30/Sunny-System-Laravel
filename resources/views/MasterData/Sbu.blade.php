@@ -46,7 +46,7 @@
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
-                                        style="background-color:#ffa62b; padding: 6px">
+                                        style="background-color:#008CB4; padding: 6px">
                                         New</a>
 
                                     <!--begin::Wrapper-->
@@ -418,7 +418,7 @@
 
 
 
-                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#ffa62b">Save</button>
+                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#008CB4">Save</button>
 
                     </div>
                     <!--end::Modal body-->
