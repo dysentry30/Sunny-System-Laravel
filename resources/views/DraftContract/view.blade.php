@@ -589,9 +589,11 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid"
-                                                                    value="{{ old('draft-contract-create-by') }}"
+                                                                    value="{{ auth()->user()->name }}"
                                                                     placeholder="Who create this draft?"
                                                                     id="draft-contract-create-by"
+                                                                    readonly
+                                                                    aria-readonly="true"
                                                                     name="draft-contract-create-by" />
                                                                 @error('draft-contract-create-by')
                                                                     <h6>
@@ -1106,8 +1108,8 @@
 
     <script>
         // begin::Script adding pasal
-        const toaster = document.querySelector(".toast");
-        const toasterBoots = new bootstrap.Toast(toaster, {});
+        // const toaster = document.querySelector(".toast");
+        // const toasterBoots = new bootstrap.Toast(toaster, {});
         const savePasalBtn = document.querySelector("#save-pasal");
         const pasalCheckboxes = document.querySelectorAll(".pasal");
         const clearPasalBtn = document.querySelector("#clear-pasal");
@@ -1134,8 +1136,8 @@
             }).then(res => res.json());
             if (savePasal.status == "success") {
                 const pasals = JSON.parse(savePasal.pasals);
-                toaster.classList.add("text-bg-success");
-                document.querySelector(".toast-body").innerText = savePasal.message
+                // toaster.classList.add("text-bg-success");
+                // document.querySelector(".toast-body").innerText = savePasal.message
                 pasals.forEach((pasal) => {
                     html += `
                 <tr>
@@ -1149,12 +1151,12 @@
                 `
                 });
                 document.querySelector(".table tbody").innerHTML = html;
-                toasterBoots.show();
+                // toasterBoots.show();
                 clearPasalBtn.style.display = "block";
             } else {
-                toaster.classList.add("text-bg-danger");
-                document.querySelector(".toast-body").innerText = savePasal.message
-                toasterBoots.show();
+                // toaster.classList.add("text-bg-danger");
+                // document.querySelector(".toast-body").innerText = savePasal.message
+                // toasterBoots.show();
 
             }
             loadingElt.style.display = "none";
@@ -1168,9 +1170,9 @@
                 body: formData,
             }).then(res => res.json());
             if (clearPasalsRes.status == "success") {
-                toasterBoots.show();
-                toaster.classList.add("text-bg-success");
-                document.querySelector(".toast-body").innerText = clearPasalsRes.message
+                // toasterBoots.show();
+                // toaster.classList.add("text-bg-success");
+                // document.querySelector(".toast-body").innerText = clearPasalsRes.message
                 html = `
                     <tr>
                         <td>
