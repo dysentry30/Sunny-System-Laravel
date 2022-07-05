@@ -123,7 +123,7 @@ class DatabaseSeeder extends Seeder
             'nomor_unit' => 5,
             'unit_kerja' => "Divisi Luar Negeri",
             'divcode' => "L",
-            'dop' => "DOP 1",
+            'dop' => "DOP 3",
             'company' => "PT Wijaya Karya",
         ]);
 
@@ -154,6 +154,9 @@ class DatabaseSeeder extends Seeder
         ]);
         Dop::create([
             'dop' => "DOP 2",
+        ]);
+        Dop::create([
+            'dop' => "DOP 3",
         ]);
         Dop::create([
             'dop' => "EA",

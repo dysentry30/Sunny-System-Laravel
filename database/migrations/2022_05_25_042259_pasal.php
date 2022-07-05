@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('pasals', function (Blueprint $table) {
             $table->bigIncrements('id_pasal');
+            $table->string("tipe_pasal");
             $table->longText("pasal");
             $table->timestamps();
         });

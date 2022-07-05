@@ -339,8 +339,8 @@
         </form>
     @endforeach
     <!--end::modal DELETE-->
-
     <!--end::Modals-->
 
+@endsection
 
     <!--end::Main-->

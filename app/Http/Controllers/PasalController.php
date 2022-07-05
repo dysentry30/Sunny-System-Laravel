@@ -108,8 +108,10 @@ class PasalController extends Controller
     // Save Pasal to database or server
     public function pasalAdd(Request $request, Pasals $pasals) {
         $pasal = $request->get("pasal");
-        dd($request->all());
+        $tipePasal = $request->get("tipe-pasal");
+        // dd($request->all());
         $pasals->pasal = $pasal;
+        $pasals->tipe_pasal = $tipePasal;
         if ($pasals->save()) {
             Alert::success('Success', $pasal.", Berhasil Ditambahkan");
             return response()->json([
@@ -128,9 +130,11 @@ class PasalController extends Controller
     
     public function pasalUpdate(Request $request) {
         $pasal = $request->get("pasal");
+        $tipePasal = $request->get("tipe-pasal");
         $id_pasal = $request->get("id_pasal");
         $pasals = Pasals::find($id_pasal);
         $pasals->pasal = $pasal;
+        $pasals->tipe_pasal = $tipePasal;
         if ($pasals->save()) {
             Alert::success('Success', $pasal.", Berhasil Diubah")->autoClose(3000);
             return response()->json([
@@ -159,9 +163,11 @@ class PasalController extends Controller
         
         $data = 0;
         for($i=3; $i<count($sheetData); $i++){
-            $pasal = $sheetData[$i]['1'];
+            $tipePasal = $sheetData[$i]['1'];
+            $pasal = $sheetData[$i]['2'];
 
             $newPasal = new Pasals();
+            $newPasal->tipe_pasal = $tipePasal;
             $newPasal->pasal = $pasal;
             $newPasal->save();
             $data++;

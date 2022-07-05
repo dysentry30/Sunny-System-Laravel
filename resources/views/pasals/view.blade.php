@@ -115,6 +115,7 @@
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                 <th class="w-75px">No</th>
+                                <th class="w-auto">Kategori Pasal</th>
                                 <th class="w-700px text-break">Pasal</th>
                             </tr>
                             <!--end::Table row-->
@@ -134,9 +135,15 @@
 
                                     <!--begin::Pasal=-->
                                     <td>
+                                        <p>{{ $pasal->tipe_pasal }}</p>
+                                    </td>
+                                    <!--end::Pasal=-->
+
+                                    <!--begin::Pasal=-->
+                                    <td>
                                         <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-gray-600 text-hover-primary mb-1 w-800px text-break" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
+                                            class="text-hover-primary mb-1 w-800px text-break" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -202,6 +209,17 @@
                         <div class="fv-row">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tipe Pasal :</span>
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Input-->
+                            <input class="form-control form-control-solid" name="tipe-pasal" id="tipe-pasal"
+                                style="font-weight: normal" rows="10" value="" placeholder="Tipe Pasal"/>
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
                                 <span style="font-weight: normal">Pasal :</span>
                             </label>
                             <!--end::Label-->
@@ -251,13 +269,7 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black"></rect>
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                                    transform="rotate(45 7.41422 6)" fill="black"></rect>
-                            </svg>
+                            <i class="bi bi-x-lg"></i>
                         </span>
                         <!--end::Svg Icon-->
                     </div>
@@ -278,6 +290,23 @@
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-5">
                         <div class="fv-row mb-5" id="input-grup-edit-pasal" style="display: none;">
+                            <!--begin::Input-->
+                            <input type="hidden" class="form-control form-control-solid" name="id-pasal"
+                                id="id-pasal">
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Tipe Pasal :</span>
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="tipe-pasal-edit"
+                                id="tipe-pasal-edit" style="font-weight: normal" value=""
+                                placeholder="Ketikan pasal disini..." />
+                            <!--end::Input-->
+
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
                                 <span style="font-weight: normal">Pasal :</span>
@@ -285,15 +314,11 @@
                             <!--end::Label-->
 
                             <!--begin::Input-->
-                            <input type="hidden" class="form-control form-control-solid" name="id-pasal"
-                                id="id-pasal">
-                            <!--end::Input-->
                             <textarea type="text" class="form-control form-control-solid" name="pasal-edit"
                                 id="pasal-edit" style="font-weight: normal" rows="10" value=""
                                 placeholder="Ketikan pasal disini..."></textarea>
                             <!--end::Input-->
 
-                            <!--end::Input-->
 
                         </div>
                         {{-- <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="edit-pasal-btn" style="background-color:#008CB4">Update</button> --}}
@@ -318,55 +343,6 @@
     </div>
     {{-- end::modal Edit Pasal --}}
 
-    <!--begin::modal DELETE-->
-    @foreach ($pasals as $pasal)
-        <form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_modal_delete{{ $pasal->id_pasal }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus Pasal :</h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg text-white"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            <strong> &bull; {{ $pasal->pasal }}</strong>
-                            <br>
-                            <br>
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-    @endforeach
-    <!--end::modal DELETE-->
     <!--begin::modal DELETE-->
     @foreach ($pasals as $pasal)
         <form action="/pasal/delete/{{ $pasal->id_pasal }}" method="post" enctype="multipart/form-data">
@@ -485,6 +461,7 @@
         const editPasalModalBoots = new bootstrap.Modal("#kt_modal_edit_pasal", {});
         const loadingElt = document.querySelector(".spinner-border");
         const inputPasalElt = document.querySelector("#pasal");
+        const inputTipePasalElt = document.querySelector("#tipe-pasal");
         const tableBodyElt = document.querySelector("table tbody");
         const toaster = document.getElementById("liveToastBtn");
         const toasterBoots = new bootstrap.Toast("#liveToastBtn", {
@@ -497,8 +474,10 @@
             loadingElt.style.display = "block";
 
             const pasal = inputPasalElt.value;
+            const tipePasal = inputTipePasalElt.value;
             const formData = new FormData();
             formData.append("_token", "{{ csrf_token() }}");
+            formData.append("tipe-pasal", tipePasal);
             formData.append("pasal", pasal);
 
             const responsePasal = await fetch("/pasal/add", {
@@ -580,6 +559,7 @@
                 inputGrupEditPasalElt.style.display = "block";
                 loadingEditElt.style.display = "none";
                 document.getElementById("pasal-edit").value = getResponse.pasal.pasal;
+                document.getElementById("tipe-pasal-edit").value = getResponse.pasal.tipe_pasal;
                 document.getElementById("id-pasal").value = getResponse.pasal.id;
                 document.getElementById("pasal-edit").focus();
 
@@ -591,9 +571,11 @@
             spinnerLoadingUpdate.style.display = "block";
             const formData = new FormData();
             const pasalChanges = document.querySelector("#pasal-edit").value;
+            const tipePasalChanges = document.querySelector("#tipe-pasal-edit").value;
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("id_pasal", id_pasal);
             formData.append("pasal", pasalChanges);
+            formData.append("tipe-pasal", tipePasalChanges);
             const updatePasal = await fetch("/pasal/update", {
                 method: "POST",
                 header: {
