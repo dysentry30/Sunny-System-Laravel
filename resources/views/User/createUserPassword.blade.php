@@ -80,7 +80,7 @@
                         <br><br>
                         <div class="d-flex flex-row justify-content-end">
                             <button type="submit" name="reset-password" class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #ffa62b;">Terapkan</button>
+                                style="background-color: #008CB4;">Terapkan</button>
                             {{-- <div class="col">
                             </div> --}}
                         </div>

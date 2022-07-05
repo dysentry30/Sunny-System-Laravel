@@ -46,7 +46,7 @@
 
                                     <!--begin::Button-->
                                     <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                        style="background-color:#ffa62b;">
+                                        style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
 
@@ -279,7 +279,7 @@
                         <input type="hidden" value="{{ $user->id }}" name="id-user">
                         <input type="hidden" value="" id="socket-id" name="socket-id">
                         <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                        style="background-color: #ffa62b;">Reset Password</button>
+                        style="background-color: #008CB4;">Reset Password</button>
                     </form>
                     @endif
                     @if ($user->check_administrator == true)
@@ -288,7 +288,7 @@
                         <input type="hidden" value="{{ $user->id }}" name="id-user">
                         <input type="hidden" value="" id="socket-id" name="socket-id">
                         <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                        style="background-color: #ffa62b;">Reset Password By Request</button>
+                        style="background-color: #008CB4;">Reset Password By Request</button>
                     </form>
                     @endif
                 </div>

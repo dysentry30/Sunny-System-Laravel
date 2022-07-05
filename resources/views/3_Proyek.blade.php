@@ -66,7 +66,7 @@
                                     <button class="btn btn-sm btn-primary w-80px"
                                         data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" 
-                                        style="background-color:#ffa62b; padding: 6px">
+                                        style="background-color:#008CB4; padding: 6px">
                                         New</button>
 
                                     <!--begin::Wrapper-->
@@ -559,7 +559,7 @@
                         </div>
                         <!--End::Row Kanan+Kiri-->
                         <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#ffa62b" id="proyek_new_save">Save</button>
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#008CB4" id="proyek_new_save">Save</button>
                         </div>
                     </div>
                     <!--end::Modal body-->

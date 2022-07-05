@@ -43,7 +43,7 @@
                         <!--begin::Button-->
                         <button type="button" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                             data-bs-target="#kt_modal_tambah_faq" id="tambah-faq"
-                            style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+                            style="background-color:#008CB4; padding: 7px 30px 7px 30px">
                             New</button>
                         <!--end::Button-->
 
@@ -202,7 +202,7 @@
 				
 										</div><br>
 				
-										<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#ffa62b" >Update</button>
+										<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Update</button>
 				
 									</div>
 									<!--end::Input group-->
@@ -369,7 +369,7 @@
 
                         </div><br>
 
-						<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#ffa62b" >Save</button>
+						<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Save</button>
 
                     </div>
                     <!--end::Input group-->

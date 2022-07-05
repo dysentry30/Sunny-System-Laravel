@@ -45,7 +45,7 @@
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create" id="kt_toolbar_primary_button"
-                                        style="background-color:#ffa62b; padding: 7px 30px 7px 30px">
+                                        style="background-color:#008CB4; padding: 7px 30px 7px 30px">
                                         New</a>
 
                                     <!--begin::Wrapper-->
