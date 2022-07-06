@@ -27,11 +27,12 @@
                     <!--begin::Notifications-->
                     <div class="d-flex align-items-center ms-1 ms-lg-3">
                         <!--begin::Menu- wrapper-->
-                        <div class="btn btn-icon btn-active-light-primary position-relative w-30px h-30px w-md-40px h-md-40px"
+                        <div class="btn-icon btn-active-light-primary position-relative"
                             data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                             data-kt-menu-placement="bottom-end">
                             <!--begin::Svg Icon | path: icons/duotune/general/gen022.svg-->
-                            <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-diamond-fill fs-1 text-hover-primary"></i>&nbsp;&nbsp;
+                            {{-- <span class="svg-icon svg-icon-1">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none">
                                     <path
@@ -47,10 +48,10 @@
                                         d="M17.2929 8.70711C17.6834 8.31658 18.3166 8.31658 18.7071 8.70711L21.2929 11.2929C21.6834 11.6834 21.6834 12.3166 21.2929 12.7071L18.7071 15.2929C18.3166 15.6834 17.6834 15.6834 17.2929 15.2929L14.7071 12.7071C14.3166 12.3166 14.3166 11.6834 14.7071 11.2929L17.2929 8.70711Z"
                                         fill="black" />
                                 </svg>
-                            </span>
+                            </span> --}}
                             <!--end::Svg Icon-->
                             <span
-                                class="position-absolute top-0 end-0 badge rounded-circle p-2 bg-danger" id="notification">
+                                class="position-absolute top-0 start-75 translate-middle badge rounded-circle bg-danger" style="padding: 5px">
                                 <span id="notification-counter"></span>
                                 <span class="visually-hidden">unread messages</span>
                             </span>

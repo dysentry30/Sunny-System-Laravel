@@ -17,8 +17,9 @@ class FaqsFactory extends Factory
     public function definition()
     {
         return [
-            "judul" => $this->faker->jobTitle(15),
+            "judul" => $this->faker->realText(30),
             "deskripsi" => $this->faker->text(220),
+            "faq_attachment" => $this->faker->uuid().".docx",
         ];
     }
 }

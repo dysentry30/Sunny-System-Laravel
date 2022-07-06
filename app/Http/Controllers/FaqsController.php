@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Faqs;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests\StorefaqsRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatefaqsRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class FaqsController extends Controller
 {
@@ -27,13 +30,26 @@ class FaqsController extends Controller
     public function create(Request $request, Faqs $newFaq) 
     {
         $data = $request->all(); 
-
+        $file = $request->file("faq-attachment");
+        
         $newFaq->judul = $data["judul"];
         $newFaq->deskripsi = $data["deskripsi"];
+        
+        if ($file == null)
+        {   
+            Alert::success('Success', "Tambah Knowledge Base Berhasil")->autoClose(3000);
+            $newFaq->save();
+        }else{
+            $path = "faqs/";
+            $file_name = $file->getClientOriginalName();
+            $file_id =  date('Y-m-d_H-i-s_').$file_name;
+            // dd($file_id);
+            $file->move(public_path($path), $file_id);
 
-        $newFaq->save();
+            $newFaq->faq_attachment = $file_id;
+            $newFaq->save();
+        }
         return redirect()->back();
-
     }
     
     public function update(Request $request, Faqs $newFaq) 
@@ -58,10 +74,32 @@ class FaqsController extends Controller
      * @param  \App\Http\Requests\StorefaqsRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StorefaqsRequest $request)
-    {
-        //
-    }
+    // public function download($file_id, Request $request)
+    // {   
+    //     // $path = public_path()."/faqs";
+    //     // $file = File::files($path);
+    //     // $file->each();
+    //     // dd($file);
+        
+    //     $path = public_path()."/faqs";
+    //     $file = File::files($path);
+        
+        
+    //     // dd($file);
+    //     $content = Storage::get($file);
+
+    //     return response($content)->withHeaders(([
+    //         'Content-Type' => mime_content_type($path)
+    //     ]));
+
+    //     // if (Storage::disk('public')->exists("faqs/$request->file")){
+    //     //     $path = Storage::disk('public')->path("faqs/$request->file");
+    //     //     $content = file_get_contents($path);
+    //     //     return response($content)->withHeaders(([
+    //     //        'Content-Type' => mime_content_type($path)
+    //     //     ]));
+    //     // }
+    // }
 
     /**
      * Display the specified resource.
