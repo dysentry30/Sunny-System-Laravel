@@ -392,6 +392,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/knowledge-base/new',  [FaqsController::class, 'create']);
 
     Route::post('/knowledge-base/update',  [FaqsController::class, 'update']);
+
+    Route::delete('/knowledge-base/delete/{id}',  [FaqsController::class, 'delete']);
     //End :: FAQ - KnowledgeBase
 
     
