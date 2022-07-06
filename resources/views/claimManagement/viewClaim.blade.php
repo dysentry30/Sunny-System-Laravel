@@ -462,7 +462,7 @@
 
                                                     <button class="btn btn-sm fw-normal btn-primary"
                                                         data-bs-dismiss="modal"
-                                                        style="background-color: #e08c16;color: white;"
+                                                        style="background-color: #008cb4;color: white;"
                                                         id="set-calendar-start">Apply</button>
 
                                                 </div>

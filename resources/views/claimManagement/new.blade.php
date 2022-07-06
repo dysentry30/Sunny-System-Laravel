@@ -170,7 +170,7 @@
                                                                 data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_calendar"><i
                                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                    style="color: #e08c16"></i></a>
+                                                                    style="color: #008cb4"></i></a>
                                                             <input type="Date"
                                                                 class="form-control form-control-solid ps-12"
                                                                 placeholder="Select a date"
@@ -694,7 +694,7 @@
                                     data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
 
                                 <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                    style="background-color: #e08c16;color: white;" id="set-calendar-start">Apply</button>
+                                    style="background-color: #008cb4;color: white;" id="set-calendar-start">Apply</button>
 
                             </div>
                         </div>

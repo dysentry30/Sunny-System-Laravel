@@ -208,7 +208,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_calendar-start"><i
                                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #e08c16"></i></a>
+                                                                        style="color: #008CB4"></i></a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12"
                                                                     placeholder="Select a date" value="{{ old('start-date') }}" name="start-date"
@@ -239,7 +239,7 @@
                                                                     data-bs-toggle="modal"
                                                                     data-bs-target="#kt_modal_calendar-end"><i
                                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #e08c16"></i></a>
+                                                                        style="color: #008CB4"></i></a>
                                                                 <input type="Date"
                                                                     class="form-control form-control-solid ps-12" value="{{ old('due-date') }}"
                                                                     placeholder="Select a date" id="due-date"
@@ -586,7 +586,7 @@
                                                     style="background: transparent;width:1rem;height:2.3rem;"
                                                     data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                        style="color: #e08c16"></i></a>
+                                                        style="color: #008CB4"></i></a>
                                                 <input type="Date" data-bs-target="#kt_modal_calendar-start"
                                                     class="form-control form-control-solid ps-12"
                                                     placeholder="Select a date"
@@ -610,7 +610,7 @@
                                                     style="background: transparent;width:1rem;height:2.3rem;"
                                                     data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-end"><i
                                                         class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                        style="color: #e08c16"></i></a>
+                                                        style="color: #008CB4"></i></a>
                                                 <!--begin::Input-->
                                                 <input type="Date" class="form-control form-control-solid ps-12"
                                                     value="{{ date_format($contract->contract_out ?? now(), 'Y-m-d') }}"
@@ -4075,7 +4075,7 @@
                                 data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
 
                             <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                style="background-color: #e08c16;color: white;" id="set-calendar-start">Apply</button>
+                                style="background-color: #008CB4;color: white;" id="set-calendar-start">Apply</button>
 
                         </div>
                     </div>
@@ -4216,12 +4216,12 @@
                                 data-bs-dismiss="modal" id="cancel-date-btn-end">Back</button>
 
                             <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                style="background-color: #e08c16;color: white;" id="set-calendar-end">Apply</button>
+                                style="background-color: #008CB4;color: white;" id="set-calendar-end">Apply</button>
                             {{-- <button class="calendar__button calendar__button--grey" data-bs-dismiss="modal"
                                 id="cancel-date-btn-end">Back</button>
 
                             <button class="calendar__button" data-bs-dismiss="modal"
-                                style="background-color: #e08c16;color: white;" id="set-calendar-end">Apply</button> --}}
+                                style="background-color: #008CB4;color: white;" id="set-calendar-end">Apply</button> --}}
                         </div>
                     </div>
                 </div>

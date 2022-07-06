@@ -86,7 +86,7 @@ class DocumentController extends Controller
         $id_document = $request->id_document;
         $id = $request->id;
         // dd($request->id_document);
-        $document_path = asset("/storage/words/" . $id_document . ".docx");
+        $document_path = asset("words/" . $id_document . ".docx");
         return view("/document/document", ["document" => $document_path, "id" => $id, "id_document" => $id_document]);
         // return view("document", ["document" => $document_path]);
     }

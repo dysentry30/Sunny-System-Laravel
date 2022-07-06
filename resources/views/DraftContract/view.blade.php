@@ -174,7 +174,7 @@
                                                                     data-bs-target="#kt_modal_calendar_start"
                                                                     data-bs-toggle="modal">
                                                                     <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #e08c16"></i>
+                                                                        style="color: #008CB4"></i>
                                                                 </a>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -558,7 +558,7 @@
                                                                     data-bs-target="#kt_modal_calendar_start"
                                                                     data-bs-toggle="modal" id="start-date-modal">
                                                                     <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #e08c16"></i>
+                                                                        style="color: #008CB4"></i>
                                                                 </a>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -1081,7 +1081,7 @@
                                     data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
 
                                 <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                    style="background-color: #e08c16;color: white;" id="set-calendar-start">Apply</button>
+                                    style="background-color: #008CB4;color: white;" id="set-calendar-start">Apply</button>
                             </div>
                         </div>
                     </div>

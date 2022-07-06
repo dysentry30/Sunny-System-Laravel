@@ -138,8 +138,76 @@
                         <!--begin::Card body-->
                         <div class="card-body py-10">
                             @if (auth()->user()->check_administrator)
+                                <!--begin::Table-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-auto">Unit Kerja</th>
+                                        <th class="min-w-auto">Tahun Pelaksanaan</th>
+                                        <th class="min-w-auto">Total OK Awal</th>
+                                        <th class="min-w-auto">Total OK Review</th>
+                                        <th class="min-w-auto">Apakah RKP Terkunci?</th>
+                                        {{-- <th class="text-center">Action</th>
+                                        <th class="text-center">Settings</th> --}}
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                {{-- @php
+												$proyeks = $proyeks->reverse();
+												@endphp --}}
 
-                                @foreach ($unitkerjas as $unitKerja)
+                                <tbody class="fw-bold text-gray-600">
+                                    @foreach ($unitkerjas as $unitkerja)
+                                        <tr>
+                                            <!--begin::Name=-->
+                                            <td class="">
+                                                <a href="#" id="click-name"
+                                                    class="text-gray-600 text-hover-primary mb-1">{{ $unitkerja->unit_kerja }}</a>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Coloumn=-->
+                                            <td>
+                                                <p id="click-name"
+                                                    class="text-gray-600 mb-1">{{ "2022" }}</p>
+                                            </td>
+                                            <!--end::Coloumn=-->
+                                            <!--begin::Coloumn=-->
+                                            @php
+                                                $total_ok_awal = 0;
+                                                $total_ok_review = 0;
+                                                foreach ($unitkerja->proyeks as $proyek) {
+                                                    $total_ok_awal += (int) str_replace(",", "", $proyek->nilaiok_awal);
+                                                    $total_ok_review += (int) str_replace(",", "", $proyek->nilaiok_review);
+                                                }
+                                                $total_ok_awal = number_format($total_ok_awal, 0, ",", ",");
+                                                $total_ok_review = number_format($total_ok_review, 0, ",", ",");
+                                            @endphp
+                                            <td class="text-center">
+                                                {{ $total_ok_awal }}
+                                            </td>
+                                            <!--end::Coloumn=-->
+                                            <!--begin::Coloumn=-->
+                                            <td class="text-center">
+                                                {{ $total_ok_review }}
+                                            </td>
+                                            <!--end::Coloumn=-->
+                                            <!--begin::Coloumn=-->
+                                            <td>
+                                                {{ "Iya" }}
+                                            </td>
+                                            <!--end::Coloumn=-->
+
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--end::Table-->
+                                {{-- @foreach ($unitkerjas as $unitKerja)
                                     <p>
                                         <a class="#" data-bs-toggle="collapse"
                                             href="#collapseRKAP{{ $unitKerja->divcode }}" role="button"
@@ -171,9 +239,9 @@
                                             @endif
                                         </ul>
                                     </div>
-                                @endforeach
+                                @endforeach --}}
                             @else
-                                @php
+                                {{-- @php
                                     $unit_kerja = auth()->user()->UnitKerja;
                                 @endphp
                                 <p>
@@ -194,7 +262,7 @@
                                             </a>
                                         @endforeach
                                     </ul>
-                                </div>
+                                </div> --}}
 
                             @endif
 
