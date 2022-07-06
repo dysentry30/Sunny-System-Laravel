@@ -55,39 +55,45 @@ a{{-- Begin::Extend Header --}}
                                         New</a>
 
                                     <!--begin::Wrapper-->
-                                <div class="me-4" style="margin-left:10px;">
-                                    <!--begin::Menu-->
-                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-folder2-open"></i>Action</a>
-                                    <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-                                        <!--begin::Header-->
-                                        <div class="px-7 py-5">
-                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                    <div class="me-4" style="margin-left:10px;">
+                                        <!--begin::Menu-->
+                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <i class="bi bi-folder2-open"></i>Action</a>
+                                        <!--begin::Menu 1-->
+                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                            id="kt_menu_6155ac804a1c2">
+                                            <!--begin::Header-->
+                                            <div class="px-7 py-5">
+                                                <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Menu separator-->
+                                            <div class="separator border-gray-200"></div>
+                                            <!--end::Menu separator-->
+                                            <!--begin::Form-->
+                                            <div class="">
+                                                <!--begin::Item-->
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"
+                                                    id="kt_toolbar_import">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                                </button>
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"
+                                                    id="kt_toolbar_export">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                                </button>
+                                                <!--end::Item-->
+                                            </div>
+                                            <!--end::Form-->
                                         </div>
-                                        <!--end::Header-->
-                                        <!--begin::Menu separator-->
-                                        <div class="separator border-gray-200"></div>
-                                        <!--end::Menu separator-->
-                                        <!--begin::Form-->
-                                        <div class="">
-                                            <!--begin::Item-->
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                            </button>
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
-                                            </button>
-                                            <!--end::Item-->
-                                        </div>
-                                        <!--end::Form-->
+                                        <!--end::Menu 1-->
+                                        <!--end::Menu-->
                                     </div>
-                                    <!--end::Menu 1-->
-                                    <!--end::Menu-->
-                                </div>
-                                <!--end::Wrapper-->
+                                    <!--end::Wrapper-->
 
 
                                 </div>
@@ -247,55 +253,20 @@ a{{-- Begin::Extend Header --}}
 
                                             <!--begin::Role=-->
                                             <td>
-                                                @php
-                                                    $roles = explode(',', $user->role_id);
-                                                @endphp
-                                                @if (count($roles) > 1)
-                                                    @foreach ($roles as $i => $role)
-                                                        @switch((int) $role)
-                                                            @case(1)
-                                                                - Administrator
-                                                                <br>
-                                                            @break
-
-                                                            @case(2)
-                                                                - Admin Kontrak
-                                                                <br>
-                                                            @break
-
-                                                            @case(3)
-                                                                - User Sales
-                                                                <br>
-                                                            @break
-
-                                                            @case(4)
-                                                                - Team Proyek
-                                                                <br>
-                                                            @break
-
-                                                            @default
-                                                        @endswitch
-                                                    @endforeach
-                                                @else
-                                                    @switch($user->role_id)
-                                                        @case(1)
-                                                            - Administrator
-                                                        @break
-
-                                                        @case(2)
-                                                            - Admin Kontrak
-                                                        @break
-
-                                                        @case(3)
-                                                            - User Sales
-                                                        @break
-
-                                                        @case(4)
-                                                            - Team Proyek
-                                                        @break
-
-                                                        @default
-                                                    @endswitch
+                                                @if (!$user->check_administrator && !$user->check_admin_kontrak && !$user->check_user_sales && !$user->check_team_proyek)
+                                                    <span class="text-danger">Belum ditentukan</span>
+                                                @endif
+                                                @if ($user->check_administrator)
+                                                    - Administrator <br>
+                                                @endif
+                                                @if ($user->check_admin_kontrak)
+                                                    - Admin Kontrak <br>
+                                                @endif
+                                                @if ($user->check_user_sales)
+                                                    - User Sales <br>
+                                                @endif
+                                                @if ($user->check_team_proyek)
+                                                    - Team Proyek <br>
                                                 @endif
                                             </td>
                                             <!--end::Role=-->
@@ -349,7 +320,7 @@ a{{-- Begin::Extend Header --}}
     </div>
     <!--end::Root-->
 
-{{-- begin::modal DELETE --}}
+    {{-- begin::modal DELETE --}}
     @foreach ($users as $user)
         <form action="/user/delete/{{ $user->id }}" method="post" enctype="multipart/form-data">
             @method('delete')
@@ -394,7 +365,7 @@ a{{-- Begin::Extend Header --}}
             </div>
         </form>
     @endforeach
-{{-- end::modal DELETE --}}
+    {{-- end::modal DELETE --}}
 
 @endsection
 
