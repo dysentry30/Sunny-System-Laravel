@@ -114,21 +114,21 @@
                         <thead>
                             <!--begin::Table row-->
                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                <th class="w-75px">No</th>
-                                <th class="w-auto">Kategori Pasal</th>
-                                <th class="w-700px text-break">Pasal</th>
+                                <th class="w-0px text-center">No</th>
+                                <th class="w-150px">Kategori Pasal</th>
+                                <th class="text-break">Pasal</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
+                        <tbody class="text-gray-600">
                             @foreach ($pasals as $i => $pasal)
                                 <tr class="align-baseline">
 
                                     <!--begin::Nomor=-->
                                     <td>
-                                        <p class="text-gray-700 mb-1">
+                                        <p class="mb-1 text-center">
                                             {{ ++$i }}</p>
                                     </td>
                                     <!--end::Nomor=-->
@@ -143,7 +143,8 @@
                                     <td>
                                         <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
                                             data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-hover-primary mb-1 w-800px text-break" style="font-family: Poppins;">{{ $pasal->pasal }}</pre>
+                                            class="text-hover-primary mb-1 w-50%" 
+                                            style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -426,7 +427,7 @@
                                     
                                 <!--begin::Input-->
                                 <div>
-                                    <label for="attachment" class="form-label">Import Pasal :</label>
+                                    <label for="import-pasal" class="form-label">Import Pasal :</label>
                                     <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file">
                                 </div>
                                 <!--end::Input-->

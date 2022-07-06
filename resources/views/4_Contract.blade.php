@@ -157,7 +157,7 @@
                                             <!--begin::Email=-->
                                             <td>
                                                 @isset($contract->project)
-                                                    <a href="/proyek/view/{{ $contract->project->id }}"
+                                                    <a href="/proyek/view/{{ $contract->project->kode_proyek }}"
                                                         class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $contract->project->nama_proyek }}</a>
                                                 @else
