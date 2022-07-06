@@ -501,11 +501,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     function writeDOCXFile($content)
     {
-        // header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        // header("Content-Disposition: attachment;filename=$id_document.docx");
         $php_word = new PhpWord();
         $section = $php_word->addSection();
-        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content);
+        // $html = "<p>test</p>";
+        // $html .= "<b>test</b>";
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $content, false, false);
         $docx_writer = \PhpOffice\PhpWord\IOFactory::createWriter($php_word);
         return $docx_writer;
     }

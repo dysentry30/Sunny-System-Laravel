@@ -963,11 +963,11 @@
     <!--end::Page Custom Javascript-->
 
     {{-- End :: Notif Open --}}
-    <script>
+    {{-- <script>
         const tabNotif = document.querySelector("#notif-alert");
         const tabNotifBoots = new bootstrap.Tab(tabNotif, {});
         tabNotifBoots.show();
-    </script>
+    </script> --}}
     {{-- Begin :: Notif Open --}}
     
     <!--end::Javascript-->
