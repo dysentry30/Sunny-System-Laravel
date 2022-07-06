@@ -510,7 +510,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     function moveFileTemp(UploadedFile $file, $file_name)
     {
-        $result = $file->storeAs("public/words", $file_name . "." . $file->getClientOriginalExtension());
+        $path = "words/";
+        $file_name =  $file_name . "." . $file->getClientOriginalExtension();
+        $result = $file->move(public_path($path), $file_name);
 
         return $result;
     }

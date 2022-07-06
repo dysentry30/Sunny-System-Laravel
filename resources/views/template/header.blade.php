@@ -50,7 +50,7 @@
                             </span>
                             <!--end::Svg Icon-->
                             <span
-                                class="position-absolute top-0 start-100 translate-middle badge rounded-circle p-2 bg-danger">
+                                class="position-absolute top-0 end-0 badge rounded-circle p-2 bg-danger" id="notification">
                                 <span id="notification-counter"></span>
                                 <span class="visually-hidden">unread messages</span>
                             </span>
