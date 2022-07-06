@@ -70,7 +70,7 @@
     cursor: not-allowed;
 }
 .calendar__date--selected {
-    color: #e08c16;
+    color: #008cb4;
 }
 .calendar__date--selected::before {
     background-color: #ffeaec;
@@ -91,7 +91,7 @@
     border-radius: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #e08c16;
+    background-color: #008cb4;
     width: 10px;
     height: 4px;
 }
@@ -100,8 +100,8 @@
     transition: all 0.3s ease-in-out;
 }
 .calendar__date--range-end::before {
-    box-shadow: 0 15px 20px -3px #e38f1a;
-    background-color: #e08c16;
+    box-shadow: 0 15px 20px -3px #008cb4;
+    background-color: #008cb4;
     border-radius: var(--accent-br);
     z-index: 1;
     transition: all 0.3s ease-in-out;
