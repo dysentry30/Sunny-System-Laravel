@@ -87,6 +87,9 @@
                     document.querySelector(".fr-view").innerHTML = html;
                     data = html;
                     // document.getElementById("A").remove();
+                }).catch(() => {
+                    document.querySelector(".fr-view").innerHTML = file.result;
+
                 });
             }
             file.readAsBinaryString(docx);
@@ -101,24 +104,27 @@
             //     html = editor.html.get();
 
             // });
-            // const content = htmlDocx.asBlob(html.innerHTML);
-            const parser = new XMLSerializer().serializeToString(html);
-            // console.log(parser);
+            // const content = htmlDocx.asBlob(html.outerHTML);
+            const content = new Blob([html.outerHTML]);
+            // console.log(content);
+            // return;
+            // const parser = new XMLSerializer().serializeToString(html);
+            // console.log(html.innerText);
             // return;
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("id", "{{ $id }}");
             formData.append("id_document", "{{ $id_document }}");
-            formData.append("content_word", parser);
+            formData.append("content_word", content);
             circleLoadingElt.style.display = "block";
             const uploadFile = await fetch(
                 "/document/view/{{ $id }}/{{ $id_document }}/save", {
                     method: "POST",
                     body: formData,
                     header: {
-                        "content-type": "application/json",
+                        // "content-type": "application/json",
+                        'Content-Type': 'multipart/form-data',
                     }
                 }).then(res => res.json());
-            console.log(uploadFile);
             circleLoadingElt.style.display = "none";
             if (uploadFile.status == "success") {
                 console.log(uploadFile);
