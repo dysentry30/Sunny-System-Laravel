@@ -57,17 +57,43 @@ class FaqsController extends Controller
         // dd($idFaq);
         
         $data = $request->all(); 
+        $file = $request->file("faq-attachment");
         
         // dd($data);
         
         $newFaq = Faqs::find($data["id"]);
         $newFaq->judul = $data["judul"];
         $newFaq->deskripsi = $data["deskripsi"];
+        if ($file == null)
+        {   
+            Alert::success('Success', "Tambah Knowledge Base Berhasil")->autoClose(3000);
+            $newFaq->save();
+        }else{
+            $path = "faqs/";
+            $file_name = $file->getClientOriginalName();
+            $file_id =  date('Y-m-d_H-i-s_').$file_name;
+            // dd($file_id);
+            $file->move(public_path($path), $file_id);
 
-        $newFaq->save();
+            $newFaq->faq_attachment = $file_id;
+            $newFaq->save();
+        }
+
         return redirect()->back();
 
     }
+
+    public function delete($id)
+    {
+        $id = Faqs::find($id);
+        $judul = $id->judul;
+        
+        $id->delete();
+        Alert::success('Delete', $judul.", Berhasil Dihapus")->hideCloseButton();
+
+        return redirect()->back();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

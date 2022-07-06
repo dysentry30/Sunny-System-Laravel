@@ -279,7 +279,8 @@
 
 
 
-
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
                             style="background-color:#008CB4">Save</button>
 

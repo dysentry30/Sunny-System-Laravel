@@ -417,7 +417,8 @@
                         <!--End::Row Kanan+Kiri-->
 
 
-
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#008CB4">Save</button>
 
                     </div>

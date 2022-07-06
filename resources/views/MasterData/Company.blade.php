@@ -278,7 +278,8 @@
 
 
 
-
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-sm btn-primary" id="new_save">Save</button>
 
                     </div>

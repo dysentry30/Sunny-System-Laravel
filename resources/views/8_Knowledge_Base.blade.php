@@ -129,9 +129,43 @@
                                     class="text-gray-500 text-hover-primary">
                                     {{ ++$i }}. {{ $faq->judul }}</h6>
                                 <pre class="card-text" style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $faq->deskripsi }}</pre>
+                                
+                                <div class="d-flex justify-content-between d-inline align-items-center">
+                                    @if (!$faq->faq_attachment)
+                                    <a type="button" class="text-gray-500 text-hover-primary">
+                                    Attachement : <i> Attachment Tidak Tersedia </i></a>
+                                    
+                                        @if (auth()->user()->check_administrator)
+
+                                            {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
+                                                <!--begin::Action=-->
+                                                    <button data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_delete{{ $faq->id }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                <!--end::Action=-->
+                                        @endif
+                                    @else
+                                    <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
+                                    Attachement : {{ $faq->faq_attachment }}</a>
+                                        
+                                        @if (auth()->user()->check_administrator)
+
+                                            {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
+                                                <!--begin::Action=-->
+                                                    <button data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_delete{{ $faq->id }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                <!--end::Action=-->
+                                        @endif
+                                    @endif
+                                </div>
+
                                 <hr class="text-secondary border-1 opacity-75">
                             </div>
-                            
 
                             @endforeach
                             
@@ -211,14 +245,21 @@
                                             <label class="fs-6 fw-bold form-label mt-3">
                                                 <span style="font-weight: normal">Attachement : </span>
                                             </label>
+
+                                            @if (! $faq->faq_attachment )
+                                                <input class="form-control form-control-md form-control-solid" id="faq-attachment" name="faq-attachment" type="file">
+                                            @endif
                                             <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
                                                 {{ $faq->faq_attachment }}</a>
-                                            <!--end::Label-->
+                                           <!--end::Label-->
                 
                 
                                         </div><br>
-                
+                                    </div>
+                                    <div class="modal-footer">
+                                            
                                         <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Update</button>
+                                        
                 
                                     </div>
                                     <!--end::Input group-->
@@ -376,6 +417,8 @@
 
 
                         </div><br>
+                    </div>
+                    <div class="modal-footer">
 
 						<button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Save</button>
 
@@ -391,6 +434,55 @@
     </div>
 	</form>
 {{-- end::modal Tambah faq --}}
+
+
+
+<!--begin::modal DELETE-->
+    @foreach ($faqs as $faq)
+        <form action="/knowledge-base/delete/{{ $faq->id }}" method="post" enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade" id="kt_modal_delete{{ $faq->id }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-750px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $faq->judul }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg text-white"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+<!--end::modal DELETE-->
 
 
 {{-- end::modal --}}
