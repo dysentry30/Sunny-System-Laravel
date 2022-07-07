@@ -179,7 +179,7 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
 
-                                                                <input type="Date" class="form-control form-control-solid ps-12"
+                                                                <input type="Date" class="form-control form-control-solid"
                                                                     placeholder="Select a date"
                                                                     value="{{ old('draft-contract-start-date') ?? date_format(new DateTime($draftContract->created_at), 'Y-m-d') }}"
                                                                     name="draft-contract-start-date"
@@ -204,7 +204,7 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid ps-12"
+                                                                <input type="text" class="form-control form-control-solid"
                                                                     value="{{ old('draft-contract-create-by') ?? $draftContract->created_by }}"
                                                                     placeholder="Who create this draft?"
                                                                     id="draft-contract-create-by"

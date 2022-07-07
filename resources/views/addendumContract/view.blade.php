@@ -225,7 +225,7 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
 
-                                                                <input type="Date" class="form-control form-control-solid ps-12"
+                                                                <input type="Date" class="form-control form-control-solid"
                                                                     placeholder="Select a date"
                                                                     value="{{ old('addendum-contract-start-date') ?? date_format(new DateTime($addendumContract->created_at), 'Y-m-d') }}"
                                                                     name="addendum-contract-start-date"
@@ -250,11 +250,11 @@
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
-                                                                <input type="text" class="form-control form-control-solid ps-12"
-                                                                    value="{{ old('addendum-contract-create-by') ?? $addendumContract->created_by }}"
+                                                                <input type="text" class="form-control form-control-solid"
+                                                                    value="{{ auth()->user()->name }}"
                                                                     placeholder="Who create this draft?"
                                                                     id="addendum-contract-create-by"
-                                                                    name="addendum-contract-create-by" />
+                                                                    name="addendum-contract-create-by" readonly />
                                                                 @error('addendum-contract-create-by')
                                                                     <h6>
                                                                         <b style="color: rgb(209, 38, 38)">{{ $message }}</b>
@@ -621,10 +621,9 @@
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
                                                                 <input type="text" class="form-control form-control-solid"
-                                                                    value="{{ old('addendum-contract-create-by') }}"
-                                                                    placeholder="Who create this draft?"
+                                                                    value="{{ auth()->user()->name }}"
                                                                     id="addendum-contract-create-by"
-                                                                    name="addendum-contract-create-by" />
+                                                                    name="addendum-contract-create-by" readonly />
                                                                 @error('addendum-contract-create-by')
                                                                     <h6>
                                                                         <b style="color: rgb(209, 38, 38)">{{ $message }}</b>

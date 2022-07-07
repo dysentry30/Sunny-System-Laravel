@@ -913,6 +913,10 @@
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- end::html2pdf JS --}}
 
+    {{-- begin::sweetalert2 JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.all.min.js"></script>
+    {{-- end::sweetalert2 JS --}}
+
 
     {{-- begin::Froala Editor JS --}}
     <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'>

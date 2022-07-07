@@ -3770,8 +3770,15 @@ fill="none">
                 }).then(res => res.json());
                 getIconElt.classList.remove("bi-unlock-fill");
                 getIconElt.classList.add("bi-lock-fill");
-                toaster.classList.add("text-bg-success");
-                toastBody.innerText = getLockRes.msg;
+                Swal.fire({
+                    title: 'Success',
+                    text: getLockRes.msg,
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+                // toaster.classList.add("text-bg-success");
+                // toastBody.innerText = getLockRes.msg;
             } else {
                 const getLockRes = await fetch("/forecast/set-unlock", {
                     method: "POST",
@@ -3782,10 +3789,17 @@ fill="none">
                 }).then(res => res.json());
                 getIconElt.classList.add("bi-unlock-fill");
                 getIconElt.classList.remove("bi-lock-fill");
-                toaster.classList.add("text-bg-success");
-                toastBody.innerText = getLockRes.msg;
+                Swal.fire({
+                    title: 'Success',
+                    text: getLockRes.msg,
+                    icon: 'success',
+                    timer: 3000,
+                    showConfirmButton: false,
+                });
+                // toaster.classList.add("text-bg-success");
+                // toastBody.innerText = getLockRes.msg;
             }
-            toastBoots.show();
+            // toastBoots.show();
             disabledAllInputs();
             modalBoots.hide();
         }

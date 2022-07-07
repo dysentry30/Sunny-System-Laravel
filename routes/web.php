@@ -294,26 +294,35 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 // begin :: Set lock / unlock data month forecast
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
-        $from_user = Auth::user();
-        // Forecast::query()->each(function($oldRecord) use ($data){
-        //     $duplicateRecord = $oldRecord->replicate();
-        //     $duplicateRecord->setTable("history_forecast");
-        //     $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
-        //     $duplicateRecord->save();
-        // });
-        $unit_kerjas = UnitKerja::find(5);
-        if($unit_kerjas->metode_approval == "Sequence" && auth()->user()->check_administrator) {
-            $next_user = [];
-            $to_user = $unit_kerjas->User_1;
-            // $next_user = $unit_kerjas->user_2;
-            array_push($next_user, $unit_kerjas->User_2->id ?? null, $unit_kerjas->User_3->id ?? null);
-            LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast", $next_user, 0, 0);
-            // Alert::success("Success", "Forecast has been locked");
+        // $from_user = Auth::user();
+        $history_forecast = HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->get()->all();
+        if(empty($history_forecast)) {
+            Forecast::query()->each(function($oldRecord) use ($data){
+                $duplicateRecord = $oldRecord->replicate();
+                $duplicateRecord->setTable("history_forecast");
+                $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
+                $duplicateRecord->save();
+            });
+        } else {
+            foreach($history_forecast as $history) {
+                $forecast = Forecast::where("kode_proyek", "=", $history->kode_proyek)->where("month_forecast", "=", $history->month_forecast)->whereMonth("created_at", "=", $history->periode_prognosa)->get()->first();
+                $history->nilai_forecast = $forecast->nilai_forecast; 
+                $history->save();
+            }
+        }
+        // $unit_kerjas = UnitKerja::find(5);
+        // if($unit_kerjas->metode_approval == "Sequence" && auth()->user()->check_administrator) {
+        //     $next_user = [];
+        //     $to_user = $unit_kerjas->User_1;
+        //     // $next_user = $unit_kerjas->user_2;
+        //     array_push($next_user, $unit_kerjas->User_2->id ?? null, $unit_kerjas->User_3->id ?? null);
+        //     LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast", $next_user, 0, 0);
+        //     // Alert::success("Success", "Forecast has been locked");
             return response()->json([
                 "status" => "success",
                 "msg" => "Forecast has been locked",
             ]);
-        }
+        // }
         return response()->json([
             "status" => "failed",
             "msg" => "Maaf, anda bukan admin",
@@ -324,7 +333,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/forecast/set-unlock', function (Request $request) {
         $data = $request->all();
-        HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
+        // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
         return response()->json([
             "status" => "success",
             "msg" => "Forecast has been unlocked",
