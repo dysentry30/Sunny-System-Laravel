@@ -154,10 +154,8 @@
 
 <!--begin::FORECAST LINE-->
 <script>
-    let arrayHistoryForecast = "{{ $arrayHistoryForecast }}";
-    // let arrayHistoryForecast = JSON.stringify("{!! $arrayHistoryForecast !!}");
+    let arrayHistoryForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
     console.log(arrayHistoryForecast);
-    // console.log([1,2,3,4,5]);
         Highcharts.chart('forecast-line', {
 
         title: {
@@ -217,7 +215,6 @@
         {
             name: 'Nilai OK',
             data: arrayHistoryForecast
-            // data: [43934000, 52503000, 57177000, 69658000, 97031000, 119931000, 137133000, 154175000, 230185000, 243477000, 321457000, 393387000]
         // }, 
         // {
         //     name: 'Forecast',
