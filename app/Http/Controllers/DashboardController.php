@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\HistoryForecast;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -13,8 +14,23 @@ class DashboardController extends Controller
      */
     function index () 
     {
-        // \Illuminate\Support\Facades\Artisan::call("storage:link");
-        return view('1_Dashboard');
+        // $historyForecast = HistoryForecast::all()->toJson();
+        // dd($historyForecast);
+
+        $nilaiHistoryForecast = HistoryForecast::select('nilai_forecast')->get()->toArray();
+        function flatten(array $array) {
+            $return = array();
+            array_walk_recursive($array, function($a) use (&$return) { $return[] = $a; });
+            return $return;
+        }
+
+        $arrayHistoryForecast = flatten($nilaiHistoryForecast);
+
+        // dump([1,2,3,4,5]);
+        // dump($arrayHistoryForecast);
+        // dd($nilaiHistoryForecast);
+
+        return view('1_Dashboard', compact("arrayHistoryForecast"));
     }
 
     /**
