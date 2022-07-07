@@ -17,6 +17,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpWord\PhpWord;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\FaqsController;
@@ -68,12 +69,10 @@ Route::post('/logout', [UserController::class, 'logout']);
 
 Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
-    Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
-    });
-    Route::get('/dashboard', function () {
-        \Illuminate\Support\Facades\Artisan::call("storage:link");
-        return view('1_Dashboard');
-    });
+    // Route::middleware(["admin", "adminKontrak", "userSales"])->group(function () {
+    // });
+
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);

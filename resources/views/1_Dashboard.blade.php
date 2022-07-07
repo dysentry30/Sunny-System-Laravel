@@ -90,13 +90,47 @@
                     <!--end::Toolbar-->
 
                     <!--begin::Post-->
-                    <div class="post d-flex flex-column-fluid" id="kt_post">
-                        <!--begin::Container-->
-                        <div id="kt_content_container" class="container-xxl">
-                            <img src="/media/demos/Coming-Soon-Illustration-01.svg" alt="development" class="tengah"
-                                style="width:50%;" />
+                    <!--begin::Container-->
+                    <!--begin::Card "style edited"-->
+                    <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
+
+
+                        <!--begin::Card header-->
+                        <div class="card-header border-0 pt-">
+                            <!--begin::Card title-->
+                            <div class="card-title">
+                                <!--begin::Search-->
+                                <div class="d-flex align-items-center position-relative my-1">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    <input type="text" data-kt-customer-table-filter="search"
+                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Dashboard" />
+                                </div>
+                                <!--end::Search-->
+                            </div>
+                            <!--begin::Card title-->
+
                         </div>
+                        <!--end::Card header-->
+
+
+                        <!--begin::Card body-->
+                        <div class="card-body pt-0 ">
+                            <div id="forecast-line">
+                                <!--begin::FORECAST LINE CHART-->
+                                <!--end::FORECAST LINE CHART-->
+                            </div>
+
+
+
+                        </div>
+                        <!--end::Card body-->
                     </div>
+                    <!--end::Card-->
+                    <!--end::Container-->
                     <!--end::Post-->
 
 
@@ -113,19 +147,109 @@
     <!--end::Root-->
 
 
-    <!--begin::Scrolltop-->
-    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
-        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
-        <span class="svg-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1" transform="rotate(90 13 6)" fill="black" />
-                <path
-                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-                    fill="black" />
-            </svg>
-        </span>
-        <!--end::Svg Icon-->
-    </div>
-    <!--end::Scrolltop-->
 @endsection
 {{-- End::Main --}}
+@section('js-script')
+<!--begin::CDN High Chart-->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<!--end::CDN High Chart-->
+
+<!--begin::FORECAST LINE-->
+<script>
+        Highcharts.chart('forecast-line', {
+
+        title: {
+            text: 'Forecast Line Chart'
+        },
+
+        subtitle: {
+            text: '2022'
+        },
+
+        yAxis: {
+            title: {
+                text: 'Data Forecast (Dalam Jutaan)'
+            }
+        },
+
+        xAxis: {
+            categories:[
+                "Januari",
+                "Februari",
+                "Maret",
+                "April",
+                "Mei",
+                "Juni",
+                "Juli",
+                "Agustus",
+                "September",
+                "oktober",
+                "November",
+                "Desember",
+            ],
+            // accessibility: {
+            //     rangeDescription: 'Range: 2010 to 2017'
+            // }
+        },
+
+        legend: {
+            // layout: 'vertical',
+            // align: 'right',
+            // verticalAlign: 'middle'
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
+        },
+
+        plotOptions: {
+            series: {
+                allowPointSelect: true
+            //     label: {
+            //         connectorAllowed: false
+            //     },
+            //     pointStart: 2021
+            }
+        },
+
+        series: [
+        {
+            name: 'Nilai OK',
+            data: [43934000, 52503000, 57177000, 69658000, 97031000, 119931000, 137133000, 154175000, 230185000, 243477000, 321457000, 393387000]
+        }, 
+        {
+            name: 'Forecast',
+            data: [24916000, 54064000, 89742000, 99851000, 112490000, 138121000, 180282000, 238121000, 301434000, 381434000, 401434000, 501434000]
+        }, 
+        {
+            name: 'Nilai Realisasi',
+            data: [11744000, 17722000, 16005000, 19771000, 20185000, 24377000, 32147000, 39387000, 69771000, 90185000, 124377000, 232147000]
+        // }, 
+        // {
+        //     name: 'Project Development',
+        //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+        // }, 
+        // {
+        //     name: 'Other',
+        //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+
+        });
+        
+</script>
+<!--end::FORECAST LINE-->
+@endsection
