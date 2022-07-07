@@ -331,8 +331,17 @@ class ProyekController extends Controller
         $kodeProyek = $request->kode_proyek;
         // dd($kodeProyek);
         $proyekStage = Proyek::find($kodeProyek);
+        if(!$request->ajax()) {
+            $data = $request->all();
+            // Check kalo variable di bawah ini ada
+            if(isset($data["stage-menang"])) {
+                $request->stage = 6;
+            } 
+            elseif(isset($data["stage-kalah"])) {
+                $request->stage = 7;
+            }
+        }
         $proyekStage->stage = $request->stage;
-        // dd($proyekStage->stage);
         
         $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
         if ( $teamProyek != null ){
@@ -347,17 +356,28 @@ class ProyekController extends Controller
         $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
         if ( $proyekBerjalans == null ){
             $proyekStage->save();
-            return response()->json([
-                "status" => "success",
-                "link" => true,
-            ]);
+            if($request->ajax()) {
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
+            }
+            Alert::success("Success", "Stage berhasil diperbarui");
+            return back();
         } else {
             $proyekBerjalans->stage = $request->stage;
             $proyekBerjalans->save();
             $proyekStage->save();
-            return response()->json([
-                "status" => "success",
-                "link" => true,
-            ]);}
+            if($request->ajax()) {
+                return response()->json([
+                    "status" => "success",
+                    "link" => true,
+                ]);
+            }
+            Alert::success("Success", "Stage berhasil diperbarui");
+            return back();
+        }
+        Alert::error("Error", "Stage gagal diperbarui");
+        return back();
     }
 }

@@ -95,39 +95,62 @@
                                                     <div class="form-group">
 
                                                         <div id="stage-button" class="stage-list">
-                                                        <a href="#" class="stage-button color-is-default stage-is-done"
+                                                        <a href="#" class="stage-button stage-action color-is-default stage-is-done"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Pasar Dini
                                                         </a>
-                                                        <a href="#" class="stage-button color-is-default stage-is-not-active"
+                                                        <a href="#" class="stage-button stage-action color-is-default stage-is-not-active"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Pasar Potensial
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Prakualifikasi
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Tender Diikuti
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Perolehan
                                                         </a>
                                                         <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                            data-bs-toggle="dropdown"
+                                                            role="button"
+                                                            id="dropdownMenuButton1"
+                                                            aria-expanded="false"
                                                             style="outline: 0px; cursor: pointer;">
-                                                            Menang
+                                                            <div class="d-flex flex-row">
+                                                                <span class="text-white">Menang</span>&nbsp;&nbsp;
+                                                                <span class="" style="position: relative;top: 15%;"><i class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </div>
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                            <form action="/proyek/stage-save" method="POST">
+                                                                {{-- @csrf
+                                                                <input type="hidden" name="kode_proyek" value="{{$proyek->kode_proyek}}">
+                                                                <input type="hidden" name="stage" value="6">
+                                                                <li><button type="submit" class="dropdown-item" name="stage-menang">Menang</button></li>
+                                                                <li><button type="submit" class="dropdown-item" name="stage-kalah">Kalah</button></li> --}}
+                                                            </form>
+                                                            <form action="/proyek/stage-save" method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="kode_proyek" value="{{$proyek->kode_proyek}}">
+                                                                {{-- <input type="hidden" name="stage" value="6"> --}}
+                                                                <li><input type="submit" class="dropdown-item" name="stage-menang" value="Menang"></li>
+                                                                <li><input type="submit" class="dropdown-item" name="stage-kalah" value="Kalah"></li>
+                                                            </form>
+                                                        </ul>
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Terkontrak
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             ForeCast
                                                         </a>
-                                                        <a href="#" class="stage-button stage-is-not-active color-is-default"
+                                                        <a href="#" class="stage-button stage-action stage-is-not-active color-is-default"
                                                             style="outline: 0px; cursor: pointer;">
                                                             Approval
                                                         </a>
@@ -153,7 +176,10 @@
                 
                                                 }
                                                                
-                                                stage.addEventListener("click", async e => {
+                                            });
+                                            const stageActions = document.querySelectorAll(".stage-action");
+                                            stageActions.forEach(stageAction => {
+                                                stageAction.addEventListener("click", async e => {
                                                     e.stopPropagation();
                                                     const stage = e.target.getAttribute("stage");
                                                     const formData = new FormData();
@@ -171,7 +197,7 @@
                                                         window.location.reload();
                                                     }
                                                 });
-                                            });
+                                            })
                                         </script>
 <!--end::Header Orange-->
 

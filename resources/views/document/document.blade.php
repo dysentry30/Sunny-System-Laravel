@@ -88,6 +88,11 @@
                     data = html;
                     // document.getElementById("A").remove();
                 }).catch(() => {
+                    // html = `
+                    // <div id="A" style="background-color: transparent; min-height: 1000px; width: 100%; padding-top: 20px; overflow: auto;">
+                    
+                    // </div>
+                    // `;
                     document.querySelector(".fr-view").innerHTML = file.result;
 
                 });
