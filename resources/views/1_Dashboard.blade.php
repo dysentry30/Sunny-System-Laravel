@@ -37,52 +37,52 @@
                             </div>
                             <!--end::Page title-->
                             <!--begin::Actions-->
-                            <div class="d-flex align-items-center py-1">
+                                {{-- <div class="d-flex align-items-center py-1">
 
-                                <!--begin::Button-->
-                                <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button"
-                                    style="background-color:#008CB4; padding: 6px">
-                                    New</a>
-                                <!--end::Button-->
+                                    <!--begin::Button-->
+                                    <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button"
+                                        style="background-color:#008CB4; padding: 6px">
+                                        New</a>
+                                    <!--end::Button-->
 
-                                <!--begin::Wrapper-->
-                                <div class="me-4" style="margin-left:10px;">
-                                    <!--begin::Menu-->
-                                    <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                        <i class="bi bi-folder2-open"></i>Action</a>
-                                    <!--begin::Menu 1-->
-                                    <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-                                        <!--begin::Header-->
-                                        <div class="px-7 py-5">
-                                            <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                    <!--begin::Wrapper-->
+                                    <div class="me-4" style="margin-left:10px;">
+                                        <!--begin::Menu-->
+                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                            <i class="bi bi-folder2-open"></i>Action</a>
+                                        <!--begin::Menu 1-->
+                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                            <!--begin::Header-->
+                                            <div class="px-7 py-5">
+                                                <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
+                                            </div>
+                                            <!--end::Header-->
+                                            <!--begin::Menu separator-->
+                                            <div class="separator border-gray-200"></div>
+                                            <!--end::Menu separator-->
+                                            <!--begin::Form-->
+                                            <div class="">
+                                                <!--begin::Item-->
+                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
+                                                </button>
+                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
+                                                </button>
+                                                <!--end::Item-->
+                                            </div>
+                                            <!--end::Form-->
                                         </div>
-                                        <!--end::Header-->
-                                        <!--begin::Menu separator-->
-                                        <div class="separator border-gray-200"></div>
-                                        <!--end::Menu separator-->
-                                        <!--begin::Form-->
-                                        <div class="">
-                                            <!--begin::Item-->
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                            </button>
-                                            <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
-                                                <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
-                                            </button>
-                                            <!--end::Item-->
-                                        </div>
-                                        <!--end::Form-->
+                                        <!--end::Menu 1-->
+                                        <!--end::Menu-->
                                     </div>
-                                    <!--end::Menu 1-->
-                                    <!--end::Menu-->
-                                </div>
-                                <!--end::Wrapper-->
+                                    <!--end::Wrapper-->
 
 
-                            </div>
+                                </div> --}}
                             <!--end::Actions-->
                         </div>
                         <!--end::Container-->
@@ -300,7 +300,7 @@
 
         yAxis: {
             title: {
-                text: 'Data Forecast (Dalam Jutaan)'
+                text: ' '
             }
         },
 
@@ -376,7 +376,8 @@
 <!--end::FORECAST 3WULAN-->
 
 <!--begin::MONITORING PROYEK-->
-{{-- Highcharts.chart('monitoring-proyek', { --}}
+{{-- let arrayStage = {!! json_encode($stageProyek) !!} --}}
+{{-- console.log(arrayStage); --}}
 <script>
     Highcharts.chart('monitoring-proyek', {
         chart: {
@@ -397,10 +398,11 @@
         },
         xAxis: {
             type: 'category'
+            // categories : ["Proses","Menang","Kalah dan Cancel","Prakualifikasi"]
         },
         yAxis: {
             title: {
-                text: 'Total percent market share'
+                text: ' '
             }
 
         },
@@ -429,25 +431,25 @@
                 data: [
                     {
                         name: "Proses",
-                        y: 62,
+                        y: {{ $proses }},
                         drilldown: "Proses",
                         color: "#7cb5ec"
                     },
                     {
                         name: "Menang",
-                        y: 34,
+                        y: {{ $menang }},
                         drilldown: "Menang",
                         color: "#90ed7d"
                     },
                     {
                         name: "Kalah dan Cancel",
-                        y: 73,
+                        y: {{ $kalah }},
                         drilldown: "Kalah dan Cancel",
                         color:"#f1416c"
                     },
                     {
                         name: "Prakualifikasi",
-                        y: 58,
+                        y: {{ $prakualifikasi }},
                         drilldown: "Prakualifikasi",
                             color:"#f9A962"
                     }
