@@ -152,6 +152,28 @@
     .stage-button.stage-is-not-active.color-is-yellow:hover:after {
         border-left-color: #f4e0a4;
     }
+    
+    /* danger */
+    .stage-is-done.color-is-danger {
+        background-color: #f1416c;
+        color: #fff;
+    }
+    .stage-is-done.color-is-danger:after {
+        border-left-color: #f1416c;
+    }
+    .stage-is-before.color-is-danger {
+        background-color: #f1416c;
+        color: #fff;
+    }
+    .stage-is-before.color-is-danger:after {
+        border-left-color: #f1416c;
+    }
+    .stage-button.stage-is-not-active.color-is-danger:hover {
+        background-color: #f1416c;
+    }
+    .stage-button.stage-is-not-active.color-is-danger:hover:after {
+        border-left-color: #f1416c;
+    }
 
     /* default */
     .stage-is-done.color-is-default {

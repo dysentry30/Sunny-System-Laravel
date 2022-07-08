@@ -14,6 +14,8 @@ class DashboardController extends Controller
      */
     function index () 
     {
+        // $historyForecast = HistoryForecast::all()->toJson();
+        // dd($historyForecast);
 
         $nilaiHistoryForecast = HistoryForecast::select('nilai_forecast')->get()->toArray();
         function flatten(array $array) {
