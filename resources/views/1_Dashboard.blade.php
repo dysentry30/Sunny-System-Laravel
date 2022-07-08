@@ -123,6 +123,24 @@
                                 <!--begin::FORECAST LINE CHART-->
                                 <!--end::FORECAST LINE CHART-->
                             </div>
+                            <br><br><hr><br><br>
+
+                            <div id="forecast-3wulan">
+                                <!--begin::FORECAST 3 WULAN CHART-->
+                                <!--end::FORECAST 3 WULAN CHART-->
+                            </div>
+                            <br><br><hr><br><br>
+                            
+                            <div id="monitoring-proyek">
+                                <!--begin::MONITORING PROYEK-->
+                                <!--end::MONITORING PROYEK-->
+                            </div>
+                            <br><br><hr><br><br>
+                            
+                            <div id="container">
+                                <!--begin::MONITORING PROYEK-->
+                                <!--end::MONITORING PROYEK-->
+                            </div>
 
                         </div>
                         <!--end::Card body-->
@@ -150,42 +168,52 @@
 @section('js-script')
 <!--begin::CDN High Chart-->
 <script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/series-label.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+{{-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
 <!--end::CDN High Chart-->
 
 <!--begin::FORECAST LINE-->
 <script>
     let arrayHistoryForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
-    console.log(arrayHistoryForecast);
+    let i = arrayHistoryForecast;
+    // let per = 1; //normal
+    let per = 1000000; //jutaan
+    // let per = 1000000000; //miliaran
+    let fc1 = i[0] ;
+    let fc2 = fc1 + i[1] ;
+    let fc3 = fc2 + i[2] ;
+    let fc4 = fc3 + i[3] ;
+    let fc5 = fc4 + i[4] ;
+    let fc6 = fc5 + i[5] ;
+    let fc7 = fc6 + i[6] ;
+    let fc8 = fc7 + i[7] ;
+    let fc9 = fc8 + i[8] ;
+    let fc10 = fc9 + i[9] ;
+    let fc11 = fc10 + i[10] ;
+    let fc12 = fc11 + i[11] ;
+    
         Highcharts.chart('forecast-line', {
 
         title: {
-            text: 'Forecast Line Chart'
+            text: '<b class="h1">Forecast per BULAN (Dalam Jutaan)</b>'
         },
 
-        subtitle: {
-            text: '2022'
-        },
+        // subtitle: {
+        //     text: '2022'
+        // },
 
         yAxis: {
             title: {
-                text: 'Data Forecast (Dalam Jutaan)'
+                text: ''
             }
         },
 
         xAxis: {
             categories:[
-                "Januari",
-                "Februari",
-                "Maret",
-                "April",
-                "Mei",
-                "Juni",
-                "Juli",
-                "Agustus",
-                "September",
-                "oktober",
-                "November",
-                "Desember",
+                "Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","oktober","November","Desember",
             ],
             // accessibility: {
             //     rangeDescription: 'Range: 2010 to 2017'
@@ -204,33 +232,27 @@
         plotOptions: {
             series: {
                 allowPointSelect: true
-            //     label: {
-            //         connectorAllowed: false
-            //     },
-            //     pointStart: 2021
-            }
+            },
+            // label: {
+            //     connectorAllowed: false
+            // },
+            // pointStart: 2021
         },
 
         series: [
         {
+            name: 'Forecast',
+            data: [fc1/per, fc2/per, fc3/per, fc4/per, fc5/per, fc6/per, fc7/per, fc8/per, fc9/per, fc10/per, fc11/per, fc12/per]
+        }, 
+        {
             name: 'Nilai OK',
-            data: arrayHistoryForecast
-        // }, 
-        // {
-        //     name: 'Forecast',
-        //     data: [24916000, 54064000, 89742000, 99851000, 112490000, 138121000, 180282000, 238121000, 301434000, 381434000, 401434000, 501434000]
-        // }, 
-        // {
-        //     name: 'Nilai Realisasi',
-        //     data: [11744000, 17722000, 16005000, 19771000, 20185000, 24377000, 32147000, 39387000, 69771000, 90185000, 124377000, 232147000]
-        // }, 
-        // {
-        //     name: 'Project Development',
-        //     data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-        // }, 
-        // {
-        //     name: 'Other',
-        //     data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+            data: [1491, 5406, 8974, 9985, 11249, 13812, 18028, 23812, 30143, 32143, 38143, 40143],
+            color: '#90ed7d'
+        }, 
+        {
+            name: 'Nilai Realisasi',
+            data: [1174, 1772, 1600, 1977, 3318, 3437, 4214, 5938, 8977, 11018, 22437, 29214],
+            color: '#f1416c'
         }],
 
         responsive: {
@@ -246,10 +268,233 @@
                     }
                 }
             }]
+        },
+
+        credits: {
+            enabled:false
         }
 
         });
         
 </script>
 <!--end::FORECAST LINE-->
+
+<!--begin::FORECAST 3WULAN-->
+<script>
+    let triWulanForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
+    let j = triWulanForecast;
+    let fc_3 = j[0]+j[1]+j[2] ;
+    let fc_6 = fc_3+j[3]+j[4]+j[5] ;
+    let fc_9 = fc_6+j[6]+j[7]+j[8] ;
+    let fc_12 = fc_9+j[9]+j[10]+j[11] ;
+    
+        Highcharts.chart('forecast-3wulan', {
+
+        title: {
+            text: '<b class="h1">Forecast per 3 BULAN</b>'
+        },
+
+        subtitle: {
+            text: ' '
+        },
+
+        yAxis: {
+            title: {
+                text: 'Data Forecast (Dalam Jutaan)'
+            }
+        },
+
+        xAxis: {
+            categories:[
+                "Januari-Maret",
+                "April-Juni",
+                "Juli-September",
+                "oktober-Desember",
+            ],
+            // accessibility: {
+            //     rangeDescription: 'Range: 2010 to 2017'
+            // }
+        },
+
+        legend: {
+            // layout: 'vertical',
+            // align: 'right',
+            // verticalAlign: 'middle'
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
+        },
+
+        plotOptions: {
+            series: {
+                allowPointSelect: true
+            }
+        //     label: {
+        //         connectorAllowed: false
+        //     },
+        //     pointStart: 2021
+        },
+
+        series: [
+        {
+            name: 'Forecast',
+            data: [fc_3, fc_6, fc_9, fc_12]
+        }, 
+        {
+            name: 'Nilai OK',
+            data: [6491600000, 15406400000, 49742000000, 60851000000],
+            color: '#90ed7d'
+        }, 
+        {
+            name: 'Nilai Realisasi',
+            data: [1174400000, 6772200000, 16005000000, 22077100000],
+            color: '#f1416c'
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        },
+
+        credits: {
+            enabled:false
+        },
+
+        });
+        
+</script>
+<!--end::FORECAST 3WULAN-->
+
+<!--begin::MONITORING PROYEK-->
+{{-- Highcharts.chart('monitoring-proyek', { --}}
+<script>
+    Highcharts.chart('monitoring-proyek', {
+        chart: {
+            type: 'column'
+        },
+        title: {
+            align: 'center',
+            text: '<b class="h1">Monitoring Proyek</b>'
+        },
+        subtitle: {
+                align: 'center',
+                text: ' '
+        },
+        accessibility: {
+            announceNewData: {
+                enabled: true
+            }
+        },
+        xAxis: {
+            type: 'category'
+        },
+        yAxis: {
+            title: {
+                text: 'Total percent market share'
+            }
+
+        },
+        legend: {
+            enabled: false
+        },
+        plotOptions: {
+            series: {
+                borderWidth: 0,
+                dataLabels: {
+                    enabled: true,
+                    // format: '{point.y:.1f}%'
+                }
+            }
+        },
+
+        tooltip: {
+            headerFormat:    '<span style="font-size:11px">{series.name}</span><br>',
+            // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+        },
+
+        series: [
+            {
+                name: "Proyek Stage",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "Proses",
+                        y: 62,
+                        drilldown: "Proses",
+                        color: "#7cb5ec"
+                    },
+                    {
+                        name: "Menang",
+                        y: 34,
+                        drilldown: "Menang",
+                        color: "#90ed7d"
+                    },
+                    {
+                        name: "Kalah dan Cancel",
+                        y: 73,
+                        drilldown: "Kalah dan Cancel",
+                        color:"#f1416c"
+                    },
+                    {
+                        name: "Prakualifikasi",
+                        y: 58,
+                        drilldown: "Prakualifikasi",
+                            color:"#f9A962"
+                    }
+                ]
+            }
+        ],
+        drilldown: {
+            breadcrumbs: {
+                position: {
+                    align: 'right'
+                }
+            },
+            series: [
+                {
+                    name: "Proses",
+                    id: "Proses",
+                    data: [
+                        [
+                            "v650",
+                            21
+                        ],
+                        [
+                            "v640",
+                            13
+                        ],
+                        [
+                            "v630",
+                            50
+                        ],
+                        [
+                            "v620",
+                            44
+                        ],
+                        [
+                            "v610",
+                            28
+                        ],
+                        [
+                            "v600",
+                            35
+                        ]
+                    ]
+                }
+            ]
+        }
+    });
+</script>
+<!--end::MONITORING PROYEK-->
+
 @endsection

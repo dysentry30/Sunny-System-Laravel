@@ -15,6 +15,7 @@ use App\Models\SumberDana;
 use App\Models\DraftContracts;
 use Illuminate\Database\Seeder;
 use App\Models\ContractManagements;
+use App\Models\Forecast;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
@@ -33,8 +34,8 @@ class DatabaseSeeder extends Seeder
         Customer::factory(100)->create();
         Faqs::factory(7)->create();
         ContractManagements::factory(1)->create();
-        User::factory(10)->create();
-        // Proyek::factory(8)->create();
+        User::factory(15)->create();
+        Proyek::factory(28)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.
@@ -70,7 +71,13 @@ class DatabaseSeeder extends Seeder
         ]);
         // end :: Proyek.
 
-        // begin :: Proyek.
+        // begin :: User.
+        User::create([
+            'name' => "Inter System Asia",
+            'email' => "isa@sunny.com",
+            'password' => Hash::make('password'),
+            "check_administrator" => 1,
+        ]);
         User::create([
             'name' => "Admin Sunny",
             'email' => "admin@sunny.com",
@@ -83,7 +90,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             "check_team_proyek" => 1,
         ]);
-        // end :: Proyek.
+        // end :: User.
 
 
         // begin :: Unit Kerja.
@@ -168,8 +175,8 @@ class DatabaseSeeder extends Seeder
             'nama_sumber' => "BUMN",
             'kategori' => "BUMN",
             'unique_code' => "NPWP",
-        ]);
-        SumberDana::create([
+        ],
+        [
             'nama_sumber' => "SWASTA",
             'kategori' => "LOAN",
             'unique_code' => "Bussines Permite License",
@@ -187,5 +194,68 @@ class DatabaseSeeder extends Seeder
             'referensi3' => "LPJK 6/2018",
         ]);
         // begin :: SBU.
+
+        // begin :: Forecast.
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 1000000000,
+            'month_forecast' => 1,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 1200000000,
+            'month_forecast' => 2,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 1550000000,
+            'month_forecast' => 3,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 300000000,
+            'month_forecast' => 4,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 2800000000,
+            'month_forecast' => 5,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 3250000000,
+            'month_forecast' => 6,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 3500000000,
+            'month_forecast' => 7,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 5400000000,
+            'month_forecast' => 8,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 4750000000,
+            'month_forecast' => 9,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 3150000000,
+            'month_forecast' => 10,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 6200000000,
+            'month_forecast' => 11,
+        ]);
+        Forecast::create([
+            'kode_proyek' => "FIRA001",
+            'nilai_forecast' => 4700000000,
+            'month_forecast' => 12,
+        ]);
+        // begin :: Forecast.
     }
 }

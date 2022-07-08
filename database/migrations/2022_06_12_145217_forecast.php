@@ -16,8 +16,10 @@ return new class extends Migration
         Schema::create('forecasts', function (Blueprint $table) {
             $table->id("id_forecast");
             $table->string("kode_proyek");
-            $table->integer('nilai_forecast');
+            $table->bigInteger('nilai_forecast');
             $table->mediumInteger('month_forecast');
+            $table->bigInteger('rkap_forecast')->nullable();
+            $table->bigInteger('realisasi_forecast')->nullable();
             $table->timestamps();
         });
     }
