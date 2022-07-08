@@ -25,9 +25,9 @@ use Google\Service\FactCheckTools\Resource\Claims;
 
 class ProyekController extends Controller
 {
-    public function view() 
+    public function view()
     {
-        return view ('3_Proyek', ['proyeks' => Proyek::with('UnitKerja')->get(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::get()]);
+        return view('3_Proyek', ['proyeks' => Proyek::with('UnitKerja')->get(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::get()]);
     }
 
 
@@ -39,7 +39,7 @@ class ProyekController extends Controller
 
     public function save(Request $request, Proyek $newProyek)
     {
-        $dataProyek = $request->all(); 
+        $dataProyek = $request->all();
         $proyekAll = Proyek::all();
         $unitKerja = UnitKerja::where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
@@ -67,59 +67,58 @@ class ProyekController extends Controller
             $request->old("sumber-dana");
             $request->old("tahun-perolehan");
             $request->old("bulan-pelaksanaan");
-            Session::flash('failed','Proyek gagal dibuat, Periksa kembali button "NEW" !');
-            
+            Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
         }
         $validation->validate();
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
-        $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];
-        $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
+        $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
+        $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
         $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
-        $newProyek->sumber_dana= $dataProyek["sumber-dana"];
+        $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-        $newProyek->bulan_pelaksanaan= $dataProyek["bulan-pelaksanaan"];
-        $newProyek->stage= "1";
-        
-        $newProyek->dop= $unitKerja->dop;
-        $newProyek->company= $unitKerja->company;
+        $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->stage = "1";
+
+        $newProyek->dop = $unitKerja->dop;
+        $newProyek->company = $unitKerja->company;
 
         //begin::Generate Kode Proyek
-            if ($proyekAll->last() == null){
-                $no_urut = 1;
-            } else {
-                // $no_urut = count($proyekAll)+1;
-                $no_urut = (int) preg_replace("/[^0-9]/i", "", $proyekAll->last()->kode_proyek)+1;
-            }
+        if ($proyekAll->last() == null) {
+            $no_urut = 1;
+        } else {
+            // $no_urut = count($proyekAll)+1;
+            $no_urut = (int) preg_replace("/[^0-9]/i", "", $proyekAll->last()->kode_proyek) + 1;
+        }
 
-            // dd($no_urut);
-            
-            $unit_kerja = $dataProyek["unit-kerja"];
-            $jenis_proyek = $dataProyek["jenis-proyek"];
-            $tipe_proyek = $dataProyek["tipe-proyek"];
-            $tahun = $dataProyek["tahun-perolehan"];
-            
-                // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
-                $kode_tahun = $tahun == 2021 ? "A" : "O";
-                
-                // Untuk membuat 3 digit nomor urut terakhir
-                $no_urut = str_pad(strval($no_urut),3,0, STR_PAD_LEFT);
-                
-                // Menggabungkan semua kode beserta nomor urut
-                $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
+        // dd($no_urut);
 
-                $newProyek->kode_proyek = $kode_proyek;
+        $unit_kerja = $dataProyek["unit-kerja"];
+        $jenis_proyek = $dataProyek["jenis-proyek"];
+        $tipe_proyek = $dataProyek["tipe-proyek"];
+        $tahun = $dataProyek["tahun-perolehan"];
+
+        // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
+        $kode_tahun = $tahun == 2021 ? "A" : "O";
+
+        // Untuk membuat 3 digit nomor urut terakhir
+        $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
+
+        // Menggabungkan semua kode beserta nomor urut
+        $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
+
+        $newProyek->kode_proyek = $kode_proyek;
         //end::Generate Kode Proyek
 
-        Alert::success('Success', $dataProyek["nama-proyek"].", Berhasil Ditambahkan");
-        
+        Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
+
         if ($newProyek->save()) {
-            return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"].", Berhasil dibuat"));
+            return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
-    
-    
+
+
     public function  edit($kode_proyek)
     {
         $proyek = Proyek::find($kode_proyek);
@@ -128,28 +127,31 @@ class ProyekController extends Controller
 
         // dd($kode_proyek);
         // dd($proyek); //tes log hasil 
-        return view('Proyek/viewProyek', 
-        ["proyek" => $proyek, "proyeks" => Proyek::all()], [
-        'companies' => Company::all(),
-        'sumberdanas' => SumberDana::all(),
-        'dops' => Dop::all(),
-        'sbus' => Sbu::all(),
-        'unitkerjas' => UnitKerja::all(),
-        'customers' => Customer::all(),
-        'users' => User::all(),
-        'teams' => $teamProyek,
-        'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
-        "historyForecast" => $historyForecast]
+        return view(
+            'Proyek/viewProyek',
+            ["proyek" => $proyek, "proyeks" => Proyek::all()],
+            [
+                'companies' => Company::all(),
+                'sumberdanas' => SumberDana::all(),
+                'dops' => Dop::all(),
+                'sbus' => Sbu::all(),
+                'unitkerjas' => UnitKerja::all(),
+                'customers' => Customer::all(),
+                'users' => User::all(),
+                'teams' => $teamProyek,
+                'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
+                "historyForecast" => $historyForecast
+            ]
         );
     }
 
     public function update(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)
     {
-        $dataProyek = $request->all(); 
+        $dataProyek = $request->all();
         // dd($dataProyek); //console log hasil $dataProyek
-        $newProyek=Proyek::find($dataProyek["kode-proyek"]);
+        $newProyek = Proyek::find($dataProyek["kode-proyek"]);
         // $allProyek = Proyek::all();
-        
+
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
@@ -159,7 +161,7 @@ class ProyekController extends Controller
         // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
         // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
 
-        $newProyek->pic= $dataProyek["pic"];
+        $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         $newProyek->nilai_valas_review = $dataProyek["nilai-valas-review"];
@@ -173,7 +175,7 @@ class ProyekController extends Controller
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan-awal"];
         $newProyek->nilaiok_awal = $dataProyek["nilaiok-awal"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
-        
+
         // form PASAR POTENSIAL
         $newProyek->negara = $dataProyek["negara"];
         $newProyek->sbu = $dataProyek["sbu"];
@@ -184,7 +186,7 @@ class ProyekController extends Controller
         // $newProyek->dop = $dataProyek["dop"];
         // $newProyek->company = $dataProyek["company"];
         $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
-        
+
         // form PASAR PRAKUALIFIKASI
         $newProyek->jadwal_pq = $dataProyek["jadwal-pq"];
         $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
@@ -198,14 +200,14 @@ class ProyekController extends Controller
         // }
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
         $newProyek->laporan_prakualifikasi = $dataProyek["laporan-prakualifikasi"];
-        
+
         // form TENDER DIIKUTI
         $newProyek->jadwal_tender = $dataProyek["jadwal-tender"];
         $newProyek->lokasi_tender = $dataProyek["lokasi-tender"];
         $newProyek->penawaran_tender = $dataProyek["penawaran-tender"];
         $newProyek->hps_tender = $dataProyek["hps-tender"];
         $newProyek->laporan_tender = $dataProyek["laporan-tender"];
-        
+
         // form PEROLEHAN
         $newProyek->biaya_praproyek = $dataProyek["biaya-praproyek"];
         $newProyek->penawaran_perolehan = $dataProyek["penawaran-perolehan"];
@@ -213,12 +215,12 @@ class ProyekController extends Controller
         $newProyek->oe_wika = $dataProyek["oe-wika"];
         $newProyek->peringkat_wika = $dataProyek["peringkat-wika"];
         $newProyek->laporan_perolehan = $dataProyek["laporan-perolehan"];
-        
+
         // form MENANG
         $newProyek->aspek_pesaing = $dataProyek["aspek-pesaing"];
         $newProyek->aspek_non_pesaing = $dataProyek["aspek-non-pesaing"];
         $newProyek->saran_perbaikan = $dataProyek["saran-perbaikan"];
-        
+
         // form TERKONTRAK
         $newProyek->nospk_external = $dataProyek["nospk-external"];
         $newProyek->jenis_proyek_terkontrak = $dataProyek["jenis-proyek-terkontrak"];
@@ -238,24 +240,24 @@ class ProyekController extends Controller
         $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
         $newProyek->tanggal_selesai_terkontrak = $dataProyek["tanggal-selesai-kontrak"];
         $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
-        
+
         $idCustomer = $dataProyek["customer"];
 
         // Form update Customer dan auto Proyek Berjalan
         // $newProyek->customer= $dataProyek["customer"];
 
         Alert::success('Success', "Edit Berhasil")->autoClose(3000);
-        
-        if ($idCustomer != null){
-            
+
+        if ($idCustomer != null) {
+
             // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
             // $customer = Customer::find($idCustomer);
-            
-            
+
+
             $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
             // dd($customerHistory);
-            
-            if($customerHistory == null){
+
+            if ($customerHistory == null) {
 
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
@@ -266,41 +268,41 @@ class ProyekController extends Controller
                 $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
                 $customerHistory->nilaiok_proyek = $newProyek->nilai_rkap;
                 $customerHistory->stage = $newProyek->stage;
-                
-            }else{
+            } else {
                 $customerHistory->id_customer = $idCustomer;
             }
-            
+
             $newProyek->save();
             $customerHistory->save();
             return redirect()->back()->with("success", "Success,");
-            
-        }else{
+        } else {
             $newProyek->save();
             return redirect()->back()->with("success", "Success,");
         }
     }
-    
+
     public function delete($kode_proyek)
     {
         $deleteProyek = Proyek::find($kode_proyek);
-        
+
         $proyekBerjalan = ProyekBerjalans::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get()->first();
         $contractManagement = ContractManagements::where('project_id', "=", $deleteProyek->kode_proyek)->get()->first();
         $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
-        $claimManagement->each(function ($claim) { $claim->delete(); });
-        
-        Alert::success('Delete', $deleteProyek->nama_proyek.", Berhasil Dihapus");
-        
-        if ($proyekBerjalan == null && $contractManagement == null){
+        $claimManagement->each(function ($claim) {
+            $claim->delete();
+        });
+
+        Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
+
+        if ($proyekBerjalan == null && $contractManagement == null) {
             $deleteProyek->delete();
-        }elseif($proyekBerjalan == null){
+        } elseif ($proyekBerjalan == null) {
             $deleteProyek->delete();
             $contractManagement->delete();
-        }elseif($contractManagement ==  null){
+        } elseif ($contractManagement ==  null) {
             $deleteProyek->delete();
             $proyekBerjalan->delete();
-        }else{
+        } else {
             $deleteProyek->delete();
             $proyekBerjalan->delete();
             $contractManagement->delete();
@@ -308,55 +310,58 @@ class ProyekController extends Controller
 
         // dd($proyekBerjalan); 
         // dd($deleteProyek->kode_proyek);
-        
+
 
         return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");
     }
 
-    public function assignTeam (Request $request, TeamProyek $newTeam, Proyek $proyek) 
+    public function assignTeam(Request $request, TeamProyek $newTeam, Proyek $proyek)
     {
         $assignTeam = $request->all();
         // $proyek=Proyek::find($proyek["kode-proyek"]);
         // dd($proyek);
         $newTeam->id_user = $assignTeam["nama-team"];
         $newTeam->kode_proyek = $assignTeam["assign-kode-proyek"];
-        
+
         $newTeam->save();
-        return redirect()->back();       
+        return redirect()->back();
     }
 
 
-    public function stage (Request $request) 
+    public function stage(Request $request)
     {
         $kodeProyek = $request->kode_proyek;
-        // dd($kodeProyek);
         $proyekStage = Proyek::find($kodeProyek);
-        if(!$request->ajax()) {
+        if (!$request->is_ajax) {
             $data = $request->all();
             // Check kalo variable di bawah ini ada
-            if(isset($data["stage-menang"])) {
+            if (!empty($data["stage-menang"]) && $data["stage-menang"] == "Menang") {
+                // dd($request->all());
                 $request->stage = 6;
-            } 
-            elseif(isset($data["stage-kalah"])) {
+            } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
                 $request->stage = 7;
+            } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
+                $request->stage = 8;
+            } elseif (!empty($data["stage-terendah"]) && $data["stage-terendah"] == "Terendah") {
+                $request->stage = 9;
             }
         }
         $proyekStage->stage = $request->stage;
-        
+
         $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
-        if ( $teamProyek != null ){
-            $teamProyek->each(function ($stage) use ($proyekStage){
-                if ($proyekStage->stage > 8){
-                    $stage->proyek_selesai = true;    
+        if ($teamProyek != null) {
+            $teamProyek->each(function ($stage) use ($proyekStage) {
+                if ($proyekStage->stage > 8) {
+                    $stage->proyek_selesai = true;
                     $stage->save();
                 }
             });
-        } 
+        }
 
         $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
-        if ( $proyekBerjalans == null ){
+        if ($proyekBerjalans == null) {
             $proyekStage->save();
-            if($request->ajax()) {
+            if ($request->is_ajax) {
                 return response()->json([
                     "status" => "success",
                     "link" => true,
@@ -368,7 +373,7 @@ class ProyekController extends Controller
             $proyekBerjalans->stage = $request->stage;
             $proyekBerjalans->save();
             $proyekStage->save();
-            if($request->ajax()) {
+            if ($request->is_ajax) {
                 return response()->json([
                     "status" => "success",
                     "link" => true,
