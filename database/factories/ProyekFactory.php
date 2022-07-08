@@ -16,15 +16,24 @@ class ProyekFactory extends Factory
      */
     public function definition()
     {
+        $unit_kerja = $this->faker->randomElement(["F", "U", "G", "H", "L", "O"]);
+        $jenis_proyek = $this->faker->randomElement(["I", "E"]);
+        $tipe_proyek = $this->faker->randomElement(["R", "P"]);
+        $tahun_perolehan = $this->faker->randomElement(["2020", "2021", "2022", "2023"]);
+        $no_urut = str_pad(strval(random_int(1, 99)), 3, 0, STR_PAD_LEFT);
+        $kode_tahun = $tahun_perolehan ? "A" : "O";
+        $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
+
         return [
             "nama_proyek" => $this->faker->company(9),
-            "kode_proyek" => $this->faker->randomElement(["FIRA000", "FERA000", "FIPA000", "FEPA000", "LIRA000", "LERA000", "LIPA000", "LEPA000", "UIRA000", "UERA000", "UIPA000", "UEPA000", "HIRA000", "HERA000", "HIPA000", "HEPA000", "GIRA000", "GERA000", "GIPA000", "GEPA000"]), 
-            "unit_kerja" => $this->faker->randomElement(["F", "u", "G", "H", "L", "O"]),
-            "tahun_perolehan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]), 
+            // "kode_proyek" => $this->faker->randomElement(["FIRA000", "FERA000", "FIPA000", "FEPA000", "LIRA000", "LERA000", "LIPA000", "LEPA000", "UIRA000", "UERA000", "UIPA000", "UEPA000", "HIRA000", "HERA000", "HIPA000", "HEPA000", "GIRA000", "GERA000", "GIPA000", "GEPA000"]), 
+            "kode_proyek" => $kode_proyek,
+            "unit_kerja" => $unit_kerja,
+            "tahun_perolehan" => $tahun_perolehan,
             "sumber_dana" => $this->faker->randomElement(["Sendiri", "Pinjam", "Sharing"]),
-            "jenis_proyek" => $this->faker->randomElement(["I", "E"]),
-            "tipe_proyek" => $this->faker->randomElement(["R", "P"]),
-            "stage" => $this->faker->randomElement([1, 2, 3, 4]),
+            "jenis_proyek" => $jenis_proyek,
+            "tipe_proyek" => $tipe_proyek,
+            "stage" => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
             // "tahun_pelaksanaan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]),
             "bulan_pelaksanaan" => $this->faker->randomElement(["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]),
             "nilai_rkap" => $this->faker->numerify('##,###,000,00'),
@@ -39,7 +48,7 @@ class ProyekFactory extends Factory
             "bulan_awal" => $this->faker->randomElement(["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]),
             "nilaiok_awal" => $this->faker->numerify('#,###,000,00'),
             "laporan_kualitatif_pasdin" => $this->faker->text(100),
-            
+
             // Pasar Potensial
             "negara" => $this->faker->country(),
             "sbu" => $this->faker->randomElement(["Ya", "Tidak"]),
@@ -50,7 +59,7 @@ class ProyekFactory extends Factory
             "dop" => $this->faker->randomElement(["Ya", "Tidak"]),
             "company" => $this->faker->company(),
             "laporan_kualitatif_paspot" => $this->faker->text(100),
-            
+
             // Pra-Kualifikasi
             "jadwal_pq" => $this->faker->date(),
             "jadwal_proyek" => $this->faker->date(),
@@ -58,14 +67,14 @@ class ProyekFactory extends Factory
             "porsi_jo" => $this->faker->numerify('## %'),
             "ketua_tender" => $this->faker->name(),
             "laporan_prakualifikasi" => $this->faker->text(100),
-            
+
             // Tender Diikuti   
             "jadwal_tender" => $this->faker->date(),
             "penawaran_tender" => $this->faker->numerify('#,###,000,00'),
             "lokasi_tender" => $this->faker->address(),
             "hps_tender" => $this->faker->numerify('#,###,000,00'),
             "laporan_tender" => $this->faker->text(100),
-            
+
             // Perolehan   
             "biaya_praproyek" => $this->faker->numerify('#,###,000,00'),
             "penawaran_perolehan" => $this->faker->numerify('#,###,000,00'),
@@ -73,12 +82,12 @@ class ProyekFactory extends Factory
             "oe_wika" => $this->faker->numerify('## %'),
             "peringkat_wika" => $this->faker->randomDigit(),
             "laporan_perolehan" => $this->faker->text(100),
-            
+
             // Menang
             "aspek_pesaing" => $this->faker->name(),
             "aspek_non_pesaing" => $this->faker->name(),
             "saran_perbaikan" => $this->faker->text(175),
-            
+
             // Terkontrak
             "nospk_external" => $this->faker->numerify('#/##/2022-#'),
             "tglspk_internal" => $this->faker->date(),
@@ -98,7 +107,7 @@ class ProyekFactory extends Factory
             "klasifikasi_terkontrak" => $this->faker->randomElement(["Ter-Klasifikasi", "Tidak Ter-Klasifikasi"]),
             "tanggal_selesai_terkontrak" => $this->faker->date(),
             "jenis_terkontrak" => $this->faker->randomElement(["Internal", "External"]),
-            
+
         ];
     }
 }
