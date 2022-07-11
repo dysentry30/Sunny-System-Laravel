@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Faqs::factory(7)->create();
         ContractManagements::factory(1)->create();
         User::factory(15)->create();
-        Proyek::factory(28)->create();
+        Proyek::factory(3)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.

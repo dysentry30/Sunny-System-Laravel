@@ -300,6 +300,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $duplicateRecord = $oldRecord->replicate();
                 $duplicateRecord->setTable("history_forecast");
                 $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
+                $duplicateRecord->rkap_forecast = $data["rkap_forecast"];
+                $duplicateRecord->realisasi_forecast = $data["realisasi_forecast"];
                 $duplicateRecord->save();
             });
         } else {

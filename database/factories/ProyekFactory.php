@@ -94,7 +94,7 @@ class ProyekFactory extends Factory
             "jenis_proyek_terkontrak" => $this->faker->randomElement(["Internal", "External"]),
             "porsijo_terkontrak" => $this->faker->numerify('##'),
             "tahun_ri_perolehan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]),
-            "bulan_ri_perolehan" => $this->faker->month(),
+            "bulan_ri_perolehan" => $this->faker->month,
             "nilaiok_terkontrak" => $this->faker->numerify('#,###,000,00'),
             "matauang_terkontrak" => $this->faker->randomElement(["IDR", "USD", "YUAN"]),
             "nomor_terkontrak" => $this->faker->numerify('#/##/2022-#'),

@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 @php
-$arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'April', '5' => 'Mei', '6' => 'Juni', '7' => 'Juli', '8' => 'Agustus', '9' => 'September', '10' => 'Oktober', '11' => 'November', '12' => 'Desember'];
+$arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
 @endphp
 
 {{-- Begin::Title --}}
@@ -656,7 +656,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                                                             <!--begin::Child=-->
                                                                                             <p class="ms-12">
-                                                                                                {{ $proyek->nama_proyek }}
+                                                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
                                                                                             </p>
                                                                                             <!--end::Child=-->
                                                                                         </td>
@@ -671,6 +671,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                 @if ($forecast->month_forecast == $i + 1)
                                                                                                     @php
                                                                                                         $total_forecast += (int) $forecast->nilai_forecast;
+
                                                                                                     @endphp
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
@@ -691,10 +692,10 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                             placeholder=". . . , -" />
                                                                                                     </td>
                                                                                                     @php
-                                                                                                        $getBulanRIPerolehanNumberOfMonth = array_search($proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? 0;
+                                                                                                        $getBulanRIPerolehanNumberOfMonth = array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? "-";
                                                                                                     @endphp
-                                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -731,7 +732,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                     value=""
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                     {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -1439,7 +1440,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                             value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                             placeholder=". . . , -" />
                                                                                                     </td>
-                                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -1479,7 +1480,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                     value=""
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-internal="{{ $month_counter }}">
                                                                                                     {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -2150,7 +2151,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         @endphp
                                                                                     @endif
                                                                                     @php
-                                                                                        if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
+                                                                                        if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                             $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         }
                                                                                         
@@ -2181,7 +2182,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2220,7 +2221,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                         <td
                                                                                             data-column-realisasi-sd="{{ $month_counter }}">
                                                                                             {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2891,7 +2892,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                         @endphp
                                                                                     @endif
                                                                                     @php
-                                                                                        if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
+                                                                                        if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                             $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         }
                                                                                         
@@ -2922,7 +2923,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2962,7 +2963,7 @@ $arrNamaBulan = ['1' => 'Januari', '2' => 'Februari', '3' => 'Maret', '4' => 'Ap
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= array_search((int) $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                         <td
                                                                                             data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                             {{ number_format($total_realisasi, 0, ',', ',') }}
