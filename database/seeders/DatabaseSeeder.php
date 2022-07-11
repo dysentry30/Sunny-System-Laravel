@@ -31,11 +31,11 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // ContractManagements::factory(5)->create();
         Pasals::factory(5)->create();
-        Customer::factory(100)->create();
+        Customer::factory(50)->create();
         Faqs::factory(7)->create();
         ContractManagements::factory(1)->create();
         User::factory(15)->create();
-        Proyek::factory(3)->create();
+        Proyek::factory(8)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.

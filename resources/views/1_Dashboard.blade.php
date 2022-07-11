@@ -137,9 +137,9 @@
                             </div>
                             <br><br><hr><br><br>
                             
-                            <div id="container">
-                                <!--begin::MONITORING PROYEK-->
-                                <!--end::MONITORING PROYEK-->
+                            <div id="marketing-pipeline">
+                                <!--begin::MARKETING PIPELINE-->
+                                <!--end::MARKETING PIPELINE-->
                             </div>
 
                         </div>
@@ -172,30 +172,30 @@
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-{{-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <!--end::CDN High Chart-->
 
 <!--begin::FORECAST LINE-->
+{{-- let arrayHistoryForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
+let i = arrayHistoryForecast; --}}
 <script>
-    let arrayHistoryForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
-    let i = arrayHistoryForecast;
     // let per = 1; //normal
     let per = 1000000; //jutaan
-    // let per = 1000000000; //miliaran
-    let fc1 = i[0] ;
-    let fc2 = fc1 + i[1] ;
-    let fc3 = fc2 + i[2] ;
-    let fc4 = fc3 + i[3] ;
-    let fc5 = fc4 + i[4] ;
-    let fc6 = fc5 + i[5] ;
-    let fc7 = fc6 + i[6] ;
-    let fc8 = fc7 + i[7] ;
-    let fc9 = fc8 + i[8] ;
-    let fc10 = fc9 + i[9] ;
-    let fc11 = fc10 + i[10] ;
-    let fc12 = fc11 + i[11] ;
+    let fc1 = {!! $fc1 !!} ;
+    let fc2 = fc1 + {!! $fc2 !!} ;
+    let fc3 = fc2 + {!! $fc3 !!} ;
+    let fc4 = fc3 + {!! $fc4 !!} ;
+    let fc5 = fc4 + {!! $fc5 !!} ;
+    let fc6 = fc5 + {!! $fc6 !!} ;
+    let fc7 = fc6 + {!! $fc7 !!} ;
+    let fc8 = fc7 + {!! $fc8 !!} ;
+    let fc9 = fc8 + {!! $fc9 !!} ;
+    let fc10 = fc9 + {!! $fc10 !!} ;
+    let fc11 = fc10 + {!! $fc11 !!} ;
+    let fc12 = fc11 + {!! $fc12 !!} ;
     
-        Highcharts.chart('forecast-line', {
+    Highcharts.chart('forecast-line', {
 
         title: {
             text: '<b class="h1">Forecast per BULAN (Dalam Jutaan)</b>'
@@ -220,6 +220,7 @@
             // }
         },
 
+        colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
         legend: {
             // layout: 'vertical',
             // align: 'right',
@@ -242,17 +243,66 @@
         series: [
         {
             name: 'Forecast',
-            data: [fc1/per, fc2/per, fc3/per, fc4/per, fc5/per, fc6/per, fc7/per, fc8/per, fc9/per, fc10/per, fc11/per, fc12/per]
+            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
+            data: [
+                    {
+                        y: fc1/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc2/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc3/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc4/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc5/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc6/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc7/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc8/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc9/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc10/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc11/per,
+                        drilldown: "Forecast"
+                    },
+                    {
+                        y: fc12/per,
+                        drilldown: "Forecast"
+                    },
+                    
+                ]
         }, 
         {
             name: 'Nilai OK',
             data: [1491, 5406, 8974, 9985, 11249, 13812, 18028, 23812, 30143, 32143, 38143, 40143],
-            color: '#90ed7d'
         }, 
         {
             name: 'Nilai Realisasi',
             data: [1174, 1772, 1600, 1977, 3318, 3437, 4214, 5938, 8977, 11018, 22437, 29214],
-            color: '#f1416c'
         }],
 
         responsive: {
@@ -272,6 +322,59 @@
 
         credits: {
             enabled:false
+        },
+        drilldown: {
+            breadcrumbs: {
+                // format: "{level.name}",
+                position: {
+                    align: 'right',
+                }
+            },
+            series: [
+                {
+                    name: "Forecast",
+                    id: "Forecast",
+                    type: 'column',
+                    data: [
+                        [
+                            21
+                        ],
+                        [
+                            13
+                        ],
+                        [
+                            50
+                        ],
+                        [
+                            44
+                        ],
+                        [
+                            28
+                        ],
+                        [
+                            35
+                        ],
+                        [
+                            21
+                        ],
+                        [
+                            13
+                        ],
+                        [
+                            50
+                        ],
+                        [
+                            44
+                        ],
+                        [
+                            28
+                        ],
+                        [
+                            35
+                        ]
+                    ]
+                }
+            ]
         }
 
         });
@@ -280,13 +383,13 @@
 <!--end::FORECAST LINE-->
 
 <!--begin::FORECAST 3WULAN-->
+{{-- let triWulanForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
+let j = triWulanForecast; --}}
 <script>
-    let triWulanForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
-    let j = triWulanForecast;
-    let fc_3 = j[0]+j[1]+j[2] ;
-    let fc_6 = fc_3+j[3]+j[4]+j[5] ;
-    let fc_9 = fc_6+j[6]+j[7]+j[8] ;
-    let fc_12 = fc_9+j[9]+j[10]+j[11] ;
+    let fc_3 = {!! $fc1 + $fc2 + $fc3 !!} ;
+    let fc_6 = fc_3 + {!! $fc4 + $fc5 + $fc6 !!} ;
+    let fc_9 = fc_6 + {!! $fc7 + $fc8 + $fc9 !!} ;
+    let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ;
     
         Highcharts.chart('forecast-3wulan', {
 
@@ -316,6 +419,7 @@
             // }
         },
 
+        colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
         legend: {
             // layout: 'vertical',
             // align: 'right',
@@ -343,12 +447,10 @@
         {
             name: 'Nilai OK',
             data: [6491600000, 15406400000, 49742000000, 60851000000],
-            color: '#90ed7d'
         }, 
         {
             name: 'Nilai Realisasi',
             data: [1174400000, 6772200000, 16005000000, 22077100000],
-            color: '#f1416c'
         }],
 
         responsive: {
@@ -381,7 +483,7 @@
 <script>
     Highcharts.chart('monitoring-proyek', {
         chart: {
-            type: 'column'
+            type: 'pie'
         },
         title: {
             align: 'center',
@@ -406,6 +508,7 @@
             }
 
         },
+        colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
         legend: {
             enabled: false
         },
@@ -421,7 +524,7 @@
 
         tooltip: {
             headerFormat:    '<span style="font-size:11px">{series.name}</span><br>',
-            // pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}%</b> of total<br/>'
+            pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> Total Proyek<br/>'
         },
 
         series: [
@@ -433,39 +536,40 @@
                         name: "Proses",
                         y: {{ $proses }},
                         drilldown: "Proses",
-                        color: "#7cb5ec"
                     },
                     {
                         name: "Menang",
                         y: {{ $menang }},
                         drilldown: "Menang",
-                        color: "#90ed7d"
                     },
                     {
                         name: "Kalah dan Cancel",
                         y: {{ $kalah }},
                         drilldown: "Kalah dan Cancel",
-                        color:"#f1416c"
                     },
                     {
                         name: "Prakualifikasi",
                         y: {{ $prakualifikasi }},
                         drilldown: "Prakualifikasi",
-                            color:"#f9A962"
                     }
                 ]
             }
         ],
+        credits: {
+            enabled:false
+        },
         drilldown: {
             breadcrumbs: {
+                // format: "{level.name}",
                 position: {
-                    align: 'right'
+                    align: 'right',
                 }
             },
             series: [
                 {
                     name: "Proses",
                     id: "Proses",
+                    type: 'column',
                     data: [
                         [
                             "v650",
@@ -499,4 +603,65 @@
 </script>
 <!--end::MONITORING PROYEK-->
 
+<!--begin::MARKETING PIPELINE-->
+<script>
+    Highcharts.chart('marketing-pipeline', {
+        chart: {
+            type: 'funnel'
+        },
+        title: {
+            text: '<b class="h1">Marketing Pipeline</b>'
+        },
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    softConnector: true
+                },
+                center: ['35%', '50%'],
+                neckWidth: '35%',
+                neckHeight: '0%',
+                width: '45%'
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+        series: [{
+            name: 'Jml Proyek',
+            data: [
+                ['Proses Tender', {{ $prosesTender }}],
+                ['Terkontrak', {{ $terkontrak }}],
+                ['Pelaksanaan', {{ $pelaksanaan }}],
+                ['Serah Terima Pekerjaan', {{ $serahTerima }}],
+                ['Penutupan', {{ $closing }}]
+            ]
+        }],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    plotOptions: {
+                        series: {
+                            dataLabels: {
+                                inside: true
+                            },
+                            center: ['50%', '50%'],
+                            width: '100%'
+                        }
+                    }
+                }
+            }]
+        },
+        credits: {
+            enabled:false
+        },
+    });
+</script>
+<!--end::MARKETING PIPELINE-->
 @endsection
