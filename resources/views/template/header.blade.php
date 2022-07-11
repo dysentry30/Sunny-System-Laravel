@@ -201,6 +201,9 @@
                                                                 @if (str_contains($notif->message, 'ganti password'))
                                                                     <i class="bi bi-key-fill fs-2" id="icon-notif"
                                                                         style="color: rgb(223, 155, 28)"></i>
+                                                                @elseif(str_contains($notif->message, 'Lock Forecast'))
+                                                                    <i class="bi bi-lock-fill fs-2" id="icon-notif"
+                                                                        style="color: rgb(223, 155, 28)"></i>
                                                                 @endif
                                                             </span>
                                                         </div>
@@ -232,27 +235,9 @@
                                                                 @php
                                                                     $from_user = $notif->FromUser;
                                                                     $to_user = $notif->ToUser;
+                                                                    $next_user = explode(",", $notif->next_user)[0];
+
                                                                 @endphp
-                                                                <!--begin::Section-->
-                                                                <div class="d-flex align-items-center">
-                                                                    <!--begin::Symbol-->
-                                                                    <div class="symbol symbol-35px me-4">
-                                                                        <span class="symbol-label bg-light-primary">
-                                                                            <i class="bi bi-lock-fill fs-2"
-                                                                                id="icon-notif"
-                                                                                style="color: rgb(223, 155, 28)"></i>
-                                                                        </span>
-                                                                    </div>
-                                                                    <!--end::Symbol-->
-                                                                    <!--begin::Title-->
-                                                                    <div class="mb-0 me-2">
-                                                                        <a href="#"
-                                                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder"
-                                                                            id="title-notif">{{ $from_user->name }}</a>
-                                                                        <div class="text-gray-400 fs-7"
-                                                                            id="msg-notif">{!! $notif->message !!}
-                                                                        </div>
-                                                                        <br>
                                                                         <button type="button"
                                                                             class="btn btn-sm btn-light btn-active-primary"
                                                                             data-parent-item="${data.id_notification}"
@@ -260,18 +245,11 @@
                                                                         <button type="button"
                                                                             class="btn btn-sm btn-active-primary text-white"
                                                                             data-parent-item="${data.id_notification}"
-                                                                            onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]"
-                                                                            ? data.from_user.id : data.to_user.id })"
+                                                                            onclick="lockUnlockForecast(this, false, {{ $next_user}}, {{ $to_user }})"
                                                                             style="background-color: #008CB4;">Accept</button>
                                                                     </div>
                                                                     <!--end::Title-->
-
-                                                                </div>
-                                                                <!--end::Section-->
-                                                                <!--begin::Label-->
-                                                                <span class="badge badge-light fs-8"
-                                                                    id="timestamp-notif">${"Now"}</span>
-                                                                <!--end::Label-->
+                                                            
                                                             @else
                                                                 <button type="button" name="reset-password"
                                                                     class="btn btn-sm btn-secondary text-dark disabled">Request

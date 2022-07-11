@@ -72,18 +72,18 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     Bulanan</a>
 
 
-                                                <button type="button" style="background-color: #008CB4;"
+                                                <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                     onclick="lockMonthForecastBulanan(this)" class="btn btn-sm btn-active-primary mt-4">
                                                     <script>
                                                         const historyForecast = "{{ count($historyForecast) }}";
                                                     </script>
-                                                    @if (count($historyForecast) > 0)
-                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                        <i class="bi bi-lock-fill text-white"></i>
-                                                    @else
+                                                        {{-- <span class="text-white mx-2 fs-6">Lock Forecast</span>
+                                                        <i class="bi bi-lock-fill text-white"></i> --}}
                                                         <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                         <i class="bi bi-unlock-fill text-white"></i>
-                                                    @endif
+                                                    {{-- @if (count($historyForecast) > 0)
+                                                    @else
+                                                    @endif --}}
                                                 </button>
 
                                             </li>
@@ -3760,6 +3760,7 @@ fill="none">
 
     async function confirmedLock() {
         const getIconElt = monthEltBulanan.querySelector("i");
+        monthEltBulanan.setAttribute("disabled", "");
         const formData = new FormData();
         if (monthEltBulanan) {
             formData.append("_token", "{{ csrf_token() }}");
@@ -3772,8 +3773,7 @@ fill="none">
                     },
                     body: formData,
                 }).then(res => res.json());
-                getIconElt.classList.remove("bi-unlock-fill");
-                getIconElt.classList.add("bi-lock-fill");
+                
                 Swal.fire({
                     title: 'Success',
                     text: getLockRes.msg,
@@ -3791,8 +3791,8 @@ fill="none">
                     },
                     body: formData,
                 }).then(res => res.json());
-                getIconElt.classList.add("bi-unlock-fill");
-                getIconElt.classList.remove("bi-lock-fill");
+                // getIconElt.classList.add("bi-unlock-fill");
+                // getIconElt.classList.remove("bi-lock-fill");
                 Swal.fire({
                     title: 'Success',
                     text: getLockRes.msg,
@@ -3804,7 +3804,7 @@ fill="none">
                 // toastBody.innerText = getLockRes.msg;
             }
             // toastBoots.show();
-            disabledAllInputs();
+            // disabledAllInputs();
             modalBoots.hide();
         }
     }
@@ -3815,13 +3815,15 @@ fill="none">
 
     function disabledAllInputs() {
         const allInputsForecast = document.querySelectorAll("input[data-month]");
-        allInputsForecast.forEach(input => {
-            if (input.hasAttribute("disabled")) {
-                input.removeAttribute("disabled");
-            } else {
-                input.setAttribute("disabled", "");
-            }
-        });
+        if(allInputsForecast) {
+            allInputsForecast.forEach(input => {
+                if (input.hasAttribute("disabled")) {
+                    input.removeAttribute("disabled");
+                } else {
+                    input.setAttribute("disabled", "");
+                }
+            });
+        }
     }
 </script>
 @endsection

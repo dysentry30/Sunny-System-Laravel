@@ -52,6 +52,8 @@ class LockForeacastEvent implements ShouldBroadcast
         $new_notif->to_user = $this->to_user->id;
         $new_notif->message = $this->message;
         $new_notif->next_user = join(",", $this->next_user);
+        $new_notif->is_approved = $is_approved ?? false;
+        $new_notif->is_rejected = $is_rejected ?? false;
         $new_notif->save();
         // $this->dontBroadcastToCurrentUser();
     } 
