@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('addendum_contracts', function (Blueprint $table) {
             $table->bigIncrements('id_addendum');
-            $table->mediumInteger("id_contract");
+            $table->integer("id_contract");
             $table->integer("no_addendum");
             $table->mediumText("created_by");
             $table->date("start_date");
