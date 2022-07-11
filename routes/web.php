@@ -262,6 +262,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->nilai_forecast = (int) $data["nilai_forecast"];
             $forecast->month_forecast = (int) $data["forecast_month"];
+            $forecast->rkap_forecast = (int) str_replace(",", "", $proyek->nilai_rkap);
+            $forecast->realisasi_forecast = (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
                 return response()->json([
@@ -294,14 +296,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
         // $from_user = Auth::user();
-        $history_forecast = HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->get()->all();
+        $history_forecast = HistoryForecast::where("periode_prognosa", "=", (int) $data["periode_prognosa"])->get()->all();
         if(empty($history_forecast)) {
             Forecast::query()->each(function($oldRecord) use ($data){
                 $duplicateRecord = $oldRecord->replicate();
                 $duplicateRecord->setTable("history_forecast");
                 $duplicateRecord->periode_prognosa = $data["periode_prognosa"];
-                $duplicateRecord->rkap_forecast = $data["rkap_forecast"];
-                $duplicateRecord->realisasi_forecast = $data["realisasi_forecast"];
+                $duplicateRecord->rkap_forecast = $oldRecord["rkap_forecast"];
+                $duplicateRecord->realisasi_forecast = $oldRecord["realisasi_forecast"];
                 $duplicateRecord->save();
             });
         } else {
