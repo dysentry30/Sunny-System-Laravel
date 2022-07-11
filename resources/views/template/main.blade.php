@@ -723,13 +723,15 @@
         // end Reset Password Authorization
 
         // Begin Lock/Unlock Forecast
-        window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent", data => {
+        window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent",async data => {
             console.log("Data Received");
             console.log(data);
 
             const mainNotifContent = document.querySelector("#main-content-notif");
             const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
+            const lockForecastBtn = document.querySelector("#lock-forecast");
             const idUser = Number("{{ auth()->user()->id ?? 0 }}");
+            const nextUser = data.next_user.length > 1 ? JSON.stringify(data.next_user) : isNaN(Number(data.next_user[0])) ? "[]" : Number(Number(data.next_user[0]));
             // const dataDate = new Date(data.timestamp.date);
             // const nowDate = new Date();
             // const diff = Math.abs(dataDate - nowDate);
@@ -740,13 +742,58 @@
             // } else if (diff % 1000 == 0) {
             //     time = `${diff} sec`;
             // }
+
             let html = "";
-            if (data.to_user.check_administrator == isAdministrator && data.is_rejected) {
-                let actionBtn = "";
+            if (data.to_user.check_administrator == isAdministrator && data.to_user.id == idUser && (data.is_rejected || data.is_approved)) {
+                if(lockForecastBtn) {
+                    const icon = lockForecastBtn.querySelector("i");
+                    const formData = new FormData();
+                    formData.append("_token", "{{csrf_token()}}");
+                    formData.append("set-lock", true);
+                    const setLockForecastRes = await fetch("/forecast/set-lock", {
+                        method: "POST",
+                        header: {
+                            "Content-Type": "application/json",
+                        },
+                        body: formData,
+                    }).then(res => res.json());
+                    if(data.is_approved) {
+                        if(icon.classList.contains("bi-lock-fill")) {
+                            icon.classList.add("bi-unlock-fill")
+                            icon.classList.remove("bi-lock-fill")
+                        } else {
+                            icon.classList.remove("bi-unlock-fill")
+                            icon.classList.add("bi-lock-fill")
+                        }
+                    }
+                    lockForecastBtn.removeAttribute("disabled");
+                    const allInputsForecast = document.querySelectorAll("input[data-month]");
+                    if(allInputsForecast) {
+                        allInputsForecast.forEach(input => {
+                            if (input.hasAttribute("disabled")) {
+                                input.removeAttribute("disabled");
+                            } else {
+                                input.setAttribute("disabled", "");
+                            }
+                        });
+                    }
+                    Swal.fire({
+                        title: 'Success',
+                        text: setLockForecastRes.msg,
+                        icon: 'success',
+                        timer: 3000,
+                        showConfirmButton: false,
+                    });
+                }
+                let actionBtnForecast = "";
                 if (data.is_rejected) {
-                    actionBtn = `
+                    actionBtnForecast = `
                     <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock tidak disetujui</button>
                 `;
+            } else if(data.is_approved) {
+                    actionBtnForecast = `
+                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock disetujui</button>
+                `;  
                 }
 
                 html = `
@@ -768,7 +815,7 @@
                                         <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
                                         </div>
                                         <br>
-                                        ${actionBtn}
+                                        ${actionBtnForecast}
                                     </div>
                                     <!--end::Title-->
                                     
@@ -803,7 +850,7 @@
                                         </div>
                                         <br>
                                         <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, true, ${data.to_user.id}, ${data.from_user.id})">Reject</button>
-                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${JSON.stringify(data.next_user)}, ${JSON.stringify(data.next_user) != "[]" ? data.from_user.id : data.to_user.id })" style="background-color: #008CB4;">Accept</button>
+                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })" style="background-color: #008CB4;">Accept</button>
                                     </div>
                                     <!--end::Title-->
                                     
@@ -842,15 +889,6 @@
             formData.append("id_notification", idNotification);
             formData.append("from_user", fromUser);
 
-            const nextApprovalUserLock = await fetch("/user/forecast/set-lock", {
-                method: "POST",
-                header: {
-                    "Content-Type": "application/json",
-                    // "X-Socket-ID": window.Echo.socketId(),
-                },
-                body: formData,
-            });
-
             if (isRejected) {
                 actionBtn = `
                 <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${idNotification}" disabled>Lock tidak disetujui</button>
@@ -888,6 +926,15 @@
                         <!--end::Label-->
                 `;
             parentElt.innerHTML = html;
+
+            const nextApprovalUserLock = await fetch("/user/forecast/set-lock", {
+                method: "POST",
+                header: {
+                    "Content-Type": "application/json",
+                    // "X-Socket-ID": window.Echo.socketId(),
+                },
+                body: formData,
+            });
         }
         // End Lock/Unlock Forecast
     </script>
@@ -966,13 +1013,17 @@
     </script>
     <!--end::Page Custom Javascript-->
 
+    @if (!str_contains(Request::path(), "document/view"))
     {{-- End :: Notif Open --}}
-    {{-- <script>
+    <script>
         const tabNotif = document.querySelector("#notif-alert");
         const tabNotifBoots = new bootstrap.Tab(tabNotif, {});
         tabNotifBoots.show();
-    </script> --}}
+    </script>
     {{-- Begin :: Notif Open --}}
+        
+    @endif
+
     
     <!--end::Javascript-->
 
