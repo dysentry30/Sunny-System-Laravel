@@ -14,7 +14,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    function index () 
+    function index (Request $request) 
     {
         function flatten(array $array) {
             $return = array();
@@ -29,7 +29,17 @@ class DashboardController extends Controller
         // dd(HistoryForecast::select(['nilai_forecast','month_forecast','periode_prognosa'])->get());
         // $arrayHistoryForecast = flatten($nilaiHistoryForecast);
         
-        $nilaiHistoryForecast = HistoryForecast::all();
+        if (!empty($request->get("periode-prognosa")) || !empty($request->get("tahun-history"))) {
+            $nilaiHistoryForecast = HistoryForecast::where("periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
+                ->whereYear("created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get()->all();
+            $year = $request->get("tahun-history") ?? "";
+            $month = $request->get("periode-prognosa") ?? "";
+        } else {
+            $year = "";
+            $month = "";
+            $nilaiHistoryForecast = HistoryForecast::all();
+        }
+
         $fc1 = 0;
         $fc2 = 0;
         $fc3 = 0;
@@ -122,7 +132,7 @@ class DashboardController extends Controller
         };
         //end::Marketing PipeLine
 
-        return view('1_Dashboard', compact(["fc1", "fc2","fc3","fc4","fc5","fc6","fc7","fc8","fc9","fc10","fc11","fc12","proses","menang","kalah","prakualifikasi","prosesTender","terkontrak","pelaksanaan","serahTerima","closing"]));
+        return view('1_Dashboard', compact(["fc1", "fc2","fc3","fc4","fc5","fc6","fc7","fc8","fc9","fc10","fc11","fc12", "year", "month", "proses","menang","kalah","prakualifikasi","prosesTender","terkontrak","pelaksanaan","serahTerima","closing","proyeks"]));
     }
 
     /**

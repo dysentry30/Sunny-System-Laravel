@@ -59,6 +59,11 @@ class Proyek extends Model
         return $this->hasMany(Forecast::class, "kode_proyek");
     }
 
+    public function HistoryForecasts()
+    {
+        return $this->hasMany(HistoryForecast::class, "kode_proyek");
+    }
+
     public function proyekBerjalan()
     {
         return $this->hasOne(proyekBerjalan::class, "kode_proyek", "kode_proyek");
