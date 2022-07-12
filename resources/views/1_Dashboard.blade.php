@@ -38,50 +38,16 @@
                             <!--end::Page title-->
                             <!--begin::Actions-->
                                 {{-- <div class="d-flex align-items-center py-1">
-
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button"
                                         style="background-color:#008CB4; padding: 6px">
-                                        New</a>
+                                        Filter</a>
+                                    <a href="#" class="btn btn-sm btn-light btn-active-primary w-80px me-4" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button"
+                                        style="padding: 6px; margin-left:10px">
+                                        Reset</a>
                                     <!--end::Button-->
-
-                                    <!--begin::Wrapper-->
-                                    <div class="me-4" style="margin-left:10px;">
-                                        <!--begin::Menu-->
-                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
-                                            <i class="bi bi-folder2-open"></i>Action</a>
-                                        <!--begin::Menu 1-->
-                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
-                                            <!--begin::Header-->
-                                            <div class="px-7 py-5">
-                                                <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-                                            </div>
-                                            <!--end::Header-->
-                                            <!--begin::Menu separator-->
-                                            <div class="separator border-gray-200"></div>
-                                            <!--end::Menu separator-->
-                                            <!--begin::Form-->
-                                            <div class="">
-                                                <!--begin::Item-->
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                                </button>
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
-                                                </button>
-                                                <!--end::Item-->
-                                            </div>
-                                            <!--end::Form-->
-                                        </div>
-                                        <!--end::Menu 1-->
-                                        <!--end::Menu-->
-                                    </div>
-                                    <!--end::Wrapper-->
-
-
                                 </div> --}}
                             <!--end::Actions-->
                         </div>
@@ -96,33 +62,144 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 pt-2">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Dashboard" />
-                                </div>
-                                <!--end::Search-->
+                                <form action="/dashboard" class="d-flex flex-row w-600px" method="get">
+                                    {{-- Begin:: Select Options --}}
+                                    <select id="periode-prognosa" name="periode-prognosa" class="form-select form-select-solid select2-hidden-accessible w-200px" style="margin-right: 2rem;" data-control="select2" data-hide-search="true" data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$month == "" ? "selected": ""}}></option>
+                                        <option value="1" {{$month == 1 ? "selected": ""}}>Januari
+                                        </option>
+                                        <option value="2" {{$month == 2 ? "selected": ""}}>Februari
+                                        </option>
+                                        <option value="3" {{$month == 3 ? "selected": ""}}>Maret</option>
+                                        <option value="4" {{$month == 4 ? "selected": ""}}>April</option>
+                                        <option value="5" {{$month == 5 ? "selected": ""}}>Mei</option>
+                                        <option value="6" {{$month == 6 ? "selected": ""}}>Juni</option>
+                                        <option value="7" {{$month == 7 ? "selected": ""}}>Juli</option>
+                                        <option value="8" {{$month == 8 ? "selected": ""}}>Agustus
+                                        </option>
+                                        <option value="9" {{$month == 9 ? "selected": ""}}>September
+                                        </option>
+                                        <option value="10" {{$month == 10 ? "selected": ""}}>Oktober
+                                        </option>
+                                        <option value="11" {{$month == 11 ? "selected": ""}}>November
+                                        </option>
+                                        <option value="12" {{$month == 12 ? "selected": ""}}>Desember
+                                        </option>
+                                    </select>
+                                    {{-- End:: Select Options --}}
+                                    
+                                    {{-- Begin:: Select Options --}}
+                                    <select id="tahun-history" name="tahun-history" class="form-select form-select-solid select2-hidden-accessible w-200px mx-2" data-control="select2" data-hide-search="true" data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                        <option {{$year == "" ? "selected": ""}}></option>
+                                        <option value="2021" {{$year == 2021 ? "selected": ""}}>2021
+                                        </option>
+                                        <option value="2022" {{$year == 2022 ? "selected": ""}}>2022
+                                        </option>
+                                        <option value="2023" {{$year == 2023 ? "selected": ""}}>2023</option>
+                                        <option value="2024" {{$year == 2024 ? "selected": ""}}>2024</option>
+                                        <option value="2025" {{$year == 2025 ? "selected": ""}}>2025</option>
+                                        <option value="2026" {{$year == 2026 ? "selected": ""}}>2026</option>
+                                        <option value="2027" {{$year == 2027 ? "selected": ""}}>2027</option>
+                                        <option value="2028" {{$year == 2028 ? "selected": ""}}>2028
+                                        </option>
+                                        <option value="2029" {{$year == 2029 ? "selected": ""}}>2029
+                                        </option>
+                                        <option value="2030" {{$year == 2030 ? "selected": ""}}>2030
+                                        </option>
+                                        <option value="2031" {{$year == 2031 ? "selected": ""}}>2031
+                                        </option>
+                                        <option value="2032" {{$year == 2032 ? "selected": ""}}>2032
+                                        </option>
+                                    </select>
+                                    {{-- End:: Select Options --}}
+
+                                    {{-- Begin:: Action Filter --}}
+                                    <button type="submit" class="btn btn-sm btn-primary w-250px" id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                        Filter</button>
+                                    {{-- End:: Action Filter --}}
+
+                                    {{-- Begin:: Action Filter --}}
+                                    <button type="button" onclick="resetFilter()" class="btn btn-sm btn-flex btn-light text-center btn-active-primary w-200px mx-2" id="kt_toolbar_primary_button">Reset</button>
+                                    {{-- End:: Action Filter --}}
+                                </form>
                             </div>
                             <!--begin::Card title-->
 
                         </div>
+                        <hr><br>
                         <!--end::Card header-->
 
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0 ">
-                            <div id="forecast-line">
-                                <!--begin::FORECAST LINE CHART-->
-                                <!--end::FORECAST LINE CHART-->
-                            </div>
+                            <!--begin::FORECAST LINE CHART-->
+                            <figure class="highcharts-figure">
+                                <div id="forecast-line" style="display:">
+                                </div>
+                                <!--begin::Table Proyek-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="datatable" style="display:">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-auto">Kode Proyek</th>
+                                            <th class="min-w-auto">Nama Proyek</th>
+                                            <th class="min-w-auto">Unit Kerja</th>
+                                            <th class="min-w-auto">Bulan</th>
+                                            <th class="min-w-auto">Nilai Forecast</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    @foreach ($proyeks as $proyek)
+                                        <tbody class="fw-bold text-gray-600">
+                                            <tr>
+
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                        class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Email=-->
+                                                <td>
+                                                    {{ $proyek->nama_proyek }}
+                                                </td>
+                                                <!--end::Email=-->
+                                                <!--begin::Company=-->
+                                                <td>
+                                                    {{ $proyek->UnitKerja->unit_kerja }}
+                                                </td>
+                                                <!--end::Company=-->
+                                                
+                                                <!--begin::Bulan=-->
+                                                <td>
+                                                    @foreach ($proyek->HistoryForecasts as $month_forecast)
+                                                    {{ $month_forecast->month_forecast }}<br>
+                                                    @endforeach
+                                                </td>
+                                                <!--end::Bulan=-->
+                                                
+                                                <!--begin::Nilai OK=-->
+                                                <td>
+                                                    @foreach ($proyek->HistoryForecasts as $nilai_forecast)
+                                                    {{ $nilai_forecast->nilai_forecast }}<br>
+                                                    @endforeach
+                                                </td>
+                                                <!--end::Nilai OK=-->
+                                            </tr>
+                                    @endforeach
+
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                                <!--end::Table Proyek-->
+                            </figure>
+                            <!--end::FORECAST LINE CHART-->
                             <br><br><hr><br><br>
 
                             <div id="forecast-3wulan">
@@ -246,63 +323,63 @@ let i = arrayHistoryForecast; --}}
             // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
             data: [
                     {
-                        y: fc1/per,
+                        y: Math.ceil(fc1/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc2/per,
+                        y: Math.ceil(fc2/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc3/per,
+                        y: Math.ceil(fc3/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc4/per,
+                        y: Math.ceil(fc4/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc5/per,
+                        y: Math.ceil(fc5/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc6/per,
+                        y: Math.ceil(fc6/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc7/per,
+                        y: Math.ceil(fc7/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc8/per,
+                        y: Math.ceil(fc8/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc9/per,
+                        y: Math.ceil(fc9/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc10/per,
+                        y: Math.ceil(fc10/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc11/per,
+                        y: Math.ceil(fc11/per),
                         drilldown: "Forecast"
                     },
                     {
-                        y: fc12/per,
+                        y: Math.ceil(fc12/per),
                         drilldown: "Forecast"
                     },
                     
                 ]
-        }, 
-        {
-            name: 'Nilai OK',
-            data: [1491, 5406, 8974, 9985, 11249, 13812, 18028, 23812, 30143, 32143, 38143, 40143],
-        }, 
-        {
-            name: 'Nilai Realisasi',
-            data: [1174, 1772, 1600, 1977, 3318, 3437, 4214, 5938, 8977, 11018, 22437, 29214],
+        // }, 
+        // {
+        //     name: 'Nilai OK',
+        //     data: [1491, 5406, 8974, 9985, 11249, 13812, 18028, 23812, 30143, 32143, 38143, 40143],
+        // }, 
+        // {
+        //     name: 'Nilai Realisasi',
+        //     data: [1174, 1772, 1600, 1977, 3318, 3437, 4214, 5938, 8977, 11018, 22437, 29214],
         }],
 
         responsive: {
@@ -323,59 +400,59 @@ let i = arrayHistoryForecast; --}}
         credits: {
             enabled:false
         },
-        drilldown: {
-            breadcrumbs: {
-                // format: "{level.name}",
-                position: {
-                    align: 'right',
-                }
-            },
-            series: [
-                {
-                    name: "Forecast",
-                    id: "Forecast",
-                    type: 'column',
-                    data: [
-                        [
-                            21
-                        ],
-                        [
-                            13
-                        ],
-                        [
-                            50
-                        ],
-                        [
-                            44
-                        ],
-                        [
-                            28
-                        ],
-                        [
-                            35
-                        ],
-                        [
-                            21
-                        ],
-                        [
-                            13
-                        ],
-                        [
-                            50
-                        ],
-                        [
-                            44
-                        ],
-                        [
-                            28
-                        ],
-                        [
-                            35
-                        ]
-                    ]
-                }
-            ]
-        }
+            // drilldown: {
+            //     breadcrumbs: {
+            //         // format: "{level.name}",
+            //         position: {
+            //             align: 'right',
+            //         }
+            //     },
+            //     series: [
+            //         {
+            //             name: "Monthly Forecast",
+            //             id: "Forecast",
+            //             // type: 'column',
+            //             data: [
+            //                 [
+            //                     21
+            //                 ],
+            //                 [
+            //                     13
+            //                 ],
+            //                 [
+            //                     50
+            //                 ],
+            //                 [
+            //                     44
+            //                 ],
+            //                 [
+            //                     28
+            //                 ],
+            //                 [
+            //                     35
+            //                 ],
+            //                 [
+            //                     21
+            //                 ],
+            //                 [
+            //                     13
+            //                 ],
+            //                 [
+            //                     50
+            //                 ],
+            //                 [
+            //                     44
+            //                 ],
+            //                 [
+            //                     28
+            //                 ],
+            //                 [
+            //                     35
+            //                 ]
+            //             ]
+            //         }
+            //     ]
+            // }
 
         });
         
@@ -443,14 +520,14 @@ let j = triWulanForecast; --}}
         {
             name: 'Forecast',
             data: [fc_3, fc_6, fc_9, fc_12]
-        }, 
-        {
-            name: 'Nilai OK',
-            data: [6491600000, 15406400000, 49742000000, 60851000000],
-        }, 
-        {
-            name: 'Nilai Realisasi',
-            data: [1174400000, 6772200000, 16005000000, 22077100000],
+        // }, 
+        // {
+        //     name: 'Nilai OK',
+        //     data: [6491600000, 15406400000, 49742000000, 60851000000],
+        // }, 
+        // {
+        //     name: 'Nilai Realisasi',
+        //     data: [1174400000, 6772200000, 16005000000, 22077100000],
         }],
 
         responsive: {
@@ -664,4 +741,20 @@ let j = triWulanForecast; --}}
     });
 </script>
 <!--end::MARKETING PIPELINE-->
+
+<!--begin::RESET FILTER-->
+<script>
+    function resetFilter() {
+        $("#periode-prognosa").select2({
+            minimumResultsForSearch: -1
+        }).val("").trigger("change");
+        
+        $("#tahun-history").select2({
+            minimumResultsForSearch: -1
+        }).val("").trigger("change");
+
+    }
+</script>
+<!--end::RESET FILTER-->
+
 @endsection
