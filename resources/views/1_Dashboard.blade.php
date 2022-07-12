@@ -140,64 +140,33 @@
                                 <div id="forecast-line" style="display:">
                                 </div>
                                 <!--begin::Table Proyek-->
-                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="datatable" style="display:">
-                                    <!--begin::Table head-->
-                                    <thead>
-                                        <!--begin::Table row-->
-                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto">Kode Proyek</th>
-                                            <th class="min-w-auto">Nama Proyek</th>
-                                            <th class="min-w-auto">Unit Kerja</th>
-                                            <th class="min-w-auto">Bulan</th>
-                                            <th class="min-w-auto">Nilai Forecast</th>
-                                        </tr>
-                                        <!--end::Table row-->
-                                    </thead>
-                                    <!--end::Table head-->
-                                    <!--begin::Table body-->
-                                    @foreach ($proyeks as $proyek)
-                                        <tbody class="fw-bold text-gray-600">
-                                            <tr>
-
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                        class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Email=-->
-                                                <td>
-                                                    {{ $proyek->nama_proyek }}
-                                                </td>
-                                                <!--end::Email=-->
-                                                <!--begin::Company=-->
-                                                <td>
-                                                    {{ $proyek->UnitKerja->unit_kerja }}
-                                                </td>
-                                                <!--end::Company=-->
-                                                
-                                                <!--begin::Bulan=-->
-                                                <td>
-                                                    @foreach ($proyek->HistoryForecasts as $month_forecast)
-                                                    {{ $month_forecast->month_forecast }}<br>
-                                                    @endforeach
-                                                </td>
-                                                <!--end::Bulan=-->
-                                                
-                                                <!--begin::Nilai OK=-->
-                                                <td>
-                                                    @foreach ($proyek->HistoryForecasts as $nilai_forecast)
-                                                    {{ $nilai_forecast->nilai_forecast }}<br>
-                                                    @endforeach
-                                                </td>
-                                                <!--end::Nilai OK=-->
-                                            </tr>
-                                    @endforeach
-
-                                    </tbody>
-                                    <!--end::Table body-->
-                                </table>
-                                <!--end::Table Proyek-->
+                                <div class="" id="datatable" style="display:none;">
+                                    <hr>
+                                    <div class="text-center">
+                                        <h2 id="title-table">TITLE</h2>
+                                        <h4 id="total"></h4>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        {{-- <div class="d-flex flex-column">
+                                        </div> --}}
+                                        <button class="btn btn-sm btn-light btn-active-primary" onclick="hideTable()">Hide Table</button>
+                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                    </div>
+                                    <br>
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                        <!--begin::Table head-->
+                                        <thead id="table-line-head">
+                                            {{-- THead Here --}}
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-600" id="table-line-body">
+                                            {{-- Data Here --}}
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table Proyek-->
+                                </div>
                             </figure>
                             <!--end::FORECAST LINE CHART-->
                             <br><br><hr><br><br>
@@ -290,7 +259,7 @@ let i = arrayHistoryForecast; --}}
 
         xAxis: {
             categories:[
-                "Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","oktober","November","Desember",
+                "Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember",
             ],
             // accessibility: {
             //     rangeDescription: 'Range: 2010 to 2017'
@@ -757,4 +726,123 @@ let j = triWulanForecast; --}}
 </script>
 <!--end::RESET FILTER-->
 
+<!--Begin::Trigger Point Chart-->
+<script>
+    const chartPoints = document.querySelectorAll(".highcharts-point");
+    chartPoints.forEach(point => {
+        point.addEventListener("click",async function() {
+            const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.]/gi, "").split(".");
+            const month = data[0];
+            const type = data[1];
+            const filterRes = await fetch(`/dashboard/${type}/${month}`).then(res => res.json());
+            console.log(filterRes);
+            const thead = document.querySelector("#table-line-head");
+            const tbody = document.querySelector("#table-line-body");
+            const table = document.querySelector("#datatable");
+            const titleTable = table.querySelector("#title-table");
+            const total = table.querySelector("#total");
+
+            let theadHTML = '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">'+
+                '<th>Kode Proyek</th>'+
+               '<th>Nama Proyek</th>'+
+                '<th>Stage</th>'+
+                '<th>Unit Kerja</th>'+
+                '<th>Bulan</th>'+
+                '<th class="right-align">Nilai Forecast</th>'
+            '</tr>';
+
+            let tbodyHTML = ``;
+            let totalForecast = 0;
+
+            filterRes.forEach(filter => {
+                let stage = "";
+                totalForecast += filter.nilai_forecast;
+                switch (filter.stage) {
+                    case 1:
+                        stage = "Pasar Dini";
+                        break;
+                    case 2:
+                        stage = "Pasar Potensial";
+                        break;
+                    case 3:
+                        stage = "Prakualifikasi";
+                        break;
+                    case 4:
+                        stage = "Tender Diikuti";
+                        break;
+                    case 5:
+                        stage = "Perolehan";
+                        break;
+                    case 6:
+                        stage = "Menang";
+                        break;
+                    case 7:
+                        stage = "Kalah";
+                        break;
+                    case 8:
+                        stage = "Terkontrak";
+                        break;
+                    case 9:
+                        stage = "Terendah";
+                        break;
+                    case 10:
+                        stage = "Approval";
+                        break;
+                
+                    default:
+                        break;
+                }
+
+                tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${filter.month_forecast}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+            });
+            thead.innerHTML = theadHTML;
+            tbody.innerHTML = tbodyHTML;
+            titleTable.innerHTML = `Forecast - ${month}`;
+            total.innerHTML = `Total Forecast = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
+            table.style.display = "";
+        }); 
+    })
+
+    function hideTable() {
+        const table = document.querySelector("#datatable");
+        table.style.display = "none";
+    }
+</script>
+<!--End::Trigger Point Chart-->
 @endsection
