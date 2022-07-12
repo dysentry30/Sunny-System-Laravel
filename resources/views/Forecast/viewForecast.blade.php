@@ -759,6 +759,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         $total_forecast = 0;
                                                                                         $total_ok = 0;
+                                                                                        $month_counter = 1;
                                                                                     @endphp
                                                                                     <td class="pinForecast HidePin">
                                                                                         <center>
@@ -3226,9 +3227,9 @@ fill="none">
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
 
-    if (historyForecast > 0) {
-        disabledAllInputs();
-    }
+    // if (historyForecast > 0) {
+    //     disabledAllInputs();
+    // }
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat("en-US", {
@@ -3775,9 +3776,9 @@ fill="none">
                 }).then(res => res.json());
                 
                 Swal.fire({
-                    title: 'Success',
+                    title: getLockRes.status == "success" ? "Success" : "Failed",
                     text: getLockRes.msg,
-                    icon: 'success',
+                    icon: getLockRes.status == "failed" ? "error" : "success",
                     timer: 3000,
                     showConfirmButton: false,
                 });
@@ -3794,9 +3795,9 @@ fill="none">
                 // getIconElt.classList.add("bi-unlock-fill");
                 // getIconElt.classList.remove("bi-lock-fill");
                 Swal.fire({
-                    title: 'Success',
+                    title: getLockRes.status == "success" ? "Success" : "Failed",
                     text: getLockRes.msg,
-                    icon: 'success',
+                    icon: getLockRes.status == "failed" ? "error" : "success",
                     timer: 3000,
                     showConfirmButton: false,
                 });

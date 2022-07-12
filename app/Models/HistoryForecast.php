@@ -11,4 +11,8 @@ class HistoryForecast extends Model
 
     protected $primaryKey = "id_history_forecast";
     protected $table = "history_forecast";
+
+    public function Proyek() {
+        return $this->belongsTo(Proyek::class, "kode_proyek");
+    }
 }
