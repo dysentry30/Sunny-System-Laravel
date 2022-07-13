@@ -74,7 +74,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/dashboard/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
+    Route::get('/dashboard/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
 
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);

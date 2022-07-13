@@ -49,7 +49,7 @@ class DatabaseSeeder extends Seeder
             'nilai_rkap' => "1,500,000,000",
             'stage' => "1",
             'sumber_dana' => "BUMN",
-            'bulan_pelaksanaan' => "Mei",
+            'bulan_pelaksanaan' => 3,
             'dop' => "DOP 1",
             'company' => "Wika Gedung",
 
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
             'nilai_rkap' => "23,500,000,000",
             'stage' => "4",
             'sumber_dana' => "BUMN",
-            'bulan_pelaksanaan' => "Juni",
+            'bulan_pelaksanaan' => 4,
             'dop' => "EA",
             'company' => "Wika Industry & Konstruksi",
 
@@ -196,61 +196,61 @@ class DatabaseSeeder extends Seeder
         // begin :: SBU.
 
         // begin :: Forecast.
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 1000000000,
-            'month_forecast' => 1,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 1200000000,
-            'month_forecast' => 2,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 1550000000,
-            'month_forecast' => 3,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 300000000,
-            'month_forecast' => 4,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 2800000000,
-            'month_forecast' => 5,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 3250000000,
-            'month_forecast' => 6,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 3500000000,
-            'month_forecast' => 7,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 5400000000,
-            'month_forecast' => 8,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 4750000000,
-            'month_forecast' => 9,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 3150000000,
-            'month_forecast' => 10,
-        ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 6200000000,
-            'month_forecast' => 11,
-        ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 1000000000,
+        //     'month_forecast' => 1,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 1200000000,
+        //     'month_forecast' => 2,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 1550000000,
+        //     'month_forecast' => 3,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 300000000,
+        //     'month_forecast' => 4,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 2800000000,
+        //     'month_forecast' => 5,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 3250000000,
+        //     'month_forecast' => 6,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 3500000000,
+        //     'month_forecast' => 7,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 5400000000,
+        //     'month_forecast' => 8,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 4750000000,
+        //     'month_forecast' => 9,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 3150000000,
+        //     'month_forecast' => 10,
+        // ]);
+        // Forecast::create([
+        //     'kode_proyek' => "FIRA001",
+        //     'nilai_forecast' => 6200000000,
+        //     'month_forecast' => 11,
+        // ]);
         Forecast::create([
             'kode_proyek' => "FIRA001",
             'nilai_forecast' => 4700000000,
