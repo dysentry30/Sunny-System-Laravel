@@ -673,10 +673,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         $total_forecast += (int) $forecast->nilai_forecast;
 
                                                                                                     @endphp
-                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ $proyek->nilai_rkap }}
-                                                                                                    </td>
+                                                                                                    @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
+                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                            {{ $proyek->nilai_rkap }}
+                                                                                                        </td>
+                                                                                                    @else
+                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                            -
+                                                                                                        </td>
+                                                                                                    @endif
                                                                                                     <td>
                                                                                                         <input
                                                                                                             type="text"
@@ -692,10 +699,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             placeholder=". . . , -" />
                                                                                                     </td>
                                                                                                     @php
-                                                                                                        $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                        // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                         $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? "-";
                                                                                                     @endphp
-                                                                                                    @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -715,10 +722,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @endphp
                                                                                         @endforeach
                                                                                         @if (!$is_data_found)
-                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                {{ $proyek->nilai_rkap }}
-                                                                                            </td>
+                                                                                            @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
+                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                    {{ $proyek->nilai_rkap }}
+                                                                                                </td>
+                                                                                            @else
+                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                    -
+                                                                                                </td>
+                                                                                            @endif
                                                                                             <td>
                                                                                                 <input type="text"
                                                                                                     data-id-proyek="{{ $proyek->kode_proyek }}"
@@ -735,7 +749,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @php
                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? "-";
                                                                                             @endphp
-                                                                                            @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                     {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
