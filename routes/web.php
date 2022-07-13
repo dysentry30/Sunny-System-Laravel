@@ -302,36 +302,38 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         $from_user = Auth::user();
 
-        $history_forecast = HistoryForecast::where("periode_prognosa", "=", (int) date("m"))->get()->all();
-        if(empty($history_forecast)) {
-            Forecast::query()->each(function($oldRecord) use ($data){
-                $duplicateRecord = $oldRecord->replicate();
-                $duplicateRecord->setTable("history_forecast");
-                $duplicateRecord->periode_prognosa = (int) date("m");
-                $duplicateRecord->rkap_forecast = $oldRecord["rkap_forecast"];
-                $duplicateRecord->realisasi_forecast = $oldRecord["realisasi_forecast"];
-                $duplicateRecord->save();
-            });
-        } else {
-            $forecast = Forecast::all();
-            foreach($forecast as $f) {
-                $history_forecast = HistoryForecast::where("month_forecast", "=", $f->month_forecast)->get()->all();
-                // dd($history_forecast);
-                if(!empty($history_forecast)) {
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast; 
-                    $history_forecast->rkap_forecast = $forecast->rkap_forecast; 
-                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast; 
-                    $history_forecast->save();
-                } else {
-                    $history_forecast = new HistoryForecast();
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast; 
-                    $history_forecast->rkap_forecast = $forecast->rkap_forecast; 
-                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast; 
-                    $history_forecast->save();
+        $history_forecast = HistoryForecast::where("periode_prognosa", "=", (int) date("m"));
+        if(!empty($history_forecast->get()->all())) {
+            $history_forecast->delete();
+        }
+
+        $farestMonth = 0;
+        $total_forecast = 0;
+        $proyeks = Proyek::all()->sortBy("kode_proyek");
+        foreach($proyeks as $proyek) {
+            $forecasts = $proyek->Forecasts;
+            foreach($forecasts as $forecast) {
+                if($forecast->month_forecast > $farestMonth) {
+                    $farestMonth = $forecast->month_forecast;
                 }
-                // $forecast = Forecast::where("kode_proyek", "=", $history->kode_proyek)->where("month_forecast", "=", $history->month_forecast)->whereMonth("created_at", "=", $history->periode_prognosa)->get()->first();
+                $total_forecast += $forecast->nilai_forecast;
+            }
+            if($total_forecast != 0) {
+                $history_forecast = new HistoryForecast();
+                $history_forecast->kode_proyek = $forecast->Proyek->kode_proyek;
+                $history_forecast->nilai_forecast = $total_forecast;
+                $history_forecast->month_forecast = $farestMonth;
+                $history_forecast->rkap_forecast = moneyFormatToNumber($forecast->Proyek->nilai_rkap);
+                $history_forecast->month_rkap = (int) $forecast->Proyek->bulan_pelaksanaan;
+                $history_forecast->realisasi_forecast = moneyFormatToNumber($forecast->Proyek->nilai_kontrak_keseluruhan);
+                $history_forecast->month_realisasi = (int) $forecast->Proyek->bulan_ri_perolehan;
+                $history_forecast->periode_prognosa = (int) date("m");
+                $history_forecast->save();
+                $farestMonth = 0;
+                $total_forecast = 0;
             }
         }
+        
         return response()->json([
             "status" => "success",
             "msg" => "Forecast berhasil dikunci",
@@ -361,7 +363,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::post('/forecast/set-unlock', function (Request $request) {
-        $data = $request->all();
+        // $data = $request->all();
         // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
         return response()->json([
             "status" => "success",
@@ -557,5 +559,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $result = $file->move(public_path($path), $file_name);
 
         return $result;
+    }
+
+    function moneyFormatToNumber(string $value) {
+        return (int) str_replace(",", "", $value);
     }
 });

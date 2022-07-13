@@ -73,17 +73,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
 
                                                 <button type="button" style="background-color: #008CB4;" id="lock-forecast"
-                                                    onclick="lockMonthForecastBulanan(this)" class="btn btn-sm btn-active-primary mt-4">
+                                                    onclick="lockMonthForecastBulanan(this)"
+                                                    class="btn btn-sm btn-active-primary mt-4">
                                                     <script>
                                                         const historyForecast = "{{ count($historyForecast) }}";
                                                     </script>
-                                                        {{-- <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                        <i class="bi bi-lock-fill text-white"></i> --}}
+
+                                                    @if (count($historyForecast) > 0)
                                                         <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                        <i class="bi bi-unlock-fill text-white"></i>
-                                                    {{-- @if (count($historyForecast) > 0)
+                                                        <i class="bi bi-lock-fill text-white"></i>
                                                     @else
-                                                    @endif --}}
+                                                        <span class="text-white mx-2 fs-6">Unlock Forecast</span>
+                                                        <i class="bi bi-unlock-fill text-white"></i>
+                                                    @endif
                                                 </button>
 
                                             </li>
@@ -453,378 +455,369 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                 @endphp
                                                                 @foreach ($dops as $dop)
                                                                     {{-- @if (count($dop->UnitKerjas) > 0) --}}
-                                                                        {{-- @foreach ($proyeks as $proyek) --}}
+                                                                    {{-- @foreach ($proyeks as $proyek) --}}
 
-                                                                        <tr style="text-align: right; ">
+                                                                    <tr style="text-align: right; ">
 
-                                                                            @php
-                                                                                $dop_name = str_replace(' ', '-', $dop->dop);
-                                                                            @endphp
-                                                                            <td
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                                <a name="collalpse1" class=""
-                                                                                    data-bs-toggle="collapse"
-                                                                                    href="#{{ $dop_name }}"
-                                                                                    aria-expanded="false"
-                                                                                    aria-controls="{{ $dop_name }} ">
-                                                                                    <i class="bi bi-chevron-down"></i>
-                                                                                    {{-- {{ $dop->dop }} --}}
-                                                                                    {{ $dop->dop }}
-                                                                                </a>
-                                                                            </td>
+                                                                        @php
+                                                                            $dop_name = str_replace(' ', '-', $dop->dop);
+                                                                        @endphp
+                                                                        <td
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                            <a name="collalpse1" class=""
+                                                                                data-bs-toggle="collapse"
+                                                                                href="#{{ $dop_name }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="{{ $dop_name }} ">
+                                                                                <i class="bi bi-chevron-down"></i>
+                                                                                {{-- {{ $dop->dop }} --}}
+                                                                                {{ $dop->dop }}
+                                                                            </a>
+                                                                        </td>
 
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Total Coloumn-->
-                                                                            <td class="pinForecast HidePin">-</td>
-                                                                            <td class="pinForecast HidePin">-</td>
-                                                                            <td class="pinForecast HidePin">-</td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                -</td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                -</td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                -</td>
-                                                                            <!--end::Total Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Januari Coloumn-->
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <td>-</td>
+                                                                        <!--end::Januari Coloumn-->
+                                                                        <!--begin::Total Coloumn-->
+                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                            -</td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                            -</td>
+                                                                        <td class="pinForecast ShowPin"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                            -</td>
+                                                                        <!--end::Total Coloumn-->
 
-                                                                        </tr>
+                                                                    </tr>
 
-                                                                        {{-- begin:: Foreach Unit Kerja --}}
-                                                                        @foreach ($dop->UnitKerjas as $unitKerja)
-                                                                            @if (count($unitKerja->proyeks) > 0)
-                                                                                <tr class="collapse accordion-header"
-                                                                                    id="{{ $dop_name }}"
+                                                                    {{-- begin:: Foreach Unit Kerja --}}
+                                                                    @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                        @if (count($unitKerja->proyeks) > 0)
+                                                                            <tr class="collapse accordion-header"
+                                                                                id="{{ $dop_name }}"
+                                                                                style="text-align: right;">
+                                                                                <td
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                    <!--begin::Child=-->
+                                                                                    <a class="ms-6" type="button"
+                                                                                        data-bs-toggle="collapse"
+                                                                                        data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                        aria-expanded="false"
+                                                                                        aria-controls="{{ $unitKerja->divcode }}">
+                                                                                        <i class="bi bi-chevron-down"></i>
+                                                                                        {{ $unitKerja->unit_kerja }}
+                                                                                    </a>
+                                                                                    <!--end::Child=-->
+                                                                                </td>
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Februari Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Februari Coloumn-->
+                                                                                <!--begin::Maret Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Maret Coloumn-->
+                                                                                <!--begin::April Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::April Coloumn-->
+                                                                                <!--begin::Mei Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Mei Coloumn-->
+                                                                                <!--begin::Juni Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Juni Coloumn-->
+                                                                                <!--begin::Juli Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Juli Coloumn-->
+                                                                                <!--begin::Agustus Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Agustus Coloumn-->
+                                                                                <!--begin::September Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::September Coloumn-->
+                                                                                <!--begin::Oktober Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Oktober Coloumn-->
+                                                                                <!--begin::November Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::November Coloumn-->
+                                                                                <!--begin::Desember Coloumn-->
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <td>-</td>
+                                                                                <!--end::Desember Coloumn-->
+                                                                                <!--begin::Total Coloumn-->
+                                                                                <td class="pinForecast HidePin">-</td>
+                                                                                <td class="pinForecast HidePin">-</td>
+                                                                                <td class="pinForecast HidePin">-</td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                    -</td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                    -</td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                    -</td>
+                                                                                <!--end::Total Coloumn-->
+                                                                            </tr>
+                                                                            {{-- begin:: Foreach Proyek --}}
+                                                                            @foreach ($unitKerja->proyeks as $proyek)
+                                                                                <tr id="{{ $unitKerja->divcode }}"
+                                                                                    class="collapse"
+                                                                                    aria-labelledby="{{ $unitKerja->divcode }}"
+                                                                                    data-bs-parent="#{{ $unitKerja->divcode }}"
                                                                                     style="text-align: right;">
                                                                                     <td
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                                                         <!--begin::Child=-->
-                                                                                        <a class="ms-6" type="button"
-                                                                                            data-bs-toggle="collapse"
-                                                                                            data-bs-target="#{{ $unitKerja->divcode }}"
-                                                                                            aria-expanded="false"
-                                                                                            aria-controls="{{ $unitKerja->divcode }}">
-                                                                                            <i
-                                                                                                class="bi bi-chevron-down"></i>
-                                                                                            {{ $unitKerja->unit_kerja }}
-                                                                                        </a>
+                                                                                        <p class="ms-12">
+                                                                                            <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
+                                                                                        </p>
                                                                                         <!--end::Child=-->
                                                                                     </td>
-                                                                                    <!--begin::Januari Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Januari Coloumn-->
-                                                                                    <!--begin::Februari Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Februari Coloumn-->
-                                                                                    <!--begin::Maret Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Maret Coloumn-->
-                                                                                    <!--begin::April Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::April Coloumn-->
-                                                                                    <!--begin::Mei Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Mei Coloumn-->
-                                                                                    <!--begin::Juni Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Juni Coloumn-->
-                                                                                    <!--begin::Juli Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Juli Coloumn-->
-                                                                                    <!--begin::Agustus Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Agustus Coloumn-->
-                                                                                    <!--begin::September Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::September Coloumn-->
-                                                                                    <!--begin::Oktober Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Oktober Coloumn-->
-                                                                                    <!--begin::November Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::November Coloumn-->
-                                                                                    <!--begin::Desember Coloumn-->
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <td>-</td>
-                                                                                    <!--end::Desember Coloumn-->
-                                                                                    <!--begin::Total Coloumn-->
-                                                                                    <td class="pinForecast HidePin">-</td>
-                                                                                    <td class="pinForecast HidePin">-</td>
-                                                                                    <td class="pinForecast HidePin">-</td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        -</td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        -</td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        -</td>
-                                                                                    <!--end::Total Coloumn-->
-                                                                                </tr>
-                                                                                {{-- begin:: Foreach Proyek --}}
-                                                                                @foreach ($unitKerja->proyeks as $proyek)
-                                                                                    <tr id="{{ $unitKerja->divcode }}"
-                                                                                        class="collapse"
-                                                                                        aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                        data-bs-parent="#{{ $unitKerja->divcode }}"
-                                                                                        style="text-align: right;">
-                                                                                        <td
-                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                                            <!--begin::Child=-->
-                                                                                            <p class="ms-12">
-                                                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
-                                                                                            </p>
-                                                                                            <!--end::Child=-->
-                                                                                        </td>
 
-                                                                                        @for ($i = 0; $i < 12; $i++)
-                                                                                            @if ($index > 3)
+                                                                                    @for ($i = 0; $i < 12; $i++)
+                                                                                        @foreach ($proyek->Forecasts as $forecast)
+                                                                                            @if ($forecast->month_forecast == $month_counter)
                                                                                                 @php
-                                                                                                    $index = 1;
+                                                                                                    $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                    
                                                                                                 @endphp
-                                                                                            @endif
-                                                                                            @foreach ($proyek->Forecasts as $forecast)
-                                                                                                @if ($forecast->month_forecast == $i + 1)
-                                                                                                    @php
-                                                                                                        $total_forecast += (int) $forecast->nilai_forecast;
-
-                                                                                                    @endphp
-                                                                                                    @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
-                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                            {{ $proyek->nilai_rkap }}
-                                                                                                        </td>
-                                                                                                    @else
-                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                            -
-                                                                                                        </td>
-                                                                                                    @endif
-                                                                                                    <td>
-                                                                                                        <input
-                                                                                                            type="text"
-                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                            data-month="{{ $month_counter }}"
-                                                                                                            data-column-forecast="{{ $month_counter }}"
-                                                                                                            class="form-control"
-                                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                            id="nilai-forecast"
-                                                                                                            name="nilai-forecast"
-                                                                                                            onkeyup="reformatNumber(this)"
-                                                                                                            value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                            placeholder=". . . , -" />
+                                                                                                @if ($month_counter == (int) $forecast->rkap_month)
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        {{ $proyek->nilai_rkap }}
                                                                                                     </td>
+                                                                                                @else
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        -
+                                                                                                    </td>
+                                                                                                @endif
+                                                                                                <td>
+                                                                                                    <input type="text"
+                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                        data-month="{{ $month_counter }}"
+                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                        class="form-control"
+                                                                                                        style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        id="nilai-forecast"
+                                                                                                        name="nilai-forecast"
+                                                                                                        onkeyup="reformatNumber(this)"
+                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
+                                                                                                        placeholder=". . . , -" />
+                                                                                                </td>
+                                                                                                @if ($month_counter == (int) $forecast->month_realisasi)
                                                                                                     @php
                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? "-";
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
                                                                                                     @endphp
-                                                                                                    @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                        <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                            {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
-                                                                                                        </td>
-                                                                                                    @else
-                                                                                                        <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                            -</td>
-                                                                                                    @endif
-                                                                                                    @php
-                                                                                                        $is_data_found = true;
-                                                                                                    @endphp
-                                                                                                @break
-                                                                                            @endif
-                                                                                            @php
-                                                                                                $index++;
-                                                                                            @endphp
-                                                                                        @endforeach
-                                                                                        @if (!$is_data_found)
-                                                                                            @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
-                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                    {{ $proyek->nilai_rkap }}
-                                                                                                </td>
-                                                                                            @else
-                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                    -
-                                                                                                </td>
-                                                                                            @endif
-                                                                                            <td>
-                                                                                                <input type="text"
-                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                    data-month="{{ $month_counter }}"
-                                                                                                    data-column-forecast="{{ $month_counter }}"
-                                                                                                    class="form-control"
-                                                                                                    style="border: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                    id="nilai-forecast"
-                                                                                                    name="nilai-forecast"
-                                                                                                    onkeyup="reformatNumber(this)"
-                                                                                                    value=""
-                                                                                                    placeholder=". . . , -" />
-                                                                                            </td>
-                                                                                            @php
-                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? "-";
-                                                                                            @endphp
-                                                                                            @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                <td
-                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                    {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
-                                                                                                </td>
-                                                                                            @else
-                                                                                                <td
-                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                    -</td>
-                                                                                            @endif
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                                    </td>
+                                                                                                @else
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        -</td>
+                                                                                                @endif
+                                                                                                @php
+                                                                                                    $is_data_found = true;
+                                                                                                @endphp
+                                                                                            @break
                                                                                         @endif
-                                                                                        @php
-                                                                                            $is_data_found = false;
-                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
-                                                                                            $month_counter++;
-                                                                                        @endphp
-                                                                                    @endfor
-                                                                                    <!--begin::Total Side Coloumn-->
+                                                                                    @endforeach
+                                                                                    @if (!$is_data_found)
+                                                                                        @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
+                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                            </td>
+                                                                                        @else
+                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                -
+                                                                                            </td>
+                                                                                        @endif
+                                                                                        <td>
+                                                                                            <input type="text"
+                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                data-month="{{ $month_counter }}"
+                                                                                                data-column-forecast="{{ $month_counter }}"
+                                                                                                class="form-control"
+                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                id="nilai-forecast"
+                                                                                                name="nilai-forecast"
+                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                value=""
+                                                                                                placeholder=". . . , -" />
+                                                                                        </td>
+                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                            @php
+                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                            @endphp
+                                                                                            <td
+                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                            </td>
+                                                                                        @else
+                                                                                            <td
+                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                -</td>
+                                                                                        @endif
+                                                                                    @endif
                                                                                     @php
-                                                                                        $total_ok_formatted = number_format($total_ok, 0, ',', ',');
-                                                                                        $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
-                                                                                        $total_forecast = 0;
-                                                                                        $total_ok = 0;
-                                                                                        $month_counter = 1;
+                                                                                        $is_data_found = false;
+                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                        $month_counter++;
                                                                                     @endphp
-                                                                                    <td class="pinForecast HidePin">
-                                                                                        <center>
-                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast HidePin"
-                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}">
-                                                                                        <center>
-                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast HidePin"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                        <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        <center>
-                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        <center>
-                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <!--end::Total Side Coloumn-->
-                                                                            @endforeach
-                                                                            {{-- end:: Foreach Proyek --}}
-                                                                        @endif
-                                                                        @php
-                                                                            $total_year_forecast += $total_forecast;
-                                                                            $total_forecast = 0;
-                                                                            $total_ok = 0;
-                                                                            $month_counter = 1;
-                                                                        @endphp
-                                                                    @endforeach
-                                                                    {{-- end:: Foreach Unit Kerja --}}
+                                                                                @endfor
+                                                                                <!--begin::Total Side Coloumn-->
+                                                                                @php
+                                                                                    $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                    $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                    $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                    $total_forecast = 0;
+                                                                                    $total_ok = 0;
+                                                                                    $month_counter = 1;
+                                                                                @endphp
+                                                                                <td class="pinForecast HidePin">
+                                                                                    <center>
+                                                                                        <b>{{ $total_ok_formatted }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td class="pinForecast HidePin"
+                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}">
+                                                                                    <center>
+                                                                                        <b>{{ $total_forecast_formatted }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td class="pinForecast HidePin"
+                                                                                    data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                    <center>
+                                                                                        <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                    <center>
+                                                                                        <b>{{ $total_ok_formatted }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin total-month-x-forecast"
+                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                    <center>
+                                                                                        <b>{{ $total_forecast_formatted }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
+                                                                                    data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                    <center>
+                                                                                        <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                    </center>
+                                                                                </td>
+                                                                                <!--end::Total Side Coloumn-->
+                                                                        @endforeach
+                                                                        {{-- end:: Foreach Proyek --}}
+                                                                    @endif
+                                                                    @php
+                                                                        $total_year_forecast += $total_forecast;
+                                                                        $total_forecast = 0;
+                                                                        $total_ok = 0;
+                                                                        $month_counter = 1;
+                                                                    @endphp
+                                                                @endforeach
+                                                                {{-- end:: Foreach Unit Kerja --}}
                                                                 {{-- @endif --}}
                                                             @endforeach
 
@@ -1458,7 +1451,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                             placeholder=". . . , -" />
                                                                                                     </td>
-                                                                                                    @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -1498,7 +1491,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value=""
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-internal="{{ $month_counter }}">
                                                                                                     {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -2169,7 +2162,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endphp
                                                                                     @endif
                                                                                     @php
-                                                                                        if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
+                                                                                        if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                             $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         }
                                                                                         
@@ -2200,7 +2193,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2239,7 +2232,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                         <td
                                                                                             data-column-realisasi-sd="{{ $month_counter }}">
                                                                                             {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2910,7 +2903,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endphp
                                                                                     @endif
                                                                                     @php
-                                                                                        if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
+                                                                                        if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                             $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         }
                                                                                         
@@ -2941,7 +2934,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2981,7 +2974,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
                                                                                         <td
                                                                                             data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                             {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -3241,9 +3234,9 @@ fill="none">
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
 
-    // if (historyForecast > 0) {
-    //     disabledAllInputs();
-    // }
+    if (historyForecast > 0) {
+        disabledAllInputs();
+    }
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat("en-US", {
@@ -3369,11 +3362,11 @@ fill="none">
                     `;
                     });
 
-                //     totalColumn.innerHTML = `
-                // <td>
-                //     <center><b>${columnValueFormatted}</b></center>
-                // </td>
-                // `;
+                    //     totalColumn.innerHTML = `
+                    // <td>
+                    //     <center><b>${columnValueFormatted}</b></center>
+                    // </td>
+                    // `;
 
                     columnDataYearForecast.forEach(columnDataTotalYear => {
                         if (columnDataTotalYear.innerText != null || columnDataTotalYear
@@ -3421,7 +3414,7 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `input[data-column-forecast="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecast += Number(dataForecast.value.replaceAll(",", ""));
+                totalForecast += isNaN(Number(dataForecast.value.replaceAll(",", ""))) ? 0 : Number(dataForecast.value.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3443,7 +3436,7 @@ fill="none">
         const dataColumnForecast = document.querySelectorAll(
             `.total-month-x-forecast`);
         dataColumnForecast.forEach(dataForecast => {
-            totalForecastYear += Number(dataForecast.innerText.replaceAll(",", ""));
+            totalForecastYear += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
         });
         const formattedForecastValue = Intl.NumberFormat("en-US", {
             maximumFractionDigits: 0,
@@ -3467,7 +3460,7 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `input[data-column-forecast-internal="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecastInternal += Number(dataForecast.value.replaceAll(",", ""));
+                totalForecastInternal += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3491,7 +3484,7 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `td[data-column-forecast-sd="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecastSD += Number(dataForecast.value.replaceAll(",", ""));
+                totalForecastSD += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3515,17 +3508,15 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `td[data-column-ok-bulanan="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalOKBulanan += Number(dataForecast.innerText.replaceAll(",", ""));
+                totalOKBulanan += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
                     maximumFractionDigits: 0,
                 }).format(totalOKBulanan);
                 forecast.innerHTML = `
-            <td>
                 <center><b>${formattedForecastValue}</b></center>
-            </td>
-            `;
+                `;
             }
             totalOKBulanan = 0;
         });
@@ -3536,8 +3527,11 @@ fill="none">
         let totalRealisasiBulanan = 0;
         dataColumnTotalRealisasiBulanan.forEach((forecast, i) => {
             const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
-            const dataColumnForecast = document.querySelectorAll(
-                `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`);
+            const dataColumnForecast = Array.from(document.querySelectorAll(
+                `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
+            if(dataColumnForecast.length > 10) {
+                dataColumnForecast.pop();
+            }
             dataColumnForecast.forEach(dataForecast => {
                 totalRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, "") ?? 0);
             });
@@ -3547,7 +3541,7 @@ fill="none">
                 }).format(totalRealisasiBulanan);
                 forecast.innerHTML = `
             <td>
-                <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+                <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
             </td>
             `;
             }
@@ -3574,7 +3568,7 @@ fill="none">
             totalYearOKBulanan = 0;
             forecast.innerHTML = `
         <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
         </td>
         `;
         });
@@ -3597,7 +3591,7 @@ fill="none">
             totalYearRealisasiBulanan = 0;
             forecast.innerHTML = `
         <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
         </td>
         `;
         });
@@ -3717,7 +3711,7 @@ fill="none">
             totalYearRealisasiBulanan = 0;
             forecast.innerHTML = `
         <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
         </td>
         `;
         });
@@ -3739,7 +3733,7 @@ fill="none">
             totalYearRealisasiBulanan = 0;
             forecast.innerHTML = `
         <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "-" : formattedForecastValue}</b></center>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
         </td>
         `;
         });
@@ -3775,7 +3769,7 @@ fill="none">
 
     async function confirmedLock() {
         const getIconElt = monthEltBulanan.querySelector("i");
-        monthEltBulanan.setAttribute("disabled", "");
+        // monthEltBulanan.setAttribute("disabled", "");
         const formData = new FormData();
         if (monthEltBulanan) {
             formData.append("_token", "{{ csrf_token() }}");
@@ -3788,7 +3782,7 @@ fill="none">
                     },
                     body: formData,
                 }).then(res => res.json());
-                
+
                 Swal.fire({
                     title: getLockRes.status == "success" ? "Success" : "Failed",
                     text: getLockRes.msg,
@@ -3796,6 +3790,8 @@ fill="none">
                     timer: 3000,
                     showConfirmButton: false,
                 });
+                getIconElt.classList.remove("bi-unlock-fill");
+                getIconElt.classList.add("bi-lock-fill");
                 // toaster.classList.add("text-bg-success");
                 // toastBody.innerText = getLockRes.msg;
             } else {
@@ -3806,8 +3802,8 @@ fill="none">
                     },
                     body: formData,
                 }).then(res => res.json());
-                // getIconElt.classList.add("bi-unlock-fill");
-                // getIconElt.classList.remove("bi-lock-fill");
+                getIconElt.classList.add("bi-unlock-fill");
+                getIconElt.classList.remove("bi-lock-fill");
                 Swal.fire({
                     title: getLockRes.status == "success" ? "Success" : "Failed",
                     text: getLockRes.msg,
@@ -3819,7 +3815,7 @@ fill="none">
                 // toastBody.innerText = getLockRes.msg;
             }
             // toastBoots.show();
-            // disabledAllInputs();
+            disabledAllInputs();
             modalBoots.hide();
         }
     }
@@ -3830,7 +3826,7 @@ fill="none">
 
     function disabledAllInputs() {
         const allInputsForecast = document.querySelectorAll("input[data-month]");
-        if(allInputsForecast) {
+        if (allInputsForecast) {
             allInputsForecast.forEach(input => {
                 if (input.hasAttribute("disabled")) {
                     input.removeAttribute("disabled");
