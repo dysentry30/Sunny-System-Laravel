@@ -814,41 +814,41 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Bulan Pelaksanaan">
                                                                         <option></option>
-                                                                        <option value="Januari"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Januari' ? 'selected' : '' }}>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
                                                                             Januari</option>
-                                                                        <option value="Februari"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Februari' ? 'selected' : '' }}>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
                                                                             Februari</option>
-                                                                        <option value="Maret"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Maret' ? 'selected' : '' }}>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
                                                                             Maret</option>
-                                                                        <option value="April"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'April' ? 'selected' : '' }}>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
                                                                             April</option>
-                                                                        <option value="Mei"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Mei' ? 'selected' : '' }}>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
                                                                             Mei</option>
-                                                                        <option value="Juni"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Juni' ? 'selected' : '' }}>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
                                                                             Juni</option>
-                                                                        <option value="Juli"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Juli' ? 'selected' : '' }}>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
                                                                             Juli</option>
-                                                                        <option value="Agustus"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Agustus' ? 'selected' : '' }}>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
                                                                             Agustus</option>
-                                                                        <option value="September"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'September' ? 'selected' : '' }}>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
                                                                             September</option>
-                                                                        <option value="Oktober"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Oktober' ? 'selected' : '' }}>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
                                                                             Oktober</option>
-                                                                        <option value="November"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'November' ? 'selected' : '' }}>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
                                                                             November</option>
-                                                                        <option value="Desember"
-                                                                            {{ $proyek->bulan_pelaksanaan == 'Desember' ? 'selected' : '' }}>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
                                                                             Desember</option>
                                                                     </select>
                                                                     <!--end::Input-->
@@ -2320,41 +2320,41 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Bulan RI Perolehan">
                                                                         <option></option>
-                                                                        <option value="Januari"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Januari' ? 'selected' : '' }}>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
                                                                             Januari</option>
-                                                                        <option value="Februari"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Februari' ? 'selected' : '' }}>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
                                                                             Februari</option>
-                                                                        <option value="Maret"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Maret' ? 'selected' : '' }}>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
                                                                             Maret</option>
-                                                                        <option value="April"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'April' ? 'selected' : '' }}>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
                                                                             April</option>
-                                                                        <option value="Mei"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Mei' ? 'selected' : '' }}>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
                                                                             Mei</option>
-                                                                        <option value="Juni"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Juni' ? 'selected' : '' }}>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
                                                                             Juni</option>
-                                                                        <option value="Juli"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Juli' ? 'selected' : '' }}>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
                                                                             Juli</option>
-                                                                        <option value="Agustus"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Agustus' ? 'selected' : '' }}>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
                                                                             Agustus</option>
-                                                                        <option value="September"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'September' ? 'selected' : '' }}>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
                                                                             September</option>
-                                                                        <option value="Oktober"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Oktober' ? 'selected' : '' }}>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
                                                                             Oktober</option>
-                                                                        <option value="November"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'November' ? 'selected' : '' }}>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
                                                                             November</option>
-                                                                        <option value="Desember"
-                                                                            {{ $proyek->bulan_ri_perolehan == 'Desember' ? 'selected' : '' }}>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
                                                                             Desember</option>
                                                                     </select>
                                                                     <!--end::Input-->

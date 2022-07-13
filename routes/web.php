@@ -264,6 +264,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->nilai_forecast = (int) $data["nilai_forecast"];
             $forecast->month_forecast = (int) $data["forecast_month"];
+            $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            $forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+            $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = (int) str_replace(",", "", $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast->kode_proyek = $data["kode_proyek"];
@@ -300,22 +303,35 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $from_user = Auth::user();
 
         $history_forecast = HistoryForecast::where("periode_prognosa", "=", (int) date("m"))->get()->all();
-        Forecast::query()->each(function($oldRecord) use ($data){
-            $duplicateRecord = $oldRecord->replicate();
-            $duplicateRecord->setTable("history_forecast");
-            $duplicateRecord->periode_prognosa = (int) date("m");
-            $duplicateRecord->rkap_forecast = $oldRecord["rkap_forecast"];
-            $duplicateRecord->realisasi_forecast = $oldRecord["realisasi_forecast"];
-            $duplicateRecord->save();
-        });
-        // if(empty($history_forecast)) {
-        // } else {
-        //     foreach($history_forecast as $history) {
-        //         $forecast = Forecast::where("kode_proyek", "=", $history->kode_proyek)->where("month_forecast", "=", $history->month_forecast)->whereMonth("created_at", "=", $history->periode_prognosa)->get()->first();
-        //         $history->nilai_forecast = $forecast->nilai_forecast; 
-        //         $history->save();
-        //     }
-        // }
+        if(empty($history_forecast)) {
+            Forecast::query()->each(function($oldRecord) use ($data){
+                $duplicateRecord = $oldRecord->replicate();
+                $duplicateRecord->setTable("history_forecast");
+                $duplicateRecord->periode_prognosa = (int) date("m");
+                $duplicateRecord->rkap_forecast = $oldRecord["rkap_forecast"];
+                $duplicateRecord->realisasi_forecast = $oldRecord["realisasi_forecast"];
+                $duplicateRecord->save();
+            });
+        } else {
+            $forecast = Forecast::all();
+            foreach($forecast as $f) {
+                $history_forecast = HistoryForecast::where("month_forecast", "=", $f->month_forecast)->get()->all();
+                // dd($history_forecast);
+                if(!empty($history_forecast)) {
+                    $history_forecast->nilai_forecast = $forecast->nilai_forecast; 
+                    $history_forecast->rkap_forecast = $forecast->rkap_forecast; 
+                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast; 
+                    $history_forecast->save();
+                } else {
+                    $history_forecast = new HistoryForecast();
+                    $history_forecast->nilai_forecast = $forecast->nilai_forecast; 
+                    $history_forecast->rkap_forecast = $forecast->rkap_forecast; 
+                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast; 
+                    $history_forecast->save();
+                }
+                // $forecast = Forecast::where("kode_proyek", "=", $history->kode_proyek)->where("month_forecast", "=", $history->month_forecast)->whereMonth("created_at", "=", $history->periode_prognosa)->get()->first();
+            }
+        }
         return response()->json([
             "status" => "success",
             "msg" => "Forecast berhasil dikunci",
@@ -346,7 +362,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/forecast/set-unlock', function (Request $request) {
         $data = $request->all();
-        HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
+        // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
         return response()->json([
             "status" => "success",
             "msg" => "Forecast has been unlocked",

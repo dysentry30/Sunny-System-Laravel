@@ -188,8 +188,8 @@
                                 @php
                                     $proyeks = $proyeks->reverse();
                                 @endphp
-                                @foreach ($proyeks as $proyek)
                                     <tbody class="fw-bold text-gray-600">
+                                        @foreach ($proyeks as $proyek)
                                         <tr>
 
                                             <!--begin::Name=-->
@@ -508,36 +508,36 @@
                                         class="form-select form-select-solid" data-control="select2"
                                         data-hide-search="true" data-placeholder="Bulan Pelaksanaan">
                                         <option selected></option>
-                                        <option value="Januari"
-                                            {{ old('bulan-pelaksanaan') == 'Januari' ? 'selected' : '' }}>Januari
+                                        <option value="1"
+                                            {{ old('bulan-pelaksanaan') == '1' ? 'selected' : '' }}>Januari
                                         </option>
-                                        <option value="Februari"
-                                            {{ old('bulan-pelaksanaan') == 'Februari' ? 'selected' : '' }}>Februari
+                                        <option value="2"
+                                            {{ old('bulan-pelaksanaan') == '2' ? 'selected' : '' }}>Februari
                                         </option>
-                                        <option value="Maret"
-                                            {{ old('bulan-pelaksanaan') == 'Maret' ? 'selected' : '' }}>Maret</option>
-                                        <option value="April"
-                                            {{ old('bulan-pelaksanaan') == 'April' ? 'selected' : '' }}>April</option>
-                                        <option value="Mei"
-                                            {{ old('bulan-pelaksanaan') == 'Mei' ? 'selected' : '' }}>Mei</option>
-                                        <option value="Juni"
-                                            {{ old('bulan-pelaksanaan') == 'Juni' ? 'selected' : '' }}>Juni</option>
-                                        <option value="Juli"
-                                            {{ old('bulan-pelaksanaan') == 'Juli' ? 'selected' : '' }}>Juli</option>
-                                        <option value="Agustus"
-                                            {{ old('bulan-pelaksanaan') == 'Agustus' ? 'selected' : '' }}>Agustus
+                                        <option value="3"
+                                            {{ old('bulan-pelaksanaan') == '3' ? 'selected' : '' }}>Maret</option>
+                                        <option value="4"
+                                            {{ old('bulan-pelaksanaan') == '4' ? 'selected' : '' }}>April</option>
+                                        <option value="5"
+                                            {{ old('bulan-pelaksanaan') == '5' ? 'selected' : '' }}>Mei</option>
+                                        <option value="6"
+                                            {{ old('bulan-pelaksanaan') == '6' ? 'selected' : '' }}>Juni</option>
+                                        <option value="7"
+                                            {{ old('bulan-pelaksanaan') == '7' ? 'selected' : '' }}>Juli</option>
+                                        <option value="8"
+                                            {{ old('bulan-pelaksanaan') == '8' ? 'selected' : '' }}>Agustus
                                         </option>
-                                        <option value="September"
-                                            {{ old('bulan-pelaksanaan') == 'September' ? 'selected' : '' }}>September
+                                        <option value="9"
+                                            {{ old('bulan-pelaksanaan') == '9' ? 'selected' : '' }}>September
                                         </option>
-                                        <option value="Oktober"
-                                            {{ old('bulan-pelaksanaan') == 'Oktober' ? 'selected' : '' }}>Oktober
+                                        <option value="10"
+                                            {{ old('bulan-pelaksanaan') == '10' ? 'selected' : '' }}>Oktober
                                         </option>
-                                        <option value="November"
-                                            {{ old('bulan-pelaksanaan') == 'November' ? 'selected' : '' }}>November
+                                        <option value="11"
+                                            {{ old('bulan-pelaksanaan') == '11' ? 'selected' : '' }}>November
                                         </option>
-                                        <option value="Desember"
-                                            {{ old('bulan-pelaksanaan') == 'Desember' ? 'selected' : '' }}>Desember
+                                        <option value="12"
+                                            {{ old('bulan-pelaksanaan') == '12' ? 'selected' : '' }}>Desember
                                         </option>
                                     </select>
                                     @error('bulan-pelaksanaan')
