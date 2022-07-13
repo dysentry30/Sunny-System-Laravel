@@ -62,74 +62,62 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-2">
+                        <div class="card-header pt-2">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row w-600px" method="get">
                                     {{-- Begin:: Select Options --}}
                                     <select id="periode-prognosa" name="periode-prognosa" class="form-select form-select-solid select2-hidden-accessible w-200px" style="margin-right: 2rem;" data-control="select2" data-hide-search="true" data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$month == "" ? "selected": ""}}></option>
-                                        <option value="1" {{$month == 1 ? "selected": ""}}>Januari
-                                        </option>
-                                        <option value="2" {{$month == 2 ? "selected": ""}}>Februari
-                                        </option>
+                                        <option value="1" {{$month == 1 ? "selected": ""}}>Januari</option>
+                                        <option value="2" {{$month == 2 ? "selected": ""}}>Februari</option>
                                         <option value="3" {{$month == 3 ? "selected": ""}}>Maret</option>
                                         <option value="4" {{$month == 4 ? "selected": ""}}>April</option>
                                         <option value="5" {{$month == 5 ? "selected": ""}}>Mei</option>
                                         <option value="6" {{$month == 6 ? "selected": ""}}>Juni</option>
                                         <option value="7" {{$month == 7 ? "selected": ""}}>Juli</option>
-                                        <option value="8" {{$month == 8 ? "selected": ""}}>Agustus
-                                        </option>
-                                        <option value="9" {{$month == 9 ? "selected": ""}}>September
-                                        </option>
-                                        <option value="10" {{$month == 10 ? "selected": ""}}>Oktober
-                                        </option>
-                                        <option value="11" {{$month == 11 ? "selected": ""}}>November
-                                        </option>
-                                        <option value="12" {{$month == 12 ? "selected": ""}}>Desember
-                                        </option>
+                                        <option value="8" {{$month == 8 ? "selected": ""}}>Agustus</option>
+                                        <option value="9" {{$month == 9 ? "selected": ""}}>September</option>
+                                        <option value="10" {{$month == 10 ? "selected": ""}}>Oktober</option>
+                                        <option value="11" {{$month == 11 ? "selected": ""}}>November</option>
+                                        <option value="12" {{$month == 12 ? "selected": ""}}>Desember</option>
                                     </select>
                                     {{-- End:: Select Options --}}
                                     
                                     {{-- Begin:: Select Options --}}
-                                    <select id="tahun-history" name="tahun-history" class="form-select form-select-solid select2-hidden-accessible w-200px mx-2" data-control="select2" data-hide-search="true" data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                    <select id="tahun-history" name="tahun-history" class="form-select form-select-solid select2-hidden-accessible w-200px ms-2" data-control="select2" data-hide-search="true" data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
                                         <option {{$year == "" ? "selected": ""}}></option>
-                                        <option value="2021" {{$year == 2021 ? "selected": ""}}>2021
-                                        </option>
-                                        <option value="2022" {{$year == 2022 ? "selected": ""}}>2022
-                                        </option>
+                                        <option value="2021" {{$year == 2021 ? "selected": ""}}>2021</option>
+                                        <option value="2022" {{$year == 2022 ? "selected": ""}}>2022</option>
                                         <option value="2023" {{$year == 2023 ? "selected": ""}}>2023</option>
                                         <option value="2024" {{$year == 2024 ? "selected": ""}}>2024</option>
                                         <option value="2025" {{$year == 2025 ? "selected": ""}}>2025</option>
                                         <option value="2026" {{$year == 2026 ? "selected": ""}}>2026</option>
                                         <option value="2027" {{$year == 2027 ? "selected": ""}}>2027</option>
-                                        <option value="2028" {{$year == 2028 ? "selected": ""}}>2028
-                                        </option>
-                                        <option value="2029" {{$year == 2029 ? "selected": ""}}>2029
-                                        </option>
-                                        <option value="2030" {{$year == 2030 ? "selected": ""}}>2030
-                                        </option>
-                                        <option value="2031" {{$year == 2031 ? "selected": ""}}>2031
-                                        </option>
-                                        <option value="2032" {{$year == 2032 ? "selected": ""}}>2032
-                                        </option>
+                                        <option value="2028" {{$year == 2028 ? "selected": ""}}>2028</option>
+                                        <option value="2029" {{$year == 2029 ? "selected": ""}}>2029</option>
+                                        <option value="2030" {{$year == 2030 ? "selected": ""}}>2030</option>
+                                        <option value="2031" {{$year == 2031 ? "selected": ""}}>2031</option>
+                                        <option value="2032" {{$year == 2032 ? "selected": ""}}>2032</option>
                                     </select>
                                     {{-- End:: Select Options --}}
 
                                     {{-- Begin:: Action Filter --}}
-                                    <button type="submit" class="btn btn-sm btn-primary w-250px" id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                    <button type="submit" class="btn btn-sm btn-primary ms-4" id="kt_toolbar_primary_button" 
+                                        style="background-color:#008CB4">
                                         Filter</button>
                                     {{-- End:: Action Filter --}}
 
                                     {{-- Begin:: Action Filter --}}
-                                    <button type="button" onclick="resetFilter()" class="btn btn-sm btn-flex btn-light text-center btn-active-primary w-200px mx-2" id="kt_toolbar_primary_button">Reset</button>
+                                    <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                        onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
                                     {{-- End:: Action Filter --}}
                                 </form>
                             </div>
                             <!--begin::Card title-->
 
                         </div>
-                        <hr><br>
+                        <br>
                         <!--end::Card header-->
 
 
@@ -143,13 +131,11 @@
                                 <div class="" id="datatable" style="display:none;">
                                     <hr>
                                     <div class="text-center">
-                                        <h2 id="title-table">TITLE</h2>
+                                        <h2 id="title-table"></h2>
                                         <h4 id="total"></h4>
                                     </div>
                                     <div class="d-flex justify-content-end">
-                                        {{-- <div class="d-flex flex-column">
-                                        </div> --}}
-                                        <button class="btn btn-sm btn-light btn-active-primary" onclick="hideTable()">Hide Table</button>
+                                        <button class="btn btn-sm btn-light btn-active-primary fs-6" onclick="hideTable()"><i class="bi bi-graph-up-arrow fs-6"></i> Show Chart</button>
                                         {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
                                     </div>
                                     <br>
@@ -223,23 +209,23 @@
 <!--end::CDN High Chart-->
 
 <!--begin::FORECAST LINE-->
-{{-- let arrayHistoryForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
-let i = arrayHistoryForecast; --}}
+{{-- let i = arrayHistoryForecast; --}}
+{{-- let fc1 = {!! $fc1 !!} ;
+let fc2 = fc1 + {!! $fc2 !!} ;
+let fc3 = fc2 + {!! $fc3 !!} ;
+let fc4 = fc3 + {!! $fc4 !!} ;
+let fc5 = fc4 + {!! $fc5 !!} ;
+let fc6 = fc5 + {!! $fc6 !!} ;
+let fc7 = fc6 + {!! $fc7 !!} ;
+let fc8 = fc7 + {!! $fc8 !!} ;
+let fc9 = fc8 + {!! $fc9 !!} ;
+let fc10 = fc9 + {!! $fc10 !!} ;
+let fc11 = fc10 + {!! $fc11 !!} ;
+let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <script>
+    let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
     // let per = 1; //normal
-    let per = 1000000; //jutaan
-    let fc1 = {!! $fc1 !!} ;
-    let fc2 = fc1 + {!! $fc2 !!} ;
-    let fc3 = fc2 + {!! $fc3 !!} ;
-    let fc4 = fc3 + {!! $fc4 !!} ;
-    let fc5 = fc4 + {!! $fc5 !!} ;
-    let fc6 = fc5 + {!! $fc6 !!} ;
-    let fc7 = fc6 + {!! $fc7 !!} ;
-    let fc8 = fc7 + {!! $fc8 !!} ;
-    let fc9 = fc8 + {!! $fc9 !!} ;
-    let fc10 = fc9 + {!! $fc10 !!} ;
-    let fc11 = fc10 + {!! $fc11 !!} ;
-    let fc12 = fc11 + {!! $fc12 !!} ;
+    // let per = 1000000; //jutaan
     
     Highcharts.chart('forecast-line', {
 
@@ -289,66 +275,16 @@ let i = arrayHistoryForecast; --}}
         series: [
         {
             name: 'Forecast',
+            data: nilaiForecast,
             // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
-            data: [
-                    {
-                        y: Math.ceil(fc1/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc2/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc3/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc4/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc5/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc6/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc7/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc8/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc9/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc10/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc11/per),
-                        drilldown: "Forecast"
-                    },
-                    {
-                        y: Math.ceil(fc12/per),
-                        drilldown: "Forecast"
-                    },
-                    
-                ]
-        // }, 
-        // {
-        //     name: 'Nilai OK',
-        //     data: [1491, 5406, 8974, 9985, 11249, 13812, 18028, 23812, 30143, 32143, 38143, 40143],
-        // }, 
-        // {
-        //     name: 'Nilai Realisasi',
-        //     data: [1174, 1772, 1600, 1977, 3318, 3437, 4214, 5938, 8977, 11018, 22437, 29214],
+        }, 
+        {
+            name: 'Nilai OK',
+            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
+        }, 
+        {
+            name: 'Nilai Realisasi',
+            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
         }],
 
         responsive: {
@@ -429,8 +365,7 @@ let i = arrayHistoryForecast; --}}
 <!--end::FORECAST LINE-->
 
 <!--begin::FORECAST 3WULAN-->
-{{-- let triWulanForecast = JSON.parse("{!! json_encode($arrayHistoryForecast) !!}");
-let j = triWulanForecast; --}}
+{{-- let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}"); --}}
 <script>
     let fc_3 = {!! $fc1 + $fc2 + $fc3 !!} ;
     let fc_6 = fc_3 + {!! $fc4 + $fc5 + $fc6 !!} ;
@@ -728,14 +663,21 @@ let j = triWulanForecast; --}}
 
 <!--Begin::Trigger Point Chart-->
 <script>
-    const chartPoints = document.querySelectorAll(".highcharts-point");
+    const chartPoints = document.querySelectorAll("#forecast-line .highcharts-point");
+    const periodePrognosa = document.querySelector("#periode-prognosa");
+    // console.log(periodePrognosa.value);
+    // console.log(chartPoints);
     chartPoints.forEach(point => {
         point.addEventListener("click",async function() {
+            // console.log(point);
             const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.]/gi, "").split(".");
             const month = data[0];
             const type = data[1];
-            const filterRes = await fetch(`/dashboard/${type}/${month}`).then(res => res.json());
-            console.log(filterRes);
+            const date = new Date().getMonth()+1;
+            const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
+            // console.log(prognosa);
+            const filterRes = await fetch(`/dashboard/${prognosa}/${type}/${month}/`).then(res => res.json());
+            // console.log(filterRes);
             const thead = document.querySelector("#table-line-head");
             const tbody = document.querySelector("#table-line-body");
             const table = document.querySelector("#datatable");
@@ -744,7 +686,7 @@ let j = triWulanForecast; --}}
 
             let theadHTML = '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">'+
                 '<th>Kode Proyek</th>'+
-               '<th>Nama Proyek</th>'+
+                '<th>Nama Proyek</th>'+
                 '<th>Stage</th>'+
                 '<th>Unit Kerja</th>'+
                 '<th>Bulan</th>'+
@@ -793,6 +735,37 @@ let j = triWulanForecast; --}}
                         break;
                 }
 
+                let bulan = "";
+                // console.log(filter.bulan_pelaksanaan);
+                switch (filter.month_forecast){
+                    case 1: bulan="Januari";
+                    break;
+                    case 2: bulan="Februari";
+                    break;
+                    case 3: bulan="Maret";
+                    break;
+                    case 4: bulan="April";
+                    break;
+                    case 5: bulan="Mei";
+                    break;
+                    case 6: bulan="Juni";
+                    break;
+                    case 7: bulan="Juli";
+                    break;
+                    case 8: bulan="Agustus";
+                    break;
+                    case 9: bulan="September";
+                    break;
+                    case 10: bulan="Oktober";
+                    break;
+                    case 11: bulan="November";
+                    break;
+                    case 12: bulan="Desember";
+                    break;
+                    default: bulan="Bulan Unknown"
+                    break;
+                }
+
                 tbodyHTML += `<tr>
 
                             <!--begin::Name=-->
@@ -820,7 +793,7 @@ let j = triWulanForecast; --}}
 
                             <!--begin::Bulan=-->
                             <td>
-                                ${filter.month_forecast}
+                                ${bulan}
                             </td>
                             <!--end::Bulan=-->
 
@@ -836,12 +809,16 @@ let j = triWulanForecast; --}}
             titleTable.innerHTML = `Forecast - ${month}`;
             total.innerHTML = `Total Forecast = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
             table.style.display = "";
+            const chartLine = document.querySelector("#forecast-line");
+            chartLine.style.display = "none";
         }); 
     })
 
     function hideTable() {
         const table = document.querySelector("#datatable");
+        const chartLine = document.querySelector("#forecast-line");
         table.style.display = "none";
+        chartLine.style.display = "";
     }
 </script>
 <!--End::Trigger Point Chart-->

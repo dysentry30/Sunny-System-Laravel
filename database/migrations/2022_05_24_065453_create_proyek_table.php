@@ -28,18 +28,18 @@ return new class extends Migration
             // $table->string('customer')->nullable();
             $table->string('pic')->nullable();
             $table->string('sumber_dana')->nullable();
-            $table->string('bulan_pelaksanaan')->nullable();
+            $table->integer('bulan_pelaksanaan')->nullable();
             // $table->integer('tahun_pelaksanaan')->nullable();
             $table->string("nilai_rkap")->nullable();
             $table->string("nilai_valas_review")->nullable();
             $table->string("mata_uang_review")->nullable();
             $table->string("kurs_review")->nullable();
-            $table->string("bulan_review")->nullable();
+            $table->integer("bulan_review")->nullable();
             $table->string("nilaiok_review")->nullable();
             $table->string("nilai_valas_awal")->nullable();
             $table->string("mata_uang_awal")->nullable();
             $table->string("kurs_awal")->nullable();
-            $table->string("bulan_awal")->nullable();
+            $table->integer("bulan_awal")->nullable();
             $table->string("nilaiok_awal")->nullable();
             $table->string("laporan_kualitatif_pasdin")->nullable();
             
@@ -88,7 +88,7 @@ return new class extends Migration
             $table->string("jenis_proyek_terkontrak")->nullable();
             $table->string("porsijo_terkontrak")->nullable();
             $table->integer("tahun_ri_perolehan")->nullable();
-            $table->string("bulan_ri_perolehan")->nullable();
+            $table->integer("bulan_ri_perolehan")->nullable();
             $table->string("nilaiok_terkontrak")->nullable();
             $table->string("matauang_terkontrak")->nullable();
             $table->string("nomor_terkontrak")->nullable();
