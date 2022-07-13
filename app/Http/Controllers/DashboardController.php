@@ -27,12 +27,6 @@ class DashboardController extends Controller
         // }
 
         //begin::History Forecast
-        // $nilaiHistoryForecast = HistoryForecast::select('nilai_forecast')->get()->toArray();
-        // $nilaiHistoryForecast = HistoryForecast::select(['nilai_forecast','month_forecast','periode_prognosa'])->get();
-        // $nilaiHistoryForecast[1];   
-        // dd(HistoryForecast::select(['nilai_forecast','month_forecast','periode_prognosa'])->get());
-        // $arrayHistoryForecast = flatten($nilaiHistoryForecast);
-        
         if ($request->get("periode-prognosa") || $request->get("tahun-history")) {
             $nilaiHistoryForecast = HistoryForecast::where("periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
             ->whereYear("created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
@@ -47,26 +41,24 @@ class DashboardController extends Controller
         }
         
         // dd($nilaiHistoryForecast);
-        $fc2 = 0;
-        $fc3 = 0;
-        $fc4 = 0;
-        $fc5 = 0;
-        $fc6 = 0;
-        $fc7 = 0;
-        $fc8 = 0;
-        $fc9 = 0;
-        $fc10 = 0;
-        $fc11 = 0;
-        $fc12 = 0;
         $nilaiForecast = 0;
         $nilaiForecastArray = [];
-        $fc1 = 0;
-        $per = 1000000; //Dibagi Dalam Jutaan
         $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
 
+        $nilaiRkap = 0;
+        $nilaiRkapArray = [];
+        $historyRkap = $nilaiHistoryForecast->sortBy("month_rkap");
+
+        $nilaiRealisasi = 0;
+        $nilaiRealisasiArray = [];
+        $historyRealisasi = $nilaiHistoryForecast->sortBy("month_realisasi");
+        // dd($historyRealisasi);
         
-        foreach ($historyForecast as $forecast){
-            for ($i=1; $i <= 12; $i++) { 
+        $per = 1000000; //Dibagi Dalam Jutaan
+        
+        
+        for ($i=1; $i <= 12; $i++) { 
+            foreach ($historyForecast as $forecast){
                 if ($forecast->month_forecast == $i) {
                     $nilaiForecast += ceil($forecast->nilai_forecast/$per);
                 }else{
@@ -74,39 +66,87 @@ class DashboardController extends Controller
                 }
             }
             array_push($nilaiForecastArray, $nilaiForecast);
-            dump($forecast->month_forecast);
-        }
-        dd();
-        dd($nilaiForecastArray);
 
+            foreach ($historyForecast as $rkap){
+                if ($rkap->month_rkap == $i) {
+                    $nilaiRkap += ceil($rkap->rkap_forecast/$per);
+                }else{
+                    $nilaiRkap == 0;
+                }
+            }
+            array_push($nilaiRkapArray, $nilaiRkap);
+            
+            foreach ($historyForecast as $realisasi){
+                if ($realisasi->month_realisasi == $i) {
+                    $nilaiRealisasi += ceil($realisasi->realisasi_forecast/$per);
+                }else{
+                    $nilaiRealisasi == 0;
+                }
+            }
+            array_push($nilaiRealisasiArray, $nilaiRealisasi);
+        }
+        // dump($nilaiRealisasiArray);
+        // dd();
+
+
+        
+        // begin :: Tri Wulan
+        $nilaiForecastTriwulan = 0;
+        $nilaiForecastTriwunalArray = [];
+
+        $offset_history = 0;
+        for ($i = 3; $i <= 12; $i+=3) {
+            $filtered_history_forecast = $historyForecast->filter(function($data) use ($i, $offset_history){
+                return  $data->month_forecast > $offset_history && $data->month_forecast <= $i && $data->periode_prognosa == (int) date("m");
+            });
+            $nilaiForecastTriwulan += $filtered_history_forecast->sum("nilai_forecast");
+            // dump($filtered_history_forecast->all());
+            array_push($nilaiForecastTriwunalArray, $nilaiForecastTriwulan);
+            $offset_history = $i;
+        }
+
+
+        // $fc1 = 0;
+        // $fc2 = 0;
+        // $fc3 = 0;
+        // $fc4 = 0;
+        // $fc5 = 0;
+        // $fc6 = 0;
+        // $fc7 = 0;
+        // $fc8 = 0;
+        // $fc9 = 0;
+        // $fc10 = 0;
+        // $fc11 = 0;
+        // $fc12 = 0;
+        
         // foreach ($nilaiHistoryForecast as $History) {
         //     if ($History->month_forecast == 1)
-        //         $fc1 += $History->nilai_forecast;
+        //     $fc1 += $History->nilai_forecast;
         //     if ($History->month_forecast == 2)
-        //         $fc2 += $History->nilai_forecast;
+        //     $fc2 += $History->nilai_forecast;
         //     if ($History->month_forecast == 3)
-        //         $fc3 += $History->nilai_forecast;
+        //     $fc3 += $History->nilai_forecast;
         //     if ($History->month_forecast == 4)
-        //         $fc4 += $History->nilai_forecast;
+        //     $fc4 += $History->nilai_forecast;
         //     if ($History->month_forecast == 5)
-        //         $fc5 += $History->nilai_forecast;
+        //     $fc5 += $History->nilai_forecast;
         //     if ($History->month_forecast == 6)
-        //         $fc6 += $History->nilai_forecast;
+        //     $fc6 += $History->nilai_forecast;
         //     if ($History->month_forecast == 7)
-        //         $fc7 += $History->nilai_forecast;
+        //     $fc7 += $History->nilai_forecast;
         //     if ($History->month_forecast == 8)
-        //         $fc8 += $History->nilai_forecast;
+        //     $fc8 += $History->nilai_forecast;
         //     if ($History->month_forecast == 9)
-        //         $fc9 += $History->nilai_forecast;
+        //     $fc9 += $History->nilai_forecast;
         //     if ($History->month_forecast == 10)
-        //         $fc10 += $History->nilai_forecast;
+        //     $fc10 += $History->nilai_forecast;
         //     if ($History->month_forecast == 11)
-        //         $fc11 += $History->nilai_forecast;
+        //     $fc11 += $History->nilai_forecast;
         //     if ($History->month_forecast == 12)
-        //         $fc12 += $History->nilai_forecast;
+        //     $fc12 += $History->nilai_forecast;
         // }
         //end::History Forecast
-
+        
         //begin::Proyek Stage
         $proyeks = Proyek::all();
         $proses = 0;
@@ -158,7 +198,7 @@ class DashboardController extends Controller
         };
         //end::Marketing PipeLine
 
-        return view('1_Dashboard', compact(["nilaiForecastArray", "fc1", "fc2", "fc3", "fc4", "fc5", "fc6", "fc7", "fc8", "fc9", "fc10", "fc11", "fc12", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks"]));
+        return view('1_Dashboard', compact(["nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks"]));
     }
 
     /**

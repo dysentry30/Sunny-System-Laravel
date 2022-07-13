@@ -173,6 +173,12 @@
                                 <!--begin::MARKETING PIPELINE-->
                                 <!--end::MARKETING PIPELINE-->
                             </div>
+                            <br><br><hr><br><br>
+                            
+                            <div id="claim">
+                                <!--begin::MARKETING PIPELINE-->
+                                <!--end::MARKETING PIPELINE-->
+                            </div>
 
                         </div>
                         <!--end::Card body-->
@@ -224,6 +230,8 @@ let fc11 = fc10 + {!! $fc11 !!} ;
 let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <script>
     let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
+    let nilaiRkap = JSON.parse("{!! json_encode($nilaiRkapArray) !!}");
+    let nilaiRealisasi = JSON.parse("{!! json_encode($nilaiRealisasiArray) !!}");
     // let per = 1; //normal
     // let per = 1000000; //jutaan
     
@@ -280,11 +288,11 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
         }, 
         {
             name: 'Nilai OK',
-            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
+            data: nilaiRkap,
         }, 
         {
             name: 'Nilai Realisasi',
-            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
+            data: nilaiRealisasi,
         }],
 
         responsive: {
@@ -365,14 +373,14 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <!--end::FORECAST LINE-->
 
 <!--begin::FORECAST 3WULAN-->
-{{-- let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}"); --}}
+{{-- let fc_3 = {!! $fc1 + $fc2 + $fc3 !!} ;
+let fc_6 = fc_3 + {!! $fc4 + $fc5 + $fc6 !!} ;
+let fc_9 = fc_6 + {!! $fc7 + $fc8 + $fc9 !!} ;
+let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
 <script>
-    let fc_3 = {!! $fc1 + $fc2 + $fc3 !!} ;
-    let fc_6 = fc_3 + {!! $fc4 + $fc5 + $fc6 !!} ;
-    let fc_9 = fc_6 + {!! $fc7 + $fc8 + $fc9 !!} ;
-    let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ;
+    let forecast3Wulan = JSON.parse("{!! json_encode($nilaiForecastTriwunalArray) !!}");
     
-        Highcharts.chart('forecast-3wulan', {
+    Highcharts.chart('forecast-3wulan', {
 
         title: {
             text: '<b class="h1">Forecast per 3 BULAN</b>'
@@ -393,7 +401,7 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
                 "Januari-Maret",
                 "April-Juni",
                 "Juli-September",
-                "oktober-Desember",
+                "Oktober-Desember",
             ],
             // accessibility: {
             //     rangeDescription: 'Range: 2010 to 2017'
@@ -423,7 +431,7 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
         series: [
         {
             name: 'Forecast',
-            data: [fc_3, fc_6, fc_9, fc_12]
+            data: forecast3Wulan
         // }, 
         // {
         //     name: 'Nilai OK',
@@ -459,8 +467,6 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <!--end::FORECAST 3WULAN-->
 
 <!--begin::MONITORING PROYEK-->
-{{-- let arrayStage = {!! json_encode($stageProyek) !!} --}}
-{{-- console.log(arrayStage); --}}
 <script>
     Highcharts.chart('monitoring-proyek', {
         chart: {
@@ -504,7 +510,7 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
         },
 
         tooltip: {
-            headerFormat:    '<span style="font-size:11px">{series.name}</span><br>',
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
             pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> Total Proyek<br/>'
         },
 
@@ -645,6 +651,66 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
     });
 </script>
 <!--end::MARKETING PIPELINE-->
+
+<!--begin::CLAIM-->
+<script>
+    Highcharts.chart('claim', {
+    chart: {
+        type: 'column'
+    },
+    title: {
+        text: '<b class="h1">Status Claim</b>'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        categories: [
+            'Cancel',
+            'Disetujui',
+            'Ditolak',
+            'On Progress'
+        ],
+        crosshair: true
+    },
+    yAxis: {
+        min: 0,
+        title: {
+            text: ' '
+        }
+    },
+    tooltip: {
+        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y}</b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
+    },
+    plotOptions: {
+        column: {
+            pointPadding: 0.2,
+            borderWidth: 0
+        }
+    },
+    colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+    series: [{
+        name: 'Claim',
+        data: [49, 71, 106, 129]
+
+    }, {
+        name: 'Anti Claim',
+        data: [83, 78, 98, 93]
+
+    }, {
+        name: 'Claim Asuransi',
+        data: [48, 38, 39, 41]
+
+    }]
+});
+</script>
+<!--end::CLAIM-->
+
 
 <!--begin::RESET FILTER-->
 <script>
