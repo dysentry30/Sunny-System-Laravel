@@ -22,7 +22,7 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                <form action="/proyek/update/" method="post" enctype="multipart/form-data">
+                <form action={{ url("/proyek/update/") }} method="post" enctype="multipart/form-data">
                     @csrf
 
 
@@ -318,7 +318,7 @@
                                                                 class="stage-button stage-is-done color-is-default"
                                                                 style="outline: 0px; cursor: pointer;" stage="8">
                                                                 Terkontrak
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                &nbsp;&nbsp;
                                                                 <span class="" style="position: relative;top: 15%;"
                                                                     stage="8"><i
                                                                         class="bi bi-caret-down-fill text-white"></i></span>
@@ -330,7 +330,7 @@
                                                                 class="stage-button stage-is-done color-is-danger"
                                                                 style="outline: 0px; cursor: pointer;" stage="8">
                                                                 Terendah
-                                                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                &nbsp;&nbsp;
                                                                 <span class="" style="position: relative;top: 15%;"
                                                                     stage="8"><i
                                                                         class="bi bi-caret-down-fill text-white"></i></span>
@@ -368,7 +368,7 @@
                                                                     class="stage-button stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="8">
                                                                     Terkontrak
-                                                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                                                    &nbsp;&nbsp;
                                                                     <span class=""
                                                                         style="position: relative;top: 15%;"
                                                                         stage="8"><i

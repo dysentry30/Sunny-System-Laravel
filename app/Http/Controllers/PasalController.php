@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Pasals;
 use Illuminate\Http\Request;
+use PhpOffice\PhpWord\IOFactory;
 use App\Models\AddendumContracts;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
@@ -109,9 +110,13 @@ class PasalController extends Controller
     public function pasalAdd(Request $request, Pasals $pasals) {
         $pasal = $request->get("pasal");
         $tipePasal = $request->get("tipe-pasal");
+        $prioritas = $request->get("prioritas");
+        $keterangan = $request->get("keterangan");
         // dd($request->all());
         $pasals->pasal = $pasal;
         $pasals->tipe_pasal = $tipePasal;
+        $pasals->prioritas = $prioritas;
+        $pasals->keterangan = $keterangan;
         if ($pasals->save()) {
             Alert::success('Success', $pasal.", Berhasil Ditambahkan");
             return response()->json([

@@ -117,6 +117,8 @@
                                 <th class="w-0px text-center">No</th>
                                 <th class="w-150px">Kategori Pasal</th>
                                 <th class="text-break">Pasal</th>
+                                <th class="">Prioritas</th>
+                                <th class="text-break">Keterangan</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -142,19 +144,30 @@
                                     <!--begin::Pasal=-->
                                     <td>
                                         <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
-                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
-                                            class="text-hover-primary mb-1 w-50%" 
+                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal" class="text-hover-primary mb-1 w-35%" 
                                             style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
+
+                                    <!--begin::Prioritas=-->
+                                    <td>
+                                        <p>{{ $pasal->prioritas }}</p>
+                                    </td>
+                                    <!--end::Prioritas=-->
+
+                                    <!--begin::Keterangan=-->
+                                    <td>
+                                        <pre type="button" data-bs-toggle="modal" class="text-hover-primary mb-1 w-40%" 
+                                            style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $pasal->keterangan }}</pre>
+                                    </td>
+                                    <!--end::Keterangan=-->
 
                                     @if (auth()->user()->check_administrator)
                                         <!--begin::Close Btn=-->
                                         <td>
                                             {{-- <a href="/pasal/delete/{{ $pasal->id_pasal }}"
                                             class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a> --}}
-                                            <a data-bs-toggle="modal"
-                                                data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
+                                            <a data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
                                                 class="btn btn-sm btn-light btn-active-primary">Delete</a>
                                         </td>
                                         <!--end::Close Btn=-->
@@ -208,26 +221,67 @@
                     <!--begin::Input group Website-->
                     <div class="fv-row">
                         <div class="fv-row">
+
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Tipe Pasal</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid"
+                                            id="tipe-pasal" name="tipe-pasal" placeholder="Input kategori Pasal" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Prioritas Pasal</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="prioritas" id="prioritas" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
+                                            <option value=""></option>
+                                            <option value="Penting">Penting</option>
+                                            <option value="Wajib">Wajib</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Tipe Pasal :</span>
+                                <span>Pasal :</span>
                             </label>
                             <!--end::Label-->
-
                             <!--begin::Input-->
-                            <input class="form-control form-control-solid" name="tipe-pasal" id="tipe-pasal"
-                                style="font-weight: normal" rows="10" value="" placeholder="Tipe Pasal"/>
+                            <textarea class="form-control form-control-solid" name="pasal" id="pasal"
+                                style="font-weight: normal" rows="8" value="" placeholder="Ketikan pasal disini."></textarea>
                             <!--end::Input-->
 
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Pasal :</span>
+                                <span>Keterangan :</span>
                             </label>
                             <!--end::Label-->
-
                             <!--begin::Input-->
-                            <textarea class="form-control form-control-solid" name="pasal" id="pasal"
-                                style="font-weight: normal" rows="10" value="" placeholder="Ketikan pasal disini..."></textarea>
+                            <textarea class="form-control form-control-solid" name="keterangan" id="keterangan"
+                                style="font-weight: normal" rows="4" value="" placeholder="Ketikan keterangan disini."></textarea>
                             <!--end::Input-->
 
 
@@ -463,6 +517,8 @@
         const loadingElt = document.querySelector(".spinner-border");
         const inputPasalElt = document.querySelector("#pasal");
         const inputTipePasalElt = document.querySelector("#tipe-pasal");
+        const inputPrioritasElt = document.querySelector("#prioritas");
+        const inputKeteranganElt = document.querySelector("#keterangan");
         const tableBodyElt = document.querySelector("table tbody");
         const toaster = document.getElementById("liveToastBtn");
         const toasterBoots = new bootstrap.Toast("#liveToastBtn", {
@@ -476,10 +532,14 @@
 
             const pasal = inputPasalElt.value;
             const tipePasal = inputTipePasalElt.value;
+            const prioritas = inputPrioritasElt.value;
+            const keterangan = inputKeteranganElt.value;
             const formData = new FormData();
             formData.append("_token", "{{ csrf_token() }}");
             formData.append("tipe-pasal", tipePasal);
             formData.append("pasal", pasal);
+            formData.append("prioritas", prioritas);
+            formData.append("keterangan", keterangan);
 
             const responsePasal = await fetch("/pasal/add", {
                 method: "POST",

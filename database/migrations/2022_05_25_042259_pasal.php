@@ -17,6 +17,8 @@ return new class extends Migration
             $table->bigIncrements('id_pasal');
             $table->string("tipe_pasal");
             $table->longText("pasal");
+            $table->string("prioritas")->nullable();
+            $table->longText("keterangan")->nullable();
             $table->timestamps();
         });
     }

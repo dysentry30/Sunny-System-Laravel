@@ -251,11 +251,6 @@ class DatabaseSeeder extends Seeder
         //     'nilai_forecast' => 6200000000,
         //     'month_forecast' => 11,
         // ]);
-        Forecast::create([
-            'kode_proyek' => "FIRA001",
-            'nilai_forecast' => 4700000000,
-            'month_forecast' => 12,
-        ]);
         // begin :: Forecast.
     }
 }
