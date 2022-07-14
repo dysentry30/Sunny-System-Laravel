@@ -325,7 +325,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->month_forecast = $farestMonth;
                 $history_forecast->rkap_forecast = moneyFormatToNumber($forecast->Proyek->nilai_rkap);
                 $history_forecast->month_rkap = (int) $forecast->Proyek->bulan_pelaksanaan;
-                $history_forecast->realisasi_forecast = moneyFormatToNumber($forecast->Proyek->nilai_kontrak_keseluruhan);
+                $history_forecast->realisasi_forecast = moneyFormatToNumber($forecast->Proyek->nilai_kontrak_keseluruhan ?? "");
                 $history_forecast->month_realisasi = (int) $forecast->Proyek->bulan_ri_perolehan;
                 $history_forecast->periode_prognosa = (int) date("m");
                 $history_forecast->save();

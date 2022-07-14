@@ -180,11 +180,21 @@
                                                                     {{ $claim->jenis_claim }}
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
+                                                                <!--begin::Approval-->
                                                                 <td>
-                                                                    Pending
+                                                                    @switch($claim->stages)
+                                                                        @case(1) On Progress
+                                                                            @break
+                                                                        @case(2) Disetujui
+                                                                            @break
+                                                                        @case(3) Ditolak
+                                                                            @break
+                                                                        @case(4) cancel
+                                                                            @break
+                                                                        @default
+                                                                    @endswitch
                                                                 </td>
-                                                                <!--end::Action=-->
+                                                                <!--end::Approval-->
                                                                 <!--begin::PIC=-->
                                                                 <td>
                                                                     {{ $claim->pic }}
@@ -233,11 +243,21 @@
                                                                     {{ $claim->jenis_claim }}
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
+                                                                <!--begin::Approval-->
                                                                 <td>
-                                                                    Pending
+                                                                    @switch($claim->stages)
+                                                                        @case(1) On Progress
+                                                                            @break
+                                                                        @case(2) Disetujui
+                                                                            @break
+                                                                        @case(3) Ditolak
+                                                                            @break
+                                                                        @case(4) cancel
+                                                                            @break
+                                                                        @default
+                                                                    @endswitch
                                                                 </td>
-                                                                <!--end::Action=-->
+                                                                <!--end::Approval-->
                                                                 <!--begin::PIC=-->
                                                                 <td>
                                                                     {{ $claim->pic }}
@@ -286,11 +306,21 @@
                                                                     {{ $claim->jenis_claim }}
                                                                 </td>
                                                                 <!--end::Action=-->
-                                                                <!--begin::Action=-->
+                                                                <!--begin::Approval-->
                                                                 <td>
-                                                                    Pending
+                                                                    @switch($claim->stages)
+                                                                        @case(1) On Progress
+                                                                            @break
+                                                                        @case(2) Disetujui
+                                                                            @break
+                                                                        @case(3) Ditolak
+                                                                            @break
+                                                                        @case(4) cancel
+                                                                            @break
+                                                                        @default
+                                                                    @endswitch
                                                                 </td>
-                                                                <!--end::Action=-->
+                                                                <!--end::Approval-->
                                                                 <!--begin::PIC=-->
                                                                 <td>
                                                                     {{ $claim->pic }}

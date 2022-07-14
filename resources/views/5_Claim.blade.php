@@ -177,7 +177,6 @@
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
                                             </tr>
                                             <!--end::Table row-->
@@ -208,11 +207,6 @@
                                                         <!--end::Email=-->
                                                         <!--begin::Action=-->
                                                         <td>
-                                                            Pending
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
                                                             <a href="/contract-management/view/{{ $proyekClaims->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a>
                                                         </td>
                                                         <!--end::Action=-->
@@ -237,7 +231,6 @@
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
@@ -265,11 +258,6 @@
                                                         {{ $proyekAntis->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Email=-->
-                                                    <!--begin::Action=-->
-                                                    <td>
-                                                        Pending
-                                                    </td>
-                                                    <!--end::Action=-->
                                                     <!--begin::Action=-->
                                                     <td>
                                                         <a href="/contract-management/view/{{ $proyekAntis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->ContractManagements->id_contract }}</a>
@@ -301,9 +289,7 @@
                                                 <th class="min-w-auto">Kode Proyek</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">Approval Status</th>
                                                 <th class="min-w-auto">ID Contract</th>
-                                                <th class="min-w-auto">PIC</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -328,11 +314,6 @@
                                                             {{ $proyekAsuransis->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Email=-->
-                                                        <!--begin::Company=-->
-                                                        <td>
-                                                            Pending
-                                                        </td>
-                                                        <!--end::Company=-->
                                                         <!--begin::Action=-->
                                                         <td>
                                                             <a href="/contract-management/view/{{ $proyekAsuransis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagements->id_contract }}</a>

@@ -693,6 +693,9 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
             borderWidth: 0
         }
     },
+    credits: {
+        enabled:false
+    },
     colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
     series: [{
         name: 'Claim',

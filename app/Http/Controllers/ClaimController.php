@@ -150,9 +150,11 @@ class ClaimController extends Controller
         $claimManagements->jenis_claim = $data["jenis-claim"];
 
         if ($claimManagements->save()) {
-            return redirect("/contract-management/view/" . $data["id-contract"])->with("success", "This claim has been added");
+            Alert::success("Success", "Claim Berhasil Ditambahkan");
+            return redirect("/contract-management/view/" . $data["id-contract"]);
         }
-        return redirect("/claim-management")->with("failed", "This claim failed to add");
+        Alert::error("Error", "Claim Gagal Ditambahkan");
+        return redirect("/claim-management");
     }
 
     /**
