@@ -3530,8 +3530,9 @@ fill="none">
             const dataColumnForecast = Array.from(document.querySelectorAll(
                 `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
             if(dataColumnForecast.length > 10) {
-                dataColumnForecast.pop();
+                dataColumnForecast.length = 10;
             }
+            console.log(dataColumnForecast);
             dataColumnForecast.forEach(dataForecast => {
                 totalRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, "") ?? 0);
             });
