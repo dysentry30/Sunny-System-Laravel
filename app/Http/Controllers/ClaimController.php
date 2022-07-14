@@ -12,6 +12,7 @@ use App\Models\ContractManagements;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class ClaimController extends Controller
 {
@@ -29,51 +30,52 @@ class ClaimController extends Controller
         //         array_push($proyek_with_claim, $proyek);
         //     }
         // }
-        
-        $proyekClaim = Proyek::WhereHas('ClaimManagements', function ($claim){
+
+        $proyekClaim = Proyek::WhereHas('ClaimManagements', function ($claim) {
             $claim->where('jenis_claim', '=', "Claim");
         })->get();
-        
-        $proyekAnti = Proyek::WhereHas('ClaimManagements', function ($claim){
+
+        $proyekAnti = Proyek::WhereHas('ClaimManagements', function ($claim) {
             $claim->where('jenis_claim', '=', "Anti Claim");
         })->get();
 
-        $proyekAsuransi = Proyek::WhereHas('ClaimManagements', function ($claim){
+        $proyekAsuransi = Proyek::WhereHas('ClaimManagements', function ($claim) {
             $claim->where('jenis_claim', '=', "Claim Asuransi");
         })->get();
-        
+
         // dd($proyekClaim);
         return view("5_Claim", ["proyekClaim" => $proyekClaim, "proyekAnti" => $proyekAnti, "proyekAsuransi" => $proyekAsuransi]);
     }
 
     public function viewClaim($id_proyek, $jenis_claim)
-    {   
+    {
         $proyek = Proyek::find($id_proyek);
         $claim = $proyek->ClaimManagements;
         $jenis_claim = str_replace('-', ' ', $jenis_claim);
         $proyekClaim = [];
         foreach ($claim as $claims) {
-                if($claims->jenis_claim == $jenis_claim) {
-                    array_push($proyekClaim, $claims);
-                }
+            if ($claims->jenis_claim == $jenis_claim) {
+                array_push($proyekClaim, $claims);
             }
+        }
 
         // dd($jenis_claim);
-        
+
         // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
 
 
         return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek]);
     }
 
-    public function claimDelete(Request $request) {
+    public function claimDelete(Request $request)
+    {
         $data = $request->all();
         $claim = ClaimManagements::find($data["id-claim"]);
-        ClaimDetails::where("id_claim", "=", $claim->id_claim)->get()->each(function($approval) {
+        ClaimDetails::where("id_claim", "=", $claim->id_claim)->get()->each(function ($approval) {
             Storage::disk("public/words")->delete($approval->id_document . ".docx");
             $approval->delete();
         });
-        if($claim->delete()) {
+        if ($claim->delete()) {
             return redirect("/claim-management")->with("success", "Claim berhasil dihapus");
         }
         return redirect("/claim-management")->with("success", "Claim gagal dihapus");
@@ -148,7 +150,7 @@ class ClaimController extends Controller
         $claimManagements->jenis_claim = $data["jenis-claim"];
 
         if ($claimManagements->save()) {
-            return redirect("/contract-management/view/".$data["id-contract"])->with("success", "This claim has been added");
+            return redirect("/contract-management/view/" . $data["id-contract"])->with("success", "This claim has been added");
         }
         return redirect("/claim-management")->with("failed", "This claim failed to add");
     }
@@ -343,20 +345,23 @@ class ClaimController extends Controller
     public function claimStage(Request $request)
     {
         $id_claim = $request->id_claim;
-        $stage = $request->stage;
+        if (!empty($request->get("stage-disetujui"))) {
+            $stage = 2;
+        } else if (!empty($request->get("stage-ditolak"))) {
+            $stage = 3;
+        } elseif (!empty($request->get("stage-cancel"))) {
+            $stage = 4;
+        }
+
         $claimManagement = ClaimManagements::find($id_claim);
         if ($claimManagement instanceof ClaimManagements) {
             $claimManagement->stages = $stage;
             if ($claimManagement->save()) {
-                return response()->json([
-                    "status" => "success",
-                    "message" => "Stage has been updated",
-                ]);
+                Alert::success("Success", "Stage berhasil diperbarui");
+                return redirect()->back();
             }
         }
-        return response()->json([
-            "status" => "failed",
-            "message" => "Stage failed to update",
-        ]);
+        Alert::error("Error", "Stage gagal diperbarui");
+        return redirect()->back();
     }
 }

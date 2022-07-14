@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
@@ -105,6 +106,53 @@ class DashboardController extends Controller
             $offset_history = $i;
         }
 
+        $claims = ClaimManagements::all();
+        
+        /* 
+         * Format Claim Stage
+         * Stage 1 = On Progress
+         * Stage 2 = Disetujui
+         * Stage 3 = Ditolak
+         * Stage 4 = Cancel
+        */
+        // Begin :: menghitung total dari status dan jenis claim
+        $claim_status_array = [];
+        $claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim")->count();
+        $claim_disetujui = $claims->where("stages", "=", "2")->where("jenis_claim", "=", "Claim")->count();
+        $claim_ditolak = $claims->where("stages", "=", "3")->where("jenis_claim", "=", "Claim")->count();
+        $claim_on_progress = $claims->where("stages", "=", "1")->where("jenis_claim", "=", "Claim")->count();
+        array_push($claim_status_array, $claim_cancel, $claim_disetujui, $claim_ditolak, $claim_on_progress);
+        // End :: menghitung total dari status dan jenis claim
+
+        // Begin :: menghitung total dari status dan jenis anti claim
+        $anti_claim_status_array = [];
+        $anti_claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_disetujui = $claims->where("stages", "=", "2")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_ditolak = $claims->where("stages", "=", "3")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_on_progress = $claims->where("stages", "=", "1")->where("jenis_claim", "=", "Anti Claim")->count();
+        array_push($anti_claim_status_array, $anti_claim_cancel, $anti_claim_disetujui, $anti_claim_ditolak, $anti_claim_on_progress);
+        // End :: menghitung total dari status dan jenis anti claim
+        
+        // Begin :: menghitung total dari status dan jenis claim asuransi
+        $claim_asuransi_status_array = [];
+        $claim_asuransi_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_disetujui = $claims->where("stages", "=", "2")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_ditolak = $claims->where("stages", "=", "3")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_on_progress = $claims->where("stages", "=", "1")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        array_push($claim_asuransi_status_array, $claim_asuransi_cancel, $claim_asuransi_disetujui, $claim_asuransi_ditolak, $claim_asuransi_on_progress);
+        // End :: menghitung total dari status dan jenis claim asuransi
+
+        // $claim_diterima = $claims->countBy(function($data) {
+        //     return $data->stages == 2;
+        // });
+        // $claim_on_progress = $claims->countBy(function($data) {
+        //     return $data->stages == 1;
+        // });
+        // $claim_on_progress = $claims->countBy(function($data) {
+        //     return $data->stages == 1;
+        // });
+        // dd($claim_on_progress);
+
 
         // $fc1 = 0;
         // $fc2 = 0;
@@ -198,7 +246,7 @@ class DashboardController extends Controller
         };
         //end::Marketing PipeLine
 
-        return view('1_Dashboard', compact(["nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks"]));
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks"]));
     }
 
     /**
