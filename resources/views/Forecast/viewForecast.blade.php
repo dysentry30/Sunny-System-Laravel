@@ -40,6 +40,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                 </div>
                 {{-- end:: Toaster Notification --}}
 
+                <div class="custom-toaster">
+
+                </div>
+
 
                 <!--begin::Form-->
                 <form action="#" method="post" enctype="multipart/form-data">
@@ -80,10 +84,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </script>
 
                                                     @if (count($historyForecast) > 0)
-                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
+                                                        <span class="text-white mx-2 fs-6">Unlock Forecast</span>
                                                         <i class="bi bi-lock-fill text-white"></i>
                                                     @else
-                                                        <span class="text-white mx-2 fs-6">Unlock Forecast</span>
+                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                         <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
                                                 </button>
@@ -668,6 +672,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @if ($forecast->month_forecast == $month_counter)
                                                                                                 @php
                                                                                                     $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                    $total_year_forecast += $total_forecast;
                                                                                                     
                                                                                                 @endphp
                                                                                                 @if ($month_counter == (int) $forecast->rkap_month)
@@ -755,7 +760,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @endif
                                                                                     @php
                                                                                         $is_data_found = false;
-                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                        $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap);
                                                                                         $month_counter++;
                                                                                     @endphp
                                                                                 @endfor
@@ -811,10 +816,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         {{-- end:: Foreach Proyek --}}
                                                                     @endif
                                                                     @php
-                                                                        $total_year_forecast += $total_forecast;
                                                                         $total_forecast = 0;
                                                                         $total_ok = 0;
                                                                         $month_counter = 1;
+                                                                        $total_year_forecast += $total_forecast;
                                                                     @endphp
                                                                 @endforeach
                                                                 {{-- end:: Foreach Unit Kerja --}}
@@ -2193,7 +2198,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) &&
+                                                                                                $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -2934,7 +2940,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) &&
+                                                                                                $proyek->nilai_kontrak_keseluruhan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                                     {{ number_format($total_realisasi, 0, ',', ',') }}
@@ -3351,9 +3358,9 @@ fill="none">
                     }).format(totalColumnForecast);
 
                     input.value = nilaiFormatted;
-                    toaster.classList.add("text-bg-success")
-                    toaster.classList.remove("text-bg-danger")
-                    toastBody.innerHTML = saveNilaiForecastRes.msg;
+                    // toaster.classList.add("text-bg-success")
+                    // toaster.classList.remove("text-bg-danger")
+                    // toastBody.innerHTML = saveNilaiForecastRes.msg;
                     rowTotalForecastElt.forEach(rowForecast => {
                         rowForecast.innerHTML = `
                     <center>
@@ -3390,12 +3397,49 @@ fill="none">
                     });
 
                     recalculateColumn();
+                    Swal.fire({
+                        html: saveNilaiForecastRes.msg,
+                        target: '#custom-toaster',
+                        customClass: {
+                            container: 'position-absolute'
+                        },
+                        toast: true,
+                        // timer: 3000,
+                        confirmButtonColor: "#008cb4",
+                        position: 'top-right'
+                    });
                 } else {
-                    toaster.classList.remove("text-bg-success")
-                    toaster.classList.add("text-bg-danger")
-                    toastBody.innerHTML = saveNilaiForecastRes.msg;
+                    Swal.fire({
+                        html: saveNilaiForecastRes.msg,
+                        target: '#custom-toaster',
+                        customClass: {
+                            container: 'position-absolute'
+                        },
+                        toast: true,
+                        confirmButtonColor: "#008cb4",
+                        // timer: 3000,
+                        position: 'top-right'
+                    });
+                    // toaster.classList.remove("text-bg-success")
+                    // toaster.classList.add("text-bg-danger")
+                    // toastBody.innerHTML = saveNilaiForecastRes.msg;
                 }
-                toastBoots.show();
+                // let counterTimer = 3;
+                // let width = 0;
+                // const toasterTimer = document.querySelector("#toaster-timer");
+                // const toasterTimerBefore = window.getComputedStyle(
+                //     document.querySelector('#toaster-timer'), ':before'
+                // ).getPropertyValue("width");
+                // const timerOut = setInterval(() => {
+                //     counterTimer--;
+                //     width = Math.floor(toasterTimer.clientWidth / counterTimer);
+                //     toasterTimerBefore.style.setProperty("width") += `${width}px`;
+                //     toasterTimer.innerHTML =
+                //         `<span style="position:relative;z-index:3;">${counterTimer}</span>`;
+                //     if (counterTimer == 0) {
+                //         clearInterval(timerOut);
+                //     }
+                // }, 1000);
             });
         });
     }
@@ -3414,7 +3458,8 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `input[data-column-forecast="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecast += isNaN(Number(dataForecast.value.replaceAll(",", ""))) ? 0 : Number(dataForecast.value.replaceAll(",", ""));
+                totalForecast += isNaN(Number(dataForecast.value.replaceAll(",", ""))) ? 0 : Number(
+                    dataForecast.value.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3436,7 +3481,8 @@ fill="none">
         const dataColumnForecast = document.querySelectorAll(
             `.total-month-x-forecast`);
         dataColumnForecast.forEach(dataForecast => {
-            totalForecastYear += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
+            totalForecastYear += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(
+                dataForecast.innerText.replaceAll(",", ""));
         });
         const formattedForecastValue = Intl.NumberFormat("en-US", {
             maximumFractionDigits: 0,
@@ -3460,7 +3506,8 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `input[data-column-forecast-internal="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecastInternal += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
+                totalForecastInternal += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 :
+                    Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3484,7 +3531,8 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `td[data-column-forecast-sd="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalForecastSD += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
+                totalForecastSD += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 :
+                    Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3508,7 +3556,8 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `td[data-column-ok-bulanan="${totalColumnForecast}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                totalOKBulanan += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 : Number(dataForecast.innerText.replaceAll(",", ""));
+                totalOKBulanan += isNaN(Number(dataForecast.innerText.replaceAll(",", ""))) ? 0 :
+                    Number(dataForecast.innerText.replaceAll(",", ""));
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -3529,10 +3578,9 @@ fill="none">
             const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
             const dataColumnForecast = Array.from(document.querySelectorAll(
                 `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
-            if(dataColumnForecast.length > 10) {
+            if (dataColumnForecast.length > 10) {
                 dataColumnForecast.length = 10;
             }
-            console.log(dataColumnForecast);
             dataColumnForecast.forEach(dataForecast => {
                 totalRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, "") ?? 0);
             });
@@ -3770,6 +3818,7 @@ fill="none">
 
     async function confirmedLock() {
         const getIconElt = monthEltBulanan.querySelector("i");
+
         // monthEltBulanan.setAttribute("disabled", "");
         const formData = new FormData();
         if (monthEltBulanan) {
@@ -3791,8 +3840,12 @@ fill="none">
                     timer: 3000,
                     showConfirmButton: false,
                 });
-                getIconElt.classList.remove("bi-unlock-fill");
-                getIconElt.classList.add("bi-lock-fill");
+                // getIconElt.classList.remove("bi-unlock-fill");
+                // getIconElt.classList.add("bi-lock-fill");
+                monthEltBulanan.innerHTML = `
+                    <span class="text-white mx-2 fs-6">Unlock Forecast</span>
+                    <i class="bi bi-lock-fill text-white"></i>
+                `;
                 // toaster.classList.add("text-bg-success");
                 // toastBody.innerText = getLockRes.msg;
             } else {
@@ -3812,6 +3865,10 @@ fill="none">
                     timer: 3000,
                     showConfirmButton: false,
                 });
+                monthEltBulanan.innerHTML = `
+                    <span class="text-white mx-2 fs-6">Lock Forecast</span>
+                    <i class="bi bi-unlock-fill text-white"></i>
+                `;
                 // toaster.classList.add("text-bg-success");
                 // toastBody.innerText = getLockRes.msg;
             }
