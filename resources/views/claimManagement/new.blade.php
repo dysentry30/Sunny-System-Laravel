@@ -14,7 +14,6 @@
         @extends('template.header')
         <!--end::Header-->
 
-
         <!--begin::Content-->
         <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
@@ -69,501 +68,557 @@
                         <!--begin::Container-->
                         <div id="kt_content_container" class="container-fluid">
                             <!--begin::Contacts App- Edit Contact-->
-                            <div class="row g-7">
+                            @isset($claimContract)
+                                <div class="row g-7 mb-10">
+                                    <div class="col-xl-15">
+                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-                                {{-- begin::Alert --}}
-                                @if (Session::has('failed'))
-                                    <div class="col">
-                                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                            <symbol id="exclamation-triangle-fill" fill="red" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                            </symbol>
-                                        </svg>
-                                        <div class="alert alert-danger d-flex align-items-center alert-dismissible"
-                                            role="alert">
-                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                                aria-label="Danger:">
-                                                <use xlink:href="#exclamation-triangle-fill" />
-                                            </svg>
-                                            <div>
-                                                {{ Session::get('failed') }}
-                                                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"
-                                                    aria-label="Close"></button>
-                                            </div>
+                                            <div class="card-body pt-5"
+                                                style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
 
-                                        </div>
+                                                <div class="form-group">
+                                                    <div id="stage-button" class="stage-list">
+                                                        <a href="#" role="link"
+                                                            class="stage-button color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer;" stage="1">
+                                                            On Progress
+                                                        </a>
+                                                        @if ($claimContract->stages == 2)
+                                                            <a href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                                                                role="button" id="dropdownMenuButton1"
+                                                                class="stage-button color-is-default stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Disetujui</span>&nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @elseif($claimContract->stages == 3)
+                                                            <a href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                                                                role="button" id="dropdownMenuButton1"
+                                                                class="stage-button color-is-danger stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Ditolak</span>&nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @elseif($claimContract->stages == 4)
+                                                            <a href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                                                                role="button" id="dropdownMenuButton1"
+                                                                class="stage-button color-is-danger stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Cancel</span>&nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @else
+                                                            <a href="#" data-bs-toggle="dropdown" aria-expanded="false"
+                                                                role="button" id="dropdownMenuButton1"
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                <div class="d-flex flex-row">
+                                                                    <span class="text-white">Disetujui</span>&nbsp;&nbsp;
+                                                                    <span class="" style="position: relative;top: 15%;"
+                                                                        stage="1"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </div>
+                                                            </a>
+                                                        @endif
+                                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1"
+                                                            style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(612px, 81px);"
+                                                            data-popper-escaped="" data-popper-placement="bottom-start">
+                                                            <form action=""></form>
+                                                            <form action="/claim/stage/save" method="POST"
+                                                                onsubmit="confirmAction(this); return false;">
+                                                                @csrf
+                                                                <li><input type="submit"
+                                                                        onclick="this.form.submitted=this.value"
+                                                                        class="dropdown-item" name="stage-disetujui"
+                                                                        value="Disetujui"></li>
+                                                                <li><input type="submit"
+                                                                        onclick="this.form.submitted=this.value"
+                                                                        class="dropdown-item" name="stage-ditolak"
+                                                                        value="Ditolak"></li>
+                                                                <li><input type="submit"
+                                                                        onclick="this.form.submitted=this.value"
+                                                                        class="dropdown-item" name="stage-cancel"
+                                                                        value="Cancel"></li>
+                                                            </form>
+                                                        </ul>
+                                                        {{-- <a href="/contract-management/view/90142/addendum-contract"
+                                                        role="link"
+                                                        class="stage-button color-is-default stage-is-not-active"
+                                                        style="outline: 0px; cursor: pointer;" stage="4">
+                                                        Addendum Kontrak
+                                                    </a>
+                                                    <a href="#" role="link"
+                                                        class="stage-button color-is-default stage-is-not-active"
+                                                        style="outline: 0px; cursor: not-allowed; pointer-events: none;"
+                                                        stage="5">
+                                                        Serah Terima Pekerjaan
+                                                    </a>
+                                                    <a href="#" role="link"
+                                                        class="stage-button color-is-default stage-is-not-active"
+                                                        style="outline: 0px; cursor: not-allowed; pointer-events: none;"
+                                                        stage="6">
+                                                        Closing Proyek
+                                                    </a> --}}
 
-                                    </div>
-                                    {{-- end::Alert --}}
-                                @endif
-                                @if (Session::has('success'))
-                                    <div class="col">
-                                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                            <symbol id="check-circle-fill" fill="green" viewBox="0 0 16 16">
-                                                <path
-                                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </symbol>
-                                        </svg>
-                                        <div class="alert alert-success d-flex align-items-center alert-dismissible"
-                                            role="alert">
-                                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                                aria-label="Success:">
-                                                <use xlink:href="#check-circle-fill" />
-                                            </svg>
-                                            <div>
-                                                {{ Session::get('success') }}
-                                                <button type="button" class="btn-close btn-sm" data-bs-dismiss="alert"
-                                                    aria-label="Close"></button>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                    {{-- end::Alert --}}
-                                @endif
-
-
-                                <!--begin::Header Contract-->
-                                <div class="col-xl-15">
-                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
-                                        <form action="/claim-management/save" method="POST">
-                                            @csrf
-                                            <div class="card-body pt-5">
-
-                                                <!--begin::Row-->
-                                                <div class="row fv-row">
-                                                    <!--begin::Col-->
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-
-                                                        <!--begin::Input group Name-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">No. Claim</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid"
-                                                                id="number-claim" name="number-claim"
-                                                                value="{{ $kode_claim ?? ($claimContract->id_claim ?? '') }}"
-                                                                placeholder="No. Claim" readonly>
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group Name-->
                                                     </div>
 
-                                                    <!--begin::Col-->
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Tanggal Pengajuan</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-
-                                                            <a href="#" class="btn btn-sm mx-3"
-                                                                style="background: transparent;width:1rem;height:2.3rem;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_calendar"><i
-                                                                    class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                    style="color: #008cb4"></i></a>
-                                                            <input type="Date"
-                                                                class="form-control form-control-solid ps-12"
-                                                                placeholder="Select a date"
-                                                                value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
-                                                                name="approve-date" id="approve-date">
-
-                                                            {{-- begin::erorr message --}}
-                                                            @error('approve-date')
-                                                                <h6 class="text-danger">{{ $message }}</h6>
-                                                            @enderror
-                                                            {{-- end::erorr message --}}
-
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                    </div>
-                                                    <!--End begin::Col-->
                                                 </div>
 
-                                                <!--End begin::Row-->
-                                                {{-- @dd($proyek); --}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endisset
 
-                                                <div class="row fv-row">
+                            <!--begin::Header Contract-->
+                            <div class="col-xl-15">
+                                <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                    <form action="/claim-management/save" method="POST">
+                                        @csrf
+                                        <div class="card-body pt-5">
 
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Proyek</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <select name="project-id" id="project-id"
-                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Pilih Proyek"
-                                                                data-select2-id="select2-data-project-id" tabindex="-1"
-                                                                aria-hidden="true">
-                                                                <option value="{{ $proyek->kode_proyek }}" selected>
-                                                                    {{ $proyek->nama_proyek }}</option>
-                                                                {{-- @foreach ($projects as $projectAll)
+                                            <!--begin::Row-->
+                                            <div class="row fv-row">
+                                                <!--begin::Col-->
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+
+                                                    <!--begin::Input group Name-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">No. Claim</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid"
+                                                            id="number-claim" name="number-claim"
+                                                            value="{{ $kode_claim ?? ($claimContract->id_claim ?? '') }}"
+                                                            placeholder="No. Claim" readonly>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group Name-->
+                                                </div>
+
+                                                <!--begin::Col-->
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Tanggal Pengajuan</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+
+                                                        <a href="#" class="btn btn-sm mx-3"
+                                                            style="background: transparent;width:1rem;height:2.3rem;"
+                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_calendar"><i
+                                                                class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                                style="color: #008cb4"></i></a>
+                                                        <input type="Date"
+                                                            class="form-control form-control-solid ps-12"
+                                                            placeholder="Select a date"
+                                                            value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
+                                                            name="approve-date" id="approve-date">
+
+                                                        {{-- begin::erorr message --}}
+                                                        @error('approve-date')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
+                                                        {{-- end::erorr message --}}
+
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+                                                </div>
+                                                <!--End begin::Col-->
+                                            </div>
+
+                                            <!--End begin::Row-->
+                                            {{-- @dd($proyek); --}}
+
+                                            <div class="row fv-row">
+
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Proyek</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <select name="project-id" id="project-id"
+                                                            class="form-select form-select-solid select2-hidden-accessible"
+                                                            data-control="select2" data-hide-search="true"
+                                                            data-placeholder="Pilih Proyek"
+                                                            data-select2-id="select2-data-project-id" tabindex="-1"
+                                                            aria-hidden="true">
+                                                            <option value="{{ $proyek->kode_proyek }}" selected>
+                                                                {{ $proyek->nama_proyek }}</option>
+                                                            {{-- @foreach ($projects as $projectAll)
                                                                     <option value="{{ $projectAll->kode_proyek }}"
                                                                         {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? $proyek->kode_proyek)) ? 'selected' : '' }}>
                                                                         {{ $projectAll->nama_proyek }}</option>
                                                                 @endforeach --}}
-                                                                {{-- <option selected data-select2-id="select2-data-2-3jce">Pilih
+                                                            {{-- <option selected data-select2-id="select2-data-2-3jce">Pilih
                                                                 Proyek...</option> --}}
-                                                            </select>
-                                                            <!--end::Input-->
+                                                        </select>
+                                                        <!--end::Input-->
 
-                                                            {{-- begin::erorr message --}}
-                                                            {{-- @error('project-id')
+                                                        {{-- begin::erorr message --}}
+                                                        {{-- @error('project-id')
                                                                 <h6 class="text-danger">{{ $message }}</h6>
                                                             @enderror --}}
-                                                            {{-- end::erorr message --}}
-                                                        </div>
-                                                        <!--end::Input group-->
+                                                        {{-- end::erorr message --}}
                                                     </div>
+                                                    <!--end::Input group-->
+                                                </div>
 
-                                                    <!--End begin::Col-->
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Contract</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <select
-                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                name="id-contract" id="id-contract" value=""
-                                                                data-control="select2" data-hide-search="true"
-                                                                data-select2-id="select2-data-contract-id"
-                                                                data-placeholder="Pilih Contract">
-                                                                <option value="{{ $currentContract->id_contract }}" sel>
-                                                                    {{ $currentContract->id_contract }}</option>
-                                                                {{-- @foreach ($contractManagements as $contract)
+                                                <!--End begin::Col-->
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Contract</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <select
+                                                            class="form-select form-select-solid select2-hidden-accessible"
+                                                            name="id-contract" id="id-contract" value=""
+                                                            data-control="select2" data-hide-search="true"
+                                                            data-select2-id="select2-data-contract-id"
+                                                            data-placeholder="Pilih Contract">
+                                                            <option value="{{ $currentContract->id_contract }}" sel>
+                                                                {{ $currentContract->id_contract }}</option>
+                                                            {{-- @foreach ($contractManagements as $contract)
                                                                     <option value="{{ $contract->id_contract }}"
                                                                         {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>
                                                                         {{ $contract->id_contract }}</option>
                                                                 @endforeach --}}
-                                                            </select>
-                                                            <!--end::Input-->
-                                                            {{-- begin::erorr message --}}
-                                                            {{-- @error('id-contract')
+                                                        </select>
+                                                        <!--end::Input-->
+                                                        {{-- begin::erorr message --}}
+                                                        {{-- @error('id-contract')
                                                                 <h6 class="text-danger">{{ $message }}</h6>
                                                             @enderror --}}
-                                                            {{-- end::erorr message --}}
-                                                        </div>
-                                                        <!--end::Input group-->
+                                                        {{-- end::erorr message --}}
                                                     </div>
-                                                    <!--End begin::Col-->
-
+                                                    <!--end::Input group-->
                                                 </div>
-                                                <h6 id="status-msg" style="display: none"></h6>
-
-
-                                                <!--End begin::Row-->
-
-                                                <div class="row fv-row">
-
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>PIC</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid"
-                                                                placeholder="Who is responsible for this contract?"
-                                                                id="pic" name="pic"
-                                                                {{-- value="{{ old('pic') ?? ($claimContract->pic ?? '') ?? auth()->user()->name }}"> --}}
-                                                                value="{{ auth()->user()->name }}" readonly>
-                                                            <!--end::Input-->
-
-                                                            {{-- begin::erorr message --}}
-                                                            @error('pic')
-                                                                <h6 class="text-danger">{{ $message }}</h6>
-                                                            @enderror
-                                                            {{-- end::erorr message --}}
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                    </div>
-                                                    <!--End begin::Col-->
-
-                                                    <!--begin::Col-->
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Total Claim</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" class="form-control form-control-solid"
-                                                                name="total-claim" id="total-claim"
-                                                                onkeyup="reformatNumber(this)"
-                                                                value="{{ number_format((int) ($claimContract->nilai_claim ?? 0), 0, ',', ',') }}"
-                                                                placeholder="Type number here..." disabled>
-                                                            <!--end::Input-->
-
-                                                            {{-- begin::erorr message --}}
-                                                            @error('total-claim')
-                                                                <h6 class="text-danger">{{ $message }}</h6>
-                                                            @enderror
-                                                            {{-- end::erorr message --}}
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                    </div>
-                                                    <!--End begin::Col-->
-                                                </div>
-
-                                                <!--End begin::Row-->
-
-                                                <div class="row fv-row">
-
-                                                    <div class="col-6">
-                                                        <!--begin::Input group Website-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Jenis Claim</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <select name="jenis-claim" id="jenis-claim"
-                                                                class="form-select form-select-solid select2-hidden-accessible"
-                                                                data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Pilih Jenis Claim"
-                                                                data-select2-id="select2-data-jenis-claim" tabindex="-1"
-                                                                aria-hidden="true">
-                                                                @isset($claimContract)
-                                                                    <option value="{{ $claimContract->jenis_claim }}"
-                                                                        selected>{{ $claimContract->jenis_claim }}</option>
-                                                                @else
-                                                                    <option value="Claim">Claim</option>
-                                                                    <option value="Anti Claim">Anti Claim</option>
-                                                                    <option value="Claim Asuransi">Claim Asuransi</option>
-                                                                @endisset
-                                                            </select>
-                                                            <!--end::Input-->
-
-                                                            {{-- begin::erorr message --}}
-                                                            @error('project-id')
-                                                                <h6 class="text-danger">{{ $message }}</h6>
-                                                            @enderror
-                                                            {{-- end::erorr message --}}
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                    </div>
-
-                                                </div>
-
-                                                <!--End begin::Row-->
-
-
-
-
-                                        </form>
-
-                                    </div>
-
-
-                                </div>
-                            </div>
-                            <!--end::Header Contract-->
-
-                            @isset($claimContract)
-                                {{-- begin:: Footer --}}
-                                <div class="col-xl-15">
-                                    <!--begin::Contacts-->
-                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
-
-                                        <!--begin::Card body-->
-                                        <div class="card-body pt-5">
-                                            <!--begin:::Tabs-->
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8"
-                                                role="tablist">
-
-                                                <!--begin:::Tab item Informasi Perusahaan-->
-                                                <li class="nav-item" role="presentation">
-                                                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                        href="#kt_user_view_overview_tab" style="font-size:14px;"
-                                                        aria-selected="true" role="tab">Detail Pengajuan</a>
-                                                </li>
-                                                <!--end:::Tab item Informasi Perusahaan-->
-
-                                                <!--begin:::Tab item History-->
-                                                <li class="nav-item" role="presentation">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_history"
-                                                        style="font-size:14px;" aria-selected="false" tabindex="-1"
-                                                        role="tab">Attachment and Notes</a>
-                                                </li>
-                                                <!--end:::Tab item History-->
-                                            </ul>
-                                            <!--end:::Tabs-->
-
-                                            <!--begin:::Tab content -->
-                                            <div class="tab-content" id="myTabContent">
-                                                <!--Informasi Perusahaan-->
-                                                <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
-                                                    role="tabpanel">
-
-                                                    <!--begin::Card title-->
-                                                    <div class="card-title m-0">
-
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                            Pengajuan Claim
-
-                                                            <button type="button" class="btn btn-link mx-3 btn-lg"
-                                                                id="tambah-pengajuan">+</button>
-                                                        </h3>
-
-                                                        <!--begin:Table: Draft Contract-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_pengajuan_claim">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Nama</th>
-                                                                    <th class="min-w-auto">Total</th>
-
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @php
-                                                                    $approval_claim_array = explode(';', trim($claimContract->approval_claim));
-                                                                    array_pop($approval_claim_array);
-                                                                @endphp
-                                                                @if (count($approval_claim_array) > 0)
-                                                                    @foreach ($approval_claim_array as $approval)
-                                                                        @php
-                                                                            $approval = json_decode($approval);
-                                                                        @endphp
-                                                                        <tr data-id="{{ $approval[0] }}">
-                                                                            <td>
-                                                                                <h6><b>{{ $approval[1] }}</b></h6>
-                                                                            </td>
-                                                                            <td>
-                                                                                <h6><b>{{ number_format($approval[2], 0, ',', ',') }}</b>
-                                                                                </h6>
-                                                                            </td>
-                                                                            <td>
-                                                                                <button type="button"
-                                                                                    onclick="deleteApprovalClaim(this)"
-                                                                                    class="btn btn-sm btn-link">
-                                                                                    <i class="bi bi-trash3-fill"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    @endforeach
-                                                                @else
-                                                                    <tr>
-                                                                        <td>
-                                                                            <h6><b>There is no data</b></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endif
-                                                            </tbody>
-                                                            <!--end::Table body-->
-
-                                                        </table>
-                                                        <!--End:Table: Draft Contract-->
-                                                    </div>
-                                                </div>
-                                                <!--end:::Tab pane Informasi Perusahaan-->
-
-                                                <!--begin:::Tab pane History-->
-                                                <div class="tab-pane fade" id="kt_user_view_overview_history"
-                                                    role="tabpanel">
-                                                    <!--begin::Card title-->
-                                                    <div class="card-title m-0">
-
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                            Attachment & Notes
-
-                                                            <button type="button" data-bs-toggle="modal"
-                                                                class="btn btn-link mx-3 btn-lg" id="Plus"
-                                                                data-bs-target="#kt_modal_create_detail_claim">+</button>
-                                                        </h3>
-
-                                                        <!--begin:Table: Draft Contract-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_attachment-notes_claim">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Nama Dokumen</th>
-                                                                    <th class="min-w-auto">Notes</th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @forelse ($claimContract->claimDetails as $claimDetail)
-                                                                    <tr>
-                                                                        <td>
-                                                                            <a class="text-hover-primary text-gray-800"
-                                                                                href="/document/view/{{ $claimDetail->id_claim_detail }}/{{ $claimDetail->id_document }}">{{ $claimDetail->document_name }}</a>
-
-                                                                        </td>
-                                                                        <td>
-                                                                            <h6 class="text-gray-800">
-                                                                                {{ $claimDetail->document_name }}</h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                @empty
-                                                                    <tr>
-                                                                        <td>
-                                                                            <h6><b>There is no data</b></h6>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforelse
-                                                            </tbody>
-                                                            <!--end::Table body-->
-
-                                                        </table>
-                                                        <!--End:Table: Draft Contract-->
-                                                    </div>
-                                                </div>
-                                                <!--end:::Tab pane History-->
-
+                                                <!--End begin::Col-->
 
                                             </div>
-                                            <!--end:::Tab content-->
+                                            <h6 id="status-msg" style="display: none"></h6>
+
+
+                                            <!--End begin::Row-->
+
+                                            <div class="row fv-row">
+
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>PIC</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid"
+                                                            placeholder="Who is responsible for this contract?"
+                                                            id="pic" name="pic" {{-- value="{{ old('pic') ?? ($claimContract->pic ?? '') ?? auth()->user()->name }}"> --}}
+                                                            value="{{ auth()->user()->name }}" readonly>
+                                                        <!--end::Input-->
+
+                                                        {{-- begin::erorr message --}}
+                                                        @error('pic')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
+                                                        {{-- end::erorr message --}}
+                                                    </div>
+                                                    <!--end::Input group-->
+                                                </div>
+                                                <!--End begin::Col-->
+
+                                                <!--begin::Col-->
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Total Claim</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid"
+                                                            name="total-claim" id="total-claim"
+                                                            onkeyup="reformatNumber(this)"
+                                                            value="{{ number_format((int) ($claimContract->nilai_claim ?? 0), 0, ',', ',') }}"
+                                                            placeholder="Type number here..." disabled>
+                                                        <!--end::Input-->
+
+                                                        {{-- begin::erorr message --}}
+                                                        @error('total-claim')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
+                                                        {{-- end::erorr message --}}
+                                                    </div>
+                                                    <!--end::Input group-->
+                                                </div>
+                                                <!--End begin::Col-->
+                                            </div>
+
+                                            <!--End begin::Row-->
+
+                                            <div class="row fv-row">
+
+                                                <div class="col-6">
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Jenis Claim</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <select name="jenis-claim" id="jenis-claim"
+                                                            class="form-select form-select-solid select2-hidden-accessible"
+                                                            data-control="select2" data-hide-search="true"
+                                                            data-placeholder="Pilih Jenis Claim"
+                                                            data-select2-id="select2-data-jenis-claim" tabindex="-1"
+                                                            aria-hidden="true">
+                                                            @isset($claimContract)
+                                                                <option value="{{ $claimContract->jenis_claim }}" selected>
+                                                                    {{ $claimContract->jenis_claim }}</option>
+                                                            @else
+                                                                <option value="Claim">Claim</option>
+                                                                <option value="Anti Claim">Anti Claim</option>
+                                                                <option value="Claim Asuransi">Claim Asuransi</option>
+                                                            @endisset
+                                                        </select>
+                                                        <!--end::Input-->
+
+                                                        {{-- begin::erorr message --}}
+                                                        @error('project-id')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
+                                                        {{-- end::erorr message --}}
+                                                    </div>
+                                                    <!--end::Input group-->
+                                                </div>
+
+                                            </div>
+
+                                            <!--End begin::Row-->
+
+
+
+
+                                    </form>
+
+                                </div>
+
+
+                            </div>
+                        </div>
+                        <!--end::Header Contract-->
+
+                        @isset($claimContract)
+                            {{-- begin:: Footer --}}
+                            <div class="col-xl-15">
+                                <!--begin::Contacts-->
+                                <div class="card card-flush h-lg-100" id="kt_contacts_main">
+
+                                    <!--begin::Card body-->
+                                    <div class="card-body pt-5">
+                                        <!--begin:::Tabs-->
+                                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8"
+                                            role="tablist">
+
+                                            <!--begin:::Tab item Informasi Perusahaan-->
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                    href="#kt_user_view_overview_tab" style="font-size:14px;"
+                                                    aria-selected="true" role="tab">Detail Pengajuan</a>
+                                            </li>
+                                            <!--end:::Tab item Informasi Perusahaan-->
+
+                                            <!--begin:::Tab item History-->
+                                            <li class="nav-item" role="presentation">
+                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                    data-bs-toggle="tab" href="#kt_user_view_overview_history"
+                                                    style="font-size:14px;" aria-selected="false" tabindex="-1"
+                                                    role="tab">Attachment and Notes</a>
+                                            </li>
+                                            <!--end:::Tab item History-->
+                                        </ul>
+                                        <!--end:::Tabs-->
+
+                                        <!--begin:::Tab content -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!--Informasi Perusahaan-->
+                                            <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
+                                                role="tabpanel">
+
+                                                <!--begin::Card title-->
+                                                <div class="card-title m-0">
+
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Pengajuan Claim
+
+                                                        <button type="button" class="btn btn-link mx-3 btn-lg"
+                                                            id="tambah-pengajuan">+</button>
+                                                    </h3>
+
+                                                    <!--begin:Table: Draft Contract-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                        id="kt_customers_pengajuan_claim">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="min-w-auto">Nama</th>
+                                                                <th class="min-w-auto">Total</th>
+
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @php
+                                                                $approval_claim_array = explode(';', trim($claimContract->approval_claim));
+                                                                array_pop($approval_claim_array);
+                                                            @endphp
+                                                            @if (count($approval_claim_array) > 0)
+                                                                @foreach ($approval_claim_array as $approval)
+                                                                    @php
+                                                                        $approval = json_decode($approval);
+                                                                    @endphp
+                                                                    <tr data-id="{{ $approval[0] }}">
+                                                                        <td>
+                                                                            <h6><b>{{ $approval[1] }}</b></h6>
+                                                                        </td>
+                                                                        <td>
+                                                                            <h6><b>{{ number_format($approval[2], 0, ',', ',') }}</b>
+                                                                            </h6>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button"
+                                                                                onclick="deleteApprovalClaim(this)"
+                                                                                class="btn btn-sm btn-link">
+                                                                                <i class="bi bi-trash3-fill"></i>
+                                                                            </button>
+                                                                        </td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @else
+                                                                <tr>
+                                                                    <td>
+                                                                        <h6><b>There is no data</b></h6>
+                                                                    </td>
+                                                                </tr>
+                                                            @endif
+                                                        </tbody>
+                                                        <!--end::Table body-->
+
+                                                    </table>
+                                                    <!--End:Table: Draft Contract-->
+                                                </div>
+                                            </div>
+                                            <!--end:::Tab pane Informasi Perusahaan-->
+
+                                            <!--begin:::Tab pane History-->
+                                            <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
+                                                <!--begin::Card title-->
+                                                <div class="card-title m-0">
+
+                                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                        Attachment & Notes
+
+                                                        <button type="button" data-bs-toggle="modal"
+                                                            class="btn btn-link mx-3 btn-lg" id="Plus"
+                                                            data-bs-target="#kt_modal_create_detail_claim">+</button>
+                                                    </h3>
+
+                                                    <!--begin:Table: Draft Contract-->
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                        id="kt_customers_attachment-notes_claim">
+                                                        <!--begin::Table head-->
+                                                        <thead>
+                                                            <!--begin::Table row-->
+                                                            <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <th class="min-w-auto">Nama Dokumen</th>
+                                                                <th class="min-w-auto">Notes</th>
+                                                            </tr>
+                                                            <!--end::Table row-->
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold text-gray-600">
+                                                            @forelse ($claimContract->claimDetails as $claimDetail)
+                                                                <tr>
+                                                                    <td>
+                                                                        <a class="text-hover-primary text-gray-800"
+                                                                            href="/document/view/{{ $claimDetail->id_claim_detail }}/{{ $claimDetail->id_document }}">{{ $claimDetail->document_name }}</a>
+
+                                                                    </td>
+                                                                    <td>
+                                                                        <h6 class="text-gray-800">
+                                                                            {{ $claimDetail->document_name }}</h6>
+                                                                    </td>
+                                                                </tr>
+                                                            @empty
+                                                                <tr>
+                                                                    <td>
+                                                                        <h6><b>There is no data</b></h6>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforelse
+                                                        </tbody>
+                                                        <!--end::Table body-->
+
+                                                    </table>
+                                                    <!--End:Table: Draft Contract-->
+                                                </div>
+                                            </div>
+                                            <!--end:::Tab pane History-->
+
 
                                         </div>
-                                        <!--end::Card body-->
-                                    </div>
-                                    <!--end::Contacts-->
-                                </div>
-                                {{-- end:: Footer --}}
-                            </div>
-                        @endisset
+                                        <!--end:::Tab content-->
 
-                    </div>
+                                    </div>
+                                    <!--end::Card body-->
+                                </div>
+                                <!--end::Contacts-->
+                            </div>
+                            {{-- end:: Footer --}}
+                        </div>
+                    @endisset
+
         </div>
-        </form>
-        <!--end::Card body-->
+    </div>
+    </form>
+    <!--end::Card body-->
     </div>
     <!--end::Contacts-->
     </div>
@@ -1215,5 +1270,86 @@
         }
         // end Delete Approval Claim
     </script>
+
+    {{-- Begin Confirm Action Claim --}}
+    <script>
+        function confirmAction(form) {
+            const formSend = document.createElement("form");
+            formSend.setAttribute("method", "post");
+            formSend.setAttribute("action", form.action);
+            let html = `
+                                                    @csrf
+                                                    <input type="hidden" name="id_claim" value="{{ $claimContract->id_claim ?? 0 }}">
+                                                `;
+            if (form.submitted == "Disetujui") {
+                html +=
+                    `<input type="hidden"
+                        onclick="this.form.submitted=this.value"
+                        class="dropdown-item" name="stage-disetujui"
+                        value="Disetujui">`;
+            } else if (form.submitted == "Ditolak") {
+                html +=
+                    `<input type="hidden"
+                        onclick="this.form.submitted=this.value"
+                        class="dropdown-item" name="stage-ditolak"
+                        value="Ditolak">`;
+            } else if (form.submitted == "Cancel") {
+                html +=
+                    `<input type="hidden"
+                        onclick="this.form.submitted=this.value"
+                        class="dropdown-item" name="stage-cancel"
+                        value="cancel">`;
+            }
+            formSend.innerHTML = html;
+            document.body.appendChild(formSend);
+            Swal.fire({
+                title: '',
+                text: "Yakin Pindah Stage ?",
+                icon: false,
+                showCancelButton: true,
+                confirmButtonColor: '#008CB4',
+                cancelButtonColor: '#BABABA',
+                confirmButtonText: 'Ya'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    formSend.submit();
+                }
+                return false;
+            });
+        }
+        // const stageActions = document.querySelectorAll(".stage-action");
+        // stageActions.forEach(stageAction => {
+        //     stageAction.addEventListener("click", async e => {
+        //         Swal.fire({
+        //             title: '',
+        //             text: "Yakin Pindah Stage ?",
+        //             icon: false,
+        //             showCancelButton: true,
+        //             confirmButtonColor: '#008CB4',
+        //             cancelButtonColor: '#BABABA',
+        //             confirmButtonText: 'Ya'
+        //         }).then(async (result) => {
+        //             if (result.isConfirmed) {
+        //                 const stage = e.target.getAttribute("stage");
+        //                 const formData = new FormData();
+        //                 formData.append("_token", "{{ csrf_token() }}");
+        //                 formData.append("stage", stage);
+        //                 formData.append("is_ajax", true);
+        //                 // formData.append("id", "");
+        //                 formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
+        //                 const setStage = await fetch(form.action, {
+        //                     method: "POST",
+        //                     body: formData
+        //                 }).then(res => res.json());
+        //                 console.log(setStage);
+        //                 if (setStage.link) {
+        //                     window.location.reload();
+        //                 }
+        //             }
+        //         })
+        //     });
+        // });
+    </script>
+    {{-- End Confirm Action Claim --}}
 
 @endsection

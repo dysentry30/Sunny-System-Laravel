@@ -696,15 +696,15 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
     colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
     series: [{
         name: 'Claim',
-        data: [49, 71, 106, 129]
+        data: JSON.parse("{!! json_encode($claim_status_array) !!}")
 
     }, {
         name: 'Anti Claim',
-        data: [83, 78, 98, 93]
+        data: JSON.parse("{!! json_encode($anti_claim_status_array) !!}")
 
     }, {
         name: 'Claim Asuransi',
-        data: [48, 38, 39, 41]
+        data: JSON.parse("{!! json_encode($claim_asuransi_status_array) !!}")
 
     }]
 });
