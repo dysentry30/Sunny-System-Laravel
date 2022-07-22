@@ -23,6 +23,8 @@ return new class extends Migration
             $table->dateTime("contract_out");
             $table->text("dokumen_bast_1")->nullable();
             $table->text("dokumen_bast_2")->nullable();
+            $table->longText("list_dokumen_ba_defect")->nullable();
+            $table->longText("dokumen_pendukung")->nullable();
             $table->bigInteger("number_spk");
             $table->bigInteger("value");
             $table->bigInteger("value_review");

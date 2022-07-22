@@ -33,7 +33,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">{{$claimContract->jenis_claim}}
+                                <h1 class="d-flex align-items-center fs-3 my-1">{{$claimContract->jenis_claim ?? "Claim"}}
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -155,14 +155,14 @@
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">No. {{$claimContract->jenis_claim}}</span>
+                                                            <span class="required">No. {{$claimContract->jenis_claim ?? "Claim"}}</span>
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control form-control-solid"
                                                             id="number-claim" name="number-claim"
                                                             value="{{ $kode_claim ?? ($claimContract->id_claim ?? '') }}"
-                                                            placeholder="No. {{$claimContract->jenis_claim}}" readonly>
+                                                            placeholder="No. {{$claimContract->jenis_claim ?? "Claim"}}" readonly>
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group Name-->
@@ -360,8 +360,8 @@
                                                             data-select2-id="select2-data-jenis-claim" tabindex="-1"
                                                             aria-hidden="true">
                                                             @isset($claimContract)
-                                                                <option value="{{ $claimContract->jenis_claim }}" selected>
-                                                                    {{ $claimContract->jenis_claim }}</option>
+                                                                <option value="{{ $claimContract->jenis_claim ?? "Claim" }}" selected>
+                                                                    {{ $claimContract->jenis_claim ?? "Claim" }}</option>
                                                             @else
                                                                 <option value="Claim">Claim</option>
                                                                 <option value="Anti Claim">Anti Claim</option>
@@ -664,7 +664,7 @@
                                                     <div class="fv-row mb-5">
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">
-                                                            {{$claimContract->jenis_claim}} Kontrak Negoisasi
+                                                            {{$claimContract->jenis_claim ?? "Claim"}} Kontrak Negoisasi
                                                             <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_Negoisasi"
                                                                 id="Plus">+</a>
                                                         </h3>
@@ -852,7 +852,7 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col">
-                                        <label for="uraian-claim" class="form-label fs-6 fw-normal">Uraian {{$claimContract->jenis_claim}}</label>
+                                        <label for="uraian-claim" class="form-label fs-6 fw-normal">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</label>
                                         <input type="text" name="uraian-claim" class="form-control form-control-solid">
                                     </div>
                                     <div class="col">
@@ -926,7 +926,7 @@
                                         <input type="date" name="pengajuan-waktu" class="form-control form-control-solid">
                                     </div>
                                     <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Draft Proposal {{$claimContract->jenis_claim}}</label>
+                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Draft Proposal {{$claimContract->jenis_claim ?? "Claim"}}</label>
                                         <input type="file" name="proposal-claim" accept=".docx" class="form-control form-control-solid fw-normal">
                                     </div>
                                 </div>
@@ -1006,7 +1006,7 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Proposal {{$claimContract->jenis_claim}}</label>
+                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Proposal {{$claimContract->jenis_claim ?? "Claim"}}</label>
                                         <input type="file" accept=".docx" name="proposal-claim" class="form-control form-control-solid fw-normal">
                                     </div>
                                     <div class="col-6">
@@ -1874,7 +1874,7 @@
         // end::Script adding pasal
 
         const stageActions = document.querySelectorAll(".stage-button");
-        let prevStage = "{{$claimContract->stages}}";
+        let prevStage = "{{$claimContract->stages ?? 0}}";
         stageActions.forEach((stageAction, i) => {
             stageAction.addEventListener("click", async e => {
                 Swal.fire({
@@ -1891,8 +1891,8 @@
                         const formData = new FormData();
                         formData.append("_token", "{{ csrf_token() }}");
                         formData.append("stage", stage);
-                        formData.append("id_claim", "{{$claimContract->id_claim}}");
-                        formData.append("kode_proyek", "{{ $proyek->kode_proyek }}");
+                        formData.append("id_claim", "{{$claimContract->id_claim ?? 0}}");
+                        formData.append("kode_proyek", "{{ $proyek->kode_proyek ?? 0 }}");
                         const setStage = await fetch("/claim/stage/save", {
                             method: "POST",
                             body: formData

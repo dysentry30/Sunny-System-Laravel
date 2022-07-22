@@ -521,7 +521,7 @@ class ContractManagementsController extends Controller
 
         $risk->resiko = $data["resiko"];
         $risk->id_contract = $data["id-contract"];
-        $risk->tender_menang = $is_tender_menang; // Kolom Tender Menang dialihfungsikan menjadi Stage
+        $risk->stage = $is_tender_menang; // Kolom Tender Menang dialihfungsikan menjadi Stage
         $risk->penyebab = $data["penyebab"];
         $risk->dampak = $data["dampak"];
         $risk->mitigasi = $data["mitigasi"];
@@ -776,7 +776,6 @@ class ContractManagementsController extends Controller
     public function documentBastContractUpload(Request $request) {
         $data = $request->all();
 
-        dd($data);
         $faker = new Uuid();
         $contract_managements = ContractManagements::find($data["id-contract"]);
         if(isset($data["dokumen-bast-1"])) {
@@ -796,6 +795,67 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Dokument Bast gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function baDefectContractUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $faker = new Uuid();
+        if(count($data["ba-defect"]) > 1) {
+            $list_id_document_pendukung = [];
+            foreach($data["ba-defect"] as $dokumen_ba_defect) {
+                $id_document = $faker->uuid3();
+                array_push($list_id_document_pendukung, $id_document);
+                moveFileTemp($dokumen_ba_defect, $id_document);
+            }
+        } else {
+            $id_document = $faker->uuid3();
+            moveFileTemp($data["ba-defect"][0], $id_document);
+            $contract->list_dokumen_ba_defect = $id_document;
+        }
+
+        if($contract->save()) {
+            Alert::success("Success", "BA Defect berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "BA Defect gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function dokumenPendukungContractUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $faker = new Uuid();
+        if(count($data["dokumen-pendukung"]) > 1) {
+            $list_id_document_pendukung = [];
+            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+                $id_document = $faker->uuid3();
+                array_push($list_id_document_pendukung, $id_document);
+                moveFileTemp($dokumen_pendukung, $id_document);
+            }
+            $contract->dokumen_pendukung = join(",", $list_id_document_pendukung);
+        } else {
+            $id_document = $faker->uuid3();
+            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+            $contract->dokumen_pendukung = $id_document;
+        }
+
+        if($contract->save()) {
+            Alert::success("Success", "Dokumen berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Dokumen gagal ditambahkan");
         return redirect()->back();
     }
 }
