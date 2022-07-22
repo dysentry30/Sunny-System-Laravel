@@ -1533,7 +1533,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->KlarifikasiNegosiasiCDA))
                                         @php
                                             // dd($contract->KlarifikasiNegosiasiCDA);
                                         @endphp
@@ -1608,7 +1608,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->KontrakTandaTangan))
                                         @forelse ($contract->KontrakTandaTangan as $kontrak_tanda_tangan)
                                             <tr>
                                                 <!--begin::Name=-->
@@ -1678,7 +1678,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->ReviewPembatalanKontrak))
                                         @forelse ($contract->ReviewPembatalanKontrak as $review_pembatalan_kontrak)
                                             <tr>
                                                 <!--begin::Name=-->
@@ -1748,7 +1748,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->PerjanjianKSO))
                                         @forelse ($contract->PerjanjianKSO as $perjanjian_kso)
                                             <tr>
                                                 <!--begin::Name=-->
@@ -1890,7 +1890,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->DokumenPendukung))
                                         @forelse ($contract->DokumenPendukung as $dokumen_pendukung)
                                             <tr>
                                                 <!--begin::Name=-->
@@ -2191,7 +2191,7 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if (!empty($contract->MoMMeeting))
                                         @forelse ($contract->MoMMeeting as $mom_meeting)
                                             <tr>
                                                 <!--begin::Name=-->
@@ -5508,104 +5508,104 @@ aria-hidden="true">
 <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script>
 
 <script>
-        const savePasalBtn = document.querySelector("#save-pasal");
-        const loadingElt = document.querySelector("#save-pasal > .spinner-border");
-        savePasalBtn.addEventListener("click", async e => {
-            savePasalBtn.setAttribute("disabled", "");
-            const pasalCheckboxes = document.querySelectorAll(".pasal");
-            loadingElt.style.display = "block";
-            let pasals = [];
-            pasalCheckboxes.forEach((pasal) => {
-                if (pasal.checked) {
-                    pasals.push(pasal.value);
-                }
-            });
-            const formData = new FormData();
-            let html = "";
-            let counter = 1;
-            formData.append("_token", '{{ csrf_token() }}');
-            formData.append("pasals", pasals);
-            const savePasal = await fetch("/pasal/save", {
-                method: "POST",
-                header: {
-                    "Content-Type": "application/json",
-                },
-                body: formData,
-            }).then(res => res.json());
-            if (savePasal.status == "success") {
-                const pasals = JSON.parse(savePasal.pasals);
-                modalDraftBoots.show();
-                modalPasalBoots.hide();
-                $("#draft-rekomendasi").select2({
-                    dropdownParent: $('#kt_modal_draft'),
-                    minimumResultsForSearch: Infinity,
-                });
-                // if (toaster.classList.contains("text-bg-danger")) {
-                //     toaster.classList.remove("text-bg-danger");
-                // }
-                // toaster.classList.add("text-bg-success");
-                document.querySelector(".toast-body").innerText = savePasal.message
-                pasals.forEach((pasal) => {
-                    html += `
-                    <tr>
-                        <td>
-                            <span class="fw-normal fs-8">${counter++}</span>
-                        </td>
-                        <td>
-                            <span class="fw-normal fs-8">${pasal.pasal}</span>
-                        </td>
-                    </tr>
-            `
-                });
-                document.querySelector("#kt_pasal_table tbody").innerHTML = html;
-                // toasterBoots.show();
-                document.querySelector("#clear-pasal").style.visibility = "visible";
+        // const savePasalBtn = document.querySelector("#save-pasal");
+        // const loadingElt = document.querySelector("#save-pasal > .spinner-border");
+        // savePasalBtn.addEventListener("click", async e => {
+        //     savePasalBtn.setAttribute("disabled", "");
+        //     const pasalCheckboxes = document.querySelectorAll(".pasal");
+        //     loadingElt.style.display = "block";
+        //     let pasals = [];
+        //     pasalCheckboxes.forEach((pasal) => {
+        //         if (pasal.checked) {
+        //             pasals.push(pasal.value);
+        //         }
+        //     });
+        //     const formData = new FormData();
+        //     let html = "";
+        //     let counter = 1;
+        //     formData.append("_token", '{{ csrf_token() }}');
+        //     formData.append("pasals", pasals);
+        //     const savePasal = await fetch("/pasal/save", {
+        //         method: "POST",
+        //         header: {
+        //             "Content-Type": "application/json",
+        //         },
+        //         body: formData,
+        //     }).then(res => res.json());
+        //     if (savePasal.status == "success") {
+        //         const pasals = JSON.parse(savePasal.pasals);
+        //         modalDraftBoots.show();
+        //         modalPasalBoots.hide();
+        //         $("#draft-rekomendasi").select2({
+        //             dropdownParent: $('#kt_modal_draft'),
+        //             minimumResultsForSearch: Infinity,
+        //         });
+        //         // if (toaster.classList.contains("text-bg-danger")) {
+        //         //     toaster.classList.remove("text-bg-danger");
+        //         // }
+        //         // toaster.classList.add("text-bg-success");
+        //         document.querySelector(".toast-body").innerText = savePasal.message
+        //         pasals.forEach((pasal) => {
+        //             html += `
+        //             <tr>
+        //                 <td>
+        //                     <span class="fw-normal fs-8">${counter++}</span>
+        //                 </td>
+        //                 <td>
+        //                     <span class="fw-normal fs-8">${pasal.pasal}</span>
+        //                 </td>
+        //             </tr>
+        //     `
+        //         });
+        //         document.querySelector("#kt_pasal_table tbody").innerHTML = html;
+        //         // toasterBoots.show();
+        //         document.querySelector("#clear-pasal").style.visibility = "visible";
 
-            } else {
-                // if (toaster.classList.contains("text-bg-success")) {
-                //     toaster.classList.remove("text-bg-success");
-                // }
-                // toaster.classList.add("text-bg-danger");
-                document.querySelector(".toast-body").innerText = savePasal.message
-                // toasterBoots.show();
+        //     } else {
+        //         // if (toaster.classList.contains("text-bg-success")) {
+        //         //     toaster.classList.remove("text-bg-success");
+        //         // }
+        //         // toaster.classList.add("text-bg-danger");
+        //         document.querySelector(".toast-body").innerText = savePasal.message
+        //         // toasterBoots.show();
 
-            }
-            Toast.fire({
-                html: savePasal.message,
-                icon: savePasal.status,
-            });
-            loadingElt.style.display = "none";
-            savePasalBtn.removeAttribute("disabled");
-        });
-        document.querySelector("#clear-pasal").addEventListener("click", async e => {
-            const pasalCheckboxes = document.querySelectorAll(".pasal");
-            const formData = new FormData();
-            formData.append("_token", "{{ csrf_token() }}");
-            const clearPasalsRes = await fetch("/pasal/clear", {
-                method: "POST",
-                body: formData,
-            }).then(res => res.json());
-            if (clearPasalsRes.status == "success") {
-                document.querySelector(".toast-body").innerText = clearPasalsRes.message
-                html = `
-                <tr>
-                    <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum terpilih</b></td>
-                </tr>
-                `
-                Toast.fire({
-                    icon: "success",
-                    text: "Pasal-pasal berhasil dihapus",
-                });
-                document.querySelector("#kt_pasal_table tbody").innerHTML = html;
-                pasalCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        checkbox.checked = false;
-                    }
-                })
-            }
+        //     }
+        //     Toast.fire({
+        //         html: savePasal.message,
+        //         icon: savePasal.status,
+        //     });
+        //     loadingElt.style.display = "none";
+        //     savePasalBtn.removeAttribute("disabled");
+        // });
+        // document.querySelector("#clear-pasal").addEventListener("click", async e => {
+        //     const pasalCheckboxes = document.querySelectorAll(".pasal");
+        //     const formData = new FormData();
+        //     formData.append("_token", "{{ csrf_token() }}");
+        //     const clearPasalsRes = await fetch("/pasal/clear", {
+        //         method: "POST",
+        //         body: formData,
+        //     }).then(res => res.json());
+        //     if (clearPasalsRes.status == "success") {
+        //         document.querySelector(".toast-body").innerText = clearPasalsRes.message
+        //         html = `
+        //         <tr>
+        //             <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum terpilih</b></td>
+        //         </tr>
+        //         `
+        //         Toast.fire({
+        //             icon: "success",
+        //             text: "Pasal-pasal berhasil dihapus",
+        //         });
+        //         document.querySelector("#kt_pasal_table tbody").innerHTML = html;
+        //         pasalCheckboxes.forEach(checkbox => {
+        //             if (checkbox.checked) {
+        //                 checkbox.checked = false;
+        //             }
+        //         })
+        //     }
             
-            document.querySelector("#clear-pasal").style.visibility = "hidden";
-        });
+        //     document.querySelector("#clear-pasal").style.visibility = "hidden";
+        // });
         // end::Script adding pasal
 
     new FroalaEditor('#froala-editor-terima', {
