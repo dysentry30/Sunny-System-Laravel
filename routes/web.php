@@ -569,23 +569,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        $unitkerjas = UnitKerja::sortable()->get();
-        // dump($unitkerjas);
-        // $arrayUnitKerja = [];
-        // $i = 0;
-        foreach ($unitkerjas as $unitkerja) {
-            // dump($unitkerja);
-            // if ($unitkerja->unit_kerja == $unitkerjas[$i+1]->unit_kerja ) {
-            // }
+        // $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", "L")->get()->groupBy("tahun_perolehan");
+        // $unitkerjas = UnitKerja::all();
+        // $proyeks = Proyek::all()->groupBy("tahun_perolehan");
+        $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
+
+        $proyeks = [];
+        foreach ($unitkerjas as $key => $unitkerja){
+            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->get()->groupBy("tahun_perolehan");
+            array_push($proyeks, $proyek);
+        //    dump($proyeks);
         }
         // dd();
-        // $tahun_perolehan = 2022;
-        // $unitkerjas = DB::table('proyeks')->where("tahun_perolehan", "=", $tahun_perolehan)->get();
-        // foreach ($unitkerjas as $unitkerja) {
-        //     dump($unitkerja->proyeks);
-        // }
         
-        return view("/11_Rkap", compact(["unitkerjas"]));
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
     });
     // end RKAP
 

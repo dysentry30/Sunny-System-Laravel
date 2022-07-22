@@ -958,9 +958,9 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
-                                                                    <select id="customer" name="customer"
+                                                                    <select id="customer" name="customer" 
                                                                         class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Pilih Customer">
                                                                         <option></option>
                                                                         @if (isset($proyekberjalans))

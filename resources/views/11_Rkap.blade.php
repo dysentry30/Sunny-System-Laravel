@@ -156,37 +156,31 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                {{-- @php
-                                $proyeks = $proyeks->reverse();
-                                @endphp --}}
-
                                 <tbody class="fw-bold text-gray-600">
-                                    @foreach ($unitkerjas as $unitkerja)
-                                        @foreach ($unitkerja->proyeks as $proyek)
-                                            {{-- @dump($unitkerja->proyeks)     --}}
+                                    @foreach ($proyeks as $proyekArray)
+                                        @foreach ($proyekArray as $proyek)
+                                        {{-- @dd($proyek)     --}}
                                         <tr>
                                             <!--begin::Name-->
                                             <td class="">
                                                 <a href="#" id="click-name"
-                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
+                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja->unit_kerja }}</a>
                                             </td>
                                             <!--end::Name-->
                                             <!--begin::Pelaksanaan-->
                                             <td class="text-center">
-                                                    {{ $proyek->tahun_perolehan }}
+                                                    {{ $proyek->first()->tahun_perolehan }}
                                             </td>
                                             <!--end::Pelaksanaan-->
                                             <!--begin::Coloumn-->
                                             @php
                                                 $total_ok_awal = 0;
                                                 $total_ok_review = 0;
-                                                foreach ($unitkerja->proyeks as $proyek) {
-                                                    if ($proyek->tahun_perolehan) {
-                                                        $total_ok_awal += (int) str_replace(",", "", $proyek->nilaiok_awal);
-                                                        $total_ok_review += (int) str_replace(",", "", $proyek->nilaiok_review);
+                                                foreach ($proyek as $proyekTotal) {
+                                                        $total_ok_awal += (int) str_replace(",", "", $proyekTotal->nilaiok_awal);
+                                                        $total_ok_review += (int) str_replace(",", "", $proyekTotal->nilaiok_review);
                                                     }
-                                                }
-                                                // dump($unitkerja->proyeks);
+                                                // dump($total_ok_awal, $total_ok_review);
                                                 // dd();
                                                 $total_ok_awal = number_format($total_ok_awal, 0, ",");
                                                 $total_ok_review = number_format($total_ok_review, 0, ",");
@@ -202,8 +196,7 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td class="text-center">
-                                                {{-- @dump($proyek->is_active) --}}
-                                                {{ $unitkerja->is_active == 1 ? "Yes" : "No" }}
+                                                {{ $proyek->first()->UnitKerja->is_active == 1 ? "Yes" : "No" }}
                                             </td>
                                             <!--end::Coloumn-->
 
@@ -214,63 +207,7 @@
                                 <!--end::Table body-->
                             </table>
                             <!--end::Table-->
-                                {{-- @foreach ($unitkerjas as $unitKerja)
-                                    <p>
-                                        <a class="#" data-bs-toggle="collapse"
-                                            href="#collapseRKAP{{ $unitKerja->divcode }}" role="button"
-                                            aria-expanded="false" aria-controls="collapseRKAP{{ $unitKerja->divcode }}">
-                                            {{ $unitKerja->unit_kerja }}
-                                        </a>
-
-                                    </p>
-                                    <div class="collapse bg-dark" id="collapseRKAP{{ $unitKerja->divcode }}">
-                                        <ul class="list-group list-group-flush">
-                                            @if (!empty($unitKerja->Users))
-                                                @foreach ($unitKerja->proyeks as $proyek)
-                                                    @if (auth()->user()->check_administrator)
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                            class="list-group-item list-group-item-action text-hover-primary"
-                                                            aria-current="true">
-                                                            {{ $proyek->nama_proyek }}
-                                                        </a>
-                                                    @else
-                                                        <a href="#"
-                                                            class="list-group-item list-group-item-action text-hover-primary"
-                                                            aria-current="true">
-                                                            {{ $proyek->nama_proyek }}
-                                                        </a>
-                                                    @endif
-                                                @endforeach
-                                            @else
-                                                <li class="list-group-item">There is no data</li>
-                                            @endif
-                                        </ul>
-                                    </div>
-                                @endforeach --}}
-                            @else
-                                {{-- @php
-                                    $unit_kerja = auth()->user()->UnitKerja;
-                                @endphp
-                                <p>
-                                    <a class="#" data-bs-toggle="collapse"
-                                        href="#collapseRKAP{{ $unit_kerja->divcode }}" role="button" aria-expanded="false"
-                                        aria-controls="collapseRKAP{{ $unit_kerja->divcode }}">
-                                        {{ $unit_kerja->unit_kerja }}
-                                    </a>
-                                </p>
-
-                                <div class="collapse bg-dark" id="collapseRKAP{{ $unit_kerja->divcode }}">
-                                    <ul class="list-group list-group-flush">
-                                        @foreach ($unit_kerja->Users as $user)
-                                            <a href="#"
-                                                class="list-group-item list-group-item-action text-hover-primary"
-                                                aria-current="true">
-                                                {{ $user->name }}
-                                            </a>
-                                        @endforeach
-                                    </ul>
-                                </div> --}}
-
+                            
                             @endif
 
 
