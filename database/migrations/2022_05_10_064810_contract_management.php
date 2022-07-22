@@ -21,8 +21,11 @@ return new class extends Migration
             $table->tinyInteger("stages");
             $table->dateTime("contract_in");
             $table->dateTime("contract_out");
+            $table->text("dokumen_bast_1")->nullable();
+            $table->text("dokumen_bast_2")->nullable();
             $table->bigInteger("number_spk");
             $table->bigInteger("value");
+            $table->bigInteger("value_review");
         });
     }
 

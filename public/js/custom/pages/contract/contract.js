@@ -2,7 +2,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function getElement(elt) {
         return document.querySelector(elt);
     };
-    const valueContractElt = getElement("#value-contract");
+    // const valueContractElt = getElement("#value-contract");
+    // const valueReviewElt = getElement("#value-review");
     // const saveBtn = getElement("#kt_toolbar_primary_button");
     const numberContract = getElement("#number-contract");
     const projectName = getElement("#project-name");
@@ -12,17 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const csrf_token = getElement("#csrf-token");
     const statusMsg = getElement("#status-msg");
     // saveBtn.addEventListener("click", saveDataDraft);
-    valueContractElt.addEventListener("keyup", reformatNumber);
+    // valueContractElt.addEventListener("keyup", reformatNumber(valueContractElt));
+    // valueReviewElt.addEventListener("keyup", reformatNumber);
 
     // startDate.disabled = true;
     // dueDate.disabled = true;
 
-    function reformatNumber() {
-        const valueFormatted = Intl.NumberFormat("en-US", {
-            maximumFractionDigits: 0,
-        }).format(valueContractElt.value.toString().replace(/[^0-9]/gi, ""));
-        valueContractElt.value = valueFormatted;
-    }
+    
     async function saveDataDraft() {
         const valueContract = valueContractElt.value;
 
@@ -491,6 +488,7 @@ async function readFile(file, elt) {
     const docx2html = require("docx2html");
     const html = await docx2html(file);
     document.querySelector(` ${elt} > .fr-wrapper > .fr-view`).innerHTML = html;
+    document.querySelector(` ${elt} > .fr-wrapper > .fr-view > #A > section`).style.backgroundColor = "transparent";
     document.querySelector(`body > #A`).remove();
     return html;
 };
@@ -524,4 +522,11 @@ async function saveReview() {
 
 function setCalendar() {
 
+}
+
+function reformatNumber(elt) {
+    const valueFormatted = Intl.NumberFormat("en-US", {
+        maximumFractionDigits: 0,
+    }).format(elt.value.toString().replace(/[^0-9]/gi, ""));
+    elt.value = valueFormatted;
 }

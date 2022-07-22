@@ -19,7 +19,6 @@ return new class extends Migration
             $table->integer("no_addendum");
             $table->mediumText("created_by");
             $table->date("start_date");
-            $table->text("pasals");
             $table->tinyInteger("stages");
             $table->mediumInteger("addendum_contract_version");
             $table->boolean("tender_menang");

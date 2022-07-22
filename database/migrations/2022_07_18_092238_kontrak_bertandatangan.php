@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('input_risks', function (Blueprint $table) {
-            $table->bigIncrements('id_risk');
-            $table->integer("id_contract");
-            $table->longText("resiko");
-            $table->longText("dampak");
-            $table->longText("penyebab");
-            $table->longText("mitigasi");
-            $table->boolean("stage");
+        Schema::create('kontrak_bertandatangans', function (Blueprint $table) {
+            $table->id('id_kontrak_bertandatangan');
+            $table->integer('id_contract');
+            $table->mediumText('id_document');
+            $table->longText('document_name');
+            $table->longText('note');
+            $table->text('created_by');
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('input_risks');
+        Schema::dropIfExists('kontrak_bertandatangans');
     }
 };
