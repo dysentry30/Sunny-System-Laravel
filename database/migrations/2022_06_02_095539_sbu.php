@@ -18,9 +18,10 @@ return new class extends Migration
             $table->string('sbu');
             $table->string('kode_sbu')->nullable();
             $table->string('klasifikasi')->nullable();
-            $table->string('sub_klasifikasi')->nullable();
             $table->string('referensi1')->nullable();
+            $table->string('sub_klasifikasi')->nullable();
             $table->string('referensi2')->nullable();
+            $table->string('lingkup_kerja')->nullable();
             $table->string('referensi3')->nullable();
             $table->timestamps();
         });

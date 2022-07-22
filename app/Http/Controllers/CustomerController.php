@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use App\Models\StrukturCustomer;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,73 +17,71 @@ class CustomerController extends Controller
 {
     public function getIndex(Request $request)
     {
-        $results = Customer::orderBy('id_customer')->paginate(10);
-        $artilces = '';
-        // dd($artilces);
-        if ($request->ajax()) {
-            $no=1;
-            foreach ($results as $customers) {
-                $artilces.=
-                // '<div class="card mb-2"> 
-                //     <div class="card-body">'.$customers->id_customer.' 
-                //         <h5 class="card-title">'.$customers->name.'</h5> '.$customers->email.
-                //     '</div>
-                // </div>';
-                // <!--begin::Email=-->
-                // <td>'
-                // .$no++.
-                // '</td>
-                // <!--end::Email=-->
-
-                '<tr>
-                    <!--begin::Name=-->
-                    <td>
-                    <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
-                    </td>
-                    <!--end::Name=-->
-                    <!--begin::Email=-->
-                    <td>
-                    '.$customers->email.'
-                    </td>
-                    <!--end::Email=-->
-                    <!--begin::Phone Number=-->
-                    <td>
-                    '.$customers->phone_number.'
-                    </td>
-                    <!--end::Phone Number=-->
-                    <!--begin::Website=-->
-                    <td data-filter="mastercard">
-                    <a href="#">'.$customers->website.'</a>
-                    </td>
-                    <!--end::Website=-->
-                    <!--begin::Date=-->
-                    <td>
-                    '.$customers->created_at.'</td>
-                    <!--end::Date=-->
-                    <!--begin::PIC=-->
-                    <td>
-                    '.$customers->name_pic.'
-                    </td>
-                    <!--end::Date=-->
-                    <!--begin::Action=-->
-                    @if (auth()->user()->check_administrator)
-                        <td class="text-center">
-                            <button data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
-                                id="modal-delete"
-                                class="btn btn-sm btn-light btn-active-primary">Delete
-                            </button>
+        $cari = $request->query("cari");
+        
+        if(!empty($cari)){
+            $results = Customer::where('name', 'like', '%'.$cari.'%')->orWhere('email', 'like', '%'.$cari.'%')->get();
+        } else {
+            $results = Customer::orderBy('id_customer')->paginate(10);
+            $artilces = '';
+            if ($request->ajax()) {
+                foreach ($results as $customers) {
+                    $artilces.=
+                    '<tr>
+                        <!--begin::Name=-->
+                        <td>
+                        <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
                         </td>
-                        <!--end::Action=-->
-                    @endif
-                </tr>';
-                
+                        <!--end::Name=-->
+                        <!--begin::Email=-->
+                        <td>
+                        <a href="#">'.($customers->email).'</a>
+                        </td>
+                        <!--end::Email=-->
+                        <!--begin::Nomor=-->
+                        <td>
+                        '.$customers->phone_number.'
+                        </td>
+                        <!--end::Nomor-->
+                        <!--begin::check_customer-->
+                        <td>
+                        '.($customers->check_customer == 1 ? "Yes" : "No").'
+                        </td>
+                        <!--end::check_customer=-->
+                        <!--begin::check_partner-->
+                        <td>
+                        '.($customers->check_partner == 1 ? "Yes" : "No").'
+                        </td>
+                        <!--end::check_partner-->
+                        <!--begin::check_competitor-->
+                        <td data-filter="mastercard">
+                        '.($customers->check_competitor == 1 ? "Yes" : "No").'
+                        </td>
+                        <!--end::check_competitor-->
+                        <!--begin::Kode Nasabah=-->
+                        <td>
+                        '.$customers->kode_nasabah.'
+                        </td>
+                        <!--end::Kode Nasabah-->
+                        <!--begin::Action=-->
+                        @if (auth()->user()->check_administrator)
+                            <td class="text-center">
+                                <button data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
+                                    id="modal-delete"
+                                    class="btn btn-sm btn-light btn-active-primary">Delete
+                                </button>
+                            </td>
+                            <!--end::Action=-->
+                        @endif
+                    </tr>';
 
-
+                }
+                return $artilces;
             }
-            return $artilces;
         }
-        return view('2_Customer', ['results' => $results]);
+
+        return view('2_Customer', compact(["results", "cari"]));
     }
 
     // public function index (Request $request) 
@@ -100,17 +99,79 @@ class CustomerController extends Controller
         return redirect("/customer")->with('status', 'Customer deleted');   
     }
 
+    public function new () {
+        return view('Customer/newCustomer');
+    }
+    
+    public function saveNew (Request $request, Customer $newCustomer) {
+        $data = $request->all(); 
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-customer" => "required",
+            "email" => "required",
+            "phone-number" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        $validation->validate();
+        if ($validation->fails()) {
+            // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
+            $request->old("name-customer");
+            $request->old("email");
+            $request->old("phone-number");
+            return redirect()->back();
+        }
+        
+        $newCustomer->name = $data["name-customer"];
+        $newCustomer->check_customer = $request->has("check-customer"); //boolean check
+        $newCustomer->check_partner = $request->has("check-partner"); //boolean check
+        $newCustomer->check_competitor = $request->has("check-competitor"); //boolean check
+        $newCustomer->address_1 = $data["AddressLine1"];
+        $newCustomer->address_2 = $data["AddressLine2"];
+        $newCustomer->email = $data["email"];
+        $newCustomer->phone_number = $data["phone-number"];
+        $newCustomer->website = $data["website"];
+
+        // form company information
+        $newCustomer->jenis_instansi = $data["jenis-instansi"];
+        $newCustomer->kode_proyek = $data["kodeproyek-company"];
+        $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
+        // $newCustomer->journey_company = $data["journey-company"];
+        // $newCustomer->segmentation_company = $data["segmentation-company"];
+        $newCustomer->name_pic = $data["name-pic"];
+        $newCustomer->kode_pic = $data["kode-pic"];
+        $newCustomer->email_pic = $data["email-pic"];
+        $newCustomer->phone_number_pic = $data["phone-number-pic"];
+        
+        // form table performance
+        // $newCustomer->nilaiok = $data["nilaiok-performance"];
+        // $newCustomer->piutang = $data["piutang-performance"];
+        // $newCustomer->laba = $data["laba-performance"];
+        // $newCustomer->rugi = $data["rugi-performance"];
+        
+        // form attachment
+        Alert::success('Success', $data["name-customer"].", Berhasil Ditambahkan");
+
+        if ($newCustomer->save()) {
+            return redirect("/customer/view/$newCustomer->id_customer")->with("success", true);
+        }
+    }
+
     public function view ($id_customer) 
     {
         $customer = Customer::find($id_customer);
+        $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
+        // dd($struktur);
         return view('Customer/viewCustomer', [
             "customer" => $customer, 
-            // "customers" => Customer::all(),
             "attachment" => $customer->customerAttachments->all(),   
             "proyekberjalan" => $customer->proyekBerjalans->all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => Proyek::all(),
+            "strukturs" => $struktur,
         ]);
     }
 
@@ -121,6 +182,25 @@ class CustomerController extends Controller
         {
 
         $data = $request->all(); 
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-customer" => "required",
+            "email" => "required",
+            "phone-number" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        $validation->validate();
+        if ($validation->fails()) {
+            // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
+            $request->old("name-customer");
+            $request->old("email");
+            $request->old("phone-number");
+            return redirect()->back();
+        }
+
+
         // dd($data); //tes log hasil $data 
         $editCustomer=Customer::find($data["id-customer"]);
         $editCustomer->name = $data["name-customer"];
@@ -138,8 +218,8 @@ class CustomerController extends Controller
         $editCustomer->kode_proyek = $data["kodeproyek-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
-        $editCustomer->journey_company = $data["journey-company"];
-        $editCustomer->segmentation_company = $data["segmentation-company"];
+        // $editCustomer->journey_company = $data["journey-company"];
+        // $editCustomer->segmentation_company = $data["segmentation-company"];
         $editCustomer->name_pic = $data["name-pic"];
         $editCustomer->kode_pic = $data["kode-pic"];
         $editCustomer->email_pic = $data["email-pic"];
@@ -173,66 +253,23 @@ class CustomerController extends Controller
 
         return redirect()->back();
     }
-    
-    public function new () {
-        return view('Customer/newCustomer');
-    }
-    
-    public function saveNew (Request $request, Customer $newCustomer) {
-        $data = $request->all(); 
-        $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-        ];
-        $rules = [
-            "name-customer" => "required",
-            "email" => "required",
-            "phone-number" => "required|numeric",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        $validation->validate();
-        if ($validation->fails()) {
-            // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
-            $request->old("name-customer");
-            $request->old("email");
-            $request->old("phone-number");
-            return redirect()->back();
-        }
-        
-        $newCustomer->name = $data["name-customer"];
-        $newCustomer->check_customer = $request->has("check-customer"); //boolean check
-        $newCustomer->check_partner = $request->has("check-partner"); //boolean check
-        $newCustomer->check_competitor = $request->has("check-competitor"); //boolean check
-        $newCustomer->address_1 = $data["AddressLine1"];
-        $newCustomer->address_2 = $data["AddressLine2"];
-        $newCustomer->email = $data["email"];
-        $newCustomer->phone_number = $data["phone-number"];
-        $newCustomer->website = $data["website"];
 
-        // form company information
-        $newCustomer->jenis_instansi = $data["jenis-instansi"];
-        $newCustomer->kode_proyek = $data["kodeproyek-company"];
-        $newCustomer->npwp_company = $data["npwp-company"];
-        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
-        $newCustomer->journey_company = $data["journey-company"];
-        $newCustomer->segmentation_company = $data["segmentation-company"];
-        $newCustomer->name_pic = $data["name-pic"];
-        $newCustomer->kode_pic = $data["kode-pic"];
-        $newCustomer->email_pic = $data["email-pic"];
-        $newCustomer->phone_number_pic = $data["phone-number-pic"];
+    public function struktur (Request $request, StrukturCustomer $newStruktur)
+    {
+        $data = $request->all();
         
-        // form table performance
-        $newCustomer->nilaiok = $data["nilaiok-performance"];
-        $newCustomer->piutang = $data["piutang-performance"];
-        $newCustomer->laba = $data["laba-performance"];
-        $newCustomer->rugi = $data["rugi-performance"];
-        
-        // form attachment
-        Alert::success('Success', $data["name-customer"].", Berhasil Ditambahkan");
+        // $idCustomer=Customer::find($data["id-customer"]);
+        // dd($idCustomer);
 
-        if ($newCustomer->save()) {
-            return redirect("/customer")->with("success", true);
-        }
+        $newStruktur->id_customer = $data["id-customer"];
+        $newStruktur->nama_struktur = $data["name-struktur"];
+        $newStruktur->jabatan_struktur = $data["jabatan-struktur"];
+        $newStruktur->email_struktur = $data["email-struktur"];
+        $newStruktur->phone_struktur = $data["phone-struktur"];
+
+        $newStruktur->save();
+        return redirect()->back();
+        
     }
 
     public function customerHistory (

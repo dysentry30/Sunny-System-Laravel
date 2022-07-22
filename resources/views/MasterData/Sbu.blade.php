@@ -101,28 +101,65 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 py-2">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
+                                {{-- <div class="d-flex align-items-center position-relative my-1">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
-                                                fill="black" />
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black" />
-                                        </svg>
+                                        <i class="bi bi-search"></i>
                                     </span>
                                     <!--end::Svg Icon-->
                                     <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
-                                </div>
+                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search SBU" />
+                                </div> --}}
                                 <!--end::Search-->
+
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$column == "" ? "selected": ""}}></option>
+                                        <option value="sbu" {{$column == "sbu" ? "selected" : ""}}>Nama SBU</option>
+                                        <option value="kode_sbu" {{$column == "kode_sbu" ? "selected" : ""}}>Kode</option>
+                                        <option value="klasifikasi" {{$column == "klasifikasi" ? "selected" : ""}}>Klasifikasi</option>
+                                        <option value="sub_klasifikasi" {{$column == "sub_klasifikasi" ? "selected" : ""}}>Sub Klasifikasi</option>
+                                        <option value="referensi1" {{$column == "referensi1" ? "selected" : ""}}>Referensi 1</option>
+                                        <option value="referensi2" {{$column == "referensi2" ? "selected" : ""}}>Referensi 2</option>
+                                        <option value="referensi3" {{$column == "referensi3" ? "selected" : ""}}>Referensi 3</option>
+                                        
+                                    </select>
+                                    <!--End:: Select Options-->
+                                    
+                                    <!--begin:: Input Filter-->
+                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    <!--end:: Input Filter-->
+                                    
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                    <!--end:: Filter-->
+                                    
+                                    <!--begin:: RESET-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <script>
+                                        function resetFilter() {
+                                            $("#column").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#filter").text({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+
                             </div>
                             <!--begin::Card title-->
 
@@ -140,13 +177,14 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Nama</th>
-                                        <th class="min-w-auto">Kode</th>
-                                        <th class="min-w-auto">Klasifikasi</th>
-                                        <th class="min-w-auto">Sub-Klasifikasi</th>
-                                        <th class="min-w-auto">Referensi 1</th>
-                                        <th class="min-w-auto">Referensi 2</th>
-                                        <th class="min-w-auto">Referensi 3</th>
+                                        <th class="min-w-auto">@sortablelink('sbu','Nama')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_sbu','Kode')</th>
+                                        <th class="min-w-auto">@sortablelink('klasifikasi','Klasifikasi')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi1','Referensi 1')</th>
+                                        <th class="min-w-auto">@sortablelink('sub_klasifikasi','Sub-Klasifikasi')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi2','Referensi 2')</th>
+                                        <th class="min-w-auto">@sortablelink('lingkup_kerja','Lingkup Pekerjaan')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi3','Referensi 3')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>
                                         @endif
@@ -165,39 +203,46 @@
                                             <!--begin::Name=-->
                                             <td>
                                                 <a href="#" id="click-name"
-                                                    class="text-gray-800 text-hover-primary mb-1">{{ $sbu->sbu }}</a>
+                                                    class="text-gray-600 text-hover-primary mb-1">{{ $sbu->sbu }}</a>
                                             </td>
                                             <!--end::Name=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->kode_sbu }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->klasifikasi }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ $sbu->sub_klasifikasi }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->referensi1 }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td>
+                                                {{ $sbu->sub_klasifikasi }}
+                                            </td>
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->referensi2 }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td>
+                                                <a href="#" id="click-no" class="text-gray-600 text-hover-primary mb-1">
+                                                    {{ $sbu->lingkup_kerja }}
+                                                </a>
+                                            </td>
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->referensi3 }}
                                             </td>
-                                            <!--end::Coloumn=-->
+                                            <!--end::Coloumn-->
 
                                             @if (auth()->user()->check_administrator)
                                                 <!--begin::Action=-->

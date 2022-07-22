@@ -26,4 +26,9 @@ class Customer extends Model
         return $this->hasMany(Proyek::class);
     }
 
+    public function struktur()
+    {
+        return $this->hasMany(StrukturCustomer::class, "id_customer");
+    }
+
 }

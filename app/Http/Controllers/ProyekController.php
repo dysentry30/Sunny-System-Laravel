@@ -25,9 +25,31 @@ use Google\Service\FactCheckTools\Resource\Claims;
 
 class ProyekController extends Controller
 {
-    public function view()
+    public function view(Request $request)
     {
-        return view('3_Proyek', ['proyeks' => Proyek::with('UnitKerja')->get(), 'sumberdanas' => SumberDana::all(), 'unitkerjas' => UnitKerja::get()]);
+        $cari = $request->query("cari");
+        $column = $request->get("column");
+        $filter = $request->query("filter");
+        // dd($column);
+        $sumberdanas = SumberDana::all();
+        $unitkerjas = UnitKerja::get();
+        
+        // Begin::FILTER
+        if (!empty($column)) {
+            // $proyeks = Proyek::sortable()->where($column, '=', $filter)->get();
+            $proyeks = Proyek::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+            if(!empty($cari)){
+                $proyeks = Proyek::sortable()->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
+            }else{
+                $proyeks = Proyek::sortable()->get();
+                // dd($proyeks);
+            }
+        }
+                
+        // $proyeks = Proyek::sortable()->get();
+
+        return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "sumberdanas", "unitkerjas"]));
     }
 
 
@@ -113,7 +135,7 @@ class ProyekController extends Controller
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
 
         if ($newProyek->save()) {
-            return redirect("/proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
+            return redirect("/proyek/view/$kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }

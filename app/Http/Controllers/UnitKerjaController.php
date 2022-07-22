@@ -16,9 +16,21 @@ class UnitKerjaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('/MasterData/UnitKerja', ['unitkerjas' => UnitKerja::all(), 'dops' => Dop::all(), 'companies' => Company::all()]);
+        $column = $request->get("column");
+        $filter = $request->get("filter");
+        // $activeFilter = $request->query("active-filter");
+        $dops = Dop::all();
+        $companies = Company::all();
+
+
+        if (!empty($column)){
+            $unitkerjas = UnitKerja::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $unitkerjas = UnitKerja::sortable()->get();
+        }    
+        return view('/MasterData/UnitKerja', compact(['unitkerjas', 'dops', 'companies', 'column', 'filter']));
     }
 
     /**
@@ -30,38 +42,45 @@ class UnitKerjaController extends Controller
     public function store(Request $request, UnitKerja $newUnitKerja)
     {
         $dataUnitKerja = $request->all();
-        $messages = [
-            "required" => "This field is required",
-        ];
-        $rules = [
-            "nomor-unit" => "required",
-            "unit-kerja" => "required",
-            "divcode" => "required",
-            "dop" => "required",
-            "company" => "required",
-        ];
-        $validation = Validator::make($dataUnitKerja, $rules, $messages);
-        if ($validation->fails()) {
-            $request->old("nomor-unit");
-            $request->old("unit-kerja");
-            $request->old("divcode");
-            $request->old("dop");
-            $request->old("company");
-            Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
-        }
-        $validation->validate();   
-        
-        $newUnitKerja->nomor_unit = $dataUnitKerja["nomor-unit"];
-        $newUnitKerja->unit_kerja = $dataUnitKerja["unit-kerja"];
-        $newUnitKerja->divcode = $dataUnitKerja["divcode"];
-        $newUnitKerja->dop = $dataUnitKerja["dop"];
-        $newUnitKerja->company = $dataUnitKerja["company"];
-        $newUnitKerja->pic = $dataUnitKerja["pic"];
-
-        Alert::success('Success', $dataUnitKerja["unit-kerja"].", Berhasil Ditambahkan");
-
-        if ($newUnitKerja->save()) {
-            return redirect('/unit-kerja')->with("success", true);
+        $divcode = UnitKerja::where("divcode", "=", $dataUnitKerja["divcode"])->get()->first();
+        if ($divcode == null) {
+            $messages = [
+                "required" => "This field is required",
+            ];
+            $rules = [
+                "nomor-unit" => "required",
+                "unit-kerja" => "required",
+                "divcode" => "required",
+                "dop" => "required",
+                "company" => "required",
+            ];
+            $validation = Validator::make($dataUnitKerja, $rules, $messages);
+            if ($validation->fails()) {
+                $request->old("nomor-unit");
+                $request->old("unit-kerja");
+                $request->old("divcode");
+                $request->old("dop");
+                $request->old("company");
+                Alert::error('Error', "Unit Kerja Gagal Dibuat, Periksa Kembali !");
+            }
+            $validation->validate();   
+            
+            $newUnitKerja->nomor_unit = $dataUnitKerja["nomor-unit"];
+            $newUnitKerja->unit_kerja = $dataUnitKerja["unit-kerja"];
+            $newUnitKerja->divcode = $dataUnitKerja["divcode"];
+            $newUnitKerja->dop = $dataUnitKerja["dop"];
+            $newUnitKerja->company = $dataUnitKerja["company"];
+            $newUnitKerja->divisi = $dataUnitKerja["divisi"];
+            $newUnitKerja->is_active = (int) $dataUnitKerja["is-active"];
+    
+            Alert::success('Success', $dataUnitKerja["unit-kerja"].", Berhasil Ditambahkan");
+    
+            if ($newUnitKerja->save()) {
+                return redirect()->back();
+            }
+        } else{
+            Alert::error('Error', 'Divcode "'.$dataUnitKerja["divcode"].'" Sudah Digunakan, Periksa Kembali !');
+            return redirect()->back();
         }
     }
 

@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->integer('nip')->unique();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->mediumText("unit_kerja")->nullable();
             $table->longText("alamat")->nullable();
             $table->mediumText("no_hp")->nullable();
+            $table->boolean("is_active")->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

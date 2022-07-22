@@ -73,18 +73,21 @@ class DatabaseSeeder extends Seeder
 
         // begin :: User.
         User::create([
+            'nip' => 12345,
             'name' => "Inter System Asia",
             'email' => "isa@sunny.com",
             'password' => Hash::make('password'),
             "check_administrator" => 1,
         ]);
         User::create([
+            'nip' => 14045,
             'name' => "Admin Sunny",
             'email' => "admin@sunny.com",
             'password' => Hash::make('password'),
             "check_administrator" => 1,
         ]);
         User::create([
+            'nip' => 112911,
             'name' => "User Sunny",
             'email' => "user@sunny.com",
             'password' => Hash::make('password'),
@@ -100,46 +103,58 @@ class DatabaseSeeder extends Seeder
             'divcode' => "F",
             'dop' => "DOP 1",
             'company' => "Wika Gedung",
+            'divisi' => "DBG PIC",
+            'is_active' => 1,
         ]);
-
+        
         UnitKerja::create([
             'nomor_unit' => 2,
             'unit_kerja' => "Divisi Industri Plant",
             'divcode' => "U",
             'dop' => "DOP 1",
             'company' => "Wika Gedung",
+            'divisi' => "DIP PIC",
+            'is_active' => 0,
         ]);
-
+        
         UnitKerja::create([
             'nomor_unit' => 3,
             'unit_kerja' => "Industri Infrastruktur 1",
             'divcode' => "G",
             'dop' => "DOP 2",
             'company' => "PT Wijaya Karya",
+            'divisi' => "Divisi Infrastruktur 1",
+            'is_active' => 1,
         ]);
-
+        
         UnitKerja::create([
             'nomor_unit' => 4,
             'unit_kerja' => "Industri Infrastruktur 2",
             'divcode' => "H",
             'dop' => "EA",
             'company' => "Wika Industri & Konstruksi",
+            'divisi' => "Divisi Infrastruktur 2",
+            'is_active' => 1,
         ]);
-
+        
         UnitKerja::create([
             'nomor_unit' => 5,
             'unit_kerja' => "Divisi Luar Negeri",
             'divcode' => "L",
             'dop' => "DOP 3",
             'company' => "PT Wijaya Karya",
+            'divisi' => "DLN PIC",
+            'is_active' => 0,
         ]);
-
+        
         UnitKerja::create([
             'nomor_unit' => 6,
             'unit_kerja' => "Industri Power Energi",
             'divcode' => "O",
             'dop' => "DOP 2",
             'company' => "PT Wijaya Karya",
+            'divisi' => "DPE",
+            'is_active' => 1,
         ]);
         // end :: Unit Kerja
 
@@ -175,11 +190,22 @@ class DatabaseSeeder extends Seeder
             'nama_sumber' => "BUMN",
             'kategori' => "BUMN",
             'unique_code' => "NPWP",
-        ],
-        [
+            'sumber_dana_id' => "BUMN / BUMD",
+            'kode_proyek_id' => "A1",
+        ]);
+        SumberDana::create([
+            'nama_sumber' => "Pemerintah Kota / Kabupaten",
+            'kategori' => "Pemerintah",
+            'unique_code' => "Kode Anggaran Provinsi",
+            'sumber_dana_id' => "APBD",
+            'kode_proyek_id' => "A3",
+        ]);
+        SumberDana::create([
             'nama_sumber' => "SWASTA",
             'kategori' => "LOAN",
             'unique_code' => "Bussines Permite License",
+            'sumber_dana_id' => "INVESTASI",
+            'kode_proyek_id' => "C1",
         ]);
         // begin :: Sumber Dana.
 
@@ -188,9 +214,10 @@ class DatabaseSeeder extends Seeder
             'sbu' => "SBU1",
             'kode_sbu' => "D06E",
             'klasifikasi' => "Minyak dan Gas",
-            'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
             'referensi1' => "LPJK 3/2015",
+            'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
             'referensi2' => "LPJK 4/2015",
+            'lingkup_kerja' => "Pertambangan",
             'referensi3' => "LPJK 6/2018",
         ]);
         // begin :: SBU.

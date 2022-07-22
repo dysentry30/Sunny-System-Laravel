@@ -85,6 +85,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/contract-management/update', [ContractManagementsController::class, 'update']);
 
+    Route::post('/contract-management/document-bast/upload', [ContractManagementsController::class, 'documentBastContractUpload']);
+
     Route::delete('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
 
     Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
@@ -111,6 +113,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post("/addendum-contract/update", [AddendumContractController::class, "update"]);
 
     Route::post("/addendum-contract/draft/upload", [AddendumContractController::class, "draftUpload"]);
+
+    Route::post("/addendum-contract/diajukan/upload", [AddendumContractController::class, "draftDiajukanUpload"]);
+    
+    Route::post("/addendum-contract/negosiasi/upload", [AddendumContractController::class, "draftNegoisasiUpload"]);
+    
+    Route::post("/addendum-contract/disetujui/upload", [AddendumContractController::class, "draftDisetujuiUpload"]);
+    
+    Route::post("/addendum-contract/amandemen/upload", [AddendumContractController::class, "draftAmandemenUpload"]);
 
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
@@ -154,6 +164,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/detail-claim/save', [ClaimController::class, 'detailSave']);
 
     Route::post('/claim/stage/save', [ClaimController::class, 'claimStage']);
+
+    Route::post('/claim-contract/draft/upload', [ClaimController::class, 'claimDraftUpload']);
+
+    Route::post('/claim-contract/diajukan/upload', [ClaimController::class, 'claimDiajukanUpload']);
+    
+    Route::post('/claim-contract/negosiasi/upload', [ClaimController::class, 'claimNegosiasiUpload']);
+    
+    Route::post('/claim-contract/disetujui/upload', [ClaimController::class, 'claimDisetujuiUpload']);
 
     // end :: Claim Management
 
@@ -220,6 +238,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     // Edit Customer Proyek History by view id_customer    
     Route::post('/customer/save-modal', [CustomerController::class, 'customerHistory']);
+
+    // Add Struktur Organisasi    
+    Route::post('/customer/struktur', [CustomerController::class, 'struktur']);
     //End :: Customer
 
 
@@ -392,6 +413,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // NEW Sumber Dana after SAVE
     Route::post('/sumber-dana/save', [SumberDanaController::class, 'store']);
     
+    // EDIT Sumber Dana
+    Route::post('/sumber-dana/{id}/edit', [SumberDanaController::class, 'update']);
+    
     // DELETE Sumber Dana
     Route::delete('/sumber-dana/delete/{id}', [SumberDanaController::class, 'delete']);
 
@@ -477,6 +501,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/serah-terima/upload", [ContractManagementsController::class, "handOverUpload"]);
 
+    Route::post("/klarifikasi-negosiasi/upload", [ContractManagementsController::class, "klarifikasiNegoUpload"]);
+
+    Route::post("/kontrak-tanda-tangan/upload", [ContractManagementsController::class, "kontrakTandaTanganUpload"]);
+    
+    Route::post("/dokumen-pendukung/upload", [ContractManagementsController::class, "dokumenPendukungUpload"]);
+
+    Route::post("/perjanjian-kso/upload", [ContractManagementsController::class, "perjanjianKSO"]);
+
+    Route::post("/mom-meeting/upload", [ContractManagementsController::class, "momMeeting"]);
+
 
     Route::get("/document/view/{id}/{id_document}", [DocumentController::class, "documentView"]);
 
@@ -531,7 +565,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        return view("/11_Rkap", ["unitkerjas" => UnitKerja::all()]);
+        $unitkerjas = UnitKerja::sortable()->get();
+        // dump($unitkerjas);
+        // $arrayUnitKerja = [];
+        // $i = 0;
+        foreach ($unitkerjas as $unitkerja) {
+            // dump($unitkerja);
+            // if ($unitkerja->unit_kerja == $unitkerjas[$i+1]->unit_kerja ) {
+            // }
+        }
+        // dd();
+        // $tahun_perolehan = 2022;
+        // $unitkerjas = DB::table('proyeks')->where("tahun_perolehan", "=", $tahun_perolehan)->get();
+        // foreach ($unitkerjas as $unitkerja) {
+        //     dump($unitkerja->proyeks);
+        // }
+        
+        return view("/11_Rkap", compact(["unitkerjas"]));
     });
     // end RKAP
 

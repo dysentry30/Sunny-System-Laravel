@@ -14,9 +14,17 @@ class SbuController extends Controller
              *
              * @return \Illuminate\Http\Response
              */
-    public function index()
+    public function index(Request $request)
     {
-        return view('/MasterData/Sbu', ['sbus' => Sbu::all()]);
+        $column = $request->get("column");
+        $filter = $request->query("filter");
+
+        if (!empty($column)) {
+            $sbus = Sbu::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $sbus = Sbu::sortable()->get();
+        }    
+        return view('/MasterData/Sbu', compact(['sbus', 'column', 'filter']));
     }
 
             /**

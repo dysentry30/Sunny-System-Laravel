@@ -47,6 +47,15 @@
         input[type="date"]::-webkit-calendar-picker-indicator {
             display: none;
         }
+
+        .select2-selection__rendered{
+            color: #181c32 !important;
+        }
+
+        /* change color sortable to default text-gray-400 */
+        th a{
+            color: #b5b5c3 !important;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -1024,6 +1033,15 @@
         
     @endif
 
+    <script>
+        const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+        });
+    </script>
     
     <!--end::Javascript-->
 

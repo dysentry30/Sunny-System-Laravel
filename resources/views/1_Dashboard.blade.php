@@ -117,14 +117,14 @@
                             <!--begin::Card title-->
 
                         </div>
-                        <br>
                         <!--end::Card header-->
-
+                        
+                        <br>
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 ">
+                        <div class="card-body pt-0">
                             <!--begin::FORECAST LINE CHART-->
-                            <figure class="highcharts-figure">
+                            <figure class="highcharts-figure py-12">
                                 <div id="forecast-line" style="display:">
                                 </div>
                                 <!--begin::Table Proyek-->
@@ -146,7 +146,7 @@
                                         </thead>
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
-                                        <tbody class="fw-bold text-gray-600" id="table-line-body">
+                                        <tbody class="fw-bold" id="table-line-body">
                                             {{-- Data Here --}}
                                         </tbody>
                                         <!--end::Table body-->
@@ -155,30 +155,230 @@
                                 </div>
                             </figure>
                             <!--end::FORECAST LINE CHART-->
-                            <br><br><hr><br><br>
+                            <hr>
 
-                            <div id="forecast-3wulan">
+                            <div class="py-12" id="forecast-3wulan">
                                 <!--begin::FORECAST 3 WULAN CHART-->
                                 <!--end::FORECAST 3 WULAN CHART-->
                             </div>
-                            <br><br><hr><br><br>
+                            <hr>
                             
-                            <div id="monitoring-proyek">
+                            <div class="py-12" id="monitoring-proyek">
                                 <!--begin::MONITORING PROYEK-->
                                 <!--end::MONITORING PROYEK-->
                             </div>
-                            <br><br><hr><br><br>
+                            <hr>
                             
-                            <div id="marketing-pipeline">
+                            <div class="py-12" id="marketing-pipeline">
                                 <!--begin::MARKETING PIPELINE-->
                                 <!--end::MARKETING PIPELINE-->
                             </div>
-                            <br><br><hr><br><br>
-                            
-                            <div id="claim">
+                            <hr>
+
+                            <div class="py-12" id="claim">
                                 <!--begin::MARKETING PIPELINE-->
                                 <!--end::MARKETING PIPELINE-->
                             </div>
+                            <hr>
+                            
+                            <!--begin:: PARETO-->    
+                            <div class="px-8 pb-18 py-12">
+                                <h1 class="text-center bold">
+                                    Pareto Claim
+                                </h1>
+<!--begin::Tabs Navigasi-->    
+                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                            <!--begin:::Tab item Claim-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                    href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
+                            </li>
+                            <!--end:::Tab item Claim-->
+
+                            <!--begin:::Tab item Anti Claim-->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                    data-bs-toggle="tab" href="#kt_user_view_anticlaim"
+                                    style="font-size:14px;">Anti Claim</a>
+                            </li>
+                            <!--end:::Tab item Anti Claim-->
+
+                            <!--begin:::Tab item -->
+                            <li class="nav-item">
+                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                    data-bs-toggle="tab" href="#kt_user_view_asuransi"
+                                    style="font-size:14px;">Claim Asuransi</a>
+                            </li>
+                            <!--end:::Tab item -->
+                            </ul>
+<!--end::Tabs Navigasi-->
+
+
+                                <!--begin::Table Pannel Claim  -->
+                                <div class="tab-content" id="myTabContent">
+<!--begin::Pareto Claim-->
+                                    <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Nama Proyek')</th>
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Unit Kerja')</th>
+                                                    <th class="min-w-auto">@sortablelink('nilai_claim','Nilai Claim')</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold">
+                                                @foreach ($paretoClaim as $claim)
+                                                {{-- @foreach ($claim as $claim) --}}
+                                                <tr>
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                    <!--end::Name-->
+                                                    <!--begin::Unit Kerja-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                    </td>
+                                                    <!--end::Unit Kerja-->
+                                                    <!--begin::Nilai Claim-->
+                                                    <td>
+                                                        @php
+                                                            $nilaiClaim = 0;
+                                                            foreach ($claim as $nilai)
+                                                            if ($nilai->nilai_claim != "") {
+                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                            }
+                                                        @endphp
+                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                    </td>
+                                                    <!--end::Nilai Claim-->
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                                @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table -->
+                                        {{-- {{ $paretoClaim->links() }} --}}
+                                        {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
+                                    </div>
+<!--end::Pareto Claim-->
+    
+<!--begin:::Pareto Anti Claim-->
+                                    <div class="tab-pane fade" id="kt_user_view_anticlaim" role="tabpanel">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Nama Proyek')</th>
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Unit Kerja')</th>
+                                                    <th class="min-w-auto">@sortablelink('nilai_claim','Nilai Claim')</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold">
+                                                @foreach ($paretoAntiClaim as $claim)
+                                                {{-- @foreach ($claim as $claim) --}}
+                                                <tr>
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                    <!--end::Name-->
+                                                    <!--begin::Unit Kerja-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                    </td>
+                                                    <!--end::Unit Kerja-->
+                                                    <!--begin::Nilai Claim-->
+                                                    <td>
+                                                        @php
+                                                            $nilaiClaim = 0;
+                                                            foreach ($claim as $nilai)
+                                                            if ($nilai->nilai_claim != "") {
+                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                            }
+                                                        @endphp
+                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                    </td>
+                                                    <!--end::Nilai Claim-->
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                                @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table -->
+                                    </div>
+<!--end:::Pareto Anti Claim-->
+    
+<!--begin:::Pareto Asuransi-->
+                                    <div class="tab-pane fade" id="kt_user_view_asuransi" role="tabpanel">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Nama Proyek')</th>
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Unit Kerja')</th>
+                                                    <th class="min-w-auto">@sortablelink('nilai_claim','Nilai Claim')</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold text-gray-800">
+                                                @foreach ($paretoAsuransi as $claim)
+                                                {{-- @foreach ($claim as $claim) --}}
+                                                <tr>
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                    <!--end::Name-->
+                                                    <!--begin::Unit Kerja-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                    </td>
+                                                    <!--end::Unit Kerja-->
+                                                    <!--begin::Nilai Claim-->
+                                                    <td>
+                                                        @php
+                                                            $nilaiClaim = 0;
+                                                            foreach ($claim as $nilai)
+                                                            if ($nilai->nilai_claim != "") {
+                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                            }
+                                                        @endphp
+                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                    </td>
+                                                    <!--end::Nilai Claim-->
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                                @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table -->
+                                    </div>
+<!--end:::Pareto Asuransi-->
+    
+                                </div>
+                                <!--end::Table Pannel Claim-->
+                            </div>
+                            <!--end::: PARETO-->
+                            <hr>
 
                         </div>
                         <!--end::Card body-->
@@ -215,25 +415,10 @@
 <!--end::CDN High Chart-->
 
 <!--begin::FORECAST LINE-->
-{{-- let i = arrayHistoryForecast; --}}
-{{-- let fc1 = {!! $fc1 !!} ;
-let fc2 = fc1 + {!! $fc2 !!} ;
-let fc3 = fc2 + {!! $fc3 !!} ;
-let fc4 = fc3 + {!! $fc4 !!} ;
-let fc5 = fc4 + {!! $fc5 !!} ;
-let fc6 = fc5 + {!! $fc6 !!} ;
-let fc7 = fc6 + {!! $fc7 !!} ;
-let fc8 = fc7 + {!! $fc8 !!} ;
-let fc9 = fc8 + {!! $fc9 !!} ;
-let fc10 = fc9 + {!! $fc10 !!} ;
-let fc11 = fc10 + {!! $fc11 !!} ;
-let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <script>
     let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
     let nilaiRkap = JSON.parse("{!! json_encode($nilaiRkapArray) !!}");
     let nilaiRealisasi = JSON.parse("{!! json_encode($nilaiRealisasiArray) !!}");
-    // let per = 1; //normal
-    // let per = 1000000; //jutaan
     
     Highcharts.chart('forecast-line', {
 
@@ -284,7 +469,6 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
         {
             name: 'Forecast',
             data: nilaiForecast,
-            // data: [Math.ceil(fc1/per), Math.ceil(fc2/per), Math.ceil(fc3/per), Math.ceil(fc4/per), Math.ceil(fc5/per), Math.ceil(fc6/per), Math.ceil(fc7/per), Math.ceil(fc8/per), Math.ceil(fc9/per), Math.ceil(fc10/per), Math.ceil(fc11/per), Math.ceil(fc12/per)],
         }, 
         {
             name: 'Nilai OK',
@@ -373,10 +557,6 @@ let fc12 = fc11 + {!! $fc12 !!} ; --}}
 <!--end::FORECAST LINE-->
 
 <!--begin::FORECAST 3WULAN-->
-{{-- let fc_3 = {!! $fc1 + $fc2 + $fc3 !!} ;
-let fc_6 = fc_3 + {!! $fc4 + $fc5 + $fc6 !!} ;
-let fc_9 = fc_6 + {!! $fc7 + $fc8 + $fc9 !!} ;
-let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
 <script>
     let forecast3Wulan = JSON.parse("{!! json_encode($nilaiForecastTriwunalArray) !!}");
     
@@ -491,7 +671,7 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
         },
         yAxis: {
             title: {
-                text: ' '
+                text: ''
             }
 
         },
@@ -520,22 +700,22 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
                 colorByPoint: true,
                 data: [
                     {
-                        name: "Proses",
+                        name: "Proses : "+{{ $proses }},
                         y: {{ $proses }},
                         drilldown: "Proses",
                     },
                     {
-                        name: "Menang",
+                        name: "Menang : "+{{ $menang }},
                         y: {{ $menang }},
                         drilldown: "Menang",
                     },
                     {
-                        name: "Kalah dan Cancel",
+                        name: "Kalah dan Cancel : "+{{ $kalah }},
                         y: {{ $kalah }},
                         drilldown: "Kalah dan Cancel",
                     },
                     {
-                        name: "Prakualifikasi",
+                        name: "Prakualifikasi : "+{{ $prakualifikasi }},
                         y: {{ $prakualifikasi }},
                         drilldown: "Prakualifikasi",
                     }
@@ -603,7 +783,7 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
             series: {
                 dataLabels: {
                     enabled: true,
-                    format: '<b>{point.name}</b> ({point.y:,.0f})',
+                    format: '<b>{point.name}</b> : {point.y:,.0f}',
                     softConnector: true
                 },
                 center: ['35%', '50%'],
@@ -655,62 +835,62 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
 <!--begin::CLAIM-->
 <script>
     Highcharts.chart('claim', {
-    chart: {
-        type: 'column'
-    },
-    title: {
-        text: '<b class="h1">Status Claim</b>'
-    },
-    subtitle: {
-        text: ''
-    },
-    xAxis: {
-        categories: [
-            'Cancel',
-            'Disetujui',
-            'Ditolak',
-            'On Progress'
-        ],
-        crosshair: true
-    },
-    yAxis: {
-        min: 0,
+        chart: {
+            type: 'column'
+        },
         title: {
-            text: ' '
-        }
-    },
-    tooltip: {
-        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-            '<td style="padding:0"><b>{point.y}</b></td></tr>',
-        footerFormat: '</table>',
-        shared: true,
-        useHTML: true
-    },
-    plotOptions: {
-        column: {
-            pointPadding: 0.2,
-            borderWidth: 0
-        }
-    },
-    credits: {
-        enabled:false
-    },
-    colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
-    series: [{
-        name: 'Claim',
-        data: JSON.parse("{!! json_encode($claim_status_array) !!}")
+            text: '<b class="h1">Status Claim</b>'
+        },
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: [
+                'Cancel',
+                'Disetujui',
+                'Ditolak',
+                'On Progress'
+            ],
+            crosshair: true
+        },
+        yAxis: {
+            min: 0,
+            title: {
+                text: ' '
+            }
+        },
+        tooltip: {
+            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                '<td style="padding:0"><b>{point.y}</b></td></tr>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            column: {
+                pointPadding: 0.2,
+                borderWidth: 0
+            }
+        },
+        credits: {
+            enabled:false
+        },
+        colors : ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+        series: [{
+            name: 'Claim',
+            data: JSON.parse("{!! json_encode($claim_status_array) !!}")
 
-    }, {
-        name: 'Anti Claim',
-        data: JSON.parse("{!! json_encode($anti_claim_status_array) !!}")
+        }, {
+            name: 'Anti Claim',
+            data: JSON.parse("{!! json_encode($anti_claim_status_array) !!}")
 
-    }, {
-        name: 'Claim Asuransi',
-        data: JSON.parse("{!! json_encode($claim_asuransi_status_array) !!}")
+        }, {
+            name: 'Claim Asuransi',
+            data: JSON.parse("{!! json_encode($claim_asuransi_status_array) !!}")
 
-    }]
-});
+        }]
+    });
 </script>
 <!--end::CLAIM-->
 
@@ -767,7 +947,7 @@ let fc_12 = fc_9 + {!! $fc10 + $fc11 + $fc12 !!} ; --}}
 
             filterRes.forEach(filter => {
                 let stage = "";
-                totalForecast += filter.nilai_forecast;
+                totalForecast += Number(filter.nilai_forecast);
                 switch (filter.stage) {
                     case 1:
                         stage = "Pasar Dini";
