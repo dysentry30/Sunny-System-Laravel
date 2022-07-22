@@ -66,27 +66,27 @@ class ContractManagements extends Model
     }
     public function KlarifikasiNegosiasiCDA()
     {
-        return $this->hasOne(KlarifikasiNegosiasiCda::class, "id_contract");
+        return $this->hasMany(KlarifikasiNegosiasiCda::class, "id_contract");
     }
     public function KontrakTandaTangan()
     {
-        return $this->hasOne(KontrakBertandatangan::class, "id_contract");
+        return $this->hasMany(KontrakBertandatangan::class, "id_contract");
     }
     public function ReviewPembatalanKontrak()
     {
-        return $this->hasOne(ReviewPembatalanKontrak::class, "id_contract");
+        return $this->hasMany(ReviewPembatalanKontrak::class, "id_contract");
     }
     public function PerjanjianKSO()
     {
-        return $this->hasOne(PerjanjianKso::class, "id_contract");
+        return $this->hasMany(PerjanjianKso::class, "id_contract");
     }
     public function DokumenPendukung()
     {
-        return $this->hasOne(DokumenPendukung::class, "id_contract");
+        return $this->hasMany(DokumenPendukung::class, "id_contract");
     }
     public function MoMMeeting()
     {
-        return $this->hasOne(MomKickOffMeeting::class, "id_contract");
+        return $this->hasMany(MomKickOffMeeting::class, "id_contract");
     }
 
     public function getAll()
