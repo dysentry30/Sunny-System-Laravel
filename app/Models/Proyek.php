@@ -5,13 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\Paginator;
+use Kyslik\ColumnSortable\Sortable;
 
 class Proyek extends Model
 {
     use HasFactory;
+    use Sortable;
     protected $primaryKey   = 'kode_proyek';
     protected $casts = [
         "kode_proyek" => "string"
+    ];
+
+    public $sortable = [
+        'nama_proyek', 'kode_proyek', 'jenis_proyek', 'divcode', 'tahun_perolehan', 'stage', 'bulan_pelaksanaan', 'nilai_rkap', 'forecast', 'nilai_kontrak_keseluruhan'
     ];
 
     public function Company()

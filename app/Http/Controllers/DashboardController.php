@@ -107,6 +107,7 @@ class DashboardController extends Controller
         }
 
         $claims = ClaimManagements::all();
+        // dd($claims);
         
         /* 
          * Format Claim Stage
@@ -115,6 +116,7 @@ class DashboardController extends Controller
          * Stage 3 = Ditolak
          * Stage 4 = Cancel
         */
+        
         // Begin :: menghitung total dari status dan jenis claim
         $claim_status_array = [];
         $claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim")->count();
@@ -142,59 +144,6 @@ class DashboardController extends Controller
         array_push($claim_asuransi_status_array, $claim_asuransi_cancel, $claim_asuransi_disetujui, $claim_asuransi_ditolak, $claim_asuransi_on_progress);
         // End :: menghitung total dari status dan jenis claim asuransi
 
-        // $claim_diterima = $claims->countBy(function($data) {
-        //     return $data->stages == 2;
-        // });
-        // $claim_on_progress = $claims->countBy(function($data) {
-        //     return $data->stages == 1;
-        // });
-        // $claim_on_progress = $claims->countBy(function($data) {
-        //     return $data->stages == 1;
-        // });
-        // dd($claim_on_progress);
-
-
-        // $fc1 = 0;
-        // $fc2 = 0;
-        // $fc3 = 0;
-        // $fc4 = 0;
-        // $fc5 = 0;
-        // $fc6 = 0;
-        // $fc7 = 0;
-        // $fc8 = 0;
-        // $fc9 = 0;
-        // $fc10 = 0;
-        // $fc11 = 0;
-        // $fc12 = 0;
-        
-        // foreach ($nilaiHistoryForecast as $History) {
-        //     if ($History->month_forecast == 1)
-        //     $fc1 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 2)
-        //     $fc2 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 3)
-        //     $fc3 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 4)
-        //     $fc4 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 5)
-        //     $fc5 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 6)
-        //     $fc6 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 7)
-        //     $fc7 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 8)
-        //     $fc8 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 9)
-        //     $fc9 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 10)
-        //     $fc10 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 11)
-        //     $fc11 += $History->nilai_forecast;
-        //     if ($History->month_forecast == 12)
-        //     $fc12 += $History->nilai_forecast;
-        // }
-        //end::History Forecast
-        
         //begin::Proyek Stage
         $proyeks = Proyek::all();
         $proses = 0;
@@ -245,8 +194,17 @@ class DashboardController extends Controller
             };
         };
         //end::Marketing PipeLine
+        
+        //begin::Pareto
+        $paretoClaim = ClaimManagements::sortable()->where("jenis_claim", "=", "Claim")->get()->groupBy("kode_proyek");
+        // $paretoClaim = ClaimManagements::sortable()->get();
+        // dd($paretoClaim);
+        $paretoAntiClaim = ClaimManagements::sortable()->where("jenis_claim", "=", "Anti Claim")->get()->groupBy("kode_proyek");
+        $paretoAsuransi = ClaimManagements::sortable()->where("jenis_claim", "=", "Claim Asuransi")->get()->groupBy("kode_proyek");
+        //end::Pareto
 
-        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks"]));
+
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi"]));
     }
 
     /**

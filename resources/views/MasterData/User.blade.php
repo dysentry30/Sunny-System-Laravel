@@ -104,57 +104,6 @@ a{{-- Begin::Extend Header --}}
                     </div>
                     <!--end::Toolbar-->
 
-                    {{-- begin:: Alert --}}
-                    @if (Session::has('failed') || Session::has('success'))
-                        <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                            <symbol id="check-circle-fill" fill="#0f5132" viewBox="0 0 16 16">
-                                <path
-                                    d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                            </symbol>
-                            <symbol id="exclamation-triangle-fill" fill="#842029" viewBox="0 0 16 16">
-                                <path
-                                    d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                            </symbol>
-                        </svg>
-                        @if (Session::has('success'))
-                            <div class="alert alert-success alert-dismissible fade show mx-9 mb-8" role="alert">
-                                <div class="d-flex align-items-center ">
-                                    <div class="col-1">
-                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                            aria-label="Success:">
-                                            <use xlink:href="#check-circle-fill" />
-                                        </svg>
-                                    </div>
-                                    <div class="col">
-                                        {!! Session::get('success') !!}
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        @else
-                            <div class="alert alert-danger alert-dismissible fade show mx-9 mb-8" role="alert">
-                                <div class="d-flex align-items-center ">
-                                    <div class="col-1">
-                                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                            aria-label="Danger:">
-                                            <use xlink:href="#exclamation-triangle-fill" />
-                                        </svg>
-                                    </div>
-                                    <div class="col">
-                                        {!! Session::get('failed') !!}
-                                    </div>
-                                    <div class="col-1">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                            aria-label="Close"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    @endif
-                    {{-- end:: Alert --}}
 
                     <!--begin::Post-->
                     <!--begin::Container-->
@@ -170,20 +119,12 @@ a{{-- Begin::Extend Header --}}
                                 <div class="d-flex align-items-center position-relative my-1">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
-                                                fill="black" />
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black" />
-                                        </svg>
+                                        <i class="bi bi-search"></i>
                                     </span>
                                     <!--end::Svg Icon-->
                                     <input type="text" data-kt-customer-table-filter="search"
                                         class="form-control form-control-solid w-250px ps-15"
-                                        placeholder="Search Proyek" />
+                                        placeholder="Search User" />
                                 </div>
                                 <!--end::Search-->
                             </div>
@@ -204,13 +145,15 @@ a{{-- Begin::Extend Header --}}
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">No.</th>
+                                        <th class="min-w-auto">Nip</th>
                                         <th class="min-w-auto">Name</th>
-                                        <th class="min-w-auto">Email</th>
                                         <th class="min-w-auto">Unit Kerja</th>
                                         <th class="min-w-auto">Role</th>
+                                        <th class="min-w-auto text-center">Is Active</th>
+                                        <th class="min-w-auto text-end">Nomor Kontak</th>
                                         @if (auth()->user()->check_administrator)
-                                            <th class="">
-                                                <center>Action</center>
+                                            <th class="text-center">
+                                                Action
                                             </th>
                                         @endif
                                     </tr>
@@ -232,18 +175,19 @@ a{{-- Begin::Extend Header --}}
                                             </td>
                                             <!--end::No=-->
 
-                                            <!--begin::Ketua tender=-->
+                                            <!--begin::NIP-->
                                             <td>
                                                 <a href="/user/view/{{ $user->id }}"
-                                                    class="text-hover-primary text-gray-500">{{ $user->name }}</a>
+                                                    class="text-hover-primary text-gray-600">{{ $user->nip }}</a>
                                             </td>
-                                            <!--end::Ketua tender=-->
+                                            <!--end::NIP-->
 
-                                            <!--begin::Email=-->
+                                            <!--begin::Ketua tender-->
                                             <td>
-                                                {{ $user->email }}
+                                                <a href="/user/view/{{ $user->id }}"
+                                                    class="text-hover-primary text-gray-600">{{ $user->name }}</a>
                                             </td>
-                                            <!--end::Email=-->
+                                            <!--end::Ketua tender-->
 
                                             <!--begin::unit=-->
                                             <td>
@@ -272,10 +216,16 @@ a{{-- Begin::Extend Header --}}
                                             <!--end::Role=-->
 
                                             <!--begin::Created at=-->
-                                            <td>
-                                                {{ date_format(new DateTime($user->created_at), 'd M Y') }}
+                                            <td class="text-center">
+                                                {{ $user->is_active == 1 ? "yes" : "No" }}
                                             </td>
                                             <!--end::Created at=-->
+
+                                            <!--begin::Email-->
+                                            <td class="text-end">
+                                                {{ $user->no_hp ?? "-"}}
+                                            </td>
+                                            <!--end::Email-->
 
                                             @if (auth()->user()->check_administrator)
                                                 <!--begin::Action=-->

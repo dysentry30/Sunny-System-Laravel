@@ -83,6 +83,31 @@
                                                     <div class="fv-row mb-7">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">NIP</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <div class="d-flex align-items-center position-relative my-1">
+                                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                                <i class="bi bi-search"></i>
+                                                            </span>
+                                                            <!--end::Svg Icon-->
+                                                            <input type="text" id="nip" name="nip"
+                                                                class="form-control form-control-solid ps-12" value="{{ old("nip") }}"
+                                                                placeholder="NIP" />
+                                                        </div>
+                                                        @error('nip')
+                                                            <h6 class="text-danger">{{ $message }}</h6>
+                                                        @enderror
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group Name-->
+
+                                                    <!--begin::Input group Name-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
                                                             <span class="required">Name</span>
                                                         </label>
                                                         <!--end::Label-->
@@ -134,7 +159,7 @@
                                                     <!--end::Input group-->
 
                                                     <!--begin::Input group Address 2-->
-                                                    <div class="fv-row mb-7" style="margin-top:10px;">
+                                                    {{-- <div class="fv-row mb-7" style="margin-top:10px;">
                                                         <!--begin::Label-->
                                                         <label class="fs-6 fw-bold form-label mt-3">
                                                             <span>Alamat</span>
@@ -143,7 +168,7 @@
                                                         <!--begin::Input-->
                                                         <textarea class="form-control form-control-solid" name="alamat"></textarea>
                                                         <!--end::Input-->
-                                                    </div>
+                                                    </div> --}}
                                                     <!--end::Input group-->
 
                                             </div>

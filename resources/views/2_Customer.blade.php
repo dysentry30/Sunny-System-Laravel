@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Customer')
+@section('title', 'Pelanggan')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -103,15 +103,19 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Pelanggan" />
-                                </div>
+
+                                <form action="" method="get">
+                                    <div class="d-flex align-items-center position-relative my-1">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
+                                            class="form-control form-control-solid w-250px ps-15" placeholder="Search Pelanggan"/>
+                                    </div>
+                                </form>
+
                                 <!--end::Search-->
                                 <!--begin::Paginate-->
                                 {{-- <div class="align-items-center d-flex justify-content-end">
@@ -124,11 +128,9 @@
                                         {{ $customer->total()}}
                                         entries
                                     </div>
-                                    
                                     <div>
                                         {{ $customer->links() }}
                                     </div>
-                                    
                                 </div> --}}
                                 <!--end::Paginate-->
                             </div>
@@ -144,12 +146,13 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">No.</th> --}}
-                                        <th class="min-w-auto">Customer Name</th>
-                                        <th class="max-w-50px">Email</th>
-                                        <th class="min-w-auto">Phone Number</th>
-                                        <th class="min-w-auto">Website</th>
-                                        <th class="min-w-auto">Created Date</th>
-                                        <th class="min-w-auto">PIC</th>
+                                        <th class="min-w-auto">Pelanggan</th>
+                                        <th class="min-w-auto">Email</th>
+                                        <th class="min-w-auto">Kontak Nomor</th>
+                                        <th class="max-w-auto">Customer</th>
+                                        <th class="min-w-auto">Partner</th>
+                                        <th class="min-w-auto">Competitor</th>
+                                        <th class="min-w-auto">Kode Nasabah</th>
                                         @if (auth()->user()->check_administrator)
                                         <th class="min-w-auto text-center">Action</th>
                                         @endif
@@ -164,6 +167,73 @@
                                     <tbody class="fw-bold text-gray-600" id="data-wrapper">
 
                                         <!-- Results :: Data Tabel Infinite Scroll -->
+
+                                    </tbody>
+                                    <tbody class="fw-bold text-gray-600">
+
+                                        <!-- Results :: Data Tabel Infinite Scroll -->
+                                        @if ($cari != null)
+                                            
+                                        {{-- {!! $artilces !!} --}}
+
+                                        @foreach ($results as $customers)
+
+                                        <tr>
+                                            <!--begin::Name=-->
+                                            <td>
+                                            <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a>
+                                            </td>
+                                            <!--end::Name=-->
+                                            <!--begin::Email=-->
+                                            <td>
+                                            <a href="#">{{ ($customers->email) }}</a>
+                                            </td>
+                                            <!--end::Email=-->
+                                            <!--begin::Nomor=-->
+                                            <td>
+                                            {{ $customers->phone_number }}
+                                            </td>
+                                            <!--end::Nomor-->
+                                            <!--begin::check_customer-->
+                                            <td>
+                                            {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
+                                            </td>
+                                            <!--end::check_customer=-->
+                                            <!--begin::check_partner-->
+                                            <td>
+                                            {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
+                                            </td>
+                                            <!--end::check_partner-->
+                                            <!--begin::check_competitor-->
+                                            <td data-filter="mastercard">
+                                            {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
+                                            </td>
+                                            <!--end::check_competitor-->
+                                            <!--begin::Kode Nasabah=-->
+                                            <td>
+                                            {{ $customers->kode_nasabah }}
+                                            </td>
+                                            <!--end::Kode Nasabah-->
+                                            <!--begin::Action=-->
+                                            @if (auth()->user()->check_administrator)
+                                                <td class="text-center">
+                                                    <button data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                </td>
+                                                <!--end::Action=-->
+                                            @endif
+                                        </tr>
+                                            
+                                        @endforeach
+                                        <script>
+                                             const tbody = document.querySelector("#data-wrapper");
+                                             tbody.style.display = "none";
+                                        </script>
+                                        
+                                        @endif
 
                                     </tbody>
                                     <!-- End :: Results -->

@@ -13,7 +13,7 @@ class ProyekBerjalans extends Model
 
     public function proyek()
     {
-        return $this->hasMany(Proyek::class, 'kode_proyek', 'kode_proyek');
+        return $this->hasOne(Proyek::class, 'kode_proyek', 'kode_proyek');
     }
 
     public function UnitKerja()

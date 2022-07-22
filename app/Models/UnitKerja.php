@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class UnitKerja extends Model
 {
     use HasFactory;
+    use Sortable;
+
+    public $sortable = [
+        'nomor_unit', 'unit_kerja', 'divcode', 'dop', 'company', 'divisi', 'is_active'
+    ];
+    
     public function proyeks() {
         return $this->hasMany(Proyek::class, "unit_kerja", "divcode");
     }

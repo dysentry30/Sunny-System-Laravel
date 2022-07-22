@@ -102,28 +102,62 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 py-2">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
+                                {{-- <div class="d-flex align-items-center position-relative my-1">
                                     <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                     <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none">
-                                            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546"
-                                                height="2" rx="1" transform="rotate(45 17.0365 15.1223)"
-                                                fill="black" />
-                                            <path
-                                                d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z"
-                                                fill="black" />
-                                        </svg>
+                                        <i class="bi bi-search"></i>
                                     </span>
                                     <!--end::Svg Icon-->
                                     <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
-                                </div>
+                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Sumber Dana" />
+                                </div> --}}
                                 <!--end::Search-->
+
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$column == "" ? "selected": ""}}></option>
+                                        <option value="nama_sumber" {{$column == "nama_sumber" ? "selected" : ""}}>Instansi</option>
+                                        <option value="kategori" {{$column == "kategori" ? "selected" : ""}}>Kategori</option>
+                                        <option value="unique_code" {{$column == "unique_code" ? "selected" : ""}}>Unique Code</option>
+                                        <option value="sumber_dana_id" {{$column == "sumber_dana_id" ? "selected" : ""}}>Sumber Dana Id</option>
+                                        
+                                    </select>
+                                    <!--End:: Select Options-->
+                                    
+                                    <!--begin:: Input Filter-->
+                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    <!--end:: Input Filter-->
+                                    
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                    <!--end:: Filter-->
+                                    
+                                    <!--begin:: RESET-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <script>
+                                        function resetFilter() {
+                                            $("#column").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#filter").text({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+                                
                             </div>
                             <!--begin::Card title-->
 
@@ -141,16 +175,11 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Nama</th>
-                                        <th class="min-w-auto">Kategori</th>
-                                        <th class="min-w-auto">Unique Code</th>
-                                        <th class="min-w-auto">Jenis Perusahaan</th>
-                                        <th class="min-w-auto">Tipe Lain</th>
-                                        <th class="min-w-auto">Kode</th>
-                                        <th class="min-w-auto">Sumber Dana ID</th>
-                                        <th class="min-w-auto">Kode Proyek ID</th>
-                                        <th class="min-w-auto">Tipe Perusahaan</th>
-                                        <th class="min-w-auto">COT ID</th>
+                                        <th class="min-w-auto">@sortablelink('nama_sumber','Instansi')</th>
+                                        <th class="min-w-auto">@sortablelink('kategori','Kategori')</th>
+                                        <th class="min-w-auto">@sortablelink('unique_code','Unique Code')</th>
+                                        <th class="min-w-auto">@sortablelink('sumber_dana_id','Sumber Dana ID')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_proyek_id','Kode Proyek ID')</th>
 										@if (auth()->user()->check_administrator)
 											<th class="text-center">Action</th>
 										@endif
@@ -169,8 +198,9 @@
 
                                             <!--begin::Name=-->
                                             <td>
-                                                <a href="#" id="click-name"
-                                                    class="text-gray-800 text-hover-primary mb-1">{{ $sumberdanas->nama_sumber }}</a>
+                                                <a type="button" data-bs-toggle="modal" data-bs-target="#kt_edit_{{ $sumberdanas->id }}" 
+                                                    class="text-gray-600 text-gray text-hover-primary">{{ $sumberdanas->nama_sumber }}</a>
+                                                </a>
                                             </td>
                                             <!--end::Name=-->
                                             <!--begin::Email=-->
@@ -185,37 +215,12 @@
                                             <!--end::Coloumn=-->
                                             <!--begin::Coloumn=-->
                                             <td>
-                                                {{ $sumberdanas->jenis_perusahaan }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ $sumberdanas->tipe_lain }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ $sumberdanas->kode_sumber }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
                                                 {{ $sumberdanas->sumber_dana_id }}
                                             </td>
                                             <!--end::Coloumn=-->
                                             <!--begin::Coloumn=-->
                                             <td>
                                                 {{ $sumberdanas->kode_proyek_id }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ $sumberdanas->tipe_perusahaan }}
-                                            </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ $sumberdanas->cot_id }}
                                             </td>
                                             <!--end::Coloumn=-->
 
@@ -261,12 +266,9 @@
     <!--end::Root-->
 
 
-    <!--begin::Modal-->
+<!--begin::Modal-->
     <form action="/sumber-dana/save" method="post" enctype="multipart/form-data">
         @csrf
-
-        <!--begin::Modal - Create App-->
-        {{-- <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer"> --}}
 
         <!--begin::Modal - Create Proyek-->
         <div class="modal fade" id="kt_modal_create" tabindex="-1" aria-hidden="true">
@@ -303,7 +305,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama Pemberi Dana</span>
+                                        <span class="required">Instansi Pemberi Dana</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -475,7 +477,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid reformat"
+                                    <input type="text" class="form-control form-control-solid"
                                         id="tipe-perusahaan" name="tipe-perusahaan" value=""
                                         placeholder="Tipe Perusahaan" />
                                     <!--end::Input-->
@@ -492,7 +494,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid reformat" id="cot-id"
+                                    <input type="text" class="form-control form-control-solid" id="cot-id"
                                         name="cot-id" value="" placeholder="COT ID" />
                                     <!--end::Input-->
                                 </div>
@@ -516,9 +518,268 @@
         </div>
         <!--end::Modal - Create App-->
     </form>
-    <!--end::Modals-->
+<!--end::Modals-->
 
-    <!--begin::modal DELETE-->
+<!--begin::EDIT-->
+    @foreach ($sumberdana as $sumberdanas)
+    <form action="/sumber-dana/{{ $sumberdanas->id }}/edit" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <!--begin::Modal - Create App-->
+        <input type="hidden" name="id-sumber" value="{{ $sumberdanas->id }}" id="id-customer">
+
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_edit_{{ $sumberdanas->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Sumber Dana</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-circle-fill ts-8"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Instansi Pemberi Dana</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="nama-sumber"
+                                        name="nama-sumber" value="{{ $sumberdanas->nama_sumber }}"
+                                        placeholder="Nama Pemberi Dana" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kategori</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="kategori" class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" data-control="select2"
+                                        data-hide-search="true" data-placeholder="Kategori">
+                                        <option value="{{ $sumberdanas->kategori }}">{{ $sumberdanas->kategori }}</option>
+                                        <option value="BUMN">BUMN</option>
+                                        <option value="Investasi">Investasi</option>
+                                        <option value="Loan">Loan</option>
+                                        <option value="Pemerintah">Pemerintah</option>
+                                        <option value="Swasta">Swasta</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Unique Code</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="unique-code" class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Unique Code">
+                                        <option value="{{ $sumberdanas->unique_code }}">{{ $sumberdanas->unique_code }}</option>
+                                        <option value="NPWP">NPWP</option>
+                                        <option value="Bussines Permite License">Bussines Permite License</option>
+                                        <option value="Kode Anggaran Provinsi">Kode Anggaran Provinsi</option>
+                                        <option value="kode Bagian Anggaran">kode Bagian Anggaran</option>
+                                        <option value="Tax Identification Number">Tax Identification Number</option>
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Jenis Perusahaan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="jenis-perusahaan"
+                                        name="jenis-perusahaan" value="{{ $sumberdanas->jenis_perusahaan }}" placeholder="Jenis Perusahaan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tipe Lain</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="tipe-lain"
+                                        name="tipe-lain" value="{{ $sumberdanas->tipe_lain }}" placeholder="Tipe Lain" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kode</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="kode-sumber"
+                                        name="kode-sumber" value="{{ $sumberdanas->kode_sumber }}" placeholder="Kode" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Sumber Dana ID</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="sumber-dana-id"
+                                        name="sumber-dana-id" value="{{ $sumberdanas->sumber_dana_id }}" placeholder="Sumber Dana ID" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kode Proyek ID</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="kode-proyek-id"
+                                        name="kode-proyek-id" value="{{ $sumberdanas->kode_proyek_id }}" placeholder="Kode Proyek ID" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tipe Perusahaan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                        id="tipe-perusahaan" name="tipe-perusahaan" value="{{ $sumberdanas->tipe_perusahaan }}"
+                                        placeholder="Tipe Perusahaan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>COT ID</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="cot-id"
+                                        name="cot-id" value="{{ $sumberdanas->cot_id }}" placeholder="COT ID" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                            id="" style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    @endforeach
+<!--end::EDIT-->
+
+
+<!--begin::modal DELETE-->
     @foreach ($sumberdana as $sumberdanas)
         <form action="/sumber-dana/delete/{{ $sumberdanas->id }}" method="post" enctype="multipart/form-data">
             @method('delete')

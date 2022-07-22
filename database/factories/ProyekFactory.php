@@ -36,17 +36,17 @@ class ProyekFactory extends Factory
             "stage" => $this->faker->randomElement([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
             // "tahun_pelaksanaan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]),
             "bulan_pelaksanaan" => $this->faker->month,
-            "nilai_rkap" => $this->faker->numerify('##,###,000'),
+            "nilai_rkap" => $this->faker->numerify('#,###,###,000'),
             "nilai_valas_review" => $this->faker->numerify('#,###,000'),
             "mata_uang_review" => $this->faker->randomElement(["IDR", "USD", "YUAN"]),
             "kurs_review" => $this->faker->text(10),
             "bulan_review" => $this->faker->month,
-            "nilaiok_review" => $this->faker->numerify('#,###,000'),
+            "nilaiok_review" => $this->faker->numerify('#,###,###,000'),
             "nilai_valas_awal" => $this->faker->numerify('###,000'),
             "mata_uang_awal" => $this->faker->randomElement(["IDR", "USD", "YUAN"]),
             "kurs_awal" => $this->faker->text(10),
             "bulan_awal" => $this->faker->month,
-            "nilaiok_awal" => $this->faker->numerify('#,###,000'),
+            "nilaiok_awal" => $this->faker->numerify('#,###,###,000'),
             "laporan_kualitatif_pasdin" => $this->faker->text(100),
 
             // Pasar Potensial
@@ -107,6 +107,7 @@ class ProyekFactory extends Factory
             "klasifikasi_terkontrak" => $this->faker->randomElement(["Ter-Klasifikasi", "Tidak Ter-Klasifikasi"]),
             "tanggal_selesai_terkontrak" => $this->faker->date(),
             "jenis_terkontrak" => $this->faker->randomElement(["Internal", "External"]),
+            "forecast" => $this->faker->numerify('#,####,#00,000'),
 
         ];
     }

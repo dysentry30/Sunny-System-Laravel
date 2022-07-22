@@ -15,9 +15,17 @@ class CompanyController extends Controller
          *
          * @return \Illuminate\Http\Response
          */
-    public function index()
+    public function index(Request $request)
     {
-        return view('/MasterData/Company', ['companies' => Company::all()]);
+        $column = $request->get("column");
+        $filter = $request->query("filter");
+
+        if (!empty($column)) {
+            $companies = Company::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $companies = Company::sortable()->get();
+        }    
+        return view('/MasterData/Company', compact(['companies', 'column', 'filter']));
     }
 
         /**

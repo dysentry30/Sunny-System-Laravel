@@ -3,7 +3,7 @@
 {{-- End::Extend Header --}}
 
 {{-- Begin::Title --}}
-@section('title', 'Customer')
+@section('title', 'Buat Pelanggan')
 {{-- End::Title --}}
 
 <!--begin::Main-->
@@ -212,28 +212,7 @@
                                                                 href="#kt_user_view_overview_tab" style="font-size:14px;">COMPANY INFORMATION</a>
                                                             </li>
                                                             <!--end:::Tab item Informasi Perusahaan-->
-                                                            
-                                                            <!--begin:::Tab item Atachment & Notes-->
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" 
-                                                                href="#kt_user_view_overview_Performance" style="font-size:14px;">PERFORMANCE</a>
-                                                            </li>
-                                                            <!--end:::Tab item Atachment & Notes-->
-                                                            
-                                                            <!--begin:::Tab item History-->
-                                                            {{-- <li class="nav-item">
-                                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" 
-                                                                href="#kt_user_view_overview_history" style="font-size:14px;">HISTORY</a>
-                                                            </li> --}}
-                                                            <!--end:::Tab item History-->
-
-                                                            <!--begin:::Tab item Atachment & Notes-->
-                                                            {{-- <li class="nav-item">
-                                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" 
-                                                                href="#kt_user_view_overview_AttNotes" style="font-size:14px;">ATTACHMENTS</a>
-                                                            </li> --}}
-                                                            <!--end:::Tab item Atachment & Notes-->
-                                                            
+                                                                                                                        
 														</ul>
 														<!--end:::Tabs-->
                                                         
@@ -251,320 +230,235 @@
                                                                         <div class="fv-row mb-7">
                                                                             <!--begin::Label-->
                                                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                                                <span>Instansi</span>
+                                                                                <span class="required">Instansi</span>
                                                                             </label>
                                                                             <!--end::Label-->
                                                                             <!--begin::Input-->
                                                                             <select name="jenis-instansi" 
-                                                                            class="form-select form-select-solid" 
-                                                                            data-control="select2" data-hide-search="true" 
-                                                                            data-placeholder="Instansi">
-																			<option></option>
-																			<option value="BUMN">BUMN</option>
-																			<option value="BUMND">BUMND</option>
-																			<option value="APBN">APBN</option>
-																			<option value="Swasta">Swasta</option>
-																			<option value="Investasi">Investasi</option>
-																		</select>
-																		<!--end::Input-->
+																				class="form-select form-select-solid" 
+																				data-control="select2" data-hide-search="true" 
+																				data-placeholder="Instansi">
+																				<option></option>
+																				<option value="BUMN">BUMN</option>
+																				<option value="BUMND">BUMND</option>
+																				<option value="APBN">APBN</option>
+																				<option value="Swasta">Swasta</option>
+																				<option value="Investasi">Investasi</option>
+																			</select>
+																			<!--end::Input-->
+																		</div>
+																		<!--end::Input group-->
 																	</div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Kode Proyek Owner</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="kodeproyek-company" value="" placeholder="Kode Proyek Owner" />
-																		<!--end::Input-->
+																	<!--End begin::Col-->
+																	<div class="col-6">
+																		<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="required">Kode Proyek Owner</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="kodeproyek-company" value="" placeholder="Kode Proyek Owner" />
+																			<!--end::Input-->
+																		</div>
+																		<!--end::Input group-->
 																	</div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-															</div>
-															<!--End begin::Row-->
-                                                            
-															<!--begin::Row-->
-															<div class="row fv-row">
-                                                                <!--begin::Col-->
+																	<!--End begin::Col-->
+																</div>
+																<!--End begin::Row-->
+																
+																<!--begin::Row-->
+																<div class="row fv-row">
+																	<!--begin::Col-->
+																	<div class="col-6">
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="required">NPWP</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="npwp-company" value="" placeholder="NPWP" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
 																<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>NPWP</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="npwp-company" value="" placeholder="NPWP" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Kode Nasabah</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="kodenasabah-company" value="" placeholder="Kode Nasabah" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															</div>
-															<!--End begin::Row-->
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="required">Kode Nasabah</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="kodenasabah-company" value="" placeholder="Kode Nasabah" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
+																</div>
+																<!--End begin::Row-->
 
-															<!--begin::Row-->
-															<div class="row fv-row">
-																<!--begin::Col-->
-																<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Customer Journey</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<select name="journey-company" 
-																		class="form-select form-select-solid" 
-																		data-control="select2" data-hide-search="true" 
-																		data-placeholder="Customer Journey">
-																			<option></option>
-																			<option value="Customer">Customer</option>
-																			<option value="Loyal">Loyal</option>
-																			<option value="Advocate">Advocate</option>
-																		</select>
-																		<!--end::Input-->
+																<!--begin::Row-->
+																{{-- <div class="row fv-row">
+																	<!--begin::Col-->
+																	<div class="col-6">
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="required">Customer Journey</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<select name="journey-company" 
+																				class="form-select form-select-solid" 
+																				data-control="select2" data-hide-search="true" 
+																				data-placeholder="Customer Journey">
+																					<option></option>
+																					<option value="Customer">Customer</option>
+																					<option value="Loyal">Loyal</option>
+																					<option value="Advocate">Advocate</option>
+																				</select>
+																				<!--end::Input-->
+																			</div>
+																		<!--end::Input group-->
 																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Segmentation</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<select name="segmentation-company" 
-																		class="form-select form-select-solid" 
-																		data-control="select2" data-hide-search="true" 
-																		data-placeholder="Segmentation">
-																			<option></option>
-																			<option value="Silver">Silver</option>
-																			<option value="Gold">Gold</option>
-																			<option value="VIP">VIP</option>
-																		</select>
-																		<!--end::Input-->
+																	<!--End begin::Col-->
+																	<div class="col-6">
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="required">Segmentation</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<select name="segmentation-company" 
+																			class="form-select form-select-solid" 
+																			data-control="select2" data-hide-search="true" 
+																			data-placeholder="Segmentation">
+																				<option></option>
+																				<option value="Silver">Silver</option>
+																				<option value="Gold">Gold</option>
+																				<option value="VIP">VIP</option>
+																			</select>
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
 																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															</div>
-															<!--End begin::Row-->
-															&nbsp;<br>
-															&nbsp;<br>
-															&nbsp;<br>
-															<!--begin::Card title-->
-															<div class="card-title m-0">
-																<h3 class="fw-bolder m-0" style="font-size:14px;">Contact / PIC</h3>
-															</div>
-															<!--end::Card title-->
-															<!--begin::Menu separator-->
-															<div class="separator border-gray-200" style="margin-top: 10px;"></div>
-															<!--end::Menu separator-->
+																	<!--End begin::Col-->
+																</div> --}}
+																<!--End begin::Row-->
+																&nbsp;<br>
+																&nbsp;<br>
+																&nbsp;<br>
+																<!--begin::Card title-->
+																<div class="card-title m-0">
+																	<h3 class="fw-bolder m-0" style="font-size:14px;">Contact / PIC</h3>
+																</div>
+																<!--end::Card title-->
+																<!--begin::Menu separator-->
+																<div class="separator border-gray-200" style="margin-top: 10px;"></div>
+																<!--end::Menu separator-->
 
-															<!--begin::Row-->
-															<div class="row fv-row">
-																<!--begin::Col-->
+																<!--begin::Row-->
+																<div class="row fv-row">
+																	<!--begin::Col-->
+																	<div class="col-6">
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span>Name</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="name-pic" value="" placeholder="Name" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
 																<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Name</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="name-pic" value="" placeholder="Name" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Role</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="kode-pic" value="" placeholder="Kode Nasabah" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															</div>
-															<!--End begin::Row-->
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span>Jabatan</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="kode-pic" value="" placeholder="Jabatan" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
+																</div>
+																<!--End begin::Row-->
 
-															<!--begin::Row-->
-															<div class="row fv-row">
-																<!--begin::Col-->
+																<!--begin::Row-->
+																<div class="row fv-row">
+																	<!--begin::Col-->
+																	<div class="col-6">
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span>Email</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="email-pic" value="" placeholder="Email" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
 																<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Email</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="email-pic" value="" placeholder="Email" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															<div class="col-6">
-																<!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span>Phone Number</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<input type="text" class="form-control form-control-solid" 
-																		name="phone-number-pic" value="" placeholder="Phone Number" />
-																		<!--end::Input-->
-																	</div>
-																<!--end::Input group-->
-															</div>
-															<!--End begin::Col-->
-															</div>
-															<!--End begin::Row-->
+																	<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span>Phone Number</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text" class="form-control form-control-solid" 
+																			name="phone-number-pic" value="" placeholder="Phone Number" />
+																			<!--end::Input-->
+																		</div>
+																	<!--end::Input group-->
+																</div>
+																<!--End begin::Col-->
+																</div>
+																<!--End begin::Row-->
 
 															</div>
 															<!--end:::Tab pane Informasi Perusahaan-->
 
 															<!--begin:::Tab pane History-->
-															<div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
-														<!--begin::Card title-->
-															<div class="card-title m-0">
-															<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-																Proyek Berjalan
-																<a href="#" Id="Plus"
-																data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a>
-															</h3>
-															&nbsp;<br>
-															<!--begin::Table-->
-																<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-																	<!--begin::Table head-->
-																	<thead>
-																		<!--begin::Table row-->
-																		<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-																			<th class="min-w-auto">Nama Proyek</th>
-																			<th class="min-w-auto">Kode Proyek</th>
-																			<th class="min-w-auto">Unit kerja</th>
-																			<th class="min-w-auto">Jenis Proyek</th>
-																			<th class="min-w-auto">Nama PIC</th>
-																			<th class="min-w-auto">Nilai OK</th>
-																		</tr>
-																		<!--end::Table row-->
-																	</thead>
-																	<!--end::Table head-->
-																	<!--begin::Table body-->
-																	<tbody class="fw-bold text-gray-600">
-																		<tr>
-																			<!--begin::Name=-->
-																			<td>
-																				<a href="#" class="text-gray-800 text-hover-primary mb-1">
-																					Proyek Pembangun Jalan Tol Cipularang
-																				</a>
-																			</td>
-																			<!--end::Name=-->
-																			<!--begin::Kode=-->
-																			<td>
-																				<a href="#" class="text-gray-600 text-hover-primary mb-1">
-																					3EPA050</a>
-																			</td>
-																			<!--end::Kode=-->
-																			<!--begin::Unit=-->
-																			<td>Wika Industri Konstruksi</td>
-																			<!--end::Unit=-->
-																			<!--begin::Jenis=-->
-																			<td>External</td>
-																			<!--end::Jenis=-->
-																			<!--begin::PIC=-->
-																			<td>Erika Sartini</td>
-																			<!--end::PIC=-->
-																			<!--begin::Nilai OK=-->
-																			<td>95,000,000,000</td>
-																			<!--end::Nilai OK=-->
-																		</tr>
-																		<tr>
-																			<!--begin::Name=-->
-																			<td>
-																				<a href="#" class="text-gray-800 text-hover-primary mb-1">
-																					Proyek Pembangun Gedung Wisma K3
-																				</a>
-																			</td>
-																			<!--end::Name=-->
-																			<!--begin::Kode=-->
-																			<td>
-																				<a href="#" class="text-gray-600 text-hover-primary mb-1">
-																					3EPA052</a>
-																			</td>
-																			<!--end::Kode=-->
-																			<!--begin::Unit=-->
-																			<td>Wika Bangun Gedung</td>
-																			<!--end::Unit=-->
-																			<!--begin::Jenis=-->
-																			<td>External</td>
-																			<!--end::Jenis=-->
-																			<!--begin::PIC=-->
-																			<td>Joe Satriani</td>
-																			<!--end::PIC=-->
-																			<!--begin::Nilai OK=-->
-																			<td>15,432,000,000</td>
-																			<!--end::Nilai OK=-->
-																		</tr>
-																		
-																	</tbody>
-																	<!--end::Table body-->
-																</table>
-															<!--end::Table-->
-															</div>
-															&nbsp;<br>
-															&nbsp;<br>
-															&nbsp;<br>
-															<div class="card-title m-0">
+															{{-- <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
+																<!--begin::Card title-->
+																<div class="card-title m-0">
 																<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-																	Proyek Terkontrak
+																	Proyek Berjalan
+																	<a href="#" Id="Plus"
+																	data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a>
 																</h3>
+																&nbsp;<br>
 																<!--begin::Table-->
 																	<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
 																		<!--begin::Table head-->
@@ -577,9 +471,6 @@
 																				<th class="min-w-auto">Jenis Proyek</th>
 																				<th class="min-w-auto">Nama PIC</th>
 																				<th class="min-w-auto">Nilai OK</th>
-																				<th class="min-w-auto">Nilai Kontrak</th>
-																				<th class="min-w-auto">Tanggal Mulai Kontrak</th>
-																				<th class="min-w-auto">No.SPK</th>
 																			</tr>
 																			<!--end::Table row-->
 																		</thead>
@@ -590,50 +481,41 @@
 																				<!--begin::Name=-->
 																				<td>
 																					<a href="#" class="text-gray-800 text-hover-primary mb-1">
-																						Proyek Pembangun Jalan Tol Baru
+																						Proyek Pembangun Jalan Tol Cipularang
 																					</a>
 																				</td>
 																				<!--end::Name=-->
 																				<!--begin::Kode=-->
 																				<td>
 																					<a href="#" class="text-gray-600 text-hover-primary mb-1">
-																						3EPD142</a>
+																						3EPA050</a>
 																				</td>
 																				<!--end::Kode=-->
 																				<!--begin::Unit=-->
-																				<td>Wika Industri Plant</td>
+																				<td>Wika Industri Konstruksi</td>
 																				<!--end::Unit=-->
 																				<!--begin::Jenis=-->
 																				<td>External</td>
 																				<!--end::Jenis=-->
 																				<!--begin::PIC=-->
-																				<td>Shandy Austria</td>
+																				<td>Erika Sartini</td>
 																				<!--end::PIC=-->
 																				<!--begin::Nilai OK=-->
-																				<td>101,150,000,000</td>
-																				<!--end::Nilai OK=-->
-																				<!--begin::Nilai Kontrak=-->
 																				<td>95,000,000,000</td>
-																				<!--end::Nilai Kontrak=-->
-																				<!--begin::Tanggal Mulai Kontrak=-->
-																				<td>04/27/2022</td>
-																				<!--end::Tanggal Mulai Kontrak=-->
-																				<!--begin::No.SPK=-->
-																				<td>SPK/XII/201/2022</td>
-																				<!--end::No.SPK=-->
+																				<!--end::Nilai OK=-->
 																			</tr>
 																			<tr>
 																				<!--begin::Name=-->
 																				<td>
 																					<a href="#" class="text-gray-800 text-hover-primary mb-1">
-																						Proyek Pembangun Gedung Baru K4
+																						Proyek Pembangun Gedung Wisma K3
 																					</a>
 																				</td>
 																				<!--end::Name=-->
 																				<!--begin::Kode=-->
 																				<td>
 																					<a href="#" class="text-gray-600 text-hover-primary mb-1">
-																						3EPD172</a>
+																						3EPA052</a>
 																				</td>
 																				<!--end::Kode=-->
 																				<!--begin::Unit=-->
@@ -646,64 +528,161 @@
 																				<td>Joe Satriani</td>
 																				<!--end::PIC=-->
 																				<!--begin::Nilai OK=-->
-																				<td>19,122,000,000</td>
+																				<td>15,432,000,000</td>
 																				<!--end::Nilai OK=-->
-																				<!--begin::Nilai Kontrak=-->
-																				<td>19,000,000,000</td>
-																				<!--end::Nilai Kontrak=-->
-																				<!--begin::Tanggal Mulai Kontrak=-->
-																				<td>04/27/2022</td>
-																				<!--end::Tanggal Mulai Kontrak=-->
-																				<!--begin::No.SPK=-->
-																				<td>SPK/XII/202/2022</td>
-																				<!--end::No.SPK=-->
 																			</tr>
 																			
 																		</tbody>
 																		<!--end::Table body-->
 																	</table>
 																<!--end::Table-->
-															</div>
-														<!--end::Card title-->
-														<!--begin::Menu separator-->
-														<!-- <div class="separator border-gray-200" style="margin-top: 10px;"></div> -->
-														<!--end::Menu separator-->
-															</div>
+																</div>
+																&nbsp;<br>
+																&nbsp;<br>
+																&nbsp;<br>
+																<div class="card-title m-0">
+																	<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+																		Proyek Terkontrak
+																	</h3>
+																	<!--begin::Table-->
+																		<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+																			<!--begin::Table head-->
+																			<thead>
+																				<!--begin::Table row-->
+																				<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+																					<th class="min-w-auto">Nama Proyek</th>
+																					<th class="min-w-auto">Kode Proyek</th>
+																					<th class="min-w-auto">Unit kerja</th>
+																					<th class="min-w-auto">Jenis Proyek</th>
+																					<th class="min-w-auto">Nama PIC</th>
+																					<th class="min-w-auto">Nilai OK</th>
+																					<th class="min-w-auto">Nilai Kontrak</th>
+																					<th class="min-w-auto">Tanggal Mulai Kontrak</th>
+																					<th class="min-w-auto">No.SPK</th>
+																				</tr>
+																				<!--end::Table row-->
+																			</thead>
+																			<!--end::Table head-->
+																			<!--begin::Table body-->
+																			<tbody class="fw-bold text-gray-600">
+																				<tr>
+																					<!--begin::Name=-->
+																					<td>
+																						<a href="#" class="text-gray-800 text-hover-primary mb-1">
+																							Proyek Pembangun Jalan Tol Baru
+																						</a>
+																					</td>
+																					<!--end::Name=-->
+																					<!--begin::Kode=-->
+																					<td>
+																						<a href="#" class="text-gray-600 text-hover-primary mb-1">
+																							3EPD142</a>
+																					</td>
+																					<!--end::Kode=-->
+																					<!--begin::Unit=-->
+																					<td>Wika Industri Plant</td>
+																					<!--end::Unit=-->
+																					<!--begin::Jenis=-->
+																					<td>External</td>
+																					<!--end::Jenis=-->
+																					<!--begin::PIC=-->
+																					<td>Shandy Austria</td>
+																					<!--end::PIC=-->
+																					<!--begin::Nilai OK=-->
+																					<td>101,150,000,000</td>
+																					<!--end::Nilai OK=-->
+																					<!--begin::Nilai Kontrak=-->
+																					<td>95,000,000,000</td>
+																					<!--end::Nilai Kontrak=-->
+																					<!--begin::Tanggal Mulai Kontrak=-->
+																					<td>04/27/2022</td>
+																					<!--end::Tanggal Mulai Kontrak=-->
+																					<!--begin::No.SPK=-->
+																					<td>SPK/XII/201/2022</td>
+																					<!--end::No.SPK=-->
+																				</tr>
+																				<tr>
+																					<!--begin::Name=-->
+																					<td>
+																						<a href="#" class="text-gray-800 text-hover-primary mb-1">
+																							Proyek Pembangun Gedung Baru K4
+																						</a>
+																					</td>
+																					<!--end::Name=-->
+																					<!--begin::Kode=-->
+																					<td>
+																						<a href="#" class="text-gray-600 text-hover-primary mb-1">
+																							3EPD172</a>
+																					</td>
+																					<!--end::Kode=-->
+																					<!--begin::Unit=-->
+																					<td>Wika Bangun Gedung</td>
+																					<!--end::Unit=-->
+																					<!--begin::Jenis=-->
+																					<td>External</td>
+																					<!--end::Jenis=-->
+																					<!--begin::PIC=-->
+																					<td>Joe Satriani</td>
+																					<!--end::PIC=-->
+																					<!--begin::Nilai OK=-->
+																					<td>19,122,000,000</td>
+																					<!--end::Nilai OK=-->
+																					<!--begin::Nilai Kontrak=-->
+																					<td>19,000,000,000</td>
+																					<!--end::Nilai Kontrak=-->
+																					<!--begin::Tanggal Mulai Kontrak=-->
+																					<td>04/27/2022</td>
+																					<!--end::Tanggal Mulai Kontrak=-->
+																					<!--begin::No.SPK=-->
+																					<td>SPK/XII/202/2022</td>
+																					<!--end::No.SPK=-->
+																				</tr>
+																				
+																			</tbody>
+																			<!--end::Table body-->
+																		</table>
+																	<!--end::Table-->
+																</div>
+																<!--end::Card title-->
+																<!--begin::Menu separator-->
+																<!-- <div class="separator border-gray-200" style="margin-top: 10px;"></div> -->
+																<!--end::Menu separator-->
+															</div> --}}
 															<!--end:::Tab pane History-->
 
 															<!--begin:::Tab pane Atachment & Notes-->
 															{{-- <div class="tab-pane fade" id="kt_user_view_overview_AttNotes" role="tabpanel">
-																<input type="file" id="file" class="file" hidden>
-																<!--begin::Attachment-->
-																<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-																	Attachments
-																</h3>
-                                                                <div>
-                                                                    <label for="doc-attachment" class="form-label"></label>
-                                                                    <input class="form-control form-control-lg" id="doc-attachment" name="doc-attachment" type="file">
-                                                                </div>
-																<div style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
-																<!--End::Attachment-->
-																&nbsp;<br>
-																&nbsp;<br>
-															<!--begin::Note-->
-															<div class="fv-row mb-7">
-																<!--begin::Label-->
-																<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-																	Note
-																</h3>
-																<!--end::Label-->
-																<!--begin::Input-->
-																<textarea class="form-control form-control-solid" name="note-attachment" 
-																style="background-color:white;border-color:gainsboro; min-height:200px;">
-																</textarea>
-																<!--end::Input-->
-															</div>
-															<!--end::Input Note-->
+																	<input type="file" id="file" class="file" hidden>
+																	<!--begin::Attachment-->
+																	<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+																		Attachments
+																	</h3>
+																	<div>
+																		<label for="doc-attachment" class="form-label"></label>
+																		<input class="form-control form-control-lg" id="doc-attachment" name="doc-attachment" type="file">
+																	</div>
+																	<div style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
+																	<!--End::Attachment-->
+																	&nbsp;<br>
+																	&nbsp;<br>
+																<!--begin::Note-->
+																<div class="fv-row mb-7">
+																	<!--begin::Label-->
+																	<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+																		Note
+																	</h3>
+																	<!--end::Label-->
+																	<!--begin::Input-->
+																	<textarea class="form-control form-control-solid" name="note-attachment" 
+																	style="background-color:white;border-color:gainsboro; min-height:200px;">
+																	</textarea>
+																	<!--end::Input-->
+																</div>
+																<!--end::Input Note-->
 
-															</div>
-															</div> --}}
-															<!--end:::Tab pane Atachment & Notes-->
+																</div>
+																</div>
+																<!--end:::Tab pane Atachment & Notes-->
 
                                                                 <!--begin:::Tab pane Performance-->
                                                                 <div class="tab-pane fade" id="kt_user_view_overview_Performance" role="tabpanel">
@@ -794,10 +773,10 @@
                                                                        
                                                                         <!--End begin::Row-->
                                                                     </div>
-                                                                </div>
-                                                                <!--end:::Tab pane Performance-->
+															</div> --}}
+															<!--end:::Tab pane Performance-->
 															
-															</div>
+														</div>
 														<!--end:::Tab content-->
 													</form>
 											</div>

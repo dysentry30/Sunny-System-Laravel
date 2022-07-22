@@ -144,11 +144,11 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Tahun Pelaksanaan</th>
-                                        <th class="min-w-auto">Total OK Awal</th>
-                                        <th class="min-w-auto">Total OK Review</th>
-                                        <th class="min-w-auto">Apakah RKP Terkunci?</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
+                                        <th class="min-w-auto text-center">Tahun Pelaksanaan</th>
+                                        <th class="min-w-auto text-center">Total OK Awal</th>
+                                        <th class="min-w-auto text-center">Total OK Review</th>
+                                        <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th>
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
                                     </tr>
@@ -157,51 +157,58 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 {{-- @php
-												$proyeks = $proyeks->reverse();
-												@endphp --}}
+                                $proyeks = $proyeks->reverse();
+                                @endphp --}}
 
                                 <tbody class="fw-bold text-gray-600">
                                     @foreach ($unitkerjas as $unitkerja)
+                                        @foreach ($unitkerja->proyeks as $proyek)
+                                            {{-- @dump($unitkerja->proyeks)     --}}
                                         <tr>
-                                            <!--begin::Name=-->
+                                            <!--begin::Name-->
                                             <td class="">
                                                 <a href="#" id="click-name"
-                                                    class="text-gray-600 text-hover-primary mb-1">{{ $unitkerja->unit_kerja }}</a>
+                                                    class="text-gray-600 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                <p id="click-name"
-                                                    class="text-gray-600 mb-1">{{ "2022" }}</p>
+                                            <!--end::Name-->
+                                            <!--begin::Pelaksanaan-->
+                                            <td class="text-center">
+                                                    {{ $proyek->tahun_perolehan }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
+                                            <!--end::Pelaksanaan-->
+                                            <!--begin::Coloumn-->
                                             @php
                                                 $total_ok_awal = 0;
                                                 $total_ok_review = 0;
                                                 foreach ($unitkerja->proyeks as $proyek) {
-                                                    $total_ok_awal += (int) str_replace(",", "", $proyek->nilaiok_awal);
-                                                    $total_ok_review += (int) str_replace(",", "", $proyek->nilaiok_review);
+                                                    if ($proyek->tahun_perolehan) {
+                                                        $total_ok_awal += (int) str_replace(",", "", $proyek->nilaiok_awal);
+                                                        $total_ok_review += (int) str_replace(",", "", $proyek->nilaiok_review);
+                                                    }
                                                 }
-                                                $total_ok_awal = number_format($total_ok_awal, 0, ",", ",");
-                                                $total_ok_review = number_format($total_ok_review, 0, ",", ",");
+                                                // dump($unitkerja->proyeks);
+                                                // dd();
+                                                $total_ok_awal = number_format($total_ok_awal, 0, ",");
+                                                $total_ok_review = number_format($total_ok_review, 0, ",");
                                             @endphp
-                                            <td class="text-center">
+                                            <td class="text-end">
                                                 {{ $total_ok_awal }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td class="text-center">
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td class="text-end">
                                                 {{ $total_ok_review }}
                                             </td>
-                                            <!--end::Coloumn=-->
-                                            <!--begin::Coloumn=-->
-                                            <td>
-                                                {{ "Iya" }}
+                                            <!--end::Coloumn-->
+                                            <!--begin::Coloumn-->
+                                            <td class="text-center">
+                                                {{-- @dump($proyek->is_active) --}}
+                                                {{ $unitkerja->is_active == 1 ? "Yes" : "No" }}
                                             </td>
-                                            <!--end::Coloumn=-->
+                                            <!--end::Coloumn-->
 
                                         </tr>
+                                        @endforeach
                                     @endforeach
                                 </tbody>
                                 <!--end::Table body-->

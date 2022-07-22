@@ -406,7 +406,7 @@
 
 
 
-                                                        @if ($proyek->stage > 9)
+                                                        {{-- @if ($proyek->stage > 9)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
                                                                 style="outline: 0px; cursor: pointer;" stage="10">
@@ -427,7 +427,7 @@
                                                                     Approval
                                                                 </a>
                                                             @endif
-                                                        @endif
+                                                        @endif --}}
                                                     </div>
                                                 </div>
                                             </div>
@@ -538,7 +538,7 @@
                                             <div class="card-body pt-5">
 
 
-                                                <!--begin:::Tabs Navigasi-->
+<!--begin:::Tabs Navigasi-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     @if ($proyek->stage > 0)
@@ -647,13 +647,12 @@
                                                         <!--end:::Tab item Feedback-->
                                                     @endif
                                                 </ul>
-
-                                                <!--end:::Tabs Navigasi-->
+<!--end:::Tabs Navigasi-->
 
                                                 <!--begin:::Tab isi content  -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    <!--begin:::Tab Pasar Dini-->
+<!--begin:::Tab Pasar Dini-->
                                                     <div class="tab-pane fade show active"
                                                         id="kt_user_view_overview_pasardini" role="tabpanel">
 
@@ -674,10 +673,9 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="nama-proyek" name="nama-proyek"
-                                                                        value="{{ $proyek->nama_proyek }}"
-                                                                        placeholder="Nama Proyek" />
+                                                                        value="{{ $proyek->nama_proyek }}" />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -692,22 +690,27 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select name="unit-kerja"
-                                                                        class="form-select form-select-solid"
+                                                                    {{-- <select name="unit-kerja"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Unit Kerja">
                                                                         <option></option>
                                                                         @foreach ($unitkerjas as $unitkerja)
-                                                                            @if ($unitkerja->divcode == $proyek->unit_kerja)
-                                                                                <option
-                                                                                    value="{{ $unitkerja->divcode }}"
-                                                                                    selected>{{ $unitkerja->unit_kerja }}
-                                                                                </option>
-                                                                                {{-- @else
-                                                                        <option value="{{ $unitkerja->divcode }}">{{$unitkerja->unit_kerja }}</option> --}}
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </select>
+                                                                        @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                                                        <option
+                                                                        value="{{ $unitkerja->divcode }}"
+                                                                        selected>{{ $unitkerja->unit_kerja }}
+                                                                    </option>
+                                                                    @endif
+                                                                    @endforeach
+                                                                    </select> --}}
+                                                                    @foreach ($unitkerjas as $unitkerja)
+                                                                    @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                                                    <input type="text"
+                                                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                                    value="{{ $unitkerja->unit_kerja }}" readonly/>
+                                                                    @endif
+                                                                    @endforeach
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -729,10 +732,9 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="kode-proyek" name="kode-proyek"
-                                                                        value="{{ $proyek->kode_proyek }}"
-                                                                        placeholder="Kode Proyek" disabled />
+                                                                        value="{{ $proyek->kode_proyek }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -753,16 +755,18 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="tipe-proyek" name="tipe-proyek"
-                                                                        class="form-select form-select-solid"
+                                                                    {{-- <select id="tipe-proyek" name="tipe-proyek"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Tipe Proyek">
                                                                         <option selected>
                                                                             {{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}
                                                                         </option>
-                                                                        {{-- <option value="R" {{ $proyek->tipe_proyek == "R" ? "selected" : "" }}>Retail</option>
-                                                                    <option value="P" {{ $proyek->tipe_proyek == "P" ? "selected" : "" }}>Non-Retail</option> --}}
-                                                                    </select>
+                                                                    </select> --}}
+                                                                    <input type="text"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                                        id="tipe-proyek" name="tipe-proyek"
+                                                                        value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -777,16 +781,18 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="jenis-proyek" name="jenis-proyek"
-                                                                        class="form-select form-select-solid"
+                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Jenis Proyek">
                                                                         <option selected>
                                                                             {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
                                                                         </option>
-                                                                        {{-- <option value="I" {{ $proyek->jenis_proyek == "I" ? "selected" : "" }}>Internal</option>
-                                                                    <option value="E" {{ $proyek->jenis_proyek == "E" ? "selected" : "" }}>External</option> --}}
-                                                                    </select>
+                                                                    </select> --}}
+                                                                    <input type="text"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                                        id="jenis-proyek" name="jenis-proyek"
+                                                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -804,13 +810,32 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Tahun Perolehan</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="number"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                                        name="tahun-perolehan" min="2021" max="2099" step="1"
+                                                                        value="{{ $proyek->tahun_perolehan }}"
+                                                                        readonly />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Bulan Pelaksanaan</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
                                                                     <select id="bulan-pelaksanaan"
                                                                         name="bulan-pelaksanaan"
-                                                                        class="form-select form-select-solid"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0 text-dark"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Bulan Pelaksanaan">
                                                                         <option></option>
@@ -855,26 +880,6 @@
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tahun Perolehan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="number"
-                                                                        class="form-control form-control-solid"
-                                                                        name="tahun-perolehan" min="2021"
-                                                                        max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_perolehan }}"
-                                                                        disabled />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
                                                             <!--End::Col-->
                                                         </div>
                                                         <!--End::Row Kanan+Kiri-->
@@ -893,7 +898,7 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <select id="sumber-dana" name="sumber-dana"
-                                                                        class="form-select form-select-solid"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Sumber Dana">
                                                                         <option></option>
@@ -927,7 +932,7 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat"
+                                                                        class="form-control reformat rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="nilai-rkap" name="nilai-rkap"
                                                                         value="{{ $proyek->nilai_rkap }}"
                                                                         placeholder="Nilai OK RKAP" />
@@ -954,7 +959,7 @@
                                                                     <!--begin::Input-->
                                                                     {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
                                                                     <select id="customer" name="customer"
-                                                                        class="form-select form-select-solid"
+                                                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Customer">
                                                                         <option></option>
@@ -994,7 +999,7 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid"
+                                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="pic" name="pic"
                                                                         value="{{ $proyek->pic ?? auth()->user()->name }}"
                                                                         placeholder="Nama PIC" />

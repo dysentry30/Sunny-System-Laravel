@@ -14,9 +14,18 @@ class DopController extends Controller
              *
              * @return \Illuminate\Http\Response
              */
-    public function index()
+    public function index(Request $request)
     {
-        return view('/MasterData/Dop', ['dops' => Dop::all()]);
+        $column = $request->get("column");
+        $filter = $request->query("filter");
+
+        if (!empty($column)) {
+            $dops = Dop::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $dops = Dop::sortable()->get();
+        }
+
+        return view('/MasterData/Dop', compact(['dops', 'column', 'filter']));
     }
 
             /**

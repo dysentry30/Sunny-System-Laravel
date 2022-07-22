@@ -16,10 +16,18 @@ class SumberDanaController extends Controller
              *
              * @return \Illuminate\Http\Response
              */
-    public function index()
+    public function index(Request $request)
     {
+        $column = $request->get("column");
+        $filter = $request->query("filter");
 
-        return view('/MasterData/SumberDana', ['sumberdana' => SumberDana::all()]);
+        if (!empty($column)) {
+            $sumberdana = SumberDana::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $sumberdana = SumberDana::sortable()->get();
+        }
+
+        return view('/MasterData/SumberDana', compact(['sumberdana', 'column', 'filter']));
     }
 
             /**
@@ -54,7 +62,6 @@ class SumberDanaController extends Controller
         $newSumber->kode_sumber = $dataSumber["kode-sumber"];
         $newSumber->sumber_dana_id = $dataSumber["sumber-dana-id"];
         $newSumber->kode_proyek_id = $dataSumber["kode-proyek-id"];
-        $newSumber->kode_proyek_id = $dataSumber["kode-proyek-id"];
         $newSumber->tipe_perusahaan = $dataSumber["tipe-perusahaan"];
         $newSumber->cot_id = $dataSumber["cot-id"];
 
@@ -83,9 +90,41 @@ class SumberDanaController extends Controller
      * @param  \App\Models\SumberDana  $sumberDana
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, SumberDana $sumberDana)
+    public function update(Request $request)
     {
-        //
+        $dataSumber = $request->all();
+        // dd($dataSumber);
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "nama-sumber" => "required",
+            "kategori" => "required",
+            "unique-code" => "required",
+        ];
+        $validation = Validator::make($dataSumber, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Sumber Dana Gagal Diperbaharui, Periksa Kembali !");
+        }
+        $validation->validate();  
+        
+        $editSumber = SumberDana::find($dataSumber["id-sumber"]);
+        $editSumber->nama_sumber = $dataSumber["nama-sumber"];
+        $editSumber->kategori = $dataSumber["kategori"];
+        $editSumber->jenis_perusahaan = $dataSumber["jenis-perusahaan"];
+        $editSumber->tipe_lain = $dataSumber["tipe-lain"];
+        $editSumber->kode_sumber = $dataSumber["kode-sumber"];
+        $editSumber->unique_code = $dataSumber["unique-code"];
+        $editSumber->sumber_dana_id = $dataSumber["sumber-dana-id"];
+        $editSumber->kode_proyek_id = $dataSumber["kode-proyek-id"];
+        $editSumber->tipe_perusahaan = $dataSumber["tipe-perusahaan"];
+        $editSumber->cot_id = $dataSumber["cot-id"];
+
+        Alert::success('Success', $dataSumber["nama-sumber"].", Berhasil Ditambahkan");
+
+        if ($editSumber->save()) {
+            return redirect()->back();
+        }
     }
 
     /**

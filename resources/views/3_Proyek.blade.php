@@ -57,6 +57,7 @@
                                 </h1>
                                 <!--end::Title-->
                             </div>
+                                
                             <!--end::Page title-->
                             @if (auth()->user()->check_administrator)
                                 <!--begin::Actions-->
@@ -121,20 +122,106 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 py-1">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Proyek" />
-                                </div>
+                                <form action="" method="get">
+                                    <div class="d-flex align-items-center position-relative my-1 me-8">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
+                                            class="form-control form-control-solid ps-15" placeholder="Search Proyek" />
+                                    </div>
+                                </form>
                                 <!--end::Search-->
+                                
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    <select id="column" name="column" onchange="changes(this)" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$column == "" ? "selected": ""}}></option>
+                                        <option value="kode_proyek" {{$column == "kode_proyek" ? "selected" : ""}}>Kode Proyek</option>
+                                        <option value="nama_proyek" {{$column == "nama_proyek" ? "selected" : ""}}>Nama Proyek</option>
+                                        <option value="tahun_perolehan" {{$column == "tahun_perolehan" ? "selected" : ""}}>Tahun Perolehan</option>
+                                        {{-- <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
+                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option> --}}
+                                        
+                                    </select>
+                                    <!--End:: Select Options-->
+                                    
+                                    <!--begin:: Input Filter-->
+                                    @if ($column == "stage")
+                                    
+                                    <select id="filter" name="filter" class="form-select form-select-solid select2-hidden-accessible w-200px ms-2" data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        <option value="1" {{$filter == "1" ? "selected" : ""}}>Pasar Dini</option>
+                                        <option value="2" {{$filter == "2" ? "selected" : ""}}>Pasar Potensial</option>
+                                        <option value="3" {{$filter == "3" ? "selected" : ""}}>Prakualifikasi</option>
+                                        <option value="4" {{$filter == "4" ? "selected" : ""}}>Tender Diikuti</option>
+                                        <option value="5" {{$filter == "5" ? "selected" : ""}}>Perolehan</option>
+                                        <option value="6" {{$filter == "6" ? "selected" : ""}}>Menang</option>
+                                        <option value="7" {{$filter == "7" ? "selected" : ""}}>Kalah</option>
+                                        <option value="8" {{$filter == "8" ? "selected" : ""}}>Terkontrak</option>
+                                        <option value="9" {{$filter == "9" ? "selected" : ""}}>Terendah</option>
+                                        <option value="10" {{$filter == "10" ? "selected" : ""}}>Selesai</option>
+                                    </select>
+                                    
+                                    @elseif ($column == "jenis_proyek")
+                                    
+                                    <select id="filter" name="filter" class="form-select form-select-solid select2-hidden-accessible w-200px ms-2" data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                        <option></option>
+                                        <option value="I" {{$filter == "I" ? "selected" : ""}}>Internal</option>
+                                        <option value="E" {{$filter == "E" ? "selected" : ""}}>External</option>
+                                    </select>
+                                    
+                                    @else
+                                    
+                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    
+                                    @endif
+
+                                    <script>
+                                        function changes(e) {
+                                        if (e.value == "stage"){
+                                            window.location.href="/proyek?column=stage";
+                                        } else if (e.value == "jenis_proyek"){
+                                            window.location.href="/proyek?column=jenis_proyek";
+                                        } else {
+                                            // window.location.href="/proyek?column="+e.value;
+                                        }
+                                    }
+                                    </script>
+                                    <!--end:: Input Filter-->
+                                    
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                    <!--end:: Filter-->
+                                    
+                                    <!--begin:: RESET-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <script>
+                                        function resetFilter() {
+                                            $("#column").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#filter").text({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+                                
+                                
                             </div>
                             <!--begin::Card title-->
 
@@ -169,14 +256,16 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">Kode Proyek</th>
-                                        <th class="min-w-auto">Nama Proyek</th>
-                                        <th class="min-w-auto">Unit Kerja</th>
-                                        <th class="min-w-auto">Nilai RKAP</th>
-                                        <th class="min-w-auto">Nilai Forecast</th>
-                                        <th class="min-w-auto">Nilai Realisasi</th>
-                                        <th class="min-w-auto">Jenis Proyek</th>
-                                        <th class="min-w-auto">Tipe Proyek</th>
+                                        <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
+                                        <th class="min-w-auto">@sortablelink('nama_proyek','Nama Proyek')</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
+                                        <th class="min-w-auto">@sortablelink('stage','Stage')</th>
+                                        <th class="min-w-auto">@sortablelink('tahun_perolehan','Tahun Perolehan')</th>
+                                        <th class="min-w-auto">@sortablelink('bulan_pelaksanaan','Bulan Pelaksanaan')</th>
+                                        <th class="min-w-auto">@sortablelink('nilai_rkap','Nilai RKAP')</th>
+                                        <th class="min-w-auto">@sortablelink('forecast','Nilai Forecast')</th>
+                                        <th class="min-w-auto">@sortablelink('nilai_kontrak_keseluruhan','Nilai Realisasi')</th>
+                                        <th class="min-w-auto text-center">@sortablelink('jenis_proyek','Jenis Proyek')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="min-w-auto text-center">Action</th>
                                         @endif
@@ -188,54 +277,118 @@
                                 @php
                                     $proyeks = $proyeks->reverse();
                                 @endphp
-                                    <tbody class="fw-bold text-gray-600">
+                                    <tbody class="fw-bold text-gray-800">
                                         @foreach ($proyeks as $proyek)
                                         <tr>
 
-                                            <!--begin::Name=-->
+                                            <!--begin::Name-->
                                             <td>
                                                 <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
                                                     class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                             </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Email=-->
+                                            <!--end::Name-->
+                                            <!--begin::Email-->
                                             <td>
-                                                {{ $proyek->nama_proyek }}
+                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                             </td>
-                                            <!--end::Email=-->
-                                            <!--begin::Company=-->
+                                            <!--end::Email-->
+                                            <!--begin::Company-->
                                             <td>
                                                 {{ $proyek->UnitKerja->unit_kerja }}
                                             </td>
-                                            <!--end::Company=-->
+                                            <!--end::Company-->
 
-                                            <!--begin::Nilai OK=-->
+                                            <!--begin::Stage-->
+                                            <td>
+                                                @switch($proyek->stage)
+                                                    @case("1") Pasar Dini
+                                                        @break
+                                                    @case("2") Pasar Potensial
+                                                        @break
+                                                    @case("3") Prakualifikasi
+                                                        @break
+                                                    @case("4") Tender Diikuti
+                                                        @break
+                                                    @case("5") Perolehan
+                                                        @break
+                                                    @case("6") Menang
+                                                        @break
+                                                    @case("7") Kalah
+                                                        @break
+                                                    @case("8") Terkontrak
+                                                        @break
+                                                    @case("9") Terendah
+                                                        @break
+                                                    @default Selesai
+                                                @endswitch
+                                            </td>
+                                            <!--end::Stage-->
+                                            <!--begin::Pelaksanaan-->
+                                            <td class="text-center">
+                                                {{ $proyek->tahun_perolehan }}
+                                            </td>
+                                            <!--end::Pelaksanaan-->
+
+                                            <!--begin::Pelaksanaan-->
+                                            <td class="">
+                                                @switch($proyek->bulan_pelaksanaan)
+                                                    @case("1") Januari
+                                                        @break
+                                                    @case("2") Februari
+                                                        @break
+                                                    @case("3") Maret
+                                                        @break
+                                                    @case("4") April
+                                                        @break
+                                                    @case("5") Mei
+                                                        @break
+                                                    @case("6") Juni
+                                                        @break
+                                                    @case("7") Juli
+                                                        @break
+                                                    @case("8") Agustus
+                                                        @break
+                                                    @case("9") September
+                                                        @break
+                                                    @case("10") Oktober
+                                                        @break
+                                                    @case("11") November
+                                                        @break
+                                                    @case("12") Desember
+                                                        @break
+                                                    @default Selesai
+                                                @endswitch
+                                            </td>
+                                            <!--end::Pelaksanaan-->
+
+                                            <!--begin::Nilai OK-->
                                             <td>
                                                 {{ $proyek->nilai_rkap }}
                                             </td>
-                                            <!--end::Nilai OK=-->
-                                            <!--begin::Forecast=-->
-                                            <td>
-                                                {{-- {{ $proyek->nilai_forecast }} --}}
+                                            <!--end::Nilai OK-->
+                                            
+                                            <!--begin::Forecast-->
+                                            <td class="text-end">
+                                                {{ $proyek->forecast ?? "-" }}
                                             </td>
-                                            <!--end::Forecast=-->
-                                            <!--begin::Realisasi=-->
-                                            <td>
-                                                {{-- {{ $proyek->nilai_realisasi }} --}}
+                                            <!--end::Forecast-->
+
+                                            <!--begin::Realisasi-->
+                                            <td class="text-end">
+                                                {{ $proyek->nilai_kontrak_keseluruhan ?? "-" }}
                                             </td>
-                                            <!--end::Realisasi=-->
-                                            <!--begin::Jenis Proyek=-->
-                                            <td>
+                                            <!--end::Realisasi-->
+
+                                            
+                                            <!--begin::Jenis Proyek-->
+                                            <td class="text-center">
                                                 {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
                                             </td>
-                                            <!--end::Jenis Proyek=-->
-                                            <!--begin::Tipe Proyek=-->
-                                            <td>
-                                                {{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}
-                                            </td>
-                                            <!--end::Tipe Proyek=-->
+                                            <!--end::Jenis Proyek-->
+                                            
                                             @if (auth()->user()->check_administrator)
-                                                <!--begin::Action=-->
+                                                <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
@@ -246,7 +399,7 @@
                                                     </form>
                                                     <!--end::Button-->
                                                 </td>
-                                                <!--end::Action=-->
+                                                <!--end::Action-->
                                             @endif
                                         </tr>
                                 @endforeach
