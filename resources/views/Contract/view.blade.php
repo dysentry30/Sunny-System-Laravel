@@ -256,7 +256,8 @@
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
                                                             <input type="decimal" id="value-contract"
-                                                                class="form-control form-control-solid" name="value"
+                                                                class="form-control form-control-solid"
+                                                                onkeyup="reformatNumber(this)" name="value"
                                                                 value="{{ old('value') }}"
                                                                 placeholder="Nilai Kontrak" />
                                                             @error('value')
@@ -363,7 +364,7 @@
                                     <div id="stage-button" class="stage-list">
                                         <a href="#" role="link" class="stage-button color-is-default "
                                             style="outline: 0px; cursor: pointer;">
-                                            Draft
+                                            Perolehan
                                         </a>
                                         <a href="#" role="link" class="stage-button color-is-default "
                                             style="outline: 0px; cursor: pointer;">
@@ -373,11 +374,11 @@
                                             style="outline: 0px; cursor: pointer;">
                                             Pelaksanaan
                                         </a>
-                                        <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
+                                        {{-- <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
                                             role="link" class="stage-button color-is-default "
                                             style="outline: 0px; cursor: pointer;">
                                             Addendum Kontrak
-                                        </a>
+                                        </a> --}}
                                         <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px; cursor: pointer;">
                                             Serah Terima Pekerjaan
@@ -419,7 +420,7 @@
                                         title: '',
                                         text: "Yakin Pindah Stage",
                                         icon: false,
-                                        showCancelButton: true, 
+                                        showCancelButton: true,
                                         confirmButtonColor: '#008CB4',
                                         cancelButtonColor: '#BABABA',
                                         confirmButtonText: 'Ya'
@@ -511,7 +512,8 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="text" class="form-control form-control-solid"
+                                            <input type="text"
+                                                class="form-control rounded-0 bg-white border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 id="number-contract" name="number-contract"
                                                 value="{{ $contract->id_contract ?? '' }}"
                                                 placeholder="No. Contract" />
@@ -531,8 +533,9 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <select name="project-id" id="project-id"
-                                                class="form-select form-select-solid" data-control="select2"
-                                                data-hide-search="true" data-placeholder="Pilih Proyek">
+                                                class="form-select border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
+                                                data-control="select2" data-hide-search="false"
+                                                data-placeholder="Pilih Proyek">
                                                 @foreach ($projects as $project_all)
                                                     <option value="{{ $project_all->kode_proyek }}"
                                                         {{ $contract->project->kode_proyek == $project_all->kode_proyek ? 'selected' : '' }}>
@@ -565,7 +568,7 @@
                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                     style="color: #008CB4"></i></a>
                                             <input type="Date" data-bs-target="#kt_modal_calendar-start"
-                                                class="form-control form-control-solid ps-12"
+                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 placeholder="Select a date"
                                                 value="{{ date_format($contract->contract_in ?? now(), 'Y-m-d') }}"
                                                 name="start-date" id="start-date" />
@@ -589,7 +592,8 @@
                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                     style="color: #008CB4"></i></a>
                                             <!--begin::Input-->
-                                            <input type="Date" class="form-control form-control-solid ps-12"
+                                            <input type="Date"
+                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 value="{{ date_format($contract->contract_out ?? now(), 'Y-m-d') }}"
                                                 placeholder="Select a date" id="due-date" name="due-date" />
                                             <!--end::Input-->
@@ -612,7 +616,8 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
 
-                                            <input type="text" class="form-control form-control-solid"
+                                            <input type="text"
+                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 name="number-spk" id="number-spk"
                                                 value="{{ $contract->number_spk ?? 0 }}" placeholder="No. SPK" />
 
@@ -626,14 +631,83 @@
                                         <div class="fv-row mb-7">
                                             <!--begin::Label-->
                                             <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Nilai Kontrak</span>
+                                                <span>Nilai Kontrak Awal</span>
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <input type="decimal" id="value-contract"
-                                                class="form-control form-control-solid" name="value"
+                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
+                                                onkeyup="reformatNumber(this)" name="value"
                                                 value="{{ number_format($contract->value ?? 0, 0, ',', ',') }}"
                                                 placeholder="Nilai Kontrak" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        {{-- begin:: Format Money --}}
+                                        <script></script>
+                                        {{-- end:: Format Money --}}
+
+                                    </div>
+                                    <!--End begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Nilai Kontrak Review</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="decimal" id="value-review"
+                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
+                                                onkeyup="reformatNumber(this)" name="value-review"
+                                                value="{{ number_format($contract->value_review ?? 0, 0, ',', ',') }}"
+                                                placeholder="Nilai Kontrak Review" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        {{-- begin:: Format Money --}}
+                                        <script></script>
+                                        {{-- end:: Format Money --}}
+
+                                    </div>
+                                    <!--End begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Unit Kerja</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" id="unit-kerja"
+                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
+                                                name="unit-kerja"
+                                                value="{{ $contract->project->UnitKerja->unit_kerja }}"
+                                                placeholder="Unit Kerja" />
+                                            <!--end::Input-->
+                                        </div>
+                                        <!--end::Input group-->
+                                        {{-- begin:: Format Money --}}
+                                        <script></script>
+                                        {{-- end:: Format Money --}}
+
+                                    </div>
+                                    <!--End begin::Col-->
+                                    <div class="col-6">
+                                        <!--begin::Input group Website-->
+                                        <div class="fv-row mb-7">
+                                            <!--begin::Label-->
+                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                <span>Sumber Dana</span>
+                                            </label>
+                                            <!--end::Label-->
+                                            <!--begin::Input-->
+                                            <input type="text" id="sumber-dana"
+                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
+                                                name="sumber-dana" value="{{ $contract->project->sumber_dana }}"
+                                                placeholder="Sumber Dana" />
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -669,8 +743,7 @@
                         <!--begin:::Tab item Informasi Perusahaan-->
                         <li class="nav-item">
                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                href="#kt_user_view_overview_tab" style="font-size:14px;">Tender
-                                Awal</a>
+                                href="#kt_user_view_overview_tab" style="font-size:14px;">Perolehan</a>
                         </li>
                         <!--end:::Tab item Informasi Perusahaan-->
                     @endif
@@ -680,8 +753,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                 data-bs-toggle="tab" href="#kt_user_view_overview_history"
-                                style="font-size:14px;">Tender
-                                Menang</a>
+                                style="font-size:14px;">Terkontrak</a>
                         </li>
                         <!--end:::Tab item History-->
 
@@ -780,7 +852,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->draftContracts as $draftContract)
                                             @if ($draftContract->tender_menang == 0)
@@ -789,12 +861,12 @@
                                                     <td>
                                                         {{-- <a target="_blank"
                                                                 href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                                class="text-gray-800 text-hover-primary mb-1">
+                                                                class="text-gray-600 text-hover-primary mb-1">
                                                                 {{ $draftContract->draft_name }}
                                                             </a> --}}
                                                         <a target="_blank"
                                                             href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $draftContract->title_draft }}
                                                         </a>
                                                     </td>
@@ -803,7 +875,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $draftContract->id_document }}
                                                         </a>
                                                     </td>
@@ -811,7 +883,7 @@
                                                     <!--begin::Kode=-->
                                                     <td>
                                                         <a href="#"
-                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            class="text-gray-400 text-hover-primary mb-1">
                                                             {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
                                                     </td>
                                                     <!--end::Kode=-->
@@ -824,14 +896,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -866,7 +938,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->reviewProjects as $reviewProject)
                                             @if ($reviewProject->tender_menang == 0)
@@ -875,7 +947,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $reviewProject->document_name_review }}
                                                         </a>
                                                     </td>
@@ -884,7 +956,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $reviewProject->id_document }}
                                                         </a>
                                                     </td>
@@ -892,7 +964,7 @@
                                                     <!--begin::Kode=-->
                                                     <td>
                                                         <a href="#"
-                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            class="text-gray-400 text-hover-primary mb-1">
                                                             {{ date_format(new DateTime($reviewProject->created_at), 'd M, Y') }}</a>
                                                     </td>
                                                     <!--end::Kode=-->
@@ -905,14 +977,14 @@
 
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -923,7 +995,7 @@
                             </table>
                             <!--End:Table: Review-->
 
-                            &nbsp;<br>
+                            {{-- &nbsp;<br>
                             &nbsp;<br>
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -947,7 +1019,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->issueProjects as $issueProject)
                                             @if ($issueProject->tender_menang == 0)
@@ -956,7 +1028,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $issueProject->document_name_issue }}
                                                         </a>
                                                     </td>
@@ -965,7 +1037,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $issueProject->id_document }}
                                                         </a>
                                                     </td>
@@ -973,7 +1045,7 @@
                                                     <!--begin::Kode=-->
                                                     <td>
                                                         <a href="#"
-                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            class="text-gray-400 text-hover-primary mb-1">
                                                             {{ date_format(new DateTime($issueProject->created_at), 'd M, Y') }}</a>
                                                     </td>
                                                     <!--end::Kode=-->
@@ -985,14 +1057,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="3" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="3" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1001,7 +1073,7 @@
                                 <!--end::Table body-->
 
                             </table>
-                            <!--End:Table: Review-->
+                            <!--End:Table: Review--> --}}
 
                             &nbsp;<br>
                             &nbsp;<br>
@@ -1018,61 +1090,52 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Catatan</th>
+                                        <th class="min-w-125px">Item Resiko</th>
+                                        <th class="min-w-125px">Penyebab</th>
+                                        <th class="min-w-125px">Dampak</th>
+                                        <th class="min-w-125px">Mitigasi</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
-                                    @if (isset($contract))
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->inputRisks->contains("tender_menang", 0))
                                         @forelse ($contract->inputRisks as $inputRisk)
                                             @if ($inputRisk->tender_menang == 0)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $inputRisk->id_risk }}/{{ $inputRisk->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                            {{ $inputRisk->document_name_risk }}
-                                                        </a>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $inputRisk->id_risk }}/{{ $inputRisk->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                            {{ $inputRisk->id_document }}
-                                                        </a>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Kode=-->
                                                     <td>
-                                                        <a href="#"
-                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ date_format(new DateTime($inputRisk->created_at), 'd M, Y') }}</a>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
                                                     </td>
                                                     <!--end::Kode=-->
                                                     <!--begin::Unit=-->
-                                                    <td>{{ $inputRisk->note_risk }}
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
                                                     </td>
                                                     <!--end::Unit=-->
                                                 </tr>
                                             @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1088,7 +1151,7 @@
                             &nbsp;<br>
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Daftar Pertanyaan
+                                Aanwitjzing
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_question_proyek">+</a>
                             </h3>
@@ -1101,6 +1164,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-125px">Nama</th>
                                         <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">Kategori</th>
                                         <th class="min-w-125px">Tanggal</th>
                                         <th class="min-w-125px">Catatan</th>
                                     </tr>
@@ -1108,7 +1172,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->questionsProjects as $questionProject)
                                             @if ($questionProject->tender_menang == 0)
@@ -1117,7 +1181,7 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $questionProject->document_name_question }}
                                                         </a>
                                                     </td>
@@ -1126,15 +1190,24 @@
                                                     <td>
                                                         <a target="_blank"
                                                             href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                            class="text-gray-800 text-hover-primary mb-1">
+                                                            class="text-gray-600 text-hover-primary mb-1">
                                                             {{ $questionProject->id_document }}
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a target="_blank"
+                                                            href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            {{ $questionProject->kategori_question }}
                                                         </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Kode=-->
                                                     <td>
                                                         <a href="#"
-                                                            class="text-gray-600 text-hover-primary mb-1">
+                                                            class="text-gray-400 text-hover-primary mb-1">
                                                             {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
                                                     </td>
                                                     <!--end::Kode=-->
@@ -1146,14 +1219,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="5" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="5" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1231,7 +1304,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->draftContracts as $draftContract)
                                             <tr>
@@ -1239,7 +1312,7 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $draftContract->title_draft }}
                                                     </a>
                                                 </td>
@@ -1248,14 +1321,14 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $draftContract->id_document }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($draftContract->created_at), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1267,14 +1340,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1309,7 +1382,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->reviewProjects as $review)
                                             <tr>
@@ -1317,7 +1390,7 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $review->document_name_review }}
                                                     </a>
                                                 </td>
@@ -1326,14 +1399,14 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $review->id_document }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($review->created_at), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1344,12 +1417,16 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td><b>There is no data</b></td>
+                                                <td colspan="4" class="text-center text-dark bg-gray-100">
+                                                    <b>There is no data</b>
+                                                </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td><b>There is no data</b></td>
+                                            <td colspan="4" class="text-center text-dark bg-gray-100">
+                                                <b>There is no data</b>
+                                            </td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -1358,10 +1435,7 @@
                             </table>
                             <!--End:Table: Review-->
 
-                            &nbsp;<br>
-                            &nbsp;<br>
-
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Issue Project
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_issue_project_menang">+</a>
@@ -1382,14 +1456,14 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->issueProjects as $issue)
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
                                                     <a href="/document/view/{{ $issue->id_issue }}/{{ $issue->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $issue->document_name_issue }}
                                                     </a>
                                                 </td>
@@ -1398,14 +1472,14 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $issue->id_issue }}/{{ $issue->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $issue->id_document }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($issue->created_at), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1416,14 +1490,300 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="3" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="3" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table> --}}
+                            <!--End:Table: Review-->
+
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Hasil Klarifikasi dan Negosiasi CDA
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_klarifikasi_negosiasi">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @php
+                                            // dd($contract->KlarifikasiNegosiasiCDA);
+                                        @endphp
+                                        @forelse ($contract->KlarifikasiNegosiasiCDA as $klarifikasi_negosiasi)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank" href="/document/view/{{$klarifikasi_negosiasi->id_klarifikasi}}/{{$klarifikasi_negosiasi->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $klarifikasi_negosiasi->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $klarifikasi_negosiasi->User->name }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($klarifikasi_negosiasi->created_at), "d-m-Y") }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $klarifikasi_negosiasi->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                            {{-- @if ($KlarifikasiNegosiasiCDA->tender_menang == 0)
+                                            @endif --}}
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Kontrak Tanda Tangan
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_kontrak_bertandatangan">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->KontrakTandaTangan as $kontrak_tanda_tangan)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank" href="/document/view/{{$kontrak_tanda_tangan->id_kontrak_bertandatangan}}/{{$kontrak_tanda_tangan->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $kontrak_tanda_tangan->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $kontrak_tanda_tangan->User->name }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($kontrak_tanda_tangan->created_at), "d-m-Y") }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $kontrak_tanda_tangan->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspa colspan="4" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Review Pembatalan Kontrak
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_review_pembatalan">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->ReviewPembatalanKontrak as $review_pembatalan_kontrak)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank" href="/document/view/{{$review_pembatalan_kontrak->id_review_pembatalan_kontrak}}/{{$review_pembatalan_kontrak->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $review_pembatalan_kontrak->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $review_pembatalan_kontrak->User->name }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($review_pembatalan_kontrak->created_at), "d-m-Y") }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $review_pembatalan_kontrak->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspa colspan="4" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Perjanjian KSO
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_perjanjian_kso">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->PerjanjianKSO as $perjanjian_kso)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank" href="/document/view/{{$perjanjian_kso->id_perjanjian_kso}}/{{$perjanjian_kso->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $perjanjian_kso->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $perjanjian_kso->User->name }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($perjanjian_kso->created_at), "d-m-Y") }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $perjanjian_kso->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1449,57 +1809,52 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Catatan</th>
+                                        <th class="min-w-125px">Item Resiko</th>
+                                        <th class="min-w-125px">Penyebab</th>
+                                        <th class="min-w-125px">Dampak</th>
+                                        <th class="min-w-125px">Mitigasi</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
-                                    @if (isset($contract))
-                                        @forelse ($contract->inputRisks as $risk)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $risk->id_risk }}/{{ $risk->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $risk->document_name_risk }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/document/view/{{ $risk->id_risk }}/{{ $risk->id_document }}"
-                                                        target="_blank" class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $risk->id_document }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($risk->created_at), 'd M, Y') }}</a>
-                                                    </a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>{{ $risk->note_risk }}</td>
-                                                <!--end::Unit=-->
-                                            </tr>
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->inputRisks->contains("tender_menang", 1))
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->tender_menang == 1)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1510,14 +1865,13 @@
                             </table>
                             <!--End:Table: Review-->
 
-
                             &nbsp;<br>
                             &nbsp;<br>
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Daftar Pertanyaan
+                                Dokumen Pendukung
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_question_menang">+</a>
+                                    data-bs-target="#kt_modal_input_dokumen_pendukung">+</a>
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1526,60 +1880,52 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">No Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh</th>
+                                        <th class="min-w-125px">Dibuat Tanggal</th>
                                         <th class="min-w-125px">Catatan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
-                                        @forelse ($contract->questionsProjects as $question)
+                                        @forelse ($contract->DokumenPendukung as $dokumen_pendukung)
                                             <tr>
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $question->id_question }}/{{ $question->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $question->document_name_question }}
+                                                    <a target="_blank" href="/document/view/{{$dokumen_pendukung->id_dokumen_pendukung}}/{{$dokumen_pendukung->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $dokumen_pendukung->document_name }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $question->id_question }}/{{ $question->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $question->id_document }}
-                                                    </a>
+                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->User->name }}</p>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a target="_blank" href="#"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($question->created_at), 'd M, Y') }}</a>
-                                                    </a>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($dokumen_pendukung->created_at), "d-m-Y") }}</p>
                                                 </td>
                                                 <!--end::Kode=-->
                                                 <!--begin::Unit=-->
-                                                <td>{{ $question->note_question }}
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $dokumen_pendukung->note }}</p>
                                                 </td>
                                                 <!--end::Unit=-->
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1619,7 +1965,15 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
+                                    @php
+                                        $classes = "";
+                                        if(isset($contract)) {
+                                            $classes = "form-control-solid";
+                                        } else {
+                                            $classes = "border-bottom-dashed border-top-0 border-left-0 border-right-0";
+                                        }
+                                    @endphp
                                     @if (isset($contract))
                                         @forelse ($contract->monthlyReports as $monthlyReport)
                                             <tr>
@@ -1627,7 +1981,7 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 {{$classes}} text-hover-primary mb-1">
                                                         {{ $monthlyReport->document_name_report }}
                                                     </a>
                                                 </td>
@@ -1636,14 +1990,14 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/document/view/{{ $monthlyReport->id_report }}/{{ $monthlyReport->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $monthlyReport->id_document }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($monthlyReport->created_at), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1656,14 +2010,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1695,7 +2049,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->addendumContracts as $addendumContract)
                                             <tr>
@@ -1703,21 +2057,21 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract/{{ $addendumContract->id_addendum }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $addendumContract->no_addendum }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $addendumContract->created_by }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($addendumContract->created_at), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1725,14 +2079,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="3" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="3" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1741,6 +2095,8 @@
                                 <!--end::Table body-->
                             </table>
                             <!--End:Table: Addendum Kontrak-->
+                            <br>
+
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Klaim Kontrak
@@ -1762,7 +2118,7 @@
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
+                                <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract->project->ClaimManagements))
                                         @forelse ($contract->project->ClaimManagements as $claimManagement)
                                             <tr>
@@ -1770,21 +2126,21 @@
                                                 <td>
                                                     <a target="_blank"
                                                         href="/claim-management/view/{{ $claimManagement->id_claim }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
+                                                        class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $claimManagement->id_claim }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Name=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $claimManagement->pic }}
                                                     </a>
                                                 </td>
                                                 <!--end::Name=-->
                                                 <!--begin::Kode=-->
                                                 <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
                                                         {{ date_format(new DateTime($claimManagement->tanggal_claim), 'd M, Y') }}</a>
                                                     </a>
                                                 </td>
@@ -1794,14 +2150,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="3" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="3" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1810,17 +2166,83 @@
                                 <!--end::Table body-->
                             </table>
                             <!--End:Table: Claim Contract-->
-                        </div>
-                    </div>
-                    <!--end:::Tab pane Laporan Bulanan-->
 
-                    <!--begin:::Tab pane Serah Terima-->
-                    <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
-                        <div class="card-title m-0">
+                            <br>
+
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Dokumen Serah Terima Pekerjaan
+                                MoM Kick Off Meeting
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_serah_terima">+</a>
+                                    data-bs-target="#kt_modal_mom_meeting">+</a>
+                            </h3>
+                            <!--begin:Table: Claim Contract-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Nama Dokumen</th>
+                                        <th class="min-w-125px">Dibuat Oleh
+                                        </th>
+                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Catatan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if (isset($contract))
+                                        @forelse ($contract->MoMMeeting as $mom_meeting)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank" href="/document/view/{{$mom_meeting->id_mom}}/{{$mom_meeting->id_document}}" class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $mom_meeting->document_name }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $mom_meeting->User->name }}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ date_format(new DateTime($mom_meeting->created_at), "d-m-Y") }}</p>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{ $mom_meeting->note }}</p>
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                            <!--End:Table: Claim Contract-->
+
+                            &nbsp;<br>
+                            &nbsp;<br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Input Resiko
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_resiko_pelaksanaan">+</a>
                             </h3>
 
                             <!--begin:Table: Review-->
@@ -1829,70 +2251,154 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama Dokumen
-                                        </th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Catatan</th>
+                                        <th class="min-w-125px">Item Resiko</th>
+                                        <th class="min-w-125px">Penyebab</th>
+                                        <th class="min-w-125px">Dampak</th>
+                                        <th class="min-w-125px">Mitigasi</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-600">
-                                    @if (isset($contract))
-                                        @forelse ($contract->handOvers as $hand_over)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
-                                                        class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $hand_over->document_name_terima }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a href="/document/view/{{ $hand_over->id_handover }}/{{ $hand_over->id_document }}"
-                                                        target="_blank" class="text-gray-800 text-hover-primary mb-1">
-                                                        {{ $hand_over->id_document }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($hand_over->created_at), 'd M, Y') }}</a>
-                                                    </a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>
-                                                    {{ $hand_over->note_terima }}
-                                                </td>
-                                                <!--end::Unit=-->
-
-                                            </tr>
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->inputRisks->contains("tender_menang", 3))
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->tender_menang == 3)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
                                         @empty
                                             <tr>
-                                                <td>
+                                                <td colspan="4" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td>
+                                            <td colspan="4" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                     @endif
-
                                 </tbody>
                                 <!--end::Table body-->
+
                             </table>
                             <!--End:Table: Review-->
+                        </div>
+                    </div>
+                    <!--end:::Tab pane Laporan Bulanan-->
+
+                    <!--begin:::Tab pane Serah Terima-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_SerahTerima" role="tabpanel">
+                        <div class="card-title m-0">
+                            <form action="/contract-management/document-bast/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="id-contract" value="{{ $contract->id_contract }}">
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="dokumen-bast-1" class="form-label">Dokumen Bast 1</label>
+                                        <input type="file" name="dokumen-bast-1" accept=".docx" class="form-control form-control-solid">
+                                    </div>
+                                    <div class="col">
+                                        <label for="dokumen-bast-2" class="form-label">Dokumen Bast 2</label>
+                                        <input type="file" name="dokumen-bast-2" accept=".docx" class="form-control form-control-solid">
+                                    </div>
+                                </div>
+                                <br>
+                                <button type="submit" class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;">Save Dokumen Bast</button>
+                            </form>
+
+                            <hr>
+                            <div class="row">
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Input Resiko
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_resiko_serah_terima">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Item Resiko</th>
+                                        <th class="min-w-125px">Penyebab</th>
+                                        <th class="min-w-125px">Dampak</th>
+                                        <th class="min-w-125px">Mitigasi</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->inputRisks->contains("tender_menang", 4))
+                                        @forelse ($contract->inputRisks as $inputRisk)
+                                            @if ($inputRisk->tender_menang == 4)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="4" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
 
                         </div>
                     </div>
@@ -3155,6 +3661,629 @@
     </div>
     <!--end::Modal - Review Tender Menang-->
 
+    <!--begin::Modal - Hasil Klarifikasi dan Negosiasi CDA-->
+    <div class="modal fade" id="kt_modal_input_klarifikasi_negosiasi" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Hasil Klarifikasi dan Negosiasi CDA </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/klarifikasi-negosiasi/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-klarifikasi-negosiasi" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-klarifikasi-negosiasi">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-klarifikasi-negosiasi").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-klarifikasi-negosiasi");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-klarifikasi-negosiasi" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Hasil Klarifikasi dan Negosiasi CDA-->
+    
+    <!--begin::Modal - Kontrak Tanda Tangan-->
+    <div class="modal fade" id="kt_modal_input_kontrak_bertandatangan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Kontrak Tanda Tangan </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/kontrak-tanda-tangan/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-tandan-tangan" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-kontrak-tanda-tangan">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-tandan-tangan").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-kontrak-tanda-tangan");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-kontrak-tanda-tangan" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Kontrak Tanda Tangan-->
+    
+    <!--begin::Modal - Perjanjian KSO -->
+    <div class="modal fade" id="kt_modal_input_perjanjian_kso" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Perjanjian KSO  </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/perjanjian-kso/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-perjanjian-kso" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-perjanjian-kso">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-perjanjian-kso").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-perjanjian-kso");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-perjanjian-kso" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Perjanjian KSO -->
+
+    <!--begin::Modal - Review Pembatalan Kontrak -->
+    <div class="modal fade" id="kt_modal_input_review_pembatalan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Review Pembatalan Kontrak  </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-pembatalan-kontrak" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name-pendukung" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-pembatalan-kontrak">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-pembatalan-kontrak").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-pembatalan-kontrak");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-pembatalan-kontrak" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Review Pembatalan Kontrak -->
+    
+    <!--begin::Modal - Dokumen Pendukung -->
+    <div class="modal fade" id="kt_modal_input_dokumen_pendukung" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | Dokumen Pendukung  </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-dokumen-pendukung" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name-pendukung" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-dokumen-pendukung">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-dokumen-pendukung").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-dokumen-pendukung");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-dokumen-pendukung" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Dokumen Pendukung -->
+    <!--begin::Modal - MoM Meeting -->
+    <div class="modal fade" id="kt_modal_mom_meeting" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Attachment | MoM Kick Off Meeting  </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/mom-meeting/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Attachment</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="file" style="font-weight: normal"
+                                class="form-control form-control-solid" name="attach-file"
+                                id="attach-file-mom-meeting" value="" accept=".docx"
+                                placeholder="" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Nama Dokumen</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid"
+                                name="document-name" id="document-name-pendukung" value=""
+                                style="font-weight: normal" placeholder="Nama Document" />
+                            <!--end::Input-->
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span style="font-weight: normal">Catatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" name="note"
+                                id="note" value="" style="font-weight: normal"
+                                placeholder="Catatan" />
+                            <!--end::Input-->
+                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+
+
+                            {{-- begin::Froala Editor --}}
+                            <div id="froala-editor-mom-meeting">
+                                <h1>Attach file with <b>.DOCX</b> format only</h1>
+                            </div>
+                            {{-- end::Froala Editor --}}
+                            {{-- begin::Read File --}}
+                            <script>
+                                document.getElementById("attach-file-mom-meeting").addEventListener("change", async function() {
+                                    await readFile(this.files[0], "#froala-editor-mom-meeting");
+                                });
+                            </script>
+                            {{-- end::Read File --}}
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-review-mom-meeting" class="btn btn-lg btn-primary"
+                        data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - MoM Meeting -->
+
     <!--begin::Modal - Issue Project Tender Menang-->
     <div class="modal fade" id="kt_modal_issue_project_menang" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
@@ -3266,7 +4395,7 @@
                 <!--begin::Modal header-->
                 <div class="modal-header">
                     <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
+                    <h2>Add Resiko Proyek</h2>
                     <!--end::Modal title-->
                     <!--begin::Close-->
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -3274,11 +4403,10 @@
                         <span class="svg-icon svg-icon-1">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -3288,77 +4416,251 @@
                 <!--end::Modal header-->
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
-
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" class="form-control form-control-solid" name="attach-file-risk"
-                                id="attach-file-risk-menang" value="" style="font-weight: normal"
-                                accept=".docx" placeholder="Name risk" />
-                            <!--end::Input-->
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid"
-                                name="document-name-risk" id="document-name-risk" style="font-weight: normal"
-                                value="" placeholder="Nama Document" />
-                            <!--end::Input-->
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-risk"
-                                id="note-risk" value="" placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-risk-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-risk-menang").addEventListener("change", async function() {
-                                    await readFile(this.files[0], "#froala-editor-risk-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
-                    </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-risk-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
+        
+                    <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Resiko</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="hidden" value="1" name="is-tender-menang">
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
+                        <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
+                            style="font-weight: normal" value="" placeholder="Resiko" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Penyebab</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="penyebab" id="penyebab"
+                            style="font-weight: normal" value="" placeholder="Penyebab" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Dampak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="dampak" id="dampak"
+                            value="" placeholder="Dampak" style="font-weight: normal" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Mitigasi</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="mitigasi"
+                            id="mitigasi" value="" placeholder="Mitigasi" style="font-weight: normal" />
+                        <!--end::Input-->
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+                        {{-- end::Read File --}}
+                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+        
                     </form>
-
-
                 </div>
-                <!--end::Modal body-->
+                <!--end::Input group-->
+        
+        
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal body-->
         </div>
-        <!--end::Modal dialog-->
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input Resiko Tender Menang-->
+    
+    <!--begin::Modal - Input Resiko Tender Menang-->
+    <div class="modal fade" id="kt_modal_input_resiko_pelaksanaan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Resiko Proyek</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Resiko</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="hidden" value="3" name="stage">
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
+                        <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
+                            style="font-weight: normal" value="" placeholder="Resiko" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Penyebab</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="penyebab" id="penyebab"
+                            style="font-weight: normal" value="" placeholder="Penyebab" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Dampak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="dampak" id="dampak"
+                            value="" placeholder="Dampak" style="font-weight: normal" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Mitigasi</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="mitigasi"
+                            id="mitigasi" value="" placeholder="Mitigasi" style="font-weight: normal" />
+                        <!--end::Input-->
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+                        {{-- end::Read File --}}
+                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+        
+                    </form>
+                </div>
+                <!--end::Input group-->
+        
+        
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
     </div>
     <!--end::Modal - Input Resiko Tender Menang-->
 
+    <!--begin::Modal - Input Resiko Serah Terima-->
+    <div class="modal fade" id="kt_modal_input_resiko_serah_terima" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Resiko Serah Terima Pekerjaan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <form action="/input-risk/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Resiko</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="hidden" value="4" name="stage">
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
+                        <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
+                            style="font-weight: normal" value="" placeholder="Resiko" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Penyebab</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="penyebab" id="penyebab"
+                            style="font-weight: normal" value="" placeholder="Penyebab" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Dampak</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="dampak" id="dampak"
+                            value="" placeholder="Dampak" style="font-weight: normal" />
+                        <!--end::Input-->
+        
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Mitigasi</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid mb-3" name="mitigasi"
+                            id="mitigasi" value="" placeholder="Mitigasi" style="font-weight: normal" />
+                        <!--end::Input-->
+                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
+        
+                        {{-- end::Read File --}}
+                        <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
+                            data-bs-dismiss="modal">Save</button>
+        
+                    </form>
+                </div>
+                <!--end::Input group-->
+        
+        
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input Resiko Serah Terima-->
     <!--begin::Modal - Question Tender Menang-->
     <div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
@@ -3565,109 +4867,6 @@
 </div>
 <!--end::Modal - Laporan Bulanan-->
 
-<!--end::Modals-->
-
-<!--begin::Modal - Issue Project-->
-<div class="modal fade" id="kt_modal_issue_proyek" tabindex="-1" aria-hidden="true">
-<!--begin::Modal dialog-->
-<div class="modal-dialog modal-dialog-centered mw-900px">
-    <!--begin::Modal content-->
-    <div class="modal-content">
-        <!--begin::Modal header-->
-        <div class="modal-header">
-            <!--begin::Modal title-->
-            <h2>Add Issue Proyek</h2>
-            <!--end::Modal title-->
-            <!--begin::Close-->
-            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                <span class="svg-icon svg-icon-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none">
-                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
-                            rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
-                        <rect x="7.41422" y="6" width="16" height="2" rx="1"
-                            transform="rotate(45 7.41422 6)" fill="black" />
-                    </svg>
-                </span>
-                <!--end::Svg Icon-->
-            </div>
-            <!--end::Close-->
-        </div>
-        <!--end::Modal header-->
-        <!--begin::Modal body-->
-        <div class="modal-body py-lg-6 px-lg-6">
-
-            <!--begin::Input group Website-->
-            <div class="fv-row mb-5">
-                <form action="/issue-project/upload" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Attachment</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                        name="id-contract">
-                    <input type="file" class="form-control form-control-solid" name="attach-file-issue"
-                        id="attach-file-issue" value="" style="font-weight: normal" accept=".docx"
-                        placeholder="Name Proyek" />
-                    <!--end::Input-->
-
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Nama Dokumen</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" name="document-name-issue"
-                        id="document-name-issue" style="font-weight: normal" value=""
-                        placeholder="Nama Document" />
-                    <!--end::Input-->
-
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span style="font-weight: normal">Catatan</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" name="note-issue"
-                        id="note-issue" value="" placeholder="Catatan" style="font-weight: normal" />
-                    <!--end::Input-->
-                    <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-
-                    {{-- begin::Froala Editor --}}
-                    <div id="froala-editor-issue">
-                        <h1>Attach file with <b>.DOCX</b> format only</h1>
-                    </div>
-                    {{-- end::Froala Editor --}}
-                    {{-- begin::Read File --}}
-                    <script>
-                        document.getElementById("attach-file-issue").addEventListener("change", async function() {
-                            await readFile(this.files[0], "#froala-editor-issue");
-                        });
-                    </script>
-                    {{-- end::Read File --}}
-
-                    <button type="submit" class="btn btn-lg btn-primary" data-bs-dismiss="modal">Save
-                </form>
-            </div>
-            <!--end::Input group-->
-
-
-
-        </div>
-        <!--end::Modal body-->
-    </div>
-    <!--end::Modal content-->
-</div>
-<!--end::Modal dialog-->
-</div>
-
-<!--end::Modal - Issue Project-->
-
 <!--begin::Modal - Review-->
 <div class="modal fade" id="kt_modal_create_review" tabindex="-1" aria-hidden="true">
 <!--begin::Modal dialog-->
@@ -3809,50 +5008,46 @@
                 @csrf
                 <!--begin::Label-->
                 <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Attachment</span>
+                    <span style="font-weight: normal">Resiko</span>
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
-                <input type="file" class="form-control form-control-solid" name="attach-file-risk"
-                    id="attach-file-risk" style="font-weight: normal" value="" accept=".docx"
-                    placeholder="Name Proyek" />
+                <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
+                    style="font-weight: normal" value="" placeholder="Resiko" />
                 <!--end::Input-->
 
                 <!--begin::Label-->
                 <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Nama Dokumen</span>
+                    <span style="font-weight: normal">Penyebab</span>
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid" name="document-name-risk"
-                    id="document-name-risk" style="font-weight: normal" value=""
-                    placeholder="Nama Document" />
+                <input type="text" class="form-control form-control-solid" name="penyebab" id="penyebab"
+                    style="font-weight: normal" value="" placeholder="Penyebab" />
                 <!--end::Input-->
 
                 <!--begin::Label-->
                 <label class="fs-6 fw-bold form-label mt-3">
-                    <span style="font-weight: normal">Catatan</span>
+                    <span style="font-weight: normal">Dampak</span>
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid" name="note-risk"
-                    id="note-risk" value="" placeholder="Catatan" style="font-weight: normal" />
+                <input type="text" class="form-control form-control-solid" name="dampak" id="dampak"
+                    value="" placeholder="Dampak" style="font-weight: normal" />
+                <!--end::Input-->
+
+                <!--begin::Label-->
+                <label class="fs-6 fw-bold form-label mt-3">
+                    <span style="font-weight: normal">Mitigasi</span>
+                </label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <input type="text" class="form-control form-control-solid mb-3" name="mitigasi"
+                    id="mitigasi" value="" placeholder="Mitigasi" style="font-weight: normal" />
                 <!--end::Input-->
                 <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
 
-
-                {{-- begin::Froala Editor --}}
-                <div id="froala-editor-risk">
-                    <h1>Attach file with <b>.DOCX</b> format only</h1>
-                </div>
-                {{-- end::Froala Editor --}}
-                {{-- begin::Read File --}}
-                <script>
-                    document.getElementById("attach-file-risk").addEventListener("change", async function() {
-                        await readFile(this.files[0], "#froala-editor-risk");
-                    });
-                </script>
                 {{-- end::Read File --}}
                 <button type="submit" id="save-risk" class="btn btn-lg btn-primary"
                     data-bs-dismiss="modal">Save</button>
@@ -3921,6 +5116,30 @@
 
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
+                        <span style="font-weight: normal">Kategori Pertanyaan</span>
+                    </label>
+                    <!--end::Label-->
+
+                    {{-- Begin :: Select Kategori Dokumen --}}
+                    <select name="kategori-Aanwitjzing" id="kategori-Aanwitjzing"
+                        class="form-select form-select-solid"
+                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori Pertanyaan"
+                        data-select2-id="select2-data-kategori-Aanwitjzing" tabindex="-1" aria-hidden="true">
+                        <option value=""></option>
+                        <option value="Pertanyaan Aanwitjzing">
+                            Pertanyaan Aanwitjzing
+                        </option>
+                        <option value="Jawaban Aanwitjzing">
+                            Jawaban Aanwitjzing
+                        </option>
+                        <option value="Berita Acara Aanwitjzing">
+                            Berita Acara Aanwitjzing
+                        </option>
+                    </select>
+                    {{-- End :: Select Kategori Dokumen --}}
+
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
                         <span style="font-weight: normal">Nama Dokumen</span>
                     </label>
                     <!--end::Label-->
@@ -3973,7 +5192,6 @@
 <!--end::Modal dialog-->
 </div>
 <!--end::Modal - List Questions-->
-
 <!--begin::Modal - Calendar Start -->
 <div class="modal fade" id="kt_modal_calendar-start" data-bs-backdrop="static" tabindex="-1"
 aria-hidden="true">
@@ -4290,6 +5508,106 @@ aria-hidden="true">
 <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script>
 
 <script>
+        const savePasalBtn = document.querySelector("#save-pasal");
+        const loadingElt = document.querySelector("#save-pasal > .spinner-border");
+        savePasalBtn.addEventListener("click", async e => {
+            savePasalBtn.setAttribute("disabled", "");
+            const pasalCheckboxes = document.querySelectorAll(".pasal");
+            loadingElt.style.display = "block";
+            let pasals = [];
+            pasalCheckboxes.forEach((pasal) => {
+                if (pasal.checked) {
+                    pasals.push(pasal.value);
+                }
+            });
+            const formData = new FormData();
+            let html = "";
+            let counter = 1;
+            formData.append("_token", '{{ csrf_token() }}');
+            formData.append("pasals", pasals);
+            const savePasal = await fetch("/pasal/save", {
+                method: "POST",
+                header: {
+                    "Content-Type": "application/json",
+                },
+                body: formData,
+            }).then(res => res.json());
+            if (savePasal.status == "success") {
+                const pasals = JSON.parse(savePasal.pasals);
+                modalDraftBoots.show();
+                modalPasalBoots.hide();
+                $("#draft-rekomendasi").select2({
+                    dropdownParent: $('#kt_modal_draft'),
+                    minimumResultsForSearch: Infinity,
+                });
+                // if (toaster.classList.contains("text-bg-danger")) {
+                //     toaster.classList.remove("text-bg-danger");
+                // }
+                // toaster.classList.add("text-bg-success");
+                document.querySelector(".toast-body").innerText = savePasal.message
+                pasals.forEach((pasal) => {
+                    html += `
+                    <tr>
+                        <td>
+                            <span class="fw-normal fs-8">${counter++}</span>
+                        </td>
+                        <td>
+                            <span class="fw-normal fs-8">${pasal.pasal}</span>
+                        </td>
+                    </tr>
+            `
+                });
+                document.querySelector("#kt_pasal_table tbody").innerHTML = html;
+                // toasterBoots.show();
+                document.querySelector("#clear-pasal").style.visibility = "visible";
+
+            } else {
+                // if (toaster.classList.contains("text-bg-success")) {
+                //     toaster.classList.remove("text-bg-success");
+                // }
+                // toaster.classList.add("text-bg-danger");
+                document.querySelector(".toast-body").innerText = savePasal.message
+                // toasterBoots.show();
+
+            }
+            Toast.fire({
+                html: savePasal.message,
+                icon: savePasal.status,
+            });
+            loadingElt.style.display = "none";
+            savePasalBtn.removeAttribute("disabled");
+        });
+        document.querySelector("#clear-pasal").addEventListener("click", async e => {
+            const pasalCheckboxes = document.querySelectorAll(".pasal");
+            const formData = new FormData();
+            formData.append("_token", "{{ csrf_token() }}");
+            const clearPasalsRes = await fetch("/pasal/clear", {
+                method: "POST",
+                body: formData,
+            }).then(res => res.json());
+            if (clearPasalsRes.status == "success") {
+                document.querySelector(".toast-body").innerText = clearPasalsRes.message
+                html = `
+                <tr>
+                    <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum terpilih</b></td>
+                </tr>
+                `
+                Toast.fire({
+                    icon: "success",
+                    text: "Pasal-pasal berhasil dihapus",
+                });
+                document.querySelector("#kt_pasal_table tbody").innerHTML = html;
+                pasalCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        checkbox.checked = false;
+                    }
+                })
+            }
+            
+            document.querySelector("#clear-pasal").style.visibility = "hidden";
+        });
+        // end::Script adding pasal
+
     new FroalaEditor('#froala-editor-terima', {
         documentReady: true,
     });
@@ -4327,6 +5645,24 @@ aria-hidden="true">
         documentReady: true,
     });
     new FroalaEditor('#froala-editor-bulanan-menang', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-klarifikasi-negosiasi', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-kontrak-tanda-tangan', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-perjanjian-kso', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-dokumen-pendukung', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-pembatalan-kontrak', {
+        documentReady: true,
+    });
+    new FroalaEditor('#froala-editor-mom-meeting', {
         documentReady: true,
     });
 </script>

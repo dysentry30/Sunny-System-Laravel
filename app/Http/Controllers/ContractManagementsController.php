@@ -19,6 +19,12 @@ use App\Models\ClaimManagements;
 use App\Models\AddendumContracts;
 use App\Models\ContractManagements;
 use App\Models\AddendumContractDrafts;
+use App\Models\DokumenPendukung;
+use App\Models\KlarifikasiNegosiasiCda;
+use App\Models\KontrakBertandatangan;
+use App\Models\MomKickOffMeeting;
+use App\Models\PerjanjianKso;
+use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -26,15 +32,18 @@ use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Str;
 
 class ContractManagementsController extends Controller
 {
 
     public function index()
     {
-        $contract_managements = ContractManagements::all();
-        $sorted_contracts = $contract_managements->sortBy("contract_in");
-        return view('4_Contract', ["contracts" => $sorted_contracts]);
+        // $contract_managements = ContractManagements::all();
+        // $sorted_contracts = $contract_managements->sortBy("contract_in");
+        // return view('4_Contract', ["contracts" => $sorted_contracts]);
+        $proyeks = Proyek::all()->sortBy("kode_proyek");
+        return view("4_Contract", compact(["proyeks"]));
     }
 
 
@@ -168,6 +177,7 @@ class ContractManagementsController extends Controller
         $contractManagements->number_spk = (int) $data["number-spk"];
         $contractManagements->stages = (int) 1;
         $contractManagements->value = (int) preg_replace("/[^0-9]/i", "", $data["value"]);
+        $contractManagements->value_review = 0;
 
         Alert::success('Success', $data["number-contract"] . ", Berhasil Ditambahkan");
         if ($contractManagements->save()) {
@@ -211,12 +221,15 @@ class ContractManagementsController extends Controller
         $contractManagements->contract_out = new DateTime($data["due-date"]);
         $contractManagements->number_spk = (int) $data["number-spk"];
         $contractManagements->value = (int) str_replace(",", "", $data["value"]);
-        if ($contractManagements->update()) {
-            Alert::error('Error', "Contract berhasil diperbarui");
-            return redirect("/contract-management");
+        $contractManagements->value_review = (int) str_replace(",", "", $data["value-review"]);
+        if ($contractManagements->save()) {
+            Alert::success('Success', "Contract berhasil diperbarui");
+            return redirect()->back();
+            // return redirect("/contract-management");
         }
         Alert::error('Error', "Contract ini gagal diperbarui");
-        return redirect("/contract-management");
+        return redirect()->back();
+        // return redirect("/contract-management");
     }
 
 
@@ -425,6 +438,7 @@ class ContractManagementsController extends Controller
             "attach-file-question" => "required|file",
             "document-name-question" => "required|string",
             "note-question" => "required|string",
+            "kategori-Aanwitjzing" => "required|string",
             "id-contract" => "required|numeric",
         ];
         $validation = Validator::make($data, $rules, $messages);
@@ -450,6 +464,7 @@ class ContractManagementsController extends Controller
         $questions->document_name_question = $data["document-name-question"];
         $questions->id_contract = $data["id-contract"];
         $questions->id_document = $id_document;
+        $questions->kategori_question = $data["kategori-Aanwitjzing"];
         $questions->note_question = $data["note-question"];
         $questions->tender_menang = $is_tender_menang;
         if ($questions->save()) {
@@ -476,14 +491,14 @@ class ContractManagementsController extends Controller
             "string" => "This field must be alphabet only",
         ];
         $rules = [
-            "attach-file-risk" => "required|file",
-            "document-name-risk" => "required|string",
-            "note-risk" => "required|string",
-            "id-contract" => "required|numeric",
+            "resiko" => "required|string",
+            "penyebab" => "required|string",
+            "dampak" => "required|string",
+            "mitigasi" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Risk gagal ditambahkan");
+            Alert::error('Error', "Resiko gagal ditambahkan");
             return Redirect::back();
             // dd($validation->errors());
         }
@@ -497,20 +512,25 @@ class ContractManagementsController extends Controller
             return Redirect::back();
         }
 
-        $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+        if(isset($data["stage"])) {
+            $is_tender_menang = $data["stage"];
+        } else {
+            $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+        }
         $validation->validate();
 
-        $risk->document_name_risk = $data["document-name-risk"];
+        $risk->resiko = $data["resiko"];
         $risk->id_contract = $data["id-contract"];
-        $risk->id_document = $id_document;
-        $risk->note_risk = $data["note-risk"];
-        $risk->tender_menang = $is_tender_menang;
+        $risk->tender_menang = $is_tender_menang; // Kolom Tender Menang dialihfungsikan menjadi Stage
+        $risk->penyebab = $data["penyebab"];
+        $risk->dampak = $data["dampak"];
+        $risk->mitigasi = $data["mitigasi"];
         if ($risk->save()) {
-            moveFileTemp($file, $id_document);
-            Alert::success('Success', "Risk berhasil ditambahkan");
+            // moveFileTemp($file, $id_document);
+            Alert::success('Success', "Resiko berhasil ditambahkan");
             return Redirect::back();
         }
-        Alert::error('Error', "Risk gagal ditambahkan");
+        Alert::error('Error', "Resiko gagal ditambahkan");
         return redirect($_SERVER["HTTP_REFERER"]);
     }
 
@@ -614,4 +634,169 @@ class ContractManagementsController extends Controller
         Alert::error('Error', "Serah Terima Kontrak gagal ditambahkan");
         return Redirect::back();
     }
+
+    public function klarifikasiNegoUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $klarifikasi_model = new KlarifikasiNegosiasiCda();
+        $klarifikasi_model->id_contract = $data["id-contract"];
+        $klarifikasi_model->id_document = Str::uuid();
+        $klarifikasi_model->document_name = $data["document-name"];
+        $klarifikasi_model->created_by = auth()->user()->id;
+        $klarifikasi_model->note = $data["note"];
+        if($klarifikasi_model->save()){
+            moveFileTemp($file, $klarifikasi_model->id_document);
+            Alert::success("Success", "Hasil Klarifikasi dan Negosiasi CDA berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Hasil Klarifikasi dan Negosiasi CDA gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function kontrakTandaTanganUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $model = new KontrakBertandatangan();
+        $model->id_contract = $data["id-contract"];
+        $model->id_document = Str::uuid();
+        $model->document_name = $data["document-name"];
+        $model->created_by = auth()->user()->id;
+        $model->note = $data["note"];
+        if($model->save()){
+            moveFileTemp($file, $model->id_document);
+            Alert::success("Success", "Kontrak Tanda Tangan berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Kontrak Tanda Tangan gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function reviewPembatalanKontrak(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $model = new ReviewPembatalanKontrak();
+        $model->id_contract = $data["id-contract"];
+        $model->id_document = Str::uuid();
+        $model->document_name = $data["document-name"];
+        $model->created_by = auth()->user()->id;
+        $model->note = $data["note"];
+        if($model->save()){
+            moveFileTemp($file, $model->id_document);
+            Alert::success("Success", "Review Pembatalan Kontrak berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Review Pembatalan Kontrak gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function perjanjianKSO(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $model = new PerjanjianKso();
+        $model->id_contract = $data["id-contract"];
+        $model->id_document = Str::uuid();
+        $model->document_name = $data["document-name"];
+        $model->created_by = auth()->user()->id;
+        $model->note = $data["note"];
+        if($model->save()){
+            moveFileTemp($file, $model->id_document);
+            Alert::success("Success", "Perjanjian KSO berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Perjanjian KSO gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function dokumenPendukungUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $model = new DokumenPendukung();
+        $model->id_contract = $data["id-contract"];
+        $model->id_document = Str::uuid();
+        $model->document_name = $data["document-name"];
+        $model->created_by = auth()->user()->id;
+        $model->note = $data["note"];
+        if($model->save()){
+            moveFileTemp($file, $model->id_document);
+            Alert::success("Success", "Dokumen Pendukung berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "Dokumen Pendukung gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function momMeeting(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+        $file = $request->file("attach-file");
+        $model = new MomKickOffMeeting();
+        $model->id_contract = $data["id-contract"];
+        $model->id_document = Str::uuid();
+        $model->document_name = $data["document-name"];
+        $model->created_by = auth()->user()->id;
+        $model->note = $data["note"];
+        if($model->save()){
+            moveFileTemp($file, $model->id_document);
+            Alert::success("Success", "MoM Kick Off Meeting berhasil dibuat");
+            return redirect()->back();
+        }
+        Alert::error("Error", "MoM Kick Off Meeting gagal dibuat");
+        return redirect()->back();
+    }
+
+    public function documentBastContractUpload(Request $request) {
+        $data = $request->all();
+
+        dd($data);
+        $faker = new Uuid();
+        $contract_managements = ContractManagements::find($data["id-contract"]);
+        if(isset($data["dokumen-bast-1"])) {
+            $id_document = $faker->uuid3();
+            $contract_managements->dokumen_bast_1 = $id_document;
+            moveFileTemp($data["dokumen-bast-1"], $id_document);
+        }
+
+        if(isset($data["dokumen-bast-2"])) {
+            $id_document = $faker->uuid3();
+            $contract_managements->dokumen_bast_2 = $id_document;
+            moveFileTemp($data["dokumen-bast-2"], $id_document);
+        }
+
+        if($contract_managements->save()) {
+            Alert::success("Success", "Dokument Bast berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Dokument Bast gagal ditambahkan");
+        return redirect()->back();
+    }
 }
+

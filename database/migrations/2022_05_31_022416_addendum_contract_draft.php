@@ -14,12 +14,18 @@ return new class extends Migration
     public function up()
     {
         Schema::create('addendum_contract_drafts', function (Blueprint $table) {
-            $table->bigIncrements('id_addendum_draft');
+            $table->id('id_addendum_draft');
             $table->integer('id_addendum');
-            $table->mediumText('id_document');
+            $table->integer('id_contract');
+            $table->longText('id_document_instruksi');
+            $table->boolean('rekomendasi');
+            $table->longText('uraian_rekomendasi');
+            $table->longText('uraian_perubahan');
+            $table->dateTime('pengajuan_waktu');
+            $table->longText('id_document_draft_proposal_addendum');
+            $table->longText('pasals');
             $table->text('document_name_addendum');
-            $table->longText('note_addendum');
-
+            $table->longText('list_id_document_pendukung');
             $table->timestamps();
         });
     }

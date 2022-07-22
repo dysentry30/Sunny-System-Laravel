@@ -37,11 +37,11 @@
 </style>
 @section('content')
     {{-- begin::action --}}
-    <a href="#" onclick="saveDocument()" class="btn btn-sm btn-primary d-flex justify-content-center align-items-center"
+    <button onclick="saveDocument(this)" class="btn btn-sm btn-primary d-flex justify-content-center align-items-center"
         style="background-color:#26b2e9;">
         Save
         <div class="circle-loading"></div>
-    </a>
+    </button>
     <a href="/document/view/{{ $id }}/{{ $id_document }}/history"
         class="btn btn-sm btn-primary my-2 d-flex justify-content-center align-items-center"
         style="background-color:#e78b13;">
@@ -84,6 +84,7 @@
                 const content = docx2html(file.result).then(html => {
                     // if (show) {
                     // }
+                    document.querySelector(` #A > section`).style.backgroundColor = "transparent";
                     document.querySelector(".fr-view").innerHTML = html;
                     data = html;
                     // document.getElementById("A").remove();
@@ -101,8 +102,10 @@
             return data;
             // End::Read DOCX Content
         }
-        async function saveDocument() {
-            const html = document.querySelector(".fr-view #A section");
+        async function saveDocument(elt) {
+            elt.setAttribute("disabled", "");
+            // const html = document.querySelector(".fr-view #A section");
+            const html = document.querySelector(".fr-view");
             const circleLoadingElt = document.querySelector(".circle-loading");
             const formData = new FormData();
             // const editor = new FroalaEditor('div#froala-editor', {}, function() {
@@ -110,7 +113,7 @@
 
             // });
             // const content = htmlDocx.asBlob(html.outerHTML);
-            const content = new Blob([html.outerHTML]);
+            const content = new Blob([html.innerHTML]);
             // console.log(content);
             // return;
             // const parser = new XMLSerializer().serializeToString(html);
@@ -132,7 +135,7 @@
                 }).then(res => res.json());
             circleLoadingElt.style.display = "none";
             if (uploadFile.status == "success") {
-                console.log(uploadFile);
+                elt.removeAttribute("disabled");
                 window.location.href = uploadFile.redirect;
             }
             circleLoadingElt.style.display = "none";

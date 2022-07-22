@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('input_risks', function (Blueprint $table) {
-            $table->bigIncrements('id_risk');
-            $table->integer("id_contract");
-            $table->longText("resiko");
-            $table->longText("dampak");
-            $table->longText("penyebab");
-            $table->longText("mitigasi");
-            $table->boolean("stage");
+        Schema::create('addendum_contract_negoisasis', function (Blueprint $table) {
+            $table->id('id_addendum_contract_negoisasi');
+            $table->integer('id_addendum');
+            $table->text("uraian_activity");
+            $table->dateTime("tanggal_activity");
+            $table->longText("dokumen_pendukung");
+            $table->longText("keterangan");
             $table->timestamps();
         });
     }
@@ -32,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('input_risks');
+        Schema::dropIfExists('addendum_contract_negoisasis');
     }
 };

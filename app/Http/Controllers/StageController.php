@@ -18,11 +18,11 @@ class StageController extends Controller
         }
         $id = $request->id_addendum;
         $addendum_contract = AddendumContracts::find($id);
-        if ($addendum_contract->stages == 2) {
-            $addendum_contract->stages = 1;
-        } else {
-            $addendum_contract->stages = $request->stage;
-        }
+        // if ($addendum_contract->stages == 2) {
+        //     $addendum_contract->stages = 1;
+        // } else {
+            // }
+        $addendum_contract->stages = $request->stage;
         if ($addendum_contract->save()) {
             return response()->json([
                 "status" => "success",

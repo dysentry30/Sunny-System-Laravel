@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer("id_contract");
             $table->mediumText("id_document");
             $table->text("document_name_question");
+            $table->text("kategori_question");
             $table->longText("note_question");
             $table->boolean("tender_menang");
             $table->timestamps();

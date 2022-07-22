@@ -84,7 +84,7 @@ img.tengah {
 
 /* Begin :: Custom Toaster */
 #custom-toaster {
-    position: relative;
+    position: absolute;
     width: 600px;
     height: 300px;
     border-style: solid;
