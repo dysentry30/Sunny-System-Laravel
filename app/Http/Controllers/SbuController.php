@@ -59,6 +59,7 @@ class SbuController extends Controller
         $newSbu->kode_sbu = $dataSbu["kode-sbu"];
         $newSbu->klasifikasi = $dataSbu["klasifikasi"];
         $newSbu->sub_klasifikasi = $dataSbu["sub-klasifikasi"];
+        $newSbu->lingkup_kerja = $dataSbu["lingkup"];
         $newSbu->referensi1 = $dataSbu["referensi1"];
         $newSbu->referensi2 = $dataSbu["referensi2"];
         $newSbu->referensi3 = $dataSbu["referensi3"];

@@ -41,7 +41,7 @@
                     <br>
 					<!--end::Logo-->
 					<!--begin::Wrapper-->
-					<div class="w-lg-450px shadow-md p-10 p-lg-15 mx-auto rounded-5" 
+					<div class="w-lg-450px shadow-md p-10 p-lg-15 mx-auto rounded-2" 
 							style="background: rgba(255, 255, 255, 0.71);
 							border-radius: 16px;
 							box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -101,7 +101,7 @@
 							<!--begin::Actions-->
 							<div class="text-center">
 								<!--begin::Submit button-->
-								<button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 mb-5">
+								<button type="submit" id="kt_sign_in_submit" class="btn btn-lg btn-primary w-100 my-5">
 									<span class="indicator-label">Continue</span>
 								</button>
 								<!--end::Submit button-->

@@ -409,12 +409,12 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Referensi 1</span>
+                                        <span>Lingkup Pekerjaan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="referensi1"
-                                        name="referensi1" value="" placeholder="Referensi 1" />
+                                    <input type="text" class="form-control form-control-solid" id="lingkup"
+                                        name="lingkup" value="" placeholder="Lingkup Pekerjaan" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -425,12 +425,12 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Referensi 2</span>
+                                        <span>Referensi 1</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="referensi2"
-                                        name="referensi2" value="" placeholder="Referensi 2" />
+                                    <input type="text" class="form-control form-control-solid" id="referensi1"
+                                        name="referensi1" value="" placeholder="Referensi 1" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -448,6 +448,22 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Referensi 2</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="referensi2"
+                                        name="referensi2" value="" placeholder="Referensi 2" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Referensi 3</span>
                                     </label>
                                     <!--end::Label-->
@@ -458,6 +474,7 @@
                                 </div>
                                 <!--end::Input group-->
                             </div>
+                            <!--End::Col-->
                         </div>
                         <!--End::Row Kanan+Kiri-->
 
