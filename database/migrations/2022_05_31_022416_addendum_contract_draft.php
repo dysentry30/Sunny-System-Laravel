@@ -22,9 +22,10 @@ return new class extends Migration
             $table->longText('uraian_rekomendasi');
             $table->longText('uraian_perubahan');
             $table->dateTime('pengajuan_waktu');
+            $table->bigInteger('pengajuan_biaya');
             $table->longText('id_document_draft_proposal_addendum');
             $table->longText('pasals');
-            $table->text('document_name_addendum');
+            // $table->text('document_name_addendum');
             $table->longText('list_id_document_pendukung');
             $table->timestamps();
         });

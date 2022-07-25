@@ -70,15 +70,19 @@
                             <!--begin::Card body-->
                             <div class="card-body pt-0 ">
                                 <!--begin::Table-->
-                                <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                                <table class="table align-top table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                     <!--begin::Table head-->
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto">No.</th>
                                             <th class="min-w-auto">No. Addendum</th>
-                                            <th class="min-w-auto">Tanggal</th>
-                                            <th class="min-w-auto">Dibuat Oleh</th>
+                                            <th class="min-w-auto">Uraian Perubahan</th>
+                                            <th class="min-w-auto">Tanggal Diajukan</th>
+                                            <th class="min-w-auto">Tgl Disetujui/Ditolak</th>
+                                            <th class="min-w-auto">Status</th>
+                                            <th class="min-w-auto">Tanggal Amandemen</th>
+                                            <th class="min-w-auto">Nilai Amandemen</th>
+                                            <th class="min-w-auto">Waktu Amandemen</th>
                                             {{-- <th class="min-w-auto"></th> --}}
                                         </tr>
                                         <!--end::Table row-->
@@ -86,20 +90,70 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody class="fw-bold text-gray-600">
-                                        @foreach ($addendumContracts as $i => $addendumContract)
-                                            <tr>
-                                                <td>
-                                                    {{ ++$i }}
-                                                </td>
-                                                <td>
-                                                    <a class="text-gray-800 text-hover-primary mb-1" href="/contract-management/view/{{$addendumContract->id_contract}}/addendum-contract/{{$addendumContract->id_addendum}}">{{ $addendumContract->no_addendum }}</a>
-                                                </td>
-                                                <td>
-                                                    {{ date_format(date_create($addendumContract->created_at), 'd M Y') }}
-                                                </td>
-                                                <td>
-                                                    {{ $addendumContract->created_by }}
-                                                </td>
+                                        @foreach ($addendumContracts as $addendumContract)
+                                        <tr>
+                                            <!--begin::No Adendum-->
+                                            <td>
+                                                <a class="text-gray-800 text-hover-primary mb-1" href="/contract-management/view/{{$addendumContract->id_contract}}/addendum-contract/{{$addendumContract->id_addendum}}">{{ $addendumContract->no_addendum }}</a>
+                                            </td>
+                                            <!--end::No Adendum-->
+                                            <!--begin::Uraian Perubahan-->
+                                            @foreach ($addendumContract->addendumContractDrafts as $adendumDraft)
+                                            <td>
+                                                <p class="">
+                                                    {{ $adendumDraft->uraian_perubahan }}
+                                                </p>
+                                            </td>
+                                            @endforeach
+                                            <!--end::Uraian Perubahan-->
+                                            <!--begin::Tanggal Diajukan-->
+                                            <td>
+                                                {{ date_format(date_create($addendumContract->created_at), 'd M Y') }}
+                                            </td>
+                                            <!--end::Tanggal Diajukan-->
+                                            <!--begin::Tanggal Disetujui-->
+                                            <td>
+                                                @foreach ($addendumContract->addendumContractDisetujui as $adendumDisetujui)
+                                                {{ date_format(date_create($adendumDisetujui->tanggal_disetujui), 'd M Y') }}
+                                                @endforeach
+                                            </td>
+                                            <!--end::Tanggal Disetujui-->
+                                            <!--begin::Status-->
+                                            <td>
+                                                @switch($addendumContract->stages)
+                                                    @case("1") Draft
+                                                        @break
+                                                    @case("2") Diajukan
+                                                        @break
+                                                    @case("3") Negoisasi
+                                                        @break
+                                                    @case("4") Disetujui
+                                                        @break
+                                                    @case("5") Amandemen
+                                                        @break
+                                                    @case("6") Ditolak
+                                                        @break
+                                                    @default --
+                                                @endswitch
+                                            </td>
+                                            <!--end::Status-->
+                                            <!--begin::Tanggal Amandemen-->
+                                            <td>
+                                                @foreach ($addendumContract->addendumContractAmandemen as $adendumAmandemen)
+                                                {{ date_format(date_create($adendumAmandemen->tanggal_amandemen), 'd M Y') }}
+                                            </td>
+                                            <!--end::Tanggal Amandemen-->
+                                            <!--begin::Nilai Amandemen-->
+                                            <td>
+                                                {{ number_format($adendumAmandemen->biaya_amandemen, 0, '.', ',') }}
+                                            </td>
+                                            <!--begin::Nilai Amandemen-->
+                                            <!--begin::Waktu Amandemen-->
+                                            <td>
+                                                {{ date_format(date_create($adendumAmandemen->waktu_eot_amandemen), 'd M Y') }}
+                                                @endforeach
+                                            </td>
+                                            <!--begin::Waktu Amandemen-->
                                             </tr>
                                         @endforeach
                                     </tbody>
