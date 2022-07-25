@@ -20,7 +20,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 class AddendumContractController extends Controller
 {
     // upload data addendum to server or database
-    public function upload(Request $request, AddendumContracts $addendumContracts) {
+    public function upload(Request $request, AddendumContracts $addendumContracts)
+    {
 
         $data = $request->all();
         $messages = [
@@ -52,20 +53,20 @@ class AddendumContractController extends Controller
         //         array_push($pasals, $pasal->id_pasal);
         //     }
         // }
-    
+
         if ($validation->fails()) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             $request->old("addendum-contract-title");
             $request->old("addendum-contract-version");
             $request->old("addendum-contract-start-date");
             $request->old("addendum-contract-create-by");
-    
+
             return Redirect::back()->with("error", "Please fill 'Addendum Contract' empty field");
         }
-    
+
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             $request->old("addendum-contract-title");
             $request->old("addendum-contract-version");
@@ -73,7 +74,7 @@ class AddendumContractController extends Controller
             $request->old("addendum-contract-create-by");
             return Redirect::back()->with("error", "Contract not exist");
         }
-    
+
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
         // if ($is_tender_menang == 1) {
         //     $rules["document-name-addendum-menang"] = "required|string";
@@ -81,7 +82,7 @@ class AddendumContractController extends Controller
         // } else {
         // }
         $validation->validate();
-    
+
         // Update Stages Contract
         // $is_id_contract_exist->stages = 4;
         // $addendumContracts->document_name = $data["document-name-addendum"];
@@ -101,7 +102,8 @@ class AddendumContractController extends Controller
     }
 
     // upload data addendum to server or database
-    public function update(Request $request) {
+    public function update(Request $request)
+    {
 
         $data = $request->all();
         $messages = [
@@ -136,7 +138,7 @@ class AddendumContractController extends Controller
             }
             Session::forget("pasals");
         }
-    
+
         if ($validation->fails()) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             $request->old("addendum-contract-title");
@@ -146,10 +148,10 @@ class AddendumContractController extends Controller
             Alert::error("Error", "Silahkan isi data yang kosong terlebih dahulu!");
             return Redirect::back()->with("error", "Please fill 'Addendum Contract' empty field");
         }
-    
+
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             $request->old("addendum-contract-title");
             $request->old("addendum-contract-version");
@@ -157,7 +159,7 @@ class AddendumContractController extends Controller
             $request->old("addendum-contract-create-by");
             return Redirect::back()->with("error", "Contract not exist");
         }
-    
+
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
         // if ($is_tender_menang == 1) {
         //     $rules["document-name-addendum-menang"] = "required|string";
@@ -167,7 +169,7 @@ class AddendumContractController extends Controller
         $validation->validate();
 
         $addendumContracts = AddendumContracts::find($data["id-addendum"]);
-    
+
         // Update Stages Contract
         $is_id_contract_exist->stages = 4;
         // $addendumContracts->document_name = $data["document-name-addendum"];
@@ -188,7 +190,8 @@ class AddendumContractController extends Controller
     }
 
     // Save Draft of Addendum to Server or Database
-    public function draftUpload(Request $request, AddendumContractDrafts $addendumContractDrafts) {
+    public function draftUpload(Request $request, AddendumContractDrafts $addendumContractDrafts)
+    {
 
         $data = $request->all();
         $messages = [
@@ -210,7 +213,7 @@ class AddendumContractController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         if ($validation->fails()) {
@@ -222,10 +225,10 @@ class AddendumContractController extends Controller
             Alert::error("Error", "Silahkan isi data yang kosong!");
             return Redirect::back();
         }
-    
+
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             $request->old("note-addendum");
             $request->old("document-name-addendum");
@@ -242,7 +245,7 @@ class AddendumContractController extends Controller
             }
             Session::forget("pasals");
         }
-    
+
         // $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
         // if ($is_tender_menang == 1) {
         //     $addendumContracts->document_name_addendum = $data["document-name-addendum-menang"];
@@ -251,13 +254,14 @@ class AddendumContractController extends Controller
         $id_document_instruksi_name = $faker->uuid3();
         $id_document_draft_proposal_addendum_name = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
+        if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+            foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                 $id_document = $faker->uuid3();
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+        $addendumContractDrafts->list_id_document_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
@@ -273,13 +277,12 @@ class AddendumContractController extends Controller
         $addendumContractDrafts->pengajuan_waktu = $data["pengajuan-waktu"];
         $addendumContractDrafts->pengajuan_biaya = $data["pengajuan-biaya"];
         $addendumContractDrafts->id_document_draft_proposal_addendum = $id_document_draft_proposal_addendum_name;
-        $addendumContractDrafts->list_id_document_pendukung = join(",", $list_id_document_pendukung);
         $addendumContractDrafts->pasals = join(",", $pasals);
         if ($addendumContractDrafts->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["surat-instruksi"], $id_document_instruksi_name);
             moveFileTemp($data["draft-proposal-addendum"], $id_document_draft_proposal_addendum_name);
-            
+
             Alert::success("Success", "Addendum Draft berhasil dibuat");
             return Redirect::to("/contract-management/view/" . $data['id-contract'] . "/addendum-contract/$addendumContractDrafts->id_addendum");
         }
@@ -287,7 +290,8 @@ class AddendumContractController extends Controller
         return Redirect::back();
     }
 
-    public function draftUpdate(Request $request) {
+    public function draftUpdate(Request $request)
+    {
 
         $data = $request->all();
         $addendumContractDrafts = AddendumContractDrafts::find($data["id-addendum-draft"]);
@@ -307,25 +311,25 @@ class AddendumContractController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         $validation->validate();
-    
+
         if (isset($file)) {
             $faker = new Uuid();
             $id_document = $faker->uuid3();
         }
-    
+
         if ($validation->fails()) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             $request->old("note-addendum");
             $request->old("document-name-addendum");
             $request->old("document-name-addendum-menang");
             $request->old("attach-file-addendum");
-    
+
             return Redirect::back()->with("error", "Please fill 'Addendum Contract' empty field");
         }
-    
+
         // Check ID Contract exist
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             dd("contract exist");
             $request->old("note-addendum");
@@ -334,7 +338,7 @@ class AddendumContractController extends Controller
             $request->old("attach-file-addendum");
             return Redirect::back()->with("error", "Contract not exist");
         }
-    
+
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
         if ($is_tender_menang == 1) {
             $rules["document-name-addendum-menang"] = "required|string";
@@ -356,7 +360,8 @@ class AddendumContractController extends Controller
         return Redirect::back()->with("error", "Your Draft Addendum Contract failed to update");
     }
 
-    public function draftDiajukanUpload(Request $request, AddendumContractDiajukan $addendumContractDiajukan) {
+    public function draftDiajukanUpload(Request $request, AddendumContractDiajukan $addendumContractDiajukan)
+    {
         $data = $request->all();
         // $messages = [
         //     "required" => "This field is required",
@@ -377,7 +382,7 @@ class AddendumContractController extends Controller
         // ];
         // $validation = Validator::make($data, $rules, $messages);
         // $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         // if ($validation->fails()) {
@@ -389,10 +394,10 @@ class AddendumContractController extends Controller
         //     Alert::error("Error", "Silahkan isi data yang kosong!");
         //     return Redirect::back();
         // }
-    
+
         // // Check ID Contract exist
         // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         // if (empty($is_id_contract_exist)) {
         //     $request->old("note-addendum");
         //     $request->old("document-name-addendum");
@@ -402,12 +407,12 @@ class AddendumContractController extends Controller
         //     return Redirect::back();
         // }
 
-        
+
         $id_document_proposal_addendum = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
+        if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+            foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                 $id_document = $faker->uuid3();
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
@@ -430,12 +435,13 @@ class AddendumContractController extends Controller
             Alert::success("Success", "Kontrak Diajukan berhasil dibuat");
             return redirect()->back();
         }
-        
+
         Alert::error("Error", "Kontrak Diajukan gagal dibuat");
         return Redirect::back();
     }
 
-    public function draftNegoisasiUpload(Request $request, AddendumContractNegoisasi $addendumContractNegoisasi) {
+    public function draftNegoisasiUpload(Request $request, AddendumContractNegoisasi $addendumContractNegoisasi)
+    {
         $data = $request->all();
         // $messages = [
         //     "required" => "This field is required",
@@ -456,7 +462,7 @@ class AddendumContractController extends Controller
         // ];
         // $validation = Validator::make($data, $rules, $messages);
         // $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         // if ($validation->fails()) {
@@ -468,10 +474,10 @@ class AddendumContractController extends Controller
         //     Alert::error("Error", "Silahkan isi data yang kosong!");
         //     return Redirect::back();
         // }
-    
+
         // // Check ID Contract exist
         // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         // if (empty($is_id_contract_exist)) {
         //     $request->old("note-addendum");
         //     $request->old("document-name-addendum");
@@ -481,9 +487,9 @@ class AddendumContractController extends Controller
         //     return Redirect::back();
         // }
 
-        if(count($data["dokumen-pendukung"]) > 1) {
+        if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+            foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                 $id_document = $faker->uuid3();
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
@@ -509,7 +515,8 @@ class AddendumContractController extends Controller
         return Redirect::back();
     }
 
-    public function draftDisetujuiUpload(Request $request, AddendumContractDisetujui $addendumContractDisetujui) {
+    public function draftDisetujuiUpload(Request $request, AddendumContractDisetujui $addendumContractDisetujui)
+    {
         $data = $request->all();
         // dd($data);
         // $messages = [
@@ -531,7 +538,7 @@ class AddendumContractController extends Controller
         // ];
         // $validation = Validator::make($data, $rules, $messages);
         // $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         // if ($validation->fails()) {
@@ -543,10 +550,10 @@ class AddendumContractController extends Controller
         //     Alert::error("Error", "Silahkan isi data yang kosong!");
         //     return Redirect::back();
         // }
-    
+
         // // Check ID Contract exist
         // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         // if (empty($is_id_contract_exist)) {
         //     $request->old("note-addendum");
         //     $request->old("document-name-addendum");
@@ -556,20 +563,21 @@ class AddendumContractController extends Controller
         //     return Redirect::back();
         // }
 
-        
+
         $id_document_surat_disetujui = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
+        if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+            foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                 $id_document = $faker->uuid3();
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+            $addendumContractDisetujui->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $addendumContractDisetujui->list_id_document_pendukung = $id_document;
+            $addendumContractDisetujui->dokumen_pendukung = $id_document;
         }
 
         $addendumContractDisetujui->id_addendum = $data["id-addendum"];
@@ -578,7 +586,6 @@ class AddendumContractController extends Controller
         $addendumContractDisetujui->biaya_disetujui = $data["biaya-disetujui"];
         $addendumContractDisetujui->waktu_eot_disetujui = $data["waktu-eot-disetujui"];
         $addendumContractDisetujui->keterangan = $data["keterangan-disetujui"];
-        $addendumContractDisetujui->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($addendumContractDisetujui->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["surat-disetujui"], $id_document_surat_disetujui);
@@ -590,7 +597,8 @@ class AddendumContractController extends Controller
         return Redirect::back();
     }
 
-    public function draftAmandemenUpload(Request $request, AddendumContractAmandemen $addendumContractAmandemen) {
+    public function draftAmandemenUpload(Request $request, AddendumContractAmandemen $addendumContractAmandemen)
+    {
         $data = $request->all();
         // dd($data);
         // $messages = [
@@ -612,7 +620,7 @@ class AddendumContractController extends Controller
         // ];
         // $validation = Validator::make($data, $rules, $messages);
         // $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         // if ($validation->fails()) {
@@ -624,10 +632,10 @@ class AddendumContractController extends Controller
         //     Alert::error("Error", "Silahkan isi data yang kosong!");
         //     return Redirect::back();
         // }
-    
+
         // // Check ID Contract exist
         // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         // if (empty($is_id_contract_exist)) {
         //     $request->old("note-addendum");
         //     $request->old("document-name-addendum");
@@ -637,20 +645,21 @@ class AddendumContractController extends Controller
         //     return Redirect::back();
         // }
 
-        
+
         $id_dokumen_amandemen = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
+        if (count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+            foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                 $id_document = $faker->uuid3();
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+            $addendumContractAmandemen->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $addendumContractAmandemen->list_id_document_pendukung = $id_document;
+            $addendumContractAmandemen->dokumen_pendukung = $id_document;
         }
 
         $addendumContractAmandemen->id_addendum = $data["id-addendum"];
@@ -659,7 +668,6 @@ class AddendumContractController extends Controller
         $addendumContractAmandemen->biaya_amandemen = $data["biaya-amandemen"];
         $addendumContractAmandemen->waktu_eot_amandemen = $data["waktu-eot-amandemen"];
         $addendumContractAmandemen->keterangan = $data["keterangan-amandemen"];
-        $addendumContractAmandemen->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($addendumContractAmandemen->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["dokumen-amandemen"], $id_dokumen_amandemen);

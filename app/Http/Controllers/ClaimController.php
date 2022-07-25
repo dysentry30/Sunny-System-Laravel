@@ -71,7 +71,7 @@ class ClaimController extends Controller
         // $proyekClaim = ClaimManagements::where('jenis_claim', "=", "Claim")->get();
 
 
-        return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek]);
+        return view("claimManagement/viewClaim", ['proyekClaims' => $proyekClaim, 'proyek' => $proyek, "jenis_claim" => $jenis_claim]);
     }
 
     public function claimDelete(Request $request)

@@ -90,6 +90,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/contract-management/ba-defect/upload', [ContractManagementsController::class, 'baDefectContractUpload']);
 
     Route::post('/contract-management/dokumen-pendukung/upload', [ContractManagementsController::class, 'dokumenPendukungContractUpload']);
+    
+    Route::post('/contract-management/pending-issue/upload', [ContractManagementsController::class, 'pendingIssueContractUpload']);
+
+    Route::post('/contract-management/penutupan-proyek/upload', [ContractManagementsController::class, 'penutupanProyekContractUpload']);
 
     Route::delete('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
 

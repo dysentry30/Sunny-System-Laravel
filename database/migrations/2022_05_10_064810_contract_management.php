@@ -25,6 +25,7 @@ return new class extends Migration
             $table->text("dokumen_bast_2")->nullable();
             $table->longText("list_dokumen_ba_defect")->nullable();
             $table->longText("dokumen_pendukung")->nullable();
+            $table->longText("dokumen_kontrak_dan_addendum")->nullable();
             $table->bigInteger("number_spk");
             $table->bigInteger("value");
             $table->bigInteger("value_review");

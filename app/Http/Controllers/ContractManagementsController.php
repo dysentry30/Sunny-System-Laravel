@@ -23,6 +23,7 @@ use App\Models\DokumenPendukung;
 use App\Models\KlarifikasiNegosiasiCda;
 use App\Models\KontrakBertandatangan;
 use App\Models\MomKickOffMeeting;
+use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
 use App\Models\ReviewPembatalanKontrak;
 use Illuminate\Database\Eloquent\Model;
@@ -856,6 +857,75 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Dokumen gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function pendingIssueContractUpload(Request $request, PendingIssue $pendingIssue) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $faker = new Uuid();
+        if(isset($data["pending-issue-file"])) {
+            $id_document = $faker->uuid3();
+            moveFileTemp($data["pending-issue-file"], $id_document);
+            $pendingIssue->issue = $id_document;
+        } else {
+            $pendingIssue->issue = $data["pending-issue"];
+        }
+        
+        
+        $pendingIssue->status = (bool) $data["status"];
+        $pendingIssue->id_contract = $contract->id_contract;
+        $pendingIssue->penyebab = $data["pending-issue"];
+        $pendingIssue->biaya = (int) str_replace(",", "", $data["biaya"]);
+        $pendingIssue->waktu = $data["waktu"];
+        $pendingIssue->mutu = $data["mutu"];
+        $pendingIssue->ancaman = $data["ancaman"];
+        $pendingIssue->peluang = $data["peluang"];
+        $pendingIssue->rencana_tindak_lanjut = $data["rencana-tindak-lanjut"];
+        $pendingIssue->target_waktu_penyelesaian = $data["target-waktu-penyelesaian"];
+        if($pendingIssue->save()) {
+            Alert::success("Success", "Pending Issue berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Pending Issue gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function penutupanProyekContractUpload(Request $request) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $contract = ContractManagements::find($data["id-contract"]);
+        $faker = new Uuid();
+
+        if(count($data["kontrak-dan-addendum-file"]) > 1) {
+            $list_id_document_kontrak_dan_addendum = [];
+            foreach($data["kontrak-dan-addendum-file"] as $dokumen) {
+                $id_document = $faker->uuid3();
+                array_push($list_id_document_kontrak_dan_addendum, $id_document);
+                moveFileTemp($dokumen, $id_document);
+            }
+            $contract->dokumen_kontrak_dan_addendum = join(",", $list_id_document_kontrak_dan_addendum);
+        }else {
+            $id_document = $faker->uuid3();
+            moveFileTemp($data["kontrak-dan-addendum-file"], $id_document);
+            $contract->dokumen_kontrak_dan_addendum = $id_document;
+        }
+
+        if($contract->save()) {
+            Alert::success("Success", "Dokumen Kontrak dan Addendum berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Dokumen Kontrak dan Addendum gagal ditambahkan");
         return redirect()->back();
     }
 }
