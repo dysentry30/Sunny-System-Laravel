@@ -1151,7 +1151,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="uraian-perubahan" class="form-label fs-6 fw-normal">Uraian Perubahan</label>
-                                        <input type="text" name="uraian-perubahan" class="form-control form-control-solid">
+                                        <textarea rows="3" placeholder="Input Perubahan" name="uraian-perubahan" class="form-control form-control-solid"></textarea>
                                     </div>
                                     <div class="col-6">
                                         <label for="surat-instruksi" class="form-label fs-6 fw-normal">Surat / Instruksi (Dari Owner)</label>
@@ -1478,33 +1478,33 @@
                             {{-- <form action=""></form> --}}
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal">Surat Disetujui Dari Owner</label>
+                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal required">Surat Disetujui Dari Owner</label>
                                     <input type="file" accept=".docx" name="surat-disetujui" class="form-control form-control-solid fw-normal">
                                 </div>
                                 <div class="col-6">
-                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal">Tanggal Disetujui</label>
+                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal required">Tanggal Disetujui</label>
                                     <input type="date" name="tanggal-disetujui" class="form-control form-control-solid">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal">Biaya Disetujui</label>
+                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal required">Biaya Disetujui</label>
                                     <input type="text" name="biaya-disetujui" class="form-control form-control-solid fw-normal">
                                 </div>
                                 <div class="col-6">
-                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal">Waktu / EOT Disetujui</label>
+                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal required">Waktu / EOT Disetujui</label>
                                     <input type="date" name="waktu-eot-disetujui" class="form-control form-control-solid">
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal">Keterangan</label>
+                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal required">Keterangan</label>
                                     <textarea rows="1" name="keterangan-disetujui" class="form-control form-control-solid fw-normal"></textarea>
                                 </div>
                                 <div class="col-6">
-                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
+                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal required">Dokumen Pendukung</label>
                                     <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx" multiple class="form-control form-control-solid">
                                 </div>
                             </div>
@@ -2061,7 +2061,7 @@
                     }
                     prevStep = step;
                     Toast.fire({
-                        icon: "error",
+                        icon: "success",
                         text: "Update Stage berhasil diperbarui",
                     });
                 } else {
