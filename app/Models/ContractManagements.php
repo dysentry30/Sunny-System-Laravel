@@ -88,6 +88,10 @@ class ContractManagements extends Model
     {
         return $this->hasMany(MomKickOffMeeting::class, "id_contract");
     }
+    public function PendingIssue()
+    {
+        return $this->hasMany(PendingIssue::class, "id_contract");
+    }
 
     public function getAll()
     {

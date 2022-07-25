@@ -385,7 +385,7 @@
                                         </a>
                                         <a href="#" role="link" class="stage-button color-is-default"
                                             style="outline: 0px;">
-                                            Closing Proyek
+                                            Penutupan Proyek
                                         </a>
 
                                     </div>
@@ -776,6 +776,17 @@
                             <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                 data-bs-toggle="tab" href="#kt_user_view_overview_SerahTerima"
                                 style="font-size:14px;">Serah Terima Pekerjaan</a>
+                        </li>
+                        <!--end:::Tab item Atachment & Notes-->
+
+                    @endif
+
+                    @if ($contract->stages > 4)
+                        <!--begin:::Tab item Atachment & Notes-->
+                        <li class="nav-item">
+                            <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                data-bs-toggle="tab" href="#kt_user_view_overview_penutupan_proyek"
+                                style="font-size:14px;">Penutupan Proyek</a>
                         </li>
                         <!--end:::Tab item Atachment & Notes-->
 
@@ -2403,40 +2414,86 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No</th>
-                                    <th class="min-w-125px">Dokumen</th>
+                                    <th class="min-w-125px">Issue</th>
+                                    <th class="min-w-125px">Status</th>
+                                    <th class="min-w-125px">Penyebab</th>
+                                    <th class="min-w-125px">Biaya</th>
+                                    <th class="min-w-125px">Waktu</th>
+                                    <th class="min-w-125px">Mutu</th>
+                                    <th class="min-w-125px">Ancaman</th>
+                                    <th class="min-w-125px">Peluang</th>
+                                    <th class="min-w-125px">Rencana Tindak Lanjut</th>
+                                    <th class="min-w-125px">Target Waktu Penyelesaian</th>
                                 </tr>
                                 <!--end::Table row-->
                             </thead>
                             <!--end::Table head-->
                             <!--begin::Table body-->
-                            @php
-                                $list_document_ba_defect = explode(",", $contract->list_dokumen_ba_defect);
-                            @endphp
                             <tbody class="fw-bold text-gray-400">
-                                @if (count($list_document_ba_defect) > 0 && $list_document_ba_defect[0] != "")
-                                    @forelse ($list_document_ba_defect as $key => $ba_defect)
+                                @foreach ($contract->PendingIssue as $key => $pending_issue)
                                     <tr>
-                                        <!--begin::Name=-->
-                                        <td>
-                                            <a href="/document/view/{{$contract->id_contract}}/{{$ba_defect}}" class="text-gray-600 text-hover-primary">Dokumen BA Defect #{{$key + 1}}</a>
-                                        </td>
-                                        <!--end::Name=-->
-                                    </tr>
-                                    @empty
-                                        <tr>
-                                            <td colspan="2" class="text-center bg-gray-100">
-                                                <h6><b>There is no data</b></h6>
+                                        @if (Str::isUuid($pending_issue->issue))
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <a href="/document/view/{{$contract->id_contract}}/{{$pending_issue->issue}}/pict" class="text-gray-600 text-hover-primary">Gambar #{{$key + 1}}</a>
                                             </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="2" class="text-center bg-gray-100">
-                                            <h6><b>There is no data</b></h6>
+                                            <!--end::Name=-->
+                                        @else
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->issue}}</p>
+                                            </td>
+                                            <!--end::Name=-->
+                                        @endif
+
+                                        @if ($pending_issue->status)
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <p class="text-gray-600">Open</p>
+                                            </td>
+                                            <!--end::Name=-->
+                                        @else
+                                            <!--begin::Name=-->
+                                            <td>
+                                                <p class="text-gray-600">Closed</p>
+                                            </td>
+                                            <!--end::Name=-->
+                                        @endif
+
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->penyebab}}</p>
                                         </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{number_format($pending_issue->biaya, 2, ",", ",")}}</p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->waktu}}</p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->mutu}}</p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->ancaman}}</p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->peluang}}</p>
+                                        </td>
+                                        
+                                        <td>
+                                            <p class="text-gray-600">{{$pending_issue->rencana_tindak_lanjut}}</p>
+                                        </td>
+
+                                        <td>
+                                            <p class="text-gray-600">{{Carbon\Carbon::parse($pending_issue->target_waktu_penyelesaian)->translatedFormat("d F Y")}}</p>
+                                        </td>
+                                        
                                     </tr>
-                                @endif
+                                @endforeach
                             </tbody>
                             <!--end::Table body-->
 
@@ -2491,6 +2548,42 @@
                             <!--end::Table body-->
 
                         </table>
+                        </div>
+                    </div>
+                    <!--end:::Tab pane Serah Terima-->
+
+                    <!--begin:::Tab pane Serah Terima-->
+                    <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel">
+                        <div class="card-title m-0">
+                            <h3 class="fw-normal mb-2" style="font-size:14px;">
+                                Upload Dokumen Kontrak dan Addendum
+                            </h3>
+                            <form action="/contract-management/penutupan-proyek/upload" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" value="{{$contract->id_contract}}" name="id-contract">
+                                <input type="file" accept=".docx" multiple name="kontrak-dan-addendum-file[]" class="form-control form-control-solid">
+                                <small>* Support multiple file upload</small>
+                                <br><br>
+                                <button type="submit" class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4;">Save Dokumen</button>
+                            </form>
+                            <hr>
+                            @php
+                                $list_dokumen_kontrak_dan_addendum = explode(",", $contract->dokumen_kontrak_dan_addendum);
+                            @endphp
+                            @if (count($list_dokumen_kontrak_dan_addendum) > 0 && $list_dokumen_kontrak_dan_addendum[0] != "")
+                                <b>Daftar Dokumen Kontrak dan Addendum</b>
+                                <ul class="list-group list-group-flush">
+                                @foreach ($list_dokumen_kontrak_dan_addendum as $key => $kontrak_dan_addendum)
+                                    <li class="list-group-item">
+                                        <a href="/document/view/{{$contract->id_contract}}/{{$kontrak_dan_addendum}}" class="text-gray-600 text-hover-primary">Dokumen #{{$key + 1}}</a>
+                                    </li>
+                                @endforeach
+                                </ul>
+                            @else 
+                                <p>Dokumen Belum Diupload</p>
+                            @endif
+                        </div>
+                        {{-- list_dokumen_ba_defect --}}
                     </div>
                     <!--end:::Tab pane Serah Terima-->
 
@@ -4064,6 +4157,174 @@
         <!--end::Modal content-->
     </div>
     <!--end::Modal - Input Dokumen Lainnya Serah Terima-->
+
+    <!--begin::Modal - Input Pending Issue Serah Terima-->
+    <div class="modal fade" id="kt_modal_pending_issue" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Pending Issue</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+        
+                    <form action="/contract-management/pending-issue/upload" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="id-contract" value="{{$contract->id_contract}}">
+
+                        <div class="row">
+                            <div class="col d-flex flex-column justify-content-center">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Masukan file dibawah ini</span>
+                                </label>
+                                <!--end::Label-->
+                                <input type="file" accept=".jpg,.jpeg,.png" name="pending-issue-file" class="form-control form-control-solid">
+                                {{-- end::Read File --}}
+                                <small>* hanya menerima file dengan format <b>.jpg</b>, <b>.jpeg</b> dan <b>.png</b></small>
+                            </div>
+
+                            <div class="col-1 d-flex flex-col align-items-center justify-content-center mt-8">
+                                <p><b>atau</b></p>
+                            </div>
+
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Issue</span>
+                                </label>
+                                <!--end::Label-->
+                                <textarea name="pending-issue" rows="1" class="form-control form-control-solid"></textarea>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Status</span>
+                                </label>
+                                <!--end::Label-->
+                                <select name="status" id="status" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Status" data-select2-id="select2-data-project-id" tabindex="-1" aria-hidden="true">
+                                    <option value=""></option>
+                                    <option value="1">Open</option>
+                                    <option value="0">Close</option>
+                                </select>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="col">
+                            <h3 class="text-center"><b>Resiko / Dampak</b></h3>
+                            <div class="row">
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Biaya</span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <input type="text" class="form-control form-control-solid" name="biaya" id="biaya">
+                                </div>
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Waktu</span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <input type="date" class="form-control form-control-solid" name="waktu" id="waktu">
+                                </div>
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span style="font-weight: normal">Mutu</span>
+                                    </label>
+                                    <!--end::Label-->
+
+                                    <input type="text" class="form-control form-control-solid" name="mutu" id="mutu">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Ancaman</span>
+                                </label>
+                                <!--end::Label-->
+
+                                <input type="text" class="form-control form-control-solid" name="ancaman" id="ancaman">
+                            </div>
+                            
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Peluang</span>
+                                </label>
+                                <!--end::Label-->
+    
+                                <input type="text" class="form-control form-control-solid" name="peluang" id="peluang">
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Rencana Tindak Lanjut</span>
+                                </label>
+                                <!--end::Label-->
+    
+                                <textarea class="form-control form-control-solid" rows="1" name="rencana-tindak-lanjut" id="rencana-tindak-lanjut"></textarea>
+                            </div>
+
+                            <div class="col d-flex flex-column justify-content-center">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span style="font-weight: normal">Target Waktu Penyelesaian</span>
+                                </label>
+                                <!--end::Label-->
+    
+                                <input type="date" class="form-control form-control-solid" name="target-waktu-penyelesaian" id="target-waktu-penyelesaian">
+                            </div>
+                        </div>
+                        
+                        <br> <br>
+                        <button type="submit" id="pending-issue" class="btn btn-lg btn-primary">Save</button>
+        
+                    </form>
+                </div>
+                <!--end::Input group-->
+        
+        
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal - Input Pending Issue Serah Terima-->
 
     <!--begin::Modal - Question Tender Menang-->
     <div class="modal fade" id="kt_modal_question_menang" tabindex="-1" aria-hidden="true">
