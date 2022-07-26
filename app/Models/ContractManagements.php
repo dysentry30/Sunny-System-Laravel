@@ -96,6 +96,10 @@ class ContractManagements extends Model
     {
         return $this->hasMany(UsulanPerubahanDraft::class, "id_contract");
     }
+    public function RencanaKerjaManajemen()
+    {
+        return $this->hasMany(RencanKerjaManajemenKontrak::class, "id_contract");
+    }
 
     public function getAll()
     {

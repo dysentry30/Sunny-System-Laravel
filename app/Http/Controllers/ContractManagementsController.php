@@ -25,6 +25,7 @@ use App\Models\KontrakBertandatangan;
 use App\Models\MomKickOffMeeting;
 use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
+use App\Models\RencanKerjaManajemenKontrak;
 use App\Models\ReviewPembatalanKontrak;
 use App\Models\UsulanPerubahanDraft;
 use Illuminate\Database\Eloquent\Model;
@@ -319,24 +320,41 @@ class ContractManagementsController extends Controller
     {
         $faker = new Uuid();
         $id_document = (string) $faker->uuid3();
-        $file = $request->file("attach-file-review");
+        // $file = $request->file("attach-file-review");
         $data = $request->all();
-        // dd($data);
         $messages = [
             "required" => "This field is required",
             "numeric" => "This field must be numeric only",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
-        $rules = [
-            "attach-file-review" => "required|file",
-            "document-name-review" => "required|string",
-            "note-review" => "required|string",
-            "id-contract" => "required|numeric",
-        ];
-        $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
 
-        $reviewContracts->document_name_review = $data["document-name-review"];
+        $is_input_has_set = $data["ketentuan-review"] != null ||
+                            $data["sub-pasal-review"] != null ||
+                            $data["uraian-penjelasan-review"] != null ||
+                            $data["pic-cross-review"] != null ||
+                            $data["catatan-review"] != null;
+
+        if(isset($data["upload-review"]) && !$is_input_has_set) {
+            $rules = [
+                "upload-review" => "required|file",
+            ];
+        } else if(!isset($data["upload-review"]) && $is_input_has_set) {
+            $rules = [
+                "ketentuan-review" => "required|string",
+                "sub-pasal-review" => "required|string",
+                "uraian-penjelasan-review" => "required|string",
+                "catatan-review" => "required|string",
+                "pic-cross-review" => "required|numeric",
+                "id-contract" => "required|numeric",
+            ];
+        } else {
+            Alert::error("Error", "Pilih salah satu untuk dijadikan masukan");
+            return redirect()->back();
+        }
+
+        // $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
+
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             // dd($validation->errors());
@@ -355,13 +373,39 @@ class ContractManagementsController extends Controller
         }
         $validation->validate();
 
-        $reviewContracts->id_document = $id_document;
-        $reviewContracts->note_review = $data["note-review"];
-        $reviewContracts->id_contract = $data["id-contract"];
-        $reviewContracts->tender_menang = $is_tender_menang;
+        if(isset($data["upload-review"]) && !$is_input_has_set) {
+            // $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReader("Xlsx");
+            // $spreadsheet = $reader->load($data["upload-review"]);
+            $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($data["upload-review"]);
+            $spreadsheet = $spreadsheet->getActiveSheet()->toArray();
+            array_unshift($spreadsheet);
+            dd($spreadsheet);
+            foreach($spreadsheet as $data_excel) {
+                $reviewContractsExcel = new ReviewContracts();
+                $reviewContractsExcel->ketentuan = $data_excel[0];
+                $reviewContractsExcel->stage = $data["stage"];
+                $reviewContractsExcel->sub_pasal = $data_excel[1];
+                $reviewContractsExcel->uraian = $data_excel[2];
+                $reviewContractsExcel->pic_cross = $data_excel[3];
+                $reviewContractsExcel->catatan = $data_excel[4];
+                $reviewContractsExcel->id_contract = $is_id_contract_exist->id_contract;
+                $reviewContractsExcel->save();
+            }
+            Alert::success("Success", "Data berhasil di import ");
+            return redirect()->back();
+            // moveFileTemp($file, $id_document);
+        } else {
+            $reviewContracts->stage = $data["stage"];
+            $reviewContracts->ketentuan = $data["ketentuan-review"];
+            $reviewContracts->sub_pasal = $data["sub-pasal-review"];
+            $reviewContracts->id_contract = $data["id-contract"];
+            $reviewContracts->uraian = $data["uraian-penjelasan-review"];
+            $reviewContracts->pic_cross = $data["pic-cross-review"];
+            $reviewContracts->catatan = $data["catatan-review"];
+        }
 
         if ($reviewContracts->save()) {
-            moveFileTemp($file, $id_document);
+            
             Alert::success('Success', "Review Contract berhasil dibuat");
             return redirect($_SERVER["HTTP_REFERER"]);
         }
@@ -949,6 +993,25 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Usulan Perubahan Draft gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function rencanaKerjaManajemenContractUpload(Request $request, RencanKerjaManajemenKontrak $rencanKerjaManajemenKontrak) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract;
+        $rencanKerjaManajemenKontrak->ketentuan_rencana_kerja = $data["ketentuan-rencana-kerja"];
+        $rencanKerjaManajemenKontrak->informasi_lengkap_adkon = $data["kelengkapan-adkon"];
+        if($rencanKerjaManajemenKontrak->save()) {
+            Alert::success("Success", "Rencana Kerja Manajemen Kontrak berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
         return redirect()->back();
     }
 }
