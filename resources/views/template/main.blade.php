@@ -1053,12 +1053,68 @@
     <!--begin:: show calendar-->
     <script>
         const calendarElt = document.querySelector("#kt_modal_calendar");
+
         if(calendarElt) {
+            // Begin :: Set Date Clickable
+            function setDateClickable(rootElt) {
+                const dates = document.querySelectorAll(
+                    `${rootElt} .calendar__body .calendar__dates .calendar__date`);
+                dates.forEach(elt => {
+                    elt.addEventListener("click", e => {
+                        dates.forEach(d => {
+                            if (d.classList.contains("calendar__date--selected")) {
+                                d.classList.remove("calendar__date--selected");
+                                d.classList.remove("calendar__date--range-end");
+                                d.classList.remove("calendar__date--first-date");
+                            }
+                        });
+
+                        if (elt.classList.contains("calendar__date--selected")) {
+                            elt.classList.remove("calendar__date--selected");
+                            elt.classList.remove("calendar__date--range-end");
+                            elt.classList.remove("calendar__date--first-date");
+                        } else {
+                            // if (rootElt.toString().match("end")) {
+                            //     dateEnd = Number(elt.firstElementChild.innerText);
+                            //     const dateStart = document.querySelectorAll(
+                            //         `#start-date .calendar__body .calendar__dates .calendar__date`
+                            //     );
+                            //     dateStart.forEach((d, i) => {
+                            //         if (i + 1 == dateEndFix) {
+                            //             d.classList.add("calendar__date--range-start");
+                            //         } else {
+                            //             d.classList.remove("calendar__date--range-start");
+                            //         }
+                            //     });
+                            // } else {
+                            //     date = Number(elt.firstElementChild.innerText);
+                            //     const dateEnd = document.querySelectorAll(
+                            //         `#end-date .calendar__body .calendar__dates .calendar__date`
+                            //     );
+                            //     dateEnd.forEach((d, i) => {
+                            //         if (i + 1 <= date && monthEndFix < month) {
+                            //             // d.classList.add("calendar__date--range-start");
+                            //             d.classList.add("calendar__date--grey");
+                            //         } else {
+                            //             d.classList.remove("calendar__date--range-start");
+                            //         }
+                            //     });
+                            // }
+                            elt.classList.add("calendar__date--selected");
+                            elt.classList.add("calendar__date--range-end");
+                            elt.classList.add("calendar__date--first-date");
+                        }
+                    });
+                });
+            }
+            setDateClickable("#kt_modal_calendar");
+            // End :: Set Date Clickable
             const calendarBoots = new bootstrap.Modal(calendarElt, {});
             let dateInputElt = null;
             function showCalendarModal(elt) {
                 calendarBoots.show();
                 dateInputElt = elt.parentElement.querySelector("input[type='date']");
+                console.log(dateInputElt);
             }
     
             function setCalendar() {
@@ -1066,7 +1122,6 @@
                 const month = calendarElt.querySelector("#calendar__month").value;
                 const year = calendarElt.querySelector("#calendar__year").value;
                 const valueDate = `${year}-${month.toString().padStart(2, "0")}-${date.innerText.padStart(2, "0")}`;
-                console.log(valueDate);
                 dateInputElt.value = valueDate;
             }
         }
