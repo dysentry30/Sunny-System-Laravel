@@ -17,7 +17,7 @@ class ClaimManagements extends Model
     ];
 
     public $sortable = [
-        'nilai_claim', 'kode_proyek'
+        'nilai_claim', 'kode_proyek', 'id_contract' 
     ];
 
     public function contract() {

@@ -57,6 +57,66 @@
                 <div class="col-xl-15">
                     <!--begin::Contacts-->
                     <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                        <!--begin::Card header-->
+                        <div class="card-header border-0 pt-1">
+                            <!--begin::Card title-->
+                            <div class="card-title">
+                                <!--begin::Search-->
+                                {{-- <div class="d-flex align-items-center position-relative my-1">
+                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                        <i class="bi bi-search"></i>
+                                    </span>
+                                    <!--end::Svg Icon-->
+                                    <input type="text" data-kt-customer-table-filter="search"
+                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Addendum" />
+                                </div> --}}
+                                <!--end::Search-->
+
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$column == "" ? "selected": ""}}></option>
+                                        <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
+                                        <option value="kode_proyek" {{$column == "kode_proyek" ? "selected" : ""}}>Kode Proyek</option>
+                                        {{-- <option value="uraian_perubahan" {{$column == "uraian_perubahan" ? "selected" : ""}}>Uraian Perubahan</option> --}}
+                                    </select>
+                                    <!--End:: Select Options-->
+                                    
+                                    <!--begin:: Input Filter-->
+                                    
+                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}" class="form-control form-control-solid ms-2" placeholder="Input Filter"/>
+                                    
+                                    <!--end:: Input Filter-->
+                                    
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                    <!--end:: Filter-->
+                                    
+                                    <!--begin:: RESET-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <script>
+                                        function resetFilter() {
+                                            $("#column").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#filter").text({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+                            </div>
+                            <!--begin::Card title-->
+
+                        </div>
+                        <!--end::Card header-->
 
                         <!--begin::Card body-->
                         <div class="card-body pt-5">
@@ -101,10 +161,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">ID Contract</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -114,29 +174,29 @@
                                             @foreach ($proyekClaim as $proyekClaims)
                                                     <tr>
 
-                                                        <!--begin::Name=-->
+                                                        <!--begin::Action-->
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ $proyekClaims->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->id_contract }}</a>
+                                                        </td>
+                                                        <!--end::Action-->
+                                                        <!--begin::Name-->
                                                         <td>
                                                             {{-- <a class="text-hover-primary text-gray-500"
                                                                 href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                             </a> --}}
                                                             <a href="/claim-management/proyek/{{ $proyekClaims->kode_proyek }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->kode_proyek }}</a>
                                                         </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
+                                                        <!--end::Name-->
+                                                        <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekClaims->nama_proyek }}
+                                                            {{ $proyekClaims->project->nama_proyek }}
                                                         </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
+                                                        <!--end::Name Proyek-->
+                                                        <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekClaims->UnitKerja->unit_kerja }}
+                                                            {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                         </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ $proyekClaims->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a>
-                                                        </td>
-                                                        <!--end::Action=-->
+                                                        <!--end::Unit Kerja-->
                                                     </tr>
                                             @endforeach
                                         </tbody>
@@ -155,10 +215,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">ID Contract</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -170,31 +230,26 @@
                                             @foreach ($proyekAnti as $proyekAntis)
                                                 <tr>
 
-                                                    <!--begin::Name=-->
+                                                    <!--begin::Action-->
+                                                    <td>
+                                                        <a href="/contract-management/view/{{ $proyekAntis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->id_contract }}</a>
+                                                    </td>
+                                                    <!--end::Action-->
+                                                    <!--begin::Name-->
                                                     <td>
                                                         <a href="/claim-management/proyek/{{ $proyekAntis->kode_proyek }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
                                                     </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Name=-->
+                                                    <!--end::Name-->
+                                                    <!--begin::Name Proyek-->
                                                     <td>
-                                                        {{ $proyekAntis->nama_proyek }}
+                                                        {{ $proyekClaims->project->nama_proyek }}
                                                     </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Email=-->
+                                                    <!--end::Name Proyek-->
+                                                    <!--begin::Unit Kerja-->
                                                     <td>
-                                                        {{ $proyekAntis->UnitKerja->unit_kerja }}
+                                                        {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                     </td>
-                                                    <!--end::Email=-->
-                                                    <!--begin::Action=-->
-                                                    <td>
-                                                        <a href="/contract-management/view/{{ $proyekAntis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->ContractManagements->id_contract }}</a>
-                                                    </td>
-                                                    <!--end::Action=-->
-                                                    <!--begin::Action=-->
-                                                    {{-- <td>
-                                                        {{ count($proyekAnti) }}
-                                                    </td> --}}
-                                                    <!--end::Action=-->
+                                                    <!--end::Unit Kerja-->
                                                 </tr>
                                         @endforeach
                                         </tbody>
@@ -213,7 +268,7 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
                                                 <th class="min-w-auto">ID Contract</th>
@@ -227,25 +282,25 @@
                                             @foreach ($proyekAsuransi as $proyekAsuransis)
                                                     <tr>
 
-                                                        <!--begin::Name=-->
+                                                        <!--begin::Action-->
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ $proyekAsuransis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->id_contract }}</a>
+                                                        </td>
+                                                        <!--end::Action-->
+                                                        <!--begin::Name-->
                                                         <td>
                                                             <a href="/claim-management/proyek/{{ $proyekAsuransis->kode_proyek }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
+                                                            <!--end::Name-->
+                                                        <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekAsuransis->nama_proyek }}
+                                                            {{ $proyekClaims->project->nama_proyek }}
                                                         </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
+                                                        <!--end::Name Proyek-->
+                                                        <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekAsuransis->UnitKerja->unit_kerja }}
+                                                            {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                         </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ $proyekAsuransis->ContractManagements->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->ContractManagements->id_contract }}</a>
-                                                        </td>
-                                                        <!--end::Action=-->
+                                                        <!--end::Unit Kerja-->
                                                     </tr>
                                             @endforeach
                                         </tbody>

@@ -95,6 +95,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/contract-management/penutupan-proyek/upload', [ContractManagementsController::class, 'penutupanProyekContractUpload']);
 
+    Route::post('/contract-management/usulan-perubahan-draft/upload', [ContractManagementsController::class, 'usulanPerubahanDraftContractUpload']);
+
     Route::delete('/contract-management/{contractManagement}/delete', [ContractManagementsController::class, 'delete']);
 
     Route::get('/contract-management/view/{id_contract}', [ContractManagementsController::class, 'viewContract']);
@@ -132,6 +134,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post("/addendum-contract/draft/update", [AddendumContractController::class, "draftUpdate"]);
 
+    Route::get('change-request', [AddendumContractController::class, 'changeRequest']);
     // end :: contract management
 
 
@@ -143,9 +146,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::delete('/pasal/delete/{pasal}', [PasalController::class, 'destroy']);
 
     Route::get('/pasal/{pasal}', [PasalController::class, 'show']);
-
-    Route::get('change-request', [PasalController::class, 'changeRequest']);
-
     // end :: Pasal
 
 

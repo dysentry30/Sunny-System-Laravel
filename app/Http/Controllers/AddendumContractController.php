@@ -19,6 +19,31 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class AddendumContractController extends Controller
 {
+    public function changeRequest(Request $request)
+    {
+        $column = $request->get("column");
+        $filter = $request->get("filter");
+        
+        if ($column == "uraian_perubahan"){
+            $addendumContracts = AddendumContractDrafts::sortable()->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
+        }else if (!empty($column)){
+            $addendumContracts = AddendumContracts::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+        }else{
+        $addendumContracts = AddendumContracts::sortable()->get();
+        // $arrayDrafts = [];
+        // foreach ($addendumContracts as $addendumContract) {
+        //     $idAddendum = $addendumContract->id_addendum;
+        //     $addendumDrafts = AddendumContractDrafts::sortable()->where("id_addendum", '=', $idAddendum)->get();
+        //     // dump($addendumDrafts->each);
+        //     array_push($arrayDrafts, $addendumDrafts->each);
+        //     }
+        //     dump($arrayDrafts);
+        }    
+        // dd();
+        
+        return view("9_Change_request", compact(["addendumContracts", 'column', 'filter']));
+    }
+
     // upload data addendum to server or database
     public function upload(Request $request, AddendumContracts $addendumContracts)
     {

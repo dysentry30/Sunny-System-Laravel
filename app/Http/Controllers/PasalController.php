@@ -38,10 +38,6 @@ class PasalController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function changeRequest()
-    {
-        return view("9_Change_request", ["addendumContracts" => AddendumContracts::all()]);
-    }
 
     /**
      * Remove the specified resource from storage.
