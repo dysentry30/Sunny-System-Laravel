@@ -47,11 +47,11 @@
                     <!--begin::Card "style edited"-->
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
                             <!--begin::Card header-->
-                            <div class="card-header border-0 pt-">
+                            <div class="card-header border-0 pt-1">
                                 <!--begin::Card title-->
                                 <div class="card-title">
                                     <!--begin::Search-->
-                                    <div class="d-flex align-items-center position-relative my-1">
+                                    {{-- <div class="d-flex align-items-center position-relative my-1">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                             <i class="bi bi-search"></i>
@@ -59,8 +59,48 @@
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-customer-table-filter="search"
                                             class="form-control form-control-solid w-250px ps-15" placeholder="Search Addendum" />
-                                    </div>
+                                    </div> --}}
                                     <!--end::Search-->
+
+                                    <!--Begin:: BUTTON FILTER-->
+                                    <form action="" class="d-flex flex-row w-auto" method="get">
+                                        <!--Begin:: Select Options-->
+                                        <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                            <option {{$column == "" ? "selected": ""}}></option>
+                                            <option value="no_addendum" {{$column == "no_addendum" ? "selected" : ""}}>No Addendum</option>
+                                            <option value="created_at" {{$column == "created_at" ? "selected" : ""}}>Tanggal Diajukan</option>
+                                            {{-- <option value="uraian_perubahan" {{$column == "uraian_perubahan" ? "selected" : ""}}>Uraian Perubahan</option> --}}
+                                        </select>
+                                        <!--End:: Select Options-->
+                                        
+                                        <!--begin:: Input Filter-->
+                                        
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}" class="form-control form-control-solid ms-2" placeholder="Input Filter"/>
+                                        
+                                        <!--end:: Input Filter-->
+                                        
+                                        <!--begin:: Filter-->
+                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                        Filter</button>
+                                        <!--end:: Filter-->
+                                        
+                                        <!--begin:: RESET-->
+                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                        onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                        <script>
+                                            function resetFilter() {
+                                                $("#column").select2({
+                                                    minimumResultsForSearch: -1
+                                                }).val("").trigger("change");
+                                                
+                                                $("#filter").text({
+                                                    minimumResultsForSearch: -1
+                                                }).val("").trigger("change");
+                                            }
+                                        </script>
+                                        <!--end:: RESET-->
+                                    </form>
+                                    <!--end:: BUTTON FILTER-->
                                 </div>
                                 <!--begin::Card title-->
 
@@ -75,9 +115,10 @@
                                     <thead>
                                         <!--begin::Table row-->
                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                            <th class="min-w-auto">No. Addendum</th>
+                                            <th class="min-w-auto">@sortablelink('no_addendum','No Addendum')</th>
+                                            <th class="min-w-auto">@sortablelink('created_at','Tanggal Diajukan')</th>
+                                            {{-- <th class="min-w-auto">@sortablelink('uraian_perubahan','Uraian Perubahan')</th> --}}
                                             <th class="min-w-auto">Uraian Perubahan</th>
-                                            <th class="min-w-auto">Tanggal Diajukan</th>
                                             <th class="min-w-auto">Tgl Disetujui/Ditolak</th>
                                             <th class="min-w-auto">Status</th>
                                             <th class="min-w-auto">Tanggal Amandemen</th>
@@ -97,24 +138,24 @@
                                                 <a class="text-gray-800 text-hover-primary mb-1" href="/contract-management/view/{{$addendumContract->id_contract}}/addendum-contract/{{$addendumContract->id_addendum}}">{{ $addendumContract->no_addendum }}</a>
                                             </td>
                                             <!--end::No Adendum-->
-                                            <!--begin::Uraian Perubahan-->
-                                            @foreach ($addendumContract->addendumContractDrafts as $adendumDraft)
-                                            <td>
-                                                <p class="">
-                                                    {{ $adendumDraft->uraian_perubahan }}
-                                                </p>
-                                            </td>
-                                            @endforeach
-                                            <!--end::Uraian Perubahan-->
                                             <!--begin::Tanggal Diajukan-->
                                             <td>
                                                 {{ date_format(date_create($addendumContract->created_at), 'd M Y') }}
                                             </td>
                                             <!--end::Tanggal Diajukan-->
+                                            <!--begin::Uraian Perubahan-->
+                                            <td>
+                                                @foreach ($addendumContract->addendumContractDrafts as $adendumDraft)
+                                                <p class="">
+                                                    {{ $adendumDraft->uraian_perubahan }}
+                                                </p>
+                                                @endforeach
+                                            </td>
+                                            <!--end::Uraian Perubahan-->
                                             <!--begin::Tanggal Disetujui-->
                                             <td>
                                                 @foreach ($addendumContract->addendumContractDisetujui as $adendumDisetujui)
-                                                {{ date_format(date_create($adendumDisetujui->tanggal_disetujui), 'd M Y') }}
+                                                {{ date_format(date_create($adendumDisetujui->tanggal_disetujui), 'd M Y' ) }}
                                                 @endforeach
                                             </td>
                                             <!--end::Tanggal Disetujui-->

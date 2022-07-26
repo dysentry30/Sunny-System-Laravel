@@ -134,7 +134,7 @@
                                         </span>
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
-                                            class="form-control form-control-solid ps-15" placeholder="Search Proyek" />
+                                            class="form-control form-control-solid ps-15" placeholder="Kode/Nama Proyek" />
                                     </div>
                                 </form>
                                 <!--end::Search-->

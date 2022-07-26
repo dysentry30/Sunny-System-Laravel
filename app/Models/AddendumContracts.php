@@ -4,10 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class AddendumContracts extends Model
 {
     use HasFactory;
+    use Sortable;
+
+    public $sortable = [
+        'no_addendum', 'created_at'
+    ];
+
     protected $primaryKey = "id_addendum";
 
     public function addendumContractDrafts()
