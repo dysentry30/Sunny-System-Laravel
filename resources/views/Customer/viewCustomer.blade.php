@@ -608,16 +608,16 @@
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($strukturs as $struktur)
                                                                 <tr>
-                                                                    <!--begin::Name=-->
+                                                                    <!--begin::Name-->
                                                                     <td>
                                                                         {{ $struktur->nama_struktur }}
                                                                     </td>
-                                                                    <!--end::Name=-->
-                                                                    <!--begin::Email=-->
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Email-->
                                                                     <td>
                                                                         {{ $struktur->email_struktur }}
                                                                     </td>
-                                                                    <!--end::Email=-->
+                                                                    <!--end::Email-->
                                                                     <!--begin::Jabatan-->
                                                                     <td>
                                                                         {{ $struktur->jabatan_struktur }}
@@ -673,28 +673,28 @@
                                                                         @foreach ($proyekberjalan as $proyekberjalan0)
                                                                         @if ( $proyekberjalan0->stage <= 7)
                                                                         <tr>
-                                                                            <!--begin::Name=-->
+                                                                            <!--begin::Name-->
                                                                             <td>
                                                                                 <a href="#" class="text-gray-800 text-hover-primary mb-1">
                                                                                     {{ $proyekberjalan0->nama_proyek }}
                                                                                 </a>
                                                                             </td>
-                                                                            <!--end::Name=-->
-                                                                            <!--begin::Kode=-->
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Kode-->
                                                                             <td>
                                                                                 <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                                                     {{ $proyekberjalan0->proyek->nospk_external }}
                                                                                 </a>
                                                                             </td>
-                                                                            <!--end::Kode=-->
-                                                                            <!--begin::Unit=-->
+                                                                            <!--end::Kode-->
+                                                                            <!--begin::Unit-->
                                                                             <td>
                                                                                 {{ $proyekberjalan0->UnitKerja->unit_kerja }}
                                                                             </td>
-                                                                            <!--end::Unit=-->
-                                                                            <!--begin::Nilai OK=-->
+                                                                            <!--end::Unit-->
+                                                                            <!--begin::Nilai OK-->
                                                                             <td>{{ $proyekberjalan0->nilaiok_proyek }}</td>
-                                                                            <!--end::Nilai OK=-->
+                                                                            <!--end::Nilai OK-->
                                                                             <!--begin::Durasi-->
                                                                             <td>
                                                                                 @php
@@ -702,13 +702,13 @@
                                                                                     $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
                                                                                     $durasi = $tglakhir->diff($tglawal);
                                                                                 @endphp
-                                                                                {{ $durasi->y }} Tahun
+                                                                                {{ $durasi->y }} Tahun,
                                                                                 {{ $durasi->m }} Bulan
                                                                             </td>
                                                                             <!--end::Durasi-->
-                                                                            <!--begin::Start=-->
+                                                                            <!--begin::Start-->
                                                                             <td>{{ date_format($tglawal, "d-M-Y") }} / {{ date_format($tglakhir, "d-M-Y") }}</td>
-                                                                            <!--end::End=-->
+                                                                            <!--end::End-->
                                                                         </tr>
                                                                         @endif
                                                                         @endforeach
@@ -753,20 +753,20 @@
                                                                         @foreach ($proyekberjalan as $proyekberjalan6)
                                                                         @if ( $proyekberjalan6->stage > 7)
                                                                         <tr>
-                                                                            <!--begin::Name=-->
+                                                                            <!--begin::Name-->
                                                                             <td>
                                                                                 <a href="#" class="text-gray-800 text-hover-primary mb-1 text-break">
                                                                                     {{ $proyekberjalan6->nama_proyek }}
                                                                                 </a>
                                                                             </td>
-                                                                            <!--end::Name=-->
-                                                                            <!--begin::No.SPK=-->
+                                                                            <!--end::Name-->
+                                                                            <!--begin::No.SPK-->
                                                                             <td>{{ $proyekberjalan6->proyek->nospk_external }}</td>
-                                                                            <!--end::No.SPK=-->
-                                                                            <!--begin::Unit=-->
+                                                                            <!--end::No.SPK-->
+                                                                            <!--begin::Unit-->
                                                                             <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}</td>
-                                                                            <!--end::Unit=-->
-                                                                            <!--begin::Nama Proyek=-->
+                                                                            <!--end::Unit-->
+                                                                            <!--begin::Nama Proyek-->
                                                                             <td class="text-center">
                                                                                 @switch($proyekberjalan6->stage)
                                                                                     @case("1") Pasar Dini
@@ -790,16 +790,16 @@
                                                                                     @default Selesai
                                                                                 @endswitch
                                                                             </td>
-                                                                            <!--end::Nama Proyek=-->
-                                                                            <!--begin::Divisi=-->
-                                                                            <td>#Divisi</td>
-                                                                            <!--end::Divisi=-->
-                                                                            <!--begin::Provinsi=-->
+                                                                            <!--end::Nama Proyek-->
+                                                                            <!--begin::Divisi-->
+                                                                            <td>{{ $proyekberjalan6->proyek->UnitKerja->divisi }}</td>
+                                                                            <!--end::Divisi-->
+                                                                            <!--begin::Provinsi-->
                                                                             <td>{{ $proyekberjalan6->proyek->provinsi }}</td>
-                                                                            <!--end::Provinsi=-->
-                                                                            <!--begin::Tanggal Kontrak=-->
+                                                                            <!--end::Provinsi-->
+                                                                            <!--begin::Tanggal Kontrak-->
                                                                             <td>{{ $proyekberjalan6->proyek->tanggal_mulai_terkontrak }}</td>
-                                                                            <!--end::Tanggal Kontrak=-->
+                                                                            <!--end::Tanggal Kontrak-->
                                                                             <!--begin::Durasi-->
                                                                             <td>
                                                                                 @php
@@ -807,7 +807,7 @@
                                                                                     $tglawal = new DateTime($proyekberjalan6->proyek->tanggal_mulai_terkontrak);
                                                                                     $durasi = $tglakhir->diff($tglawal);
                                                                                 @endphp
-                                                                                {{ $durasi->y }} Tahun
+                                                                                {{ $durasi->y }} Tahun,
                                                                                 {{ $durasi->m }} Bulan
                                                                             </td>
                                                                             <!--end::Durasi-->
@@ -826,7 +826,115 @@
 
                                                             <br><br>
 
-                                                            <!--begin::Input Forecast Proyek-->
+                                                            <!--begin:: FORECAST Proyek-->
+                                                            <div class="card-title m-0">
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                                                    Forecast Proyek
+                                                                </h3>
+                                                                <!--begin::Table-->
+                                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Stage</th>
+                                                                            <th class="min-w-auto">Unit kerja</th>
+                                                                            <th class="min-w-auto">Nilai Forecast</th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    <tbody class="fw-bold text-gray-600">
+
+                                                                        @if (isset($proyekberjalan))
+                                                                        @foreach ($proyekberjalan as $proyekberforecast)
+                                                                        <tr>
+                                                                            <!--begin::Name-->
+                                                                            <td>
+                                                                                <a href="#" class="text-gray-800 text-hover-primary mb-1 text-break">
+                                                                                    {{ $proyekberforecast->nama_proyek }}
+                                                                                </a>
+                                                                            </td>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Divisi-->
+                                                                            <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}</td>
+                                                                            <!--end::Divisi-->
+                                                                            <!--begin::Stage-->
+                                                                            <td class="text-center">
+                                                                                @switch($proyekberforecast->stage)
+                                                                                    @case("1") Pasar Dini
+                                                                                        @break
+                                                                                    @case("2") Pasar Potensial
+                                                                                        @break
+                                                                                    @case("3") Prakualifikasi
+                                                                                        @break
+                                                                                    @case("4") Tender Diikuti
+                                                                                        @break
+                                                                                    @case("5") Perolehan
+                                                                                        @break
+                                                                                    @case("6") Menang
+                                                                                        @break
+                                                                                    @case("7") Kalah
+                                                                                        @break
+                                                                                    @case("8") Terkontrak
+                                                                                        @break
+                                                                                    @case("9") Terendah
+                                                                                        @break
+                                                                                    @default Selesai
+                                                                                @endswitch
+                                                                            </td>
+                                                                            <!--end::Stage-->
+                                                                            <!--begin::Nilai Forecast-->
+                                                                            <td>
+                                                                            @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
+                                                                            @switch($forecast->month_forecast)
+                                                                                @case("1") Januari
+                                                                                    @break
+                                                                                @case("2") Februari
+                                                                                    @break
+                                                                                @case("3") Maret
+                                                                                    @break
+                                                                                @case("4") April
+                                                                                    @break
+                                                                                @case("5") Mei
+                                                                                    @break
+                                                                                @case("6") Juni
+                                                                                    @break
+                                                                                @case("7") Juli
+                                                                                    @break
+                                                                                @case("8") Agustus
+                                                                                    @break
+                                                                                @case("9") September
+                                                                                    @break
+                                                                                @case("10") Oktober
+                                                                                    @break
+                                                                                @case("11") November
+                                                                                    @break
+                                                                                @case("12") Desember
+                                                                                    @break
+                                                                                @default Selesai
+                                                                            @endswitch
+
+                                                                                : {{ $forecast->nilai_forecast }};<br>
+                                                                            @endforeach
+                                                                            </td>
+                                                                            <!--end::Nilai Forecast-->
+                                                                        </tr>
+                                                                        @endforeach
+                                                                        @endif
+                                                                        
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
+                                                            <!--end::Card title-->
+
+                                                            <br><br>
+
+                                                            {{-- <!--begin::Input Forecast Proyek-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Forecast Proyek
                                                             </h3>
@@ -906,13 +1014,9 @@
                                                                     <!--End begin::Col-->
                                                                 </div>
                                                                 <!--End begin::Row-->
-                                                            <!--end::Input Forecast Proyek-->
+                                                            <!--end::Input Forecast Proyek--> --}}
 
-
-                                                            <!--begin::Menu separator-->
-                                                            {{-- <div class="separator border-gray-200" style="margin-top: 10px;"></div> --}}
-                                                            <!--end::Menu separator-->
-                                                            <!--begin::Proyek Terkontrak-->
+                                                            <!--begin:: FORECAST Proyek-->
                                                     </div>
 <!--end:::Tab pane History-->
 
@@ -958,26 +1062,26 @@
                                                                             @if (isset($attachment))
                                                                             @foreach ($attachment as $attachment)
                                                                             <tr>
-                                                                                <!--begin::Name=-->
+                                                                                <!--begin::Name-->
                                                                                 
                                                                                 <td>
                                                                                     <a href="#" class="text-gray-800 text-hover-primary mb-1">
                                                                                         {{ $attachment->name_customer }}
                                                                                     </a>
                                                                                 </td>
-                                                                                <!--end::Name=-->
-                                                                                <!--begin::Kode=-->
+                                                                                <!--end::Name-->
+                                                                                <!--begin::Kode-->
                                                                                 <td>
                                                                                     <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                                                         {{ $attachment->name_attachment }}</a>
                                                                                 </td>
-                                                                                <!--end::Kode=-->
-                                                                                <!--begin::Time=-->
+                                                                                <!--end::Kode-->
+                                                                                <!--begin::Time-->
                                                                                 <td>
                                                                                     <a href="#" class="text-gray-600 text-hover-primary mb-1">
                                                                                         {{ $attachment->created_at }}</a>
                                                                                     </td>
-                                                                                    <!--end::Time=-->
+                                                                                    <!--end::Time-->
                                                                                 </tr>
                                                                             @endforeach
                                                                             @endif

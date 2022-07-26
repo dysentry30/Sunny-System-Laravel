@@ -417,7 +417,7 @@
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg text-white"></i>
+                                    <i class="bi bi-x-lg"></i>
                                 </span>
                                 <!--end::Svg Icon-->
                             </div>

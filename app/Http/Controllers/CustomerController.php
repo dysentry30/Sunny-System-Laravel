@@ -18,75 +18,86 @@ class CustomerController extends Controller
     public function getIndex(Request $request)
     {
         $cari = $request->query("cari");
-        
-        if(!empty($cari)){
-            $results = Customer::where('name', 'like', '%'.$cari.'%')->orWhere('email', 'like', '%'.$cari.'%')->get();
-        } else {
-            $results = Customer::orderBy('id_customer')->paginate(10);
-            $all_customer = Customer::all();
-            $artilces = '';
-            if ($request->ajax()) {
-                foreach ($results as $customers) {
-                    $actButton = "";
-                    if(auth()->user()->check_administrator) {
-                        $actButton = '
-                        <td class="text-center">
-                            <button data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
-                                id="modal-delete"
-                                class="btn btn-sm btn-light btn-active-primary">Delete
-                            </button>
-                        </td>
-                        ';
+        $column = $request->query("column");
+        $filter = $request->query("filter");
+        $sort = $request->sort;
+        // dd($request->all());
+
+        if (!empty($column)) {
+            $results = Customer::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            $all_customer = Customer::all(); //untuk delete modal
+        }else{
+            if(!empty($cari)){
+                $results = Customer::sortable()->where('name', 'like', '%'.$cari.'%')->orWhere('email', 'like', '%'.$cari.'%')->get();
+                $all_customer = Customer::all(); //untuk delete modal
+            } else {
+                // $results = Customer::sortable()->get();
+                $results = Customer::sortable()->orderBy('id_customer')->paginate(15);
+                $all_customer = Customer::all(); //untuk delete modal
+                $artilces = '';
+                if ($request->ajax()) {
+                    foreach ($results as $customers) {
+                        $actButton = "";
+                        if(auth()->user()->check_administrator) {
+                            $actButton = '
+                            <td class="text-center">
+                                <button data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
+                                    id="modal-delete"
+                                    class="btn btn-sm btn-light btn-active-primary">Delete
+                                </button>
+                            </td>
+                            ';
+                        }
+
+                        $artilces.=
+                        '<tr>
+                            <!--begin::Name=-->
+                            <td>
+                            <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                            <a href="#">'.($customers->email).'</a>
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Nomor=-->
+                            <td>
+                            '.$customers->phone_number.'
+                            </td>
+                            <!--end::Nomor-->
+                            <!--begin::check_customer-->
+                            <td>
+                            '.($customers->check_customer == 1 ? "Yes" : "No").'
+                            </td>
+                            <!--end::check_customer=-->
+                            <!--begin::check_partner-->
+                            <td>
+                            '.($customers->check_partner == 1 ? "Yes" : "No").'
+                            </td>
+                            <!--end::check_partner-->
+                            <!--begin::check_competitor-->
+                            <td data-filter="mastercard">
+                            '.($customers->check_competitor == 1 ? "Yes" : "No").'
+                            </td>
+                            <!--end::check_competitor-->
+                            <!--begin::Kode Nasabah=-->
+                            <td>
+                            '.$customers->kode_nasabah.'
+                            </td>
+                            <!--end::Kode Nasabah-->
+                            <!--begin::Action=-->
+                            '. $actButton . '
+                        </tr>';
+
                     }
-
-                    $artilces.=
-                    '<tr>
-                        <!--begin::Name=-->
-                        <td>
-                        <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
-                        </td>
-                        <!--end::Name=-->
-                        <!--begin::Email=-->
-                        <td>
-                        <a href="#">'.($customers->email).'</a>
-                        </td>
-                        <!--end::Email=-->
-                        <!--begin::Nomor=-->
-                        <td>
-                        '.$customers->phone_number.'
-                        </td>
-                        <!--end::Nomor-->
-                        <!--begin::check_customer-->
-                        <td>
-                        '.($customers->check_customer == 1 ? "Yes" : "No").'
-                        </td>
-                        <!--end::check_customer=-->
-                        <!--begin::check_partner-->
-                        <td>
-                        '.($customers->check_partner == 1 ? "Yes" : "No").'
-                        </td>
-                        <!--end::check_partner-->
-                        <!--begin::check_competitor-->
-                        <td data-filter="mastercard">
-                        '.($customers->check_competitor == 1 ? "Yes" : "No").'
-                        </td>
-                        <!--end::check_competitor-->
-                        <!--begin::Kode Nasabah=-->
-                        <td>
-                        '.$customers->kode_nasabah.'
-                        </td>
-                        <!--end::Kode Nasabah-->
-                        <!--begin::Action=-->
-                        '. $actButton . '
-                    </tr>';
-
+                    return $artilces;
                 }
-                return $artilces;
             }
         }
 
-        return view('2_Customer', compact(["results", "cari", "all_customer"]));
+        return view('2_Customer', compact(["results", "cari", "column", "filter", "sort", "all_customer"]));
     }
 
     // public function index (Request $request) 

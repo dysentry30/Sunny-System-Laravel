@@ -88,7 +88,7 @@
                                 <!--begin::Contacts App- Edit Contact-->
                                 <div class="row">
 
-                                    <!--begin::Header Orange-->
+<!--begin::Header Orange-->
                                     <div class="col-xl-15 mb-8">
                                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
@@ -526,7 +526,7 @@
                                             });
                                         });
                                     </script>
-                                    <!--end::Header Orange-->
+<!--end::Header Orange-->
 
 
                                     <!--begin::All Content-->
@@ -656,11 +656,7 @@
                                                     <div class="tab-pane fade show active"
                                                         id="kt_user_view_overview_pasardini" role="tabpanel">
 
-                                                        {{-- @php
-                                                     isset($proyek->nama_proyek)
-                                                @endphp --}}
-
-                                                        <!--begin::Row Kanan+Kiri-->
+                                                            <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
                                                             <div class="col-6">
@@ -1378,10 +1374,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-                                                    <!--end:::Tab Pasar Dini-->
+<!--end:::Tab Pasar Dini-->
 
 
-                                                    <!--begin:::Tab Pasar Potensial-->
+<!--begin:::Tab Pasar Potensial-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_potensial"
                                                         role="tabpanel">
 
@@ -1620,10 +1616,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-                                                    <!--end:::Tab Pasar Potensial-->
+<!--end:::Tab Pasar Potensial-->
 
 
-                                                    <!--begin:::Tab Prakualifikasi-->
+<!--begin:::Tab Prakualifikasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_prakualifikasi"
                                                         role="tabpanel">
 
@@ -1637,6 +1633,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Jadwal PQ</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -1838,11 +1840,11 @@
 
 
                                                     </div>
-                                                    <!--end:::Tab pane Prakualifikasi-->
+<!--end:::Tab pane Prakualifikasi-->
 
 
 
-                                                    <!--begin:::Tab pane Tender Diikuti-->
+<!--begin:::Tab pane Tender Diikuti-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_tender"
                                                         role="tabpanel">
 
@@ -1948,10 +1950,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-                                                    <!--end:::Tab pane Tender Diikuti-->
+<!--end:::Tab pane Tender Diikuti-->    
 
 
-                                                    <!--begin:::Tab Perolehan-->
+<!--begin:::Tab Perolehan-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_perolehan"
                                                         role="tabpanel">
 
@@ -2094,10 +2096,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-                                                    <!--end:::Tab Perolehan-->
+<!--end:::Tab Perolehan-->
 
 
-                                                    <!--begin:::Tab Menang-->
+<!--begin:::Tab Menang-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_menang"
                                                         role="tabpanel">
 
@@ -2985,8 +2987,6 @@
 <!--end::Root-->
 
 
-
-
 <!--begin::Modal-->
 
 <!--begin::modal ADD USER-->
@@ -3071,172 +3071,283 @@
 </form>
 <!--end::modal ADD USER-->
 
-<!--begin::modal APPROVAL-->
-{{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
-				@csrf --}}
-
-<!--begin::Modal - Create Proyek-->
-<div class="modal fade" id="kt_modal_create_approval" tabindex="-1" aria-hidden="true">
-<!--begin::Modal dialog-->
-<div class="modal-dialog modal-dialog-centered">
-    <!--begin::Modal content-->
-    <div class="modal-content">
-        <!--begin::Modal header-->
-        <div class="modal-header">
-            <!--begin::Modal title-->
-            <h2>Choose Approval Head :</h2>
-            <!--end::Modal title-->
-            <!--begin::Close-->
-            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                <span class="svg-icon svg-icon-1">
-                    <i class="bi bi-x-circle-fill ts-8"></i>
-                </span>
-                <!--end::Svg Icon-->
+<!--start::Modal - Calendar -->
+<div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-300px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header" style="padding: 15px">
+                <!--begin::Modal title-->
+                <h2>Calendar</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
             </div>
-            <!--end::Close-->
-        </div>
-        <!--end::Modal header-->
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body px-6" style="padding: 10px">
 
-        <!--begin::Modal body-->
-        <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin:: Calendar-->
+                @php
+                    // $mytime = date("now"); $mytime = date("Y-M-d");
+                    $mytime = Carbon\Carbon::now()->translatedFormat("Y-F-d");
+                    // $mytime = "2022-Februari-26";
+                    // $mytime = "2022-April-26";
+                    // dump($mytime, "Apr :", str_contains($mytime, 'Apr') );
+                @endphp
+                <div class="calendar w-auto" style="padding: 0px" id="start-date">
+                    <div class="calendar__opts">
+                        <select class="rounded-2" name="calendar__month" id="calendar__month">
+                            <option value="1"{{ str_contains($mytime, 'Jan') ? 'selected' : '' }}>Jan</option>
+                            <option value="2"{{ str_contains($mytime, 'Feb') ? 'selected' : '' }}>Feb</option>
+                            <option value="3"{{ str_contains($mytime, 'Mar') ? 'selected' : '' }}>Mar</option>
+                            <option value="4"{{ str_contains($mytime, 'Apr') ? 'selected' : '' }}>Apr</option>
+                            <option value="5"{{ str_contains($mytime, 'Mei') ? 'selected' : '' }}>May</option>
+                            <option value="6"{{ str_contains($mytime, 'Jun') ? 'selected' : '' }}>Jun</option>
+                            <option value="7"{{ str_contains($mytime, 'Jul') ? 'selected' : '' }}>Jul</option>
+                            <option value="8"{{ str_contains($mytime, 'Agu') ? 'selected' : '' }}>Aug</option>
+                            <option value="9"{{ str_contains($mytime, 'Sep') ? 'selected' : '' }}>Sep</option>
+                            <option value="10"{{ str_contains($mytime, 'Okt') ? 'selected' : '' }}>Oct</option>
+                            <option value="11"{{ str_contains($mytime, 'Nov') ? 'selected' : '' }}>Nov</option>
+                            <option value="12"{{ str_contains($mytime, 'Des') ? 'selected' : '' }}>Dec</option>
+                        </select>
+                        
+                        <select class="rounded-2" name="calendar__year" id="calendar__year">
+                            <option {{ str_contains($mytime, '2021') ? 'selected' : '' }}>2021</option>
+                            <option {{ str_contains($mytime, '2022') ? 'selected' : '' }}>2022</option>
+                            <option {{ str_contains($mytime, '2023') ? 'selected' : '' }}>2023</option>
+                        </select>
+                    </div>
 
-
-            <!--begin::Row Kanan+Kiri-->
-            <div class="row fv-row">
-                <!--begin::Input-->
-                <select name="head-approval" class="form-select form-select-solid" data-control="select2"
-                    data-hide-search="true" data-placeholder="Select Head To Send Approval">
-                    <option></option>
-                    <option value="Head Divisi Bangun Gedung">Head Divisi Bangun Gedung</option>
-                    <option value="Head Divisi Industri Plant">Head Divisi Industri Plant</option>
-                    <option value="Head Industri Infrastruktur">Head Industri Infrastruktur</option>
-                </select>
-                <!--end::Input-->
+                    <div class="calendar__body">
+                        <div class="calendar__dates" style="padding: 0px">
+                            <div class="calendar__date"><span>1</span></div>
+                            <div class="calendar__date"><span>2</span></div>
+                            <div class="calendar__date"><span>3</span></div>
+                            <div class="calendar__date"><span>4</span></div>
+                            <div class="calendar__date"><span>5</span></div>
+                            <div class="calendar__date"><span>6</span></div>
+                            <div class="calendar__date"><span>7</span></div>
+                            <div class="calendar__date"><span>8</span></div>
+                            <div class="calendar__date"><span>9</span></div>
+                            <div class="calendar__date"><span>10</span></div>
+                            <div class="calendar__date"><span>11</span></div>
+                            <div class="calendar__date"><span>12</span></div>
+                            <div class="calendar__date"><span>13</span></div>
+                            <div class="calendar__date"><span>14</span></div>
+                            <div class="calendar__date"><span>15</span></div>
+                            <div class="calendar__date"><span>16</span></div>
+                            <div class="calendar__date"><span>17</span></div>
+                            <div class="calendar__date"><span>18</span></div>
+                            <div class="calendar__date"><span>19</span></div>
+                            <div class="calendar__date"><span>20</span></div>
+                            <div class="calendar__date"><span>21</span></div>
+                            <div class="calendar__date"><span>22</span></div>
+                            <div class="calendar__date"><span>23</span></div>
+                            <div class="calendar__date"><span>24</span></div>
+                            <div class="calendar__date"><span>25</span></div>
+                            <div class="calendar__date"><span>26</span></div>
+                            <div class="calendar__date"><span>27</span></div>
+                            <div class="calendar__date"><span>28</span></div>
+                            <div class="calendar__date"><span>29</span></div>
+                            @if (str_contains($mytime, 'Feb'))
+                            @elseif (str_contains($mytime, 'Apr') || str_contains($mytime, 'Jun') || str_contains($mytime, 'Sep') || str_contains($mytime, 'Nov'))
+                            <div class="calendar__date"><span>30</span></div>
+                            @else
+                            <div class="calendar__date"><span>30</span></div>
+                            <div class="calendar__date"><span>31</span></div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                </div>
+                <!--end::Calendar-->
+                
             </div>
-            <!--End::Row Kanan+Kiri-->
-            <br>
-            <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Send</button>
+            <!--end::Input group-->
+            <div class="modal-footer" style="padding: 10px">
+                {{-- <div class="calendar__buttons"> --}}
+                {{-- <button class="btn btn-sm fw-normal btn-active-primary" data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button> --}}
+                <button class="btn btn-sm fw-normal btn-active-primary text-white"  style="background-color: #008cb4" data-bs-dismiss="modal" id="set-calendar-start">Apply</button>
+            </div>
+            
         </div>
         <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
     </div>
-    <!--end::Modal content-->
+    <!--end::Modal dialog-->
 </div>
-<!--end::Modal dialog-->
-</div>
-<!--end::Modal - Create App-->
-{{-- </form> --}}
+<!--end::Modal - Calendar -->
+
 <!--begin::modal APPROVAL-->
-<!--end::Modals-->
+        {{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
+            @csrf --}}
+
+    <!--begin::Modal - Create Proyek-->
+    <div class="modal fade" id="kt_modal_create_approval" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Choose Approval Head :</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-circle-fill ts-8"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+
+                <!--begin::Row Kanan+Kiri-->
+                <div class="row fv-row">
+                    <!--begin::Input-->
+                    <select name="head-approval" class="form-select form-select-solid" data-control="select2"
+                        data-hide-search="true" data-placeholder="Select Head To Send Approval">
+                        <option></option>
+                        <option value="Head Divisi Bangun Gedung">Head Divisi Bangun Gedung</option>
+                        <option value="Head Divisi Industri Plant">Head Divisi Industri Plant</option>
+                        <option value="Head Industri Infrastruktur">Head Industri Infrastruktur</option>
+                    </select>
+                    <!--end::Input-->
+                </div>
+                <!--End::Row Kanan+Kiri-->
+                <br>
+                <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Send</button>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Create App-->
+    {{-- </form> --}}
+<!--begin::modal APPROVAL-->
 
 <!--begin::Feedback Modals-->
+    {{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
+        @csrf --}}
 
-{{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
-    @csrf --}}
+    <!--begin::Modal - Feedback-->
+    <div class="modal fade" id="kt_modal_feedback" tabindex="-1" aria-hidden="true">
 
-<!--begin::Modal - Feedback-->
-<div class="modal fade" id="kt_modal_feedback" tabindex="-1" aria-hidden="true">
-
-<!--begin::Modal dialog-->
-<div class="modal-dialog modal-dialog-centered mw-900px">
-    <!--begin::Modal content-->
-    <div class="modal-content">
-        <!--begin::Modal header-->
-        <div class="modal-header">
-            <!--begin::Modal title-->
-            <h2>Add Feedback</h2>
-            <!--end::Modal title-->
-            <!--begin::Close-->
-            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                <span class="svg-icon svg-icon-1">
-                    <i class="bi bi-x-circle-fill ts-8"></i>
-                </span>
-                <!--end::Svg Icon-->
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Feedback</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-circle-fill ts-8"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
             </div>
-            <!--end::Close-->
-        </div>
-        <!--end::Modal header-->
-        <!--begin::Modal body-->
-        <div class="modal-body py-lg-6 px-lg-6">
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
 
-            <!--begin::Input group Website-->
-            <div class="fv-row mb-5">
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span>Nama Customer</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <input type="text" class="form-control form-control-solid" id="nama-feedback"
-                    name="nama-feedback" value="" placeholder="Nama Customer" />
-                <!--end::Input-->
-                <br>
-                <!--begin::Label-->
-                <label class="fs-6 fw-bold form-label mt-3">
-                    <span>Peringkat :&nbsp;&nbsp;</span>
-                </label>
-                <!--end::Label-->
-                <!--begin::Input-->
-                <div class="form-check-inline">
-                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                        value="option1">
-                    <label class="form-check-label" for="inlineRadio1">1</label>
-                </div>
-                <div class="form-check-inline">
-                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                        value="option2">
-                    <label class="form-check-label" for="inlineRadio2">2</label>
-                </div>
-                <div class="form-check-inline">
-                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                        value="option3">
-                    <label class="form-check-label" for="inlineRadio3">3</label>
-                </div>
-                <div class="form-check-inline">
-                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio4"
-                        value="option4">
-                    <label class="form-check-label" for="inlineRadio4">4</label>
-                </div>
-                <div class="form-check-inline">
-                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5"
-                        value="option5">
-                    <label class="form-check-label" for="inlineRadio5">5</label>
-                </div>
-                <!--end::Input-->
-
-                <!--begin::Label-->
-                <div>
+                <!--begin::Input group Website-->
+                <div class="fv-row mb-5">
+                    <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Kritik dan saran</span>
+                        <span>Nama Customer</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
-                    &nbsp;<br>
-                    <div class="form-group">
-                        <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
-                            id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                    <input type="text" class="form-control form-control-solid" id="nama-feedback"
+                        name="nama-feedback" value="" placeholder="Nama Customer" />
+                    <!--end::Input-->
+                    <br>
+                    <!--begin::Label-->
+                    <label class="fs-6 fw-bold form-label mt-3">
+                        <span>Peringkat :&nbsp;&nbsp;</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                            value="option1">
+                        <label class="form-check-label" for="inlineRadio1">1</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                            value="option2">
+                        <label class="form-check-label" for="inlineRadio2">2</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                            value="option3">
+                        <label class="form-check-label" for="inlineRadio3">3</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio4"
+                            value="option4">
+                        <label class="form-check-label" for="inlineRadio4">4</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5"
+                            value="option5">
+                        <label class="form-check-label" for="inlineRadio5">5</label>
                     </div>
                     <!--end::Input-->
+
+                    <!--begin::Label-->
+                    <div>
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span>Kritik dan saran</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        &nbsp;<br>
+                        <div class="form-group">
+                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
+                                id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                        </div>
+                        <!--end::Input-->
+                    </div>
                 </div>
+                <!--end::Input group-->
+
+                    <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
+
+                </div>
+                <!--end::Modal body-->
             </div>
-            <!--end::Input group-->
-
-            <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
-
+            <!--end::Modal content-->
         </div>
-        <!--end::Modal body-->
+        <!--end::Modal dialog-->
     </div>
-    <!--end::Modal content-->
-</div>
-<!--end::Modal dialog-->
-</div>
-<!--end::Modal - Create App-->
-{{-- </form> --}}
-
 <!--end:: Feedback Modals-->
-
-
 
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}

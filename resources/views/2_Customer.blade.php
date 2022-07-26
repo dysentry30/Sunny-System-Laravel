@@ -99,40 +99,62 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0">
+                        <div class="card-header border-0 py-1">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-
                                 <form action="" method="get">
-                                    <div class="d-flex align-items-center position-relative my-1">
+                                    <div class="d-flex align-items-center position-relative my-1 me-8">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                             <i class="bi bi-search"></i>
                                         </span>
                                         <!--end::Svg Icon-->
                                         <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
-                                            class="form-control form-control-solid w-250px ps-15" placeholder="Search Pelanggan"/>
+                                            class="form-control form-control-solid ps-15" placeholder="Name/Email Pelanggan"/>
                                     </div>
                                 </form>
-
                                 <!--end::Search-->
-                                <!--begin::Paginate-->
-                                {{-- <div class="align-items-center d-flex justify-content-end">
-                                    <div class="p-2" style="color:gray">
-                                        Showing
-                                        {{ $customer->firstItem() }}
-                                        to
-                                        {{ $customer->lastItem() }}
-                                        of
-                                        {{ $customer->total()}}
-                                        entries
-                                    </div>
-                                    <div>
-                                        {{ $customer->links() }}
-                                    </div>
-                                </div> --}}
-                                <!--end::Paginate-->
+
+                                <!--Begin:: BUTTON FILTER-->
+                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                    <!--Begin:: Select Options-->
+                                    <select id="column" name="column" onchange="changes(this)" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                        <option {{$column == "" ? "selected": ""}}></option>
+                                        <option value="name" {{$column == "name" ? "selected" : ""}}>Nama Pelanggan</option>
+                                        <option value="email" {{$column == "email" ? "selected" : ""}}>Email Pelanggan</option>
+                                        <option value="kode_nasabah" {{$column == "kode_nasabah" ? "selected" : ""}}>Kode Nasabah</option>
+                                    </select>
+                                    <!--End:: Select Options-->
+                                    
+                                    <!--begin:: Input Filter-->
+                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    <!--end:: Input Filter-->
+                                    
+                                    <!--begin:: Filter-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                    Filter</button>
+                                    <!--end:: Filter-->
+                                    
+                                    <!--begin:: RESET-->
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <script>
+                                        function resetFilter() {
+                                            $("#column").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#filter").text({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
+                                </form>
+                                <!--end:: BUTTON FILTER-->
+                                
                             </div>
                             <!--end::Card header-->
                         </div>
@@ -146,12 +168,12 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">No.</th> --}}
-                                        <th class="min-w-auto">Pelanggan</th>
+                                        <th class="min-w-auto">@sortablelink('name','Pelanggan')</th>
                                         <th class="min-w-auto">Email</th>
                                         <th class="min-w-auto">Kontak Nomor</th>
-                                        <th class="max-w-auto">Customer</th>
-                                        <th class="min-w-auto">Partner</th>
-                                        <th class="min-w-auto">Competitor</th>
+                                        <th class="max-w-auto">@sortablelink('check_customer','Customer')</th>
+                                        <th class="min-w-auto">@sortablelink('check_partner','Partner')</th>
+                                        <th class="min-w-auto">@sortablelink('check_competitor','Competitor')</th>
                                         <th class="min-w-auto">Kode Nasabah</th>
                                         @if (auth()->user()->check_administrator)
                                         <th class="min-w-auto text-center">Action</th>
@@ -172,67 +194,66 @@
                                     <tbody class="fw-bold text-gray-600">
 
                                         <!-- Results :: Data Tabel Infinite Scroll -->
-                                        @if ($cari != null)
-                                            
-                                        {{-- {!! $artilces !!} --}}
 
-                                        @foreach ($results as $customers)
-
-                                        <tr>
-                                            <!--begin::Name=-->
-                                            <td>
-                                            <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary mb-1">{{ $customers->name }}</a>
-                                            </td>
-                                            <!--end::Name=-->
-                                            <!--begin::Email=-->
-                                            <td>
-                                            <a href="#">{{ ($customers->email) }}</a>
-                                            </td>
-                                            <!--end::Email=-->
-                                            <!--begin::Nomor=-->
-                                            <td>
-                                            {{ $customers->phone_number }}
-                                            </td>
-                                            <!--end::Nomor-->
-                                            <!--begin::check_customer-->
-                                            <td>
-                                            {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
-                                            </td>
-                                            <!--end::check_customer=-->
-                                            <!--begin::check_partner-->
-                                            <td>
-                                            {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
-                                            </td>
-                                            <!--end::check_partner-->
-                                            <!--begin::check_competitor-->
-                                            <td data-filter="mastercard">
-                                            {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
-                                            </td>
-                                            <!--end::check_competitor-->
-                                            <!--begin::Kode Nasabah=-->
-                                            <td>
-                                            {{ $customers->kode_nasabah }}
-                                            </td>
-                                            <!--end::Kode Nasabah-->
-                                            <!--begin::Action=-->
-                                            @if (auth()->user()->check_administrator)
-                                                <td class="text-center">
-                                                    <button data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
-                                                        id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-primary">Delete
-                                                    </button>
-                                                </td>
-                                                <!--end::Action=-->
-                                            @endif
-                                        </tr>
-                                            
-                                        @endforeach
-                                        <script>
-                                             const tbody = document.querySelector("#data-wrapper");
-                                             tbody.style.display = "none";
-                                        </script>
+                                        @if ($cari != null || $column != null || $sort != null )
                                         
+
+                                            @foreach ($results as $customers)
+
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Email=-->
+                                                <td>
+                                                <a href="#" class="text-gray-800 text-hover-primary">{{ ($customers->email) }}</a>
+                                                </td>
+                                                <!--end::Email=-->
+                                                <!--begin::Nomor=-->
+                                                <td>
+                                                {{ $customers->phone_number }}
+                                                </td>
+                                                <!--end::Nomor-->
+                                                <!--begin::check_customer-->
+                                                <td>
+                                                {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
+                                                </td>
+                                                <!--end::check_customer=-->
+                                                <!--begin::check_partner-->
+                                                <td>
+                                                {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
+                                                </td>
+                                                <!--end::check_partner-->
+                                                <!--begin::check_competitor-->
+                                                <td data-filter="mastercard">
+                                                {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
+                                                </td>
+                                                <!--end::check_competitor-->
+                                                <!--begin::Kode Nasabah=-->
+                                                <td>
+                                                {{ $customers->kode_nasabah }}
+                                                </td>
+                                                <!--end::Kode Nasabah-->
+                                                <!--begin::Action=-->
+                                                @if (auth()->user()->check_administrator)
+                                                    <td class="text-center">
+                                                        <button data-bs-toggle="modal"
+                                                            data-bs-target="#kt_modal_delete{{ $customers->id_customer }}"
+                                                            id="modal-delete"
+                                                            class="btn btn-sm btn-light btn-active-primary">Delete
+                                                        </button>
+                                                    </td>
+                                                    <!--end::Action=-->
+                                                @endif
+                                            </tr>
+                                            @endforeach
+                                                
+                                            <script>
+                                                const tbody = document.querySelector("#data-wrapper");
+                                                tbody.style.display = "none";
+                                            </script>
                                         @endif
 
                                     </tbody>
@@ -271,7 +292,6 @@
 
 
 {{-- begin::modal DELETE --}}
-    {{-- @dd($results) --}}
     @foreach ($all_customer as $customers)
         <form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
             @method('delete')
@@ -290,7 +310,7 @@
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg text-white"></i>
+                                    <i class="bi bi-x-lg"></i>
                                 </span>
                                 <!--end::Svg Icon-->
                             </div>
