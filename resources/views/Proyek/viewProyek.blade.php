@@ -1641,7 +1641,7 @@
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="date"
+                                                                    <input type="Date"
                                                                         class="form-control form-control-solid"
                                                                         name="jadwal-pq"
                                                                         value="{{ $proyek->jadwal_pq }}"
@@ -1683,6 +1683,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Jadwal Proyek</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -1858,6 +1864,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Jadwal Tender</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -2229,6 +2241,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Tanggal SPK Internal</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -2458,6 +2476,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Tanggal Kontrak</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -2505,6 +2529,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Tanggal Mulai Kontrak</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -2552,6 +2582,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Tanggal Akhir Kontrak</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -2599,6 +2635,12 @@
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Tanggal Selesai Bash PHO</span>
                                                                     </label>
+                                                                    <a href="#" class="btn"
+                                                                    style="background: transparent;" id="start-date-modal"
+                                                                    onclick="showCalendarModal(this)">
+                                                                    <i class="bi bi-calendar2-plus-fill"
+                                                                        style="color: #008CB4"></i>
+                                                                    </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
@@ -3080,7 +3122,7 @@
             <!--begin::Modal header-->
             <div class="modal-header" style="padding: 15px">
                 <!--begin::Modal title-->
-                <h2>Calendar</h2>
+                <h2>Pilih Tanggal</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -3098,15 +3140,13 @@
 
                 <!--begin:: Calendar-->
                 @php
-                    // $mytime = date("now"); $mytime = date("Y-M-d");
                     $mytime = Carbon\Carbon::now()->translatedFormat("Y-F-d");
-                    // $mytime = "2022-Februari-26";
-                    // $mytime = "2022-April-26";
-                    // dump($mytime, "Apr :", str_contains($mytime, 'Apr') );
+                    $year = (int) date("Y") ;
+                    // $year = 2030 ;
                 @endphp
                 <div class="calendar w-auto" style="padding: 0px" id="start-date">
                     <div class="calendar__opts">
-                        <select class="rounded-2" name="calendar__month" id="calendar__month">
+                        <select class="rounded-2" onchange="month(this)" name="calendar__month" id="calendar__month">
                             <option value="1"{{ str_contains($mytime, 'Jan') ? 'selected' : '' }}>Jan</option>
                             <option value="2"{{ str_contains($mytime, 'Feb') ? 'selected' : '' }}>Feb</option>
                             <option value="3"{{ str_contains($mytime, 'Mar') ? 'selected' : '' }}>Mar</option>
@@ -3122,9 +3162,9 @@
                         </select>
                         
                         <select class="rounded-2" name="calendar__year" id="calendar__year">
-                            <option {{ str_contains($mytime, '2021') ? 'selected' : '' }}>2021</option>
-                            <option {{ str_contains($mytime, '2022') ? 'selected' : '' }}>2022</option>
-                            <option {{ str_contains($mytime, '2023') ? 'selected' : '' }}>2023</option>
+                            @for ($i = $year-3; $i < $year+10; $i++ )
+                            <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
                         </select>
                     </div>
 
@@ -3161,10 +3201,10 @@
                             <div class="calendar__date"><span>29</span></div>
                             @if (str_contains($mytime, 'Feb'))
                             @elseif (str_contains($mytime, 'Apr') || str_contains($mytime, 'Jun') || str_contains($mytime, 'Sep') || str_contains($mytime, 'Nov'))
-                            <div class="calendar__date"><span>30</span></div>
+                            <div id="tgl-30" class="calendar__date"><span>30</span></div>
                             @else
-                            <div class="calendar__date"><span>30</span></div>
-                            <div class="calendar__date"><span>31</span></div>
+                            <div id="tgl-30" class="calendar__date"><span>30</span></div>
+                            <div id="tgl-31" class="calendar__date"><span>31</span></div>
                             @endif
                         </div>
                     </div>
