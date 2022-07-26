@@ -1641,7 +1641,7 @@
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="Date"
+                                                                    <input type="date"
                                                                         class="form-control form-control-solid"
                                                                         name="jadwal-pq"
                                                                         value="{{ $proyek->jadwal_pq }}"
@@ -3177,7 +3177,7 @@
             <div class="modal-footer" style="padding: 10px">
                 {{-- <div class="calendar__buttons"> --}}
                 {{-- <button class="btn btn-sm fw-normal btn-active-primary" data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button> --}}
-                <button class="btn btn-sm fw-normal btn-active-primary text-white"  style="background-color: #008cb4" data-bs-dismiss="modal" id="set-calendar-start">Apply</button>
+                <button class="btn btn-sm fw-normal btn-active-primary text-white" onclick="setCalendar()"  style="background-color: #008cb4" data-bs-dismiss="modal" id="set-calendar-start">Apply</button>
             </div>
             
         </div>
