@@ -26,6 +26,7 @@ use App\Models\MomKickOffMeeting;
 use App\Models\PendingIssue;
 use App\Models\PerjanjianKso;
 use App\Models\ReviewPembatalanKontrak;
+use App\Models\UsulanPerubahanDraft;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -926,6 +927,28 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Dokumen Kontrak dan Addendum gagal ditambahkan");
+        return redirect()->back();
+    }
+
+    public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft) {
+        $data = $request->all();
+        $contract = ContractManagements::find($data["id-contract"]);
+        if(empty($contract)) {
+            Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
+            return redirect()->back();
+        }
+
+        $usulanPerubahanDraft->id_contract = $contract->id_contract;
+        $usulanPerubahanDraft->kategori = $data["kategori"];
+        $usulanPerubahanDraft->isu = $data["keterangan"];
+        $usulanPerubahanDraft->deskripsi_klausul_awal = $data["deskripsi-klausul-awal"];
+        $usulanPerubahanDraft->usulan_perubahan_klausul = $data["usulan-peurbahan-klausul"];
+        $usulanPerubahanDraft->keterangan = $data["keterangan"];
+        if($usulanPerubahanDraft->save()) {
+            Alert::success("Success", "Usulan Perubahan Draft berhasil ditambahkan");
+            return redirect()->back();
+        }
+        Alert::error("Erorr", "Usulan Perubahan Draft gagal ditambahkan");
         return redirect()->back();
     }
 }

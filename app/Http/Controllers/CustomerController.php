@@ -23,9 +23,23 @@ class CustomerController extends Controller
             $results = Customer::where('name', 'like', '%'.$cari.'%')->orWhere('email', 'like', '%'.$cari.'%')->get();
         } else {
             $results = Customer::orderBy('id_customer')->paginate(10);
+            $all_customer = Customer::all();
             $artilces = '';
             if ($request->ajax()) {
                 foreach ($results as $customers) {
+                    $actButton = "";
+                    if(auth()->user()->check_administrator) {
+                        $actButton = '
+                        <td class="text-center">
+                            <button data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
+                                id="modal-delete"
+                                class="btn btn-sm btn-light btn-active-primary">Delete
+                            </button>
+                        </td>
+                        ';
+                    }
+
                     $artilces.=
                     '<tr>
                         <!--begin::Name=-->
@@ -64,16 +78,7 @@ class CustomerController extends Controller
                         </td>
                         <!--end::Kode Nasabah-->
                         <!--begin::Action=-->
-                        @if (auth()->user()->check_administrator)
-                            <td class="text-center">
-                                <button data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
-                                    id="modal-delete"
-                                    class="btn btn-sm btn-light btn-active-primary">Delete
-                                </button>
-                            </td>
-                            <!--end::Action=-->
-                        @endif
+                        '. $actButton . '
                     </tr>';
 
                 }
@@ -81,7 +86,7 @@ class CustomerController extends Controller
             }
         }
 
-        return view('2_Customer', compact(["results", "cari"]));
+        return view('2_Customer', compact(["results", "cari", "all_customer"]));
     }
 
     // public function index (Request $request) 
