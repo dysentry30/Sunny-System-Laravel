@@ -4,13 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Customer extends Model
 {
     use HasFactory;
-    protected $primaryKey   = 'id_customer';
-    // protected $guarded   = ['id_customer'];
+    use Sortable;
 
+    protected $primaryKey   = 'id_customer';
+
+    public $sortable = [
+        'name', 'check_customer', 'check_partner', 'check_competitor'
+    ];
+    
+    
     public function customerAttachments()
     {
         return $this->hasMany(CustomerAttachments::class, "id_customer");

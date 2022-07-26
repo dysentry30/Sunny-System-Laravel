@@ -21,27 +21,6 @@
                 @extends('template.header')
                 <!--end::Header-->
 
-
-                {{-- Begin:: Alert --}}
-                {{-- @if (Session::has('success'))
-                    <div class="alert alert-success alert-dismissible fade show rounded-0" role="alert">
-                        {{ Session::get('success') }}
-                    </div>
-                @endif
-                @if (Session::has('delete'))
-                    <div class="alert alert-warning alert-dismissible fade show rounded-0" role="alert">
-                        {{ Session::get('delete') }}
-                    </div>
-                @endif
-                @if (Session::has('failed'))
-                    <div class="alert alert-danger alert-dismissible fade show rounded-0" role="alert">
-                        {{ Session::get('failed') }}
-                    </div>
-                @endif --}}
-                {{-- End:: Alert --}}
-
-
-
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Toolbar-->
@@ -255,19 +234,19 @@
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
-                                        <th class="min-w-auto">@sortablelink('nama_proyek','Nama Proyek')</th>
-                                        <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
-                                        <th class="min-w-auto">@sortablelink('stage','Stage')</th>
-                                        <th class="min-w-auto">@sortablelink('tahun_perolehan','Tahun Perolehan')</th>
-                                        <th class="min-w-auto">@sortablelink('bulan_pelaksanaan','Bulan Pelaksanaan')</th>
-                                        <th class="min-w-auto">@sortablelink('nilai_rkap','Nilai RKAP')</th>
-                                        <th class="min-w-auto">@sortablelink('forecast','Nilai Forecast')</th>
-                                        <th class="min-w-auto">@sortablelink('nilai_kontrak_keseluruhan','Nilai Realisasi')</th>
-                                        <th class="min-w-auto text-center">@sortablelink('jenis_proyek','Jenis Proyek')</th>
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
+                                        <th class="min-w-auto"><small>@sortablelink('kode_proyek','Kode Proyek')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('nama_proyek','Nama Proyek')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('unit_kerja','Unit Kerja')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('stage','Stage')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('tahun_perolehan','Tahun Perolehan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan','Bulan Pelaksanaan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('nilai_rkap','Nilai RKAP')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('forecast','Nilai Forecast')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('nilai_kontrak_keseluruhan','Nilai Realisasi')</small></th>
+                                        <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek','Jenis Proyek')</small></th>
                                         @if (auth()->user()->check_administrator)
-                                            <th class="min-w-auto text-center">Action</th>
+                                            <th class="min-w-auto text-center"><small>Action</small></th>
                                         @endif
                                     </tr>
                                     <!--end::Table row-->
@@ -277,62 +256,72 @@
                                 @php
                                     $proyeks = $proyeks->reverse();
                                 @endphp
-                                    <tbody class="fw-bold text-gray-800">
-                                        @foreach ($proyeks as $proyek)
+                                <tbody class="fw-bold text-gray-800">
+                                    @foreach ($proyeks as $proyek)
                                         <tr>
-
                                             <!--begin::Name-->
                                             <td>
-                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                <small>
+                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                        class="text-gray-800 text-hover-primary">{{ $proyek->kode_proyek }}</a>
+                                                </small>
                                             </td>
                                             <!--end::Name-->
                                             <!--begin::Email-->
                                             <td>
-                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                <small>
+                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                        class="text-gray-800 text-hover-primary">{{ $proyek->nama_proyek }}</a>
+                                                </small>
                                             </td>
                                             <!--end::Email-->
                                             <!--begin::Company-->
                                             <td>
-                                                {{ $proyek->UnitKerja->unit_kerja }}
+                                                <small>
+                                                    {{ $proyek->UnitKerja->unit_kerja }}
+                                                </small>
                                             </td>
                                             <!--end::Company-->
 
                                             <!--begin::Stage-->
                                             <td>
-                                                @switch($proyek->stage)
+                                                <small>
+                                                    @switch($proyek->stage)
                                                     @case("1") Pasar Dini
                                                         @break
                                                     @case("2") Pasar Potensial
-                                                        @break
+                                                    @break
                                                     @case("3") Prakualifikasi
-                                                        @break
+                                                    @break
                                                     @case("4") Tender Diikuti
-                                                        @break
+                                                    @break
                                                     @case("5") Perolehan
-                                                        @break
+                                                    @break
                                                     @case("6") Menang
-                                                        @break
+                                                    @break
                                                     @case("7") Kalah
-                                                        @break
+                                                    @break
                                                     @case("8") Terkontrak
-                                                        @break
+                                                    @break
                                                     @case("9") Terendah
                                                         @break
                                                     @default Selesai
-                                                @endswitch
+                                                    @endswitch
+                                                </small>
                                             </td>
                                             <!--end::Stage-->
                                             <!--begin::Pelaksanaan-->
                                             <td class="text-center">
-                                                {{ $proyek->tahun_perolehan }}
+                                                <small>
+                                                    {{ $proyek->tahun_perolehan }}
+                                                </small>
                                             </td>
                                             <!--end::Pelaksanaan-->
 
                                             <!--begin::Pelaksanaan-->
                                             <td class="">
-                                                @switch($proyek->bulan_pelaksanaan)
+                                                <small>
+                                                    @switch($proyek->bulan_pelaksanaan)
                                                     @case("1") Januari
                                                         @break
                                                     @case("2") Februari
@@ -358,32 +347,41 @@
                                                     @case("12") Desember
                                                         @break
                                                     @default Selesai
-                                                @endswitch
+                                                        @endswitch
+                                                </small>
                                             </td>
                                             <!--end::Pelaksanaan-->
 
                                             <!--begin::Nilai OK-->
                                             <td>
-                                                {{ $proyek->nilai_rkap }}
+                                                <small>
+                                                    {{ $proyek->nilai_rkap }}
+                                                </small>
                                             </td>
                                             <!--end::Nilai OK-->
                                             
                                             <!--begin::Forecast-->
                                             <td class="text-end">
-                                                {{ $proyek->forecast ?? "-" }}
+                                                <small>
+                                                    {{ $proyek->forecast ?? "-" }}
+                                                </small>
                                             </td>
                                             <!--end::Forecast-->
 
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
-                                                {{ $proyek->nilai_kontrak_keseluruhan ?? "-" }}
+                                                <small>
+                                                    {{ $proyek->nilai_kontrak_keseluruhan ?? "-" }}
+                                                </small>
                                             </td>
                                             <!--end::Realisasi-->
 
                                             
                                             <!--begin::Jenis Proyek-->
                                             <td class="text-center">
-                                                {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
+                                                <small>
+                                                    {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
+                                                </small>
                                             </td>
                                             <!--end::Jenis Proyek-->
                                             
@@ -402,8 +400,7 @@
                                                 <!--end::Action-->
                                             @endif
                                         </tr>
-                                @endforeach
-
+                                    @endforeach
                                 </tbody>
                                 <!--end::Table body-->
                             </table>
@@ -737,7 +734,7 @@
                             <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                                 <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg text-white"></i>
+                                    <i class="bi bi-x-lg"></i>
                                 </span>
                                 <!--end::Svg Icon-->
                             </div>
