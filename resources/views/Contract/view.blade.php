@@ -812,10 +812,10 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="Instansi" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Instansi">
-                                        <option value="Yes">Yes</option>
-                                        <option value="No">No</option>
+                                    <select name="rekomendasi" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
                                     </select>
                                     <!--end::Input-->
                                 </div>
@@ -1006,85 +1006,6 @@
                             </table>
                             <!--End:Table: Review-->
 
-                            {{-- &nbsp;<br>
-                            &nbsp;<br>
-
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Issue Project
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_issue_proyek">+</a>
-                            </h3>
-
-                            <!--begin:Table: Review-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama</th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
-                                        <th class="min-w-125px">Catatan</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
-                                        @forelse ($contract->issueProjects as $issueProject)
-                                            @if ($issueProject->tender_menang == 0)
-                                                <tr>
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
-                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ $issueProject->document_name_issue }}
-                                                        </a>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $issueProject->id_issue }}/{{ $issueProject->id_document }}"
-                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ $issueProject->id_document }}
-                                                        </a>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <a href="#"
-                                                            class="text-gray-400 text-hover-primary mb-1">
-                                                            {{ date_format(new DateTime($issueProject->created_at), 'd M, Y') }}</a>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>{{ $issueProject->note_issue }}
-                                                    </td>
-                                                    <!--end::Unit=-->
-                                                </tr>
-                                            @endif
-                                        @empty
-                                            <tr>
-                                                <td colspan="3" class="text-center bg-gray-100">
-                                                    <h6><b>There is no data</b></h6>
-                                                </td>
-                                            </tr>
-                                        @endforelse
-                                    @else
-                                        <tr>
-                                            <td colspan="3" class="text-center bg-gray-100">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
-
-                            </table>
-                            <!--End:Table: Review--> --}}
 
                             &nbsp;<br>
                             &nbsp;<br>
@@ -1242,6 +1163,85 @@
                                             </td>
                                         </tr>
                                     @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
+
+                            <br>
+                            <br>
+
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Usulan Perubahan Draft Kontrak
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Isu</th>
+                                        <th class="min-w-125px">Deskripsi Klausul Awal</th>
+                                        <th class="min-w-125px">Usulan Perubahan Klausul</th>
+                                        <th class="min-w-125px">Keterangan</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-600">
+                                    <tr>
+                                        <td colspan="5" class="bg-gray-100">
+                                            <b>Surat Perjanjian Kontrak</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @if ($perubahan_draft->kategori == 1)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="5" class="bg-gray-100">
+                                            <b>Syarat-syarat Umum Kontrak (SSUK)</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @if ($perubahan_draft->kategori == 2)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+
+                                    <tr>
+                                        <td colspan="5" class="bg-gray-100">
+                                            <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                            @if ($perubahan_draft->kategori == 3)
+                                                <td>{{$perubahan_draft->isu}}</td>
+                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                <td>{{$perubahan_draft->keterangan}}</td>
+                                            @endif
+                                        @endforeach
+                                    </tr>
+
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -4417,6 +4417,125 @@
 
                     <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary"
                         data-bs-dismiss="modal">Save</button>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Question Tender Menang-->
+
+    <!--begin::Modal - Question Tender Menang-->
+    <div class="modal fade" id="kt_modal_usulan_perubahan_draft_kontrak" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Usulan Perubahan Draft Kontrak</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <div class="fv-row mb-5">
+                        <form action="/contract-management/usulan-perubahan-draft/upload" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            {{-- <input type="hidden" value="1" name="is-tender-menang"> --}}
+                            <select name="kategori" id="kategori" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori" tabindex="-1" aria-hidden="false">
+                                <option value=""></option>
+                                <option value="1">Surat Perjanjian Kontrak</option>
+                                <option value="2">Syarat-syarat Umum Kontrak (SSUK)</option>
+                                <option value="3">Syarat-syarat Khusus Kontrak (SSKK)</option>
+                            </select>
+                            <!--end::Input-->
+
+                            <br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Isu</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            {{-- <input type="hidden" value="1" name="is-tender-menang"> --}}
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="text" class="form-control form-control-solid"
+                                name="isu-perubahan-draft" id="isu-perubahan-draft" value=""
+                                placeholder="Isu" />
+                            <!--end::Input-->
+
+                            <br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Deskripsi Klausul Awal</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <textarea class="form-control form-control-solid" name="deskripsi-klausul-awal" id="deskripsi-klausul-awal" rows="1"></textarea>
+                            <!--end::Input-->
+
+                            <br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Usulan Perubahan Klausul</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" style="font-weight: normal"
+                                class="form-control form-control-solid" name="usulan-peurbahan-klausul" id="usulan-peurbahan-klausul"
+                                value="" placeholder="Usulan" />
+                            <!--end::Input-->
+
+                            <br><br>
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Keterangan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <textarea style="font-weight: normal"
+                                class="form-control form-control-solid" name="keterangan" id="keterangan" rows="1" placeholder="Keterangan"></textarea>
+                            <!--end::Input-->
+
+                    </div>
+                    <!--end::Input group-->
+
+                    <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary">Save</button>
                     </form>
 
 

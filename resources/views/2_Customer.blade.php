@@ -271,7 +271,8 @@
 
 
 {{-- begin::modal DELETE --}}
-    @foreach ($results as $customers)
+    {{-- @dd($results) --}}
+    @foreach ($all_customer as $customers)
         <form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf

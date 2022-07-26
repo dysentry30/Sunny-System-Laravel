@@ -92,6 +92,10 @@ class ContractManagements extends Model
     {
         return $this->hasMany(PendingIssue::class, "id_contract");
     }
+    public function UsulanPerubahanDraft()
+    {
+        return $this->hasMany(UsulanPerubahanDraft::class, "id_contract");
+    }
 
     public function getAll()
     {
