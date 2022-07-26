@@ -140,7 +140,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
-                                    style="color:white; {{ str_contains(Request::Path(), 'proyek') ? 'background-color:#008CB4' : '' }}">
+                                    style="color:white; {{ str_contains(Request::Segment(1), 'proyek') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -1055,6 +1055,21 @@
         const calendarElt = document.querySelector("#kt_modal_calendar");
 
         if(calendarElt) {
+            //begin:: onChange Month //pada element select Month tambahkan fungsi onchange="month(this)" && tambahkan id="tgl-30"; id="tgl-31"
+            function month(e) {
+                if (e.value == "2"){
+                    document.getElementById("tgl-30").style.display = "none";
+                    document.getElementById("tgl-31").style.display = "none";
+                }else if (e.value == "4" || e.value == "6" || e.value == "9" || e.value == "11"){
+                    document.getElementById("tgl-30").style.display = "";
+                    document.getElementById("tgl-31").style.display = "none";
+                }else{
+                    document.getElementById("tgl-30").style.display = "";
+                    document.getElementById("tgl-31").style.display = "";
+                }
+            }
+            //end:: onChange Month
+
             // Begin :: Set Date Clickable
             function setDateClickable(rootElt) {
                 const dates = document.querySelectorAll(
