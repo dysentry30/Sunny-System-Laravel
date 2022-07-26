@@ -15,11 +15,13 @@ return new class extends Migration
     {
         Schema::create('review_contracts', function (Blueprint $table) {
             $table->id('id_review');
-            $table->mediumText('id_document')->unique();
-            $table->integer("id_contract");
-            $table->text("document_name_review");
-            $table->longText("note_review");
-            $table->boolean("tender_menang");
+            $table->bigInteger("id_contract");
+            $table->longText("ketentuan");
+            $table->tinyInteger("stage");
+            $table->longText("sub_pasal");
+            $table->longText("uraian");
+            $table->text("pic_cross");
+            $table->longText("catatan");
             $table->timestamps();
         });
     }

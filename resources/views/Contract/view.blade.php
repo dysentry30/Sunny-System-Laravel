@@ -940,9 +940,10 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama Dokumen</th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Ketentuan</th>
+                                        <th class="min-w-125px">Sub Pasal</th>
+                                        <th class="min-w-125px">Uraian Penjelasan</th>
+                                        <th class="min-w-125px">PIC <i>Cross Function</i></th>
                                         <th class="min-w-125px">Catatan</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -952,35 +953,31 @@
                                 <tbody class="fw-bold text-gray-400">
                                     @if (isset($contract))
                                         @forelse ($contract->reviewProjects as $reviewProject)
-                                            @if ($reviewProject->tender_menang == 0)
+                                            @if ($reviewProject->stage == 1)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
-                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ $reviewProject->document_name_review }}
-                                                        </a>
+                                                        <p>{{$reviewProject->ketentuan}}</p>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <a target="_blank"
-                                                            href="/document/view/{{ $reviewProject->id_review }}/{{ $reviewProject->id_document }}"
-                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                            {{ $reviewProject->id_document }}
-                                                        </a>
+                                                        <p>{{$reviewProject->sub_pasal}}</p>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Kode=-->
                                                     <td>
-                                                        <a href="#"
-                                                            class="text-gray-400 text-hover-primary mb-1">
-                                                            {{ date_format(new DateTime($reviewProject->created_at), 'd M, Y') }}</a>
+                                                        <p>{{$reviewProject->uraian}}</p>
                                                     </td>
                                                     <!--end::Kode=-->
                                                     <!--begin::Unit=-->
-                                                    <td>{{ $reviewProject->note_review }}
+                                                    <td>
+                                                        <p>{{$reviewProject->pic_cross}}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->catatan}}</p>
                                                     </td>
                                                     <!--end::Unit=-->
                                                 </tr>
@@ -1383,10 +1380,10 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Nama Dokumen
-                                        </th>
-                                        <th class="min-w-125px">No. Dokumen</th>
-                                        <th class="min-w-125px">Tanggal</th>
+                                        <th class="min-w-125px">Ketentuan</th>
+                                        <th class="min-w-125px">Sub Pasal</th>
+                                        <th class="min-w-125px">Uraian Penjelasan</th>
+                                        <th class="min-w-125px">PIC <i>Cross Function</i></th>
                                         <th class="min-w-125px">Catatan</th>
                                     </tr>
                                     <!--end::Table row-->
@@ -1394,48 +1391,47 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if (isset($contract))
+                                    @if ($contract->reviewProjects->contains("stage", 2))
                                         @forelse ($contract->reviewProjects as $review)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $review->document_name_review }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $review->id_review }}/{{ $review->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $review->id_document }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($review->created_at), 'd M, Y') }}</a>
-                                                    </a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>{{ $review->note_review }}</td>
-                                                <!--end::Unit=-->
-                                            </tr>
+                                            @if ($review->stage == 2)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->ketentuan}}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->sub_pasal}}</p>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Kode=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->uraian}}</p>
+                                                    </td>
+                                                    <!--end::Kode=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->pic_cross}}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                    <!--begin::Unit=-->
+                                                    <td>
+                                                        <p>{{$reviewProject->catatan}}</p>
+                                                    </td>
+                                                    <!--end::Unit=-->
+                                                </tr>
+                                            @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center text-dark bg-gray-100">
+                                                <td colspan="5" class="text-center text-dark bg-gray-100">
                                                     <b>There is no data</b>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center text-dark bg-gray-100">
+                                            <td colspan="5" class="text-center text-dark bg-gray-100">
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
@@ -2244,6 +2240,64 @@
 
                             </table>
                             <!--End:Table: Review-->
+                            <br><br>
+                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                Rencana Kerja Manajemen Kontrak
+                                <a href="#" Id="Plus" data-bs-toggle="modal"
+                                    data-bs-target="#kt_modal_input_rencana_kerja_kontrak">+</a>
+                            </h3>
+
+                            <!--begin:Table: Review-->
+                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                <!--begin::Table head-->
+                                <thead>
+                                    <!--begin::Table row-->
+                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-50px">No</th>
+                                        <th class="min-w-125px">Ketentuan</th>
+                                        <th class="min-w-125px">Informasi Kelengkapan <i>Check List</i> ADKON</th>
+                                    </tr>
+                                    <!--end::Table row-->
+                                </thead>
+                                <!--end::Table head-->
+                                <!--begin::Table body-->
+                                <tbody class="fw-bold text-gray-400">
+                                    @if ($contract->RencanaKerjaManajemen->count() > 0)
+                                        @forelse ($contract->RencanaKerjaManajemen as $key => $rencana_kerja)
+                                            <tr>
+                                                <td>
+                                                    <p class="text-gray-600 mb-1">{{$key + 1}}</p>
+                                                </td>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->ketentuan_rencana_kerja !!}</pre>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <pre class="text-gray-600 mb-1" style="font-family: 'Khula';">{!! $rencana_kerja->informasi_lengkap_adkon !!}</pre>
+                                                </td>
+                                                <!--end::Name=-->
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="2" class="text-center bg-gray-100">
+                                                    <h6><b>There is no data</b></h6>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    @else
+                                        <tr>
+                                            <td colspan="2" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                                <!--end::Table body-->
+
+                            </table>
+                            <!--End:Table: Review-->
                         </div>
                     </div>
                     <!--end:::Tab pane Laporan Bulanan-->
@@ -2940,103 +2994,143 @@
     <!--begin::Modal - Review Tender Menang-->
     <div class="modal fade" id="kt_modal_review_menang" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Attachment</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                    </div>
-                    <!--end::Close-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+    <!--begin::Modal content-->
+    <div class="modal-content">
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Review</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2"
+                                rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
                 </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
-
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Attachment</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="file" style="font-weight: normal"
-                                class="form-control form-control-solid" name="attach-file-review"
-                                id="attach-file-review-menang" value="" accept=".docx"
-                                placeholder="Name review" />
-                            <!--end::Input-->
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Nama Dokumen</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid"
-                                name="document-name-review" id="document-name-review" value=""
-                                style="font-weight: normal" placeholder="Nama Document" />
-                            <!--end::Input-->
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Catatan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="note-review"
-                                id="note-review" value="" style="font-weight: normal"
-                                placeholder="Catatan" />
-                            <!--end::Input-->
-                            <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-
-                            {{-- begin::Froala Editor --}}
-                            <div id="froala-editor-review-menang">
-                                <h1>Attach file with <b>.DOCX</b> format only</h1>
-                            </div>
-                            {{-- end::Froala Editor --}}
-                            {{-- begin::Read File --}}
-                            <script>
-                                document.getElementById("attach-file-review-menang").addEventListener("change", async function() {
-                                    await readFile(this.files[0], "#froala-editor-review-menang");
-                                });
-                            </script>
-                            {{-- end::Read File --}}
-                    </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-review-tender-menang" class="btn btn-lg btn-primary"
-                        data-bs-dismiss="modal">Save</button>
-                    </form>
-
-
-                </div>
-                <!--end::Modal body-->
+                <!--end::Close-->
             </div>
-            <!--end::Modal content-->
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+                <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
+                    <input type="hidden" value="2" name="stage">
+                    <div class="row mb-5">  
+                        <div class="col-6 border-end">
+                            <div class="row ">
+                                <div class="col">
+                                    <label for="ketentuan-review" class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
+                                    <input type="text" name="ketentuan-review" id="ketentuan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
+                                    <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
+                                    <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
+                                    <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
+                                    <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 d-flex flex-column justify-content-center">
+                            <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
+                            <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4">Save</button>
+                    </div>
+
+                </form>
+
+
+                <!--begin::Input group Website-->
+                {{-- <div class="fv-row mb-5">
+                        @csrf
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Attachment</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="hidden" value="{{ $contract->id_contract ?? 0 }}"
+                            name="id-contract">
+                        <input type="file" class="form-control form-control-solid"
+                            name="attach-file-review" id="attach-file-review" value=""
+                            style="font-weight: normal" accept=".docx" placeholder="Name Proyek" />
+                        <!--end::Input-->
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Nama Dokumen</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid"
+                            name="document-name-review" id="document-name-review" style="font-weight: normal"
+                            value="" placeholder="Nama Document" />
+                        <!--end::Input-->
+
+                        <!--begin::Label-->
+                        <label class="fs-6 fw-bold form-label mt-3">
+                            <span style="font-weight: normal">Catatan</span>
+                        </label>
+                        <!--end::Label-->
+                        <!--begin::Input-->
+                        <input type="text" class="form-control form-control-solid" name="note-review"
+                            id="note-review" value="" style="font-weight: normal"
+                            placeholder="Catatan" />
+                        <!--end::Input-->
+                </div> --}}
+                <!--end::Input group-->
+
+                {{-- <button type="submit" id="save-review" class="btn btn-lg btn-primary"
+                    data-bs-dismiss="modal">Save</button>
+
+                </form> --}}
+
+            </div>
+            <!--end::Modal body-->
         </div>
+        <!--end::Modal content-->
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+</div>
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Review Tender Menang-->
@@ -4547,6 +4641,87 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Question Tender Menang-->
+
+    <!--begin::Modal - Question Tender Menang-->
+    <div class="modal fade" id="kt_modal_input_rencana_kerja_kontrak" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Add Rencana Kerja Manajemen Kontrak</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                    fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2"
+                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Input group Website-->
+                    <form action="/contract-management/rencana-kerja-kontrak/upload" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                                @csrf
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label for="ketentuan-rencana-kerja" class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Ketentuan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    {{-- <input type="hidden" value="1" name="is-tender-menang"> --}}
+                                    <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10" class="form-control form-control-solid"></textarea>
+                                    <!--end::Input-->
+                                </div>
+
+                                <br><br>
+
+                                <div class="col">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label">
+                                        <span style="font-weight: normal">Informasi Kelengkapan <i>Check List</i> ADKON</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    {{-- <input type="hidden" value="1" name="is-tender-menang"> --}}
+                                    <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                        name="id-contract">
+                                    <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10" class="form-control form-control-solid"></textarea>
+                                    <!--end::Input-->
+                                </div>
+
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer mt-4">
+                            <button type="submit" id="save-question-tender-menang" class="btn btn-sm btn-primary">Save</button>
+                        </div>
+                    </form>
+
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Question Tender Menang-->
 @endif
 @endisset
 
@@ -4683,10 +4858,63 @@
             <!--end::Modal header-->
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
+                <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
+                    <input type="hidden" value="0" name="stage">
+                    <div class="row mb-5">  
+                        <div class="col-6 border-end">
+                            <div class="row ">
+                                <div class="col">
+                                    <label for="ketentuan-review" class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
+                                    <input type="text" name="ketentuan-review" id="ketentuan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
+                                    <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
+                                    <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
+                                    <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
+                                    <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-6 d-flex flex-column justify-content-center">
+                            <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
+                            <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4">Save</button>
+                    </div>
+
+                </form>
+
 
                 <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
+                {{-- <div class="fv-row mb-5">
                         @csrf
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -4722,28 +4950,13 @@
                             id="note-review" value="" style="font-weight: normal"
                             placeholder="Catatan" />
                         <!--end::Input-->
-                        <small id="file-error-msg" style="color: rgb(199, 42, 42); display:none"></small>
-
-
-                        {{-- begin::Froala Editor --}}
-                        <div id="froala-editor-review">
-                            <h1>Attach file with <b>.DOCX</b> format only</h1>
-                        </div>
-                        {{-- end::Froala Editor --}}
-                        {{-- begin::Read File --}}
-                        <script>
-                            document.getElementById("attach-file-review").addEventListener("change", async function() {
-                                await readFile(this.files[0], "#froala-editor-review");
-                            });
-                        </script>
-                        {{-- end::Read File --}}
-                </div>
+                </div> --}}
                 <!--end::Input group-->
 
-                <button type="submit" id="save-review" class="btn btn-lg btn-primary"
+                {{-- <button type="submit" id="save-review" class="btn btn-lg btn-primary"
                     data-bs-dismiss="modal">Save</button>
 
-                </form>
+                </form> --}}
 
             </div>
             <!--end::Modal body-->
@@ -5411,9 +5624,6 @@ aria-hidden="true">
         documentReady: true,
     });
     new FroalaEditor('#froala-editor-draft-menang', {
-        documentReady: true,
-    });
-    new FroalaEditor('#froala-editor-review-menang', {
         documentReady: true,
     });
     new FroalaEditor('#froala-editor-risk-menang', {
