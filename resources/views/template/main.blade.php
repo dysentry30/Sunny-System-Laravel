@@ -451,6 +451,23 @@
                             </div>
                         @endif
 
+                        @if (auth()->user()->check_administrator)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/history-autorisasi"
+                                    style="color:white; {{ str_contains(Request::Path(), 'history-autorisasi') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <img alt="Logo" src="/media/icons/duotune/creatio/knowledge_base.svg"
+                                                class="h-30px logo" />
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title-2">History Autorisasi</span>
+                                </a>
+                            </div>
+                        @endif
+
                         <br><br><br>
 
                     </div>
@@ -470,6 +487,124 @@
     <!--begin:: CONTENT-->
     @yield('content')
     <!--end :: CONTENT-->
+
+
+    <!--start::Modal - Calendar -->
+    <div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-300px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header" style="padding: 15px">
+                    <!--begin::Modal title-->
+                    <h2>Pilih Tanggal</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body px-6" style="padding: 10px">
+
+                    <!--begin:: Calendar-->
+                    @php
+                        $mytime = Carbon\Carbon::now()->translatedFormat("Y-F-d");
+                        $year = (int) date("Y") ;
+                        $day = (int) date("d");
+                        // $year = 2030 ;
+                    @endphp
+                    <div class="calendar w-auto" style="padding: 0px" id="start-date">
+                        <div class="calendar__opts">
+                            <select class="rounded-2" onchange="monthCalendar(this)" name="calendar__month" id="calendar__month">
+                                <option value="1"{{ str_contains($mytime, 'Jan') ? 'selected' : '' }}>Jan</option>
+                                <option value="2"{{ str_contains($mytime, 'Feb') ? 'selected' : '' }}>Feb</option>
+                                <option value="3"{{ str_contains($mytime, 'Mar') ? 'selected' : '' }}>Mar</option>
+                                <option value="4"{{ str_contains($mytime, 'Apr') ? 'selected' : '' }}>Apr</option>
+                                <option value="5"{{ str_contains($mytime, 'Mei') ? 'selected' : '' }}>May</option>
+                                <option value="6"{{ str_contains($mytime, 'Jun') ? 'selected' : '' }}>Jun</option>
+                                <option value="7"{{ str_contains($mytime, 'Jul') ? 'selected' : '' }}>Jul</option>
+                                <option value="8"{{ str_contains($mytime, 'Agt') ? 'selected' : '' }}>Aug</option>
+                                <option value="9"{{ str_contains($mytime, 'Sep') ? 'selected' : '' }}>Sep</option>
+                                <option value="10"{{ str_contains($mytime, 'Okt') ? 'selected' : '' }}>Oct</option>
+                                <option value="11"{{ str_contains($mytime, 'Nov') ? 'selected' : '' }}>Nov</option>
+                                <option value="12"{{ str_contains($mytime, 'Des') ? 'selected' : '' }}>Dec</option>
+                            </select>
+                            
+                            <select class="rounded-2" name="calendar__year" id="calendar__year">
+                                @for ($i = $year-3; $i < $year+10; $i++ )
+                                <option {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div class="calendar__body">
+                            <div class="calendar__dates" style="padding: 0px">
+                                <div class="calendar__date {{ $day == 1 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>1</span></div>
+                                <div class="calendar__date {{ $day == 2 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>2</span></div>
+                                <div class="calendar__date {{ $day == 3 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>3</span></div>
+                                <div class="calendar__date {{ $day == 4 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>4</span></div>
+                                <div class="calendar__date {{ $day == 5 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>5</span></div>
+                                <div class="calendar__date {{ $day == 6 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>6</span></div>
+                                <div class="calendar__date {{ $day == 7 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>7</span></div>
+                                <div class="calendar__date {{ $day == 8 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>8</span></div>
+                                <div class="calendar__date {{ $day == 9 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>9</span></div>
+                                <div class="calendar__date {{ $day == 10 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>10</span></div>
+                                <div class="calendar__date {{ $day == 11 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>11</span></div>
+                                <div class="calendar__date {{ $day == 12 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>12</span></div>
+                                <div class="calendar__date {{ $day == 13 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>13</span></div>
+                                <div class="calendar__date {{ $day == 14 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>14</span></div>
+                                <div class="calendar__date {{ $day == 15 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>15</span></div>
+                                <div class="calendar__date {{ $day == 16 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>16</span></div>
+                                <div class="calendar__date {{ $day == 17 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>17</span></div>
+                                <div class="calendar__date {{ $day == 18 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>18</span></div>
+                                <div class="calendar__date {{ $day == 19 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>19</span></div>
+                                <div class="calendar__date {{ $day == 20 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>20</span></div>
+                                <div class="calendar__date {{ $day == 21 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>21</span></div>
+                                <div class="calendar__date {{ $day == 22 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>22</span></div>
+                                <div class="calendar__date {{ $day == 23 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>23</span></div>
+                                <div class="calendar__date {{ $day == 24 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>24</span></div>
+                                <div class="calendar__date {{ $day == 25 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>25</span></div>
+                                <div class="calendar__date {{ $day == 26 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>26</span></div>
+                                <div class="calendar__date {{ $day == 27 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>27</span></div>
+                                <div class="calendar__date {{ $day == 28 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>28</span></div>
+                                <div class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
+                                @if (str_contains($mytime, 'Feb'))
+                                @elseif (str_contains($mytime, 'Apr') || str_contains($mytime, 'Jun') || str_contains($mytime, 'Sep') || str_contains($mytime, 'Nov'))
+                                <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
+                                @else
+                                <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
+                                <div id="tgl-31" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
+                                @endif
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <!--end::Calendar-->
+                    
+                </div>
+                <!--end::Input group-->
+                <div class="modal-footer" style="padding: 10px">
+                    {{-- <div class="calendar__buttons"> --}}
+                    {{-- <button class="btn btn-sm fw-normal btn-active-primary" data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button> --}}
+                    <button class="btn btn-sm fw-normal btn-active-primary text-white" onclick="setCalendar()"  style="background-color: #008cb4" data-bs-dismiss="modal" id="set-calendar-start">Apply</button>
+                </div>
+                
+            </div>
+            <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Calendar -->
 
     <!--begin::Scrolltop-->
     <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
@@ -1055,8 +1190,8 @@
         const calendarElt = document.querySelector("#kt_modal_calendar");
 
         if(calendarElt) {
-            //begin:: onChange Month //pada element select Month tambahkan fungsi onchange="month(this)" && tambahkan id="tgl-30"; id="tgl-31"
-            function month(e) {
+            //begin:: onChange Month //pada element select Month tambahkan fungsi onchange="monthCalendar(this)" && tambahkan id="tgl-30"; id="tgl-31"
+            function monthCalendar(e) {
                 if (e.value == "2"){
                     document.getElementById("tgl-30").style.display = "none";
                     document.getElementById("tgl-31").style.display = "none";
@@ -1129,7 +1264,6 @@
             function showCalendarModal(elt) {
                 calendarBoots.show();
                 dateInputElt = elt.parentElement.querySelector("input[type='date']");
-                console.log(dateInputElt);
             }
     
             function setCalendar() {
@@ -1140,6 +1274,15 @@
                 dateInputElt.value = valueDate;
             }
         }
+
+        // Overlay Modal
+        $(document).on('show.bs.modal', '.modal', function() {
+            const zIndex = 1040 + 10 * $('.modal:visible').length;
+            $(this).css('z-index', zIndex);
+            setTimeout(() => $('.modal-backdrop').not('.modal-stack').css('z-index', zIndex - 1).addClass('modal-stack'));
+        });
+
+
     </script>
     <!--end:: show calendar-->
     

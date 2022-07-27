@@ -73,9 +73,7 @@ class PasalController extends Controller
         $pasals = [];
         foreach ($pasalsPost as $pasalPost) {
             $pasal = Pasals::find($pasalPost);
-            if ($pasal instanceof Pasals) {
-                array_push($pasals, $pasal);
-            }
+            array_push($pasals, $pasal);
         }
         if (Session::has("pasals")) {
             Session::forget("pasals");
@@ -153,26 +151,54 @@ class PasalController extends Controller
     //IMPORT pasal
     public function importPasal(Request $request)
     {
-        $file = $request -> file('import-file'); //get temp data
-        // dd($file);
-        
-        $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file);
-        $reader->setReadDataOnly(true);
-        $spreadsheet = $reader->load($file);
-        $sheetData = $spreadsheet->getActiveSheet()->toArray();
+       
         // dd(count($sheetData));
-        
-        $data = 0;
-        for($i=3; $i<count($sheetData); $i++){
-            $tipePasal = $sheetData[$i]['1'];
-            $pasal = $sheetData[$i]['2'];
+       
+        // Menambahkan Pasal ke session
+        // Pasal ini tidak akan masuk ke database (untuk sementara)
+        if($request->add_session) {
+            $file = $request -> file('import-file-upload'); //get temp data
+            // dd($file);
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file);
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            $count_pasal = Pasals::all()->count();
+            $importPasal = [];
+            for($i=3; $i<count($sheetData); $i++){
+                $tipePasal = $sheetData[$i]['1'];
+                $pasal = $sheetData[$i]['2'];
+                array_push($importPasal, (object) [
+                    "id_pasal" => ++$count_pasal,
+                    "pasal" => $pasal
+                ]);
+                // array_push()
+            }
+            if (Session::has("pasals")) {
+                Session::forget("pasals");
+            }
+            Session::put("pasals", $importPasal);
+            Alert::success("Success", "Import Pasal berhasil");
+            return redirect()->back();
+        } else {
+            $file = $request -> file('import-file'); //get temp data
+            // dd($file);
+            $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file);
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            $data = 0;
+            for($i=3; $i<count($sheetData); $i++){
+                $tipePasal = $sheetData[$i]['1'];
+                $pasal = $sheetData[$i]['2'];
 
-            $newPasal = new Pasals();
-            $newPasal->tipe_pasal = $tipePasal;
-            $newPasal->pasal = $pasal;
-            $newPasal->save();
-            $data++;
-            // dump($pasal);
+                $newPasal = new Pasals();
+                $newPasal->tipe_pasal = $tipePasal;
+                $newPasal->pasal = $pasal;
+                $newPasal->save();
+                $data++;
+                // dump($pasal);
+            }
         }
         // dd();
         if($data > 0){
@@ -204,6 +230,5 @@ class PasalController extends Controller
         //     // return redirect()->back();
         // }
     }
-
 
 }

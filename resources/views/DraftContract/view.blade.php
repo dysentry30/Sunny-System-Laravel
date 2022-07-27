@@ -1,5 +1,7 @@
 @extends('template.main')
-
+@php
+    // Session::forget("pasals")
+@endphp
 @section('title', 'Draft Contract')
 @section('content')
     <!--begin::Root-->
@@ -75,6 +77,7 @@
                                         {{ Session::get('success') }}
                                         <button type="button" class="btn-close" data-bs-dismiss="alert"
                                             aria-label="Close"></button>
+
                                     </div>
                                     {{ Session::forget('success') }}
                                 @endif
@@ -958,8 +961,7 @@
                             <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
                                 role="status"></span>
                         </button>
-                        <a target="_blank" href="/pasal/edit" id="edit-pasal" class="btn btn-lg mt-5 btn-secondary">Edit
-                            Pasal</a>
+                        <a href="#kt_modal_import_pasal" onclick="showModalPasal()" class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
                     </div>
                     <!--end::Input group-->
 
@@ -1095,6 +1097,60 @@
         </div>
         <!--end::Modal content-->
     </div>
+
+    {{-- start:: Modal - Import Pasal --}}
+    <div class="modal fade" id="kt_modal_import_pasal" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Import Pasal</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <form action="/import/pasal" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" value="1" name="add_session">
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <div class="row">
+                            <div class="col">
+                                <label for="import-file-upload" class="label">Upload File Pasal di bawah ini</label>
+                                <input type="file" accept=".xlsx" class="form-control form-control-solid" name="import-file-upload" id="import-file-upload">
+                                <small>* Support file <b>.xlsx</b> only</small>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4;">Import</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    {{-- start:: Modal - Import Pasal --}}
+
     <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Calendar -->
@@ -1190,6 +1246,14 @@
             clearPasalBtn.style.display = "none";
         });
         // end::Script adding pasal
+
+        const pasalModalElt = document.querySelector("#kt_modal_import_pasal");
+        const pasalModalBoots = new bootstrap.Modal(pasalModalElt, {});
+        // begin :: Import Pasal
+        function showModalPasal() {
+            pasalModalBoots.show();
+        }
+        // end :: Import Pasal
     </script>
 @endsection
 
