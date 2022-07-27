@@ -169,6 +169,96 @@
                             </div>
                             <hr>
                             
+                            <div class="px-8 py-12" id="monitoring-proyek">
+                                <h1 class="text-center bold pb-8">
+                                    Pareto Proyek
+                                </h1>
+
+                                <!--begin::Table Pannel Claim  -->
+                                <div class="tab-content" id="myTabContent">
+                                        <!--begin::Table-->
+                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                            <!--begin::Table head-->
+                                            <thead>
+                                                <!--begin::Table row-->
+                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Nama Proyek')</th>
+                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Unit Kerja')</th>
+                                                    <th class="min-w-auto">@sortablelink('stage','Stage')</th>
+                                                    <th class="min-w-auto">@sortablelink('forecast','Nilai Forecast')</th>
+                                                </tr>
+                                                <!--end::Table row-->
+                                            </thead>
+                                            <!--begin::Table body-->
+                                            <tbody class="fw-bold">
+                                                @foreach ($proyeks as $claim)
+                                                {{-- @foreach ($claim as $claim) --}}
+                                                <tr>
+                                                    <!--begin::Name-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->nama_proyek }}</a>
+                                                    <!--end::Name-->
+                                                    <!--begin::Unit Kerja-->
+                                                    <td>
+                                                        <a href="#" id=""
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->UnitKerja->unit_kerja }}</a>
+                                                    </td>
+                                                    <!--end::Unit Kerja-->
+                                                    
+                                                    <!--end::Stage-->
+                                                    <td>
+                                                        @switch($claim->stage)
+                                                            @case("1") Pasar Dini
+                                                                @break
+                                                            @case("2") Pasar Potensial
+                                                            @break
+                                                            @case("3") Prakualifikasi
+                                                            @break
+                                                            @case("4") Tender Diikuti
+                                                            @break
+                                                            @case("5") Perolehan
+                                                            @break
+                                                            @case("6") Menang
+                                                            @break
+                                                            @case("7") Kalah
+                                                            @break
+                                                            @case("8") Terkontrak
+                                                            @break
+                                                            @case("9") Terendah
+                                                                @break
+                                                            @default Selesai
+                                                        @endswitch
+                                                    </td>
+                                                    <!--end::Stage-->
+                                                    
+                                                    <!--begin::Nilai Forecast-->
+                                                    <td>
+                                                        {{-- @php
+                                                            $nilaiClaim = 0;
+                                                            foreach ($claim as $nilai)
+                                                            if ($nilai->nilai_claim != "") {
+                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                            }
+                                                        @endphp --}}
+                                                            {{-- {{ number_format($claim->forecast, 0, '.', ',') }} --}}
+                                                            {{ $claim->forecast }}
+                                                    </td>
+                                                    <!--end::Nilai Forecast-->
+                                                </tr>
+                                                {{-- @endforeach --}}
+                                                @endforeach
+                                            </tbody>
+                                            <!--end::Table body-->
+                                        </table>
+                                        <!--end::Table -->
+                                        {{-- {{ $paretoClaim->links() }} --}}
+                                        {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
+                                </div>
+                                <!--end::Table Pannel Claim-->
+                            </div>
+                            <hr>
+                            
                             <div class="py-12" id="marketing-pipeline">
                                 <!--begin::MARKETING PIPELINE-->
                                 <!--end::MARKETING PIPELINE-->
