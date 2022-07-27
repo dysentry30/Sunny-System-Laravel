@@ -1292,7 +1292,7 @@
                         <div class="card-title m-0">
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Draft Kontrak
-                                <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/tender-menang"
+                                <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/tender-menang/1"
                                     Id="Plus">+</a>
                             </h3>
 

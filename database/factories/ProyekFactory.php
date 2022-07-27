@@ -95,19 +95,19 @@ class ProyekFactory extends Factory
             "porsijo_terkontrak" => $this->faker->numerify('##'),
             "tahun_ri_perolehan" => $this->faker->randomElement(["2020", "2021", "2022", "2023"]),
             "bulan_ri_perolehan" => $this->faker->month,
-            "nilaiok_terkontrak" => $this->faker->numerify('#,####,#00,000'),
+            "nilaiok_terkontrak" => $this->faker->numerify('#,###,#00,000'),
             "matauang_terkontrak" => $this->faker->randomElement(["IDR", "USD", "YUAN"]),
             "nomor_terkontrak" => $this->faker->numerify('#/##/2022-#'),
             "kursreview_terkontrak" => $this->faker->text(10),
             "tanggal_terkontrak" => $this->faker->date(),
-            "nilai_kontrak_keseluruhan" => $this->faker->numerify('#,####,#00,000'),
+            "nilai_kontrak_keseluruhan" => $this->faker->numerify('#,###,#00,000'),
             "tanggal_mulai_terkontrak" => $this->faker->date(),
             "nilai_wika_terkontrak" => $this->faker->numerify('#,###,000'),
             "tanggal_akhir_terkontrak" => $this->faker->date(),
             "klasifikasi_terkontrak" => $this->faker->randomElement(["Ter-Klasifikasi", "Tidak Ter-Klasifikasi"]),
             "tanggal_selesai_terkontrak" => $this->faker->date(),
             "jenis_terkontrak" => $this->faker->randomElement(["Internal", "External"]),
-            "forecast" => $this->faker->numerify('#,####,#00,000'),
+            "forecast" => $this->faker->numerify('#,###,#00,000'),
 
         ];
     }

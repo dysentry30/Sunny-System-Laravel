@@ -181,7 +181,7 @@
 
                                                         <a href="#" class="btn btn-sm mx-3"
                                                             style="background: transparent;width:1rem;height:2.3rem;"
-                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_calendar"><i
+                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_calendar_start"><i
                                                                 class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                                 style="color: #008cb4"></i></a>
                                                         <input type="Date"
@@ -923,6 +923,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="pengajuan-waktu" class="form-label fs-6 fw-normal">Pengajuan Waktu / EOT </label>
+                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
                                         <input type="date" name="pengajuan-waktu" class="form-control form-control-solid">
                                     </div>
                                     <div class="col-6">
@@ -1011,6 +1012,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="tanggal-diajukan" class="form-label fs-6 fw-normal">Tanggal Diajukan</label>
+                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
                                         <input type="date" name="tanggal-diajukan" class="form-control form-control-solid">
                                     </div>
                                 </div>
@@ -1100,6 +1102,7 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="tanggal-activity" class="form-label fs-6 fw-normal">Tanggal Activity</label>
+                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
                                         <input type="date" name="tanggal-activity" class="form-control form-control-solid">
                                     </div>
                                 </div>
@@ -1180,7 +1183,8 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="tanggal-disetujui" class="form-label fs-6 fw-normal">Tanggal Disetujui</label>
-                                    <input type="date" name="tanggal-disetujui" class="form-control form-control-solid">
+                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
+                                        <input type="date" name="tanggal-disetujui" class="form-control form-control-solid">
                                 </div>
                             </div>
                             <br>
@@ -1191,7 +1195,8 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal">Waktu / EOT Disetujui</label>
-                                    <input type="date" name="waktu-eot-disetujui" class="form-control form-control-solid">
+                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
+                                        <input type="date" name="waktu-eot-disetujui" class="form-control form-control-solid">
                                 </div>
                             </div>
                             <br>
@@ -1334,7 +1339,7 @@
 
     {{-- begin::Calendar --}}
     <!--begin::Modal - Calendar Start -->
-    <div class="modal fade" id="kt_modal_calendar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="kt_modal_calendar_start" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-300px">
             <!--begin::Modal content-->
@@ -1368,7 +1373,7 @@
                     <div class="fv-row mb-5">
                         <div class="calendar" id="approval-date">
                             <div class="calendar__opts">
-                                <select name="calendar__month" id="calendar__month">
+                                <select name="calendar__month" onchange="monthCalendar(this)" id="calendar__month">
                                     <option value="1" selected>Jan</option>
                                     <option value="2">Feb</option>
                                     <option value="3">Mar</option>
@@ -1446,8 +1451,8 @@
                                     <div class="calendar__date"><span>27</span></div>
                                     <div class="calendar__date"><span>28</span></div>
                                     <div class="calendar__date"><span>29</span></div>
-                                    <div class="calendar__date"><span>30</span></div>
-                                    <div class="calendar__date"><span>31</span></div>
+                                    <div class="calendar__date" id="tgl-30"><span>30</span></div>
+                                    <div class="calendar__date" id="tgl-31"><span>31</span></div>
                                 </div>
                             </div>
 
@@ -1473,7 +1478,7 @@
     </div>
     <!--end::Modal dialog-->
     </div>
-    <!--end::Modal - Calendar Start -->
+    <!--end::Modal - Calendar  -->
     {{-- end::Calendar --}}
     {{-- End::Modal --}}
 @endsection

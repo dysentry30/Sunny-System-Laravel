@@ -51,7 +51,7 @@ class DatabaseSeeder extends Seeder
             'sumber_dana' => "BUMN",
             'bulan_pelaksanaan' => 3,
             'dop' => "DOP 1",
-            'company' => "Wika Gedung",
+            'nilai_kontrak_keseluruhan' => "4,500,000,000",
 
         ]);
         Proyek::create([
@@ -67,7 +67,7 @@ class DatabaseSeeder extends Seeder
             'bulan_pelaksanaan' => 4,
             'dop' => "EA",
             'company' => "Wika Industry & Konstruksi",
-
+            'nilai_kontrak_keseluruhan' => "4,500,000,000",
         ]);
         // end :: Proyek.
 
