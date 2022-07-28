@@ -264,16 +264,17 @@ async function readFile(content, show = true) {
     let data = "";
     file.onloadend = () => {
         const docx2html = require("docx2html");
-        const content = docx2html(file.result).then(html => {
+        docx2html(file.result).then(html => {
             // if (show) {
             // }
             document.querySelector(".fr-view").innerHTML = html;
+            document.querySelector(` #A > section`).style.backgroundColor = "transparent";
             data = html;
             document.querySelectorAll("#A")[document.querySelectorAll("#A").length - 1].remove();
         });
     }
     file.readAsBinaryString(content);
-    return data;
+    // return data;
     // End::Read DOCX Content
 }
 

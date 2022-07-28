@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id('id_draft');
             $table->text("id_claim");
             $table->text("no_claim_draft");
+            $table->longText("id_document_surat_instruksi");
             $table->longText("uraian_claim_draft");
             $table->longText("dokumen_pendukung");
             $table->longText("pasals");

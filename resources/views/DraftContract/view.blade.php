@@ -172,9 +172,9 @@
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                     <span>Tanggal Mulai Kontrak</span>
                                                                 </label>
-                                                                <a href="#" class="btn"
+                                                                <a href="#kt_modal_calendar" class="btn"
                                                                     style="background: transparent;" id="start-date-modal"
-                                                                    data-bs-target="#kt_modal_calendar_start"
+                                                                    data-bs-target="#kt_modal_calendar"
                                                                     data-bs-toggle="modal">
                                                                     <i class="bi bi-calendar2-plus-fill"
                                                                         style="color: #008CB4"></i>
@@ -412,14 +412,28 @@
                                                                                     <tbody class="fw-bold text-gray-600">
                                                                                         @if (Session::has('pasals'))
                                                                                             @foreach (Session::get('pasals') as $i => $pasal)
-                                                                                                <tr>
-                                                                                                    <td>
-                                                                                                        {{ ++$i }}
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        {{ $pasal->pasal }}
-                                                                                                    </td>
-                                                                                                </tr>
+                                                                                                @php
+                                                                                                    $pasal_model = App\Models\Pasals::find($pasal);
+                                                                                                @endphp
+                                                                                                @if (!empty($pasal_model)) 
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            {{ ++$i }}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            {{ $pasal->pasal }}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @else 
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            {{ ++$i }}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            {{ $pasal }}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
                                                                                             @endforeach
                                                                                         @elseif(!empty($pasals))
                                                                                             @foreach ($pasals as $i => $pasal)
@@ -551,34 +565,31 @@
                                                         <!--begin::Col-->
                                                         <div class="col-6">
                                                             <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Tanggal Mulai Kontrak</span>
-                                                                </label>
-                                                                <a href="#" class="btn btn-sm"
-                                                                    style="background: transparent; width:1rem;height:2.3rem"
-                                                                    data-bs-target="#kt_modal_calendar_start"
-                                                                    data-bs-toggle="modal" id="start-date-modal">
-                                                                    <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                        style="color: #008CB4"></i>
-                                                                </a>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Tanggal Mulai Kontrak</span>
+                                                            </label>
+                                                            <a class="btn btn-sm"
+                                                                style="background: transparent; width:1rem;height:2.3rem"
+                                                                onclick="showCalendarModal(this)"id="start-date-modal">
+                                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                                    style="color: #008CB4"></i>
+                                                            </a>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
 
-                                                                <input type="Date" class="form-control form-control-solid"
-                                                                    placeholder="Select a date"
-                                                                    value="{{ old('draft-contract-start-date') }}"
-                                                                    name="draft-contract-start-date"
-                                                                    id="draft-contract-start-date" />
+                                                            <input type="date" class="form-control form-control-solid"
+                                                                placeholder="Select a date"
+                                                                value="{{ old('draft-contract-start-date') }}"
+                                                                name="draft-contract-start-date"
+                                                                id="draft-contract-start-date" />
 
-                                                                @error('draft-contract-start-date')
-                                                                    <h6>
-                                                                        <b style="color: rgb(209, 38, 38)">{{ $message }}</b>
-                                                                    </h6>
-                                                                @enderror
-                                                                <!--end::Input-->
-                                                            </div>
+                                                            @error('draft-contract-start-date')
+                                                                <h6>
+                                                                    <b style="color: rgb(209, 38, 38)">{{ $message }}</b>
+                                                                </h6>
+                                                            @enderror
+                                                            <!--end::Input-->
                                                             <!--end::Input group-->
                                                         </div>
                                                         <!--End begin::Col-->
@@ -803,14 +814,25 @@
                                                                                     <tbody class="fw-bold text-gray-600">
                                                                                         @if (Session::has('pasals'))
                                                                                             @foreach (Session::get('pasals') as $i => $pasal)
-                                                                                                <tr>
-                                                                                                    <td>
-                                                                                                        {{ ++$i }}
-                                                                                                    </td>
-                                                                                                    <td>
-                                                                                                        {{ $pasal->pasal }}
-                                                                                                    </td>
-                                                                                                </tr>
+                                                                                                @if (!empty(App\Models\Pasals::find($pasal->id_pasal)))
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            {{ ++$i }}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            {{ $pasal->pasal }}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @else
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            {{ ++$i }}
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            {{ $pasal->pasal }}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                @endif
                                                                                             @endforeach
                                                                                         @else
                                                                                             <tr>
@@ -909,14 +931,14 @@
                                         ?>
                                         @foreach ($pasals as $pasal)
                                             @foreach (Session::get('pasals') as $pasalSession)
-                                                @if ($pasalSession->id_pasal == $pasal->id_pasal)
+                                                @if (isset($pasalSession->id_pasal) && $pasalSession->id_pasal == $pasal->id_pasal)
                                                     <?php $is_choosen = true; ?>
                                                     <li class="list-group-item">
                                                         <!--begin::Options-->
                                                         <label
                                                             class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                            <input class="form-check-input" name="{{ $pasal->id_pasal }}"
-                                                                type="checkbox" value="{{ $pasal->id_pasal }}"
+                                                            <input class="form-check-input" name="{{ $pasal->id_pasal ?? 0 }}"
+                                                                type="checkbox" value="{{ $pasal->id_pasal ?? 0}}"
                                                                 checked="true">
                                                             <span class="form-check-label">{{ $pasal->pasal }}</span>
                                                         </label>

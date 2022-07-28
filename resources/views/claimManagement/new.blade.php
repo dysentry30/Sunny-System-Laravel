@@ -498,7 +498,44 @@
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($claimContract->ClaimContractDrafts as $key => $draft_addendum)
+                                                                @foreach ($claimContract->claimContractDrafts as $key => $claim_contrat_draft)
+                                                                    <tr>
+                                                                        <td class="text-gray-600">{{$claim_contrat_draft->no_claim_draft}}</td>
+                                                                        <td class="text-gray-600">{{$claim_contrat_draft->uraian_claim_draft}}</td>
+                                                                        <td class="text-gray-600">
+                                                                            <a href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_surat_instruksi}}">{{$claim_contrat_draft->id_document_surat_instruksi}}</a>
+                                                                        </td>
+                                                                        @php
+                                                                            $pasals_claim_draft = explode(",", $claim_contrat_draft->pasals);
+                                                                        @endphp
+                                                                        <td class="text-gray-600">
+                                                                            @foreach ($pasals_claim_draft as $pasal)
+                                                                                @php
+                                                                                    $pasal_model = App\Models\Pasals::find($pasal);
+                                                                                @endphp
+                                                                                @if (!empty($pasal_model))
+                                                                                    - {{$pasal_model->pasal}} <br>
+                                                                                @else 
+                                                                                    - {{$pasal}} <br>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td class="text-gray-600">{{number_format($claim_contrat_draft->pengajuan_biaya, 0, ",", ",")}}</td>
+                                                                        <td class="text-gray-600">{{Carbon\Carbon::parse($claim_contrat_draft->pengajuan_waktu_eot)->translatedFormat("d F Y")}}</td>
+                                                                        <td class="text-gray-600">
+                                                                            <a href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_proposal_claim}}">{{$claim_contrat_draft->id_document_proposal_claim}}</a>
+                                                                        </td>
+                                                                        <td class="text-gray-600">{{$claim_contrat_draft->rekomendasi ? "Yes" : "No"}}</td>
+                                                                        <td class="text-gray-600">{{$claim_contrat_draft->uraian_rekomendasi}}</td>
+                                                                        <td class="text-gray-600 min-w-100px text-break">
+                                                                            @php
+                                                                                $list_dokumen = explode(",", $claim_contrat_draft->dokumen_pendukung);
+                                                                            @endphp
+                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
+                                                                               - <a target="_blank" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                            @endforeach
+                                                                        </td>
+                                                                    </tr>
                                                                     {{-- <tr>
                                                                         <td class="text-gray-600">{{$key + 1}}</td>
                                                                         <td class="text-gray-600">{{$draft_addendum->uraian_perubahan}}</td>
@@ -852,19 +889,19 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col">
-                                        <label for="uraian-claim" class="form-label fs-6 fw-normal">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</label>
-                                        <input type="text" name="uraian-claim" class="form-control form-control-solid">
+                                        <label for="no-draft-claim" class="form-label fs-6 fw-normal">No Klaim Draft</label>
+                                        <input type="text" placeholder="No Draft Klaim" name="no-draft-claim" class="form-control form-control-solid fw-normal">
                                     </div>
                                     <div class="col">
-                                        <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                                        <label for="uraian-claim" class="form-label fs-6 fw-normal">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</label>
+                                        <input type="text" name="uraian-claim" placeholder="Uraian Klaim" class="form-control form-control-solid">
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="d-flex flex-row">
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_pasal" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal">Pasal-pasal<i class="mx-2 bi bi-plus text-primary"></i></button>
+                                            <button type="button" onclick="showModalPasal()" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal">Pasal-pasal<i class="mx-2 bi bi-plus text-primary"></i></button>
                                             @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
                                                 <a name="clear-pasal" id="clear-pasal"
                                                     class="btn btn-sm btn-danger">Clear
@@ -943,7 +980,18 @@
                                     </div>
                                     <div class="col-6">
                                         <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal">Uraian Rekomendasi</label>
-                                        <textarea name="uraian-rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                        <textarea name="uraian-rekomendasi" placeholder="Uraian Rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="surat-instruksi" class="form-label fs-6 fw-normal">Surat / Instruksi (Dari Owner)</label>
+                                        <input type="file" accept=".docx" name="surat-instruksi" class="form-control form-control-solid fw-normal">
+                                    </div>
+                                    <div class="col">
+                                        <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
+                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
                                     </div>
                                 </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
@@ -1314,16 +1362,22 @@
                                 </ul>
                             </div>
                         @endisset
-                        <div class="d-flex flex-row col align-items-center justify-content-between">
-                            <button type="button" id="back-pasal" onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
-                                dropdownParent: $('#kt_modal_draft'),
-                                minimumResultsForSearch: Infinity,
-                            });" data-bs-target="#kt_modal_draft" data-bs-toggle="modal" class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary" style="background-color: #008cb4">
-                                <span>Save</span>
-                                <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
-                                role="status"></span>
-                            </button>
+                        <div class="d-flex flex-row align-items-center justify-content-between">
+                            <div class="d-flex col-3 justify-content-between">
+                                <button type="button" id="back-pasal" onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
+                                    dropdownParent: $('#kt_modal_draft'),
+                                    minimumResultsForSearch: Infinity,
+                                });" data-bs-target="#kt_modal_draft" data-bs-toggle="modal" class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i> Back</button>
+                                <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary" style="background-color: #008cb4">
+                                    <span>Save</span>
+                                    <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
+                                    role="status"></span>
+                                </button>
+                            </div>
+                            <div class="vr"></div>
+                            <div class="">
+                                <a href="#" onclick="showModalPasalImport()" class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
+                            </div>
                         </div>
                     </div>
                     <!--end::Input group-->
@@ -1476,6 +1530,59 @@
         </div>
         <!--end::Modal content-->
     </div>
+
+    {{-- start:: Modal - Import Pasal --}}
+    <div class="modal fade" id="kt_modal_import_pasal" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-600px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Import Pasal</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <form action="/import/pasal" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" value="1" name="add_session">
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        <div class="row">
+                            <div class="col">
+                                <label for="import-file-upload" class="label">Upload File Pasal di bawah ini</label>
+                                <input type="file" accept=".xlsx" class="form-control form-control-solid" name="import-file-upload" id="import-file-upload">
+                                <small>* Support file <b>.xlsx</b> only</small>
+                            </div>
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4;">Import</button>
+                    </div>
+                </form>
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    {{-- start:: Modal - Import Pasal --}}
     <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Calendar  -->
@@ -1979,6 +2086,18 @@
                 })
             });
         });
+
+        const pasalModalImportElt = document.querySelector("#kt_modal_import_pasal");
+        const pasalModalImportBoots = new bootstrap.Modal(pasalModalImportElt, {});
+        // begin :: Import Pasal
+        function showModalPasal() {
+            // pasalModalBoots.show();
+            modalPasalBoots.show();
+        }
+        function showModalPasalImport() {
+            // pasalModalBoots.show();
+            pasalModalImportBoots.show();
+        }
     </script>
     {{-- End Confirm Action Claim --}}
 

@@ -307,6 +307,8 @@ class ContractManagementsController extends Controller
             $get_pasal = Pasals::find($id_pasal);
             if ($get_pasal instanceof Pasals) {
                 array_push($res_pasals, $get_pasal);
+            } else {
+                array_push($res_pasals, $id_pasal);
             }
         }
         if (!Session::has("pasals")) {

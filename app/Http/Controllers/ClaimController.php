@@ -417,13 +417,18 @@ class ClaimController extends Controller
         $pasals = [];
         if (Session::has("pasals")) {
             foreach (Session::get("pasals") as $pasal) {
-                array_push($pasals, $pasal->id_pasal);
+                if($pasal instanceof Pasals) {
+                    array_push($pasals, $pasal->id_pasal);
+                } else {
+                    array_push($pasals, $pasal->pasal);
+                }
             }
             Session::forget("pasals");
         }
 
         $faker = new Uuid;
         $id_document_proposal_claim = $faker->uuid3();
+        $id_document_surat_instruksi = $faker->uuid3();
 
         if(count($data["dokumen-pendukung"]) > 1) {
             $list_id_document_pendukung = [];
@@ -432,24 +437,27 @@ class ClaimController extends Controller
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+            $claimContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $claimContractDrafts->list_id_document_pendukung = $id_document;
+            $claimContractDrafts->dokumen_pendukung = $id_document;
         }
 
         $claimContractDrafts->id_claim = $data["id-claim"];
+        $claimContractDrafts->no_claim_draft = $data["no-draft-claim"];
         $claimContractDrafts->uraian_claim_draft = $data["uraian-claim"];
         $claimContractDrafts->id_document_proposal_claim = $id_document_proposal_claim;
+        $claimContractDrafts->id_document_surat_instruksi = $id_document_surat_instruksi;
         $claimContractDrafts->pengajuan_biaya = (int) str_replace(",", "", $data["pengajuan-biaya"]);
         $claimContractDrafts->rekomendasi = (bool) $data["rekomendasi"];
         $claimContractDrafts->uraian_rekomendasi = $data["uraian-rekomendasi"];
         $claimContractDrafts->pengajuan_waktu_eot = $data["pengajuan-waktu"];
         $claimContractDrafts->pasals = join(",", $pasals);
-        $claimContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($claimContractDrafts->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["proposal-claim"], $id_document_proposal_claim);
+            moveFileTemp($data["surat-instruksi"], $id_document_surat_instruksi);
             Alert::success("Success", "Buat Draft Claim berhasil");
             return redirect()->back();
         }
