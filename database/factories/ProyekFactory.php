@@ -107,7 +107,7 @@ class ProyekFactory extends Factory
             "klasifikasi_terkontrak" => $this->faker->randomElement(["Ter-Klasifikasi", "Tidak Ter-Klasifikasi"]),
             "tanggal_selesai_terkontrak" => $this->faker->date(),
             "jenis_terkontrak" => $this->faker->randomElement(["Internal", "External"]),
-            "forecast" => $this->faker->numerify('#,###,#00,000'),
+            // "forecast" => $this->faker->numerify('#,###,#00,000'),
 
         ];
     }

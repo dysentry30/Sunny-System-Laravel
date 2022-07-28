@@ -79,7 +79,7 @@
                                     <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$column == "" ? "selected": ""}}></option>
                                         <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
-                                        <option value="kode_proyek" {{$column == "kode_proyek" ? "selected" : ""}}>Kode Proyek</option>
+                                        <option value="kode_proyek" {{$column ==    "kode_proyek" ? "selected" : ""}}>Kode Proyek</option>
                                         {{-- <option value="uraian_perubahan" {{$column == "uraian_perubahan" ? "selected" : ""}}>Uraian Perubahan</option> --}}
                                     </select>
                                     <!--End:: Select Options-->
@@ -161,10 +161,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                             </tr>
                                             <!--end::Table row-->
                                         </thead>
@@ -173,17 +173,8 @@
                                         <tbody class="fw-bold text-gray-600">
                                             @foreach ($proyekClaim as $proyekClaims)
                                                     <tr>
-
-                                                        <!--begin::Action-->
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ $proyekClaims->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->id_contract }}</a>
-                                                        </td>
-                                                        <!--end::Action-->
                                                         <!--begin::Name-->
                                                         <td>
-                                                            {{-- <a class="text-hover-primary text-gray-500"
-                                                                href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                            </a> --}}
                                                             <a href="/claim-management/proyek/{{ $proyekClaims->kode_proyek }}/Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name-->
@@ -197,6 +188,11 @@
                                                             {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
+                                                        <!--begin::Action-->
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ $proyekClaims->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->id_contract }}</a>
+                                                        </td>
+                                                        <!--end::Action-->
                                                     </tr>
                                             @endforeach
                                         </tbody>
@@ -215,10 +211,10 @@
                                         <thead>
                                             <!--begin::Table row-->
                                             <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -229,12 +225,6 @@
                                         {{-- @foreach ($claims as $claim) --}}
                                             @foreach ($proyekAnti as $proyekAntis)
                                                 <tr>
-
-                                                    <!--begin::Action-->
-                                                    <td>
-                                                        <a href="/contract-management/view/{{ $proyekAntis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->id_contract }}</a>
-                                                    </td>
-                                                    <!--end::Action-->
                                                     <!--begin::Name-->
                                                     <td>
                                                         <a href="/claim-management/proyek/{{ $proyekAntis->kode_proyek }}/Anti-Claim" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->kode_proyek }}</a>
@@ -250,6 +240,11 @@
                                                         {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Unit Kerja-->
+                                                    <!--begin::Action-->
+                                                    <td>
+                                                        <a href="/contract-management/view/{{ $proyekAntis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAntis->id_contract }}</a>
+                                                    </td>
+                                                    <!--end::Action-->
                                                 </tr>
                                         @endforeach
                                         </tbody>
@@ -271,7 +266,7 @@
                                                 <th class="min-w-auto">@sortablelink('kode_proyek','Kode Proyek')</th>
                                                 <th class="min-w-auto">Nama Proyek</th>
                                                 <th class="min-w-auto">Unit Kerja</th>
-                                                <th class="min-w-auto">ID Contract</th>
+                                                <th class="min-w-auto">@sortablelink('id_contract','ID Contract')</th>
                                                 {{-- <th class="min-w-auto">Total</th> --}}
                                             </tr>
                                             <!--end::Table row-->
@@ -281,16 +276,11 @@
                                         <tbody class="fw-bold text-gray-600">
                                             @foreach ($proyekAsuransi as $proyekAsuransis)
                                                     <tr>
-
-                                                        <!--begin::Action-->
-                                                        <td>
-                                                            <a href="/contract-management/view/{{ $proyekAsuransis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->id_contract }}</a>
-                                                        </td>
-                                                        <!--end::Action-->
                                                         <!--begin::Name-->
                                                         <td>
                                                             <a href="/claim-management/proyek/{{ $proyekAsuransis->kode_proyek }}/Claim-Asuransi" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->kode_proyek }}</a>
-                                                            <!--end::Name-->
+                                                        </td>
+                                                        <!--end::Name-->
                                                         <!--begin::Name Proyek-->
                                                         <td>
                                                             {{ $proyekClaims->project->nama_proyek }}
@@ -301,6 +291,11 @@
                                                             {{ $proyekClaims->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
+                                                        <!--begin::Action-->
+                                                        <td>
+                                                            <a href="/contract-management/view/{{ $proyekAsuransis->id_contract }}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekAsuransis->id_contract }}</a>
+                                                        </td>
+                                                        <!--end::Action-->
                                                     </tr>
                                             @endforeach
                                         </tbody>

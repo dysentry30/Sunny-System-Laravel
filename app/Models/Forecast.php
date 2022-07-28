@@ -4,10 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Kyslik\ColumnSortable\Sortable;
 
 class Forecast extends Model
 {
-    use HasFactory;
+    use HasFactory,Sortable;
+
+    public $sortable = [
+        'nilai_forecast', 'rkap_forecast', 'realisasi_forecast'
+    ];
 
     protected $fillable = [
         "nilai_forecast"

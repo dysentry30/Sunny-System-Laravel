@@ -105,7 +105,7 @@ return new class extends Migration
             //# Approval Table
             
             // Table untuk Halaman Forecast
-            $table->longText("forecast")->nullable();
+            $table->bigInteger("forecast")->nullable();
         });
     }
 
