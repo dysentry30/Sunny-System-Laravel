@@ -169,12 +169,25 @@
                             </div>
                             <hr>
                             
+                            <div class="py-12" id="marketing-pipeline">
+                                <!--begin::MARKETING PIPELINE-->
+                                <!--end::MARKETING PIPELINE-->
+                            </div>
+                            <hr>
+
+                            <div class="py-12" id="claim">
+                                <!--begin::MARKETING PIPELINE-->
+                                <!--end::MARKETING PIPELINE-->
+                            </div>
+                            <hr>
+                            
+                            <!--begin:: PARETO-->
                             <div class="px-8 py-12" id="monitoring-proyek">
                                 <h1 class="text-center bold pb-8">
                                     Pareto Proyek
                                 </h1>
 
-                                <!--begin::Table Pannel Claim  -->
+                                <!--begin::Table pareto proyek  -->
                                 <div class="tab-content" id="myTabContent">
                                         <!--begin::Table-->
                                         <table class="table align-middle table-row-dashed fs-6 gy-2">
@@ -182,33 +195,33 @@
                                             <thead>
                                                 <!--begin::Table row-->
                                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Nama Proyek')</th>
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek','Unit Kerja')</th>
+                                                    <th class="min-w-auto">@sortablelink('nama_proyek','Nama Proyek')</th>
+                                                    <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
                                                     <th class="min-w-auto">@sortablelink('stage','Stage')</th>
-                                                    <th class="min-w-auto">@sortablelink('forecast','Nilai Forecast')</th>
+                                                    <th class="min-w-auto text-end">@sortablelink('forecast','Nilai Forecast')</th>
                                                 </tr>
                                                 <!--end::Table row-->
                                             </thead>
                                             <!--begin::Table body-->
                                             <tbody class="fw-bold">
-                                                @foreach ($proyeks as $claim)
-                                                {{-- @foreach ($claim as $claim) --}}
+                                                @foreach ($paretoProyek as $proyek)
+                                                {{-- @foreach ($proyek as $proyek) --}}
                                                 <tr>
                                                     <!--begin::Name-->
                                                     <td>
                                                         <a href="#" id=""
-                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->nama_proyek }}</a>
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                     <!--end::Name-->
                                                     <!--begin::Unit Kerja-->
                                                     <td>
                                                         <a href="#" id=""
-                                                            class="text-gray-800 text-hover-primary mb-1">{{ $claim->UnitKerja->unit_kerja }}</a>
+                                                            class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
                                                     </td>
                                                     <!--end::Unit Kerja-->
                                                     
                                                     <!--end::Stage-->
                                                     <td>
-                                                        @switch($claim->stage)
+                                                        @switch($proyek->stage)
                                                             @case("1") Pasar Dini
                                                                 @break
                                                             @case("2") Pasar Potensial
@@ -233,17 +246,20 @@
                                                     <!--end::Stage-->
                                                     
                                                     <!--begin::Nilai Forecast-->
-                                                    <td>
+                                                    <td class="text-end">
                                                         {{-- @php
-                                                            $nilaiClaim = 0;
-                                                            foreach ($claim as $nilai)
-                                                            if ($nilai->nilai_claim != "") {
-                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                            $nilaiForecast = 0;
+                                                            foreach ($proyek->Forecasts as $forecast)
+                                                            if ($forecast->nilai_forecast != "") {
+                                                                $nilaiForecast += $forecast->nilai_forecast;
                                                             }
                                                         @endphp --}}
-                                                            {{-- {{ number_format($claim->forecast, 0, '.', ',') }} --}}
-                                                            {{ $claim->forecast }}
-                                                    </td>
+                                                            {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
+                                                            {{-- @foreach ($proyek->Forecasts as $forecast)
+                                                                {{ $forecast->nilai_forecast }};
+                                                                @endforeach --}}
+                                                        {{ number_format($proyek->forecast, 0, '.', ',') }}
+                                                     </td>
                                                     <!--end::Nilai Forecast-->
                                                 </tr>
                                                 {{-- @endforeach --}}
@@ -255,23 +271,10 @@
                                         {{-- {{ $paretoClaim->links() }} --}}
                                         {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
                                 </div>
-                                <!--end::Table Pannel Claim-->
+                                <!--end::Table pareto proyek-->
                             </div>
                             <hr>
-                            
-                            <div class="py-12" id="marketing-pipeline">
-                                <!--begin::MARKETING PIPELINE-->
-                                <!--end::MARKETING PIPELINE-->
-                            </div>
-                            <hr>
-
-                            <div class="py-12" id="claim">
-                                <!--begin::MARKETING PIPELINE-->
-                                <!--end::MARKETING PIPELINE-->
-                            </div>
-                            <hr>
-                            
-                            <!--begin:: PARETO-->    
+                                
                             <div class="px-8 pb-18 py-12">
                                 <h1 class="text-center bold">
                                     Pareto Claim

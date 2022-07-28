@@ -675,7 +675,7 @@
                                                                         <tr>
                                                                             <!--begin::Name-->
                                                                             <td>
-                                                                                <a href="#" class="text-gray-800 text-hover-primary mb-1">
+                                                                                <a href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
                                                                                     {{ $proyekberjalan0->nama_proyek }}
                                                                                 </a>
                                                                             </td>
@@ -755,7 +755,7 @@
                                                                         <tr>
                                                                             <!--begin::Name-->
                                                                             <td>
-                                                                                <a href="#" class="text-gray-800 text-hover-primary mb-1 text-break">
+                                                                                <a href="/proyek/view/{{ $proyekberjalan6->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1 text-break">
                                                                                     {{ $proyekberjalan6->nama_proyek }}
                                                                                 </a>
                                                                             </td>
@@ -853,7 +853,7 @@
                                                                         <tr>
                                                                             <!--begin::Name-->
                                                                             <td>
-                                                                                <a href="#" class="text-gray-800 text-hover-primary mb-1 text-break">
+                                                                                <a href="/proyek/view/{{ $proyekberforecast->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1 text-break">
                                                                                     {{ $proyekberforecast->nama_proyek }}
                                                                                 </a>
                                                                             </td>

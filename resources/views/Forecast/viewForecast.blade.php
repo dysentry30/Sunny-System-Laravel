@@ -7,7 +7,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 @endphp
 
 {{-- Begin::Title --}}
-@section('title', 'View Forecast')
+@section('title', 'Forecast')
 {{-- End::Title --}}
 
 <!--begin::Main-->

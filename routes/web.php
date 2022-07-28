@@ -286,8 +286,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->orderByDesc("created_at")->first();
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            // $forecast->nilai_forecast = (int) $data["nilai_forecast"];
             if ($forecast->update(["nilai_forecast" => (int) $data["nilai_forecast"]])) {
+                if(!empty($proyek->forecast)){
+                    $totalfc = 0;
+                    foreach ($proyek->Forecasts as $proyekfc){
+                        $totalfc += $proyekfc->nilai_forecast;
+                    }
+                    $proyek->forecast = $totalfc;
+                    $proyek->save(); 
+                } else {
+                    $proyek->forecast = (int) $data["nilai_forecast"];
+                    $proyek->save(); 
+                }
                 return response()->json([
                     "status" => "success",
                     "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
@@ -303,7 +313,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->rkap_forecast = (int) str_replace(",", "", $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast->kode_proyek = $data["kode_proyek"];
+            // dump($proyek);
             if ($forecast->save()) {
+                if($proyek->kode_proyek == $data["kode_proyek"]){
+                    $proyek->forecast += (int) $data["nilai_forecast"];
+                    $proyek->save(); 
+                }else{
+                    $proyek->forecast = (int) $data["nilai_forecast"];
+                    $proyek->save(); 
+                }
                 return response()->json([
                     "status" => "success",
                     "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",

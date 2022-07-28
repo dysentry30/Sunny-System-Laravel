@@ -176,7 +176,9 @@ class DashboardController extends Controller
             if ($stg <= 7) {
                 $prosesTender++;
             } else {
-                $terkontrak++;
+                if(empty($proyek->ContractManagements)){
+                    $terkontrak++;
+                }
             };
         };
         $contracts = ContractManagements::all();
@@ -187,7 +189,7 @@ class DashboardController extends Controller
             $stg = $contract->stages;
             if ($stg <= 3) {
                 $pelaksanaan++;
-            } else if ($stg <= 5) {
+            } else if ($stg < 5) {
                 $serahTerima++;
             } else {
                 $closing++;
@@ -196,6 +198,8 @@ class DashboardController extends Controller
         //end::Marketing PipeLine
         
         //begin::Pareto
+        $paretoProyek = Proyek::orderByDesc('forecast')->sortable()->get();
+        
         $paretoClaim = ClaimManagements::sortable()->where("jenis_claim", "=", "Claim")->get()->groupBy("kode_proyek");
         // $paretoClaim = ClaimManagements::sortable()->get();
         // dd($paretoClaim);
@@ -204,7 +208,7 @@ class DashboardController extends Controller
         //end::Pareto
 
 
-        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoClaim", "paretoAntiClaim", "paretoAsuransi"]));
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi"]));
     }
 
     /**
