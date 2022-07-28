@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ContractManagements;
 use App\Models\DraftContracts;
+use App\Models\Pasals;
 use Faker\Core\Uuid;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -58,7 +59,11 @@ class DraftContractController extends Controller
         if (Session::has("pasals")) {
             $pasals = [];
             foreach (Session::get("pasals") as $pasal) {
-                array_push($pasals, $pasal->id_pasal);
+                if(!empty(Pasals::find($pasal->id_pasal))) {
+                    array_push($pasals, $pasal->id_pasal);
+                } else {
+                    array_push($pasals, $pasal->pasal);
+                }
             }
             Session::forget("pasals");
         }

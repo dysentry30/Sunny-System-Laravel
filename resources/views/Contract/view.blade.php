@@ -512,12 +512,13 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="text"
-                                                class="form-control rounded-0 bg-white border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                id="number-contract" name="number-contract"
-                                                value="{{ $contract->id_contract ?? '' }}"
-                                                placeholder="No. Contract" />
+                                                {{-- <input type="text"
+                                                    class="form-control rounded-0 bg-white border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                    id="number-contract" name="number-contract"
+                                                    value="{{ $contract->id_contract ?? '' }}"
+                                                    placeholder="No. Contract" /> --}}
                                             <!--end::Input-->
+                                            <p class="">{{ $contract->id_contract ?? '' }}</p>
                                         </div>
                                         <!--end::Input group Name-->
                                     </div>
@@ -532,7 +533,7 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <select name="project-id" id="project-id"
+                                            {{-- <select name="project-id" id="project-id"
                                                 class="form-select border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
                                                 data-control="select2" data-hide-search="false"
                                                 data-placeholder="Pilih Proyek">
@@ -542,7 +543,9 @@
                                                         {{ $project_all->nama_proyek }}
                                                     </option>
                                                 @endforeach
-                                            </select>
+                                            </select> --}}
+                                            <p class="">{{ $contract->project->nama_proyek ?? '' }}</p>
+
 
                                             <!--end::Input-->
                                         </div>
@@ -567,11 +570,12 @@
                                                 data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                     style="color: #008CB4"></i></a>
-                                            <input type="Date" data-bs-target="#kt_modal_calendar-start"
+                                            {{-- <input type="Date" data-bs-target="#kt_modal_calendar-start"
                                                 class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 placeholder="Select a date"
                                                 value="{{ date_format($contract->contract_in ?? now(), 'Y-m-d') }}"
-                                                name="start-date" id="start-date" />
+                                                name="start-date" id="start-date" /> --}}
+                                                <p>{{ Carbon\Carbon::parse($contract->contract_in)->translatedFormat("d F Y")}}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -592,10 +596,11 @@
                                                     class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
                                                     style="color: #008CB4"></i></a>
                                             <!--begin::Input-->
-                                            <input type="Date"
+                                            {{-- <input type="Date"
                                                 class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 value="{{ date_format($contract->contract_out ?? now(), 'Y-m-d') }}"
-                                                placeholder="Select a date" id="due-date" name="due-date" />
+                                                placeholder="Select a date" id="due-date" name="due-date" /> --}}
+                                                <p>{{ Carbon\Carbon::parse($contract->contract_out)->translatedFormat("d F Y")}}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -616,11 +621,11 @@
                                             <!--end::Label-->
                                             <!--begin::Input-->
 
-                                            <input type="text"
+                                            {{-- <input type="text"
                                                 class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                 name="number-spk" id="number-spk"
-                                                value="{{ $contract->number_spk ?? 0 }}" placeholder="No. SPK" />
-
+                                                value="{{ $contract->number_spk ?? 0 }}" placeholder="No. SPK" /> --}}
+                                            <p>{{ $contract->number_spk ?? 0 }}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -635,11 +640,12 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="decimal" id="value-contract"
+                                            {{-- <input type="decimal" id="value-contract"
                                                 class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
                                                 onkeyup="reformatNumber(this)" name="value"
                                                 value="{{ number_format($contract->value ?? 0, 0, ',', ',') }}"
-                                                placeholder="Nilai Kontrak" />
+                                                placeholder="Nilai Kontrak" /> --}}
+                                            <p>{{ number_format($contract->value ?? 0, 0, ',', ',') }}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -658,11 +664,12 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="decimal" id="value-review"
+                                            {{-- <input type="decimal" id="value-review"
                                                 class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
                                                 onkeyup="reformatNumber(this)" name="value-review"
                                                 value="{{ number_format($contract->value_review ?? 0, 0, ',', ',') }}"
-                                                placeholder="Nilai Kontrak Review" />
+                                                placeholder="Nilai Kontrak Review" /> --}}
+                                            <p>{{ number_format($contract->value_review ?? 0, 0, ',', ',') }}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -681,11 +688,12 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="text" id="unit-kerja"
+                                            {{-- <input type="text" id="unit-kerja"
                                                 class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
                                                 name="unit-kerja"
                                                 value="{{ $contract->project->UnitKerja->unit_kerja }}"
-                                                placeholder="Unit Kerja" />
+                                                placeholder="Unit Kerja" /> --}}
+                                            <p>{{ $contract->project->UnitKerja->unit_kerja }}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -704,10 +712,11 @@
                                             </label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
-                                            <input type="text" id="sumber-dana"
+                                            {{-- <input type="text" id="sumber-dana"
                                                 class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
                                                 name="sumber-dana" value="{{ $contract->project->sumber_dana }}"
-                                                placeholder="Sumber Dana" />
+                                                placeholder="Sumber Dana" /> --}}
+                                            <p>{{ $contract->project->sumber_dana }}</p>
                                             <!--end::Input-->
                                         </div>
                                         <!--end::Input group-->
@@ -1319,7 +1328,7 @@
                                                 <!--begin::Name=-->
                                                 <td>
                                                     <a target="_blank"
-                                                        href="/document/view/{{ $draftContract->id_draft }}/{{ $draftContract->id_document }}"
+                                                        href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{ $draftContract->id_draft }}"
                                                         class="text-gray-600 text-hover-primary mb-1">
                                                         {{ $draftContract->title_draft }}
                                                     </a>
@@ -2313,7 +2322,7 @@
                                         <label for="dokumen-bast-1" class="form-label">Dokumen Bast 1</label>
                                         <input type="file" name="dokumen-bast-1" accept=".docx" class="form-control form-control-solid">
                                         @if (!empty($contract->dokumen_bast_1))
-                                            <small>Lihat Dokumen Bast 1: <a class="text-gray-400 text-hover-primary" href="/document/view/{{$contract->id_contract}}/{{$contract->dokumen_bast_1}}">Klik disini</a></small>
+                                            <small>Lihat Dokumen Bast 1: <a target="_blank" class="text-gray-400 text-hover-primary" href="/document/view/{{$contract->id_contract}}/{{$contract->dokumen_bast_1}}">Klik disini</a></small>
                                         @else
                                             <small>Belum mendapatkan Dokumen Bast 1</small>
                                         @endif
@@ -2322,7 +2331,7 @@
                                         <label for="dokumen-bast-2" class="form-label">Dokumen Bast 2</label>
                                         <input type="file" name="dokumen-bast-2" accept=".docx" class="form-control form-control-solid">
                                         @if (!empty($contract->dokumen_bast_1))
-                                            <small>Lihat Dokumen Bast 2: <a class="text-gray-400 text-hover-primary" href="/document/view/{{$contract->id_contract}}/{{$contract->dokumen_bast_2}}">Klik disini</a></small>
+                                            <small>Lihat Dokumen Bast 2: <a target="_blank" class="text-gray-400 text-hover-primary" href="/document/view/{{$contract->id_contract}}/{{$contract->dokumen_bast_2}}">Klik disini</a></small>
                                         @else
                                             <small>Belum mendapatkan Dokumen Bast 2</small>
                                         @endif
