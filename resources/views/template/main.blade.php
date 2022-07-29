@@ -56,6 +56,9 @@
         th a{
             color: #b5b5c3 !important;
         }
+        tr td, tr td a{
+            color: #3f4254 !important;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
