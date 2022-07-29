@@ -94,33 +94,23 @@ img.tengah {
     position: absolute;
 }
 
-/* #toaster-timer {
+#datatable:fullscreen {
     position: relative;
-    background: #7367f0;
-    padding: 0 10px;
-    color: white;
-    border-radius: 3px;
+    padding: 5rem;
 }
 
-#toaster-timer::before {
-    background: #4036a6;
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 50%;
-    height: 100%;
-    border-radius: 3px;
-} */
-/* .swal2-confirm.swal2-styled::before {
+#datatable:not(:fullscreen) #exit-fullscreen {
+    display: none;
+}
+
+#datatable:fullscreen #exit-fullscreen {
     display: block;
-    z-index: 3;
-    content: "";
-    position: relative;
-    background-color: #363175;
-    width: 50%;
-    height: 100%;
-    top: 0;
-    left: 0;
-} */
-/* End :: Custom Toaster */
+}
+
+html #exit-fullscreen {
+    display: block;
+}
+
+#forecast-line .highcharts-point {
+    cursor: pointer;
+}
