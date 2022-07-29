@@ -305,13 +305,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             }
         } else {
             $forecast = new Forecast();
-            $forecast->nilai_forecast = (int) $data["nilai_forecast"];
+            $forecast->nilai_forecast = $data["nilai_forecast"];
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
-            $forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan;
+            $forecast->month_realisasi = $proyek->bulan_ri_perolehan;
             $forecast->month_forecast = (int) $data["forecast_month"];
-            $forecast->rkap_forecast = (int) str_replace(",", "", $proyek->nilai_rkap);
-            $forecast->realisasi_forecast = (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+            $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
+            $forecast->realisasi_forecast = str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast->kode_proyek = $data["kode_proyek"];
             // dump($proyek);
             if ($forecast->save()) {

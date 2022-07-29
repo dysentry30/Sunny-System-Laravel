@@ -304,7 +304,7 @@
 </form>
 @else
 <!--begin::Content-->
-<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content" style="padding: 0 !important;">
     <form action="/contract-management/update" method="post">
         @csrf
         <!--begin::Toolbar-->
@@ -452,279 +452,148 @@
                     <!--end::Header Contract-->
                     <!--begin::Header Contract-->
                     <div class="px-10" style="margin-bottom: 2rem;">
-                        @if (Session::has('failed') || Session::has('success'))
-                            {{-- Begin:: Alert --}}
-                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-                                <symbol id="check-circle-fill" fill="#0f5132" viewBox="0 0 16 16">
-                                    <path
-                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                </symbol>
-                                <symbol id="exclamation-triangle-fill" fill="#842029" viewBox="0 0 16 16">
-                                    <path
-                                        d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
-                                </symbol>
-                            </svg>
-                            @if (Session::has('failed'))
-                                <div class="alert alert-danger alert-dismissible d-flex align-items-center"
-                                    role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                        aria-label="Danger:">
-                                        <use xlink:href="#exclamation-triangle-fill" />
-                                    </svg>
-                                    <div style="color: #842029;">
-                                        {{ Session::get('failed') }}
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-
-                                </div>
-                            @elseif (Session::has('success'))
-                                <div class="alert alert-success alert-dismissible d-flex align-items-center"
-                                    role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img"
-                                        aria-label="Success:">
-                                        <use xlink:href="#check-circle-fill" />
-                                    </svg>
-                                    <div style="color: #0f5132;">
-                                        {{ Session::get('success') }}
-                                    </div>
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                        aria-label="Close"></button>
-                                </div>
-                            @endif
-                            {{-- End:: Alert --}}
-                        @endif
                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
                             <div class="card-body pt-5">
 
                                 <!--begin::Row-->
-                                <div class="row fv-row">
+                                <div class="d-flex align-items-center">
                                     <!--begin::Col-->
                                     <div class="col-6">
                                         <!--begin::Input group Website-->
 
                                         <!--begin::Input group Name-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">No. Contract</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                                {{-- <input type="text"
-                                                    class="form-control rounded-0 bg-white border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                    id="number-contract" name="number-contract"
-                                                    value="{{ $contract->id_contract ?? '' }}"
-                                                    placeholder="No. Contract" /> --}}
-                                            <!--end::Input-->
-                                            <p class="">{{ $contract->id_contract ?? '' }}</p>
+                                        <div class="d-flex align-items-center">
+                                            <div class="col-5 text-end me-5">
+                                                <span class="">No. Contract: </span>
+                                            </div>
+                                            <div class="text-dark text-start">
+                                                <b>{{ $contract->id_contract ?? '' }}</b>
+                                            </div>
                                         </div>
                                         <!--end::Input group Name-->
                                     </div>
                                     <!--begin::Col-->
                                     <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="col-5 text-end me-5">
+                                                <span class="">Proyek: </span>
+                                            </div>
+                                            <div class="text-dark text-start">
+                                                <b>{{ $contract->project->nama_proyek ?? '' }}</b>
+                                            </div>
+                                        </div>
                                         <!--begin::Input group Website-->
                                         <!--begin::Input group Name-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span class="required">Proyek</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            {{-- <select name="project-id" id="project-id"
-                                                class="form-select border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
-                                                data-control="select2" data-hide-search="false"
-                                                data-placeholder="Pilih Proyek">
-                                                @foreach ($projects as $project_all)
-                                                    <option value="{{ $project_all->kode_proyek }}"
-                                                        {{ $contract->project->kode_proyek == $project_all->kode_proyek ? 'selected' : '' }}>
-                                                        {{ $project_all->nama_proyek }}
-                                                    </option>
-                                                @endforeach
-                                            </select> --}}
-                                            <p class="">{{ $contract->project->nama_proyek ?? '' }}</p>
-
-
-                                            <!--end::Input-->
-                                        </div>
                                         <!--end::Input group Name-->
                                     </div>
                                 </div>
 
 
-                                <div class="row fv-row">
-                                    <!--begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Tanggal Mulai Kontrak</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            <a href="#" class="btn btn-sm mx-3"
-                                                style="background: transparent;width:1rem;height:2.3rem;"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-start"><i
-                                                    class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                    style="color: #008CB4"></i></a>
-                                            {{-- <input type="Date" data-bs-target="#kt_modal_calendar-start"
-                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                placeholder="Select a date"
-                                                value="{{ date_format($contract->contract_in ?? now(), 'Y-m-d') }}"
-                                                name="start-date" id="start-date" /> --}}
-                                                <p>{{ Carbon\Carbon::parse($contract->contract_in)->translatedFormat("d F Y")}}</p>
-                                            <!--end::Input-->
-                                        </div>
-                                        <!--end::Input group-->
-                                    </div>
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Tanggal Berakhir Kontrak</span>
-                                            </label>
-                                            <!--end::Label-->
+                                <div class="row fv-row my-5">
 
-                                            <a href="#" class="btn btn-sm mx-3"
-                                                style="background: transparent;width:1rem;height:2.3rem;"
-                                                data-bs-toggle="modal" data-bs-target="#kt_modal_calendar-end"><i
-                                                    class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                    style="color: #008CB4"></i></a>
-                                            <!--begin::Input-->
-                                            {{-- <input type="Date"
-                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                value="{{ date_format($contract->contract_out ?? now(), 'Y-m-d') }}"
-                                                placeholder="Select a date" id="due-date" name="due-date" /> --}}
-                                                <p>{{ Carbon\Carbon::parse($contract->contract_out)->translatedFormat("d F Y")}}</p>
-                                            <!--end::Input-->
+                                    <div class="d-flex align-items-center">
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+    
+                                            <!--begin::Input group Name-->
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Tanggal Mulai Kontrak: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ Carbon\Carbon::parse($contract->contract_in)->translatedFormat("d F Y")}}</b>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group Name-->
                                         </div>
-                                        <!--end::Input group-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Tanggal Berakhir Kontrak: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ Carbon\Carbon::parse($contract->contract_out)->translatedFormat("d F Y")}}</b>
+                                                </div>
+                                            </div>
+                                            <!--begin::Input group Website-->
+                                            <!--begin::Input group Name-->
+                                            <!--end::Input group Name-->
+                                        </div>
                                     </div>
-                                    <!--End begin::Col-->
                                 </div>
 
 
-                                <div class="row fv-row">
-                                    <!--begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>No. SPK</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-
-                                            {{-- <input type="text"
-                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                name="number-spk" id="number-spk"
-                                                value="{{ $contract->number_spk ?? 0 }}" placeholder="No. SPK" /> --}}
-                                            <p>{{ $contract->number_spk ?? 0 }}</p>
-                                            <!--end::Input-->
+                                <div class="row fv-row mb-5">
+                                    <div class="d-flex align-items-center">
+                                        <!--begin::Col-->
+                                        <div class="col">
+                                            <!--begin::Input group Website-->
+    
+                                            <!--begin::Input group Name-->
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">No. SPK: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ $contract->number_spk ?? 0 }}</b>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group Name-->
                                         </div>
-                                        <!--end::Input group-->
-                                    </div>
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Nilai Kontrak Awal</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            {{-- <input type="decimal" id="value-contract"
-                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
-                                                onkeyup="reformatNumber(this)" name="value"
-                                                value="{{ number_format($contract->value ?? 0, 0, ',', ',') }}"
-                                                placeholder="Nilai Kontrak" /> --}}
-                                            <p>{{ number_format($contract->value ?? 0, 0, ',', ',') }}</p>
-                                            <!--end::Input-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Nilai Kontrak Awal: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ number_format($contract->value ?? 0, 0, ',', ',') }}</b>
+                                                </div>
+                                            </div>
+                                            <!--begin::Input group Website-->
+                                            <!--begin::Input group Name-->
+                                            <!--end::Input group Name-->
                                         </div>
-                                        <!--end::Input group-->
-                                        {{-- begin:: Format Money --}}
-                                        <script></script>
-                                        {{-- end:: Format Money --}}
-
                                     </div>
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Nilai Kontrak Review</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            {{-- <input type="decimal" id="value-review"
-                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
-                                                onkeyup="reformatNumber(this)" name="value-review"
-                                                value="{{ number_format($contract->value_review ?? 0, 0, ',', ',') }}"
-                                                placeholder="Nilai Kontrak Review" /> --}}
-                                            <p>{{ number_format($contract->value_review ?? 0, 0, ',', ',') }}</p>
-                                            <!--end::Input-->
+
+
+                                </div>
+                                <div class="fv-row">
+                                    <div class="d-flex align-items-center">
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <!--begin::Input group Website-->
+    
+                                            <!--begin::Input group Name-->
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Unit Kerja: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ $contract->project->UnitKerja->unit_kerja }}</b>
+                                                </div>
+                                            </div>
+                                            <!--end::Input group Name-->
                                         </div>
-                                        <!--end::Input group-->
-                                        {{-- begin:: Format Money --}}
-                                        <script></script>
-                                        {{-- end:: Format Money --}}
-
-                                    </div>
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Unit Kerja</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            {{-- <input type="text" id="unit-kerja"
-                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
-                                                name="unit-kerja"
-                                                value="{{ $contract->project->UnitKerja->unit_kerja }}"
-                                                placeholder="Unit Kerja" /> --}}
-                                            <p>{{ $contract->project->UnitKerja->unit_kerja }}</p>
-                                            <!--end::Input-->
+                                        <!--begin::Col-->
+                                        <div class="col-6">
+                                            <div class="d-flex align-items-center">
+                                                <div class="col-5 text-end me-5">
+                                                    <span class="">Sumber Dana: </span>
+                                                </div>
+                                                <div class="text-dark text-start">
+                                                    <b>{{ $contract->project->sumber_dana }}</b>
+                                                </div>
+                                            </div>
+                                            <!--begin::Input group Website-->
+                                            <!--begin::Input group Name-->
+                                            <!--end::Input group Name-->
                                         </div>
-                                        <!--end::Input group-->
-                                        {{-- begin:: Format Money --}}
-                                        <script></script>
-                                        {{-- end:: Format Money --}}
-
                                     </div>
-                                    <!--End begin::Col-->
-                                    <div class="col-6">
-                                        <!--begin::Input group Website-->
-                                        <div class="fv-row mb-7">
-                                            <!--begin::Label-->
-                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                <span>Sumber Dana</span>
-                                            </label>
-                                            <!--end::Label-->
-                                            <!--begin::Input-->
-                                            {{-- <input type="text" id="sumber-dana"
-                                                class="form-control border-bottom-dashed rounded-0 border-top-0 border-left-0 border-right-0"
-                                                name="sumber-dana" value="{{ $contract->project->sumber_dana }}"
-                                                placeholder="Sumber Dana" /> --}}
-                                            <p>{{ $contract->project->sumber_dana }}</p>
-                                            <!--end::Input-->
-                                        </div>
-                                        <!--end::Input group-->
-                                        {{-- begin:: Format Money --}}
-                                        <script></script>
-                                        {{-- end:: Format Money --}}
-
-                                    </div>
+                                </div>
                                     <!--End begin::Col-->
                                 </div>
                                 <h6 id="status-msg" style="display: none"></h6>
@@ -994,14 +863,14 @@
 
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="5" class="text-center bg-gray-100">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="5" class="text-center bg-gray-100">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
