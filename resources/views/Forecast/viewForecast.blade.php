@@ -115,7 +115,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                             <li class="nav-item">
                                                 <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                     data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
-                                                    style="font-size:14px;">Forecast S/D Eksternal</a>
+                                                    style="font-size:14px;">Forecast S/D Internal</a>
                                             </li>
                                             <!--end:::Tab item Forecast S/D-->
                                         </ul>
@@ -2886,7 +2886,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     </tr>
                                                                     {{-- begin:: Foreach Proyek --}}
                                                                     @foreach ($unitKerja->proyeks as $proyek)
-                                                                        @if ($proyek->jenis_proyek == 'E')
+                                                                        @if ($proyek->jenis_proyek == 'I')
 
                                                                             <tr id="{{ $unitKerja->divcode }}"
                                                                                 class="collapse"
