@@ -66,7 +66,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row w-600px" method="get">
-                                    {{-- Begin:: Select Options --}}
+                                    <!--begin::Select Options-->
                                     <select id="periode-prognosa" name="periode-prognosa" class="form-select form-select-solid select2-hidden-accessible w-200px" style="margin-right: 2rem;" data-control="select2" data-hide-search="true" data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$month == "" ? "selected": ""}}></option>
                                         <option value="1" {{$month == 1 ? "selected": ""}}>Januari</option>
@@ -82,37 +82,49 @@
                                         <option value="11" {{$month == 11 ? "selected": ""}}>November</option>
                                         <option value="12" {{$month == 12 ? "selected": ""}}>Desember</option>
                                     </select>
-                                    {{-- End:: Select Options --}}
-                                    
-                                    {{-- Begin:: Select Options --}}
+                                    <!--end::Select Options-->
+                                    @php
+                                        $years = (int) date("Y") ;
+                                        // $day = (int) date("d");
+                                        // $year = 2030 ;
+                                    @endphp
+                                    <!--begin::Select Options-->
                                     <select id="tahun-history" name="tahun-history" class="form-select form-select-solid select2-hidden-accessible w-200px ms-2" data-control="select2" data-hide-search="true" data-placeholder="Tahun" data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
-                                        <option {{$year == "" ? "selected": ""}}></option>
-                                        <option value="2021" {{$year == 2021 ? "selected": ""}}>2021</option>
-                                        <option value="2022" {{$year == 2022 ? "selected": ""}}>2022</option>
-                                        <option value="2023" {{$year == 2023 ? "selected": ""}}>2023</option>
-                                        <option value="2024" {{$year == 2024 ? "selected": ""}}>2024</option>
-                                        <option value="2025" {{$year == 2025 ? "selected": ""}}>2025</option>
-                                        <option value="2026" {{$year == 2026 ? "selected": ""}}>2026</option>
-                                        <option value="2027" {{$year == 2027 ? "selected": ""}}>2027</option>
-                                        <option value="2028" {{$year == 2028 ? "selected": ""}}>2028</option>
-                                        <option value="2029" {{$year == 2029 ? "selected": ""}}>2029</option>
-                                        <option value="2030" {{$year == 2030 ? "selected": ""}}>2030</option>
-                                        <option value="2031" {{$year == 2031 ? "selected": ""}}>2031</option>
-                                        <option value="2032" {{$year == 2032 ? "selected": ""}}>2032</option>
+                                        @if ($year == null)
+                                            @for ($i = $years-3; $i < $years+10; $i++ )
+                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        @else
+                                            @for ($i = $year-3; $i < $year+10; $i++ )
+                                            <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>{{ $i }}</option>
+                                            @endfor
+                                        @endif
                                     </select>
-                                    {{-- End:: Select Options --}}
-
-                                    {{-- Begin:: Action Filter --}}
+                                    <!--end::Select Options-->
+                                    
+                                    <!--begin::Action Filter-->
                                     <button type="submit" class="btn btn-sm btn-primary ms-4" id="kt_toolbar_primary_button" 
-                                        style="background-color:#008CB4">
-                                        Filter</button>
-                                    {{-- End:: Action Filter --}}
-
-                                    {{-- Begin:: Action Filter --}}
+                                    style="background-color:#008CB4">
+                                    Filter</button>
+                                    
                                     <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                        onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
-                                    {{-- End:: Action Filter --}}
+                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <!--end::Action Filter-->
                                 </form>
+                                    <!--begin::RESET FILTER-->
+                                    <script>
+                                        function resetFilter() {
+                                            $("#periode-prognosa").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+                                            
+                                            $("#tahun-history").select2({
+                                                minimumResultsForSearch: -1
+                                            }).val("").trigger("change");
+
+                                        }
+                                    </script>
+                                    <!--end::RESET FILTER-->
                             </div>
                             <!--begin::Card title-->
 
@@ -988,20 +1000,7 @@
 <!--end::CLAIM-->
 
 
-<!--begin::RESET FILTER-->
-<script>
-    function resetFilter() {
-        $("#periode-prognosa").select2({
-            minimumResultsForSearch: -1
-        }).val("").trigger("change");
-        
-        $("#tahun-history").select2({
-            minimumResultsForSearch: -1
-        }).val("").trigger("change");
 
-    }
-</script>
-<!--end::RESET FILTER-->
 
 <!--Begin::Trigger Point Chart-->
 <script>

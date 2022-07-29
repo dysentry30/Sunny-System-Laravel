@@ -31,7 +31,7 @@ class DashboardController extends Controller
         if ($request->get("periode-prognosa") || $request->get("tahun-history")) {
             $nilaiHistoryForecast = HistoryForecast::where("periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
             ->whereYear("created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
-            $year = $request->get("tahun-history") ?? "";
+            $year = (int) $request->get("tahun-history") ?? "";
             $month = $request->get("periode-prognosa") ?? "";
             // dd($nilaiHistoryForecast);
         } else {
@@ -198,7 +198,7 @@ class DashboardController extends Controller
         //end::Marketing PipeLine
         
         //begin::Pareto
-        $paretoProyek = Proyek::orderByDesc('forecast')->sortable()->get();
+        $paretoProyek = Proyek::sortable()->orderByDesc('forecast')->get();
         
         $paretoClaim = ClaimManagements::sortable()->where("jenis_claim", "=", "Claim")->get()->groupBy("kode_proyek");
         // $paretoClaim = ClaimManagements::sortable()->get();
