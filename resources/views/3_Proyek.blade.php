@@ -105,7 +105,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <form action="" method="get">
+                                {{-- <form action="" method="get">
                                     <div class="d-flex align-items-center position-relative my-1 me-8">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
@@ -115,7 +115,7 @@
                                         <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
                                             class="form-control form-control-solid ps-15" placeholder="Kode/Nama Proyek" />
                                     </div>
-                                </form>
+                                </form> --}}
                                 <!--end::Search-->
                                 
                                 <!--Begin:: BUTTON FILTER-->
@@ -159,8 +159,15 @@
                                     
                                     @else
                                     
-                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
-                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    <div class="d-flex align-items-center position-relative">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                        class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                    </div>
                                     
                                     @endif
 

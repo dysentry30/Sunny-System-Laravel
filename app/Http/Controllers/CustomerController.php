@@ -84,9 +84,14 @@ class CustomerController extends Controller
                             <!--end::check_competitor-->
                             <!--begin::Kode Nasabah=-->
                             <td>
-                            '.$customers->kode_nasabah.'
+                            '.$customers->kode_nasabah. '
                             </td>
                             <!--end::Kode Nasabah-->
+                            <!--begin::Kode Pelanggan=-->
+                            <td>
+                            ###'.$customers->kode_nasabah.'
+                            </td>
+                            <!--end::Kode Pelanggan-->
                             <!--begin::Action=-->
                             '. $actButton . '
                         </tr>';

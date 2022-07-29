@@ -599,9 +599,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        // $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", "L")->get()->groupBy("tahun_perolehan");
-        // $unitkerjas = UnitKerja::all();
-        // $proyeks = Proyek::all()->groupBy("tahun_perolehan");
         $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
 
         $proyeks = [];
@@ -614,8 +611,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         
         return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
     });
+
+    Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
+
+        $rkaps = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
+        // $rkaps = UnitKerja::find($id_unit_kerja);
+        // dd($rkaps);
+
+        return view("/Rkap/viewRkap", compact(["rkaps"]));
+    });
     // end RKAP
 
+    
     // begin email testing
     Route::get('/email', function () {
         return new UserPasswordEmail(auth()->user(), "test");

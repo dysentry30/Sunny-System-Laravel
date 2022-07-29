@@ -44,7 +44,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            {{-- @if (auth()->user()->check_administrator)
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -92,7 +92,7 @@
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                            @endif --}}
                         </div>
                         <!--end::Container-->
                     </div>
@@ -163,7 +163,7 @@
                                         <tr>
                                             <!--begin::Name-->
                                             <td class="">
-                                                <a href="#" id="click-name"
+                                                <a href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
                                                     class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja->unit_kerja }}</a>
                                             </td>
                                             <!--end::Name-->

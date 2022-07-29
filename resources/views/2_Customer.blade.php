@@ -103,7 +103,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <!--begin::Search-->
-                                <form action="" method="get">
+                                {{-- <form action="" method="get">
                                     <div class="d-flex align-items-center position-relative my-1 me-8">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                         <span class="svg-icon svg-icon-1 position-absolute ms-6">
@@ -113,23 +113,33 @@
                                         <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
                                             class="form-control form-control-solid ps-15" placeholder="Name/Email Pelanggan"/>
                                     </div>
-                                </form>
+                                </form> --}}
                                 <!--end::Search-->
 
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
-                                    <select id="column" name="column" onchange="changes(this)" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
+                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$column == "" ? "selected": ""}}></option>
                                         <option value="name" {{$column == "name" ? "selected" : ""}}>Nama Pelanggan</option>
                                         <option value="email" {{$column == "email" ? "selected" : ""}}>Email Pelanggan</option>
                                         <option value="kode_nasabah" {{$column == "kode_nasabah" ? "selected" : ""}}>Kode Nasabah</option>
                                     </select>
                                     <!--End:: Select Options-->
+                                    {{-- @php
+                                        $iconSearch = '<i class="bi bi-search"></i>';
+                                    @endphp --}}
                                     
                                     <!--begin:: Input Filter-->
-                                    <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
-                                    class="form-control form-control-solid ms-2" placeholder="Input Filter" />
+                                    <div class="d-flex align-items-center position-relative">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                        class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                    </div>
                                     <!--end:: Input Filter-->
                                     
                                     <!--begin:: Filter-->
@@ -139,7 +149,7 @@
                                     
                                     <!--begin:: RESET-->
                                     <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
                                     <script>
                                         function resetFilter() {
                                             $("#column").select2({
@@ -175,6 +185,7 @@
                                         <th class="min-w-auto">@sortablelink('check_partner','Partner')</th>
                                         <th class="min-w-auto">@sortablelink('check_competitor','Competitor')</th>
                                         <th class="min-w-auto">Kode Nasabah</th>
+                                        <th class="min-w-auto">Kode Pelanggan</th>
                                         @if (auth()->user()->check_administrator)
                                         <th class="min-w-auto text-center">Action</th>
                                         @endif
@@ -236,6 +247,11 @@
                                                 {{ $customers->kode_nasabah }}
                                                 </td>
                                                 <!--end::Kode Nasabah-->
+                                                <!--begin::Kode Pelanggan=-->
+                                                <td>
+                                                ###{{ $customers->kode_nasabah }}
+                                                </td>
+                                                <!--end::Kode Pelanggan-->
                                                 <!--begin::Action=-->
                                                 @if (auth()->user()->check_administrator)
                                                     <td class="text-center">
