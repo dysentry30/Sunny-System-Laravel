@@ -838,8 +838,8 @@
                                                                         <!--begin::Table row-->
                                                                         <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                             <th class="min-w-auto">Nama Proyek</th>
-                                                                            <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto">Unit kerja</th>
+                                                                            <th class="min-w-auto">Stage</th>
                                                                             <th class="min-w-auto">Nilai Forecast</th>
                                                                         </tr>
                                                                         <!--end::Table row-->

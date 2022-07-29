@@ -39,12 +39,11 @@ class ProyekController extends Controller
             // $proyeks = Proyek::sortable()->where($column, '=', $filter)->get();
             $proyeks = Proyek::sortable()->where($column, 'like', '%'.$filter.'%')->get();
         }else{
-            if(!empty($cari)){
-                $proyeks = Proyek::sortable()->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
-            }else{
+            // if(!empty($cari)){
+            //     $proyeks = Proyek::sortable()->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
+            // }else{
                 $proyeks = Proyek::sortable()->get();
-                // dd($proyeks);
-            }
+            // }
         }
                 
         // $proyeks = Proyek::sortable()->get();
