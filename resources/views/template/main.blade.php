@@ -322,6 +322,19 @@
                                     <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'kriteria-pasar' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/kriteria-pasar" style="color:white;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-sort-up text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title-2">Kriteria Pasar</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#008CB4' : '' }}">
                                         <a class="menu-link " href="/pasal/edit" style="color:white;">
                                             <span class="menu-icon">

@@ -6,6 +6,25 @@
 @section('title', 'View Proyek')
 {{-- End::Title --}}
 
+<style>
+    .form-control.form-control-solid {
+            border-left: 0px !important;
+            border-top: 0px !important;
+            border-right: 0px !important;
+            border-bottom: 1px dashed #b5b5c3 !important;
+            border-radius: 0 !important;
+            background-color: transparent !important;
+        }
+        .form-select.form-select-solid {
+            border-left: 0px !important;
+            border-top: 0px !important;
+            border-right: 0px !important;
+            border-bottom: 1px dashed #b5b5c3 !important;
+            border-radius: 0 !important;
+            background-color: transparent !important;
+        }
+</style>
+
 <!--begin::Main-->
 @section('content')
     <!--begin::Root-->
@@ -682,7 +701,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Unit Kerja</span>
+                                                                        <span class="required">Unit Kerja <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -723,7 +742,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Proyek</span>
+                                                                        <span class="required">Kode Proyek <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -747,7 +766,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tipe Proyek</span>
+                                                                        <span class="required">Tipe Proyek <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -773,7 +792,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Jenis Proyek</span>
+                                                                        <span class="required">Jenis Proyek <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -806,7 +825,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tahun Perolehan</span>
+                                                                        <span class="required">Tahun Perolehan <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1083,7 +1102,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    <input onkeyup="hitungReview()" type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="kurs-review" name="kurs-review"
                                                                         value="{{ $proyek->kurs_review }}"
@@ -1108,41 +1127,41 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Bulan Pelaksanaan">
                                                                         <option></option>
-                                                                        <option value="Januari"
-                                                                            {{ $proyek->bulan_review == 'Januari' ? 'selected' : '' }}>
+                                                                        <option value="1"
+                                                                            {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
                                                                             Januari</option>
-                                                                        <option value="Februari"
-                                                                            {{ $proyek->bulan_review == 'Februari' ? 'selected' : '' }}>
+                                                                        <option value="2"
+                                                                            {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
                                                                             Februari</option>
-                                                                        <option value="Maret"
-                                                                            {{ $proyek->bulan_review == 'Maret' ? 'selected' : '' }}>
+                                                                        <option value="3"
+                                                                            {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
                                                                             Maret</option>
-                                                                        <option value="April"
-                                                                            {{ $proyek->bulan_review == 'April' ? 'selected' : '' }}>
+                                                                        <option value="4"
+                                                                            {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
                                                                             April</option>
-                                                                        <option value="Mei"
-                                                                            {{ $proyek->bulan_review == 'Mei' ? 'selected' : '' }}>
+                                                                        <option value="5"
+                                                                            {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
                                                                             Mei</option>
-                                                                        <option value="Juni"
-                                                                            {{ $proyek->bulan_review == 'Juni' ? 'selected' : '' }}>
+                                                                        <option value="6"
+                                                                            {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
                                                                             Juni</option>
-                                                                        <option value="Juli"
-                                                                            {{ $proyek->bulan_review == 'Juli' ? 'selected' : '' }}>
+                                                                        <option value="7"
+                                                                            {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
                                                                             Juli</option>
-                                                                        <option value="Agustus"
-                                                                            {{ $proyek->bulan_review == 'Agustus' ? 'selected' : '' }}>
+                                                                        <option value="8"
+                                                                            {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
                                                                             Agustus</option>
-                                                                        <option value="September"
-                                                                            {{ $proyek->bulan_review == 'September' ? 'selected' : '' }}>
+                                                                        <option value="9"
+                                                                            {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
                                                                             September</option>
-                                                                        <option value="Oktober"
-                                                                            {{ $proyek->bulan_review == 'Oktober' ? 'selected' : '' }}>
+                                                                        <option value="10"
+                                                                            {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
                                                                             Oktober</option>
-                                                                        <option value="November"
-                                                                            {{ $proyek->bulan_review == 'November' ? 'selected' : '' }}>
+                                                                        <option value="11"
+                                                                            {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
                                                                             November</option>
-                                                                        <option value="Desember"
-                                                                            {{ $proyek->bulan_review == 'Desember' ? 'selected' : '' }}>
+                                                                        <option value="12"
+                                                                            {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
                                                                             Desember</option>
                                                                     </select>
                                                                     <!--end::Input-->
@@ -1161,7 +1180,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN)</span>
+                                                                        <span>Nilai OK (Exclude PPN) <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1177,6 +1196,16 @@
                                                             <!--End::Col-->
                                                         </div>
                                                         <!--End::Row Kanan+Kiri-->
+
+                                                        <script>
+                                                            function hitungReview (){
+                                                                let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(",", "");
+                                                                // console.log(nilaiOkReview); 
+                                                                let kursReview = document.getElementById("kurs-review").value.replaceAll(",", "");
+                                                                let hasilOkReview = nilaiOkReview * kursReview;
+                                                                document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview) ;
+                                                            }
+                                                        </script>
 
 
                                                         <!--Begin::Title Biru Form: Nilai RKAP Awal-->
@@ -1196,7 +1225,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Review (Valas) (Exclude Tax)</span>
+                                                                        <span>Nilai OK Awal (Valas) (Exclude Tax) <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1204,7 +1233,7 @@
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
                                                                         value="{{ $proyek->nilai_valas_awal }}"
-                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
+                                                                        placeholder="Nilai OK Awal (Valas) (Exclude Tax)" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1250,16 +1279,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Review</span>
+                                                                        <span>Kurs Awal</span>
                                                                     </label>
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    <input onkeyup="hitungAwal()" type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="kurs-awal" name="kurs-awal"
                                                                         value="{{ $proyek->kurs_awal }}"
-                                                                        placeholder="Kurs Review" />
+                                                                        placeholder="Kurs Awal" />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1270,7 +1299,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Bulan Pelaksanaan</span>
+                                                                        <span>Bulan Pelaksanaan <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
@@ -1280,42 +1309,35 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Bulan Pelaksanaan">
                                                                         <option></option>
-                                                                        <option value="Januari"
-                                                                            {{ $proyek->bulan_awal == 'Januari' ? 'selected' : '' }}>
-                                                                            Januari</option>
-                                                                        <option value="Februari"
-                                                                            {{ $proyek->bulan_awal == 'Februari' ? 'selected' : '' }}>
-                                                                            Februari</option>
-                                                                        <option value="Maret"
-                                                                            {{ $proyek->bulan_awal == 'Maret' ? 'selected' : '' }}>
-                                                                            Maret</option>
-                                                                        <option value="April"
-                                                                            {{ $proyek->bulan_awal == 'April' ? 'selected' : '' }}>
-                                                                            April</option>
-                                                                        <option value="Mei"
-                                                                            {{ $proyek->bulan_awal == 'Mei' ? 'selected' : '' }}>
-                                                                            Mei</option>
-                                                                        <option value="Juni"
-                                                                            {{ $proyek->bulan_awal == 'Juni' ? 'selected' : '' }}>
-                                                                            Juni</option>
-                                                                        <option value="Juli"
-                                                                            {{ $proyek->bulan_awal == 'Juli' ? 'selected' : '' }}>
-                                                                            Juli</option>
-                                                                        <option value="Agustus"
-                                                                            {{ $proyek->bulan_awal == 'Agustus' ? 'selected' : '' }}>
-                                                                            Agustus</option>
-                                                                        <option value="September"
-                                                                            {{ $proyek->bulan_awal == 'September' ? 'selected' : '' }}>
-                                                                            September</option>
-                                                                        <option value="Oktober"
-                                                                            {{ $proyek->bulan_awal == 'Oktober' ? 'selected' : '' }}>
-                                                                            Oktober</option>
-                                                                        <option value="November"
-                                                                            {{ $proyek->bulan_awal == 'November' ? 'selected' : '' }}>
-                                                                            November</option>
-                                                                        <option value="Desember"
-                                                                            {{ $proyek->bulan_awal == 'Desember' ? 'selected' : '' }}>
-                                                                            Desember</option>
+                                                                        <option selected>
+                                                                        @switch($proyek->bulan_awal)
+                                                                            @case("1") Januari
+                                                                                @break
+                                                                            @case("2") Februari
+                                                                                @break
+                                                                            @case("3") Maret
+                                                                                @break
+                                                                            @case("4") April
+                                                                                @break
+                                                                            @case("5") Mei
+                                                                                @break
+                                                                            @case("6") Juni
+                                                                                @break
+                                                                            @case("7") Juli
+                                                                                @break
+                                                                            @case("8") Agustus
+                                                                                @break
+                                                                            @case("9") September
+                                                                                @break
+                                                                            @case("10") Oktober
+                                                                                @break
+                                                                            @case("11") November
+                                                                                @break
+                                                                            @case("12") Desember
+                                                                                @break
+                                                                            @default Selesai
+                                                                                @endswitch
+                                                                            </option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -1333,7 +1355,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN)</span>
+                                                                        <span>Nilai OK (Exclude PPN) <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
 
@@ -1342,36 +1364,118 @@
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilaiok-awal" name="nilaiok-awal"
                                                                         value="{{ $proyek->nilaiok_awal }}"
-                                                                        placeholder="Nilai OK (Exclude PPN)" />
+                                                                        placeholder="Nilai OK (Exclude PPN)" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End::Col-->
                                                         </div>
+                                                        <script>
+                                                            function hitungAwal (){
+                                                                let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(",", "");
+                                                                let kursAwal = document.getElementById("kurs-awal").value.replaceAll(",", "");
+                                                                let hasilOkAwal = nilaiOkAwal * kursAwal; 
+                                                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal) ;
+                                                            }
+                                                        </script>
                                                         <!--End::Row Kanan+Kiri-->
 
                                                         <!--Begin::Title Biru Form: Kriteria pasar-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Kriteria pasar
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                data-bs-target="#kt_modal_kriteria_pasardini">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
+                                                        <!--begin::Table-->
+                                                        <table
+                                                            class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Kategori</th>
+                                                                    <th class="w-auto">Kriteria</th>
+                                                                    <th class="w-auto">Bobot</th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($kriteriapasarproyek as $kriteria)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Kategori-->
+                                                                        <td>
+                                                                            {{ $kriteria->kategori }}
+                                                                        </td>
+                                                                        <!--end::Kategori-->
+                                                                        <!--begin::Kategori-->
+                                                                        <td>
+                                                                            {{ $kriteria->kriteria }}
+                                                                        </td>
+                                                                        <!--end::Kategori-->
+                                                                        <!--begin::Kategori-->
+                                                                        <td>
+                                                                            {{ $kriteria->bobot }}
+                                                                        </td>
+                                                                        <!--end::Kategori-->
+                                                                    </tr>
+                                                                @php
+                                                                    // $statusPasar = {{ $kriteria->bobot }}
+                                                                @endphp
+                                                                @endforeach
+                                                                <tr>
+                                                                    <!--begin::Kategori-->
+                                                                    {{-- <td></td>
+                                                                    <td></td> --}}
+                                                                    <td colspan="3" class="text-end text-gray-400">Status Pasar :</td>
+                                                                    @php
+                                                                            $jumlahBobot = 0;
+                                                                            $statusPasar = "";
+                                                                            foreach ($kriteriapasarproyek as $kriteria) {
+                                                                                $jumlahBobot += $kriteria->bobot;
+                                                                                $jumlahKriteria = count($kriteriapasarproyek);
+                                                                                $statusPasar = round($jumlahBobot / $jumlahKriteria , 2);
+                                                                            }
+                                                                    @endphp
+                                                                    <td>
+                                                                        {{ $statusPasar }}
+                                                                    </td>
+                                                                    <!--end::Kategori-->
+                                                                </tr>
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--end::Table-->
                                                         <!--End::Title Biru Form: Kriteria pasar-->
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Laporan Kualitatif
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <div class="form-group">
                                                             <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
                                                                 id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
+
+                                                        
 
                                                     </div>
 <!--end:::Tab Pasar Dini-->
@@ -1489,22 +1593,14 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Status Pasar</span>
+                                                                        <span>Status Pasar <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="status-pasar" name="status-pasar"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Status Pasar">
-                                                                        <option></option>
-                                                                        <option value="Dikelola Negara"
-                                                                            {{ $proyek->status_pasar == 'Dikelola Negara' ? 'selected' : '' }}>
-                                                                            Dikelola Negara</option>
-                                                                        <option value="Dikelola Swasta"
-                                                                            {{ $proyek->status_pasar == 'Dikelola Swasta' ? 'selected' : '' }}>
-                                                                            Dikelola Swasta</option>
-                                                                    </select>
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="status-pasar" name="status-pasar"
+                                                                        value="{{ $statusPasar >= 0.75 ? 'Potensial' : 'Non-Potensial' }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1540,7 +1636,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>DOP</span>
+                                                                        <span>DOP <i class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1567,7 +1663,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Company</span>
+                                                                        <span>Company <i class="bi bi-lock-fill"></i>   </span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1798,7 +1894,8 @@
                                                                             <tr
                                                                                 class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                                 <th class="w-50px text-center">No.</th>
-                                                                                <th class="max-w-50px">Nama</th>
+                                                                                <th class="w-auto">Nama</th>
+                                                                                <th class="w-auto">Role/Jabatan</th>
                                                                             </tr>
                                                                             <!--end::Table row-->
                                                                         </thead>
@@ -1811,16 +1908,21 @@
                                                                             <tbody class="fw-bold text-gray-600">
 
                                                                                 <tr>
-                                                                                    <!--begin::Name=-->
+                                                                                    <!--begin::Name-->
                                                                                     <td class="text-center">
                                                                                         {{ $no++ }}
                                                                                     </td>
-                                                                                    <!--end::Name=-->
-                                                                                    <!--begin::Email=-->
+                                                                                    <!--end::Name-->
+                                                                                    <!--begin::Column-->
                                                                                     <td>
                                                                                         {{ $team->User->name }}
                                                                                     </td>
-                                                                                    <!--end::Email=-->
+                                                                                    <!--end::Column-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        {{ $team->role }}
+                                                                                    </td>
+                                                                                    <!--end::Column-->
                                                                             </tbody>
                                                                         @endforeach
                                                                         <!--end::Table body-->
@@ -2171,10 +2273,10 @@
                                                         <!--End::Title Biru Form: Usulan Saran Perbaikan-->
 
                                                     </div>
-                                                    <!--end:::Tab Menang-->
+<!--end:::Tab Menang-->
 
 
-                                                    <!--begin:::Tab Pasar Terkontrak New-->
+<!--begin:::Tab Pasar Terkontrak New-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_terkontrak"
                                                         role="tabpanel">
 
@@ -2685,10 +2787,10 @@
                                                         <!--End::Row Kanan+Kiri-->
 
                                                     </div>
-                                                    <!--end:::Tab Pasar Terkontrak New-->
+<!--end:::Tab Pasar Terkontrak New-->
 
 
-                                                    <!--begin:::Tab Approval-->
+<!--begin:::Tab Approval-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
@@ -2724,39 +2826,39 @@
                                                             <tbody class="fw-bold text-gray-600">
                                                                 <tr>
 
-                                                                    <!--begin::Name=-->
+                                                                    <!--begin::Name-->
                                                                     <td>
                                                                         <a href="/proyek/view/{{ $proyek->id }}"
                                                                             id="click-name"
                                                                             class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                                     </td>
-                                                                    <!--end::Name=-->
-                                                                    <!--begin::Email=-->
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Email-->
                                                                     <td>
                                                                         {{ $proyek->nama_proyek }}
                                                                     </td>
-                                                                    <!--end::Email=-->
-                                                                    <!--begin::Company=-->
+                                                                    <!--end::Email-->
+                                                                    <!--begin::Company-->
                                                                     <td>
                                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                                     </td>
-                                                                    <!--end::Company=-->
+                                                                    <!--end::Company-->
 
-                                                                    <!--begin::Action=-->
+                                                                    <!--begin::Action-->
                                                                     <td>
                                                                         {{ $proyek->nilai_rkap }}
                                                                     </td>
-                                                                    <!--end::Action=-->
-                                                                    <!--begin::Action=-->
+                                                                    <!--end::Action-->
+                                                                    <!--begin::Action-->
                                                                     <td>
                                                                         Head Of Division
                                                                     </td>
-                                                                    <!--end::Action=-->
-                                                                    <!--begin::Action=-->
+                                                                    <!--end::Action-->
+                                                                    <!--begin::Action-->
                                                                     <td>
                                                                         -
                                                                     </td>
-                                                                    <!--end::Action=-->
+                                                                    <!--end::Action-->
                                                                 </tr>
                                                             </tbody>
                                                             <!--end::Table body-->
@@ -2796,30 +2898,30 @@
                                                             <tbody class="fw-bold text-gray-600">
                                                                 <tr>
 
-                                                                    <!--begin::Name=-->
+                                                                    <!--begin::Name-->
                                                                     <td>
                                                                         <a href="/proyek/view/{{ $proyek->id }}"
                                                                             id="click-name"
                                                                             class="text-gray-800 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                                     </td>
-                                                                    <!--end::Name=-->
-                                                                    <!--begin::Email=-->
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Email-->
                                                                     <td>
                                                                         {{ $proyek->nama_proyek }}
                                                                     </td>
-                                                                    <!--end::Email=-->
-                                                                    <!--begin::Company=-->
+                                                                    <!--end::Email-->
+                                                                    <!--begin::Company-->
                                                                     <td>
                                                                         {{ $proyek->UnitKerja->unit_kerja }}
                                                                     </td>
-                                                                    <!--end::Company=-->
+                                                                    <!--end::Company-->
 
-                                                                    <!--begin::Action=-->
+                                                                    <!--begin::Action-->
                                                                     <td>
                                                                         {{ $proyek->nilai_rkap }}
                                                                     </td>
-                                                                    <!--end::Action=-->
-                                                                    <!--begin::Action=-->
+                                                                    <!--end::Action-->
+                                                                    <!--begin::Action-->
                                                                     <td class="text-center">
                                                                         <div class="d-grid gap-2 d-md-block">
                                                                             <!--begin::Button-->
@@ -2835,12 +2937,12 @@
                                                                                 onclick="return confirm('Deleted file can not be undo. Are You Sure ?')">Reject</button>
                                                                         </div>
                                                                     </td>
-                                                                    <!--end::Action=-->
-                                                                    {{-- <!--begin::Action=-->
+                                                                    <!--end::Action-->
+                                                                    {{-- <!--begin::Action-->
                                                             <td>
                                                                 null
                                                             </td>
-                                                            <!--end::Action=--> --}}
+                                                            <!--end::Action--> --}}
                                                                 </tr>
                                                             </tbody>
                                                             <!--end::Table body-->
@@ -2848,9 +2950,9 @@
                                                         <!--end::Table-->
 
                                                     </div>
-                                                    <!--end:::Tab Approval-->
+<!--end:::Tab Approval-->
 
-                                                    <!--begin:::Tab Feedback-->
+<!--begin:::Tab Feedback-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
@@ -2883,34 +2985,35 @@
                                                             <tbody class="fw-bold text-gray-600">
                                                                 <tr>
 
-                                                                    <!--begin::Email=-->
+                                                                    <!--begin::Email-->
                                                                     <td>
                                                                         PT. Membangun Negeri
                                                                     </td>
-                                                                    <!--end::Email=-->
-                                                                    <!--begin::Company=-->
+                                                                    <!--end::Email-->
+                                                                    <!--begin::Company-->
                                                                     <td>
                                                                         &#9733;&#9733;&#9733;&#9733;&#9733;
                                                                     </td>
-                                                                    <!--end::Company=-->
+                                                                    <!--end::Company-->
 
-                                                                    <!--begin::Action=-->
+                                                                    <!--begin::Action-->
                                                                     <td>
                                                                         Lorem Ipsum dolor sit amet guido lan gustom inercos
                                                                         tanttio, el bro sautires ki del proesa bukari
                                                                         oresro.
                                                                     </td>
-                                                                    <!--end::Action=-->
+                                                                    <!--end::Action-->
                                                                 </tr>
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
                                                         <!--end::Table-->
 
+                                                    </div>
+<!--end:::Tab Feedback-->
 
-                                                        <!--end:::Tab Feedback-->
-
-                                                        <!--begin:::Tab Forecast-->
+                                                        
+<!--begin:::Tab Forecast-->
                                                         <div class="tab-pane fade" id="kt_user_view_overview_forecast"
                                                             role="tabpanel">
 
@@ -2953,37 +3056,37 @@
                                                                     @for ($i = 0; $i < 12; $i++)
                                                                         <tr>
 
-                                                                            <!--begin::Name=-->
+                                                                            <!--begin::Name-->
                                                                             <td>
                                                                                 <h6 class="text-gray-600 fw-light">
                                                                                     {{ $proyek->nama_proyek }}</h6>
                                                                             </td>
-                                                                            <!--end::Name=-->
+                                                                            <!--end::Name-->
                                                                             @if (count($historyForecast) > 0)
                                                                                 @foreach ($historyForecast as $history)
                                                                                     @if ($i + 1 == $history->periode_prognosa)
-                                                                                        <!--begin::Nilai OK=-->
+                                                                                        <!--begin::Nilai OK-->
                                                                                         <td class="text-dark">
                                                                                             {{ $proyek->nilai_rkap }}
                                                                                         </td>
-                                                                                        <!--end::Nilai OK=-->
+                                                                                        <!--end::Nilai OK-->
                                                                                     @break
 
                                                                                 @else
-                                                                                    <!--begin::Nilai OK=-->
+                                                                                    <!--begin::Nilai OK-->
                                                                                     <td class="text-dark">
                                                                                         0
                                                                                     </td>
-                                                                                    <!--end::Nilai OK=-->
+                                                                                    <!--end::Nilai OK-->
                                                                                 @break
                                                                             @endif
                                                                         @endforeach
                                                                     @else
-                                                                        <!--begin::Nilai OK=-->
+                                                                        <!--begin::Nilai OK-->
                                                                         <td class="text-dark">
                                                                             0
                                                                         </td>
-                                                                        <!--end::Nilai OK=-->
+                                                                        <!--end::Nilai OK-->
                                                                     @endif
 
                                                                 </tr>
@@ -2992,8 +3095,7 @@
                                                         <!--end::Table body-->
                                                     </table>
                                                     <!--end::Table-->
-                                                </div>
-                                                <!--end:::Tab Forecast-->
+<!--end:::Tab Forecast-->
 
 
                                             </div>
@@ -3031,87 +3133,250 @@
 
 <!--begin::Modal-->
 
-<!--begin::modal ADD USER-->
+<!--begin::modal ADD USER SKAT-->
 <form action="/proyek/user/add" method="post" enctype="multipart/form-data">
 @csrf
-
-<input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}" id="id-customer">
-<input type="hidden" name="assign-stage" value="{{ $proyek->stage }}" id="id-customer">
-
-<!--begin::Modal - Create Proyek-->
-<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-600px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <i class="bi bi-x-circle-fill ts-8"></i>
-                    </span>
-                    <!--end::Svg Icon-->
-                </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
-
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
-
-
-                <!--begin::Row Kanan+Kiri-->
-                <div class="row fv-row">
-                    <!--begin::Col-->
-                    <div class="">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row">
-                            {{-- <!--begin::Label-->
-											<label class="fs-6 fw-bold form-label mt-3">
-												<span class="required">Nama Company</span>
-											</label>
-											<!--end::Label--> --}}
-                            <!--begin::Input-->
-                            <select name="nama-team" class="form-select form-select-solid"
-                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
-                                <option></option>
-                                @foreach ($users as $user)
-                                    {{-- @if ($user->name == $proyek->name) --}}
-                                    {{-- <option value="{{ $user->name }}" selected>{{$user->name }}</option> --}}
-                                    {{-- @else --}}
-                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                    {{-- @endif --}}
-                                @endforeach
-                            </select>
-                            <!--end::Input-->
+    <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
+    <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
+        <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-circle-fill ts-8"></i>
+                            </span>
+                            <!--end::Svg Icon-->
                         </div>
-                        <!--end::Input group-->
+                        <!--end::Close-->
                     </div>
-                    <!--End begin::Col-->
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Team Proyek</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select name="nama-team" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
+                                        <option></option>
+                                        @foreach ($users as $user)
+                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Role/Jabatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        id="role-team" name="role-team"
+                                        placeholder="Role/Jabatan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                            id="new_save" style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
                 </div>
-                <!--End::Row Kanan+Kiri-->
-
+                <!--end::Modal content-->
             </div>
-            <div class="modal-footer">
-
-                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                    id="new_save" style="background-color:#008CB4">Save</button>
-
-            </div>
-            <!--end::Modal body-->
+            <!--end::Modal dialog-->
         </div>
-        <!--end::Modal content-->
-    </div>
-    <!--end::Modal dialog-->
-</div>
-<!--end::Modal - Create App-->
 </form>
-<!--end::modal ADD USER-->
+<!--end::modal ADD USER SKAT-->
+
+<!--begin::modal KRITERIA PASAR-->
+<form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
+@csrf
+        <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
+
+        <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Kriteria Proyek : </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-circle-fill ts-8"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-5">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kategori</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar" 
+                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Kategori">
+                                        <option></option>
+                                            @foreach ($kriteriapasar as $kriteria)
+                                            <option value="{{ $kriteria->kategori }}">
+                                                {{ $kriteria->kategori }}</option>
+                                            @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-5">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kriteria</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select onchange="setBobot(this)" id="kriteria-pasar" name="kriteria-pasar" 
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Kriteria">
+                                        <option></option>
+                                            @foreach ($kriteriapasar as $kriteria)
+                                            <option value="{{ $kriteria->kriteria }}">
+                                                {{ $kriteria->kriteria }}</option>
+                                            @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-2">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Bobot</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                        id="bobot" name="bobot" placeholder="" readonly/>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+                        <script>
+                            // let bobot = "";
+                            async function kategoriSelect(e) {
+                                const kategori = e.value;
+                                const formData = new FormData();
+                                let html = `<option value=""></option>`;
+                                formData.append("_token", "{{ csrf_token() }}");
+                                formData.append("kategori", kategori);
+
+                                const getKriteriaRes = await fetch("/proyek/get-kriteria", {
+                                    method: "POST",
+                                    header: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: formData,
+                                }).then(res => res.json());
+                                // console.log(getKriteriaRes);
+                                getKriteriaRes.forEach(data => {
+                                    html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
+                                });
+                                document.querySelector("#kriteria-pasar").innerHTML = html;
+                                // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
+                            }
+
+                            function setBobot(e) {
+                                let bobot = "";
+                                e.options.forEach( option => {
+                                    if (option.selected) {
+                                        bobot = option.getAttribute("data-bobot")
+                                        // console.log(option.getAttribute("data-bobot"));
+                                    }
+                                })
+                                console.log(bobot);
+                                document.querySelector("#bobot").value = bobot;
+                            }
+                        </script>
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                            id="new_save" style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+</form>
+<!--end::modal KRITERIA PASAR-->
 
 <!--begin::modal APPROVAL-->
         {{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
@@ -3275,3 +3540,12 @@
 
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
+@section('js-script')
+<script>
+    const proyekStage = Number("{{$proyek->stage}}");
+    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
+    const tabBoots = new bootstrap.Tab(tabContent, {});
+    tabBoots.show();
+</script>
+@endsection
+
