@@ -336,12 +336,12 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Bobot (Dalam Perser)</span>
+                                        <span>Bobot (Dalam Persen)</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="number" class="form-control form-control-solid" id="bobot"
-                                        name="bobot" value="" placeholder="Bobot Nilai (%)" />
+                                        name="bobot" value="" placeholder="Bobot Nilai Dikonfersikan Dalam (%)" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->

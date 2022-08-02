@@ -7,6 +7,7 @@ use App\Models\ContractManagements;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\Proyek;
+use App\Models\UnitKerja;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -93,7 +94,7 @@ class DashboardController extends Controller
         // begin :: Tri Wulan
         $nilaiForecastTriwulan = 0;
         $nilaiForecastTriwunalArray = [];
-
+        
         $offset_history = 0;
         for ($i = 3; $i <= 12; $i+=3) {
             $filtered_history_forecast = $historyForecast->filter(function($data) use ($i, $offset_history){
@@ -104,19 +105,34 @@ class DashboardController extends Controller
             array_push($nilaiForecastTriwunalArray, $nilaiForecastTriwulan);
             $offset_history = $i;
         }
-
-        $claims = ClaimManagements::all();
-        // dd($claims);
+        // end :: Tri Wulan
         
-        /* 
-         * Format Claim Stage
-         * Stage 1 = On Progress
-         * Stage 2 = Disetujui
-         * Stage 3 = Ditolak
-         * Stage 4 = Cancel
-        */
+        // Begin :: Nilai Realisasi Unit Kerja
+        $unitKerja = UnitKerja::all();
+        $kategoriunitKerja = [];
+        $nilaiOkKumulatif = [];
+        $nilaiRealisasiKumulatif = [];
+        foreach ($unitKerja as $unit) {
+            // dump($unit->proyeks);
+            array_push($kategoriunitKerja, $unit->unit_kerja);
+            $nilaiOk = 0;
+            $nilaiRealisasi = 0;
+            foreach($unit->proyeks as $proyekUnit){
+                $nilaiOk += (int) str_replace(",", "", $proyekUnit->nilai_rkap); 
+                $nilaiRealisasi += (int) str_replace(",", "", $proyekUnit->nilai_kontrak_keseluruhan); 
+                // dump((int) str_replace(",", "", $proyekUnit->nilai_rkap));
+            }
+            array_push($nilaiOkKumulatif, $nilaiOk);
+            array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
+        }
+        // dd($nilaiOkKumulatif);
+        
+        // End :: Nilai Realisasi Unit Kerja
+
         
         // Begin :: menghitung total dari status dan jenis claim
+        $claims = ClaimManagements::all();
+        // dd($claims);
         $claim_status_array = [];
         $claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim")->count();
         $claim_disetujui = $claims->where("stages", "=", "2")->where("jenis_claim", "=", "Claim")->count();
@@ -207,7 +223,7 @@ class DashboardController extends Controller
         //end::Pareto
 
 
-        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi"]));
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif"]));
     }
 
     /**

@@ -157,7 +157,7 @@
                                     </div>
                                     <div class="d-flex justify-content-end">
                                         <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                            onclick="hideTable()"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                            onclick="hideTable('#datatable','#forecast-line')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
                                             Chart</button>
                                         <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                             onclick="toggleFullscreen()" id="exit-fullscreen"><i
@@ -189,9 +189,21 @@
                             </div>
                             <hr>
 
+                            <div class="py-12" id="nilai-realisasi">
+                                <!--begin::NILAI REALISASI-->
+                                <!--end::NILAI REALISASI-->
+                            </div>
+                            <hr>
+
                             <div class="py-12" id="monitoring-proyek">
                                 <!--begin::MONITORING PROYEK-->
                                 <!--end::MONITORING PROYEK-->
+                            </div>
+                            <hr>
+                            
+                            <div class="py-12" id="terendah-terkontrak">
+                                <!--begin::TERENDAH - TERKONTRAK-->
+                                <!--end::TERENDAH - TERKONTRAK-->
                             </div>
                             <hr>
 
@@ -787,9 +799,76 @@
     </script>
     <!--end::FORECAST 3WULAN-->
 
+    <!--begin::NILAI REALISASI-->
+    {{-- let kategoriunitKerja = JSON.parse("{!! json_encode($kategoriunitKerja) !!}"); --}}
+    <script>
+        let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
+        let nilaiOkKumulatif = {!! json_encode($nilaiOkKumulatif) !!};
+        let nilaiRealisasiKumulatif = {!! json_encode($nilaiRealisasiKumulatif) !!};
+        // console.log(kategoriunitKerja);
+        Highcharts.chart('nilai-realisasi', {
+            chart: {
+                type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 5,
+                    beta: 15,
+                    viewDistance: 50,
+                    depth: 100
+                }
+            },
+
+            title: {
+                text: '<b class="h1">Nilai Realisasi OK per Unit Kerja</b>'
+            },
+
+            xAxis: {
+                categories: kategoriunitKerja,
+                // categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas'],
+                labels: {
+                    skew3d: true,
+                    style: {
+                        fontSize: '16px'
+                    }
+                }
+            },
+
+            yAxis: {
+                allowDecimals: false,
+                min: 0,
+                title: {
+                    text: '',
+                    skew3d: true
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<b>{point.key}</b><br>',
+                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
+            },
+
+            plotOptions: {
+                // column: {
+                //     stacking: 'normal',
+                //     depth: 40
+                // }
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            series: [{
+                name: 'Nilai OK Kumulatif',
+                data: nilaiOkKumulatif,
+                // stack: 'male'
+            }, {
+                name: 'Nilai Realisasi Kumulatif',
+                data: nilaiRealisasiKumulatif,
+                // stack: 'female'
+            }]
+        });
+    </script>
+    <!--end::NILAI REALISASI-->
+
     <!--begin::MONITORING PROYEK-->
     <script>
-        
         Highcharts.chart('monitoring-proyek', {
             chart: {
                 type: 'pie',
@@ -875,47 +954,127 @@
                 enabled: false
             },
             drilldown: {
-                breadcrumbs: {
-                    // format: "{level.name}",
-                    position: {
-                        align: 'right',
-                    }
-                },
-                series: [{
-                    name: "Proses",
-                    id: "Proses",
-                    type: 'column',
-                    data: [
-                        [
-                            "v650",
-                            21
-                        ],
-                        [
-                            "v640",
-                            13
-                        ],
-                        [
-                            "v630",
-                            50
-                        ],
-                        [
-                            "v620",
-                            44
-                        ],
-                        [
-                            "v610",
-                            28
-                        ],
-                        [
-                            "v600",
-                            35
-                        ]
-                    ]
-                }]
+                // breadcrumbs: {
+                //     // format: "{level.name}",
+                //     position: {
+                //         align: 'right',
+                //     }
+                // },
+                // series: [{
+                //     name: "Proses",
+                //     id: "Proses",
+                //     type: 'column',
+                //     data: [
+                //         [
+                //             "v650",
+                //             21
+                //         ],
+                //         [
+                //             "v640",
+                //             13
+                //         ],
+                //         [
+                //             "v630",
+                //             50
+                //         ],
+                //         [
+                //             "v620",
+                //             44
+                //         ],
+                //         [
+                //             "v610",
+                //             28
+                //         ],
+                //         [
+                //             "v600",
+                //             35
+                //         ]
+                //     ]
+                // }]
             }
         });
     </script>
     <!--end::MONITORING PROYEK-->
+
+    <!--begin::TERENDAH vs TERKONTRAK-->
+    <script>
+        Highcharts.chart('terendah-terkontrak', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 45
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h1">Terendah - Terkontrak</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: ' '
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            legend: {
+                enabled: false
+            },
+            plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                }
+            },
+
+            tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> Total Proyek<br/>'
+            },
+
+            series: [{
+                name: "Proyek Stage",
+                colorByPoint: true,
+                data: [{
+                        name: "Proses : " + {{ $proses }},
+                        y: {{ $proses }},
+                        drilldown: "Proses",
+                    },
+                    {
+                        name: "Menang : " + {{ $menang }},
+                        y: {{ $menang }},
+                        drilldown: "Menang",
+                    },
+                    {
+                        name: "Kalah dan Cancel : " + {{ $kalah }},
+                        y: {{ $kalah }},
+                        drilldown: "Kalah dan Cancel",
+                    },
+                    {
+                        name: "Prakualifikasi : " + {{ $prakualifikasi }},
+                        y: {{ $prakualifikasi }},
+                        drilldown: "Prakualifikasi",
+                    }
+                ]
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::TERENDAH vs TERKONTRAK-->
 
     <!--begin::MARKETING PIPELINE-->
     <script>
@@ -1041,7 +1200,6 @@
     </script>
     <!--end::CLAIM-->
 
-
     <!--Begin::Trigger Point Chart Forecast-->
     <script>
         function getFullscreenElement() {
@@ -1061,422 +1219,15 @@
                     ".");
                 const month = data[0];
                 const type = data[1];
-                console.log(type);
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
                 // console.log(prognosa);
-                const filterRes = await fetch(`/dashboard/${prognosa}/${type}/${month}/`).then(res =>res.json());
-                console.log(filterRes);
-                const thead = document.querySelector("#table-line-head");
-                const tbody = document.querySelector("#table-line-body");
+                getDataTable(type, prognosa, month);
+                
+
                 const table = document.querySelector("#datatable");
-                const titleTable = table.querySelector("#title-table");
-                const total = table.querySelector("#total");
-
-                let theadHTML =
-                    '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
-                    '<th>Nama Proyek</th>' +
-                    '<th>Stage</th>' +
-                    '<th>Unit Kerja</th>' +
-                    '<th>Bulan</th>' +
-                    '<th class="right-align">Nilai Forecast</th>'
-                '</tr>';
-                
-                if (type == "Forecast") {
-                    let tbodyHTML = ``;
-                    let totalForecast = 0;
-                    filterRes.forEach(filter => {
-                        let stage = "";
-                        totalForecast += Number(filter.nilai_forecast);
-                        switch (filter.stage) {
-                            case 1:
-                                stage = "Pasar Dini";
-                                break;
-                            case 2:
-                                stage = "Pasar Potensial";
-                                break;
-                            case 3:
-                                stage = "Prakualifikasi";
-                                break;
-                            case 4:
-                                stage = "Tender Diikuti";
-                                break;
-                            case 5:
-                                stage = "Perolehan";
-                                break;
-                            case 6:
-                                stage = "Menang";
-                                break;
-                            case 7:
-                                stage = "Kalah";
-                                break;
-                            case 8:
-                                stage = "Terkontrak";
-                                break;
-                            case 9:
-                                stage = "Terendah";
-                                break;
-                            case 10:
-                                stage = "Approval";
-                                break;
-                            default:
-                                break;
-                        }
-    
-                        let bulan = "";
-                        // console.log(filter.bulan_pelaksanaan);
-                        switch (filter.month_forecast) {
-                            case 1:
-                                bulan = "Januari";
-                                break;
-                            case 2:
-                                bulan = "Februari";
-                                break;
-                            case 3:
-                                bulan = "Maret";
-                                break;
-                            case 4:
-                                bulan = "April";
-                                break;
-                            case 5:
-                                bulan = "Mei";
-                                break;
-                            case 6:
-                                bulan = "Juni";
-                                break;
-                            case 7:
-                                bulan = "Juli";
-                                break;
-                            case 8:
-                                bulan = "Agustus";
-                                break;
-                            case 9:
-                                bulan = "September";
-                                break;
-                            case 10:
-                                bulan = "Oktober";
-                                break;
-                            case 11:
-                                bulan = "November";
-                                break;
-                            case 12:
-                                bulan = "Desember";
-                                break;
-                            default:
-                                bulan = "Bulan Unknown"
-                                break;
-                        }
-    
-                        tbodyHTML += `<tr>
-    
-                                <!--begin::Name=-->
-                                <td>
-                                    <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                        class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
-                                </td>
-                                <!--end::Name=-->
-                                <!--begin::Email=-->
-                                <td>
-                                    ${filter.nama_proyek}
-                                </td>
-                                <!--end::Email=-->
-                                <!--begin::Stage=-->
-                                <td>
-                                    ${stage}
-                                </td>
-                                <!--end::Stage=-->
-    
-                                <!--begin::Unit Kerja=-->
-                                <td>
-                                    ${filter.unit_kerja}
-                                </td>
-                                <!--end::Unit Kerja=-->
-    
-                                <!--begin::Bulan=-->
-                                <td>
-                                    ${bulan}
-                                </td>
-                                <!--end::Bulan=-->
-    
-                                <!--begin::Nilai Forecast=-->
-                                <td class="text-end">
-                                    ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
-                                </td>
-                                <!--end::Nilai Forecast=-->
-                                </tr>`;
-                    });
-                    thead.innerHTML = theadHTML;
-                    tbody.innerHTML = tbodyHTML;
-                    titleTable.innerHTML = `Forecast - ${month}`;
-                    total.innerHTML = `Total Forecast = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
-                    table.style.display = "";
-                    const chartLine = document.querySelector("#forecast-line");
-                    chartLine.style.display = "none";
-                } else if (type == "NilaiOK") {
-                    let tbodyHTML = ``;
-                    let totalNilaiOk = 0;
-                    filterRes.forEach(filter => {
-                        let stage = "";
-                        totalNilaiOk += Number(filter.rkap_forecast);
-                        switch (filter.stage) {
-                            case 1:
-                                stage = "Pasar Dini";
-                                break;
-                            case 2:
-                                stage = "Pasar Potensial";
-                                break;
-                            case 3:
-                                stage = "Prakualifikasi";
-                                break;
-                            case 4:
-                                stage = "Tender Diikuti";
-                                break;
-                            case 5:
-                                stage = "Perolehan";
-                                break;
-                            case 6:
-                                stage = "Menang";
-                                break;
-                            case 7:
-                                stage = "Kalah";
-                                break;
-                            case 8:
-                                stage = "Terkontrak";
-                                break;
-                            case 9:
-                                stage = "Terendah";
-                                break;
-                            case 10:
-                                stage = "Approval";
-                                break;
-                            default:
-                                break;
-                        }
-    
-                        let bulan = "";
-                        // console.log(filter.bulan_pelaksanaan);
-                        switch (filter.month_rkap) {
-                            case 1:
-                                bulan = "Januari";
-                                break;
-                            case 2:
-                                bulan = "Februari";
-                                break;
-                            case 3:
-                                bulan = "Maret";
-                                break;
-                            case 4:
-                                bulan = "April";
-                                break;
-                            case 5:
-                                bulan = "Mei";
-                                break;
-                            case 6:
-                                bulan = "Juni";
-                                break;
-                            case 7:
-                                bulan = "Juli";
-                                break;
-                            case 8:
-                                bulan = "Agustus";
-                                break;
-                            case 9:
-                                bulan = "September";
-                                break;
-                            case 10:
-                                bulan = "Oktober";
-                                break;
-                            case 11:
-                                bulan = "November";
-                                break;
-                            case 12:
-                                bulan = "Desember";
-                                break;
-                            default:
-                                bulan = "Bulan Unknown"
-                                break;
-                        }
-    
-                        tbodyHTML += `<tr>
-    
-                                <!--begin::Name=-->
-                                <td>
-                                    <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                        class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
-                                </td>
-                                <!--end::Name=-->
-                                <!--begin::Email=-->
-                                <td>
-                                    ${filter.nama_proyek}
-                                </td>
-                                <!--end::Email=-->
-                                <!--begin::Stage=-->
-                                <td>
-                                    ${stage}
-                                </td>
-                                <!--end::Stage=-->
-    
-                                <!--begin::Unit Kerja=-->
-                                <td>
-                                    ${filter.unit_kerja}
-                                </td>
-                                <!--end::Unit Kerja=-->
-    
-                                <!--begin::Bulan=-->
-                                <td>
-                                    ${bulan}
-                                </td>
-                                <!--end::Bulan=-->
-    
-                                <!--begin::Nilai Forecast=-->
-                                <td class="text-end">
-                                    ${Intl.NumberFormat({}).format(filter.rkap_forecast)}
-                                </td>
-                                <!--end::Nilai Forecast=-->
-                                </tr>`;
-                    });
-                    thead.innerHTML = theadHTML;
-                    tbody.innerHTML = tbodyHTML;
-                    titleTable.innerHTML = `Nilai OK - ${month}`;
-                    total.innerHTML = `Total Nilai OK = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
-                    table.style.display = "";
-                    const chartLine = document.querySelector("#forecast-line");
-                    chartLine.style.display = "none";
-                } else {
-                    let tbodyHTML = ``;
-                    let totalNilaiRealisasi = 0;
-                    filterRes.forEach(filter => {
-                        let stage = "";
-                        totalNilaiRealisasi += Number(filter.realisasi_forecast);
-                        switch (filter.stage) {
-                            case 1:
-                                stage = "Pasar Dini";
-                                break;
-                            case 2:
-                                stage = "Pasar Potensial";
-                                break;
-                            case 3:
-                                stage = "Prakualifikasi";
-                                break;
-                            case 4:
-                                stage = "Tender Diikuti";
-                                break;
-                            case 5:
-                                stage = "Perolehan";
-                                break;
-                            case 6:
-                                stage = "Menang";
-                                break;
-                            case 7:
-                                stage = "Kalah";
-                                break;
-                            case 8:
-                                stage = "Terkontrak";
-                                break;
-                            case 9:
-                                stage = "Terendah";
-                                break;
-                            case 10:
-                                stage = "Approval";
-                                break;
-                            default:
-                                break;
-                        }
-    
-                        let bulan = "";
-                        // console.log(filter.bulan_pelaksanaan);
-                        switch (filter.month_realisasi) {
-                            case 1:
-                                bulan = "Januari";
-                                break;
-                            case 2:
-                                bulan = "Februari";
-                                break;
-                            case 3:
-                                bulan = "Maret";
-                                break;
-                            case 4:
-                                bulan = "April";
-                                break;
-                            case 5:
-                                bulan = "Mei";
-                                break;
-                            case 6:
-                                bulan = "Juni";
-                                break;
-                            case 7:
-                                bulan = "Juli";
-                                break;
-                            case 8:
-                                bulan = "Agustus";
-                                break;
-                            case 9:
-                                bulan = "September";
-                                break;
-                            case 10:
-                                bulan = "Oktober";
-                                break;
-                            case 11:
-                                bulan = "November";
-                                break;
-                            case 12:
-                                bulan = "Desember";
-                                break;
-                            default:
-                                bulan = "Bulan Unknown"
-                                break;
-                        }
-    
-                        tbodyHTML += `<tr>
-    
-                                <!--begin::Name=-->
-                                <td>
-                                    <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                        class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
-                                </td>
-                                <!--end::Name=-->
-                                <!--begin::Email=-->
-                                <td>
-                                    ${filter.nama_proyek}
-                                </td>
-                                <!--end::Email=-->
-                                <!--begin::Stage=-->
-                                <td>
-                                    ${stage}
-                                </td>
-                                <!--end::Stage=-->
-    
-                                <!--begin::Unit Kerja=-->
-                                <td>
-                                    ${filter.unit_kerja}
-                                </td>
-                                <!--end::Unit Kerja=-->
-    
-                                <!--begin::Bulan=-->
-                                <td>
-                                    ${bulan}
-                                </td>
-                                <!--end::Bulan=-->
-    
-                                <!--begin::Nilai Forecast=-->
-                                <td class="text-end">
-                                    ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
-                                </td>
-                                <!--end::Nilai Forecast=-->
-                                </tr>`;
-                    });
-                    thead.innerHTML = theadHTML;
-                    tbody.innerHTML = tbodyHTML;
-                    titleTable.innerHTML = `Nilai Realisasi - ${month}`;
-                    total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
-                    table.style.display = "";
-                    const chartLine = document.querySelector("#forecast-line");
-                    chartLine.style.display = "none";
-                }
-
-
-                
+                const chartLine = document.querySelector("#forecast-line");
+                hideTable(table, chartLine);
 
                 // Toggle Fullscreen
                 table.style.backgroundColor = "white";
@@ -1489,9 +1240,443 @@
             });
         })
 
-        function hideTable() {
+        async function getDataTable(type, prognosa, month) {
+            const filterRes = await fetch(`/dashboard/${prognosa}/${type}/${month}`).then(res =>res.json());
+            const thead = document.querySelector("#table-line-head");
+            const tbody = document.querySelector("#table-line-body");
             const table = document.querySelector("#datatable");
-            const chartLine = document.querySelector("#forecast-line");
+            const titleTable = table.querySelector("#title-table");
+            const total = table.querySelector("#total");
+
+            if (type == "Forecast") {
+                let tbodyHTML = ``;
+                let totalForecast = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Kode Proyek</th>' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Forecast</th>`
+                '</tr>';
+
+                filterRes.forEach(filter => {
+                    let stage = "";
+                    totalForecast += Number(filter.nilai_forecast);
+                    switch (filter.stage) {
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (filter.month_forecast) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `${type} - ${month}`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector("#forecast-line");
+                chartLine.style.display = "none";
+            } else if (type == "NilaiOK") {
+                let tbodyHTML = ``;
+                let totalNilaiOk = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Kode Proyek</th>' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai OK</th>`
+                '</tr>';
+
+                filterRes.forEach(filter => {
+                    let stage = "";
+                    totalNilaiOk += Number(filter.rkap_forecast);
+                    switch (filter.stage) {
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (filter.month_rkap) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(filter.rkap_forecast)}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai OK - ${month}`;
+                total.innerHTML = `Total Nilai OK = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector("#forecast-line");
+                chartLine.style.display = "none";
+            } else {
+                let tbodyHTML = ``;
+                let totalNilaiRealisasi = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Kode Proyek</th>' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Realisasi</th>`
+                '</tr>';
+
+                filterRes.forEach(filter => {
+                    let stage = "";
+                    totalNilaiRealisasi += Number(filter.realisasi_forecast);
+                    switch (filter.stage) {
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (filter.month_realisasi) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai Realisasi - ${month}`;
+                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector("#forecast-line");
+                chartLine.style.display = "none";
+            }
+        }
+        
+        function hideTable(tableElt, chartElt) {
+            const table = document.querySelector(tableElt);
+            const chartLine = document.querySelector(chartElt);
             // const forecastFigure = document.querySelector(".highcharts-figure");
             if (getFullscreenElement()) {
                 forecast1.fullscreen.toggle();
