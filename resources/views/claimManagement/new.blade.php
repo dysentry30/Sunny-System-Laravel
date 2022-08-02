@@ -5,7 +5,9 @@
 {{-- begin:: title --}}
 @section('title', 'Claim Managements')
 {{-- end:: title --}}
-
+@php
+    // Session::forget("pasals")
+@endphp
 {{-- begin::content --}}
 @section('content')
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
@@ -532,7 +534,7 @@
                                                                                 $list_dokumen = explode(",", $claim_contrat_draft->dokumen_pendukung);
                                                                             @endphp
                                                                             @foreach ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a target="_blank" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                               - <a target="_blank" class="text-hover-primary" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
                                                                             @endforeach
                                                                         </td>
                                                                     </tr>

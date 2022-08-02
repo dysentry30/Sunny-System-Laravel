@@ -443,7 +443,7 @@ class ClaimController extends Controller
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
             $claimContractDrafts->dokumen_pendukung = $id_document;
         }
-
+        
         $claimContractDrafts->id_claim = $data["id-claim"];
         $claimContractDrafts->no_claim_draft = $data["no-draft-claim"];
         $claimContractDrafts->uraian_claim_draft = $data["uraian-claim"];
@@ -455,6 +455,9 @@ class ClaimController extends Controller
         $claimContractDrafts->pengajuan_waktu_eot = $data["pengajuan-waktu"];
         $claimContractDrafts->pasals = join(",", $pasals);
         if ($claimContractDrafts->save()) {
+            $claim_management = ClaimManagements::find($data["id-claim"]);
+            $claim_management->nilai_claim += $claimContractDrafts->pengajuan_biaya;
+            $claim_management->save();
             // Session::forget("pasals");
             moveFileTemp($data["proposal-claim"], $id_document_proposal_claim);
             moveFileTemp($data["surat-instruksi"], $id_document_surat_instruksi);

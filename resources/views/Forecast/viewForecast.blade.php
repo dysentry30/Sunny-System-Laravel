@@ -480,78 +480,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         </td>
 
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Total Coloumn-->
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <!--end::Total Coloumn-->
 
                                                                     </tr>
@@ -576,78 +576,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     <!--end::Child=-->
                                                                                 </td>
                                                                                 <!--begin::Januari Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Januari Coloumn-->
                                                                                 <!--begin::Februari Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Februari Coloumn-->
                                                                                 <!--begin::Maret Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Maret Coloumn-->
                                                                                 <!--begin::April Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::April Coloumn-->
                                                                                 <!--begin::Mei Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Mei Coloumn-->
                                                                                 <!--begin::Juni Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Juni Coloumn-->
                                                                                 <!--begin::Juli Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Juli Coloumn-->
                                                                                 <!--begin::Agustus Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Agustus Coloumn-->
                                                                                 <!--begin::September Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::September Coloumn-->
                                                                                 <!--begin::Oktober Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Oktober Coloumn-->
                                                                                 <!--begin::November Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::November Coloumn-->
                                                                                 <!--begin::Desember Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Desember Coloumn-->
                                                                                 <!--begin::Total Coloumn-->
-                                                                                <td class="pinForecast HidePin">-</td>
-                                                                                <td class="pinForecast HidePin">-</td>
-                                                                                <td class="pinForecast HidePin">-</td>
+                                                                                <td class="pinForecast HidePin"></td>
+                                                                                <td class="pinForecast HidePin"></td>
+                                                                                <td class="pinForecast HidePin"></td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <!--end::Total Coloumn-->
                                                                             </tr>
                                                                             {{-- begin:: Foreach Proyek --}}
@@ -683,7 +683,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        -
+                                                                                                        
                                                                                                     </td>
                                                                                                 @endif
                                                                                                 <td>
@@ -711,7 +711,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @else
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                        -</td>
+                                                                                                        </td>
                                                                                                 @endif
                                                                                                 @php
                                                                                                     $is_data_found = true;
@@ -728,7 +728,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @else
                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                 data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                -
+                                                                                                
                                                                                             </td>
                                                                                         @endif
                                                                                         <td>
@@ -755,7 +755,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @else
                                                                                             <td
                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                -</td>
+                                                                                                </td>
                                                                                         @endif
                                                                                     @endif
                                                                                     @php
@@ -792,7 +792,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                    style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                     <center>
                                                                                         <b>{{ $total_ok_formatted }}</b>
                                                                                     </center>
@@ -1229,78 +1229,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         </td>
 
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Total Coloumn-->
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <!--end::Total Coloumn-->
 
                                                                     </tr>
@@ -1326,64 +1326,64 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     <!--end::Child=-->
                                                                                 </td>
                                                                                 <!--begin::Januari Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Januari Coloumn-->
                                                                                 <!--begin::Februari Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Februari Coloumn-->
                                                                                 <!--begin::Maret Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Maret Coloumn-->
                                                                                 <!--begin::April Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::April Coloumn-->
                                                                                 <!--begin::Mei Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Mei Coloumn-->
                                                                                 <!--begin::Juni Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Juni Coloumn-->
                                                                                 <!--begin::Juli Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Juli Coloumn-->
                                                                                 <!--begin::Agustus Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Agustus Coloumn-->
                                                                                 <!--begin::September Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::September Coloumn-->
                                                                                 <!--begin::Oktober Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Oktober Coloumn-->
                                                                                 <!--begin::November Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::November Coloumn-->
                                                                                 <!--begin::Desember Coloumn-->
-                                                                                <td>-</td>
-                                                                                <td>-</td>
-                                                                                <td>-</td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
                                                                                 <!--end::Desember Coloumn-->
                                                                                 <!--begin::Total Coloumn-->
                                                                                 <td class="pinForecast HidePin">-
@@ -1394,13 +1394,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <td class="pinForecast ShowPin"
                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                    -</td>
+                                                                                    </td>
                                                                                 <!--end::Total Coloumn-->
                                                                             </tr>
                                                                             {{-- begin:: Foreach Proyek --}}
@@ -1464,7 +1464,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @else
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                            -</td>
+                                                                                                            </td>
                                                                                                     @endif
                                                                                                     @php
                                                                                                         $is_data_found = true;
@@ -1504,7 +1504,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @else
                                                                                                 <td
                                                                                                     data-column-realisasi-internal="{{ $month_counter }}">
-                                                                                                    -</td>
+                                                                                                    </td>
                                                                                             @endif
                                                                                         @endif
                                                                                         @php
@@ -1973,78 +1973,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     </td>
 
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Januari Coloumn-->
-                                                                    <td>-</td>
-                                                                    <td>-</td>
-                                                                    <td>-</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                    <td></td>
                                                                     <!--end::Januari Coloumn-->
                                                                     <!--begin::Total Coloumn-->
-                                                                    <td class="pinForecast HidePin">-</td>
-                                                                    <td class="pinForecast HidePin">-</td>
-                                                                    <td class="pinForecast HidePin">-</td>
+                                                                    <td class="pinForecast HidePin"></td>
+                                                                    <td class="pinForecast HidePin"></td>
+                                                                    <td class="pinForecast HidePin"></td>
                                                                     <td class="pinForecast ShowPin"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                        -</td>
+                                                                        </td>
                                                                     <td class="pinForecast ShowPin"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                        -</td>
+                                                                        </td>
                                                                     <td class="pinForecast ShowPin"
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                        -</td>
+                                                                        </td>
                                                                     <!--end::Total Coloumn-->
 
                                                                 </tr>
@@ -2070,78 +2070,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 <!--end::Child=-->
                                                                             </td>
                                                                             <!--begin::Januari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Januari Coloumn-->
                                                                             <!--begin::Februari Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Februari Coloumn-->
                                                                             <!--begin::Maret Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Maret Coloumn-->
                                                                             <!--begin::April Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::April Coloumn-->
                                                                             <!--begin::Mei Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Mei Coloumn-->
                                                                             <!--begin::Juni Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Juni Coloumn-->
                                                                             <!--begin::Juli Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Juli Coloumn-->
                                                                             <!--begin::Agustus Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Agustus Coloumn-->
                                                                             <!--begin::September Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::September Coloumn-->
                                                                             <!--begin::Oktober Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Oktober Coloumn-->
                                                                             <!--begin::November Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::November Coloumn-->
                                                                             <!--begin::Desember Coloumn-->
-                                                                            <td>-</td>
-                                                                            <td>-</td>
-                                                                            <td>-</td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
                                                                             <!--end::Desember Coloumn-->
                                                                             <!--begin::Total Coloumn-->
-                                                                            <td class="pinForecast HidePin">-</td>
-                                                                            <td class="pinForecast HidePin">-</td>
-                                                                            <td class="pinForecast HidePin">-</td>
+                                                                            <td class="pinForecast HidePin"></td>
+                                                                            <td class="pinForecast HidePin"></td>
+                                                                            <td class="pinForecast HidePin"></td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                -</td>
+                                                                                </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                -</td>
+                                                                                </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                -</td>
+                                                                                </td>
                                                                             <!--end::Total Coloumn-->
                                                                         </tr>
                                                                         {{-- begin:: Foreach Proyek --}}
@@ -2166,24 +2166,32 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             $index = 1;
                                                                                         @endphp
                                                                                     @endif
-                                                                                    @php
+                                                                                    {{-- @php
                                                                                         if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                             $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                         }
                                                                                         
-                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
-                                                                                    @endphp
+                                                                                    @endphp --}}
                                                                                     @foreach ($proyek->Forecasts as $forecast)
                                                                                         @if ($forecast->month_forecast == $i + 1)
                                                                                             @php
                                                                                                 $total_forecast += (int) str_replace(',', '', $forecast->nilai_forecast);
                                                                                             @endphp
-                                                                                            <td
+                                                                                             @if ($i + 1 >= $proyek->bulan_pelaksanaan &&
+                                                                                             $proyek->nilai_rkap != null)
+                                                                                                @php
+                                                                                                    $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                @endphp
+                                                                                                <td
                                                                                                 data-column-ok-sd="{{ $month_counter }}">
                                                                                                 <center>
-                                                                                                    {{ number_format($total_ok, 0, ',', ',') }}
+                                                                                                    {{-- {{ number_format($proyek->nilai_rkap, 0, ',', ',') }} --}}
+                                                                                                    {{ $proyek->nilai_rkap }}
                                                                                                 </center>
                                                                                             </td>
+                                                                                            @else
+                                                                                                <td data-column-ok-sd="{{ $month_counter }}"></td>
+                                                                                            @endif
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
@@ -2198,16 +2206,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) &&
+                                                                                            @if ($i + 1 >= $proyek->bulan_ri_perolehan &&
+                                                                                                $proyek->bulan_ri_perolehan != null &&
                                                                                                 $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                                @php
+                                                                                                    $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                    
+                                                                                                @endphp
                                                                                                 <td
                                                                                                     data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                                    {{ number_format($total_realisasi, 0, ',', ',') }}
+                                                                                                    {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
                                                                                                 </td>
                                                                                             @else
                                                                                                 <td
                                                                                                     data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                                    -</td>
+                                                                                                    </td>
                                                                                             @endif
                                                                                             @php
                                                                                                 $is_data_found = true;
@@ -2219,12 +2232,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @endphp
                                                                                 @endforeach
                                                                                 @if (!$is_data_found)
-                                                                                    <td
-                                                                                        data-column-ok-sd="{{ $month_counter }}">
-                                                                                        <center>
-                                                                                            {{ number_format($total_ok, 0, ',', ',') }}
-                                                                                        </center>
-                                                                                    </td>
+                                                                                    @if ($i + 1 >= $proyek->bulan_pelaksanaan &&
+                                                                                        $proyek->nilai_rkap != null)
+                                                                                        @php
+                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                        @endphp
+                                                                                        <td
+                                                                                            data-column-ok-sd="{{ $month_counter }}">
+                                                                                            <center>
+                                                                                                {{-- {{ number_format($total_ok, 0, ',', ',') }} --}}
+                                                                                                {{ number_format((int) str_replace(",", "", $proyek->nilai_rkap), 0, ',', ',') }}
+                                                                                            </center>
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td data-column-ok-sd="{{ $month_counter }}"></td>
+                                                                                    @endif
                                                                                     <td>
                                                                                         <input type="text"
                                                                                             data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
@@ -2238,15 +2260,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
+                                                                                        @php
+                                                                                            $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                        @endphp
                                                                                         <td
                                                                                             data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                            {{ number_format($total_realisasi, 0, ',', ',') }}
+                                                                                            {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
                                                                                         </td>
                                                                                     @else
                                                                                         <td
-                                                                                            data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                            -</td>
+                                                                                            data-column-realisasi-sd="{{ $month_counter }}"></td>
                                                                                     @endif
                                                                                 @endif
                                                                                 @php
@@ -2283,9 +2307,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                <center>
+                                                                                <cnter>
                                                                                     <b>{{ $total_ok_formatted }}</b>
-                                                                                </center>
+                                                                                </cnter>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin total-month-x-forecast-sd"
                                                                                 data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
@@ -2296,9 +2320,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                <center>
+                                                                                <cnter>
                                                                                     <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
-                                                                                </center>
+                                                                                </cnter>
                                                                             </td>
                                                                             <!--end::Total Coloumn-->
                                                                     @endforeach
@@ -2713,78 +2737,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                 </td>
 
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Januari Coloumn-->
-                                                                <td>-</td>
-                                                                <td>-</td>
-                                                                <td>-</td>
+                                                                <td></td>
+                                                                <td></td>
+                                                                <td></td>
                                                                 <!--end::Januari Coloumn-->
                                                                 <!--begin::Total Coloumn-->
-                                                                <td class="pinForecast HidePin">-</td>
-                                                                <td class="pinForecast HidePin">-</td>
-                                                                <td class="pinForecast HidePin">-</td>
+                                                                <td class="pinForecast HidePin"></td>
+                                                                <td class="pinForecast HidePin"></td>
+                                                                <td class="pinForecast HidePin"></td>
                                                                 <td class="pinForecast ShowPin"
                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                    -</td>
+                                                                    </td>
                                                                 <td class="pinForecast ShowPin"
                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                    -</td>
+                                                                    </td>
                                                                 <td class="pinForecast ShowPin"
                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                    -</td>
+                                                                    </td>
                                                                 <!--end::Total Coloumn-->
 
                                                             </tr>
@@ -2810,78 +2834,78 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             <!--end::Child=-->
                                                                         </td>
                                                                         <!--begin::Januari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Januari Coloumn-->
                                                                         <!--begin::Februari Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Februari Coloumn-->
                                                                         <!--begin::Maret Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Maret Coloumn-->
                                                                         <!--begin::April Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::April Coloumn-->
                                                                         <!--begin::Mei Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Mei Coloumn-->
                                                                         <!--begin::Juni Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Juni Coloumn-->
                                                                         <!--begin::Juli Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Juli Coloumn-->
                                                                         <!--begin::Agustus Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Agustus Coloumn-->
                                                                         <!--begin::September Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::September Coloumn-->
                                                                         <!--begin::Oktober Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Oktober Coloumn-->
                                                                         <!--begin::November Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::November Coloumn-->
                                                                         <!--begin::Desember Coloumn-->
-                                                                        <td>-</td>
-                                                                        <td>-</td>
-                                                                        <td>-</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
                                                                         <!--end::Desember Coloumn-->
                                                                         <!--begin::Total Coloumn-->
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
-                                                                        <td class="pinForecast HidePin">-</td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
+                                                                        <td class="pinForecast HidePin"></td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <td class="pinForecast ShowPin"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            -</td>
+                                                                            </td>
                                                                         <!--end::Total Coloumn-->
                                                                     </tr>
                                                                     {{-- begin:: Foreach Proyek --}}
@@ -2909,23 +2933,30 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endphp
                                                                                     @endif
                                                                                     @php
-                                                                                        if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
-                                                                                            $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
-                                                                                        }
+                                                                                        // if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->nilai_kontrak_keseluruhan != null) {
+                                                                                        //     $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                        // }
                                                                                         
-                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
                                                                                     @endphp
                                                                                     @foreach ($proyek->Forecasts as $forecast)
                                                                                         @if ($forecast->month_forecast == $i + 1)
                                                                                             @php
                                                                                                 $total_forecast += (int) str_replace(',', '', $forecast->nilai_forecast);
                                                                                             @endphp
-                                                                                            <td
-                                                                                                data-column-ok-sd-eksternal="{{ $month_counter }}">
-                                                                                                <center>
-                                                                                                    {{ number_format($total_ok, 0, ',', ',') }}
-                                                                                                </center>
-                                                                                            </td>
+                                                                                            @if ($i + 1 >= $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null && $proyek->nilai_rkap != null)
+                                                                                                @php
+                                                                                                    $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                @endphp
+                                                                                                <td
+                                                                                                    data-column-ok-sd-eksternal="{{ $month_counter }}">
+                                                                                                    <center>
+                                                                                                        {{-- {{ number_format($total_ok, 0, ',', ',') }} --}}
+                                                                                                        {{ $proyek->nilai_rkap }}
+                                                                                                    </center>
+                                                                                                </td>
+                                                                                            @else
+                                                                                                <td data-column-ok-sd-eksternal="{{ $month_counter }}"></td>
+                                                                                            @endif
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
@@ -2940,16 +2971,18 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                     placeholder=". . . , -" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) &&
+                                                                                            @if ($proyek->bulan_ri_perolehan >= $i + 1  &&
                                                                                                 $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                                @php
+                                                                                                    $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                @endphp
                                                                                                 <td
                                                                                                     data-column-realisasi-sd-eksternal="{{ $month_counter }}">
-                                                                                                    {{ number_format($total_realisasi, 0, ',', ',') }}
+                                                                                                    {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
                                                                                                 </td>
                                                                                             @else
                                                                                                 <td
-                                                                                                    data-column-realisasi-sd-eksternal="{{ $month_counter }}">
-                                                                                                    -</td>
+                                                                                                    data-column-realisasi-sd-eksternal="{{ $month_counter }}"></td>
                                                                                             @endif
                                                                                             @php
                                                                                                 $is_data_found = true;
@@ -2961,12 +2994,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @endphp
                                                                                 @endforeach
                                                                                 @if (!$is_data_found)
-                                                                                    <td
-                                                                                        data-column-ok-sd-eksternal="{{ $month_counter }}">
-                                                                                        <center>
-                                                                                            {{ number_format($total_ok, 0, ',', ',') }}
-                                                                                        </center>
-                                                                                    </td>
+                                                                                    @if ($i + 1 >= $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null && $proyek->nilai_rkap != null)
+                                                                                        @php
+                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                        @endphp
+                                                                                        <td
+                                                                                            data-column-ok-sd-eksternal="{{ $month_counter }}">
+                                                                                            <center>
+                                                                                                {{-- {{ number_format($total_ok, 0, ',', ',') }} --}}
+                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                            </center>
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td data-column-ok-sd-eksternal="{{ $month_counter }}"></td>
+                                                                                    @endif
                                                                                     <td>
                                                                                         <input
                                                                                             type="text"
@@ -2981,15 +3022,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             value=""
                                                                                             placeholder=". . . , -" />
                                                                                     </td>
-                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                    @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
+                                                                                        @php
+                                                                                            $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                        @endphp
                                                                                         <td
                                                                                             data-column-realisasi-sd-eksternal="{{ $month_counter }}">
                                                                                             {{ number_format($total_realisasi, 0, ',', ',') }}
                                                                                         </td>
                                                                                     @else
                                                                                         <td
-                                                                                            data-column-realisasi-sd-eksternal="{{ $month_counter }}">
-                                                                                            -</td>
+                                                                                            data-column-realisasi-sd-eksternal="{{ $month_counter }}"></td>
                                                                                     @endif
                                                                                 @endif
                                                                                 @php
@@ -3021,9 +3064,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                <center>
+                                                                                <cnter>
                                                                                     <b>{{ number_format($total_ok, 0, ',', ',') }}</b>
-                                                                                </center>
+                                                                                </cnter>
                                                                             </td>
                                                                             <td class="pinForecast ShowPin total-month-x-forecast-sd-eksternal"
                                                                                 data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
@@ -3034,9 +3077,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             </td>
                                                                             <td class="pinForecast ShowPin"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                <center>
+                                                                                <cnter>
                                                                                     <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
-                                                                                </center>
+                                                                                </cnter>
                                                                             </td>
                                                                             <!--end::Total Coloumn-->
                                                                     @endif

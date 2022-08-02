@@ -52,7 +52,10 @@ class ContractManagementsController extends Controller
 
     public function new()
     {
-        return view('Contract/view', ["contracts" => ContractManagements::all(), "projects" => Proyek::all()]);
+        $proyeks_filtered = Proyek::all()->filter(function ($proyek) {
+            return $proyek->stage == 6 || $proyek->stage == 8;
+        });
+        return view('Contract/view', ["projects" => $proyeks_filtered]);
     }
 
     function deleteModelArray(Collection $model, $child = false, string $childColllection = null)
@@ -127,12 +130,21 @@ class ContractManagementsController extends Controller
     public function save(Request $request, ContractManagements $contractManagements)
     {
         $data = $request->all();
+        $proyek = Proyek::find($data["project-id"]);
+        
+        if ($proyek->stage < 7) {
+            Alert::html('Erorr', 'Pastikan proyek sudah <b>Terkontrak</b>', 'Error');
+            return redirect()->back();
+        } else if(!empty($proyek->ContractManagements)) {
+            Alert::html('Erorr', 'Pastikan proyek belum memiliki Kontrak', 'Error');
+            return redirect()->back();
+        }
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-            "date" => "This field must be date only",
-            "before" => "Make sure 'Tanggal Mulai Kontrak' is before 'Tanggal Berakhir Kontrak'",
-            "after" => "Make sure 'Tanggal Berakhir Kontrak' is after 'Tanggal Mulai Kontrak'",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus tanggal",
+            "before" => "Pastikan 'Tanggal Mulai Kontrak' ditentukan sebelum 'Tanggal Berakhir Kontrak'",
+            "after" => "Pastikan 'Tanggal Berakhir Kontrak' ditentukan sesudah 'Tanggal Mulai Kontrak'",
         ];
         $rules = [
             "number-contract" => "required|numeric",
@@ -196,11 +208,11 @@ class ContractManagementsController extends Controller
     {
         $data = $request->all();
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-            "date" => "This field must be date only",
-            "before" => "Make sure 'Tanggal Mulai Kontrak' is before 'Tanggal Berakhir Kontrak'",
-            "after" => "Make sure 'Tanggal Berakhir Kontrak' is after 'Tanggal Mulai Kontrak'",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "date" => "Field di atas harus tanggal",
+            "before" => "Pastikan 'Tanggal Mulai Kontrak' ditentukan sebelum 'Tanggal Berakhir Kontrak'",
+            "after" => "Pastikan 'Tanggal Berakhir Kontrak' ditentukan sesudah 'Tanggal Mulai Kontrak'",
         ];
         $rules = [
             "number-contract" => "required|numeric",
@@ -325,8 +337,8 @@ class ContractManagementsController extends Controller
         // $file = $request->file("attach-file-review");
         $data = $request->all();
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
@@ -380,8 +392,7 @@ class ContractManagementsController extends Controller
             // $spreadsheet = $reader->load($data["upload-review"]);
             $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($data["upload-review"]);
             $spreadsheet = $spreadsheet->getActiveSheet()->toArray();
-            array_unshift($spreadsheet);
-            dd($spreadsheet);
+            array_shift($spreadsheet);
             foreach($spreadsheet as $data_excel) {
                 $reviewContractsExcel = new ReviewContracts();
                 $reviewContractsExcel->ketentuan = $data_excel[0];
@@ -424,8 +435,8 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
@@ -477,8 +488,8 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
@@ -533,8 +544,8 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "file" => "This field must be file only",
             "string" => "This field must be alphabet only",
         ];
@@ -591,8 +602,8 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "string" => "This field must be alphabet only",
             "file" => "This field must be file only",
         ];
@@ -641,8 +652,8 @@ class ContractManagementsController extends Controller
         $data = $request->all();
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
             "string" => "This field must be alphabet only",
             "file" => "This field must be file only",
         ];

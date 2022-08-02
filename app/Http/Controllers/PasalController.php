@@ -158,7 +158,6 @@ class PasalController extends Controller
         // Pasal ini tidak akan masuk ke database (untuk sementara)
         if($request->add_session) {
             $file = $request -> file('import-file-upload'); //get temp data
-            // dd($file);
             $reader = \PhpOffice\PhpSpreadsheet\IOFactory::createReaderForFile($file);
             $reader->setReadDataOnly(true);
             $spreadsheet = $reader->load($file);

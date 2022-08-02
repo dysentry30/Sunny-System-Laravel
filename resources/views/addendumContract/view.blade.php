@@ -1162,7 +1162,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="d-flex flex-row">
-                                            <button type="button" data-bs-toggle="modal" data-bs-target="#kt_modal_pasal" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal">Pasal-pasal<i class="mx-2 bi bi-plus text-primary"></i></button>
+                                            <button type="button" onclick="showModalPasal()" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal">Pasal-pasal<i class="mx-2 bi bi-plus text-primary"></i></button>
                                             @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
                                                 <a name="clear-pasal" id="clear-pasal"
                                                     class="btn btn-sm btn-danger">Clear
@@ -1705,16 +1705,21 @@
                                 </ul>
                             </div>
                         @endisset
-                        <div class="d-flex flex-row col align-items-center justify-content-between">
-                            <button type="button" id="back-pasal" onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
-                                dropdownParent: $('#kt_modal_draft'),
-                                minimumResultsForSearch: Infinity,
-                            });" data-bs-target="#kt_modal_draft" data-bs-toggle="modal" class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i> Back</button>
-                            <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary" style="background-color: #008cb4">
-                                <span>Save</span>
-                                <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
-                                role="status"></span>
-                            </button>
+                        <div class="row">
+                            <div class="d-flex col-3 justify-content-between align-items-center">
+                                <button type="button" id="back-pasal" onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
+                                    dropdownParent: $('#kt_modal_draft'),
+                                    minimumResultsForSearch: Infinity,
+                                });" data-bs-target="#kt_modal_draft" data-bs-toggle="modal" class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i> Back</button>
+                                <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary" style="background-color: #008cb4">
+                                    <span>Save</span>
+                                    <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
+                                    role="status"></span>
+                                </button>
+                            </div>
+                            <div class="col d-flex justify-content-end align-items-end">
+                                <button class="btn btn-sm btn-active-primary" onclick="showModalPasalImport()" style="background-color: #e6e6e6">Import Pasal</button>
+                            </div>
                         </div>
                     </div>
                     <!--end::Input group-->
@@ -1851,6 +1856,54 @@
         </div>
         <!--end::Modal content-->
     </div>
+
+    {{-- start:: Modal - Import Pasal --}}
+    <div class="modal fade" id="kt_modal_import_pasal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-900px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Import Pasal</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <form action="/pasal/import" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body py-lg-6 px-lg-6">
+                            @csrf
+                            <input type="hidden" name="id-addendum" value="{{ $addendumContract->id_addendum ?? 0 }}">
+                            <input type="hidden" name="add_session" value="1">
+                            <label for="import-file-upload">Import pasal di sini</label>
+                            <input type="file" name="import-file-upload" accept=".xlsx" class="form-control form-control-solid">
+                        </div>
+                        <!--end::Input group-->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4;">Import</button>
+                        </div>
+                    </div>
+                </form>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    {{-- End:: Modal - Import Pasal --}}
     <!--end::Modal dialog-->
 
     </div>
@@ -1868,6 +1921,17 @@
         const modalPasalElt = document.querySelector("#kt_modal_pasal");
         const modalDraftBoots = new bootstrap.Modal(modalDraftElt, {});
         const modalPasalBoots = new bootstrap.Modal(modalPasalElt, {});
+        const pasalModalImportElt = document.querySelector("#kt_modal_import_pasal");
+        const pasalModalImportBoots = new bootstrap.Modal(pasalModalImportElt, {});
+        // begin :: Import Pasal
+        function showModalPasal() {
+            // pasalModalBoots.show();
+            modalPasalBoots.show();
+        }
+        function showModalPasalImport() {
+            // pasalModalBoots.show();
+            pasalModalImportBoots.show();
+        }
         // const clearPasalBtn = document.getElementById("clear-pasal");
         const loadingElt = document.querySelector("#save-pasal > .spinner-border");
         savePasalBtn.addEventListener("click", async e => {
