@@ -167,26 +167,29 @@
                                                 $data_found = false;
                                             @endphp
                                             @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek->ContractManagements) && $proyek->ContractManagements->stages == 1)
+                                                @if (!empty($proyek) && $proyek->stage <= 4)
                                                     @php
                                                         $data_found = true;
                                                     @endphp
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{-- <a class="text-hover-primary text-gray-500"
+                                                            {{-- <a class="text-hover-primary 
                                                     href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                 </a> --}}
-                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
+                                                            {{-- <a href="/contract-management/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a> --}}
+                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                    id="click-name"
+                                                                    class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->
@@ -240,26 +243,26 @@
                                                 $data_found = false;
                                             @endphp
                                             @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek->ContractManagements) && $proyek->ContractManagements->stages == 2)
+                                                @if (!empty($proyek) && ($proyek->stage == 6 || $proyek->stage == 8) && empty($proyek->ContractManagements))
                                                     @php
                                                         $data_found = true;
                                                     @endphp
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{-- <a class="text-hover-primary text-gray-500"
+                                                            {{-- <a class="text-hover-primary 
                                                     href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                 </a> --}}
-                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
+                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract ?? "" }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->
@@ -281,7 +284,7 @@
                                                     @endphp
                                                 <tr>
                                                     <td colspan="3">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                        <p class="text-center bg-gray-100">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
                                                 @endif
@@ -320,19 +323,19 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{-- <a class="text-hover-primary text-gray-500"
+                                                            {{-- <a class="text-hover-primary 
                                                     href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                 </a> --}}
                                                             <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->
@@ -393,19 +396,19 @@
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
-                                                            {{-- <a class="text-hover-primary text-gray-500"
+                                                            {{-- <a class="text-hover-primary 
                                                     href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
                                                 </a> --}}
                                                             <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Name=-->
                                                         <td>
                                                             <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-gray-500 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                         </td>
                                                         <!--end::Name=-->
                                                         <!--begin::Email=-->

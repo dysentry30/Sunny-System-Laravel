@@ -25,7 +25,7 @@ return new class extends Migration
             $table->dateTime("pengajuan_waktu_eot");
             $table->text("id_document_proposal_claim");
             $table->boolean("rekomendasi");
-            $table->longText("uraian_rekomendasi");
+            $table->longText("uraian_rekomendasi")->nullable();
             $table->timestamps();
         });
 
@@ -36,7 +36,7 @@ return new class extends Migration
             $table->dateTime("tanggal_diajukan");
             $table->text("id_document_proposal_claim");
             $table->boolean("rekomendasi");
-            $table->longText("uraian_rekomendasi");
+            $table->longText("uraian_rekomendasi")->nullable();
             $table->timestamps();
         });
         

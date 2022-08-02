@@ -11,4 +11,8 @@ class ReviewContracts extends Model
 
     protected $primaryKey = "id_review";
     protected $fillable = ["*"];
+
+    public function User() {
+        return $this->hasOne(User::class, "id", "pic_cross");
+    }
 }

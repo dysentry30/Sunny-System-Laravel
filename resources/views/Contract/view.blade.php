@@ -850,7 +850,11 @@
                                                     <!--end::Kode=-->
                                                     <!--begin::Unit=-->
                                                     <td>
-                                                        <p>{{$reviewProject->pic_cross}}</p>
+                                                        @if (!empty($reviewProject->User))
+                                                            <p>{{$reviewProject->User->name}}</p>
+                                                        @else 
+                                                            <p>{{$reviewProject->pic_cross}}</p>
+                                                        @endif
                                                     </td>
                                                     <!--end::Unit=-->
                                                     <!--begin::Unit=-->
@@ -1069,53 +1073,60 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
-                                    <tr>
-                                        <td colspan="5" class="bg-gray-100">
-                                            <b>Surat Perjanjian Kontrak</b>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @if ($perubahan_draft->kategori == 1)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
+                                    @if ($contract->UsulanPerubahanDraft->contains("kategori", 1))
+                                        <tr>
+                                            <td colspan="5" class="bg-gray-100 px-4">
+                                                <b>Surat Perjanjian Kontrak</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @if ($perubahan_draft->kategori == 1)
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->keterangan}}</td>
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    @endif
 
-                                    <tr>
-                                        <td colspan="5" class="bg-gray-100">
-                                            <b>Syarat-syarat Umum Kontrak (SSUK)</b>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @if ($perubahan_draft->kategori == 2)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
+                                    @if ($contract->UsulanPerubahanDraft->contains("kategori", 2))
+                                        <tr>
+                                            <td colspan="5" class="bg-gray-100 px-4">
+                                                <b>Syarat-syarat Umum Kontrak (SSUK)</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @if ($perubahan_draft->kategori == 2)
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->keterangan}}</td>
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    @endif
 
-                                    <tr>
-                                        <td colspan="5" class="bg-gray-100">
-                                            <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
-                                            @if ($perubahan_draft->kategori == 3)
-                                                <td>{{$perubahan_draft->isu}}</td>
-                                                <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
-                                                <td>{{$perubahan_draft->keterangan}}</td>
-                                            @endif
-                                        @endforeach
-                                    </tr>
+                                    @if ($contract->UsulanPerubahanDraft->contains("kategori", 3))
+                                        <tr>
+                                            <td colspan="5" class="bg-gray-100 px-4">
+                                                <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @if ($perubahan_draft->kategori == 3)
+                                                    <td>{{$perubahan_draft->isu}}</td>
+                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
+                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->keterangan}}</td>
+                                                @endif
+                                            @endforeach
+                                        </tr>
+                                    @endif
+
 
                                 </tbody>
                                 <!--end::Table body-->
@@ -2362,70 +2373,79 @@
                             <!--end::Table head-->
                             <!--begin::Table body-->
                             <tbody class="fw-bold text-gray-400">
-                                @foreach ($contract->PendingIssue as $key => $pending_issue)
-                                    <tr>
-                                        @if (Str::isUuid($pending_issue->issue))
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <a href="/document/view/{{$contract->id_contract}}/{{$pending_issue->issue}}/pict" class="text-gray-600 text-hover-primary">Gambar #{{$key + 1}}</a>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @else
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600">{{$pending_issue->issue}}</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @endif
-
-                                        @if ($pending_issue->status)
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600">Open</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @else
-                                            <!--begin::Name=-->
-                                            <td>
-                                                <p class="text-gray-600">Closed</p>
-                                            </td>
-                                            <!--end::Name=-->
-                                        @endif
-
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->penyebab}}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{number_format($pending_issue->biaya, 2, ",", ",")}}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->waktu}}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->mutu}}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->ancaman}}</p>
-                                        </td>
-
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->peluang}}</p>
-                                        </td>
+                                @if ($contract->PendingIssue->count() > 0)
                                         
-                                        <td>
-                                            <p class="text-gray-600">{{$pending_issue->rencana_tindak_lanjut}}</p>
-                                        </td>
+                                    @foreach ($contract->PendingIssue as $key => $pending_issue)
+                                        <tr>
+                                            @if (Str::isUuid($pending_issue->issue))
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a href="/document/view/{{$contract->id_contract}}/{{$pending_issue->issue}}/pict" class="text-gray-600 text-hover-primary">Gambar #{{$key + 1}}</a>
+                                                </td>
+                                                <!--end::Name=-->
+                                            @else
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600">{{$pending_issue->issue}}</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                            @endif
 
-                                        <td>
-                                            <p class="text-gray-600">{{Carbon\Carbon::parse($pending_issue->target_waktu_penyelesaian)->translatedFormat("d F Y")}}</p>
-                                        </td>
-                                        
-                                    </tr>
-                                @endforeach
+                                            @if ($pending_issue->status)
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600">Open</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                            @else
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <p class="text-gray-600">Closed</p>
+                                                </td>
+                                                <!--end::Name=-->
+                                            @endif
+
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->penyebab}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{number_format($pending_issue->biaya, 2, ",", ",")}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->waktu}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->mutu}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->ancaman}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->peluang}}</p>
+                                            </td>
+                                            
+                                            <td>
+                                                <p class="text-gray-600">{{$pending_issue->rencana_tindak_lanjut}}</p>
+                                            </td>
+
+                                            <td>
+                                                <p class="text-gray-600">{{Carbon\Carbon::parse($pending_issue->target_waktu_penyelesaian)->translatedFormat("d F Y")}}</p>
+                                            </td>
+                                            
+                                        </tr>
+                                    @endforeach
+                                @else
+                                        <tr>
+                                            <td colspan="10" class="text-center bg-gray-100">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                @endif
                             </tbody>
                             <!--end::Table body-->
 
@@ -4739,7 +4759,7 @@
                 <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
-                    <input type="hidden" value="0" name="stage">
+                    <input type="hidden" value="1" name="stage">
                     <div class="row mb-5">  
                         <div class="col-6 border-end">
                             <div class="row ">
@@ -5537,6 +5557,11 @@ aria-hidden="true">
     new FroalaEditor('#froala-editor-mom-meeting', {
         documentReady: true,
     });
+
+    const proyekStage = Number("{{$contract->stages ?? 0}}");
+    const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
+    const tabBoots = new bootstrap.Tab(tabContent, {});
+    tabBoots.show();
 </script>
 
 @endsection
