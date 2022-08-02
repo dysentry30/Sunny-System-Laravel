@@ -1,42 +1,44 @@
 <?php
 
+use App\Models\faqs;
+use App\Models\User;
+use App\Models\Proyek;
+use App\Models\Forecast;
+use App\Models\UnitKerja;
+use App\Models\SumberDana;
+use Illuminate\Http\Request;
+use PhpOffice\PhpWord\PhpWord;
+use App\Mail\UserPasswordEmail;
+use App\Models\HistoryForecast;
+use App\Models\ProyekBerjalans;
+use Illuminate\Http\UploadedFile;
 use App\Events\LockForeacastEvent;
-use App\Http\Controllers\AddendumContractController;
-use App\Http\Controllers\ClaimController;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProyekController;
-use App\Http\Controllers\CompanyController;
-use App\Http\Controllers\ContractManagementsController;
-use App\Http\Controllers\SumberDanaController;
 use App\Http\Controllers\DopController;
 use App\Http\Controllers\SbuController;
-use App\Http\Controllers\UnitKerjaController;
-use App\Models\Proyek;
-use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
-use PhpOffice\PhpWord\PhpWord;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\DocumentController;
-use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\FaqsController;
-use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
-use App\Http\Controllers\TeamProyekController;
-use App\Http\Controllers\UserController;
-use App\Mail\UserPasswordEmail;
-use App\Models\faqs;
-use App\Models\Forecast;
-use App\Models\HistoryForecast;
-use App\Models\ProyekBerjalans;
-use App\Models\UnitKerja;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
-
+use App\Http\Controllers\ProyekController;
 use function PHPUnit\Framework\returnSelf;
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\ForecastController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UnitKerjaController;
+use App\Http\Controllers\SumberDanaController;
+use App\Http\Controllers\TeamProyekController;
+use App\Http\Controllers\DraftContractController;
+
+use App\Http\Controllers\KriteriaPasarController;
+use App\Http\Controllers\AddendumContractController;
+use App\Http\Controllers\ContractManagementsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -334,6 +336,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
         ]);
     });
+
+    Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
+
+    // ADD Kriteria 
+    Route::post('/proyek/kriteria-add', [ProyekController::class, 'tambahKriteria']);
     //End :: Project
 
 
@@ -467,16 +474,25 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Home Unit Kerja
     Route::get('/unit-kerja', [UnitKerjaController::class, 'index']);
-
+    
     // NEW Unit Kerja after SAVE
     Route::post('/unit-kerja/save', [UnitKerjaController::class, 'store']);
-
+    
     // Setting Unit Kerja
     Route::post('/unit-kerja/setting/save', [UnitKerjaController::class, 'update']);
     
     // NEW Unit Kerja after SAVE
     Route::delete('/unit-kerja/delete/{id}', [UnitKerjaController::class, 'delete']);
-//End :: Master Data
+
+    // Home Kriteria Pasar
+    Route::get('/kriteria-pasar', [KriteriaPasarController::class, 'index']);
+
+    // Home Kriteria Pasar
+    Route::post('/kriteria-pasar/save', [KriteriaPasarController::class, 'store']); 
+
+    // Home Kriteria Pasar
+    Route::delete('/kriteria-pasar/delete/{id}', [KriteriaPasarController::class, 'delete']); 
+    //End :: Master Data
     
     
     //Begin :: FAQ - KnowledgeBase
@@ -613,12 +629,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
-
-        $rkaps = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
-        // $rkaps = UnitKerja::find($id_unit_kerja);
+        $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
+        $rkaps = UnitKerja::where("divcode", "=", $divcode)->first();
         // dd($rkaps);
 
-        return view("/Rkap/viewRkap", compact(["rkaps"]));
+        return view("/Rkap/viewRkap", compact(["proyeks", "tahun_pelaksanaan", "rkaps"]));
     });
     // end RKAP
 

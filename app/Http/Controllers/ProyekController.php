@@ -15,6 +15,8 @@ use App\Models\ProyekBerjalans;
 use App\Models\ClaimManagements;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
+use App\Models\KriteriaPasar;
+use App\Models\KriteriaPasarProyek;
 use App\Models\TeamProyek;
 use App\Models\User;
 use Illuminate\Pagination\Paginator;
@@ -99,8 +101,12 @@ class ProyekController extends Controller
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
+        
+        //auto filled by required 
+        $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
+        
         $newProyek->stage = "1";
-
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
 
@@ -145,8 +151,8 @@ class ProyekController extends Controller
         $proyek = Proyek::find($kode_proyek);
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
+        $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
 
-        // dd($kode_proyek);
         // dd($proyek); //tes log hasil 
         return view(
             'Proyek/viewProyek',
@@ -159,9 +165,11 @@ class ProyekController extends Controller
                 'unitkerjas' => UnitKerja::all(),
                 'customers' => Customer::all(),
                 'users' => User::all(),
+                'kriteriapasar' => KriteriaPasar::all()->unique("kategori"),
+                'kriteriapasarproyek' => $kriteriaProyek,
                 'teams' => $teamProyek,
                 'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
-                "historyForecast" => $historyForecast
+                "historyForecast" => $historyForecast,
             ]
         );
     }
@@ -190,10 +198,10 @@ class ProyekController extends Controller
         $newProyek->kurs_review = $dataProyek["kurs-review"];
         $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan-review"];
         $newProyek->nilaiok_review = $dataProyek["nilaiok-review"];
-        $newProyek->nilai_valas_awal = $dataProyek["nilai-valas-awal"];
+        $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
         $newProyek->mata_uang_awal = $dataProyek["mata-uang-awal"];
         $newProyek->kurs_awal = $dataProyek["kurs-awal"];
-        $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan-awal"];
+        $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilaiok_awal = $dataProyek["nilaiok-awal"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
 
@@ -336,15 +344,17 @@ class ProyekController extends Controller
         return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");
     }
 
-    public function assignTeam(Request $request, TeamProyek $newTeam, Proyek $proyek)
+    public function assignTeam(Request $request, TeamProyek $newTeam)
     {
         $assignTeam = $request->all();
         // $proyek=Proyek::find($proyek["kode-proyek"]);
         // dd($proyek);
         $newTeam->id_user = $assignTeam["nama-team"];
+        $newTeam->role = $assignTeam["role-team"];
         $newTeam->kode_proyek = $assignTeam["assign-kode-proyek"];
 
         $newTeam->save();
+        Alert::success("Success", "Team Berhasil Di-Assign");
         return redirect()->back();
     }
 
@@ -406,4 +416,26 @@ class ProyekController extends Controller
         Alert::error("Error", "Stage gagal diperbarui");
         return back();
     }
+
+    public function getKriteria(Request $request) {
+        $data = $request->all();
+
+        $kriteria = KriteriaPasar::select("kriteria", "bobot")->where("kategori", "=", $data["kategori"])->get();
+        // dd($kriteria);
+        return $kriteria->toJson();
+    }
+
+    public function tambahKriteria(Request $request, KriteriaPasarProyek $newKriteria)
+    {
+        $dataKriteria = $request->all();
+        $newKriteria->kode_proyek = $dataKriteria["data-kriteria-proyek"];
+        $newKriteria->kategori = $dataKriteria["kategori-pasar"];
+        $newKriteria->kriteria = $dataKriteria["kriteria-pasar"];
+        $newKriteria->bobot = $dataKriteria["bobot"];
+
+        $newKriteria->save();
+        Alert::success("Success", "Kriteria Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
 }
