@@ -237,6 +237,7 @@
                             str_contains(Request::Path(), 'unit-kerja') ||
                             str_contains(Request::Path(), 'pasal/edit') ||
                             str_contains(Request::Path(), 'user') ||
+                            str_contains(Request::Path(), 'kriteria-pasar') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white;"
