@@ -577,19 +577,10 @@
                                                             <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file"> --}}
                                                         <!--end::Input-->
                                                         
-                                                        <!--begin::INPUT PIC-->                                                                
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                            Input Struktur Organisasi 
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_struktur">+</a>
-                                                        </h3>
-                                                        <!--end::INPUT PIC-->                                                                
-                                                        
-                                                        
-                                                        <br><br>
-                                                        
                                                         <!--begin::Table-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                                            List Struktur Organisasi
+                                                            Input Struktur Organisasi
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_struktur">+</a>
                                                         </h3>
                                                         <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                                                             <!--begin::Table head-->

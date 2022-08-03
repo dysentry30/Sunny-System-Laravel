@@ -17,9 +17,15 @@ class FaqsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index ()
+    public function index (Request $request)
     {
-        return view("8_Knowledge_Base", ['faqs' => Faqs::all()]);
+        $cari = $request->query("cari");
+        if(!empty($cari)){
+            $faqs = Faqs::sortable()->where('judul', 'like', '%'.$cari.'%')->orWhere('deskripsi', 'like', '%'.$cari.'%')->get();
+        }else{
+        $faqs = Faqs::sortable()->get();
+        }
+        return view("8_Knowledge_Base", compact(['faqs', 'cari']));
     }
 
     /**

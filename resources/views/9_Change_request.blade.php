@@ -74,9 +74,15 @@
                                         <!--End:: Select Options-->
                                         
                                         <!--begin:: Input Filter-->
-                                        
-                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}" class="form-control form-control-solid ms-2" placeholder="Input Filter"/>
-                                        
+                                        <div class="d-flex align-items-center position-relative">
+                                            <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                            <span class="svg-icon svg-icon-1 position-absolute ms-6">
+                                                <i class="bi bi-search"></i>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                            <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
+                                            class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                        </div>
                                         <!--end:: Input Filter-->
                                         
                                         <!--begin:: Filter-->
