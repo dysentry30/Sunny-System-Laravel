@@ -99,11 +99,11 @@ img.tengah {
     padding: 5rem;
 }
 
-#datatable:not(:fullscreen) #exit-fullscreen {
+html:not(:fullscreen) #exit-fullscreen {
     display: none;
 }
 
-#datatable:fullscreen #exit-fullscreen {
+html:fullscreen #exit-fullscreen {
     display: block;
 }
 
@@ -111,6 +111,6 @@ html #exit-fullscreen {
     display: block;
 }
 
-#forecast-line .highcharts-point {
+#forecast-line .highcharts-point, #forecast-3wulan .highcharts-point, #nilai-realisasi .highcharts-point {
     cursor: pointer;
 }
