@@ -98,21 +98,38 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header border-0 pt-">
+                        <div class="card-header border-0 pt-2">
 
                             <!--begin::Card title-->
                             <div class="card-title" style="width: 100%">
                                 <!--begin::Search-->
-                                <div class="d-flex align-items-center my-1" style="width: 100%;">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search FAQ">
-                                    <!--end::Search-->
-                                </div>
+                                <form class="d-flex flex-row w-auto" action=""  method="get">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                        <span class="svg-icon svg-icon-1 position-absolute ms-6 mt-4">
+                                            <i class="bi bi-search"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                        <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
+                                            class="form-control form-control-solid ps-15" placeholder="Judul/Deskripsi FAQ" />
+
+                                        <!--begin:: Filter-->
+                                        <button hidden type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
+                                        Filter</button>
+                                        <!--end:: Filter-->
+
+                                        <!--begin:: RESET-->
+                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
+                                        onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                        <script>
+                                            function resetFilter() {
+                                                $("#cari").text({
+                                                    minimumResultsForSearch: -1
+                                                }).val("").trigger("change");
+                                            }
+                                        </script>
+                                        <!--end:: RESET-->
+                                </form>
+                                <!--end::Search-->
                             </div>
                             <!--begin::Card title-->
                         </div>

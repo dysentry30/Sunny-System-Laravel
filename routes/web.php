@@ -78,6 +78,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
 
+    Route::get('/dashboard/triwulan/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPointTriwulan']);
+
+    Route::get('/dashboard/realisasi/{prognosa}/{type}/{unitKerja}', [DashboardController::class, 'getDataFilterPointRealisasi']);
+
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 

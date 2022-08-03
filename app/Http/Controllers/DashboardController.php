@@ -98,7 +98,7 @@ class DashboardController extends Controller
         $offset_history = 0;
         for ($i = 3; $i <= 12; $i+=3) {
             $filtered_history_forecast = $historyForecast->filter(function($data) use ($i, $offset_history){
-                return  $data->month_forecast > $offset_history && $data->month_forecast <= $i && $data->periode_prognosa == (int) date("m");
+                return  $data->month_forecast > $offset_history && $data->month_forecast <= $i;
             });
             $nilaiForecastTriwulan += $filtered_history_forecast->sum("nilai_forecast");
             // dump($filtered_history_forecast->all());
@@ -183,6 +183,38 @@ class DashboardController extends Controller
         };
         //end::Proyek Stage
 
+        //Begin::Terendah Terkontrak
+        $nilaiTerkontrak = 0;
+        $nilaiTerendah = 0;
+        foreach ($proyeks as $proyek) {
+            $stg = $proyek->stage;
+            if ($stg == 8) {
+                $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+            } else if ($stg == 9) {
+                $nilaiTerendah += (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+            };
+            // dump($nilaiTerendah, $nilaiTerkontrak);
+        };
+        //End::Terendah Terkontrak
+        
+        //Begin::Competitive Index
+        $jumlahMenang = 0;
+        $jumlahKalah = 0;
+        $nilaiMenang = 0;
+        $nilaiKalah = 0;
+        foreach ($proyeks as $proyek) {
+            $stg = $proyek->stage;
+            if ($stg == 6) {
+                $jumlahMenang++;
+                $nilaiMenang += (int) str_replace(",", "", $proyek->nilai_rkap);
+            } else if ($stg == 9) {
+                $jumlahKalah++;
+                $nilaiKalah += (int) str_replace(",", "", $proyek->nilai_rkap);
+            };
+            // dump($nilaiTerendah, $nilaiTerkontrak);
+        };
+        //End::Competitive Index
+
         //begin::Marketing PipeLine
         $prosesTender = 0;
         $terkontrak = 0;
@@ -223,7 +255,7 @@ class DashboardController extends Controller
         //end::Pareto
 
 
-        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif"]));
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah"]));
     }
 
     /**
@@ -316,5 +348,23 @@ class DashboardController extends Controller
             }
         }
         return response()->json($data);
+    }
+    public function getDataFilterPointTriwulan($prognosa, $type, $month)
+    {
+        $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
+        $range_month = explode("-", $month);
+        $max_month = array_search($range_month[1], $arrNamaBulan);
+        $history_forecasts = Proyek::select("*")->where("month_forecast", "<=", $max_month)->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=", $prognosa)->get();
+        return response()->json($history_forecasts);
+    }
+
+    public function getDataFilterPointRealisasi($prognosa, $type, $unitKerja)
+    {
+        if ($type == "Nilai-OK-Kumulatif") {
+            $proyeks = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("unit_kerjas.unit_kerja", "=", str_replace("-", " ", $unitKerja))->get();
+        } else if ($type == "Nilai-Realisasi-Kumulatif") {
+            $proyeks = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->where("unit_kerjas.unit_kerja", "=", str_replace("-", " ", $unitKerja))->get();
+        }
+        return response()->json($proyeks);
     }
 }

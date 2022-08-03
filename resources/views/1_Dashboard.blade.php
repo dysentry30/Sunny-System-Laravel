@@ -183,16 +183,84 @@
                             <!--end::FORECAST LINE CHART-->
                             <hr>
 
-                            <div class="py-12" id="forecast-3wulan">
-                                <!--begin::FORECAST 3 WULAN CHART-->
-                                <!--end::FORECAST 3 WULAN CHART-->
-                            </div>
+                            <figure class="highcharts-figure py-12">
+                                <div class="py-12" id="forecast-3wulan">
+                                    <!--begin::FORECAST 3 WULAN CHART-->
+                                    <!--end::FORECAST 3 WULAN CHART-->
+                                </div>
+
+                                {{-- Begin :: Data Table Triwulan --}}
+                                <div class="" id="datatable-triwulan" style="display:none;">
+                                    <hr>
+                                    <div class="text-center">
+                                        <h2 id="title-table"></h2>
+                                        <h4 id="total"></h4>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                            onclick="hideTable('#datatable-triwulan','#forecast-3wulan')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                            Chart</button>
+                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                    </div>
+                                    <br>
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                        <!--begin::Table head-->
+                                        <thead id="table-line-head">
+                                            {{-- THead Here --}}
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold" id="table-line-body">
+                                            {{-- Data Here --}}
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table Proyek-->
+                                </div>
+                                {{-- End :: Data Table Triwulan --}}
+                            </figure>
                             <hr>
 
-                            <div class="py-12" id="nilai-realisasi">
-                                <!--begin::NILAI REALISASI-->
-                                <!--end::NILAI REALISASI-->
-                            </div>
+                            <figure class="highcharts-figure py-12">
+                                <div class="py-12" id="nilai-realisasi">
+                                    <!--begin::NILAI REALISASI-->
+                                    <!--end::NILAI REALISASI-->
+    
+                                </div>
+                                <div class="" id="datatable-realisasi" style="display:none;">
+                                    <hr>
+                                    <div class="text-center">
+                                        <h2 id="title-table"></h2>
+                                        <h4 id="total"></h4>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                            onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                            Chart</button>
+                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                    </div>
+                                    <br>
+                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                        <!--begin::Table head-->
+                                        <thead id="table-line-head">
+                                            {{-- THead Here --}}
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold" id="table-line-body">
+                                            {{-- Data Here --}}
+                                        </tbody>
+                                        <!--end::Table body-->
+                                    </table>
+                                    <!--end::Table Proyek-->
+                                </div>
+                            </figure>
                             <hr>
 
                             <div class="py-12" id="monitoring-proyek">
@@ -206,6 +274,19 @@
                                 <!--end::TERENDAH - TERKONTRAK-->
                             </div>
                             <hr>
+                            
+                            <div class="row">
+                                <div class="col py-12" id="index-jumlah">
+                                    <!--begin::INDEX JUMLAH-->
+                                    <!--end::INDEX JUMLAH-->
+                                </div>
+                                <span class="vr" style="padding: 0.5px"></span>
+                                <div class="col py-12" id="index-nilai">
+                                    <!--begin::INDEX NILAI-->
+                                    <!--end::INDEX NILAI-->
+                                </div>
+                            </div>
+                            <hr>
 
                             <div class="py-12" id="marketing-pipeline">
                                 <!--begin::MARKETING PIPELINE-->
@@ -214,8 +295,8 @@
                             <hr>
 
                             <div class="py-12" id="claim">
-                                <!--begin::MARKETING PIPELINE-->
-                                <!--end::MARKETING PIPELINE-->
+                                <!--begin::STATUS CLAIM-->
+                                <!--end::STATUS CLAIM-->
                             </div>
                             <hr>
 
@@ -800,7 +881,6 @@
     <!--end::FORECAST 3WULAN-->
 
     <!--begin::NILAI REALISASI-->
-    {{-- let kategoriunitKerja = JSON.parse("{!! json_encode($kategoriunitKerja) !!}"); --}}
     <script>
         let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
         let nilaiOkKumulatif = {!! json_encode($nilaiOkKumulatif) !!};
@@ -901,25 +981,18 @@
                 
             },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
-            legend: {
-                enabled: false
-            },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
-                    depth: 45
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.name}',
+                    },
+                    showInLegend: true
                 }
             },
-            // plotOptions: {
-            //     series: {
-            //         borderWidth: 0,
-            //         dataLabels: {
-            //             enabled: true,
-            //             // format: '{point.y:.1f}%'
-            //         }
-            //     }
-            // },
-
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> Total Proyek<br/>'
@@ -953,51 +1026,19 @@
             credits: {
                 enabled: false
             },
-            drilldown: {
-                // breadcrumbs: {
-                //     // format: "{level.name}",
-                //     position: {
-                //         align: 'right',
-                //     }
-                // },
-                // series: [{
-                //     name: "Proses",
-                //     id: "Proses",
-                //     type: 'column',
-                //     data: [
-                //         [
-                //             "v650",
-                //             21
-                //         ],
-                //         [
-                //             "v640",
-                //             13
-                //         ],
-                //         [
-                //             "v630",
-                //             50
-                //         ],
-                //         [
-                //             "v620",
-                //             44
-                //         ],
-                //         [
-                //             "v610",
-                //             28
-                //         ],
-                //         [
-                //             "v600",
-                //             35
-                //         ]
-                //     ]
-                // }]
-            }
         });
     </script>
     <!--end::MONITORING PROYEK-->
 
     <!--begin::TERENDAH vs TERKONTRAK-->
+    @php
+    $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
+    $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100);
+    $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100);
+    @endphp
     <script>
+        let presentaseTerkontrak = {{ $presentaseTerkontrak }};
+        let presentaseTerendah = {{ $presentaseTerendah }};
         Highcharts.chart('terendah-terkontrak', {
             chart: {
                 type: 'pie',
@@ -1029,43 +1070,36 @@
                 
             },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
-            legend: {
-                enabled: false
-            },
             plotOptions: {
                 pie: {
-                    innerSize: 100,
-                    depth: 45
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x}',
+                    },
+                    showInLegend: true
                 }
             },
-
+            
             tooltip: {
-                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> Total Proyek<br/>'
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span> <br> Presentase {point.x}</b>'
             },
 
             series: [{
-                name: "Proyek Stage",
+                name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Proses : " + {{ $proses }},
-                        y: {{ $proses }},
-                        drilldown: "Proses",
+                        name: "Terendah : " + "{{ number_format($nilaiTerendah, 0, ',' , ',' ) }}",
+                        y: {{ $nilaiTerendah }},
+                        x: "Terendah : " + presentaseTerendah + "%",
                     },
                     {
-                        name: "Menang : " + {{ $menang }},
-                        y: {{ $menang }},
-                        drilldown: "Menang",
-                    },
-                    {
-                        name: "Kalah dan Cancel : " + {{ $kalah }},
-                        y: {{ $kalah }},
-                        drilldown: "Kalah dan Cancel",
-                    },
-                    {
-                        name: "Prakualifikasi : " + {{ $prakualifikasi }},
-                        y: {{ $prakualifikasi }},
-                        drilldown: "Prakualifikasi",
+                        name: "Terkontrak : " + "{{ number_format($nilaiTerkontrak, 0, ',' , ',' ) }}",
+                        y: {{ $nilaiTerkontrak }},
+                        x: "Terkontrak : " + presentaseTerkontrak + "%",
                     }
                 ]
             }],
@@ -1075,6 +1109,157 @@
         });
     </script>
     <!--end::TERENDAH vs TERKONTRAK-->
+
+    <!--begin::Competitive Index-->
+    @php
+    $indexJumlahAll = $jumlahMenang + $jumlahKalah;
+    $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
+    $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
+    @endphp
+    <script>
+        Highcharts.chart('index-jumlah', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Competitive Index</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Jumlah</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#61CB65", "#ED6D3F"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x} %',
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: [{
+                        name: "Proyek Menang : " + {{ $jumlahMenang }},
+                        y: {{ $jumlahMenang }},
+                        x: "Menang : " + {{ $presentaseMenang }},
+                    },
+                    {
+                        name: "Proyek Kalah : " + {{ $jumlahKalah }},
+                        y: {{ $jumlahKalah }},
+                        x: "Kalah : " + {{ $presentaseKalah }},
+                    }
+                ]
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    @php
+    $indexNilaiAll = $nilaiMenang + $nilaiKalah;
+    $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
+    $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
+    @endphp
+    <script>
+        Highcharts.chart('index-nilai', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Competitive Index</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Nilai</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#61CB65", "#ED6D3F"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x} %',
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: [{
+                        name: "Nilai Menang : " + "{{ number_format($nilaiMenang, 0, ',' , ',' ) }}",
+                        y: {{ $nilaiMenang }},
+                        x: "Menang : " + {{ $presentaseNilaiMenang }},
+                    },
+                    {
+                        name: "Nilai Kalah : " + "{{ number_format($nilaiKalah, 0, ',' , ',' ) }}",
+                        y: {{ $nilaiKalah }},
+                        x: "Kalah : " + {{ $presentaseNilaiKalah }},
+                    }
+                ]
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::Competitive Index-->
 
     <!--begin::MARKETING PIPELINE-->
     <script>
@@ -1093,9 +1278,9 @@
                         softConnector: true
                     },
                     center: ['35%', '50%'],
-                    neckWidth: '35%',
+                    neckWidth: '25%',
                     neckHeight: '0%',
-                    width: '45%'
+                    width: '35%'
                 }
             },
             legend: {
@@ -1112,7 +1297,6 @@
                     ['Penutupan', {{ $closing }}]
                 ]
             }],
-
             responsive: {
                 rules: [{
                     condition: {
@@ -1142,7 +1326,14 @@
     <script>
         Highcharts.chart('claim', {
             chart: {
-                type: 'column'
+                type: 'column',
+                options3d: {
+                    enabled: true,
+                    alpha: 5,
+                    beta: 15,
+                    viewDistance: 50,
+                    depth: 100
+                }
             },
             title: {
                 text: '<b class="h1">Status Claim</b>'
@@ -1174,10 +1365,10 @@
                 useHTML: true
             },
             plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
-                }
+                // column: {
+                //     pointPadding: 0.2,
+                //     borderWidth: 0
+                // }
             },
             credits: {
                 enabled: false
@@ -1209,11 +1400,12 @@
                 document.msFullscreenElement;
         }
 
-        const chartPoints = document.querySelectorAll("#forecast-line .highcharts-point");
+        // BEGIN :: point trigger forecast per bulan
+        const chartPointsForecastPerBulan = document.querySelectorAll("#forecast-line .highcharts-point");
         const periodePrognosa = document.querySelector("#periode-prognosa");
         // console.log(periodePrognosa.value);
-        // console.log(chartPoints);
-        chartPoints.forEach(point => {
+        // console.log(chartPointsForecastPerBulan);
+        chartPointsForecastPerBulan.forEach(point => {
             point.addEventListener("click", async function() {
                 const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.]/gi, "").split(
                     ".");
@@ -1222,7 +1414,7 @@
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
                 // console.log(prognosa);
-                getDataTable(type, prognosa, month);
+                getDataTable("#datatable", "#forecast-line", `/dashboard/${prognosa}/${type}/${month}`, type, prognosa, month);
                 
 
                 const table = document.querySelector("#datatable");
@@ -1239,16 +1431,65 @@
 
             });
         })
+        // END :: point trigger forecast per bulan
 
-        async function getDataTable(type, prognosa, month) {
-            const filterRes = await fetch(`/dashboard/${prognosa}/${type}/${month}`).then(res =>res.json());
-            const thead = document.querySelector("#table-line-head");
-            const tbody = document.querySelector("#table-line-body");
-            const table = document.querySelector("#datatable");
+        // BEGIN :: point trigger forecast triwulan
+        const chartPointsForecastTriwulan = document.querySelectorAll("#forecast-3wulan .highcharts-point");
+        chartPointsForecastTriwulan.forEach(point => {
+            point.addEventListener("click", async e => {
+                const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.|^-]/gi, "").split(
+                    ".");
+                const month = data[0];
+                const type = data[1];
+                const date = new Date().getMonth() + 1;
+                const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
+                const tableTriwulan = document.querySelector("#datatable-triwulan");
+
+                getDataTable("#datatable-triwulan", "#forecast-3wulan", `/dashboard/triwulan/${prognosa}/${type}/${month}`, type, prognosa, month)
+                // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
+                // triwulanDataTable.forEach(data => {
+                // });
+                
+            });
+        });
+        // END :: point trigger forecast triwulan
+
+        // BEGIN :: point trigger nilai realisasi
+        const chartPointsForecastRealisasi = document.querySelectorAll("#nilai-realisasi .highcharts-point");
+        chartPointsForecastRealisasi.forEach(point => {
+            point.addEventListener("click", async e => {
+                const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.|^-|^ |^0-9]/gi, "").split(
+                    ".");
+                // const unitKerja = data[0].trim().replaceAll(" ", "-");
+                let unitKerja = data[0].trim().split(" ");
+                unitKerja.pop();
+                unitKerja = unitKerja.join("-");
+                const type = data[1].trim().replaceAll(" ", "-");
+                const date = new Date().getMonth() + 1;
+                const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
+                const tableRealisasi = document.querySelector("#datatable-realisasi");
+                getDataTable("#datatable-realisasi", "#nilai-realisasi", `/dashboard/realisasi/0/${type}/${unitKerja}`, type, prognosa)
+                // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
+                // triwulanDataTable.forEach(data => {
+                // });
+                
+            });
+        });
+        // END :: point trigger nilai realisasi
+
+        async function getDataTable(tableElt, chartElt, url, type, prognosa, month = new Date("now")) {
+            let filterRes = await fetch(url).then(res =>res.json());
+            const table = document.querySelector(tableElt);
+            const thead = table.querySelector("#table-line-head");
+            const tbody = table.querySelector("#table-line-body");
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
-
+            const unitKerja = url.split("/");
+            
             if (type == "Forecast") {
+                if (tableElt.includes("triwulan")) {
+                    filterRes = filterRes.sort((a, b) => a.month_forecast - b.month_forecast);
+                }
                 let tbodyHTML = ``;
                 let totalForecast = 0;
 
@@ -1387,7 +1628,7 @@
                 titleTable.innerHTML = `${type} - ${month}`;
                 total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
                 table.style.display = "";
-                const chartLine = document.querySelector("#forecast-line");
+                const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
             } else if (type == "NilaiOK") {
                 let tbodyHTML = ``;
@@ -1530,7 +1771,292 @@
                 table.style.display = "";
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
-            } else {
+            } else if(type == "Nilai-OK-Kumulatif") {
+                filterRes = filterRes.sort((a, b) => Number(b.nilai_rkap.replaceAll(",", "")) - Number(a.nilai_rkap.replaceAll(",", "")))
+                let tbodyHTML = ``;
+                let totalNilaiOk = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Kode Proyek</th>' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai OK</th>`
+                '</tr>';
+
+                filterRes.forEach(filter => {
+                    let stage = "";
+                    totalNilaiOk += Number(filter.nilai_rkap.replaceAll(",", ""));
+                    switch (filter.stage) {
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (filter.bulan_pelaksanaan) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(Number(filter.nilai_rkap.replaceAll(",", "")))}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai OK Kumulatif - ${unitKerja[unitKerja.length - 1].replaceAll("-", " ")}`;
+                total.innerHTML = `Total Nilai OK Kumulatif = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if(type == "Nilai-Realisasi-Kumulatif") {
+                filterRes = filterRes.sort((a, b) => Number(b.nilai_kontrak_keseluruhan.replaceAll(",", "")) - Number(a.nilai_kontrak_keseluruhan.replaceAll(",", "")))
+                let tbodyHTML = ``;
+                let totalNilaiOk = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Kode Proyek</th>' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Realisasi</th>`
+                '</tr>';
+
+                filterRes.forEach(filter => {
+                    let stage = "";
+                    totalNilaiOk += Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", ""));
+                    switch (filter.stage) {
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (filter.bulan_pelaksanaan) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Name=-->
+                            <td>
+                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            </td>
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
+                            <td>
+                                ${filter.nama_proyek}
+                            </td>
+                            <!--end::Email=-->
+                            <!--begin::Stage=-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage=-->
+
+                            <!--begin::Unit Kerja=-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja=-->
+
+                            <!--begin::Bulan=-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan=-->
+
+                            <!--begin::Nilai Forecast=-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", "")))}
+                            </td>
+                            <!--end::Nilai Forecast=-->
+                            </tr>`;
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai Realisasi - ${unitKerja[unitKerja.length - 1].replaceAll("-", " ")}`;
+                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            }
+            else {
                 let tbodyHTML = ``;
                 let totalNilaiRealisasi = 0;
 
