@@ -6,6 +6,7 @@ use App\Models\Dop;
 use App\Models\Company;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,12 +25,15 @@ class UnitKerjaController extends Controller
         $dops = Dop::all();
         $companies = Company::all();
 
-
-        if (!empty($column)){
-            $unitkerjas = UnitKerja::sortable()->where($column, 'like', '%'.$filter.'%')->get();
-        }else{
-        $unitkerjas = UnitKerja::sortable()->get();
-        }    
+        if(Auth::user()->check_administrator) {
+            if (!empty($column)){
+                $unitkerjas = UnitKerja::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            }else{
+                $unitkerjas = UnitKerja::sortable()->get();
+            }    
+        } else {
+            $unitkerjas = UnitKerja::sortable()->where("divcode", "=", Auth::user()->unit_kerja)->get();
+        }
         return view('/MasterData/UnitKerja', compact(['unitkerjas', 'dops', 'companies', 'column', 'filter']));
     }
 

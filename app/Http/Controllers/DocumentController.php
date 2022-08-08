@@ -7,10 +7,42 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use stdClass;
 
 class DocumentController extends Controller
 {
-    
+
+    function documentIndex()
+    {
+        $all_document = collect();
+        $tables = DB::select("SELECT table_name
+                            FROM information_schema.columns
+                            WHERE column_name='id_document';");
+        foreach ($tables as $table) {
+            $table_name = $table->table_name;
+            $data = DB::table($table_name)->select("*")->get();
+            if (!empty($data)) {
+                $all_document->push($data);
+                // array_push($all_document, $data);
+            }
+        }
+        // $all_document = array_merge(...$all_document);
+        $all_document = $all_document->flatten();
+        $id_documents = $all_document->map(function ($array) {
+            return array_values((array) $array);
+        }, $all_document);
+        $documents_name = $all_document->map(function ($array) {
+            $array = get_object_vars($array);
+            $array_keys = array_keys($array);
+            foreach ($array_keys as $key) {
+                if (str_contains($key, "document_name")) {
+                    return $array[$key];
+                }
+            }
+        }, $all_document);
+        return view("6_Document", ["all_document" => $all_document, "id_documents" => $id_documents, "documents_name" => $documents_name]);
+    }
+
     // Save Document to Server and update data from database
     public function documentSave(Request $request)
     {

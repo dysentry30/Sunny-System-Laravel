@@ -7,7 +7,7 @@ use App\Models\Proyek;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use Illuminate\Http\Request;
-use App\Models\UnitKerja;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ForecastController extends Controller
@@ -22,13 +22,21 @@ class ForecastController extends Controller
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->get();
+        if(Auth::user()->check_administrator) {
+            $proyeks = Proyek::all();
+            $dops = Dop::all();
+        } else {
+            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $dops = Dop::join("unit_kerjas", "unit_kerjas.dop", "=", "dops.dop")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
+        }
         return view(
             'Forecast/viewForecast',
             [
                 // 'forecast' => Forecast::all(),
                 "historyForecast" => $historyForecast, 
-                'dops' => Dop::all(),
-                'proyeks' => Proyek::all()
+                // 'dops' => Dop::all(),
+                'dops' => $dops,
+                'proyeks' => $proyeks
             ]
         );
         // 'unitkerjas' => UnitKerja::all()]);
@@ -86,9 +94,14 @@ class ForecastController extends Controller
      */
     public function getAllData()
     {
+        if(Auth::user()->check_administrator) {
+            $proyeks = Proyek::all();
+        } else {
+            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        }
         return response()->json([
             'dops' => Dop::all(),
-            'proyeks' => Proyek::all()
+            'proyeks' => $proyeks
         ]);
     }
 

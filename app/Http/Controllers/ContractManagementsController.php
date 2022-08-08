@@ -35,6 +35,7 @@ use Illuminate\Support\Facades\Redirect;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class ContractManagementsController extends Controller
@@ -45,16 +46,24 @@ class ContractManagementsController extends Controller
         // $contract_managements = ContractManagements::all();
         // $sorted_contracts = $contract_managements->sortBy("contract_in");
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
-        $proyeks = Proyek::all()->sortBy("kode_proyek");
+        if (Auth::user()->check_administrator) {
+            $proyeks = Proyek::all();
+        } else {
+            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->sortBy("kode_proyek");
+        }
         return view("4_Contract", compact(["proyeks"]));
     }
 
 
     public function new()
     {
-        $proyeks_filtered = Proyek::all()->filter(function ($proyek) {
-            return $proyek->stage == 6 || $proyek->stage == 8;
-        });
+        if (Auth::user()->check_administrator) {
+            $proyeks_filtered = Proyek::all();
+        } else {
+            $proyeks_filtered = Proyek::all()->filter(function ($proyek) {
+                return $proyek->stage == 6 || $proyek->stage == 8 || $proyek->unit_kerja == Auth::user()->unit_kerja;
+            });
+        }
         return view('Contract/view', ["projects" => $proyeks_filtered]);
     }
 

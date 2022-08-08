@@ -14,4 +14,8 @@ class RKAP extends Model
     // public $sortable = [
     //     'nomor_unit', 'unit_kerja', 'divcode', 'dop', 'company', 'divisi', 'is_active'
     // ];
+
+    public function Proyeks() {
+        return $this->hasMany(Proyek::class, "kode_proyek");
+    }
 }
