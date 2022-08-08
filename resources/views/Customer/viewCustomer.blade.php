@@ -295,12 +295,12 @@
 																	<div class="fv-row mb-7">
 																		<!--begin::Label-->
 																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span class="required">Kode Proyek Owner</span>
+																			<span class="required">Kode Owner</span>
 																		</label>
 																		<!--end::Label-->
 																		<!--begin::Input-->
 																		<input type="text" class="form-control form-control-solid" 
-																		name="kodeproyek-company" value="{{ $customer->kode_proyek }}" placeholder="Kode Proyek Owner" />
+																		name="kodepelanggan-company" value="{{ $customer->kode_pelanggan }}" placeholder="Kode Owner" />
 																		<!--end::Input-->
 																	</div>
 																<!--end::Input group-->

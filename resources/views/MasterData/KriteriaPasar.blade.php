@@ -122,11 +122,8 @@
                                     <!--Begin:: Select Options-->
                                     <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$column == "" ? "selected": ""}}></option>
-                                        <option value="nama_sumber" {{$column == "nama_sumber" ? "selected" : ""}}>Instansi</option>
                                         <option value="kategori" {{$column == "kategori" ? "selected" : ""}}>Kategori</option>
-                                        <option value="unique_code" {{$column == "unique_code" ? "selected" : ""}}>Unique Code</option>
-                                        <option value="sumber_dana_id" {{$column == "sumber_dana_id" ? "selected" : ""}}>Kriteria Pasar Id</option>
-                                        
+                                        <option value="kriteria" {{$column == "kriteria" ? "selected" : ""}}>Kriteria</option>
                                     </select>
                                     <!--End:: Select Options-->
                                     
@@ -309,7 +306,16 @@
                                         <option></option>
                                         <option value="Technologi">Technologi</option>
                                         <option value="Risiko usaha">Risiko usaha</option>
+                                        <option value="Cara Peroleh">Cara Peroleh</option>
+                                        <option value="Membangun Image">Membangun Image</option>
+                                        <option value="Margin (OH+Proyek)">Margin (OH+Proyek)</option>
+                                        <option value="Nilai (Besaran OK)">Nilai (Besaran OK)</option>
+                                        <option value="Kesiapan sumber daya">Kesiapan sumber daya</option>
+                                        <option value="Kelangsungan Pekerjaan">Kelangsungan Pekerjaan</option>
+                                        <option value="Sebagai referensi kerja">Sebagai referensi kerja</option>
                                         <option value="Waktu Pelaksanaan Tender">Waktu Pelaksanaan Tender</option>
+                                        <option value="Keamanan Pembayaran (Sumber Dana)">Keamanan Pembayaran (Sumber Dana)</option>
+                                        <option value="Menunjang / mendukung produksi pada tahun perolehan">Menunjang / mendukung produksi pada tahun perolehan</option>
                                     </select>
                                     <!--end::Input--> 
                                 </div>
@@ -343,11 +349,11 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Bobot (Dalam Persen)</span>
+                                        <span>Bobot (1-100)</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="number" class="form-control form-control-solid" id="bobot"
+                                    <input type="number" min="1" max="100" class="form-control form-control-solid" id="bobot"
                                         name="bobot" value="" placeholder="Bobot Nilai Dikonfersikan Dalam (%)" />
                                     <!--end::Input-->
                                 </div>

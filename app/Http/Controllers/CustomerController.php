@@ -17,7 +17,7 @@ class CustomerController extends Controller
 {
     public function getIndex(Request $request)
     {
-        $cari = $request->query("cari");
+        // $cari = $request->query("cari");
         $column = $request->query("column");
         $filter = $request->query("filter");
         $sort = $request->sort;
@@ -27,8 +27,8 @@ class CustomerController extends Controller
             $results = Customer::sortable()->where($column, 'like', '%'.$filter.'%')->get();
             $all_customer = Customer::all(); //untuk delete modal
         }else{
-            if(!empty($cari)){
-                $results = Customer::sortable()->where('name', 'like', '%'.$cari.'%')->orWhere('email', 'like', '%'.$cari.'%')->get();
+            if(!empty($sort)){
+                $results = Customer::sortable()->get();
                 $all_customer = Customer::all(); //untuk delete modal
             } else {
                 // $results = Customer::sortable()->get();
@@ -52,6 +52,11 @@ class CustomerController extends Controller
 
                         $artilces.=
                         '<tr>
+                            <!--begin::Kode Pelanggan=-->
+                            <td>
+                            <a href="/customer/view/'.$customers->id_customer. '" class="text-gray-800 text-hover-primary mb-1">'.$customers->kode_pelanggan.'</a>
+                            </td>
+                            <!--end::Kode Pelanggan-->
                             <!--begin::Name=-->
                             <td>
                             <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
@@ -87,11 +92,6 @@ class CustomerController extends Controller
                             '.$customers->kode_nasabah. '
                             </td>
                             <!--end::Kode Nasabah-->
-                            <!--begin::Kode Pelanggan=-->
-                            <td>
-                            ###'.$customers->kode_nasabah.'
-                            </td>
-                            <!--end::Kode Pelanggan-->
                             <!--begin::Action=-->
                             '. $actButton . '
                         </tr>';
@@ -102,7 +102,7 @@ class CustomerController extends Controller
             }
         }
 
-        return view('2_Customer', compact(["results", "cari", "column", "filter", "sort", "all_customer"]));
+        return view('2_Customer', compact(["results", "column", "filter", "sort", "all_customer"]));
     }
 
     // public function index (Request $request) 
@@ -157,8 +157,9 @@ class CustomerController extends Controller
         // form company information
         $newCustomer->jenis_instansi = $data["jenis-instansi"];
         $newCustomer->kode_proyek = $data["kodeproyek-company"];
-        $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $newCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $newCustomer->npwp_company = $data["npwp-company"];
         // $newCustomer->journey_company = $data["journey-company"];
         // $newCustomer->segmentation_company = $data["segmentation-company"];
         $newCustomer->name_pic = $data["name-pic"];

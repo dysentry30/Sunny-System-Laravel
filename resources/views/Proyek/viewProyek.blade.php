@@ -1442,7 +1442,7 @@
                                                                     <!--begin::Kategori-->
                                                                     {{-- <td></td>
                                                                     <td></td> --}}
-                                                                    <td colspan="3" class="text-end text-gray-400">Status Pasar :</td>
+                                                                    <td colspan="3" class="text-end text-gray-400">Average Skor Pasar :</td>
                                                                     @php
                                                                             $jumlahBobot = 0;
                                                                             $statusPasar = "";
@@ -1597,10 +1597,20 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
+                                                                    @php
+                                                                        if ($statusPasar == "") {
+                                                                            $statusPasar = "Kriteria Pasar Belum Diisi";
+                                                                        } 
+                                                                        else if ($statusPasar >= 0.75) {
+                                                                            $statusPasar = "Potensial";
+                                                                        } else {
+                                                                            $statusPasar = "Non-Potensial";
+                                                                        }
+                                                                    @endphp
                                                                     <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="status-pasar" name="status-pasar"
-                                                                        value="{{ $statusPasar >= 0.75 ? 'Potensial' : 'Non-Potensial' }}" readonly />
+                                                                        value="{{ $statusPasar }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1818,27 +1828,84 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+                                                        <br>
 
 
                                                         <!--Begin::Title Biru Form: Partner JO-->
-                                                        &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Partner JO
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                data-bs-target="#kt_modal_porsijo">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: Partner JO-->
+
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <!--begin::Table-->
+                                                                    <table
+                                                                        class="table align-middle table-row-dashed fs-6 gy-2"
+                                                                        id="kt_customers_table">
+                                                                        <!--begin::Table head-->
+                                                                        <thead>
+                                                                            <!--begin::Table row-->
+                                                                            <tr
+                                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                                <th class="w-50px text-center">No.</th>
+                                                                                <th class="w-auto">Company</th>
+                                                                                <th class="w-auto">Porsi JO</th>
+                                                                            </tr>
+                                                                            <!--end::Table row-->
+                                                                        </thead>
+                                                                        <!--end::Table head-->
+                                                                        <!--begin::Table body-->
+                                                                        @php
+                                                                            $no = 1;
+                                                                        @endphp
+                                                                        @foreach ($porsiJO as $porsi)
+                                                                            <tbody class="fw-bold text-gray-600">
+
+                                                                                <tr>
+                                                                                    <!--begin::Name-->
+                                                                                    <td class="text-center">
+                                                                                        {{ $no++ }}
+                                                                                    </td>
+                                                                                    <!--end::Name-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        {{ $porsi->company_jo }}
+                                                                                    </td>
+                                                                                    <!--end::Column-->
+                                                                                    <!--begin::Column-->
+                                                                                    <td>
+                                                                                        {{ $porsi->porsi_jo }}%
+                                                                                    </td>
+                                                                                    <!--end::Column-->
+                                                                            </tbody>
+                                                                        @endforeach
+                                                                        <!--end::Table body-->
+                                                                    </table>
+                                                                    <!--end::Table-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                        </div>
+                                                        <!--End begin::Row-->
 
 
                                                         <!--Begin::Title Biru Form: Document Prakualifikasi-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Document Prakualifikasi
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_create_namemodal">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: Document Prakualifikasi-->
 
 
@@ -1868,13 +1935,13 @@
 
 
                                                         <!--Begin::Title Biru Form: SKT Personil-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">SKT Personil
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_add_user">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: SKT Personil-->
 
                                                         <!--begin::Row-->
@@ -1935,11 +2002,11 @@
                                                         <!--End begin::Row-->
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Laporan Kualitatif
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control form-control-solid" id="laporan-prakualifikasi" name="laporan-prakualifikasi"
                                                                 rows="3">{{ $proyek->laporan_prakualifikasi }}</textarea>
@@ -3134,102 +3201,256 @@
 <!--begin::Modal-->
 
 <!--begin::modal ADD USER SKAT-->
-<form action="/proyek/user/add" method="post" enctype="multipart/form-data">
-@csrf
-    <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
-    <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
-        <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Team Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select name="nama-team" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
-                                        <option></option>
-                                        @foreach ($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
+    <form action="/proyek/user/add" method="post" enctype="multipart/form-data">
+    @csrf
+        <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
+        <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
+            <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-circle-fill ts-8"></i>
+                                </span>
+                                <!--end::Svg Icon-->
                             </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Role/Jabatan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control form-control-solid"
-                                        id="role-team" name="role-team"
-                                        placeholder="Role/Jabatan" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
+                            <!--end::Close-->
                         </div>
-                        <!--End begin::Row-->
+                        <!--end::Modal header-->
 
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+
+                            <!--begin::Row-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Team Proyek</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="nama-team" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
+                                            <option></option>
+                                            @foreach ($users as $user)
+                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Role/Jabatan</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text"
+                                            class="form-control form-control-solid"
+                                            id="role-team" name="role-team"
+                                            placeholder="Role/Jabatan" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                            </div>
+                            <!--End begin::Row-->
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                id="new_save" style="background-color:#008CB4">Save</button>
+
+                        </div>
+                        <!--end::Modal body-->
                     </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="new_save" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
+                    <!--end::Modal content-->
                 </div>
-                <!--end::Modal content-->
+                <!--end::Modal dialog-->
             </div>
-            <!--end::Modal dialog-->
-        </div>
-</form>
+    </form>
 <!--end::modal ADD USER SKAT-->
 
 <!--begin::modal KRITERIA PASAR-->
-<form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
-@csrf
-        <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
+    <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
+    @csrf
+            <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
 
-        <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
+            <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Kriteria Proyek : </h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-circle-fill ts-8"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+
+
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-5">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Kategori</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar" 
+                                            class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                            data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilih Kategori">
+                                            <option></option>
+                                                @foreach ($kriteriapasar as $kriteria)
+                                                <option value="{{ $kriteria->kategori }}">
+                                                    {{ $kriteria->kategori }}</option>
+                                                @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-5">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Kriteria</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select onchange="setBobot(this)" id="kriteria-pasar" name="kriteria-pasar" 
+                                            class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilih Kriteria">
+                                            <option></option>
+                                                @foreach ($kriteriapasar as $kriteria)
+                                                <option value="{{ $kriteria->kriteria }}">
+                                                    {{ $kriteria->kriteria }}</option>
+                                                @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-2">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Bobot</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text"
+                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                            id="bobot" name="bobot" placeholder="" readonly/>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+                            <script>
+                                // let bobot = "";
+                                async function kategoriSelect(e) {
+                                    const kategori = e.value;
+                                    const formData = new FormData();
+                                    let html = `<option value=""></option>`;
+                                    formData.append("_token", "{{ csrf_token() }}");
+                                    formData.append("kategori", kategori);
+
+                                    const getKriteriaRes = await fetch("/proyek/get-kriteria", {
+                                        method: "POST",
+                                        header: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: formData,
+                                    }).then(res => res.json());
+                                    // console.log(getKriteriaRes);
+                                    getKriteriaRes.forEach(data => {
+                                        html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
+                                    });
+                                    document.querySelector("#kriteria-pasar").innerHTML = html;
+                                    // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
+                                }
+
+                                function setBobot(e) {
+                                    let bobot = "";
+                                    e.options.forEach( option => {
+                                        if (option.selected) {
+                                            bobot = option.getAttribute("data-bobot")
+                                            // console.log(option.getAttribute("data-bobot"));
+                                        }
+                                    })
+                                    console.log(bobot);
+                                    document.querySelector("#bobot").value = bobot;
+                                }
+                            </script>
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                id="new_save" style="background-color:#008CB4">Save</button>
+
+                        </div>
+                        <!--end::Modal body-->
+                    </div>
+                    <!--end::Modal content-->
+                </div>
+                <!--end::Modal dialog-->
+            </div>
+    </form>
+<!--end::modal KRITERIA PASAR-->
+
+<!--begin::modal PORSI JO-->
+<form action="/proyek/porsi-jo" method="post" enctype="multipart/form-data">
+@csrf
+        <input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
+
+        <div class="modal fade" id="kt_modal_porsijo" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
             <div class="modal-dialog modal-dialog-centered mw-800px">
                 <!--begin::Modal content-->
@@ -3237,7 +3458,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Kriteria Proyek : </h2>
+                        <h2>Porsi JO : </h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -3255,112 +3476,87 @@
                     <div class="modal-body py-lg-6 px-lg-6">
 
 
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-5">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Kategori</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar" 
-                                        class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Kategori">
-                                        <option></option>
-                                            @foreach ($kriteriapasar as $kriteria)
-                                            <option value="{{ $kriteria->kategori }}">
-                                                {{ $kriteria->kategori }}</option>
-                                            @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                 <!--begin::Label-->
+                                 @php
+                                     $joCompany = 0;
+                                     foreach ($porsiJO as $porsi){
+                                         if ($porsi->count() > 0){
+                                            $joCompany += $porsi->porsi_jo;
+                                         }
+                                     }
+                                 @endphp
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span><b id="max-porsi" value="{{ $proyek->porsi_jo - $joCompany  }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span>
+                                </label>
+                                <!--end::Label-->
+                                <br>
+                                 <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo - $joCompany }} - </b><b id="selisih-porsi">0</b><b id="sisa-porsi"> = {{ $proyek->porsi_jo - $joCompany }}%</b></span>
+                                </label>
+                                <!--end::Label-->
                             </div>
-                            <!--End begin::Col-->
-                            <div class="col-5">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Kriteria</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select onchange="setBobot(this)" id="kriteria-pasar" name="kriteria-pasar" 
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Kriteria">
-                                        <option></option>
-                                            @foreach ($kriteriapasar as $kriteria)
-                                            <option value="{{ $kriteria->kriteria }}">
-                                                {{ $kriteria->kriteria }}</option>
-                                            @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-2">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Bobot</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text"
-                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                        id="bobot" name="bobot" placeholder="" readonly/>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
+                            <!--end::Input group-->
                         </div>
-                        <!--End::Row Kanan+Kiri-->
-                        <script>
-                            // let bobot = "";
-                            async function kategoriSelect(e) {
-                                const kategori = e.value;
-                                const formData = new FormData();
-                                let html = `<option value=""></option>`;
-                                formData.append("_token", "{{ csrf_token() }}");
-                                formData.append("kategori", kategori);
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
 
-                                const getKriteriaRes = await fetch("/proyek/get-kriteria", {
-                                    method: "POST",
-                                    header: {
-                                        "Content-Type": "application/json",
-                                    },
-                                    body: formData,
-                                }).then(res => res.json());
-                                // console.log(getKriteriaRes);
-                                getKriteriaRes.forEach(data => {
-                                    html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
-                                });
-                                document.querySelector("#kriteria-pasar").innerHTML = html;
-                                // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
-                            }
-
-                            function setBobot(e) {
-                                let bobot = "";
-                                e.options.forEach( option => {
-                                    if (option.selected) {
-                                        bobot = option.getAttribute("data-bobot")
-                                        // console.log(option.getAttribute("data-bobot"));
-                                    }
-                                })
-                                console.log(bobot);
-                                document.querySelector("#bobot").value = bobot;
-                            }
-                        </script>
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                               <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Company</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text"
+                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                    id="company-jo" name="company-jo" placeholder="Nama Company JO"/>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Porsi JO Company (1 - {{ $proyek->porsi_jo - $joCompany }} %)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="number" min="1" max="{{ $proyek->porsi_jo - $joCompany }}" onkeyup="getJO()"
+                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                    id="porsijo-company" name="porsijo-company" placeholder="Porsi JO"/>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+                    <script>
+                        function getJO() {
+                            let porsiJO = document.getElementById("porsijo-company");
+                            let maxJO = document.getElementById("max-porsi");
+                            let sisaJO = maxJO.getAttribute("value") - porsiJO.value;
+                            // console.log(maxJO);
+                            // console.log(porsiJO.value);
+                            document.getElementById("selisih-porsi").innerHTML = porsiJO.value; 
+                            document.getElementById("sisa-porsi").innerHTML = " = " + sisaJO + "%"; 
+                        }
+                    </script>
 
                     </div>
                     <div class="modal-footer">
@@ -3376,7 +3572,7 @@
             <!--end::Modal dialog-->
         </div>
 </form>
-<!--end::modal KRITERIA PASAR-->
+<!--end::modal PORSI JO-->
 
 <!--begin::modal APPROVAL-->
         {{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
@@ -3539,7 +3735,7 @@
 <!--end:: Feedback Modals-->
 
 @endsection
-{{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
+{{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></scrip> --}}
 @section('js-script')
 <script>
     const proyekStage = Number("{{$proyek->stage}}");

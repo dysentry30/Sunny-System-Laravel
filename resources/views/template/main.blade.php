@@ -143,7 +143,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_user_sales || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/proyek"
-                                    style="color:white; {{ str_contains(Request::Segment(1), 'proyek') ? 'background-color:#008CB4' : '' }}">
+                                    style="color:white; {{ Request::Segment(1) == 'proyek' ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -383,7 +383,7 @@
                             <!--end::Master Data Expand-->
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        @if (auth()->user()->check_administrator)
                             <div class="menu-item">
                                 <a class="menu-link " href="/rkap"
                                     style="color:white; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">
@@ -548,7 +548,7 @@
                                 <option value="5"{{ str_contains($mytime, 'Mei') ? 'selected' : '' }}>May</option>
                                 <option value="6"{{ str_contains($mytime, 'Jun') ? 'selected' : '' }}>Jun</option>
                                 <option value="7"{{ str_contains($mytime, 'Jul') ? 'selected' : '' }}>Jul</option>
-                                <option value="8"{{ str_contains($mytime, 'Agt') ? 'selected' : '' }}>Aug</option>
+                                <option value="8"{{ str_contains($mytime, 'Agu') ? 'selected' : '' }}>Ags</option>
                                 <option value="9"{{ str_contains($mytime, 'Sep') ? 'selected' : '' }}>Sep</option>
                                 <option value="10"{{ str_contains($mytime, 'Okt') ? 'selected' : '' }}>Oct</option>
                                 <option value="11"{{ str_contains($mytime, 'Nov') ? 'selected' : '' }}>Nov</option>

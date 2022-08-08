@@ -14,7 +14,7 @@ class Customer extends Model
     protected $primaryKey   = 'id_customer';
 
     public $sortable = [
-        'name', 'check_customer', 'check_partner', 'check_competitor'
+        'name', 'check_customer', 'check_partner', 'check_competitor', 'kode_pelanggan', 'kode_nasabah'
     ];
     
     
