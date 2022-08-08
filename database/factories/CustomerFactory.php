@@ -29,11 +29,11 @@ class CustomerFactory extends Factory
             
             //faker company
             "jenis_instansi" => $this->faker->randomElement(["BUMN", "BUMND", "APBN", "Swasta", "Investasi"]),
-            "journey_company" => $this->faker->randomElement(["Customer", "Loyal", "Advocate"]),
-            "segmentation_company" => $this->faker->randomElement(["Silver", "Gold", "VIP"]),
-            "kode_proyek" => $this->faker->unique()->randomNumber(6),
-            "npwp_company" => $this->faker->randomNumber(9),
+            // "journey_company" => $this->faker->randomElement(["Customer", "Loyal", "Advocate"]),
+            // "segmentation_company" => $this->faker->randomElement(["Silver", "Gold", "VIP"]),
+            "kode_pelanggan" => $this->faker->unique()->randomNumber(6),
             "kode_nasabah" => $this->faker->randomNumber(6),
+            "npwp_company" => $this->faker->randomNumber(9),
             
             //faker pic
             "name_pic" => $this->faker->unique()->name(),

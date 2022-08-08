@@ -20,9 +20,9 @@ class KriteriaPasarController extends Controller
         $filter = $request->query("filter");
 
         if (!empty($column)) {
-            $kriteriaPasar = KriteriaPasar::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            $kriteriaPasar = KriteriaPasar::sortable()->where($column, 'like', '%'.$filter.'%')->orderBy('kategori')->get();
         }else{
-        $kriteriaPasar = KriteriaPasar::sortable()->get();
+        $kriteriaPasar = KriteriaPasar::sortable()->orderBy('kategori')->get();
         }
 
         return view('/MasterData/KriteriaPasar', compact(['kriteriaPasar', 'column', 'filter']));

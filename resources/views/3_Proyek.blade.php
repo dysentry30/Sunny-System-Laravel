@@ -38,7 +38,7 @@
                             </div>
                                 
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -635,15 +635,25 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Tahun Perolehan</span>
                                     </label>
                                     <!--end::Label-->
+                                    @php
+                                        $years = (int) date('Y');
+                                        $bulans = (int) date('m');
+                                        // dd($bulans);
+                                    @endphp
                                     <!--begin::Input-->
-                                    <input type="number" class="form-control form-control-solid" id="tahun-perolehan"
-                                        name="tahun-perolehan" min="2021" max="2099" step="1"
-                                        value="{{ old('tahun-perolehan') }}" placeholder="Tahun Perolehan" />
+                                    <select id="tahun-perolehan" name="tahun-perolehan" 
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
+                                        @for ($i = 2021; $i < $years + 10; $i++)
+                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                {{ $i }}</option>
+                                        @endfor
+                                    </select>
                                     @error('tahun-perolehan')
                                         <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
@@ -664,38 +674,19 @@
                                     <select id="bulan-pelaksanaan" name="bulan-pelaksanaan"
                                         class="form-select form-select-solid" data-control="select2"
                                         data-hide-search="true" data-placeholder="Bulan Pelaksanaan">
-                                        <option selected></option>
-                                        <option value="1"
-                                            {{ old('bulan-pelaksanaan') == '1' ? 'selected' : '' }}>Januari
-                                        </option>
-                                        <option value="2"
-                                            {{ old('bulan-pelaksanaan') == '2' ? 'selected' : '' }}>Februari
-                                        </option>
-                                        <option value="3"
-                                            {{ old('bulan-pelaksanaan') == '3' ? 'selected' : '' }}>Maret</option>
-                                        <option value="4"
-                                            {{ old('bulan-pelaksanaan') == '4' ? 'selected' : '' }}>April</option>
-                                        <option value="5"
-                                            {{ old('bulan-pelaksanaan') == '5' ? 'selected' : '' }}>Mei</option>
-                                        <option value="6"
-                                            {{ old('bulan-pelaksanaan') == '6' ? 'selected' : '' }}>Juni</option>
-                                        <option value="7"
-                                            {{ old('bulan-pelaksanaan') == '7' ? 'selected' : '' }}>Juli</option>
-                                        <option value="8"
-                                            {{ old('bulan-pelaksanaan') == '8' ? 'selected' : '' }}>Agustus
-                                        </option>
-                                        <option value="9"
-                                            {{ old('bulan-pelaksanaan') == '9' ? 'selected' : '' }}>September
-                                        </option>
-                                        <option value="10"
-                                            {{ old('bulan-pelaksanaan') == '10' ? 'selected' : '' }}>Oktober
-                                        </option>
-                                        <option value="11"
-                                            {{ old('bulan-pelaksanaan') == '11' ? 'selected' : '' }}>November
-                                        </option>
-                                        <option value="12"
-                                            {{ old('bulan-pelaksanaan') == '12' ? 'selected' : '' }}>Desember
-                                        </option>
+                                        <option></option>
+                                        <option value="1" {{ $bulans == 1 ? 'selected' : '' }}>Januari</option>
+                                        <option value="2" {{ $bulans == 2 ? 'selected' : '' }}>Februari</option>
+                                        <option value="3" {{ $bulans == 3 ? 'selected' : '' }}>Maret</option>
+                                        <option value="4" {{ $bulans == 4 ? 'selected' : '' }}>April</option>
+                                        <option value="5" {{ $bulans == 5 ? 'selected' : '' }}>Mei</option>
+                                        <option value="6" {{ $bulans == 6 ? 'selected' : '' }}>Juni</option>
+                                        <option value="7" {{ $bulans == 7 ? 'selected' : '' }}>Juli</option>
+                                        <option value="8" {{ $bulans == 8 ? 'selected' : '' }}>Agustus</option>
+                                        <option value="9" {{ $bulans == 9 ? 'selected' : '' }}>September</option>
+                                        <option value="10" {{ $bulans == 10 ? 'selected' : '' }}>Oktober</option>
+                                        <option value="11" {{ $bulans == 11 ? 'selected' : '' }}>November</option>
+                                        <option value="12" {{ $bulans == 12 ? 'selected' : '' }}>Desember</option>
                                     </select>
                                     @error('bulan-pelaksanaan')
                                         <h6 class="text-danger">{{ $message }}</h6>

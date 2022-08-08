@@ -27,11 +27,11 @@ return new class extends Migration
             
             // company - information
             $table->string('jenis_instansi')->nullable();
-            $table->string('journey_company')->nullable();
-            $table->string('segmentation_company')->nullable();
-            $table->string('kode_proyek')->nullable();
-            $table->string('npwp_company')->nullable();
+            // $table->string('journey_company')->nullable();
+            // $table->string('segmentation_company')->nullable();
+            $table->string('kode_pelanggan')->nullable();
             $table->string('kode_nasabah')->nullable();
+            $table->string('npwp_company')->nullable();
             $table->string('name_pic')->nullable();
             $table->string('kode_pic')->nullable();
             $table->string('email_pic')->nullable();

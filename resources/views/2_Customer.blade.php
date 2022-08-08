@@ -123,7 +123,9 @@
                                         <option {{$column == "" ? "selected": ""}}></option>
                                         <option value="name" {{$column == "name" ? "selected" : ""}}>Nama Pelanggan</option>
                                         <option value="email" {{$column == "email" ? "selected" : ""}}>Email Pelanggan</option>
+                                        <option value="kode_pelanggan" {{$column == "kode_pelanggan" ? "selected" : ""}}>Kode Pelanggan</option>
                                         <option value="kode_nasabah" {{$column == "kode_nasabah" ? "selected" : ""}}>Kode Nasabah</option>
+                                        <option value="email" {{$column == "email" ? "selected" : ""}}>Email</option>
                                     </select>
                                     <!--End:: Select Options-->
                                     {{-- @php
@@ -178,14 +180,14 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">No.</th> --}}
+                                        <th class="min-w-auto">@sortablelink('kode_pelanggan','Kode Owner')</th>
                                         <th class="min-w-auto">@sortablelink('name','Pelanggan')</th>
                                         <th class="min-w-auto">Email</th>
                                         <th class="min-w-auto">Kontak Nomor</th>
                                         <th class="max-w-auto">@sortablelink('check_customer','Customer')</th>
                                         <th class="min-w-auto">@sortablelink('check_partner','Partner')</th>
                                         <th class="min-w-auto">@sortablelink('check_competitor','Competitor')</th>
-                                        <th class="min-w-auto">Kode Nasabah</th>
-                                        <th class="min-w-auto">Kode Pelanggan</th>
+                                        <th class="min-w-auto">@sortablelink('kode_nasabah','Kode Nasabah')</th>
                                         @if (auth()->user()->check_administrator)
                                         <th class="min-w-auto text-center">Action</th>
                                         @endif
@@ -206,23 +208,28 @@
 
                                         <!-- Results :: Data Tabel Infinite Scroll -->
 
-                                        @if ($cari != null || $column != null || $sort != null )
+                                        @if ($column != null || $sort != null )
                                         
 
                                             @foreach ($results as $customers)
 
                                             <tr>
-                                                <!--begin::Name=-->
+                                                <!--begin::Kode Pelanggan-->
+                                                <td>
+                                                <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->kode_pelanggan }}</a>
+                                                </td>
+                                                <!--end::Kode Pelanggan-->
+                                                <!--begin::Name-->
                                                 <td>
                                                 <a href="/customer/view/{{ $customers->id_customer }}" class="text-gray-800 text-hover-primary">{{ $customers->name }}</a>
                                                 </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Email=-->
+                                                <!--end::Name-->
+                                                <!--begin::Email-->
                                                 <td>
                                                 <a href="#" class="text-gray-800 text-hover-primary">{{ ($customers->email) }}</a>
                                                 </td>
-                                                <!--end::Email=-->
-                                                <!--begin::Nomor=-->
+                                                <!--end::Email-->
+                                                <!--begin::Nomor-->
                                                 <td>
                                                 {{ $customers->phone_number }}
                                                 </td>
@@ -231,7 +238,7 @@
                                                 <td>
                                                 {{ ($customers->check_customer == 1 ? "Yes" : "No") }}
                                                 </td>
-                                                <!--end::check_customer=-->
+                                                <!--end::check_customer-->
                                                 <!--begin::check_partner-->
                                                 <td>
                                                 {{ ($customers->check_partner == 1 ? "Yes" : "No") }}
@@ -242,17 +249,12 @@
                                                 {{ ($customers->check_competitor == 1 ? "Yes" : "No") }}
                                                 </td>
                                                 <!--end::check_competitor-->
-                                                <!--begin::Kode Nasabah=-->
+                                                <!--begin::Kode Nasabah-->
                                                 <td>
                                                 {{ $customers->kode_nasabah }}
                                                 </td>
                                                 <!--end::Kode Nasabah-->
-                                                <!--begin::Kode Pelanggan=-->
-                                                <td>
-                                                ###{{ $customers->kode_nasabah }}
-                                                </td>
-                                                <!--end::Kode Pelanggan-->
-                                                <!--begin::Action=-->
+                                                <!--begin::Action-->
                                                 @if (auth()->user()->check_administrator)
                                                     <td class="text-center">
                                                         <button data-bs-toggle="modal"
@@ -261,7 +263,7 @@
                                                             class="btn btn-sm btn-light btn-active-primary">Delete
                                                         </button>
                                                     </td>
-                                                    <!--end::Action=-->
+                                                    <!--end::Action-->
                                                 @endif
                                             </tr>
                                             @endforeach
