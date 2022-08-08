@@ -665,14 +665,14 @@
 {{-- End::Main --}}
 @section('js-script')
     <!--begin::CDN High Chart-->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/series-label.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/drilldown.js"></script>
-    <script src="https://code.highcharts.com/modules/funnel.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="/js/highcharts/highcharts.js"></script>
+    <script src="/js/highcharts/series-label.js"></script>
+    <script src="/js/highcharts/exporting.js"></script>
+    <script src="/js/highcharts/export-data.js"></script>
+    <script src="/js/highcharts/drilldown.js"></script>
+    <script src="/js/highcharts/funnel.js"></script>
+    <script src="/js/highcharts/accessibility.js"></script>
+    <script src="/js/highcharts/highcharts-3d.js"></script>
     <!--end::CDN High Chart-->
 
     <!--begin::FORECAST LINE-->

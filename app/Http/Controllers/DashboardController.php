@@ -46,7 +46,7 @@ class DashboardController extends Controller
             ->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $unitKerja = UnitKerja::all();
-            $proyeks = Proyek::join("claim_managements", "claim_managements.kode_proyek", "=", "proyeks.kode_proyek")->get();
+            $proyeks = Proyek::all();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             if (!empty($request->get("unit-kerja"))) {
                 $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $request->get("unit-kerja"));
@@ -56,7 +56,7 @@ class DashboardController extends Controller
             }
         } else {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-            $proyeks = Proyek::join("claim_managements", "claim_managements.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $proyeks = Proyek::where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
             $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
@@ -194,7 +194,7 @@ class DashboardController extends Controller
         array_push($claim_asuransi_status_array, $claim_asuransi_cancel, $claim_asuransi_disetujui, $claim_asuransi_ditolak, $claim_asuransi_on_progress);
         // End :: menghitung total dari status dan jenis claim asuransi
 
-        //begin::Proyek Stage
+        //begin:: Monitoring Proyek
         $proses = 0;
         $menang = 0;
         $kalah = 0;
@@ -215,7 +215,7 @@ class DashboardController extends Controller
                 $menang++;
             };
         };
-        //end::Proyek Stage
+        //end:: Monitoring Proyek
 
         //Begin::Terendah Terkontrak
         $nilaiTerkontrak = 0;
