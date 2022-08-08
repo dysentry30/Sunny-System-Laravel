@@ -64,8 +64,26 @@
                         <!--begin::Card header-->
                         <div class="card-header pt-2">
                             <!--begin::Card title-->
-                            <div class="card-title">
-                                <form action="/dashboard" class="d-flex flex-row w-600px" method="get">
+                            <div class=" w-100">
+                                <form action="/dashboard" class="d-flex flex-row " method="get">
+                                    @if (Auth::user()->check_administrator)
+                                        {{-- Begin :: Select Options Unit Kerja --}}
+                                        <select id="unit-kerja" name="unit-kerja"
+                                            class="form-select form-select-solid w-200px"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                            data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                            aria-hidden="true">
+                                            <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
+                                            @foreach ($unitKerja as $unit_kerja)
+                                                @php
+                                                    $is_unit_kerja_selected = $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '';
+                                                @endphp
+                                                <option value="{{ $unit_kerja->divcode }}" {{ $is_unit_kerja_selected }} >{{ $unit_kerja->unit_kerja }}</option>
+                                            @endforeach
+                                        </select>
+                                        {{-- End :: Select Options Unit Kerja --}}
+                                    @endif
+
                                     <!--begin::Select Options-->
                                     <select id="periode-prognosa" name="periode-prognosa"
                                         class="form-select form-select-solid select2-hidden-accessible w-200px"
@@ -129,8 +147,9 @@
 
                                         $("#tahun-history").select2({
                                             minimumResultsForSearch: -1
-                                        }).val("").trigger("change");
+                                        }).val(Number(new Date().getFullYear())).trigger("change");
 
+                                        $("#unit-kerja").select2({}).val("").trigger("change");
                                     }
                                 </script>
                                 <!--end::RESET FILTER-->
@@ -144,6 +163,7 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
+                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                             <!--begin::FORECAST LINE CHART-->
                             <figure class="highcharts-figure py-12">
                                 <div id="forecast-line" style="display:">
@@ -288,19 +308,7 @@
                             </div>
                             <hr>
 
-                            <div class="py-12" id="marketing-pipeline">
-                                <!--begin::MARKETING PIPELINE-->
-                                <!--end::MARKETING PIPELINE-->
-                            </div>
-                            <hr>
-
-                            <div class="py-12" id="claim">
-                                <!--begin::STATUS CLAIM-->
-                                <!--end::STATUS CLAIM-->
-                            </div>
-                            <hr>
-
-                            <!--begin:: PARETO-->
+                            
                             <div class="px-8 py-12" id="monitoring-proyek">
                                 <h1 class="text-center bold pb-8">
                                     Pareto Proyek
@@ -412,6 +420,22 @@
                                 <!--end::Table pareto proyek-->
                             </div>
                             <hr>
+                            @endif 
+
+                            @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                            <div class="py-12" id="marketing-pipeline">
+                                <!--begin::MARKETING PIPELINE-->
+                                <!--end::MARKETING PIPELINE-->
+                            </div>
+                            <hr>
+
+                            <div class="py-12" id="claim">
+                                <!--begin::STATUS CLAIM-->
+                                <!--end::STATUS CLAIM-->
+                            </div>
+                            <hr>
+
+                            <!--begin:: PARETO-->
 
                             <div class="px-8 pb-18 py-12">
                                 <h1 class="text-center bold">
@@ -615,6 +639,7 @@
                             <!--end::: PARETO-->
                             <hr>
 
+                            @endif
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -1032,9 +1057,14 @@
 
     <!--begin::TERENDAH vs TERKONTRAK-->
     @php
-    $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
-    $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100);
-    $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100);
+        $nilaiAll = $nilaiTerendah + $nilaiTerkontrak;
+    if ($nilaiAll != 0) {
+        $presentaseTerendah = round($nilaiTerendah / $nilaiAll * 100);
+        $presentaseTerkontrak = round($nilaiTerkontrak / $nilaiAll * 100);
+    } else {
+        $presentaseTerendah = 0;
+        $presentaseTerkontrak = 0;
+    }
     @endphp
     <script>
         let presentaseTerkontrak = {{ $presentaseTerkontrak }};
@@ -1113,8 +1143,13 @@
     <!--begin::Competitive Index-->
     @php
     $indexJumlahAll = $jumlahMenang + $jumlahKalah;
-    $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
-    $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
+    if ($indexJumlahAll != 0) {
+        $presentaseMenang = round($jumlahMenang / $indexJumlahAll * 100);
+        $presentaseKalah = round($jumlahKalah / $indexJumlahAll * 100);
+    } else {
+        $presentaseMenang = 0;
+        $presentaseKalah = 0;
+    }
     @endphp
     <script>
         Highcharts.chart('index-jumlah', {
@@ -1186,9 +1221,14 @@
         });
     </script>
     @php
-    $indexNilaiAll = $nilaiMenang + $nilaiKalah;
-    $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
-    $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
+        $indexNilaiAll = $nilaiMenang + $nilaiKalah;
+    if ($indexNilaiAll != 0) {
+        $presentaseNilaiMenang = round($nilaiMenang / $indexNilaiAll * 100);
+        $presentaseNilaiKalah = round($nilaiKalah / $indexNilaiAll * 100);
+    } else {
+        $presentaseNilaiMenang = 0;
+        $presentaseNilaiKalah = 0;
+    }
     @endphp
     <script>
         Highcharts.chart('index-nilai', {
@@ -1413,8 +1453,13 @@
                 const type = data[1];
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
+                let url = `/dashboard/filter/${prognosa}/${type}/${month}`;
+                const unitKerja = $("#unit-kerja").select2({}).val();
+                if (unitKerja) {
+                    url += `/${unitKerja}`;
+                }
                 // console.log(prognosa);
-                getDataTable("#datatable", "#forecast-line", `/dashboard/${prognosa}/${type}/${month}`, type, prognosa, month);
+                getDataTable("#datatable", "#forecast-line", url, type, prognosa, month);
                 
 
                 const table = document.querySelector("#datatable");
@@ -1445,7 +1490,13 @@
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
                 const tableTriwulan = document.querySelector("#datatable-triwulan");
 
-                getDataTable("#datatable-triwulan", "#forecast-3wulan", `/dashboard/triwulan/${prognosa}/${type}/${month}`, type, prognosa, month)
+                let url = `/dashboard/triwulan/${prognosa}/${type}/${month}`;
+                const unitKerja = $("#unit-kerja").select2({}).val();
+                if (unitKerja) {
+                    url += `/${unitKerja}`;
+                }
+
+                getDataTable("#datatable-triwulan", "#forecast-3wulan", url, type, prognosa, month)
                 // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
                 // triwulanDataTable.forEach(data => {
                 // });
@@ -1468,7 +1519,14 @@
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
                 const tableRealisasi = document.querySelector("#datatable-realisasi");
-                getDataTable("#datatable-realisasi", "#nilai-realisasi", `/dashboard/realisasi/0/${type}/${unitKerja}`, type, prognosa)
+
+                let url = `/dashboard/realisasi/0/${type}/${unitKerja}`;
+                const unitKerjaCode = $("#unit-kerja").select2({}).val();
+                if (unitKerjaCode) {
+                    url += `/${unitKerjaCode}`;
+                }
+                
+                getDataTable("#datatable-realisasi", "#nilai-realisasi", url, type, prognosa)
                 // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
                 // triwulanDataTable.forEach(data => {
                 // });

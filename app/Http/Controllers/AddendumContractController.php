@@ -12,6 +12,7 @@ use App\Models\ContractManagements;
 use DateTime;
 use Faker\Core\Uuid;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -25,11 +26,11 @@ class AddendumContractController extends Controller
         $filter = $request->get("filter");
         
         if ($column == "uraian_perubahan"){
-            $addendumContracts = AddendumContractDrafts::sortable()->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
+            $addendumContracts = AddendumContractDrafts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
         }else if (!empty($column)){
-            $addendumContracts = AddendumContracts::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where($column, 'like', '%'.$filter.'%')->get();
         }else{
-        $addendumContracts = AddendumContracts::sortable()->get();
+            $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         // $arrayDrafts = [];
         // foreach ($addendumContracts as $addendumContract) {
         //     $idAddendum = $addendumContract->id_addendum;

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\TeamProyek;
+use Illuminate\Support\Facades\Auth;
 
 class TeamProyekController extends Controller
 {
@@ -14,7 +15,12 @@ class TeamProyekController extends Controller
      */
     public function index()
     {
-        return view("/MasterData/TeamProyek", ["teams" => TeamProyek::all()->reverse()]);
+        if (Auth::user()->check_administrator) {
+            $users_team_proyek = TeamProyek::all()->reverse();
+        } else {
+            $users_team_proyek = TeamProyek::join("users", "users.id", "=", "team_proyeks.id_user")->where("users.unit_kerja", "=", Auth::user()->unit_kerja)->get()->reverse();
+        }
+        return view("/MasterData/TeamProyek", ["teams" => $users_team_proyek]);
     }
 
     /**

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Pasals;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
@@ -32,31 +33,35 @@ class ClaimController extends Controller
     {
         $column = $request->get("column");
         $filter = $request->get("filter");
-        
+        if (Auth::user()->check_administrator) {
+            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
+        } else {
+            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        }
         if (!empty($column)){
-            $proyekClaim = ClaimManagements::sortable()->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%')->get();
+            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%');
             
-            $proyekAnti = ClaimManagements::sortable()->where('jenis_claim', '=', "Anti Claim")->where($column, 'like', '%'.$filter.'%')->get();
+            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->where($column, 'like', '%'.$filter.'%');
             
-            $proyekAsuransi = ClaimManagements::sortable()->where('jenis_claim', '=', "Claim Asuransi")->where($column, 'like', '%'.$filter.'%')->get();
+            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->where($column, 'like', '%'.$filter.'%');
             
             // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) use ($column, $filter){
             //     $claim->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%');
-            // })->get();
+            // });
 
             // $proyekAnti = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Anti Claim");
-            // })->where($column, 'like', '%'.$filter.'%')->get();
+            // })->where($column, 'like', '%'.$filter.'%');
             
             // $proyekAsuransi = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Claim Asuransi");
-            // })->where($column, 'like', '%'.$filter.'%')->get();
+            // })->where($column, 'like', '%'.$filter.'%');
         }else{
-            $proyekClaim = ClaimManagements::sortable()->where('jenis_claim', '=', "Claim")->get();
+            $proyekClaim = $claims->where('jenis_claim', '=', "Claim");
             
-            $proyekAnti = ClaimManagements::sortable()->where('jenis_claim', '=', "Anti Claim")->get();
+            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim");
             
-            $proyekAsuransi = ClaimManagements::sortable()->where('jenis_claim', '=', "Claim Asuransi")->get();
+            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi");
 
             // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Claim");

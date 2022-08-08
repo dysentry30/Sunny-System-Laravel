@@ -76,11 +76,17 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index']);
 
-    Route::get('/dashboard/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
+    Route::get('/dashboard/filter/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPoint']);
+
+    Route::get('/dashboard/filter/{prognosa}/{type}/{month}/{unit_kerja}', [DashboardController::class, 'getDataFilterPoint']);
 
     Route::get('/dashboard/triwulan/{prognosa}/{type}/{month}', [DashboardController::class, 'getDataFilterPointTriwulan']);
 
+    Route::get('/dashboard/triwulan/{prognosa}/{type}/{month}/{unit_kerja}', [DashboardController::class, 'getDataFilterPointTriwulan']);
+
     Route::get('/dashboard/realisasi/{prognosa}/{type}/{unitKerja}', [DashboardController::class, 'getDataFilterPointRealisasi']);
+
+    Route::get('/dashboard/realisasi/{prognosa}/{type}/{unitKerja}/{divcode}', [DashboardController::class, 'getDataFilterPointRealisasi']);
 
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
@@ -195,33 +201,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     // Begin :: Menu Document
-    Route::get('/document', function () {
-        $all_document = [];
-        $tables = DB::select("SELECT table_name
-                            FROM information_schema.columns
-                            WHERE column_name='id_document';");
-        foreach ($tables as $table) {
-            $table_name = $table->table_name;
-            $data = DB::select("SELECT * FROM $table_name;");
-            if (!empty($data)) {
-                array_push($all_document, $data);
-            }
-        }
-        $all_document = array_merge(...$all_document);
-        $id_documents = array_map(function ($array) {
-            return array_values((array) $array);
-        }, $all_document);
-        $documents_name = array_map(function ($array) {
-            $array = get_object_vars($array);
-            $array_keys = array_keys($array);
-            foreach ($array_keys as $key) {
-                if (str_contains($key, "document_name")) {
-                    return $array[$key];
-                }
-            }
-        }, $all_document);
-        return view("6_Document", ["all_document" => $all_document, "id_documents" => $id_documents, "documents_name" => $documents_name]);
-    });
+    Route::get('/document', [DocumentController::class, "documentIndex"]);
     // End :: Menu Document
 
 
@@ -340,11 +320,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
         ]);
     });
-
-    Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
-
+    
     // ADD Kriteria 
+    Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
+        
     Route::post('/proyek/kriteria-add', [ProyekController::class, 'tambahKriteria']);
+
+    // ADD Porsi-JO 
+    Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
+    
     //End :: Project
 
 
@@ -589,7 +573,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // begin :: USERS
     Route::get('/user', function () {
         //Menggunakan metode Eager Loading agar memangkas loading query database 
-        return view("/MasterData/User", ["users" => User::with('UnitKerja')->get()->reverse()]);
+        if (Auth::user()->check_administrator) {
+            $users = User::with('UnitKerja')->get()->reverse();
+        } else {
+            $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
+        }
+        return view("/MasterData/User", ["users" => $users]);
         // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     // Route::get('/user', [UserController::class, 'index']);
@@ -619,7 +608,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // begin RKAP
     Route::get('/rkap', function () {
-        $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
+        if (Auth::user()->check_administrator) {
+            $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
+        } else {
+            $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
+        }
 
         $proyeks = [];
         foreach ($unitkerjas as $key => $unitkerja){

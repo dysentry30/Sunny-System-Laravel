@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Session;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Google\Service\FactCheckTools\Resource\Claims;
+use Illuminate\Support\Facades\Auth;
+use App\Models\PorsiJO;
 
 class ProyekController extends Controller
 {
@@ -34,17 +36,23 @@ class ProyekController extends Controller
         $filter = $request->query("filter");
         // dd($column);
         $sumberdanas = SumberDana::all();
-        $unitkerjas = UnitKerja::get();
+        if (Auth::user()->check_administrator) {
+            $unitkerjas = UnitKerja::all();
+            $proyeks = Proyek::sortable();
+        } else {
+            $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
+            $proyeks = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
+        }
         
         // Begin::FILTER
         if (!empty($column)) {
-            // $proyeks = Proyek::sortable()->where($column, '=', $filter)->get();
-            $proyeks = Proyek::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            // $proyeks = Proyek::sortable()->where($column, '=', $filter);
+            $proyeks = $proyeks->where($column, 'like', '%'.$filter.'%')->get();
         }else{
             // if(!empty($cari)){
-            //     $proyeks = Proyek::sortable()->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
+            //     $proyeks = $proyeks->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
             // }else{
-                $proyeks = Proyek::sortable()->get();
+            $proyeks = $proyeks->get();
             // }
         }
                 
@@ -63,7 +71,7 @@ class ProyekController extends Controller
     public function save(Request $request, Proyek $newProyek)
     {
         $dataProyek = $request->all();
-        $proyekAll = Proyek::all();
+        $proyekAll = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
         $unitKerja = UnitKerja::where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
         $messages = [
@@ -152,7 +160,7 @@ class ProyekController extends Controller
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
-
+        $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // dd($proyek); //tes log hasil 
         return view(
             'Proyek/viewProyek',
@@ -170,6 +178,7 @@ class ProyekController extends Controller
                 'teams' => $teamProyek,
                 'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
                 "historyForecast" => $historyForecast,
+                'porsiJO' => $porsiJO,
             ]
         );
     }
@@ -438,4 +447,16 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    public function tambahJO(Request $request, PorsiJO $newPorsiJO)
+    {
+        $dataPorsiJO = $request->all();
+        $newPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
+        $newPorsiJO->company_jo = $dataPorsiJO["company-jo"];
+        $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+        // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+
+        $newPorsiJO->save();
+        Alert::success("Success", "Porsi JO Berhasil Ditambahkan");
+        return redirect()->back();
+    }
 }
