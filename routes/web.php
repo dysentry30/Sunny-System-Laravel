@@ -428,6 +428,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // NEW Company after SAVE 
     Route::post('/company/save', [CompanyController::class, 'store']);
     
+    // NEW Company EDIT 
+    Route::post('/company/{id}/edit', [CompanyController::class, 'update']);
+    
     // Delete Company  
     Route::delete('/company/delete/{id}', [CompanyController::class, 'delete']);
 
@@ -448,6 +451,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // NEW DOP after SAVE
     Route::post('/dop/save', [DopController::class, 'store']);
+ 
+    // NEW DOP EDIT
+    Route::post('/dop/{id}/save', [DopController::class, 'update']);
+ 
     // NEW DOP after SAVE
     Route::delete('/dop/delete/{id}', [DopController::class, 'delete']);
 
@@ -478,7 +485,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Home Kriteria Pasar
     Route::post('/kriteria-pasar/save', [KriteriaPasarController::class, 'store']); 
 
-    // Home Kriteria Pasar
+    // Home Edit
+    Route::post('/kriteria-pasar/{id}/edit', [KriteriaPasarController::class, 'update']); 
+
+    // Home Delete
     Route::delete('/kriteria-pasar/delete/{id}', [KriteriaPasarController::class, 'delete']); 
     //End :: Master Data
     

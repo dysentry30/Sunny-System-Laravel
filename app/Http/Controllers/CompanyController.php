@@ -75,4 +75,30 @@ class CompanyController extends Controller
 
         return redirect("/company");
     }
+
+
+    public function update($id, Request $request)
+    {
+        $dataCompany = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "nama-company" => "required",
+        ];
+        $validation = Validator::make($dataCompany, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Company gagal dibuat !");
+        }
+        $validation->validate();
+
+        $newCompany = Company::find($id);
+        $newCompany->nama_company = $dataCompany["nama-company"];
+
+        Alert::success('Success', $dataCompany["nama-company"] . ", Berhasil Ditambahkan");
+
+        if ($newCompany->save()) {
+            return redirect("/company");
+        }
+    }
 }

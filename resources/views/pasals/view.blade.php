@@ -118,7 +118,7 @@
                                 <th class="w-150px">Kategori Pasal</th>
                                 <th class="text-break">Pasal</th>
                                 <th class="">Prioritas</th>
-                                <th class="text-break">Keterangan</th>
+                                <th class="text-break">Ket</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -137,7 +137,8 @@
 
                                     <!--begin::Pasal=-->
                                     <td>
-                                        <p>{{ $pasal->tipe_pasal }}</p>
+                                        <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
+                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal" class="text-hover-primary mb-1 w-35%">{{ $pasal->tipe_pasal }}</a>
                                     </td>
                                     <!--end::Pasal=-->
 
@@ -221,7 +222,6 @@
                     <!--begin::Input group Website-->
                     <div class="fv-row">
                         <div class="fv-row">
-
                             <!--begin::Row Kanan+Kiri-->
                             <div class="row fv-row">
                                 <!--begin::Col-->
@@ -266,12 +266,12 @@
 
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Pasal :</span>
+                                <span class="required">Pasal</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
                             <textarea class="form-control form-control-solid" name="pasal" id="pasal"
-                                style="font-weight: normal" rows="8" value="" placeholder="Ketikan pasal disini."></textarea>
+                                style="font-weight: normal" rows="6" value="" placeholder="Ketikan pasal disini."></textarea>
                             <!--end::Input-->
 
                             <!--begin::Label-->
@@ -281,7 +281,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <textarea class="form-control form-control-solid" name="keterangan" id="keterangan"
-                                style="font-weight: normal" rows="4" value="" placeholder="Ketikan keterangan disini."></textarea>
+                                style="font-weight: normal" rows="2" value="" placeholder="Ketikan keterangan disini."></textarea>
                             <!--end::Input-->
 
 
@@ -350,27 +350,58 @@
                                 id="id-pasal">
                             <!--end::Input-->
 
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Tipe Pasal</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" name="tipe-pasal-edit"
+                                            id="tipe-pasal-edit" style="font-weight: normal" value=""
+                                            placeholder="Ketikan pasal disini..." />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Prioritas Pasal</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="prioritas" id="prioritas" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
+                                            <option value=""></option>
+                                            <option value="Penting">Penting</option>
+                                            <option value="Wajib">Wajib</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Tipe Pasal :</span>
-                            </label>
-                            <!--end::Label-->
-
-                            <!--begin::Input-->
-                            <input type="text" class="form-control form-control-solid" name="tipe-pasal-edit"
-                                id="tipe-pasal-edit" style="font-weight: normal" value=""
-                                placeholder="Ketikan pasal disini..." />
-                            <!--end::Input-->
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span style="font-weight: normal">Pasal :</span>
+                                <span style="font-weight: normal" class="required">Pasal</span>
                             </label>
                             <!--end::Label-->
 
                             <!--begin::Input-->
                             <textarea type="text" class="form-control form-control-solid" name="pasal-edit"
-                                id="pasal-edit" style="font-weight: normal" rows="10" value=""
+                                id="pasal-edit" style="font-weight: normal" rows="6" value=""
                                 placeholder="Ketikan pasal disini..."></textarea>
                             <!--end::Input-->
 

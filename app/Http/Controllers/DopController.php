@@ -20,9 +20,9 @@ class DopController extends Controller
         $filter = $request->query("filter");
 
         if (!empty($column)) {
-            $dops = Dop::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            $dops = Dop::sortable()->where($column, 'like', '%'.$filter.'%')->orderBy('dop')->get();
         }else{
-        $dops = Dop::sortable()->get();
+        $dops = Dop::sortable()->orderBy('dop')->get();
         }
 
         return view('/MasterData/Dop', compact(['dops', 'column', 'filter']));
@@ -74,5 +74,32 @@ class DopController extends Controller
         Alert::success('Delete', $dop.", Berhasil Dihapus")->hideCloseButton();
 
         return redirect()->back();
+    }
+
+    public function update($id, Request $request)
+    {
+        $dataDop = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "dop" => "required",
+        ];
+        $validation = Validator::make($dataDop, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "DOP Fagal Dibuat !");
+        }
+
+        $validation->validate();
+
+        $newDop = Dop::find($id);
+        // dd($id);
+        $newDop->dop = $dataDop["dop"];
+
+        Alert::success('Success', $dataDop["dop"] . ", Berhasil Ditambahkan");
+
+        if ($newDop->save()) {
+            return redirect()->back();
+        }
     }
 }
