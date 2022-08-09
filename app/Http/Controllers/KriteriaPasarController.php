@@ -83,9 +83,36 @@ class KriteriaPasarController extends Controller
      * @param  \App\Models\KriteriaPasar  $kriteriaPasar
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, KriteriaPasar $kriteriaPasar)
+    public function update($id, Request $request)
     {
-        //
+        $data = $request->all();
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "kategori" => "required",
+            "kriteria" => "required",
+            "bobot" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("kategori");
+            Alert::error('Error', "Kriteria Gagal Disimpan, Periksa Kembali !");
+        }
+        $validation->validate();
+        
+        $editKriteria = KriteriaPasar::find($id);
+        $editKriteria->kategori = $data["kategori"];
+        $editKriteria->kriteria = $data["kriteria"];
+        $bobot = $data["bobot"] / 100;
+        $editKriteria->bobot = $bobot;
+        // dd($data);
+        
+        Alert::success('Success', $data["kategori"] . " - " . $data["kriteria"] . ", Berhasil Diubah");
+        
+        if ($editKriteria->save()) {
+            return redirect()->back();
+        }
     }
 
     /**

@@ -122,19 +122,27 @@
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
-                                    <select id="column" name="column" onchange="changes(this)" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
-                                        <option {{$column == "" ? "selected": ""}}></option>
-                                        <option value="nomor_unit" {{$column == "nomor_unit" ? "selected" : ""}}>No Unit</option>
-                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Nama Unit</option>
-                                        <option value="divcode" {{$column == "divcode" ? "selected" : ""}}>Divcode</option>
-                                        <option value="dop" {{$column == "dop" ? "selected" : ""}}>DOP</option>
-                                        <option value="company" {{$column == "company" ? "selected" : ""}}>Company</option>
-                                        <option value="divisi" {{$column == "divisi" ? "selected" : ""}}>Divisi</option>
+                                    <select id="column" name="column" onchange="changes(this)"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
+                                        aria-hidden="true">
+                                        <option {{ $column == '' ? 'selected' : '' }}></option>
+                                        <option value="nomor_unit" {{ $column == 'nomor_unit' ? 'selected' : '' }}>No Unit
+                                        </option>
+                                        <option value="unit_kerja" {{ $column == 'unit_kerja' ? 'selected' : '' }}>Nama Unit
+                                        </option>
+                                        <option value="divcode" {{ $column == 'divcode' ? 'selected' : '' }}>Divcode
+                                        </option>
+                                        <option value="dop" {{ $column == 'dop' ? 'selected' : '' }}>DOP</option>
+                                        <option value="company" {{ $column == 'company' ? 'selected' : '' }}>Company
+                                        </option>
+                                        <option value="divisi" {{ $column == 'divisi' ? 'selected' : '' }}>Divisi</option>
                                         {{-- <option value="is_active" {{$column == "is_active" ? "selected" : ""}}>Is Active</option> --}}
-                                        
+
                                     </select>
                                     <!--End:: Select Options-->
-                                    
+
                                     <!--begin:: Input Filter-->
                                     <div class="d-flex align-items-center position-relative">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -142,55 +150,62 @@
                                             <i class="bi bi-search"></i>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
-                                        class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter"
+                                            name="filter" value="{{ $filter }}"
+                                            class="form-control form-control-solid ms-2 ps-12 w-auto"
+                                            placeholder="Input Filter" />
                                     </div>
                                     <!--end:: Input Filter-->
-                                    
-                                    <span style="display:none" id="select" >
-                                        <select id="select2" name="filter" class="form-select form-select-solid select2-hidden-accessible w-200px ms-2" data-control="select2" data-hide-search="true" data-placeholder="Yes/No" tabindex="-1" aria-hidden="true">
-                                        <!--Inner HTML Here-->
+
+                                    <span style="display:none" id="select">
+                                        <select id="select2" name="filter"
+                                            class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Yes/No"
+                                            tabindex="-1" aria-hidden="true">
+                                            <!--Inner HTML Here-->
                                         </select>
                                     </span>
 
                                     <script>
-                                        let inputHTML = '<input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}" class="form-control form-control-solid ms-2" placeholder="Input Filter"/>';
-                                        let optionHTML = '<option></option>'+
-                                                        '<option value="1" {{$filter == "1" ? "selected" : ""}}>Yes</option>'+
-                                                        '<option value="0" {{$filter == "0" ? "selected" : ""}}>No</option>';
+                                        let inputHTML =
+                                            '<input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}" class="form-control form-control-solid ms-2" placeholder="Input Filter"/>';
+                                        let optionHTML = '<option></option>' +
+                                            '<option value="1" {{ $filter == '1' ? 'selected' : '' }}>Yes</option>' +
+                                            '<option value="0" {{ $filter == '0' ? 'selected' : '' }}>No</option>';
 
                                         function changes(e) {
-                                        if (e.value == "is_active"){
-                                            console.log(e.value);
-                                            document.getElementById("filter").style.display = "none";
-                                            document.getElementById("select").style.display = "";
-                                            document.getElementById("select2").innerHTML = optionHTML;
-                                            // window.location.href="/unit-kerja?column=is_active";
-                                            }else{
-                                            console.log(e.value);
-                                            document.getElementById("select").style.display = "none";
-                                            document.getElementById("filter").style.display = "";
-                                            // document.getElementById("filter").innerHTML = inputHTML;
+                                            if (e.value == "is_active") {
+                                                console.log(e.value);
+                                                document.getElementById("filter").style.display = "none";
+                                                document.getElementById("select").style.display = "";
+                                                document.getElementById("select2").innerHTML = optionHTML;
+                                                // window.location.href="/unit-kerja?column=is_active";
+                                            } else {
+                                                console.log(e.value);
+                                                document.getElementById("select").style.display = "none";
+                                                document.getElementById("filter").style.display = "";
+                                                // document.getElementById("filter").innerHTML = inputHTML;
                                             }
                                         }
                                     </script>
 
                                     <!--end:: Input Filter-->
-                                    
+
                                     <!--begin:: Filter-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
-                                    Filter</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="kt_toolbar_primary_button">
+                                        Filter</button>
                                     <!--end:: Filter-->
-                                    
+
                                     <!--begin:: RESET-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
                                     <script>
                                         function resetFilter() {
                                             $("#column").select2({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
-                                            
+
                                             $("#filter").text({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
@@ -217,13 +232,13 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="w-60px text-center">@sortablelink('nomor_unit','No.Unit')</th>
-                                        <th class="min-w-auto">@sortablelink('unit_kerja','Nama Unit')</th>
-                                        <th class="min-w-auto">@sortablelink('divcode','Divcode')</th>
-                                        <th class="min-w-auto">@sortablelink('dop','DOP')</th>
-                                        <th class="min-w-auto">@sortablelink('company','Company')</th>
-                                        <th class="min-w-auto">@sortablelink('divisi','Divisi PIC')</th>
-                                        <th class="min-w-auto">@sortablelink('is_active','Is Active')</th>
+                                        <th class="w-60px text-center">@sortablelink('nomor_unit', 'No.Unit')</th>
+                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Nama Unit')</th>
+                                        <th class="min-w-auto">@sortablelink('divcode', 'Divcode')</th>
+                                        <th class="min-w-auto">@sortablelink('dop', 'DOP')</th>
+                                        <th class="min-w-auto">@sortablelink('company', 'Company')</th>
+                                        <th class="min-w-auto">@sortablelink('divisi', 'Divisi PIC')</th>
+                                        <th class="min-w-auto">@sortablelink('is_active', 'Is Active')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Settings</th>
                                             <th class="text-center">Action</th>
@@ -273,7 +288,7 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td>
-                                                {{ $unitkerja->is_active == 1 ? "Yes" : "No" }}
+                                                {{ $unitkerja->is_active == 1 ? 'Yes' : 'No' }}
                                             </td>
                                             <!--end::Coloumn-->
 
@@ -292,11 +307,11 @@
                                                 <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_delete{{ $unitkerja->id }}"
-                                                    id="modal-delete"
-                                                    class="btn btn-sm btn-light btn-active-primary">Delete
-                                                </button>
-                                                <!--end::Button-->
+                                                        data-bs-target="#kt_modal_delete{{ $unitkerja->id }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                    <!--end::Button-->
                                                 </td>
                                                 <!--end::Action=-->
 
@@ -573,7 +588,7 @@
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
+                                <i class="bi bi-x-lg"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </div>
@@ -600,7 +615,7 @@
                                     <input type="text" class="form-control form-control-solid" id="nomor-unit"
                                         name="nomor-unit" value="{{ old('nomor-unit') }}" placeholder="Nomer ID" />
                                     @error('nomor-unit')
-                                    <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -619,7 +634,7 @@
                                     <input type="text" class="form-control form-control-solid" id="unit-kerja"
                                         name="unit-kerja" value="{{ old('unit-kerja') }}" placeholder="Unit Kerja" />
                                     @error('unit-kerja')
-                                    <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -644,7 +659,7 @@
                                     <input type="text" class="form-control form-control-solid" id="divcode"
                                         name="divcode" value="{{ old('divcode') }}" placeholder="Div Code" />
                                     @error('divcode')
-                                    <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -672,7 +687,7 @@
                                         @endforeach
                                     </select>
                                     @error('dop')
-                                    <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -708,7 +723,7 @@
                                         @endforeach
                                     </select>
                                     @error('company')
-                                    <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger">{{ $message }}</h6>
                                     @enderror
                                 </div>
                                 <!--end::Input group-->
@@ -901,7 +916,5 @@
             return true;
         }
         // End :: Restore All Data for Submtting
-
-
     </script>
 @endsection

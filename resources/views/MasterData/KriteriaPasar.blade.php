@@ -52,10 +52,12 @@
                                     <!--begin::Wrapper-->
                                     <div class="me-4" style="margin-left:10px;">
                                         <!--begin::Menu-->
-                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                             <i class="bi bi-folder2-open"></i>Action</a>
                                         <!--begin::Menu 1-->
-                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                            id="kt_menu_6155ac804a1c2">
                                             <!--begin::Header-->
                                             <div class="px-7 py-5">
                                                 <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -67,12 +69,16 @@
                                             <!--begin::Form-->
                                             <div class="">
                                                 <!--begin::Item-->
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"
+                                                    id="kt_toolbar_import">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                                 </button>
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"
+                                                    id="kt_toolbar_export">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                                 </button>
                                                 <!--end::Item-->
@@ -105,28 +111,24 @@
                         <div class="card-header border-0 py-2">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <!--begin::Search-->
-                                {{-- <div class="d-flex align-items-center position-relative my-1">
-                                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                    <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                        <i class="bi bi-search"></i>
-                                    </span>
-                                    <!--end::Svg Icon-->
-                                    <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search Kriteria Pasar" />
-                                </div> --}}
-                                <!--end::Search-->
 
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
-                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
-                                        <option {{$column == "" ? "selected": ""}}></option>
-                                        <option value="kategori" {{$column == "kategori" ? "selected" : ""}}>Kategori</option>
-                                        <option value="kriteria" {{$column == "kriteria" ? "selected" : ""}}>Kriteria</option>
+                                    <select id="column" name="column"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
+                                        aria-hidden="true">
+                                        <option {{ $column == '' ? 'selected' : '' }}></option>
+                                        <option value="kategori" {{ $column == 'kategori' ? 'selected' : '' }}>Kategori
+                                        </option>
+                                        <option value="kriteria" {{ $column == 'kriteria' ? 'selected' : '' }}>Kriteria
+                                        </option>
+                                        <option value="bobot" {{ $column == 'bobot' ? 'selected' : '' }}>Bobot</option>
                                     </select>
                                     <!--End:: Select Options-->
-                                    
+
                                     <!--begin:: Input Filter-->
                                     <div class="d-flex align-items-center position-relative">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -134,25 +136,28 @@
                                             <i class="bi bi-search"></i>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
-                                        class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter"
+                                            name="filter" value="{{ $filter }}"
+                                            class="form-control form-control-solid ms-2 ps-12 w-auto"
+                                            placeholder="Input Filter" />
                                     </div>
                                     <!--end:: Input Filter-->
-                                    
+
                                     <!--begin:: Filter-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
-                                    Filter</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="kt_toolbar_primary_button">
+                                        Filter</button>
                                     <!--end:: Filter-->
-                                    
+
                                     <!--begin:: RESET-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
                                     <script>
                                         function resetFilter() {
                                             $("#column").select2({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
-                                            
+
                                             $("#filter").text({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
@@ -161,7 +166,7 @@
                                     <!--end:: RESET-->
                                 </form>
                                 <!--end:: BUTTON FILTER-->
-                                
+
                             </div>
                             <!--begin::Card title-->
 
@@ -179,13 +184,13 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">@sortablelink('kategori','Kategori')</th>
-                                        <th class="min-w-auto">@sortablelink('kriteria','Kriteria Value')</th>
-                                        <th class="min-w-auto">@sortablelink('bobot','Bobot')</th>
-										@if (auth()->user()->check_administrator)
-											<th class="text-center">Action</th>
-										@endif
-										{{-- <th class=""><center>Action</center></th> --}}
+                                        <th class="min-w-auto">@sortablelink('kategori', 'Kategori')</th>
+                                        <th class="min-w-auto">@sortablelink('kriteria', 'Kriteria Value')</th>
+                                        <th class="min-w-auto">@sortablelink('bobot', 'Bobot')</th>
+                                        @if (auth()->user()->check_administrator)
+                                            <th class="text-center">Action</th>
+                                        @endif
+                                        {{-- <th class=""><center>Action</center></th> --}}
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -200,7 +205,8 @@
 
                                             <!--begin::Name-->
                                             <td>
-                                                <a type="button" data-bs-toggle="modal" data-bs-target="#kt_edit_{{ $kriteriaPasars->id }}" 
+                                                <a type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#kt_edit_{{ $kriteriaPasars->id }}"
                                                     class="text-gray-600 text-gray text-hover-primary">{{ $kriteriaPasars->kategori }}</a>
                                                 </a>
                                             </td>
@@ -216,18 +222,19 @@
                                             </td>
                                             <!--end::Coloumn-->
 
-											@if (auth()->user()->check_administrator)
-                                            <!--begin::Action-->
-                                            <td class="text-center">
-                                                <!--begin::Button-->
-                                                <button data-bs-toggle="modal"
-                                                    data-bs-target="#kt_modal_delete{{ $kriteriaPasars->id }}"
-                                                    id="modal-delete" class="btn btn-sm btn-light btn-active-primary">Delete
-                                                </button>
-                                                <!--end::Button-->
-                                            </td>
-                                            <!--end::Action-->
-											@endif
+                                            @if (auth()->user()->check_administrator)
+                                                <!--begin::Action-->
+                                                <td class="text-center">
+                                                    <!--begin::Button-->
+                                                    <button data-bs-toggle="modal"
+                                                        data-bs-target="#kt_modal_delete{{ $kriteriaPasars->id }}"
+                                                        id="modal-delete"
+                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                    </button>
+                                                    <!--end::Button-->
+                                                </td>
+                                                <!--end::Action-->
+                                            @endif
                                         </tr>
                                 @endforeach
                                 </tbody>
@@ -258,7 +265,7 @@
     <!--end::Root-->
 
 
-<!--begin::Modal-->
+    <!--begin::Modal-->
     <form action="/kriteria-pasar/save" method="post" enctype="multipart/form-data">
         @csrf
 
@@ -277,7 +284,7 @@
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
+                                <i class="bi bi-x-lg"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </div>
@@ -301,7 +308,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="kategori" class="form-select form-select-solid" data-control="select2"
+                                    <select name="edit-kategori" class="form-select form-select-solid" data-control="select2"
                                         data-hide-search="true" data-placeholder="Kategori">
                                         <option></option>
                                         <option value="Technologi">Technologi</option>
@@ -314,10 +321,12 @@
                                         <option value="Kelangsungan Pekerjaan">Kelangsungan Pekerjaan</option>
                                         <option value="Sebagai referensi kerja">Sebagai referensi kerja</option>
                                         <option value="Waktu Pelaksanaan Tender">Waktu Pelaksanaan Tender</option>
-                                        <option value="Keamanan Pembayaran (Sumber Dana)">Keamanan Pembayaran (Sumber Dana)</option>
-                                        <option value="Menunjang / mendukung produksi pada tahun perolehan">Menunjang / mendukung produksi pada tahun perolehan</option>
+                                        <option value="Keamanan Pembayaran (Sumber Dana)">Keamanan Pembayaran (Sumber Dana)
+                                        </option>
+                                        <option value="Menunjang / mendukung produksi pada tahun perolehan">Menunjang /
+                                            mendukung produksi pada tahun perolehan</option>
                                     </select>
-                                    <!--end::Input--> 
+                                    <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
                             </div>
@@ -342,99 +351,177 @@
                         <!--End::Row Kanan+Kiri-->
 
                         <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
+                        <div class="row fv-row mb-7">
                             <!--begin::Col-->
-                            <div class="col-6">
+                            <div class="col-4">
                                 <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Bobot (1-100)</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input onkeyup="hitungBobot(this)" onchange="hitungBobot(this)" type="number"
+                                    min="1" max="100" class="form-control form-control-solid" id="bobot"
+                                    name="bobot" value="" placeholder="Bobot Nilai (%)" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                            <div class="col-2 pt-15">
+                                <span id="bobotPersen">= 0.0%</span>
+                            </div>
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                            id="proyek_new_save" style="background-color:#008CB4">Save</button>
+
+                    </div>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    <!--end::Modals-->
+
+    <!--begin::EDIT-->
+    @foreach ($kriteriaPasar as $kriteriaPasars)
+        <form action="/kriteria-pasar/{{ $kriteriaPasars->id }}/edit" method="post" enctype="multipart/form-data">
+            @csrf
+
+            <!--begin::Modal - Create App-->
+            <input type="hidden" name="id-kriteria" value="{{ $kriteriaPasars->id }}" id="id-kriteria">
+
+            <!--begin::Modal - Create Proyek-->
+            <div class="modal fade" id="kt_edit_{{ $kriteriaPasars->id }}" tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Kriteria Pasar</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span class="required">Kategori</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select name="kategori" class="form-select form-select-solid"
+                                            data-control="select2" data-hide-search="true" data-placeholder="Kategori">
+                                            <option value="{{ $kriteriaPasars->kategori }}">
+                                                {{ $kriteriaPasars->kategori }}</option>
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Kriteria Value</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="text" class="form-control form-control-solid" id="kriteria"
+                                            name="kriteria" value="{{ $kriteriaPasars->kriteria }}"
+                                            placeholder="Input Kriteria" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
+                                </div>
+                                <!--End::Col-->
+                            </div>
+                            <!--End::Row Kanan+Kiri-->
+
+                            <!--begin::Row Kanan+Kiri-->
+                            <div class="row fv-row mb-7">
+                                <!--begin::Col-->
+                                <div class="col-4">
+                                    <!--begin::Input group Website-->
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
                                         <span>Bobot (1-100)</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="number" min="1" max="100" class="form-control form-control-solid" id="bobot"
-                                        name="bobot" value="" placeholder="Bobot Nilai Dikonfersikan Dalam (%)" />
+                                    <input onkeyup="hitungBobot(this)" onchange="hitungBobot(this)" type="number"
+                                        min="1" max="100" class="form-control form-control-solid"
+                                        id="edit-bobot" name="bobot" value="{{ $kriteriaPasars->bobot * 100 }}"
+                                        placeholder="Bobot Nilai (%)" />
                                     <!--end::Input-->
+                                    <!--end::Input group-->
                                 </div>
-                                <!--end::Input group-->
+                                <div class="col-2 pt-15">
+                                    <span id="bobotPersen">= {{ $kriteriaPasars->bobot }}%</span>
+                                </div>
+                                <!--End::Col-->
+                                <script>
+                                    function hitungBobot(e) {
+                                        let bobot = e.value;
+                                        let persen = e.parentElement.parentElement.querySelector("#bobotPersen");
+                                        let kalkulasi = bobot / 100;
+                                        persen.innerHTML = "= " + kalkulasi + "%";
+                                        // console.log(e.parentElement.parentElement.querySelector("#bobotPersen"));
+                                        // console.log(kalkulasi);
+                                    }
+                                </script>
                             </div>
-                            <!--End::Col-->
+                            <!--End::Row Kanan+Kiri-->
+
                         </div>
-                        <!--End::Row Kanan+Kiri-->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                id="" style="background-color:#008CB4">Save</button>
 
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="proyek_new_save" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-        <!--end::Modal - Create App-->
-    </form>
-<!--end::Modals-->
-
-<!--begin::EDIT-->
-    @foreach ($kriteriaPasar as $kriteriaPasars)
-    <form action="/sumber-dana/{{ $kriteriaPasars->id }}/edit" method="post" enctype="multipart/form-data">
-        @csrf
-
-        <!--begin::Modal - Create App-->
-        <input type="hidden" name="id-sumber" value="{{ $kriteriaPasars->id }}" id="id-customer">
-
-        <!--begin::Modal - Create Proyek-->
-        <div class="modal fade" id="kt_edit_{{ $kriteriaPasars->id }}" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Kriteria Pasar</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
-                            </span>
-                            <!--end::Svg Icon-->
                         </div>
-                        <!--end::Close-->
+                        <!--end::Modal body-->
                     </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-
-                       
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
+                    <!--end::Modal content-->
                 </div>
-                <!--end::Modal content-->
+                <!--end::Modal dialog-->
             </div>
-            <!--end::Modal dialog-->
-        </div>
-        <!--end::Modal - Create App-->
-    </form>
+            <!--end::Modal - Create App-->
+        </form>
     @endforeach
-<!--end::EDIT-->
+    <!--end::EDIT-->
 
 
-<!--begin::modal DELETE-->
+    <!--begin::modal DELETE-->
     @foreach ($kriteriaPasar as $kriteriaPasars)
         <form action="/kriteria-pasar/delete/{{ $kriteriaPasars->id }}" method="post" enctype="multipart/form-data">
             @method('delete')

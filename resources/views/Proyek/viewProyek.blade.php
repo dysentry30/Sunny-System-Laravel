@@ -8,21 +8,22 @@
 
 <style>
     .form-control.form-control-solid {
-            border-left: 0px !important;
-            border-top: 0px !important;
-            border-right: 0px !important;
-            border-bottom: 1px dashed #b5b5c3 !important;
-            border-radius: 0 !important;
-            background-color: transparent !important;
-        }
-        .form-select.form-select-solid {
-            border-left: 0px !important;
-            border-top: 0px !important;
-            border-right: 0px !important;
-            border-bottom: 1px dashed #b5b5c3 !important;
-            border-radius: 0 !important;
-            background-color: transparent !important;
-        }
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 1px dashed #b5b5c3 !important;
+        border-radius: 0 !important;
+        background-color: transparent !important;
+    }
+
+    .form-select.form-select-solid {
+        border-left: 0px !important;
+        border-top: 0px !important;
+        border-right: 0px !important;
+        border-bottom: 1px dashed #b5b5c3 !important;
+        border-radius: 0 !important;
+        background-color: transparent !important;
+    }
 </style>
 
 <!--begin::Main-->
@@ -41,7 +42,7 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                <form action={{ url("/proyek/update/") }} method="post" enctype="multipart/form-data">
+                <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
                     @csrf
 
 
@@ -107,7 +108,7 @@
                                 <!--begin::Contacts App- Edit Contact-->
                                 <div class="row">
 
-<!--begin::Header Orange-->
+                                    <!--begin::Header Orange-->
                                     <div class="col-xl-15 mb-8">
                                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
@@ -331,30 +332,31 @@
 
                                                         @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terkontrak
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
+                                                                <a href="#" data-bs-toggle="dropdown"
+                                                                    role="button" id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-default"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terkontrak
+                                                                    &nbsp;&nbsp;
+                                                                    <span class=""
+                                                                        style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
                                                             @elseif($proyek->stage == 9)
-                                                            <a href="#" data-bs-toggle="dropdown" role="button"
-                                                                id="terkontrak" aria-expanded="false"
-                                                                aria-controls="#terkontrak"
-                                                                class="stage-button stage-is-done color-is-danger"
-                                                                style="outline: 0px; cursor: pointer;" stage="8">
-                                                                Terendah
-                                                                &nbsp;&nbsp;
-                                                                <span class="" style="position: relative;top: 15%;"
-                                                                    stage="8"><i
-                                                                        class="bi bi-caret-down-fill text-white"></i></span>
-                                                            </a>
-                                                                
+                                                                <a href="#" data-bs-toggle="dropdown"
+                                                                    role="button" id="terkontrak" aria-expanded="false"
+                                                                    aria-controls="#terkontrak"
+                                                                    class="stage-button stage-is-done color-is-danger"
+                                                                    style="outline: 0px; cursor: pointer;" stage="8">
+                                                                    Terendah
+                                                                    &nbsp;&nbsp;
+                                                                    <span class=""
+                                                                        style="position: relative;top: 15%;"
+                                                                        stage="8"><i
+                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                </a>
                                                             @endif
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
@@ -482,7 +484,7 @@
                                             if (form.submitted == "Menang") {
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-menang" value="Menang"/>`;
-                                            } else if(form.submitted == "Kalah") {
+                                            } else if (form.submitted == "Kalah") {
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-kalah" value="Kalah"/>`;
                                             }
@@ -491,7 +493,7 @@
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terkontrak" value="Terkontrak"/>`;
 
-                                            } else if(form.submitted == "Terendah") {
+                                            } else if (form.submitted == "Terendah") {
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terendah" value="Terendah"/>`;
                                             }
@@ -545,7 +547,7 @@
                                             });
                                         });
                                     </script>
-<!--end::Header Orange-->
+                                    <!--end::Header Orange-->
 
 
                                     <!--begin::All Content-->
@@ -557,7 +559,7 @@
                                             <div class="card-body pt-5">
 
 
-<!--begin:::Tabs Navigasi-->
+                                                <!--begin:::Tabs Navigasi-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     @if ($proyek->stage > 0)
@@ -666,16 +668,16 @@
                                                         <!--end:::Tab item Feedback-->
                                                     @endif
                                                 </ul>
-<!--end:::Tabs Navigasi-->
+                                                <!--end:::Tabs Navigasi-->
 
                                                 <!--begin:::Tab isi content  -->
                                                 <div class="tab-content" id="myTabContent">
 
-<!--begin:::Tab Pasar Dini-->
+                                                    <!--begin:::Tab Pasar Dini-->
                                                     <div class="tab-pane fade show active"
                                                         id="kt_user_view_overview_pasardini" role="tabpanel">
 
-                                                            <!--begin::Row Kanan+Kiri-->
+                                                        <!--begin::Row Kanan+Kiri-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
                                                             <div class="col-6">
@@ -701,7 +703,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Unit Kerja <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Unit Kerja <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -720,11 +723,12 @@
                                                                     @endforeach
                                                                     </select> --}}
                                                                     @foreach ($unitkerjas as $unitkerja)
-                                                                    @if ($unitkerja->divcode == $proyek->unit_kerja)
-                                                                    <input type="text"
-                                                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                                    value="{{ $unitkerja->unit_kerja }}" readonly/>
-                                                                    @endif
+                                                                        @if ($unitkerja->divcode == $proyek->unit_kerja)
+                                                                            <input type="text"
+                                                                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                                                value="{{ $unitkerja->unit_kerja }}"
+                                                                                readonly />
+                                                                        @endif
                                                                     @endforeach
                                                                     <!--end::Input-->
                                                                 </div>
@@ -742,7 +746,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Proyek <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Kode Proyek <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -766,7 +771,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tipe Proyek <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Tipe Proyek <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -781,7 +787,8 @@
                                                                     <input type="text"
                                                                         class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="tipe-proyek" name="tipe-proyek"
-                                                                        value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}" readonly />
+                                                                        value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -792,7 +799,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Jenis Proyek <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Jenis Proyek <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -807,7 +815,8 @@
                                                                     <input type="text"
                                                                         class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         id="jenis-proyek" name="jenis-proyek"
-                                                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}" readonly />
+                                                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -825,15 +834,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tahun Perolehan <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Tahun Perolehan <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="number"
                                                                         class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                                        name="tahun-perolehan" min="2021" max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_perolehan }}"
-                                                                        readonly />
+                                                                        name="tahun-perolehan" min="2021"
+                                                                        max="2099" step="1"
+                                                                        value="{{ $proyek->tahun_perolehan }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -973,7 +983,7 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     {{-- <option value="{{ $proyekberjalans->kode_proyek }}" selected>{{$proyekberjalans->kode_proyek }}</option> --}}
-                                                                    <select id="customer" name="customer" 
+                                                                    <select id="customer" name="customer"
                                                                         class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
                                                                         data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Pilih Customer">
@@ -1180,7 +1190,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai OK (Exclude PPN) <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1198,12 +1209,12 @@
                                                         <!--End::Row Kanan+Kiri-->
 
                                                         <script>
-                                                            function hitungReview (){
+                                                            function hitungReview() {
                                                                 let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(",", "");
                                                                 // console.log(nilaiOkReview); 
                                                                 let kursReview = document.getElementById("kurs-review").value.replaceAll(",", "");
                                                                 let hasilOkReview = nilaiOkReview * kursReview;
-                                                                document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview) ;
+                                                                document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview);
                                                             }
                                                         </script>
 
@@ -1225,7 +1236,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Awal (Valas) (Exclude Tax) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai OK Awal (Valas) (Exclude Tax) <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1233,7 +1245,8 @@
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
                                                                         value="{{ $proyek->nilai_valas_awal }}"
-                                                                        placeholder="Nilai OK Awal (Valas) (Exclude Tax)" readonly/>
+                                                                        placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1299,7 +1312,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Bulan Pelaksanaan <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Bulan Pelaksanaan <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
@@ -1310,34 +1324,59 @@
                                                                         data-placeholder="Bulan Pelaksanaan">
                                                                         <option></option>
                                                                         <option selected>
-                                                                        @switch($proyek->bulan_awal)
-                                                                            @case("1") Januari
+                                                                            @switch($proyek->bulan_awal)
+                                                                                @case('1')
+                                                                                    Januari
                                                                                 @break
-                                                                            @case("2") Februari
+
+                                                                                @case('2')
+                                                                                    Februari
                                                                                 @break
-                                                                            @case("3") Maret
+
+                                                                                @case('3')
+                                                                                    Maret
                                                                                 @break
-                                                                            @case("4") April
+
+                                                                                @case('4')
+                                                                                    April
                                                                                 @break
-                                                                            @case("5") Mei
+
+                                                                                @case('5')
+                                                                                    Mei
                                                                                 @break
-                                                                            @case("6") Juni
+
+                                                                                @case('6')
+                                                                                    Juni
                                                                                 @break
-                                                                            @case("7") Juli
+
+                                                                                @case('7')
+                                                                                    Juli
                                                                                 @break
-                                                                            @case("8") Agustus
+
+                                                                                @case('8')
+                                                                                    Agustus
                                                                                 @break
-                                                                            @case("9") September
+
+                                                                                @case('9')
+                                                                                    September
                                                                                 @break
-                                                                            @case("10") Oktober
+
+                                                                                @case('10')
+                                                                                    Oktober
                                                                                 @break
-                                                                            @case("11") November
+
+                                                                                @case('11')
+                                                                                    November
                                                                                 @break
-                                                                            @case("12") Desember
+
+                                                                                @case('12')
+                                                                                    Desember
                                                                                 @break
-                                                                            @default Selesai
-                                                                                @endswitch
-                                                                            </option>
+
+                                                                                @default
+                                                                                    Selesai
+                                                                            @endswitch
+                                                                        </option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -1355,7 +1394,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai OK (Exclude PPN) <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
 
@@ -1364,7 +1404,7 @@
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilaiok-awal" name="nilaiok-awal"
                                                                         value="{{ $proyek->nilaiok_awal }}"
-                                                                        placeholder="Nilai OK (Exclude PPN)" readonly/>
+                                                                        placeholder="Nilai OK (Exclude PPN)" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1372,11 +1412,11 @@
                                                             <!--End::Col-->
                                                         </div>
                                                         <script>
-                                                            function hitungAwal (){
+                                                            function hitungAwal() {
                                                                 let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(",", "");
                                                                 let kursAwal = document.getElementById("kurs-awal").value.replaceAll(",", "");
-                                                                let hasilOkAwal = nilaiOkAwal * kursAwal; 
-                                                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal) ;
+                                                                let hasilOkAwal = nilaiOkAwal * kursAwal;
+                                                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal);
                                                             }
                                                         </script>
                                                         <!--End::Row Kanan+Kiri-->
@@ -1390,8 +1430,7 @@
                                                         </h3>
                                                         <br>
                                                         <!--begin::Table-->
-                                                        <table
-                                                            class="table align-middle table-row-dashed fs-6 gy-2"
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
                                                             id="kt_customers_table">
                                                             <!--begin::Table head-->
                                                             <thead>
@@ -1434,23 +1473,24 @@
                                                                         </td>
                                                                         <!--end::Kategori-->
                                                                     </tr>
-                                                                @php
-                                                                    // $statusPasar = {{ $kriteria->bobot }}
-                                                                @endphp
+                                                                    @php
+                                                                        // $statusPasar = {{ $kriteria->bobot }}
+                                                                    @endphp
                                                                 @endforeach
                                                                 <tr>
                                                                     <!--begin::Kategori-->
                                                                     {{-- <td></td>
                                                                     <td></td> --}}
-                                                                    <td colspan="3" class="text-end text-gray-400">Average Skor Pasar :</td>
+                                                                    <td colspan="3" class="text-end text-gray-400">
+                                                                        Average Skor Pasar :</td>
                                                                     @php
-                                                                            $jumlahBobot = 0;
-                                                                            $statusPasar = "";
-                                                                            foreach ($kriteriapasarproyek as $kriteria) {
-                                                                                $jumlahBobot += $kriteria->bobot;
-                                                                                $jumlahKriteria = count($kriteriapasarproyek);
-                                                                                $statusPasar = round($jumlahBobot / $jumlahKriteria , 2);
-                                                                            }
+                                                                        $jumlahBobot = 0;
+                                                                        $statusPasar = '';
+                                                                        foreach ($kriteriapasarproyek as $kriteria) {
+                                                                            $jumlahBobot += $kriteria->bobot;
+                                                                            $jumlahKriteria = count($kriteriapasarproyek);
+                                                                            $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
+                                                                        }
                                                                     @endphp
                                                                     <td>
                                                                         {{ $statusPasar }}
@@ -1475,13 +1515,13 @@
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
-                                                        
+
 
                                                     </div>
-<!--end:::Tab Pasar Dini-->
+                                                    <!--end:::Tab Pasar Dini-->
 
 
-<!--begin:::Tab Pasar Potensial-->
+                                                    <!--begin:::Tab Pasar Potensial-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_potensial"
                                                         role="tabpanel">
 
@@ -1593,18 +1633,18 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Status Pasar <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Status Pasar <i
+                                                                                class="bi bi-lock-fill"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     @php
-                                                                        if ($statusPasar == "") {
-                                                                            $statusPasar = "Kriteria Pasar Belum Diisi";
-                                                                        } 
-                                                                        else if ($statusPasar >= 0.75) {
-                                                                            $statusPasar = "Potensial";
+                                                                        if ($statusPasar == '') {
+                                                                            $statusPasar = 'Kriteria Pasar Belum Diisi';
+                                                                        } elseif ($statusPasar >= 0.75) {
+                                                                            $statusPasar = 'Potensial';
                                                                         } else {
-                                                                            $statusPasar = "Non-Potensial";
+                                                                            $statusPasar = 'Non-Potensial';
                                                                         }
                                                                     @endphp
                                                                     <input type="text"
@@ -1673,7 +1713,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Company <i class="bi bi-lock-fill"></i>   </span>
+                                                                        <span>Company <i class="bi bi-lock-fill"></i>
+                                                                        </span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1722,10 +1763,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab Pasar Potensial-->
+                                                    <!--end:::Tab Pasar Potensial-->
 
 
-<!--begin:::Tab Prakualifikasi-->
+                                                    <!--begin:::Tab Prakualifikasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_prakualifikasi"
                                                         role="tabpanel">
 
@@ -1740,17 +1781,17 @@
                                                                         <span>Jadwal PQ</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="Date"
                                                                         class="form-control form-control-solid"
-                                                                        name="jadwal-pq"
-                                                                        value="{{ $proyek->jadwal_pq }}"
+                                                                        name="jadwal-pq" value="{{ $proyek->jadwal_pq }}"
                                                                         placeholder="Date" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -1790,10 +1831,11 @@
                                                                         <span>Jadwal Proyek</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2015,11 +2057,11 @@
 
 
                                                     </div>
-<!--end:::Tab pane Prakualifikasi-->
+                                                    <!--end:::Tab pane Prakualifikasi-->
 
 
 
-<!--begin:::Tab pane Tender Diikuti-->
+                                                    <!--begin:::Tab pane Tender Diikuti-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_tender"
                                                         role="tabpanel">
 
@@ -2034,10 +2076,11 @@
                                                                         <span>Jadwal Tender</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2131,10 +2174,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab pane Tender Diikuti-->    
+                                                    <!--end:::Tab pane Tender Diikuti-->
 
 
-<!--begin:::Tab Perolehan-->
+                                                    <!--begin:::Tab Perolehan-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_perolehan"
                                                         role="tabpanel">
 
@@ -2277,10 +2320,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab Perolehan-->
+                                                    <!--end:::Tab Perolehan-->
 
 
-<!--begin:::Tab Menang-->
+                                                    <!--begin:::Tab Menang-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_menang"
                                                         role="tabpanel">
 
@@ -2340,10 +2383,10 @@
                                                         <!--End::Title Biru Form: Usulan Saran Perbaikan-->
 
                                                     </div>
-<!--end:::Tab Menang-->
+                                                    <!--end:::Tab Menang-->
 
 
-<!--begin:::Tab Pasar Terkontrak New-->
+                                                    <!--begin:::Tab Pasar Terkontrak New-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_terkontrak"
                                                         role="tabpanel">
 
@@ -2411,10 +2454,11 @@
                                                                         <span>Tanggal SPK Internal</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2439,7 +2483,8 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid"
-                                                                        id="porsijo-terkontrak" name="porsijo-terkontrak"
+                                                                        id="porsijo-terkontrak"
+                                                                        name="porsijo-terkontrak"
                                                                         value="{{ $proyek->porsijo_terkontrak }}"
                                                                         placeholder="Porsi JO (%)" />
                                                                     <!--end::Input-->
@@ -2646,10 +2691,11 @@
                                                                         <span>Tanggal Kontrak</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2699,10 +2745,11 @@
                                                                         <span>Tanggal Mulai Kontrak</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2752,10 +2799,11 @@
                                                                         <span>Tanggal Akhir Kontrak</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2805,10 +2853,11 @@
                                                                         <span>Tanggal Selesai Bash PHO</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
-                                                                    style="background: transparent;" id="start-date-modal"
-                                                                    onclick="showCalendarModal(this)">
-                                                                    <i class="bi bi-calendar2-plus-fill"
-                                                                        style="color: #008CB4"></i>
+                                                                        style="background: transparent;"
+                                                                        id="start-date-modal"
+                                                                        onclick="showCalendarModal(this)">
+                                                                        <i class="bi bi-calendar2-plus-fill"
+                                                                            style="color: #008CB4"></i>
                                                                     </a>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2854,10 +2903,10 @@
                                                         <!--End::Row Kanan+Kiri-->
 
                                                     </div>
-<!--end:::Tab Pasar Terkontrak New-->
+                                                    <!--end:::Tab Pasar Terkontrak New-->
 
 
-<!--begin:::Tab Approval-->
+                                                    <!--begin:::Tab Approval-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
@@ -3017,9 +3066,9 @@
                                                         <!--end::Table-->
 
                                                     </div>
-<!--end:::Tab Approval-->
+                                                    <!--end:::Tab Approval-->
 
-<!--begin:::Tab Feedback-->
+                                                    <!--begin:::Tab Feedback-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
@@ -3077,92 +3126,92 @@
                                                         <!--end::Table-->
 
                                                     </div>
-<!--end:::Tab Feedback-->
+                                                    <!--end:::Tab Feedback-->
 
-                                                        
-<!--begin:::Tab Forecast-->
-                                                        <div class="tab-pane fade" id="kt_user_view_overview_forecast"
-                                                            role="tabpanel">
 
-                                                            <!--Begin::Title Biru Form: Approval-->
-                                                            &nbsp;<br>
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">History Forecast</h3>
-                                                            &nbsp;<br>
-                                                            <!--End::Title Biru Form: List Peserta Tender-->
+                                                    <!--begin:::Tab Forecast-->
+                                                    <div class="tab-pane fade" id="kt_user_view_overview_forecast"
+                                                        role="tabpanel">
 
-                                                            {{-- begin::Detail History Forecast --}}
-                                                            <div class="d-flex flex-row-reverse mb-5">
-                                                                <div>
-                                                                    Periode Prognosa
-                                                                    @php
-                                                                        setlocale(LC_TIME, 'id.UTF-8');
-                                                                        $periode_prognosa = count($historyForecast) > 0 ? strftime('%B', mktime(0, 0, 0, $historyForecast[0]->periode_prognosa)) : 'Belum Dibuat';
-                                                                    @endphp
-                                                                    <b class="mx-4">{{ $periode_prognosa }}</b>
-                                                                </div>
+                                                        <!--Begin::Title Biru Form: Approval-->
+                                                        &nbsp;<br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">History Forecast</h3>
+                                                        &nbsp;<br>
+                                                        <!--End::Title Biru Form: List Peserta Tender-->
+
+                                                        {{-- begin::Detail History Forecast --}}
+                                                        <div class="d-flex flex-row-reverse mb-5">
+                                                            <div>
+                                                                Periode Prognosa
+                                                                @php
+                                                                    setlocale(LC_TIME, 'id.UTF-8');
+                                                                    $periode_prognosa = count($historyForecast) > 0 ? strftime('%B', mktime(0, 0, 0, $historyForecast[0]->periode_prognosa)) : 'Belum Dibuat';
+                                                                @endphp
+                                                                <b class="mx-4">{{ $periode_prognosa }}</b>
                                                             </div>
-                                                            {{-- end::Detail History Forecast --}}
+                                                        </div>
+                                                        {{-- end::Detail History Forecast --}}
 
-                                                            <!--begin::Table-->
-                                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                                        <th class="min-w-auto">Nilai OK</th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">
-                                                                    @for ($i = 0; $i < 12; $i++)
-                                                                        <tr>
+                                                        <!--begin::Table-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-auto">Nama Proyek</th>
+                                                                    <th class="min-w-auto">Nilai OK</th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @for ($i = 0; $i < 12; $i++)
+                                                                    <tr>
 
-                                                                            <!--begin::Name-->
-                                                                            <td>
-                                                                                <h6 class="text-gray-600 fw-light">
-                                                                                    {{ $proyek->nama_proyek }}</h6>
-                                                                            </td>
-                                                                            <!--end::Name-->
-                                                                            @if (count($historyForecast) > 0)
-                                                                                @foreach ($historyForecast as $history)
-                                                                                    @if ($i + 1 == $history->periode_prognosa)
-                                                                                        <!--begin::Nilai OK-->
-                                                                                        <td class="text-dark">
-                                                                                            {{ $proyek->nilai_rkap }}
-                                                                                        </td>
-                                                                                        <!--end::Nilai OK-->
-                                                                                    @break
-
-                                                                                @else
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            <h6 class="text-gray-600 fw-light">
+                                                                                {{ $proyek->nama_proyek }}</h6>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        @if (count($historyForecast) > 0)
+                                                                            @foreach ($historyForecast as $history)
+                                                                                @if ($i + 1 == $history->periode_prognosa)
                                                                                     <!--begin::Nilai OK-->
                                                                                     <td class="text-dark">
-                                                                                        0
+                                                                                        {{ $proyek->nilai_rkap }}
                                                                                     </td>
                                                                                     <!--end::Nilai OK-->
                                                                                 @break
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @else
-                                                                        <!--begin::Nilai OK-->
-                                                                        <td class="text-dark">
-                                                                            0
-                                                                        </td>
-                                                                        <!--end::Nilai OK-->
-                                                                    @endif
 
-                                                                </tr>
-                                                            @endfor
-                                                        </tbody>
-                                                        <!--end::Table body-->
-                                                    </table>
-                                                    <!--end::Table-->
-<!--end:::Tab Forecast-->
+                                                                            @else
+                                                                                <!--begin::Nilai OK-->
+                                                                                <td class="text-dark">
+                                                                                    0
+                                                                                </td>
+                                                                                <!--end::Nilai OK-->
+                                                                            @break
+                                                                        @endif
+                                                                    @endforeach
+                                                                @else
+                                                                    <!--begin::Nilai OK-->
+                                                                    <td class="text-dark">
+                                                                        0
+                                                                    </td>
+                                                                    <!--end::Nilai OK-->
+                                                                @endif
+
+                                                            </tr>
+                                                        @endfor
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table-->
+                                                <!--end:::Tab Forecast-->
 
 
                                             </div>
@@ -3201,399 +3250,114 @@
 <!--begin::Modal-->
 
 <!--begin::modal ADD USER SKAT-->
-    <form action="/proyek/user/add" method="post" enctype="multipart/form-data">
-    @csrf
-        <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
-        <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
-            <div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-circle-fill ts-8"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-
-                            <!--begin::Row-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Team Proyek</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select name="nama-team" class="form-select form-select-solid"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
-                                            <option></option>
-                                            @foreach ($users as $user)
-                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
-                                            @endforeach
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="col-6">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Role/Jabatan</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text"
-                                            class="form-control form-control-solid"
-                                            id="role-team" name="role-team"
-                                            placeholder="Role/Jabatan" />
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                            </div>
-                            <!--End begin::Row-->
-
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                id="new_save" style="background-color:#008CB4">Save</button>
-
-                        </div>
-                        <!--end::Modal body-->
-                    </div>
-                    <!--end::Modal content-->
-                </div>
-                <!--end::Modal dialog-->
-            </div>
-    </form>
-<!--end::modal ADD USER SKAT-->
-
-<!--begin::modal KRITERIA PASAR-->
-    <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
-    @csrf
-            <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
-
-            <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Kriteria Proyek : </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-circle-fill ts-8"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-
-
-                            <!--begin::Row Kanan+Kiri-->
-                            <div class="row fv-row">
-                                <!--begin::Col-->
-                                <div class="col-5">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Kategori</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar" 
-                                            class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                            data-control="select2" data-hide-search="true"
-                                            data-placeholder="Pilih Kategori">
-                                            <option></option>
-                                                @foreach ($kriteriapasar as $kriteria)
-                                                <option value="{{ $kriteria->kategori }}">
-                                                    {{ $kriteria->kategori }}</option>
-                                                @endforeach
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="col-5">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Kriteria</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <select onchange="setBobot(this)" id="kriteria-pasar" name="kriteria-pasar" 
-                                            class="form-select form-select-solid"
-                                            data-control="select2" data-hide-search="true"
-                                            data-placeholder="Pilih Kriteria">
-                                            <option></option>
-                                                @foreach ($kriteriapasar as $kriteria)
-                                                <option value="{{ $kriteria->kriteria }}">
-                                                    {{ $kriteria->kriteria }}</option>
-                                                @endforeach
-                                        </select>
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End begin::Col-->
-                                <div class="col-2">
-                                    <!--begin::Input group Website-->
-                                    <div class="fv-row mb-7">
-                                        <!--begin::Label-->
-                                        <label class="fs-6 fw-bold form-label mt-3">
-                                            <span>Bobot</span>
-                                        </label>
-                                        <!--end::Label-->
-                                        <!--begin::Input-->
-                                        <input type="text"
-                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                            id="bobot" name="bobot" placeholder="" readonly/>
-                                        <!--end::Input-->
-                                    </div>
-                                    <!--end::Input group-->
-                                </div>
-                                <!--End::Col-->
-                            </div>
-                            <!--End::Row Kanan+Kiri-->
-                            <script>
-                                // let bobot = "";
-                                async function kategoriSelect(e) {
-                                    const kategori = e.value;
-                                    const formData = new FormData();
-                                    let html = `<option value=""></option>`;
-                                    formData.append("_token", "{{ csrf_token() }}");
-                                    formData.append("kategori", kategori);
-
-                                    const getKriteriaRes = await fetch("/proyek/get-kriteria", {
-                                        method: "POST",
-                                        header: {
-                                            "Content-Type": "application/json",
-                                        },
-                                        body: formData,
-                                    }).then(res => res.json());
-                                    // console.log(getKriteriaRes);
-                                    getKriteriaRes.forEach(data => {
-                                        html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
-                                    });
-                                    document.querySelector("#kriteria-pasar").innerHTML = html;
-                                    // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
-                                }
-
-                                function setBobot(e) {
-                                    let bobot = "";
-                                    e.options.forEach( option => {
-                                        if (option.selected) {
-                                            bobot = option.getAttribute("data-bobot")
-                                            // console.log(option.getAttribute("data-bobot"));
-                                        }
-                                    })
-                                    console.log(bobot);
-                                    document.querySelector("#bobot").value = bobot;
-                                }
-                            </script>
-
-                        </div>
-                        <div class="modal-footer">
-
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                id="new_save" style="background-color:#008CB4">Save</button>
-
-                        </div>
-                        <!--end::Modal body-->
-                    </div>
-                    <!--end::Modal content-->
-                </div>
-                <!--end::Modal dialog-->
-            </div>
-    </form>
-<!--end::modal KRITERIA PASAR-->
-
-<!--begin::modal PORSI JO-->
-<form action="/proyek/porsi-jo" method="post" enctype="multipart/form-data">
+<form action="/proyek/user/add" method="post" enctype="multipart/form-data">
 @csrf
-        <input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
-
-        <div class="modal fade" id="kt_modal_porsijo" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>Porsi JO : </h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-
-                    <!--begin::Row Kanan+Kiri-->
-                    <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                 <!--begin::Label-->
-                                 @php
-                                     $joCompany = 0;
-                                     foreach ($porsiJO as $porsi){
-                                         if ($porsi->count() > 0){
-                                            $joCompany += $porsi->porsi_jo;
-                                         }
-                                     }
-                                 @endphp
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span><b id="max-porsi" value="{{ $proyek->porsi_jo - $joCompany  }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span>
-                                </label>
-                                <!--end::Label-->
-                                <br>
-                                 <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo - $joCompany }} - </b><b id="selisih-porsi">0</b><b id="sisa-porsi"> = {{ $proyek->porsi_jo - $joCompany }}%</b></span>
-                                </label>
-                                <!--end::Label-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                    </div>
-                    <!--End::Row Kanan+Kiri-->
-
-                    <!--begin::Row Kanan+Kiri-->
-                    <div class="row fv-row">
-                        <!--begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                               <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Company</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="text"
-                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                    id="company-jo" name="company-jo" placeholder="Nama Company JO"/>
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End begin::Col-->
-                        <div class="col-6">
-                            <!--begin::Input group Website-->
-                            <div class="fv-row mb-7">
-                                <!--begin::Label-->
-                                <label class="fs-6 fw-bold form-label mt-3">
-                                    <span>Porsi JO Company (1 - {{ $proyek->porsi_jo - $joCompany }} %)</span>
-                                </label>
-                                <!--end::Label-->
-                                <!--begin::Input-->
-                                <input type="number" min="1" max="{{ $proyek->porsi_jo - $joCompany }}" onkeyup="getJO()"
-                                    class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                    id="porsijo-company" name="porsijo-company" placeholder="Porsi JO"/>
-                                <!--end::Input-->
-                            </div>
-                            <!--end::Input group-->
-                        </div>
-                        <!--End::Col-->
-                    </div>
-                    <!--End::Row Kanan+Kiri-->
-                    <script>
-                        function getJO() {
-                            let porsiJO = document.getElementById("porsijo-company");
-                            let maxJO = document.getElementById("max-porsi");
-                            let sisaJO = maxJO.getAttribute("value") - porsiJO.value;
-                            // console.log(maxJO);
-                            // console.log(porsiJO.value);
-                            document.getElementById("selisih-porsi").innerHTML = porsiJO.value; 
-                            document.getElementById("sisa-porsi").innerHTML = " = " + sisaJO + "%"; 
-                        }
-                    </script>
-
-                    </div>
-                    <div class="modal-footer">
-
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                            id="new_save" style="background-color:#008CB4">Save</button>
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-</form>
-<!--end::modal PORSI JO-->
-
-<!--begin::modal APPROVAL-->
-        {{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
-            @csrf --}}
-
-    <!--begin::Modal - Create Proyek-->
-    <div class="modal fade" id="kt_modal_create_approval" tabindex="-1" aria-hidden="true">
+<input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
+<input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
+<div class="modal fade" id="kt_modal_add_user" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered mw-800px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header">
                 <!--begin::Modal title-->
-                <h2>Choose Approval Head :</h2>
+                <h2>Assign Team untuk proyek : {{ $proyek->nama_proyek }}</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <i class="bi bi-x-circle-fill ts-8"></i>
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Team Proyek</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="nama-team" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
+                                <option></option>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Role/Jabatan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" id="role-team"
+                                name="role-team" placeholder="Role/Jabatan" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+</form>
+<!--end::modal ADD USER SKAT-->
+
+<!--begin::modal KRITERIA PASAR-->
+<form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
+@csrf
+<input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
+
+<div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-800px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Kriteria Proyek : </h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
                     </span>
                     <!--end::Svg Icon-->
                 </div>
@@ -3607,141 +3371,426 @@
 
                 <!--begin::Row Kanan+Kiri-->
                 <div class="row fv-row">
-                    <!--begin::Input-->
-                    <select name="head-approval" class="form-select form-select-solid" data-control="select2"
-                        data-hide-search="true" data-placeholder="Select Head To Send Approval">
-                        <option></option>
-                        <option value="Head Divisi Bangun Gedung">Head Divisi Bangun Gedung</option>
-                        <option value="Head Divisi Industri Plant">Head Divisi Industri Plant</option>
-                        <option value="Head Industri Infrastruktur">Head Industri Infrastruktur</option>
-                    </select>
-                    <!--end::Input-->
+                    <!--begin::Col-->
+                    <div class="col-5">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar"
+                                class="form-select rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Kategori">
+                                <option></option>
+                                @foreach ($kriteriapasar as $kriteria)
+                                    <option value="{{ $kriteria->kategori }}">
+                                        {{ $kriteria->kategori }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-5">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Kriteria</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select onchange="setBobot(this)" id="kriteria-pasar" name="kriteria-pasar"
+                                class="form-select form-select-solid" data-control="select2"
+                                data-hide-search="true" data-placeholder="Pilih Kriteria">
+                                <option></option>
+                                @foreach ($kriteriapasar as $kriteria)
+                                    <option value="{{ $kriteria->kriteria }}">
+                                        {{ $kriteria->kriteria }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-2">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Bobot</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text"
+                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                id="bobot" name="bobot" placeholder="" readonly />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End::Col-->
                 </div>
                 <!--End::Row Kanan+Kiri-->
-                <br>
-                <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Send</button>
+                <script>
+                    // let bobot = "";
+                    async function kategoriSelect(e) {
+                        const kategori = e.value;
+                        const formData = new FormData();
+                        let html = `<option value=""></option>`;
+                        formData.append("_token", "{{ csrf_token() }}");
+                        formData.append("kategori", kategori);
+
+                        const getKriteriaRes = await fetch("/proyek/get-kriteria", {
+                            method: "POST",
+                            header: {
+                                "Content-Type": "application/json",
+                            },
+                            body: formData,
+                        }).then(res => res.json());
+                        // console.log(getKriteriaRes);
+                        getKriteriaRes.forEach(data => {
+                            html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
+                        });
+                        document.querySelector("#kriteria-pasar").innerHTML = html;
+                        // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
+                    }
+
+                    function setBobot(e) {
+                        let bobot = "";
+                        e.options.forEach(option => {
+                            if (option.selected) {
+                                bobot = option.getAttribute("data-bobot")
+                                // console.log(option.getAttribute("data-bobot"));
+                            }
+                        })
+                        console.log(bobot);
+                        document.querySelector("#bobot").value = bobot;
+                    }
+                </script>
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
             </div>
             <!--end::Modal body-->
         </div>
         <!--end::Modal content-->
     </div>
     <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Create App-->
-    {{-- </form> --}}
-<!--begin::modal APPROVAL-->
+</div>
+</form>
+<!--end::modal KRITERIA PASAR-->
 
-<!--begin::Feedback Modals-->
-    {{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
-        @csrf --}}
+<!--begin::modal PORSI JO-->
+<form action="/proyek/porsi-jo" method="post" enctype="multipart/form-data">
+@csrf
+<input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
 
-    <!--begin::Modal - Feedback-->
-    <div class="modal fade" id="kt_modal_feedback" tabindex="-1" aria-hidden="true">
-
+<div class="modal fade" id="kt_modal_porsijo" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-900px">
+    <div class="modal-dialog modal-dialog-centered mw-800px">
         <!--begin::Modal content-->
         <div class="modal-content">
             <!--begin::Modal header-->
             <div class="modal-header">
                 <!--begin::Modal title-->
-                <h2>Add Feedback</h2>
+                <h2>Porsi JO : </h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                     <span class="svg-icon svg-icon-1">
-                        <i class="bi bi-x-circle-fill ts-8"></i>
+                        <i class="bi bi-x-lg"></i>
                     </span>
                     <!--end::Svg Icon-->
                 </div>
                 <!--end::Close-->
             </div>
             <!--end::Modal header-->
+
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
 
-                <!--begin::Input group Website-->
-                <div class="fv-row mb-5">
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Nama Customer</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <input type="text" class="form-control form-control-solid" id="nama-feedback"
-                        name="nama-feedback" value="" placeholder="Nama Customer" />
-                    <!--end::Input-->
-                    <br>
-                    <!--begin::Label-->
-                    <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Peringkat :&nbsp;&nbsp;</span>
-                    </label>
-                    <!--end::Label-->
-                    <!--begin::Input-->
-                    <div class="form-check-inline">
-                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio1"
-                            value="option1">
-                        <label class="form-check-label" for="inlineRadio1">1</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio2"
-                            value="option2">
-                        <label class="form-check-label" for="inlineRadio2">2</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio3"
-                            value="option3">
-                        <label class="form-check-label" for="inlineRadio3">3</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio4"
-                            value="option4">
-                        <label class="form-check-label" for="inlineRadio4">4</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5"
-                            value="option5">
-                        <label class="form-check-label" for="inlineRadio5">5</label>
-                    </div>
-                    <!--end::Input-->
 
-                    <!--begin::Label-->
-                    <div>
-                        <label class="fs-6 fw-bold form-label mt-3">
-                            <span>Kritik dan saran</span>
-                        </label>
-                        <!--end::Label-->
-                        <!--begin::Input-->
-                        &nbsp;<br>
-                        <div class="form-group">
-                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
-                                id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                <!--begin::Row Kanan+Kiri-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            @php
+                                $joCompany = 0;
+                                foreach ($porsiJO as $porsi) {
+                                    if ($porsi->count() > 0) {
+                                        $joCompany += $porsi->porsi_jo;
+                                    }
+                                }
+                            @endphp
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span><b id="max-porsi" value="{{ $proyek->porsi_jo - $joCompany }}">Max Porsi
+                                        JO : {{ $proyek->porsi_jo }}% </b></span>
+                            </label>
+                            <!--end::Label-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo - $joCompany }} - </b><b
+                                        id="selisih-porsi">0</b><b id="sisa-porsi"> =
+                                        {{ $proyek->porsi_jo - $joCompany }}%</b></span>
+                            </label>
+                            <!--end::Label-->
                         </div>
-                        <!--end::Input-->
+                        <!--end::Input group-->
                     </div>
                 </div>
-                <!--end::Input group-->
+                <!--End::Row Kanan+Kiri-->
 
-                    <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
-
+                <!--begin::Row Kanan+Kiri-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Company</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text"
+                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                id="company-jo" name="company-jo" placeholder="Nama Company JO" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Porsi JO Company (1 - {{ $proyek->porsi_jo - $joCompany }} %)</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" min="1" max="{{ $proyek->porsi_jo - $joCompany }}"
+                                onkeyup="getJO()"
+                                class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End::Col-->
                 </div>
-                <!--end::Modal body-->
+                <!--End::Row Kanan+Kiri-->
+                <script>
+                    function getJO() {
+                        let porsiJO = document.getElementById("porsijo-company");
+                        let maxJO = document.getElementById("max-porsi");
+                        let sisaJO = maxJO.getAttribute("value") - porsiJO.value;
+                        // console.log(maxJO);
+                        // console.log(porsiJO.value);
+                        document.getElementById("selisih-porsi").innerHTML = porsiJO.value;
+                        document.getElementById("sisa-porsi").innerHTML = " = " + sisaJO + "%";
+                    }
+                </script>
+
             </div>
-            <!--end::Modal content-->
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
+            </div>
+            <!--end::Modal body-->
         </div>
-        <!--end::Modal dialog-->
+        <!--end::Modal content-->
     </div>
+    <!--end::Modal dialog-->
+</div>
+</form>
+<!--end::modal PORSI JO-->
+
+<!--begin::modal APPROVAL-->
+{{-- <form action="/proyek" method="post" enctype="multipart/form-data"> 
+            @csrf --}}
+
+<!--begin::Modal - Create Proyek-->
+<div class="modal fade" id="kt_modal_create_approval" tabindex="-1" aria-hidden="true">
+<!--begin::Modal dialog-->
+<div class="modal-dialog modal-dialog-centered">
+    <!--begin::Modal content-->
+    <div class="modal-content">
+        <!--begin::Modal header-->
+        <div class="modal-header">
+            <!--begin::Modal title-->
+            <h2>Choose Approval Head :</h2>
+            <!--end::Modal title-->
+            <!--begin::Close-->
+            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                <span class="svg-icon svg-icon-1">
+                    <i class="bi bi-x-lg"></i>
+                </span>
+                <!--end::Svg Icon-->
+            </div>
+            <!--end::Close-->
+        </div>
+        <!--end::Modal header-->
+
+        <!--begin::Modal body-->
+        <div class="modal-body py-lg-6 px-lg-6">
+
+
+            <!--begin::Row Kanan+Kiri-->
+            <div class="row fv-row">
+                <!--begin::Input-->
+                <select name="head-approval" class="form-select form-select-solid" data-control="select2"
+                    data-hide-search="true" data-placeholder="Select Head To Send Approval">
+                    <option></option>
+                    <option value="Head Divisi Bangun Gedung">Head Divisi Bangun Gedung</option>
+                    <option value="Head Divisi Industri Plant">Head Divisi Industri Plant</option>
+                    <option value="Head Industri Infrastruktur">Head Industri Infrastruktur</option>
+                </select>
+                <!--end::Input-->
+            </div>
+            <!--End::Row Kanan+Kiri-->
+            <br>
+            <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Send</button>
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+</div>
+<!--end::Modal dialog-->
+</div>
+<!--end::Modal - Create App-->
+{{-- </form> --}}
+<!--begin::modal APPROVAL-->
+
+<!--begin::Feedback Modals-->
+{{-- <form action="/customer/save-modal" method="post" enctype="multipart/form-data"> 
+        @csrf --}}
+
+<!--begin::Modal - Feedback-->
+<div class="modal fade" id="kt_modal_feedback" tabindex="-1" aria-hidden="true">
+
+<!--begin::Modal dialog-->
+<div class="modal-dialog modal-dialog-centered mw-900px">
+    <!--begin::Modal content-->
+    <div class="modal-content">
+        <!--begin::Modal header-->
+        <div class="modal-header">
+            <!--begin::Modal title-->
+            <h2>Add Feedback</h2>
+            <!--end::Modal title-->
+            <!--begin::Close-->
+            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                <span class="svg-icon svg-icon-1">
+                    <i class="bi bi-x-lg"></i>
+                </span>
+                <!--end::Svg Icon-->
+            </div>
+            <!--end::Close-->
+        </div>
+        <!--end::Modal header-->
+        <!--begin::Modal body-->
+        <div class="modal-body py-lg-6 px-lg-6">
+
+            <!--begin::Input group Website-->
+            <div class="fv-row mb-5">
+                <!--begin::Label-->
+                <label class="fs-6 fw-bold form-label mt-3">
+                    <span>Nama Customer</span>
+                </label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <input type="text" class="form-control form-control-solid" id="nama-feedback"
+                    name="nama-feedback" value="" placeholder="Nama Customer" />
+                <!--end::Input-->
+                <br>
+                <!--begin::Label-->
+                <label class="fs-6 fw-bold form-label mt-3">
+                    <span>Peringkat :&nbsp;&nbsp;</span>
+                </label>
+                <!--end::Label-->
+                <!--begin::Input-->
+                <div class="form-check-inline">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio1"
+                        value="option1">
+                    <label class="form-check-label" for="inlineRadio1">1</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio2"
+                        value="option2">
+                    <label class="form-check-label" for="inlineRadio2">2</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio3"
+                        value="option3">
+                    <label class="form-check-label" for="inlineRadio3">3</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio4"
+                        value="option4">
+                    <label class="form-check-label" for="inlineRadio4">4</label>
+                </div>
+                <div class="form-check-inline">
+                    <input class="" type="radio" name="inlineRadioOptions" id="inlineRadio5"
+                        value="option5">
+                    <label class="form-check-label" for="inlineRadio5">5</label>
+                </div>
+                <!--end::Input-->
+
+                <!--begin::Label-->
+                <div>
+                    <label class="fs-6 fw-bold form-label mt-3">
+                        <span>Kritik dan saran</span>
+                    </label>
+                    <!--end::Label-->
+                    <!--begin::Input-->
+                    &nbsp;<br>
+                    <div class="form-group">
+                        <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
+                            id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                    </div>
+                    <!--end::Input-->
+                </div>
+            </div>
+            <!--end::Input group-->
+
+            <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
+
+        </div>
+        <!--end::Modal body-->
+    </div>
+    <!--end::Modal content-->
+</div>
+<!--end::Modal dialog-->
+</div>
 <!--end:: Feedback Modals-->
 
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></scrip> --}}
 @section('js-script')
 <script>
-    const proyekStage = Number("{{$proyek->stage}}");
+    const proyekStage = Number("{{ $proyek->stage }}");
     const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
     const tabBoots = new bootstrap.Tab(tabContent, {});
     tabBoots.show();
 </script>
 @endsection
-

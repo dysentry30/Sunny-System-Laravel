@@ -52,10 +52,12 @@
                                     <!--begin::Wrapper-->
                                     <div class="me-4" style="margin-left:10px;">
                                         <!--begin::Menu-->
-                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                        <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                             <i class="bi bi-folder2-open"></i>Action</a>
                                         <!--begin::Menu 1-->
-                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                        <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                            id="kt_menu_6155ac804a1c2">
                                             <!--begin::Header-->
                                             <div class="px-7 py-5">
                                                 <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -67,12 +69,16 @@
                                             <!--begin::Form-->
                                             <div class="">
                                                 <!--begin::Item-->
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"
+                                                    id="kt_toolbar_import">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                                 </button>
-                                                <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export">
+                                                <button type="submit"
+                                                    class="btn btn-active-primary dropdown-item rounded-0"
+                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_export"
+                                                    id="kt_toolbar_export">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                                 </button>
                                                 <!--end::Item-->
@@ -119,19 +125,28 @@
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
-                                    <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
-                                        <option {{$column == "" ? "selected": ""}}></option>
-                                        <option value="sbu" {{$column == "sbu" ? "selected" : ""}}>Nama SBU</option>
-                                        <option value="kode_sbu" {{$column == "kode_sbu" ? "selected" : ""}}>Kode</option>
-                                        <option value="klasifikasi" {{$column == "klasifikasi" ? "selected" : ""}}>Klasifikasi</option>
-                                        <option value="sub_klasifikasi" {{$column == "sub_klasifikasi" ? "selected" : ""}}>Sub Klasifikasi</option>
-                                        <option value="referensi1" {{$column == "referensi1" ? "selected" : ""}}>Referensi 1</option>
-                                        <option value="referensi2" {{$column == "referensi2" ? "selected" : ""}}>Referensi 2</option>
-                                        <option value="referensi3" {{$column == "referensi3" ? "selected" : ""}}>Referensi 3</option>
-                                        
+                                    <select id="column" name="column"
+                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        style="margin-right: 2rem" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
+                                        aria-hidden="true">
+                                        <option {{ $column == '' ? 'selected' : '' }}></option>
+                                        <option value="sbu" {{ $column == 'sbu' ? 'selected' : '' }}>Nama SBU</option>
+                                        <option value="kode_sbu" {{ $column == 'kode_sbu' ? 'selected' : '' }}>Kode</option>
+                                        <option value="klasifikasi" {{ $column == 'klasifikasi' ? 'selected' : '' }}>
+                                            Klasifikasi</option>
+                                        <option value="sub_klasifikasi"
+                                            {{ $column == 'sub_klasifikasi' ? 'selected' : '' }}>Sub Klasifikasi</option>
+                                        <option value="referensi1" {{ $column == 'referensi1' ? 'selected' : '' }}>Referensi
+                                            1</option>
+                                        <option value="referensi2" {{ $column == 'referensi2' ? 'selected' : '' }}>Referensi
+                                            2</option>
+                                        <option value="referensi3" {{ $column == 'referensi3' ? 'selected' : '' }}>Referensi
+                                            3</option>
+
                                     </select>
                                     <!--End:: Select Options-->
-                                    
+
                                     <!--begin:: Input Filter-->
                                     <div class="d-flex align-items-center position-relative">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -139,25 +154,28 @@
                                             <i class="bi bi-search"></i>
                                         </span>
                                         <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-table-filter="search" id="filter" name="filter" value="{{ $filter }}"
-                                        class="form-control form-control-solid ms-2 ps-12 w-auto" placeholder="Input Filter" />
+                                        <input type="text" data-kt-customer-table-filter="search" id="filter"
+                                            name="filter" value="{{ $filter }}"
+                                            class="form-control form-control-solid ms-2 ps-12 w-auto"
+                                            placeholder="Input Filter" />
                                     </div>
                                     <!--end:: Input Filter-->
-                                    
+
                                     <!--begin:: Filter-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4" id="kt_toolbar_primary_button">
-                                    Filter</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="kt_toolbar_primary_button">
+                                        Filter</button>
                                     <!--end:: Filter-->
-                                    
+
                                     <!--begin:: RESET-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                    onclick="resetFilter()"  id="kt_toolbar_primary_button">Reset</button>
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
                                     <script>
                                         function resetFilter() {
                                             $("#column").select2({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
-                                            
+
                                             $("#filter").text({
                                                 minimumResultsForSearch: -1
                                             }).val("").trigger("change");
@@ -184,14 +202,14 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">@sortablelink('sbu','Nama')</th>
-                                        <th class="min-w-auto">@sortablelink('kode_sbu','Kode')</th>
-                                        <th class="min-w-auto">@sortablelink('klasifikasi','Klasifikasi')</th>
-                                        <th class="min-w-auto">@sortablelink('referensi1','Referensi 1')</th>
-                                        <th class="min-w-auto">@sortablelink('sub_klasifikasi','Sub-Klasifikasi')</th>
-                                        <th class="min-w-auto">@sortablelink('referensi2','Referensi 2')</th>
-                                        <th class="min-w-auto">@sortablelink('lingkup_kerja','Lingkup Pekerjaan')</th>
-                                        <th class="min-w-auto">@sortablelink('referensi3','Referensi 3')</th>
+                                        <th class="min-w-auto">@sortablelink('sbu', 'Nama')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_sbu', 'Kode')</th>
+                                        <th class="min-w-auto">@sortablelink('klasifikasi', 'Klasifikasi')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi1', 'Referensi 1')</th>
+                                        <th class="min-w-auto">@sortablelink('sub_klasifikasi', 'Sub-Klasifikasi')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi2', 'Referensi 2')</th>
+                                        <th class="min-w-auto">@sortablelink('lingkup_kerja', 'Lingkup Pekerjaan')</th>
+                                        <th class="min-w-auto">@sortablelink('referensi3', 'Referensi 3')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>
                                         @endif
@@ -240,7 +258,8 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td>
-                                                <a href="#" id="click-no" class="text-gray-600 text-hover-primary mb-1">
+                                                <a href="#" id="click-no"
+                                                    class="text-gray-600 text-hover-primary mb-1">
                                                     {{ $sbu->lingkup_kerja }}
                                                 </a>
                                             </td>
@@ -312,7 +331,7 @@
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                             <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-circle-fill ts-8"></i>
+                                <i class="bi bi-x-lg"></i>
                             </span>
                             <!--end::Svg Icon-->
                         </div>
@@ -488,7 +507,8 @@
 
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white" style="background-color:#008CB4">Save</button>
+                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white"
+                            style="background-color:#008CB4">Save</button>
 
                     </div>
                     <!--end::Modal body-->
