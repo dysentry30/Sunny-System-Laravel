@@ -705,6 +705,26 @@ class ContractManagementsController extends Controller
 
     public function klarifikasiNegoUpload(Request $request) {
         $data = $request->all();
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Hasil Klarifikasi dan Negosiasi CDA gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -728,6 +748,27 @@ class ContractManagementsController extends Controller
 
     public function kontrakTandaTanganUpload(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Kontrak Tanda Tangan gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -751,6 +792,27 @@ class ContractManagementsController extends Controller
 
     public function reviewPembatalanKontrak(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Kontrak Tanda Tangan gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -774,6 +836,27 @@ class ContractManagementsController extends Controller
 
     public function perjanjianKSO(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Perjanjian KSO gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+        
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -797,6 +880,27 @@ class ContractManagementsController extends Controller
 
     public function dokumenPendukungUpload(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Dokumen Pendukung gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -820,6 +924,27 @@ class ContractManagementsController extends Controller
 
     public function momMeeting(Request $request) {
         $data = $request->all();
+        
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "numeric" => "Field di atas harus numeric",
+            "string" => "This field must be alphabet only",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "attach-file" => "required|file",
+            "document-name" => "required|string",
+            "note" => "required|string",
+            "id-contract" => "required|numeric",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "MoM Kick Off Meeting gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -843,6 +968,23 @@ class ContractManagementsController extends Controller
 
     public function documentBastContractUpload(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "dokumen-bast-1" => "required|file",
+            "dokumen-bast-2" => "required|file",
+            "id-contract" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Dokument Bast gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
 
         $faker = new Uuid();
         $contract_managements = ContractManagements::find($data["id-contract"]);
@@ -868,6 +1010,23 @@ class ContractManagementsController extends Controller
 
     public function baDefectContractUpload(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "ba-defect" => "required",
+            "id-contract" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "BA Defect gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -898,6 +1057,23 @@ class ContractManagementsController extends Controller
 
     public function dokumenPendukungContractUpload(Request $request) {
         $data = $request->all();
+        
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "dokumen-pendukung" => "required",
+            "id-contract" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "BA Defect gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -929,6 +1105,30 @@ class ContractManagementsController extends Controller
 
     public function pendingIssueContractUpload(Request $request, PendingIssue $pendingIssue) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "pending-issue-file" => "required",
+            "status" => "required",
+            "biaya" => "required",
+            "waktu" => "required",
+            "ancaman" => "required",
+            "peluang" => "required",
+            "rencana-tindak-lanjut" => "required",
+            "target-waktu-penyelesaian" => "required",
+            "id-contract" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Pending Issue gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -965,6 +1165,23 @@ class ContractManagementsController extends Controller
 
     public function penutupanProyekContractUpload(Request $request) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "kontrak-dan-addendum-file" => "required",
+            "id-contract" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Dokumen Kontrak dan Addendum gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -998,6 +1215,27 @@ class ContractManagementsController extends Controller
 
     public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "kategori" => "required",
+            "id-contract" => "required",
+            "keterangan" => "required",
+            "deskripsi-klausul-awal" => "required",
+            "usulan-peurbahan-klausul" => "required",
+            "keterangan" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Usulan Perubahan Draft gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
@@ -1020,6 +1258,24 @@ class ContractManagementsController extends Controller
 
     public function rencanaKerjaManajemenContractUpload(Request $request, RencanKerjaManajemenKontrak $rencanKerjaManajemenKontrak) {
         $data = $request->all();
+
+        $messages = [
+            "required" => "Field di atas wajib diisi",
+            "file" => "This field must be file only",
+        ];
+        $rules = [
+            "ketentuan-rencana-kerja" => "required",
+            "id-contract" => "required",
+            "kelengkapan-adkon" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // dd($validation->errors());
+        }
+        $validation->validate();
+
         $contract = ContractManagements::find($data["id-contract"]);
         if(empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
