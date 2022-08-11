@@ -308,7 +308,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="edit-kategori" class="form-select form-select-solid" data-control="select2"
+                                    <select name="kategori" class="form-select form-select-solid" data-control="select2"
                                         data-hide-search="true" data-placeholder="Kategori">
                                         <option></option>
                                         <option value="Technologi">Technologi</option>
@@ -490,16 +490,6 @@
                                     <span id="bobotPersen">= {{ $kriteriaPasars->bobot }}%</span>
                                 </div>
                                 <!--End::Col-->
-                                <script>
-                                    function hitungBobot(e) {
-                                        let bobot = e.value;
-                                        let persen = e.parentElement.parentElement.querySelector("#bobotPersen");
-                                        let kalkulasi = bobot / 100;
-                                        persen.innerHTML = "= " + kalkulasi + "%";
-                                        // console.log(e.parentElement.parentElement.querySelector("#bobotPersen"));
-                                        // console.log(kalkulasi);
-                                    }
-                                </script>
                             </div>
                             <!--End::Row Kanan+Kiri-->
 
@@ -573,3 +563,14 @@
 @endsection
 
 <!--end::Main-->
+
+<script>
+    function hitungBobot(e) {
+        let bobot = e.value;
+        let persen = e.parentElement.parentElement.querySelector("#bobotPersen");
+        let kalkulasi = bobot / 100;
+        persen.innerHTML = "= " + kalkulasi + "%";
+        // console.log(e.parentElement.parentElement.querySelector("#bobotPersen"));
+        // console.log(kalkulasi);
+    }
+</script>

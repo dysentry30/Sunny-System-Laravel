@@ -109,19 +109,6 @@
                         <div class="card-header border-0 py-1">
                             <!--begin::Card title-->
                             <div class="card-title">
-                                <!--begin::Search-->
-                                {{-- <form action="" method="get">
-                                    <div class="d-flex align-items-center position-relative my-1 me-8">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
-                                            <i class="bi bi-search"></i>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                        <input type="text" data-kt-customer-table-filter="search" id="cari" name="cari" value="{{ $cari }}"
-                                            class="form-control form-control-solid ps-15" placeholder="Kode/Nama Proyek" />
-                                    </div>
-                                </form> --}}
-                                <!--end::Search-->
 
                                 <!--Begin:: BUTTON FILTER-->
                                 <form action="" class="d-flex flex-row w-auto" method="get">
@@ -138,66 +125,99 @@
                                             Proyek</option>
                                         <option value="tahun_perolehan"
                                             {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option>
-                                        {{-- <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
-                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option> --}}
+                                        <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
+                                        <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
+                                        <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
 
                                     </select>
                                     <!--End:: Select Options-->
 
                                     <!--begin:: Input Filter-->
-                                    @if ($column == 'stage')
-                                        <select id="filter" name="filter"
-                                            class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
-                                            data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
-                                            <option></option>
-                                            <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Pasar Dini
-                                            </option>
-                                            <option value="2" {{ $filter == '2' ? 'selected' : '' }}>Pasar Potensial
-                                            </option>
-                                            <option value="3" {{ $filter == '3' ? 'selected' : '' }}>Prakualifikasi
-                                            </option>
-                                            <option value="4" {{ $filter == '4' ? 'selected' : '' }}>Tender Diikuti
-                                            </option>
-                                            <option value="5" {{ $filter == '5' ? 'selected' : '' }}>Perolehan</option>
-                                            <option value="6" {{ $filter == '6' ? 'selected' : '' }}>Menang</option>
-                                            <option value="7" {{ $filter == '7' ? 'selected' : '' }}>Kalah</option>
-                                            <option value="8" {{ $filter == '8' ? 'selected' : '' }}>Terkontrak
-                                            </option>
-                                            <option value="9" {{ $filter == '9' ? 'selected' : '' }}>Terendah</option>
-                                            <option value="10" {{ $filter == '10' ? 'selected' : '' }}>Selesai</option>
-                                        </select>
-                                    @elseif ($column == 'jenis_proyek')
-                                        <select id="filter" name="filter"
-                                            class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
-                                            data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
-                                            <option></option>
-                                            <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
-                                            <option value="E" {{ $filter == 'E' ? 'selected' : '' }}>External</option>
-                                        </select>
-                                    @else
-                                        <div class="d-flex align-items-center position-relative">
+                                    {{-- @if ($column == 'stage') --}}
+                                        <div style="display: none !important" id="filterStage" class="d-flex align-items-center position-relative">
+                                            <select name="filter-stage"
+                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
+                                                tabindex="-1" aria-hidden="true">
+                                                <option></option>
+                                                <option value="1" {{ $filter == '1' ? 'selected' : '' }}>Pasar Dini
+                                                </option>
+                                                <option value="2" {{ $filter == '2' ? 'selected' : '' }}>Pasar Potensial
+                                                </option>
+                                                <option value="3" {{ $filter == '3' ? 'selected' : '' }}>Prakualifikasi
+                                                </option>
+                                                <option value="4" {{ $filter == '4' ? 'selected' : '' }}>Tender Diikuti
+                                                </option>
+                                                <option value="5" {{ $filter == '5' ? 'selected' : '' }}>Perolehan</option>
+                                                <option value="6" {{ $filter == '6' ? 'selected' : '' }}>Menang</option>
+                                                <option value="7" {{ $filter == '7' ? 'selected' : '' }}>Kalah</option>
+                                                <option value="8" {{ $filter == '8' ? 'selected' : '' }}>Terkontrak
+                                                </option>
+                                                <option value="9" {{ $filter == '9' ? 'selected' : '' }}>Terendah</option>
+                                                <option value="10" {{ $filter == '10' ? 'selected' : '' }}>Selesai</option>
+                                            </select>
+                                        </div>
+                                    {{-- @elseif ($column == 'jenis_proyek') --}}
+                                        <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
+                                            <select name="filter-jenis"
+                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
+                                                tabindex="-1" aria-hidden="true">
+                                                <option></option>
+                                                <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
+                                                <option value="E" {{ $filter == 'E' ? 'selected' : '' }}>External</option>
+                                            </select>
+                                        </div>
+                                    {{-- @elseif ($column == 'unit_kerja') --}}
+                                        <div style="display: none !important" id="filterUnit" class="d-flex align-items-center position-relative">
+                                            <select name="filter-unit" class="form-select form-select-solid w-200px ms-2"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
+                                                <option></option>
+                                                @foreach ($unitkerjas as $unitkerja)
+                                                    <option value="{{ $unitkerja->divcode }}"
+                                                        {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }}>
+                                                        {{ $unitkerja->unit_kerja }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    {{-- @else --}}
+                                        <div id="filter" class="d-flex align-items-center position-relative">
                                             <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                             <span class="svg-icon svg-icon-1 position-absolute ms-6">
                                                 <i class="bi bi-search"></i>
                                             </span>
                                             <!--end::Svg Icon-->
-                                            <input type="text" data-kt-customer-table-filter="search" id="filter"
+                                            <input type="text" data-kt-customer-table-filter="search"
                                                 name="filter" value="{{ $filter }}"
                                                 class="form-control form-control-solid ms-2 ps-12 w-auto"
                                                 placeholder="Input Filter" />
                                         </div>
-                                    @endif
+                                    {{-- @endif --}}
 
                                     <script>
                                         function changes(e) {
                                             if (e.value == "stage") {
-                                                window.location.href = "/proyek?column=stage";
+                                                // console.log(e);
+                                                // window.location.href = "/proyek?column=stage";
+                                                document.getElementById("filterStage").style.display = "";
+                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").style.setProperty("display", "none", "important");
+                                            } else if (e.value == "unit_kerja") {
+                                                document.getElementById("filterUnit").style.display = "";
+                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").style.setProperty("display", "none", "important");
                                             } else if (e.value == "jenis_proyek") {
-                                                window.location.href = "/proyek?column=jenis_proyek";
+                                                document.getElementById("filterJenis").style.display = "";
+                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").style.setProperty("display", "none", "important");
                                             } else {
-                                                // window.location.href="/proyek?column="+e.value;
+                                                document.getElementById("filter").style.display = "";
+                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                             }
                                         }
                                     </script>
@@ -210,17 +230,12 @@
                                     <!--end:: Filter-->
 
                                     <!--begin:: RESET-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                    <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
                                         onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                        
                                     <script>
                                         function resetFilter() {
-                                            $("#column").select2({
-                                                minimumResultsForSearch: -1
-                                            }).val("").trigger("change");
-
-                                            $("#filter").text({
-                                                minimumResultsForSearch: -1
-                                            }).val("").trigger("change");
+                                            window.location.href = "/proyek";
                                         }
                                     </script>
                                     <!--end:: RESET-->
@@ -546,7 +561,7 @@
                                     <input type="text" class="form-control form-control-solid" id="nama-proyek"
                                         name="nama-proyek" value="{{ old('nama-proyek') }}" placeholder="Nama Proyek" />
                                     @error('nama-proyek')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -572,7 +587,7 @@
                                         @endforeach
                                     </select>
                                     @error('unit-kerja')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -603,7 +618,7 @@
                                             External</option>
                                     </select>
                                     @error('jenis-proyek')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -628,7 +643,7 @@
                                             Non-Retail</option>
                                     </select>
                                     @error('tipe-proyek')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -654,7 +669,7 @@
                                         id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}"
                                         placeholder="Nilai OK RKAP" />
                                     @error('nilai-rkap')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -680,7 +695,7 @@
                                         @endforeach
                                     </select>
                                     @error('sumber-dana')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -718,7 +733,7 @@
                                         @endfor
                                     </select>
                                     @error('tahun-perolehan')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>
@@ -752,7 +767,7 @@
                                         <option value="12" {{ $bulans == 12 ? 'selected' : '' }}>Desember</option>
                                     </select>
                                     @error('bulan-pelaksanaan')
-                                        <h6 class="text-danger">{{ $message }}</h6>
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
                                     <!--end::Input-->
                                 </div>

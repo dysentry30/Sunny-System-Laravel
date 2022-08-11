@@ -260,7 +260,7 @@
 																			<!--end::Label-->
 																			<!--begin::Input-->
 																			<input type="text" class="form-control form-control-solid" 
-																			name="kodeproyek-company" value="" placeholder="Kode Proyek Owner" />
+																			name="kodepelanggan-company" value="" placeholder="Kode Proyek Owner" />
 																			<!--end::Input-->
 																		</div>
 																		<!--end::Input group-->

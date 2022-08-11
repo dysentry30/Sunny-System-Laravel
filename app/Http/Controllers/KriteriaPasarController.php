@@ -47,6 +47,7 @@ class KriteriaPasarController extends Controller
         ];
         $validation = Validator::make($dataKriteria, $rules, $messages);
         if ($validation->fails()) {
+            // dd($validation);
             $request->old("kategori");
             Alert::error('Error', "Kriteria Gagal Dibuat, Periksa Kembali !");
         }
@@ -58,7 +59,7 @@ class KriteriaPasarController extends Controller
         // dd($bobot, $dataKriteria["bobot"]);
         $newKriteria->bobot = $bobot;
 
-        Alert::success('Success', $dataKriteria["kategori"] . $dataKriteria["kriteria"] . ", Berhasil Ditambahkan");
+        Alert::success('Success', $dataKriteria["kategori"] . " - " . $dataKriteria["kriteria"] . ", Berhasil Ditambahkan");
 
         if ($newKriteria->save()) {
             return redirect()->back();
@@ -96,6 +97,7 @@ class KriteriaPasarController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
+            dd($validation);
             $request->old("kategori");
             Alert::error('Error', "Kriteria Gagal Disimpan, Periksa Kembali !");
         }

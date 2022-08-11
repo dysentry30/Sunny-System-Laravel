@@ -58,7 +58,7 @@ return new class extends Migration
             $table->date("jadwal_pq")->nullable();
             $table->date("jadwal_proyek")->nullable();
             $table->string("hps_pagu")->nullable();
-            $table->string("porsi_jo")->nullable();
+            $table->string("porsi_jo")->nullable(); 
             $table->string("ketua_tender")->nullable();
             $table->string("laporan_prakualifikasi")->nullable();
             
@@ -66,13 +66,13 @@ return new class extends Migration
             $table->date("jadwal_tender")->nullable();
             $table->string("lokasi_tender")->nullable();
             $table->string("penawaran_tender")->nullable();
-            $table->string("hps_tender")->nullable();
+            // $table->string("hps_tender")->nullable();
             $table->string("laporan_tender")->nullable();
             
             //#table PEROLEHAN
             $table->string("biaya_praproyek")->nullable();
-            $table->string("penawaran_perolehan")->nullable();
-            $table->string("hps_perolehan")->nullable();
+            // $table->string("penawaran_perolehan")->nullable();
+            $table->string("nilai_perolehan")->nullable();
             $table->string("oe_wika")->nullable();
             $table->string("peringkat_wika")->nullable();
             $table->string("laporan_perolehan")->nullable();
@@ -85,18 +85,18 @@ return new class extends Migration
             //#table TERKONTRAK
             $table->string("nospk_external")->nullable();
             $table->date("tglspk_internal")->nullable();
-            $table->string("jenis_proyek_terkontrak")->nullable();
-            $table->string("porsijo_terkontrak")->nullable();
+            // $table->string("jenis_proyek_terkontrak")->nullable();
+            // $table->string("porsijo_terkontrak")->nullable();
             $table->integer("tahun_ri_perolehan")->nullable();
             $table->integer("bulan_ri_perolehan")->nullable();
-            $table->string("nilaiok_terkontrak")->nullable();
-            $table->string("matauang_terkontrak")->nullable();
+            // $table->string("nilaiok_terkontrak")->nullable();
+            // $table->string("matauang_terkontrak")->nullable();
             $table->string("nomor_terkontrak")->nullable();
-            $table->string("kursreview_terkontrak")->nullable();
+            // $table->string("kursreview_terkontrak")->nullable();
             $table->date("tanggal_terkontrak")->nullable();
             $table->string("nilai_kontrak_keseluruhan")->nullable();
             $table->date("tanggal_mulai_terkontrak")->nullable();
-            $table->string("nilai_wika_terkontrak")->nullable();
+            // $table->string("nilai_wika_terkontrak")->nullable();
             $table->date("tanggal_akhir_terkontrak")->nullable();
             $table->string("klasifikasi_terkontrak")->nullable();
             $table->date("tanggal_selesai_terkontrak")->nullable();

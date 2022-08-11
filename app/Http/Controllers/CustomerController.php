@@ -156,7 +156,7 @@ class CustomerController extends Controller
 
         // form company information
         $newCustomer->jenis_instansi = $data["jenis-instansi"];
-        $newCustomer->kode_proyek = $data["kodeproyek-company"];
+        // $newCustomer->kode_proyek = $data["kodeproyek-company"];
         $newCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $newCustomer->kode_nasabah = $data["kodenasabah-company"];
         $newCustomer->npwp_company = $data["npwp-company"];
@@ -237,7 +237,7 @@ class CustomerController extends Controller
 
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
-        $editCustomer->kode_proyek = $data["kodeproyek-company"];
+        $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
         // $editCustomer->journey_company = $data["journey-company"];

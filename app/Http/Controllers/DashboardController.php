@@ -20,15 +20,6 @@ class DashboardController extends Controller
      */
     function index(Request $request)
     {
-        // function flatten(array $array)
-        // {
-        //     $return = array();
-        //     array_walk_recursive($array, function ($a) use (&$return) {
-        //         $return[] = $a;
-        //     });
-        //     return $return;
-        // }
-
         //begin::History Forecast
         if ($request->get("periode-prognosa") || $request->get("tahun-history")) {
             $year = (int) $request->get("tahun-history") ?? (int) date("Y");
@@ -36,7 +27,7 @@ class DashboardController extends Controller
             $unit_kerja_get = $request->get("unit-kerja") ?? "";
         } else {
             $year = "";
-            $month = "";
+            $month = (int) date("m");
             $unit_kerja_get = "";
             // $nilaiHistoryForecast = HistoryForecast::all();
         }
@@ -167,33 +158,7 @@ class DashboardController extends Controller
         // End :: Nilai Realisasi Unit Kerja
 
         
-        // Begin :: menghitung total dari status dan jenis claim
-        $claim_status_array = [];
-        $claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim")->count();
-        $claim_disetujui = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Claim")->count();
-        $claim_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Claim")->count();
-        $claim_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Claim")->count();
-        array_push($claim_status_array, $claim_cancel, $claim_disetujui, $claim_ditolak, $claim_on_progress);
-        // End :: menghitung total dari status dan jenis claim
-
-        // Begin :: menghitung total dari status dan jenis anti claim
-        $anti_claim_status_array = [];
-        $anti_claim_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Anti Claim")->count();
-        $anti_claim_disetujui = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Anti Claim")->count();
-        $anti_claim_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Anti Claim")->count();
-        $anti_claim_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Anti Claim")->count();
-        array_push($anti_claim_status_array, $anti_claim_cancel, $anti_claim_disetujui, $anti_claim_ditolak, $anti_claim_on_progress);
-        // End :: menghitung total dari status dan jenis anti claim
         
-        // Begin :: menghitung total dari status dan jenis claim asuransi
-        $claim_asuransi_status_array = [];
-        $claim_asuransi_cancel = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim Asuransi")->count();
-        $claim_asuransi_disetujui = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Claim Asuransi")->count();
-        $claim_asuransi_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Claim Asuransi")->count();
-        $claim_asuransi_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Claim Asuransi")->count();
-        array_push($claim_asuransi_status_array, $claim_asuransi_cancel, $claim_asuransi_disetujui, $claim_asuransi_ditolak, $claim_asuransi_on_progress);
-        // End :: menghitung total dari status dan jenis claim asuransi
-
         //begin:: Monitoring Proyek
         $proses = 0;
         $menang = 0;
@@ -276,6 +241,33 @@ class DashboardController extends Controller
             };
         };
         //end::Marketing PipeLine
+        
+        // Begin :: menghitung total dari status dan jenis claim
+        $claim_status_array = [];
+        $claim_cancel = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Claim")->count();
+        $claim_disetujui = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim")->count();
+        $claim_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Claim")->count();
+        $claim_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Claim")->count();
+        array_push($claim_status_array, $claim_cancel, $claim_disetujui, $claim_ditolak, $claim_on_progress);
+        // End :: menghitung total dari status dan jenis claim
+
+        // Begin :: menghitung total dari status dan jenis anti claim
+        $anti_claim_status_array = [];
+        $anti_claim_cancel = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_disetujui = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Anti Claim")->count();
+        $anti_claim_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Anti Claim")->count();
+        array_push($anti_claim_status_array, $anti_claim_cancel, $anti_claim_disetujui, $anti_claim_ditolak, $anti_claim_on_progress);
+        // End :: menghitung total dari status dan jenis anti claim
+        
+        // Begin :: menghitung total dari status dan jenis claim asuransi
+        $claim_asuransi_status_array = [];
+        $claim_asuransi_cancel = $claims->where("stages", "=", "5")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_disetujui = $claims->where("stages", "=", "4")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_ditolak = $claims->where("stages", "=", "6")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        $claim_asuransi_on_progress = $claims->where("stages", "<=", "3")->where("jenis_claim", "=", "Claim Asuransi")->count();
+        array_push($claim_asuransi_status_array, $claim_asuransi_cancel, $claim_asuransi_disetujui, $claim_asuransi_ditolak, $claim_asuransi_on_progress);
+        // End :: menghitung total dari status dan jenis claim asuransi
         
         //begin::Pareto
         $paretoProyek = $proyeks->sortByDesc('forecast');
