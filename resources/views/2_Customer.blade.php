@@ -263,8 +263,8 @@
                                                             class="btn btn-sm btn-light btn-active-primary">Delete
                                                         </button>
                                                     </td>
-                                                    <!--end::Action-->
                                                 @endif
+                                                <!--end::Action-->
                                             </tr>
                                             @endforeach
                                                 

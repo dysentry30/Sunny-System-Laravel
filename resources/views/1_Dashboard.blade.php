@@ -62,15 +62,15 @@
 
 
                         <!--begin::Card header-->
-                        <div class="card-header pt-2">
+                        <div class="card-header py-1">
                             <!--begin::Card title-->
-                            <div class=" w-100">
+                            <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
                                     @if (Auth::user()->check_administrator)
                                         {{-- Begin :: Select Options Unit Kerja --}}
                                         <select id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-200px"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
@@ -86,7 +86,7 @@
 
                                     <!--begin::Select Options-->
                                     <select id="periode-prognosa" name="periode-prognosa"
-                                        class="form-select form-select-solid select2-hidden-accessible w-200px"
+                                        class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
@@ -116,12 +116,12 @@
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
                                         @if ($year == null)
-                                            @for ($i = $years - 3; $i < $years + 10; $i++)
+                                            @for ($i = $years - 2; $i < $years + 10; $i++)
                                                 <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                     {{ $i }}</option>
                                             @endfor
                                         @else
-                                            @for ($i = $year - 3; $i < $year + 10; $i++)
+                                            @for ($i = $year - 2; $i < $year + 10; $i++)
                                                 <option value="{{ $i }}" {{ $year == $i ? 'selected' : '' }}>
                                                     {{ $i }}</option>
                                             @endfor
@@ -130,8 +130,8 @@
                                     <!--end::Select Options-->
 
                                     <!--begin::Action Filter-->
-                                    <button type="submit" class="btn btn-sm btn-primary ms-4"
-                                        id="kt_toolbar_primary_button" style="background-color:#008CB4">
+                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                        id="kt_toolbar_primary_button">
                                         Filter</button>
 
                                     <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
@@ -336,7 +336,7 @@
                                                 <tr>
                                                     <!--begin::Name-->
                                                     <td>
-                                                        <a href="#" id=""
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id=""
                                                             class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
                                                         <!--end::Name-->
                                                         <!--begin::Unit Kerja-->
@@ -493,7 +493,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="#" id=""
+                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim" id=""
                                                                 class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
                                                             <!--end::Name-->
                                                             <!--begin::Unit Kerja-->
@@ -548,7 +548,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="#" id=""
+                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Anti-Claim" id=""
                                                                 class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
                                                             <!--end::Name-->
                                                             <!--begin::Unit Kerja-->
@@ -601,7 +601,7 @@
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
-                                                            <a href="#" id=""
+                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim-Asuransi" id=""
                                                                 class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
                                                             <!--end::Name-->
                                                             <!--begin::Unit Kerja-->
@@ -759,60 +759,6 @@
             credits: {
                 enabled: false
             },
-            // drilldown: {
-            //     breadcrumbs: {
-            //         // format: "{level.name}",
-            //         position: {
-            //             align: 'right',
-            //         }
-            //     },
-            //     series: [
-            //         {
-            //             name: "Monthly Forecast",
-            //             id: "Forecast",
-            //             // type: 'column',
-            //             data: [
-            //                 [
-            //                     21
-            //                 ],
-            //                 [
-            //                     13
-            //                 ],
-            //                 [
-            //                     50
-            //                 ],
-            //                 [
-            //                     44
-            //                 ],
-            //                 [
-            //                     28
-            //                 ],
-            //                 [
-            //                     35
-            //                 ],
-            //                 [
-            //                     21
-            //                 ],
-            //                 [
-            //                     13
-            //                 ],
-            //                 [
-            //                     50
-            //                 ],
-            //                 [
-            //                     44
-            //                 ],
-            //                 [
-            //                     28
-            //                 ],
-            //                 [
-            //                     35
-            //                 ]
-            //             ]
-            //         }
-            //     ]
-            // }
-
         });
     </script>
     <!--end::FORECAST LINE-->
@@ -922,11 +868,9 @@
                     depth: 100
                 }
             },
-
             title: {
                 text: '<b class="h1">Nilai Realisasi OK per Unit Kerja</b>'
             },
-
             xAxis: {
                 categories: kategoriunitKerja,
                 // categories: ['Apples', 'Oranges', 'Pears', 'Grapes', 'Bananas'],
@@ -937,7 +881,6 @@
                     }
                 }
             },
-
             yAxis: {
                 allowDecimals: false,
                 min: 0,
@@ -946,12 +889,10 @@
                     skew3d: true
                 }
             },
-
             tooltip: {
                 headerFormat: '<b>{point.key}</b><br>',
                 pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
             },
-
             plotOptions: {
                 // column: {
                 //     stacking: 'normal',
@@ -1388,18 +1329,20 @@
                     'Ditolak',
                     'On Progress'
                 ],
-                crosshair: true
+                // crosshair: true
             },
             yAxis: {
+                allowDecimals: false,
                 min: 0,
                 title: {
-                    text: ' '
+                    text: '',
+                    skew3d: true
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                headerFormat: '<span style="color:{series.color};font-size:14px"><b>{point.key}</b></span><table>',
+                pointFormat: '<tr><td style="color:{series.color};font-size:12px;padding:4px;">{series.name} : </td>' +
+                    '<td style="font-size:12px;padding:6px"><b>{point.y}</b></td></tr>',
                 footerFormat: '</table>',
                 shared: true,
                 useHTML: true
