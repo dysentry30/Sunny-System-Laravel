@@ -62,7 +62,11 @@
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Proyek
+                                    <h1 class="d-flex align-items-center fs-3 my-1">
+                                        Proyek - &nbsp;
+                                        <div class="text-truncate" style="max-width: 500px"  data-bs-toggle="tooltip" data-bs-title="{{ $proyek->nama_proyek }}" data-bs-custom-class="text-start">
+                                            {{ $proyek->nama_proyek }}
+                                        </div>
                                     </h1>
                                     <!--end::Title-->
                                 </div>
@@ -549,7 +553,7 @@
                                             });
                                         });
                                     </script>
-<!--end::Header Orange-->
+                                    <!--end::Header Orange-->
 
 
                                     <!--begin::All Content-->
@@ -572,7 +576,7 @@
                                                                 href="#kt_user_view_overview_pasardini"
                                                                 style="font-size:14px;">Pasar Dini</a>
                                                         </li>
-                                                        <!--end:::Tab item Pasar Dini-->
+                                                    <!--end:::Tab item Pasar Dini-->
                                                     @endif
 
                                                     @if ($proyek->stage > 1)
@@ -705,7 +709,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Unit Kerja <i class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Unit Kerja <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -747,14 +752,13 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Proyek <i
-                                                                                class="bi bi-lock-fill"></i></span>
+                                                                        <span class="required">Kode Proyek <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid"
-                                                                        id="kode-proyek" name="kode-proyek"
+                                                                        id="edit-kode-proyek" name="edit-kode-proyek"
                                                                         value="{{ $proyek->kode_proyek }}" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -773,23 +777,22 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Tipe Proyek <i
-                                                                                class="bi bi-lock-fill"></i></span>
+                                                                                class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <select id="tipe-proyek" name="tipe-proyek"
+                                                                    <select id="tipe-proyek" name="tipe-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Tipe Proyek">
-                                                                        <option selected>
-                                                                            {{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}
-                                                                        </option>
-                                                                    </select> --}}
-                                                                    <input type="text"
+                                                                        data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        <option value="R" {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>Retail</option>
+                                                                        <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option>
+                                                                    </select>
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="tipe-proyek" name="tipe-proyek"
                                                                         value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
-                                                                        readonly />
+                                                                        readonly /> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -801,23 +804,22 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Jenis Proyek <i
-                                                                                class="bi bi-lock-fill"></i></span>
+                                                                                class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
+                                                                    <select id="jenis-proyek" name="jenis-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Jenis Proyek">
-                                                                        <option selected>
-                                                                            {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
-                                                                        </option>
-                                                                    </select> --}}
-                                                                    <input type="text"
+                                                                        data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
+                                                                        <option value="E" {{ $proyek->jenis_proyek == 'E' ? 'selected' : '' }}>External</option>
+                                                                    </select>
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="jenis-proyek" name="jenis-proyek"
                                                                         value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
-                                                                        readonly />
+                                                                        readonly /> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -836,15 +838,28 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span class="required">Tahun Perolehan <i
-                                                                                class="bi bi-lock-fill"></i></span>
+                                                                                class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="number"
+                                                                    {{-- <input type="number"
                                                                         class="form-control form-control-solid"
                                                                         name="tahun-perolehan" min="2021"
                                                                         max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_perolehan }}" readonly />
+                                                                        value="{{ $proyek->tahun_perolehan }}" readonly /> --}}
+                                                                    @php
+                                                                        $years = $proyek->tahun_perolehan;
+                                                                    @endphp
+                                                                    <!--begin::Input-->
+                                                                    <select id="tahun-perolehan" name="tahun-perolehan"
+                                                                        class="form-select form-select-solid select2-hidden-accessible"
+                                                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
+                                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        @for ($i = 2021; $i < $years + 20; $i++)
+                                                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                                                {{ $i }}</option>
+                                                                        @endfor
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -953,7 +968,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Nilai OK RKAP</span>
+                                                                        <span class="required">Nilai OK RKAP <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -961,7 +976,7 @@
                                                                         class="form-control reformat form-control-solid"
                                                                         id="nilai-rkap" name="nilai-rkap"
                                                                         value="{{ $proyek->nilai_rkap }}"
-                                                                        placeholder="Nilai OK RKAP" />
+                                                                        placeholder="Nilai OK RKAP" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1020,7 +1035,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nama PIC</span>
+                                                                        <span>Nama PIC <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1028,7 +1043,7 @@
                                                                         class="form-control form-control-solid"
                                                                         id="pic" name="pic"
                                                                         value="{{ $proyek->pic ?? auth()->user()->name }}"
-                                                                        placeholder="Nama PIC" />
+                                                                        placeholder="Nama PIC" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1041,217 +1056,243 @@
                                                         <!--Begin::Title Biru Form: Nilai RKAP Review-->
                                                         &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Nilai RKAP Review
-                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a> --}}
+                                                            style="font-size:14px;">Nilai RKAP Review &nbsp;
+                                                            <i onclick="hideReview()" id="hide-review" class="bi bi-arrows-collapse"></i><i onclick="showReview()" id="show-review" style="display: none" class="bi bi-arrows-expand"></i> 
                                                         </h3>
-                                                        &nbsp;<br>
-                                                        <!--End::Title Biru Form: Nilai RKAP Review-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Review (Valas) (Exclude Tax)</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text" onkeyup="hitungReview()"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="nilai-valas-review" name="nilai-valas-review"
-                                                                        value="{{ $proyek->nilai_valas_review }}"
-                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Mata Uang</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <select id="mata-uang-review" name="mata-uang-review"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Mata Uang">
-                                                                        <option></option>
-                                                                        <option value="IDR"
-                                                                            {{ $proyek->mata_uang_review == 'IDR' ? 'selected' : '' }}>
-                                                                            IDR</option>
-                                                                        <option value="USD"
-                                                                            {{ $proyek->mata_uang_review == 'USD' ? 'selected' : '' }}>
-                                                                            USD</option>
-                                                                        <option value="YUAN"
-                                                                            {{ $proyek->mata_uang_review == 'YUAN' ? 'selected' : '' }}>
-                                                                            YUAN</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Review</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input onkeyup="hitungReview()" type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="kurs-review" name="kurs-review"
-                                                                        value="{{ $proyek->kurs_review }}"
-                                                                        placeholder="Kurs Review" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Bulan Pelaksanaan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <select id="bulan-pelaksanaan-review"
-                                                                        name="bulan-pelaksanaan-review"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Bulan Pelaksanaan">
-                                                                        <option></option>
-                                                                        <option value="1"
-                                                                            {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
-                                                                            Januari</option>
-                                                                        <option value="2"
-                                                                            {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
-                                                                            Februari</option>
-                                                                        <option value="3"
-                                                                            {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
-                                                                            Maret</option>
-                                                                        <option value="4"
-                                                                            {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
-                                                                            April</option>
-                                                                        <option value="5"
-                                                                            {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
-                                                                            Mei</option>
-                                                                        <option value="6"
-                                                                            {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
-                                                                            Juni</option>
-                                                                        <option value="7"
-                                                                            {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
-                                                                            Juli</option>
-                                                                        <option value="8"
-                                                                            {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
-                                                                            Agustus</option>
-                                                                        <option value="9"
-                                                                            {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
-                                                                            September</option>
-                                                                        <option value="10"
-                                                                            {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
-                                                                            Oktober</option>
-                                                                        <option value="11"
-                                                                            {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
-                                                                            November</option>
-                                                                        <option value="12"
-                                                                            {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
-                                                                            Desember</option>
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN) <i
-                                                                                class="bi bi-lock-fill"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="nilaiok-review" name="nilaiok-review"
-                                                                        value="{{ $proyek->nilaiok_review }}"
-                                                                        placeholder="Nilai OK (Exclude PPN)" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
                                                         <script>
-                                                            function hitungReview() {
-                                                                let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(",", "");
-                                                                // console.log(nilaiOkReview); 
-                                                                let kursReview = document.getElementById("kurs-review").value.replaceAll(",", "");
-                                                                let hasilOkReview = nilaiOkReview * kursReview;
-                                                                document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview);
+                                                            function hideReview() {
+                                                                document.getElementById("divRkapReview").style.display = "none";
+                                                                document.getElementById("hide-review").style.display = "none";
+                                                                document.getElementById("show-review").style.display = "";
+                                                            }
+                                                            function showReview() {
+                                                                document.getElementById("divRkapReview").style.display = "";
+                                                                document.getElementById("hide-review").style.display = "";
+                                                                document.getElementById("show-review").style.display = "none";
                                                             }
                                                         </script>
+                                                        <br>
+                                                        <div id="divRkapReview">
+                                                        <!--End::Title Biru Form: Nilai RKAP Review-->
+
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai OK Review (Valas) (Exclude Tax) <i class="bi bi-key"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" onkeyup="hitungReview()"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            id="nilai-valas-review" name="nilai-valas-review"
+                                                                            value="{{ $proyek->nilai_valas_review }}"
+                                                                            placeholder="Nilai OK Review (Valas) (Exclude Tax)" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Mata Uang <i class="bi bi-key"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--Begin::Input-->
+                                                                        <select id="mata-uang-review" name="mata-uang-review"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Pilih Mata Uang" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                            <option></option>
+                                                                            <option value="IDR"
+                                                                                {{ $proyek->mata_uang_review == 'IDR' ? 'selected' : '' }}>
+                                                                                IDR</option>
+                                                                            <option value="USD"
+                                                                                {{ $proyek->mata_uang_review == 'USD' ? 'selected' : '' }}>
+                                                                                USD</option>
+                                                                            <option value="YUAN"
+                                                                                {{ $proyek->mata_uang_review == 'YUAN' ? 'selected' : '' }}>
+                                                                                YUAN</option>
+                                                                        </select>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End::Col-->
+                                                            </div>
+                                                            <!--End::Row Kanan+Kiri-->
+
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Kurs Review <i class="bi bi-key"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input onkeyup="hitungReview()" type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            id="kurs-review" name="kurs-review"
+                                                                            value="{{ $proyek->kurs_review }}"
+                                                                            placeholder="Kurs Review" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Bulan Pelaksanaan <i class="bi bi-key"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--Begin::Input-->
+                                                                        <select id="bulan-pelaksanaan-review"
+                                                                            name="bulan-pelaksanaan-review"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Pilih Bulan Pelaksanaan" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                            <option></option>
+                                                                            <option value="1"
+                                                                                {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
+                                                                                Januari</option>
+                                                                            <option value="2"
+                                                                                {{ $proyek->bulan_review == '2' ? 'selected' : '' }}>
+                                                                                Februari</option>
+                                                                            <option value="3"
+                                                                                {{ $proyek->bulan_review == '3' ? 'selected' : '' }}>
+                                                                                Maret</option>
+                                                                            <option value="4"
+                                                                                {{ $proyek->bulan_review == '4' ? 'selected' : '' }}>
+                                                                                April</option>
+                                                                            <option value="5"
+                                                                                {{ $proyek->bulan_review == '5' ? 'selected' : '' }}>
+                                                                                Mei</option>
+                                                                            <option value="6"
+                                                                                {{ $proyek->bulan_review == '6' ? 'selected' : '' }}>
+                                                                                Juni</option>
+                                                                            <option value="7"
+                                                                                {{ $proyek->bulan_review == '7' ? 'selected' : '' }}>
+                                                                                Juli</option>
+                                                                            <option value="8"
+                                                                                {{ $proyek->bulan_review == '8' ? 'selected' : '' }}>
+                                                                                Agustus</option>
+                                                                            <option value="9"
+                                                                                {{ $proyek->bulan_review == '9' ? 'selected' : '' }}>
+                                                                                September</option>
+                                                                            <option value="10"
+                                                                                {{ $proyek->bulan_review == '10' ? 'selected' : '' }}>
+                                                                                Oktober</option>
+                                                                            <option value="11"
+                                                                                {{ $proyek->bulan_review == '11' ? 'selected' : '' }}>
+                                                                                November</option>
+                                                                            <option value="12"
+                                                                                {{ $proyek->bulan_review == '12' ? 'selected' : '' }}>
+                                                                                Desember</option>
+                                                                        </select>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End::Col-->
+                                                            </div>
+                                                            <!--End::Row Kanan+Kiri-->
+
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai OK (Exclude PPN) <i class="bi bi-key"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            id="nilaiok-review" name="nilaiok-review"
+                                                                            value="{{ $proyek->nilaiok_review }}"
+                                                                            placeholder="Nilai OK (Exclude PPN)" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End::Col-->
+                                                            </div>
+                                                            <!--End::Row Kanan+Kiri-->
+
+                                                            <script>
+                                                                function hitungReview() {
+                                                                    let nilaiOkReview = document.getElementById("nilai-valas-review").value.replaceAll(",", "");
+                                                                    // console.log(nilaiOkReview); 
+                                                                    let kursReview = document.getElementById("kurs-review").value.replaceAll(",", "");
+                                                                    let hasilOkReview = nilaiOkReview * kursReview;
+                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview);
+                                                                }
+                                                            </script>
+                                                        </div> <!--divRkapReview--> 
 
 
                                                         <!--Begin::Title Biru Form: Nilai RKAP Awal-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Nilai RKAP Awal
-                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_create_proyek">+</a> --}}
+                                                            style="font-size:14px;">Nilai RKAP Awal &nbsp;
+                                                            <i onclick="hideColumn()" id="hide-button" class="bi bi-arrows-collapse"></i><i onclick="showColumn()" id="show-button" style="display: none" class="bi bi-arrows-expand"></i> 
                                                         </h3>
-                                                        &nbsp;<br>
-                                                        <!--End::Title Biru Form: Nilai RKAP Awal-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
+                                                        <script>
+                                                            function hideColumn() {
+                                                                document.getElementById("divRkapAwal").style.display = "none";
+                                                                document.getElementById("hide-button").style.display = "none";
+                                                                document.getElementById("show-button").style.display = "";
+                                                            }
+                                                            function showColumn() {
+                                                                document.getElementById("divRkapAwal").style.display = "";
+                                                                document.getElementById("hide-button").style.display = "";
+                                                                document.getElementById("show-button").style.display = "none";
+                                                            }
+                                                        </script>
+                                                        <br>
+                                                        <div id="divRkapAwal">
+                                                            <!--End::Title Biru Form: Nilai RKAP Awal-->
+                                                            
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Nilai OK Awal (Valas) (Exclude Tax) <i
-                                                                                class="bi bi-lock-fill"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text" onkeyup="hitungAwal()"
+                                                                            class="bi bi-lock"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text" onkeyup="hitungAwal()"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
                                                                         value="{{ $proyek->nilai_valas_awal }}"
                                                                         placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
                                                                         readonly />
-                                                                    <!--end::Input-->
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
                                                                 </div>
-                                                                <!--end::Input group-->
-                                                            </div>
                                                             <!--End begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -1263,164 +1304,165 @@
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
                                                                     <select id="mata-uang-awal" name="mata-uang-awal"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Mata Uang">
-                                                                        <option></option>
-                                                                        <option value="IDR"
-                                                                            {{ $proyek->mata_uang_awal == 'IDR' ? 'selected' : '' }}>
-                                                                            IDR</option>
-                                                                        <option value="USD"
-                                                                            {{ $proyek->mata_uang_awal == 'USD' ? 'selected' : '' }}>
-                                                                            USD</option>
-                                                                        <option value="YUAN"
-                                                                            {{ $proyek->mata_uang_awal == 'YUAN' ? 'selected' : '' }}>
-                                                                            YUAN</option>
-                                                                    </select>
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Mata Uang"  >
+                                                                    <option></option>
+                                                                    <option value="IDR"
+                                                                    {{ $proyek->mata_uang_awal == 'IDR' ? 'selected' : '' }}>
+                                                                    IDR</option>
+                                                                    <option value="USD"
+                                                                    {{ $proyek->mata_uang_awal == 'USD' ? 'selected' : '' }}>
+                                                                    USD</option>
+                                                                    <option value="YUAN"
+                                                                    {{ $proyek->mata_uang_awal == 'YUAN' ? 'selected' : '' }}>
+                                                                    YUAN</option>
+                                                                </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Awal</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input onkeyup="hitungAwal()" type="text"
+                                                            </div>
+                                                            <!--End::Row Kanan+Kiri-->
+                                                            
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Kurs Awal</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        
+                                                                        <!--begin::Input-->
+                                                                        <input onkeyup="hitungAwal()" type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="kurs-awal" name="kurs-awal"
                                                                         value="{{ $proyek->kurs_awal }}"
                                                                         placeholder="Kurs Awal" />
-                                                                    <!--end::Input-->
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
                                                                 </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Bulan Pelaksanaan <i
-                                                                                class="bi bi-lock-fill"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--Begin::Input-->
-                                                                    <select id="bulan-pelaksanaan-awal"
-                                                                        name="bulan-pelaksanaan-awal"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Bulan Pelaksanaan">
-                                                                        <option></option>
-                                                                        <option selected>
-                                                                            @switch($proyek->bulan_awal)
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Bulan Pelaksanaan <i
+                                                                                class="bi bi-lock"></i></span>
+                                                                            </label>
+                                                                            <!--end::Label-->
+                                                                            <!--Begin::Input-->
+                                                                            <select id="bulan-pelaksanaan-awal"
+                                                                            name="bulan-pelaksanaan-awal"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2" data-hide-search="true"
+                                                                            data-placeholder="Bulan Pelaksanaan" disabled>
+                                                                            <option></option>
+                                                                            <option selected>
+                                                                                @switch($proyek->bulan_awal)
                                                                                 @case('1')
-                                                                                    Januari
+                                                                                Januari
                                                                                 @break
-
+                                                                                
                                                                                 @case('2')
-                                                                                    Februari
+                                                                                Februari
                                                                                 @break
-
+                                                                                
                                                                                 @case('3')
-                                                                                    Maret
+                                                                                Maret
                                                                                 @break
-
+                                                                                
                                                                                 @case('4')
-                                                                                    April
+                                                                                April
                                                                                 @break
 
                                                                                 @case('5')
-                                                                                    Mei
+                                                                                Mei
                                                                                 @break
 
-                                                                                @case('6')
-                                                                                    Juni
-                                                                                @break
+                                                                                    @case('6')
+                                                                                        Juni
+                                                                                    @break
 
-                                                                                @case('7')
+                                                                                    @case('7')
                                                                                     Juli
-                                                                                @break
-
-                                                                                @case('8')
+                                                                                    @break
+                                                                                    
+                                                                                    @case('8')
                                                                                     Agustus
-                                                                                @break
-
-                                                                                @case('9')
+                                                                                    @break
+                                                                                    
+                                                                                    @case('9')
                                                                                     September
-                                                                                @break
-
-                                                                                @case('10')
+                                                                                    @break
+                                                                                    
+                                                                                    @case('10')
                                                                                     Oktober
-                                                                                @break
-
-                                                                                @case('11')
+                                                                                    @break
+                                                                                    
+                                                                                    @case('11')
                                                                                     November
-                                                                                @break
-
-                                                                                @case('12')
+                                                                                    @break
+                                                                                    
+                                                                                    @case('12')
                                                                                     Desember
-                                                                                @break
-
-                                                                                @default
-                                                                                    Selesai
-                                                                            @endswitch
-                                                                        </option>
-                                                                    </select>
-                                                                    <!--end::Input-->
+                                                                                    @break
+                                                                                    
+                                                                                    @default
+                                                                                        Selesai
+                                                                                @endswitch
+                                                                            </option>
+                                                                        </select>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
                                                                 </div>
-                                                                <!--end::Input group-->
+                                                                <!--End::Col-->
                                                             </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <!--End::Row Kanan+Kiri-->
-
-                                                        <!--begin::Row Kanan+Kiri-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Exclude PPN) <i
-                                                                                class="bi bi-lock-fill"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        id="nilaiok-awal" name="nilaiok-awal"
-                                                                        value="{{ $proyek->nilaiok_awal }}"
-                                                                        placeholder="Nilai OK (Exclude PPN)" readonly />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
+                                                            <!--End::Row Kanan+Kiri-->
+                                                            
+                                                            <!--begin::Row Kanan+Kiri-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai OK (Exclude PPN) <i
+                                                                                class="bi bi-lock"></i></span>
+                                                                            </label>
+                                                                            <!--end::Label-->
+                                                                            
+                                                                            <!--begin::Input-->
+                                                                            <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            id="nilaiok-awal" name="nilaiok-awal"
+                                                                            value="{{ $proyek->nilaiok_awal }}"
+                                                                            placeholder="Nilai OK (Exclude PPN)" readonly />
+                                                                            <!--end::Input-->
+                                                                        </div>
+                                                                        <!--end::Input group-->
+                                                                    </div>
+                                                                <!--End::Col-->
                                                             </div>
-                                                            <!--End::Col-->
-                                                        </div>
-                                                        <script>
-                                                            function hitungAwal() {
-                                                                let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(",", "");
-                                                                let kursAwal = document.getElementById("kurs-awal").value.replaceAll(",", "");
-                                                                let hasilOkAwal = nilaiOkAwal * kursAwal;
-                                                                document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal);
-                                                            }
-                                                        </script>
-                                                        <!--End::Row Kanan+Kiri-->
+                                                            <script>
+                                                                function hitungAwal() {
+                                                                    let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(",", "");
+                                                                    let kursAwal = document.getElementById("kurs-awal").value.replaceAll(",", "");
+                                                                    let hasilOkAwal = nilaiOkAwal * kursAwal;
+                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal);
+                                                                }
+                                                                </script>
+                                                            <!--End::Row Kanan+Kiri-->
+                                                        </div> <!--divRkapAwal-->
 
                                                         <!--Begin::Title Biru Form: Kriteria pasar-->
                                                         <br>
@@ -1461,8 +1503,13 @@
                                                                         <!--end::Name-->
                                                                         <!--begin::Kategori-->
                                                                         <td>
-                                                                            <a onclick="kategoriKlick(this)" data-value="{{ $kriteria->kategori }}" data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}" href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
+                                                                            <a onclick="kategoriKlick(this)"
+                                                                                data-value="{{ $kriteria->kategori }}"
+                                                                                data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}"
+                                                                                href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
                                                                         </td>
                                                                         <!--end::Kategori-->
                                                                         <!--begin::Kategori-->
@@ -1481,7 +1528,8 @@
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_kriteria_delete_{{ $kriteria->id }}"
                                                                                     id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">Delete
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
                                                                                 </p>
                                                                             </small>
                                                                         </td>
@@ -1554,247 +1602,6 @@
                                                                         id="negara" name="negara"
                                                                         value="{{ $proyek->negara }}"
                                                                         placeholder="Negara" />
-                                                                    {{-- <select>
-                                                                        <option value="Afghanistan">Afghanistan</option>
-                                                                        <option value="Albania">Albania</option>
-                                                                        <option value="Algeria">Algeria</option>
-                                                                        <option value="American Samoa">American Samoa</option>
-                                                                        <option value="Andorra">Andorra</option>
-                                                                        <option value="Angola">Angola</option>
-                                                                        <option value="Anguilla">Anguilla</option>
-                                                                        <option value="Antartica">Antarctica</option>
-                                                                        <option value="Antigua and Barbuda">Antigua and Barbuda</option>
-                                                                        <option value="Argentina">Argentina</option>
-                                                                        <option value="Armenia">Armenia</option>
-                                                                        <option value="Aruba">Aruba</option>
-                                                                        <option value="Australia">Australia</option>
-                                                                        <option value="Austria">Austria</option>
-                                                                        <option value="Azerbaijan">Azerbaijan</option>
-                                                                        <option value="Bahamas">Bahamas</option>
-                                                                        <option value="Bahrain">Bahrain</option>
-                                                                        <option value="Bangladesh">Bangladesh</option>
-                                                                        <option value="Barbados">Barbados</option>
-                                                                        <option value="Belarus">Belarus</option>
-                                                                        <option value="Belgium">Belgium</option>
-                                                                        <option value="Belize">Belize</option>
-                                                                        <option value="Benin">Benin</option>
-                                                                        <option value="Bermuda">Bermuda</option>
-                                                                        <option value="Bhutan">Bhutan</option>
-                                                                        <option value="Bolivia">Bolivia</option>
-                                                                        <option value="Bosnia and Herzegowina">Bosnia and Herzegowina</option>
-                                                                        <option value="Botswana">Botswana</option>
-                                                                        <option value="Bouvet Island">Bouvet Island</option>
-                                                                        <option value="Brazil">Brazil</option>
-                                                                        <option value="British Indian Ocean Territory">British Indian Ocean Territory</option>
-                                                                        <option value="Brunei Darussalam">Brunei Darussalam</option>
-                                                                        <option value="Bulgaria">Bulgaria</option>
-                                                                        <option value="Burkina Faso">Burkina Faso</option>
-                                                                        <option value="Burundi">Burundi</option>
-                                                                        <option value="Cambodia">Cambodia</option>
-                                                                        <option value="Cameroon">Cameroon</option>
-                                                                        <option value="Canada">Canada</option>
-                                                                        <option value="Cape Verde">Cape Verde</option>
-                                                                        <option value="Cayman Islands">Cayman Islands</option>
-                                                                        <option value="Central African Republic">Central African Republic</option>
-                                                                        <option value="Chad">Chad</option>
-                                                                        <option value="Chile">Chile</option>
-                                                                        <option value="China">China</option>
-                                                                        <option value="Christmas Island">Christmas Island</option>
-                                                                        <option value="Cocos Islands">Cocos (Keeling) Islands</option>
-                                                                        <option value="Colombia">Colombia</option>
-                                                                        <option value="Comoros">Comoros</option>
-                                                                        <option value="Congo">Congo</option>
-                                                                        <option value="Congo">Congo, the Democratic Republic of the</option>
-                                                                        <option value="Cook Islands">Cook Islands</option>
-                                                                        <option value="Costa Rica">Costa Rica</option>
-                                                                        <option value="Cota D'Ivoire">Cote d'Ivoire</option>
-                                                                        <option value="Croatia">Croatia (Hrvatska)</option>
-                                                                        <option value="Cuba">Cuba</option>
-                                                                        <option value="Cyprus">Cyprus</option>
-                                                                        <option value="Czech Republic">Czech Republic</option>
-                                                                        <option value="Denmark">Denmark</option>
-                                                                        <option value="Djibouti">Djibouti</option>
-                                                                        <option value="Dominica">Dominica</option>
-                                                                        <option value="Dominican Republic">Dominican Republic</option>
-                                                                        <option value="East Timor">East Timor</option>
-                                                                        <option value="Ecuador">Ecuador</option>
-                                                                        <option value="Egypt">Egypt</option>
-                                                                        <option value="El Salvador">El Salvador</option>
-                                                                        <option value="Equatorial Guinea">Equatorial Guinea</option>
-                                                                        <option value="Eritrea">Eritrea</option>
-                                                                        <option value="Estonia">Estonia</option>
-                                                                        <option value="Ethiopia">Ethiopia</option>
-                                                                        <option value="Falkland Islands">Falkland Islands (Malvinas)</option>
-                                                                        <option value="Faroe Islands">Faroe Islands</option>
-                                                                        <option value="Fiji">Fiji</option>
-                                                                        <option value="Finland">Finland</option>
-                                                                        <option value="France">France</option>
-                                                                        <option value="France Metropolitan">France, Metropolitan</option>
-                                                                        <option value="French Guiana">French Guiana</option>
-                                                                        <option value="French Polynesia">French Polynesia</option>
-                                                                        <option value="French Southern Territories">French Southern Territories</option>
-                                                                        <option value="Gabon">Gabon</option>
-                                                                        <option value="Gambia">Gambia</option>
-                                                                        <option value="Georgia">Georgia</option>
-                                                                        <option value="Germany">Germany</option>
-                                                                        <option value="Ghana">Ghana</option>
-                                                                        <option value="Gibraltar">Gibraltar</option>
-                                                                        <option value="Greece">Greece</option>
-                                                                        <option value="Greenland">Greenland</option>
-                                                                        <option value="Grenada">Grenada</option>
-                                                                        <option value="Guadeloupe">Guadeloupe</option>
-                                                                        <option value="Guam">Guam</option>
-                                                                        <option value="Guatemala">Guatemala</option>
-                                                                        <option value="Guinea">Guinea</option>
-                                                                        <option value="Guinea-Bissau">Guinea-Bissau</option>
-                                                                        <option value="Guyana">Guyana</option>
-                                                                        <option value="Haiti">Haiti</option>
-                                                                        <option value="Heard and McDonald Islands">Heard and Mc Donald Islands</option>
-                                                                        <option value="Holy See">Holy See (Vatican City State)</option>
-                                                                        <option value="Honduras">Honduras</option>
-                                                                        <option value="Hong Kong">Hong Kong</option>
-                                                                        <option value="Hungary">Hungary</option>
-                                                                        <option value="Iceland">Iceland</option>
-                                                                        <option value="India">India</option>
-                                                                        <option value="Indonesia">Indonesia</option>
-                                                                        <option value="Iran">Iran (Islamic Republic of)</option>
-                                                                        <option value="Iraq">Iraq</option>
-                                                                        <option value="Ireland">Ireland</option>
-                                                                        <option value="Israel">Israel</option>
-                                                                        <option value="Italy">Italy</option>
-                                                                        <option value="Jamaica">Jamaica</option>
-                                                                        <option value="Japan">Japan</option>
-                                                                        <option value="Jordan">Jordan</option>
-                                                                        <option value="Kazakhstan">Kazakhstan</option>
-                                                                        <option value="Kenya">Kenya</option>
-                                                                        <option value="Kiribati">Kiribati</option>
-                                                                        <option value="Democratic People's Republic of Korea">Korea, Democratic People's Republic of</option>
-                                                                        <option value="Korea">Korea, Republic of</option>
-                                                                        <option value="Kuwait">Kuwait</option>
-                                                                        <option value="Kyrgyzstan">Kyrgyzstan</option>
-                                                                        <option value="Lao">Lao People's Democratic Republic</option>
-                                                                        <option value="Latvia">Latvia</option>
-                                                                        <option value="Lebanon" selected>Lebanon</option>
-                                                                        <option value="Lesotho">Lesotho</option>
-                                                                        <option value="Liberia">Liberia</option>
-                                                                        <option value="Libyan Arab Jamahiriya">Libyan Arab Jamahiriya</option>
-                                                                        <option value="Liechtenstein">Liechtenstein</option>
-                                                                        <option value="Lithuania">Lithuania</option>
-                                                                        <option value="Luxembourg">Luxembourg</option>
-                                                                        <option value="Macau">Macau</option>
-                                                                        <option value="Macedonia">Macedonia, The Former Yugoslav Republic of</option>
-                                                                        <option value="Madagascar">Madagascar</option>
-                                                                        <option value="Malawi">Malawi</option>
-                                                                        <option value="Malaysia">Malaysia</option>
-                                                                        <option value="Maldives">Maldives</option>
-                                                                        <option value="Mali">Mali</option>
-                                                                        <option value="Malta">Malta</option>
-                                                                        <option value="Marshall Islands">Marshall Islands</option>
-                                                                        <option value="Martinique">Martinique</option>
-                                                                        <option value="Mauritania">Mauritania</option>
-                                                                        <option value="Mauritius">Mauritius</option>
-                                                                        <option value="Mayotte">Mayotte</option>
-                                                                        <option value="Mexico">Mexico</option>
-                                                                        <option value="Micronesia">Micronesia, Federated States of</option>
-                                                                        <option value="Moldova">Moldova, Republic of</option>
-                                                                        <option value="Monaco">Monaco</option>
-                                                                        <option value="Mongolia">Mongolia</option>
-                                                                        <option value="Montserrat">Montserrat</option>
-                                                                        <option value="Morocco">Morocco</option>
-                                                                        <option value="Mozambique">Mozambique</option>
-                                                                        <option value="Myanmar">Myanmar</option>
-                                                                        <option value="Namibia">Namibia</option>
-                                                                        <option value="Nauru">Nauru</option>
-                                                                        <option value="Nepal">Nepal</option>
-                                                                        <option value="Netherlands">Netherlands</option>
-                                                                        <option value="Netherlands Antilles">Netherlands Antilles</option>
-                                                                        <option value="New Caledonia">New Caledonia</option>
-                                                                        <option value="New Zealand">New Zealand</option>
-                                                                        <option value="Nicaragua">Nicaragua</option>
-                                                                        <option value="Niger">Niger</option>
-                                                                        <option value="Nigeria">Nigeria</option>
-                                                                        <option value="Niue">Niue</option>
-                                                                        <option value="Norfolk Island">Norfolk Island</option>
-                                                                        <option value="Northern Mariana Islands">Northern Mariana Islands</option>
-                                                                        <option value="Norway">Norway</option>
-                                                                        <option value="Oman">Oman</option>
-                                                                        <option value="Pakistan">Pakistan</option>
-                                                                        <option value="Palau">Palau</option>
-                                                                        <option value="Panama">Panama</option>
-                                                                        <option value="Papua New Guinea">Papua New Guinea</option>
-                                                                        <option value="Paraguay">Paraguay</option>
-                                                                        <option value="Peru">Peru</option>
-                                                                        <option value="Philippines">Philippines</option>
-                                                                        <option value="Pitcairn">Pitcairn</option>
-                                                                        <option value="Poland">Poland</option>
-                                                                        <option value="Portugal">Portugal</option>
-                                                                        <option value="Puerto Rico">Puerto Rico</option>
-                                                                        <option value="Qatar">Qatar</option>
-                                                                        <option value="Reunion">Reunion</option>
-                                                                        <option value="Romania">Romania</option>
-                                                                        <option value="Russia">Russian Federation</option>
-                                                                        <option value="Rwanda">Rwanda</option>
-                                                                        <option value="Saint Kitts and Nevis">Saint Kitts and Nevis</option> 
-                                                                        <option value="Saint LUCIA">Saint LUCIA</option>
-                                                                        <option value="Saint Vincent">Saint Vincent and the Grenadines</option>
-                                                                        <option value="Samoa">Samoa</option>
-                                                                        <option value="San Marino">San Marino</option>
-                                                                        <option value="Sao Tome and Principe">Sao Tome and Principe</option> 
-                                                                        <option value="Saudi Arabia">Saudi Arabia</option>
-                                                                        <option value="Senegal">Senegal</option>
-                                                                        <option value="Seychelles">Seychelles</option>
-                                                                        <option value="Sierra">Sierra Leone</option>
-                                                                        <option value="Singapore">Singapore</option>
-                                                                        <option value="Slovakia">Slovakia (Slovak Republic)</option>
-                                                                        <option value="Slovenia">Slovenia</option>
-                                                                        <option value="Solomon Islands">Solomon Islands</option>
-                                                                        <option value="Somalia">Somalia</option>
-                                                                        <option value="South Africa">South Africa</option>
-                                                                        <option value="South Georgia">South Georgia and the South Sandwich Islands</option>
-                                                                        <option value="Span">Spain</option>
-                                                                        <option value="SriLanka">Sri Lanka</option>
-                                                                        <option value="St. Helena">St. Helena</option>
-                                                                        <option value="St. Pierre and Miguelon">St. Pierre and Miquelon</option>
-                                                                        <option value="Sudan">Sudan</option>
-                                                                        <option value="Suriname">Suriname</option>
-                                                                        <option value="Svalbard">Svalbard and Jan Mayen Islands</option>
-                                                                        <option value="Swaziland">Swaziland</option>
-                                                                        <option value="Sweden">Sweden</option>
-                                                                        <option value="Switzerland">Switzerland</option>
-                                                                        <option value="Syria">Syrian Arab Republic</option>
-                                                                        <option value="Taiwan">Taiwan, Province of China</option>
-                                                                        <option value="Tajikistan">Tajikistan</option>
-                                                                        <option value="Tanzania">Tanzania, United Republic of</option>
-                                                                        <option value="Thailand">Thailand</option>
-                                                                        <option value="Togo">Togo</option>
-                                                                        <option value="Tokelau">Tokelau</option>
-                                                                        <option value="Tonga">Tonga</option>
-                                                                        <option value="Trinidad and Tobago">Trinidad and Tobago</option>
-                                                                        <option value="Tunisia">Tunisia</option>
-                                                                        <option value="Turkey">Turkey</option>
-                                                                        <option value="Turkmenistan">Turkmenistan</option>
-                                                                        <option value="Turks and Caicos">Turks and Caicos Islands</option>
-                                                                        <option value="Tuvalu">Tuvalu</option>
-                                                                        <option value="Uganda">Uganda</option>
-                                                                        <option value="Ukraine">Ukraine</option>
-                                                                        <option value="United Arab Emirates">United Arab Emirates</option>
-                                                                        <option value="United Kingdom">United Kingdom</option>
-                                                                        <option value="United States">United States</option>
-                                                                        <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
-                                                                        <option value="Uruguay">Uruguay</option>
-                                                                        <option value="Uzbekistan">Uzbekistan</option>
-                                                                        <option value="Vanuatu">Vanuatu</option>
-                                                                        <option value="Venezuela">Venezuela</option>
-                                                                        <option value="Vietnam">Viet Nam</option>
-                                                                        <option value="Virgin Islands (British)">Virgin Islands (British)</option>
-                                                                        <option value="Virgin Islands (U.S)">Virgin Islands (U.S.)</option>
-                                                                        <option value="Wallis and Futana Islands">Wallis and Futuna Islands</option>
-                                                                        <option value="Western Sahara">Western Sahara</option>
-                                                                        <option value="Yemen">Yemen</option>
-                                                                        <option value="Serbia">Serbia</option>
-                                                                        <option value="Zambia">Zambia</option>
-                                                                        <option value="Zimbabwe">Zimbabwe</option>
-                                                                    </select> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1886,7 +1693,7 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Status Pasar <i
-                                                                                class="bi bi-lock-fill"></i></span>
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1938,7 +1745,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>DOP <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>DOP <i class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1965,7 +1772,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Company <i class="bi bi-lock-fill"></i>
+                                                                        <span>Company <i class="bi bi-lock"></i>
                                                                         </span>
                                                                     </label>
                                                                     <!--end::Label-->
@@ -2030,8 +1837,13 @@
                                                                         <!--end::Name-->
                                                                         <!--begin::Kategori-->
                                                                         <td>
-                                                                            <a onclick="kategoriKlick(this)" data-value="{{ $kriteria->kategori }}" data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}" href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
-                                                                            data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
+                                                                            <a onclick="kategoriKlick(this)"
+                                                                                data-value="{{ $kriteria->kategori }}"
+                                                                                data-kriteria="edit-kriteria-pasar-{{ $kriteria->id }}"
+                                                                                href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_kriteria_{{ $kriteria->id }}">{{ $kriteria->kategori }}</a>
                                                                         </td>
                                                                         <!--end::Kategori-->
                                                                         <!--begin::Kategori-->
@@ -2050,7 +1862,8 @@
                                                                                 <p data-bs-toggle="modal"
                                                                                     data-bs-target="#kt_kriteria_delete_{{ $kriteria->id }}"
                                                                                     id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">Delete
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
                                                                                 </p>
                                                                             </small>
                                                                         </td>
@@ -2082,7 +1895,7 @@
                                                         </table>
                                                         <!--end::Table Kriteria Pasar-->
                                                         <!--End::Title Biru Form: Kriteria pasar-->
-                                                        
+
                                                         &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Laporan Kualitatif
@@ -2095,10 +1908,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab Pasar Potensial-->
+                                                    <!--end:::Tab Pasar Potensial-->
 
 
-<!--begin:::Tab Prakualifikasi-->
+                                                    <!--begin:::Tab Prakualifikasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_prakualifikasi"
                                                         role="tabpanel">
 
@@ -2186,17 +1999,19 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i class="bi bi-percent text-dark"></i>)</span>
+                                                                        <span>Porsi JO (<i
+                                                                                class="bi bi-percent text-dark"></i>)</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                    class="form-control form-control-solid"
-                                                                    id="porsi-jo" name="porsi-jo"
-                                                                    value="{{ $proyek->porsi_jo }}"
-                                                                    placeholder="Porsi JO"/>
+                                                                        class="form-control form-control-solid"
+                                                                        id="porsi-jo" name="porsi-jo"
+                                                                        value="{{ $proyek->porsi_jo }}"
+                                                                        placeholder="Porsi JO" />
                                                                     @error('porsi-jo')
-                                                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                                                        <h6 class="text-danger fw-normal">{{ $message }}
+                                                                        </h6>
                                                                     @enderror
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2206,7 +2021,8 @@
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                 </label>
-                                                                <p class="mt-12"><i class="bi bi-percent text-dark"></i></p>
+                                                                <p class="mt-12"><i class="bi bi-percent text-dark"></i>
+                                                                </p>
                                                                 <!--end::Label-->
                                                             </div>
                                                             <!--End begin::Col-->
@@ -2399,11 +2215,11 @@
 
 
                                                     </div>
-<!--end:::Tab pane Prakualifikasi-->
+                                                    <!--end:::Tab pane Prakualifikasi-->
 
 
 
-<!--begin:::Tab pane Tender Diikuti-->
+                                                    <!--begin:::Tab pane Tender Diikuti-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_tender"
                                                         role="tabpanel">
 
@@ -2473,7 +2289,8 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
-                                                                        id="nilai-kontrak-penawaran" name="nilai-kontrak-penawaran"
+                                                                        id="nilai-kontrak-penawaran"
+                                                                        name="nilai-kontrak-penawaran"
                                                                         value="{{ $proyek->penawaran_tender }}"
                                                                         placeholder="Nilai Penawaran" />
                                                                     <!--end::Input-->
@@ -2486,14 +2303,15 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS/Pagu Rupiah <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>HPS/Pagu Rupiah <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->hps_pagu ?? "*HPS/Pagu Belum Ditentukan" }}"
-                                                                        placeholder="HPS / Pagu" readonly/>
+                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->hps_pagu ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                        placeholder="HPS / Pagu" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2515,10 +2333,10 @@
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab pane Tender Diikuti-->
+                                                    <!--end:::Tab pane Tender Diikuti-->
 
 
-<!--begin:::Tab Perolehan-->
+                                                    <!--begin:::Tab Perolehan-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_perolehan"
                                                         role="tabpanel">
 
@@ -2550,7 +2368,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Penawaran <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai Penawaran <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2559,7 +2378,7 @@
                                                                         id="penawaran-perolehan"
                                                                         name="penawaran-perolehan"
                                                                         value="{{ $proyek->penawaran_tender }}"
-                                                                        placeholder="Nilai Penawaran" readonly/>
+                                                                        placeholder="Nilai Penawaran" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2576,15 +2395,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS/Pagu Rupiah <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>HPS/Pagu Rupiah <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->hps_pagu ?? "*HPS/Pagu Belum Ditentukan" }}"
-                                                                        placeholder="HPS / Pagu" readonly/>
+                                                                        class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->hps_pagu ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                        placeholder="HPS / Pagu" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2601,8 +2421,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
-                                                                        id="nilai-perolehan"
-                                                                        name="nilai-perolehan"
+                                                                        id="nilai-perolehan" name="nilai-perolehan"
                                                                         value="{{ $proyek->nilai_perolehan }}"
                                                                         placeholder="Nilai Perolehan" />
                                                                     <!--end::Input-->
@@ -2621,7 +2440,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span><i class="bi bi-percent text-dark"></i> OE Wika</span>
+                                                                        <span><i class="bi bi-percent text-dark"></i> OE
+                                                                            Wika</span>
                                                                     </label>
                                                                     <!--end::Label-->
 
@@ -2686,15 +2506,16 @@
                                                         </h3>
                                                         &nbsp;<br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="laporan-perolehan" name="laporan-perolehan" rows="3">{{ $proyek->laporan_perolehan }}</textarea>
+                                                            <textarea class="form-control form-control-solid" id="laporan-perolehan" name="laporan-perolehan"
+                                                                rows="3">{{ $proyek->laporan_perolehan }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
-<!--end:::Tab Perolehan-->
+                                                    <!--end:::Tab Perolehan-->
 
 
-<!--begin:::Tab Menang-->
+                                                    <!--begin:::Tab Menang-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_menang"
                                                         role="tabpanel">
 
@@ -2754,10 +2575,10 @@
                                                         <!--End::Title Biru Form: Usulan Saran Perbaikan-->
 
                                                     </div>
-<!--end:::Tab Menang-->
+                                                    <!--end:::Tab Menang-->
 
 
-<!--begin:::Tab Pasar Terkontrak New-->
+                                                    <!--begin:::Tab Pasar Terkontrak New-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_terkontrak"
                                                         role="tabpanel">
 
@@ -2789,7 +2610,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jenis Proyek <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Jenis Proyek <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2839,14 +2661,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i class="bi bi-percent text-dark"></i>) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Porsi JO (<i
+                                                                                class="bi bi-percent text-dark"></i>) <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                    class="form-control form-control-solid {{ $proyek->porsi_jo == Null ? 'text-danger' : '' }}"
-                                                                    value="{{ $proyek->porsi_jo ?? "*Porsi JO Belum Ditentukan" }}"
-                                                                    placeholder="Porsi JO" readonly/>
+                                                                        class="form-control form-control-solid {{ $proyek->porsi_jo == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->porsi_jo ?? '*Porsi JO Belum Ditentukan' }}"
+                                                                        placeholder="Porsi JO" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2855,7 +2679,8 @@
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                 </label>
-                                                                <p class="mt-12"><i class="bi bi-percent text-dark"></i></p>
+                                                                <p class="mt-12"><i
+                                                                        class="bi bi-percent text-dark"></i></p>
                                                                 <!--end::Label-->
                                                             </div>
                                                             <!--End begin::Col-->
@@ -2890,14 +2715,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK Review (Valas) (Exclude Tax) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai OK Review (Valas) (Exclude Tax) <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->nilai_valas_review ?? "*Nilai OK Review Belum Ditentukan" }}"
-                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)" readonly/>
+                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->nilai_valas_review ?? '*Nilai OK Review Belum Ditentukan' }}"
+                                                                        placeholder="Nilai OK Review (Valas) (Exclude Tax)"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2971,13 +2798,14 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Mata Uang <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Mata Uang <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid {{ $proyek->mata_uang_review == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->mata_uang_review ?? "*Mata Uang Belum Ditentukan"}}"
+                                                                        class="form-control form-control-solid {{ $proyek->mata_uang_review == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->mata_uang_review ?? '*Mata Uang Belum Ditentukan' }}"
                                                                         readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3014,14 +2842,15 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kurs Review <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Kurs Review <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input onkeyup="hitungReview()" type="text"
-                                                                        class="form-control form-control-solid {{ $proyek->kurs_review == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->kurs_review ?? "*Kurs Review Belum Ditentukan" }}"
-                                                                        placeholder="Kurs Review" readonly/>
+                                                                        class="form-control form-control-solid {{ $proyek->kurs_review == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->kurs_review ?? '*Kurs Review Belum Ditentukan' }}"
+                                                                        placeholder="Kurs Review" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3062,9 +2891,9 @@
                                                             </div>
                                                             <!--End begin::Col-->
                                                             @php
-                                                                if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null){
-                                                                    $nilaiPerolehan = (int) str_replace(",", "", $proyek->nilai_perolehan);
-                                                                    $nilaiKontrakKeseluruhan = (($nilaiPerolehan * 100)/$proyek->porsi_jo);
+                                                                if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
+                                                                    $nilaiPerolehan = (int) str_replace(',', '', $proyek->nilai_perolehan);
+                                                                    $nilaiKontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
                                                                 } else {
                                                                     $nilaiKontrakKeseluruhan = 0;
                                                                 }
@@ -3074,14 +2903,17 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Kontrak Keseluruhan<i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai Kontrak Keseluruhan<i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == Null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format($nilaiKontrakKeseluruhan, 0, ".", ".") }}" name="nilai-kontrak-keseluruhan"
-                                                                        placeholder="Nilai Kontrak Keseluruhan" readonly/>
+                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
+                                                                        value="{{ number_format($nilaiKontrakKeseluruhan, 0, ',', ',') }}"
+                                                                        name="nilai-kontrak-keseluruhan"
+                                                                        placeholder="Nilai Kontrak Keseluruhan"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3126,14 +2958,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Kontrak (Porsi WIKA) <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Nilai Kontrak (Porsi WIKA) <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         value="{{ $proyek->nilai_perolehan }}"
-                                                                        placeholder="Nilai Kontrak (Porsi WIKA)" readonly/>
+                                                                        placeholder="Nilai Kontrak (Porsi WIKA)"
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3178,16 +3012,29 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Klasifikasi Proyek <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Klasifikasi Proyek</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="klasifikasi-terkontrak"
+                                                                    <select id="klasifikasi-terkontrak"
                                                                         name="klasifikasi-terkontrak"
-                                                                        value="{{ $proyek->klasifikasi_terkontrak }}"
-                                                                        placeholder="Klasifikasi Proyek" />
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Klasifikasi Proyek">
+                                                                        <option></option>
+                                                                        <option value="Proyek Besar"
+                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Besar' ? 'selected' : '' }}>
+                                                                            Proyek Besar</option>
+                                                                        <option value="Proyek Menengah"
+                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Menengah' ? 'selected' : '' }}>
+                                                                            Proyek Menengah</option>
+                                                                        <option value="Proyek Kecil"
+                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Kecil' ? 'selected' : '' }}>
+                                                                            Proyek Kecil</option>
+                                                                        <option value="Proyek Mega"
+                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Mega' ? 'selected' : '' }}>
+                                                                            Proyek Mega</option>
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3232,7 +3079,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jenis Kontrak <i class="bi bi-lock-fill"></i></span>
+                                                                        <span>Jenis Kontrak <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -3258,10 +3106,10 @@
                                                         <!--End::Row Kanan+Kiri-->
 
                                                     </div>
-<!--end:::Tab Pasar Terkontrak New-->
+                                                    <!--end:::Tab Pasar Terkontrak New-->
 
 
-                                                    <!--begin:::Tab Approval-->
+<!--begin:::        -->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
@@ -3421,9 +3269,9 @@
                                                         <!--end::Table-->
 
                                                     </div>
-                                                    <!--end:::Tab Approval-->
+<!--end:::Tab Approval-->
 
-                                                    <!--begin:::Tab Feedback-->
+<!--begin:::Tab Feedback-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
@@ -3481,10 +3329,10 @@
                                                         <!--end::Table-->
 
                                                     </div>
-                                                    <!--end:::Tab Feedback-->
+<!--end:::Tab Feedback-->
 
 
-                                                    <!--begin:::Tab Forecast-->
+<!--begin:::Tab Forecast-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_forecast"
                                                         role="tabpanel">
 
@@ -3566,7 +3414,7 @@
                                                     <!--end::Table body-->
                                                 </table>
                                                 <!--end::Table-->
-                                                <!--end:::Tab Forecast-->
+<!--end:::Tab Forecast-->
 
 
                                             </div>
@@ -3737,9 +3585,8 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <select onchange="kategoriSelect(this)" id="kategori-pasar" name="kategori-pasar"
-                                class="form-select form-select-solid"
-                                data-control="select2" data-hide-search="true"
-                                data-placeholder="Pilih Kategori">
+                                class="form-select form-select-solid" data-control="select2"
+                                data-hide-search="true" data-placeholder="Pilih Kategori">
                                 <option></option>
                                 @foreach ($kriteriapasar as $kriteria)
                                     <option value="{{ $kriteria->kategori }}">
@@ -3783,9 +3630,8 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text"
-                                class="form-control form-control-solid"
-                                id="bobot" name="bobot" placeholder="" readonly />
+                            <input type="text" class="form-control form-control-solid" id="bobot"
+                                name="bobot" placeholder="" readonly />
                             <!--end::Input-->
                         </div>
                         <!--end::Input group-->
@@ -3850,95 +3696,98 @@
 @foreach ($kriteriapasarproyek as $kriteria)
 {{-- @dump($kriteriapasarproyek) --}}
 <form action="/proyek/{{ $kriteria->id }}/kriteria-edit" method="post" enctype="multipart/form-data">
-@csrf
-<input type="hidden" name="edit-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
+    @csrf
+    <input type="hidden" name="edit-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
 
-<div class="modal fade" id="kt_modal_edit_kriteria_{{ $kriteria->id }}" tabindex="-1" aria-hidden="true">
-    <!--begin::Modal dialog-->
-    <div class="modal-dialog modal-dialog-centered mw-800px">
-        <!--begin::Modal content-->
-        <div class="modal-content">
-            <!--begin::Modal header-->
-            <div class="modal-header">
-                <!--begin::Modal title-->
-                <h2>Edit Kriteria Proyek : </h2>
-                <!--end::Modal title-->
-                <!--begin::Close-->
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                    <span class="svg-icon svg-icon-1">
-                        <i class="bi bi-x-lg"></i>
-                    </span>
-                    <!--end::Svg Icon-->
+    <div class="modal fade" id="kt_modal_edit_kriteria_{{ $kriteria->id }}" tabindex="-1"
+        aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Edit Kriteria Proyek : </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
                 </div>
-                <!--end::Close-->
-            </div>
-            <!--end::Modal header-->
+                <!--end::Modal header-->
 
-            <!--begin::Modal body-->
-            <div class="modal-body py-lg-6 px-lg-6">
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
 
 
-                <!--begin::Row Kanan+Kiri-->
-                <div class="row fv-row">
-                    <!--begin::Col-->
-                    <div class="col-5">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Kategori</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" value="{{ $kriteria->kategori }}"
-                                class="form-control form-control-solid"
-                                id="edit-kategori-pasar" name="edit-kategori-pasar" placeholder="" readonly />
-                            <!--end::Input-->
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-5">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Kategori</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" value="{{ $kriteria->kategori }}"
+                                    class="form-control form-control-solid" id="edit-kategori-pasar"
+                                    name="edit-kategori-pasar" placeholder="" readonly />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
                         </div>
-                        <!--end::Input group-->
-                    </div>
-                    <!--End begin::Col-->
-                    <div class="col-5">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Kriteria</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <select onchange="editBobot(this)" id="edit-kriteria-pasar-{{ $kriteria->id }}" name="edit-kriteria-pasar"
-                                class="form-select form-select-solid" data-control="select2" data-edit-bobot="edit-bobot-{{ $kriteria->id }}"
-                                data-hide-search="true" data-placeholder="Pilih Kriteria">
-                            </select>
-                            <!--end::Input-->
+                        <!--End begin::Col-->
+                        <div class="col-5">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Kriteria</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select onchange="editBobot(this)"
+                                    id="edit-kriteria-pasar-{{ $kriteria->id }}" name="edit-kriteria-pasar"
+                                    class="form-select form-select-solid" data-control="select2"
+                                    data-edit-bobot="edit-bobot-{{ $kriteria->id }}" data-hide-search="true"
+                                    data-placeholder="Pilih Kriteria">
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
                         </div>
-                        <!--end::Input group-->
-                    </div>
-                    <!--End begin::Col-->
-                    <div class="col-2">
-                        <!--begin::Input group Website-->
-                        <div class="fv-row mb-7">
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Bobot</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text"
-                                class="form-control form-control-solid"
-                                id="edit-bobot-{{ $kriteria->id }}" name="edit-bobot" placeholder="" readonly />
-                            <!--end::Input-->
+                        <!--End begin::Col-->
+                        <div class="col-2">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Bobot</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid"
+                                    id="edit-bobot-{{ $kriteria->id }}" name="edit-bobot" placeholder=""
+                                    readonly />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
                         </div>
-                        <!--end::Input group-->
+                        <!--End::Col-->
                     </div>
-                    <!--End::Col-->
+                    <!--End::Row Kanan+Kiri-->
                 </div>
-                <!--End::Row Kanan+Kiri-->
-            </div>
-            <script>
-                async function kategoriKlick(e) {
+                <script>
+                    async function kategoriKlick(e) {
                         // console.log(e);
                         const kategori = e.getAttribute("data-value");
                         const editKriteria = e.getAttribute("data-kriteria");
@@ -3961,7 +3810,7 @@
                             html += `<option data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
                         });
                         // console.log(IDkriteriapasar);
-                        document.querySelector("#"+editKriteria).innerHTML = html;
+                        document.querySelector("#" + editKriteria).innerHTML = html;
                     }
 
                     function editBobot(e) {
@@ -3974,14 +3823,62 @@
                             }
                         })
                         console.log(bobot);
-                        document.querySelector("#"+editBobot).value = bobot;
+                        document.querySelector("#" + editBobot).value = bobot;
                     }
-            </script>
+                </script>
 
-            <div class="modal-footer">
+                <div class="modal-footer">
 
-                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                    id="new_save" style="background-color:#008CB4">Save</button>
+                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                        id="new_save" style="background-color:#008CB4">Save</button>
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::modal EDIT KRITERIA PASAR-->
+
+<!--begin::DELETE KRITERIA-->
+@foreach ($kriteriapasarproyek as $kriteria)
+<form action="/proyek/kriteria-delete/{{ $kriteria->id }}" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_kriteria_delete_{{ $kriteria->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $kriteria->kategori }} - {{ $kriteria->kriteria }} : {{ $kriteria->bobot }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
 
             </div>
             <!--end::Modal body-->
@@ -3989,57 +3886,9 @@
         <!--end::Modal content-->
     </div>
     <!--end::Modal dialog-->
-</div>
+    </div>
 </form>
 @endforeach
-<!--end::modal EDIT KRITERIA PASAR-->
-
-<!--begin::DELETE KRITERIA-->
-    @foreach ($kriteriapasarproyek as $kriteria)
-        <form action="/proyek/kriteria-delete/{{ $kriteria->id }}" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_kriteria_delete_{{ $kriteria->id }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus : {{ $kriteria->kategori }} - {{ $kriteria->kriteria }} : {{ $kriteria->bobot }}
-                            </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-    @endforeach
 <!--end::DELETE KRITERIA-->
 
 
@@ -4120,14 +3969,12 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <select id="company-jo" name="company-jo"
-                                class="form-select form-select-solid"
+                            <select id="company-jo" name="company-jo" class="form-select form-select-solid"
                                 data-control="select2" data-hide-search="false"
                                 data-placeholder="Pilih Company JO">
                                 <option></option>
                                 @foreach ($customers as $customer)
-                                    <option
-                                        value="{{ $customer->id_customer }}">
+                                    <option value="{{ $customer->id_customer }}">
                                         {{ $customer->name }}</option>
                                 @endforeach
                             </select>
@@ -4146,8 +3993,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="number" min="1" max="{{ $proyek->porsi_jo - $joCompany }}"
-                                onkeyup="getJO()" onchange="getJO()"
-                                class="form-control form-control-solid"
+                                onkeyup="getJO()" onchange="getJO()" class="form-control form-control-solid"
                                 id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
                             <!--end::Input-->
                         </div>
@@ -4349,7 +4195,7 @@
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></scrip> --}}
 @section('js-script')
 <script>
-    $('#kt_modal_porsijo').on('show.bs.modal', function () {
+    $('#kt_modal_porsijo').on('show.bs.modal', function() {
         $("#company-jo").select2({
             dropdownParent: $("#kt_modal_porsijo")
         });
@@ -4359,9 +4205,9 @@
     let proyekStage = Number("{{ $proyek->stage }}");
     if (proyekStage == 6 || proyekStage == 7) {
         // const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
-        proyekStage = 6 ;
+        proyekStage = 6;
     } else if (proyekStage == 8 || proyekStage == 9) {
-        proyekStage = 7 ;
+        proyekStage = 7;
     }
     const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
     const tabBoots = new bootstrap.Tab(tabContent, {});

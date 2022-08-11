@@ -449,7 +449,7 @@
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ $proyek->forecast ?? '-' }}
+                                                    {{ number_format($proyek->forecast, 0, ',', ',') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
@@ -582,13 +582,13 @@
                                         <option></option>
                                         @foreach ($unitkerjas as $unitkerja)
                                             <option value="{{ $unitkerja->divcode }}"
-                                                {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }}>
+                                                {{ Auth::user()->unit_kerja == $unitkerja->divcode ? 'selected' : '' }}>
                                                 {{ $unitkerja->unit_kerja }}</option>
                                         @endforeach
                                     </select>
-                                    @error('unit-kerja')
+                                    {{-- @error('unit-kerja')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
+                                    @enderror --}}
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
