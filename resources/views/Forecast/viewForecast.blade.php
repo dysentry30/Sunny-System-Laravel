@@ -691,13 +691,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                         data-month="{{ $month_counter }}"
                                                                                                         data-column-forecast="{{ $month_counter }}"
-                                                                                                        class="form-control"
-                                                                                                        style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        class="form-control border-bottom-1"
+                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                         id="nilai-forecast"
                                                                                                         name="nilai-forecast"
                                                                                                         onkeyup="reformatNumber(this)"
                                                                                                         value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                        placeholder=". . . , -" />
+                                                                                                        placeholder="" />
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $forecast->month_realisasi)
                                                                                                     @php
@@ -736,13 +736,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                 data-month="{{ $month_counter }}"
                                                                                                 data-column-forecast="{{ $month_counter }}"
-                                                                                                class="form-control"
-                                                                                                style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                class="form-control border-bottom-1"
+                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                 id="nilai-forecast"
                                                                                                 name="nilai-forecast"
                                                                                                 onkeyup="reformatNumber(this)"
                                                                                                 value=""
-                                                                                                placeholder=". . . , -" />
+                                                                                                placeholder="" />
                                                                                         </td>
                                                                                         @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                             @php
@@ -1436,27 +1436,33 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @php
                                                                                                         $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                     @endphp
-                                                                                                    <td
-                                                                                                        data-column-OK-internal="{{ $month_counter }}">
-                                                                                                        <center>
-                                                                                                            {{ $proyek->nilai_rkap }}
-                                                                                                        </center>
-                                                                                                    </td>
+
+                                                                                                    @if ($proyek->bulan_pelaksanaan == $i + 1)
+                                                                                                        <td
+                                                                                                            data-column-OK-internal="{{ $month_counter }}">
+                                                                                                            <center>
+                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                            </center>
+                                                                                                        </td>
+                                                                                                    @else 
+                                                                                                        <td data-column-OK-internal="{{ $month_counter }}"></td>
+                                                                                                    @endif
+
                                                                                                     <td>
                                                                                                         <input
                                                                                                             type="text"
                                                                                                             data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}"
                                                                                                             data-month="{{ $month_counter }}"
                                                                                                             data-column-forecast-internal="{{ $month_counter }}"
-                                                                                                            class="form-control"
-                                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                            class="form-control border-bottom-1"
+                                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                             id="nilai-forecast"
                                                                                                             name="nilai-forecast"
                                                                                                             onkeyup="reformatNumber(this)"
                                                                                                             value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                            placeholder=". . . , -" />
+                                                                                                            placeholder="" />
                                                                                                     </td>
-                                                                                                    @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @if ($i + 1 == $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                         <td
                                                                                                             data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -1476,27 +1482,31 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @endphp
                                                                                         @endforeach
                                                                                         @if (!$is_data_found)
-                                                                                            <td
-                                                                                                data-column-OK-internal="{{ $month_counter }}">
-                                                                                                <center>
-                                                                                                    {{ $proyek->nilai_rkap }}
-                                                                                                </center>
-                                                                                            </td>
+                                                                                            @if ($proyek->bulan_pelaksanaan == $i + 1)
+                                                                                                <td
+                                                                                                    data-column-OK-internal="{{ $month_counter }}">
+                                                                                                    <center>
+                                                                                                        {{ $proyek->nilai_rkap }}
+                                                                                                    </center>
+                                                                                                </td>
+                                                                                            @else 
+                                                                                                <td data-column-OK-internal="{{ $month_counter }}"></td>
+                                                                                            @endif
                                                                                             <td>
                                                                                                 <input
                                                                                                     type="text"
                                                                                                     data-id-proyek-forecast-internal="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-internal="{{ $month_counter }}"
-                                                                                                    class="form-control"
-                                                                                                    style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                    class="form-control border-bottom-1"
+                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                     id="nilai-forecast"
                                                                                                     name="nilai-forecast"
                                                                                                     onkeyup="reformatNumber(this)"
                                                                                                     value=""
-                                                                                                    placeholder=". . . , -" />
+                                                                                                    placeholder="" />
                                                                                             </td>
-                                                                                            @if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($i + 1 == $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                 <td
                                                                                                     data-column-realisasi-internal="{{ $month_counter }}">
                                                                                                     {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
@@ -2198,13 +2208,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-sd="{{ $month_counter }}"
-                                                                                                    class="form-control"
-                                                                                                    style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                    class="form-control border-bottom-1"
+                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                     id="nilai-forecast"
                                                                                                     name="nilai-forecast"
                                                                                                     onkeyup="reformatNumber(this)"
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                    placeholder=". . . , -" />
+                                                                                                    placeholder="" />
                                                                                             </td>
                                                                                             @if ($i + 1 >= $proyek->bulan_ri_perolehan &&
                                                                                                 $proyek->bulan_ri_perolehan != null &&
@@ -2252,13 +2262,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-id-proyek-forecast-sd="{{ $proyek->kode_proyek }}"
                                                                                             data-month="{{ $month_counter }}"
                                                                                             data-column-forecast-sd="{{ $month_counter }}"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            class="form-control border-bottom-1"
+                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                             id="nilai-forecast"
                                                                                             name="nilai-forecast"
                                                                                             onkeyup="reformatNumber(this)"
                                                                                             value=""
-                                                                                            placeholder=". . . , -" />
+                                                                                            placeholder="" />
                                                                                     </td>
                                                                                     @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
                                                                                         @php
@@ -2963,13 +2973,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
                                                                                                     data-month="{{ $month_counter }}"
                                                                                                     data-column-forecast-sd-eksternal="{{ $month_counter }}"
-                                                                                                    class="form-control"
-                                                                                                    style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                    class="form-control border-bottom-1"
+                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                     id="nilai-forecast"
                                                                                                     name="nilai-forecast"
                                                                                                     onkeyup="reformatNumber(this)"
                                                                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                    placeholder=". . . , -" />
+                                                                                                    placeholder="" />
                                                                                             </td>
                                                                                             @if ($proyek->bulan_ri_perolehan >= $i + 1  &&
                                                                                                 $proyek->nilai_kontrak_keseluruhan != null)
@@ -3014,13 +3024,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-id-proyek-forecast-sd-eksternal="{{ $proyek->kode_proyek }}"
                                                                                             data-month="{{ $month_counter }}"
                                                                                             data-column-forecast-sd-eksternal="{{ $month_counter }}"
-                                                                                            class="form-control"
-                                                                                            style="border: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                            class="form-control border-bottom-1"
+                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                             id="nilai-forecast"
                                                                                             name="nilai-forecast"
                                                                                             onkeyup="reformatNumber(this)"
                                                                                             value=""
-                                                                                            placeholder=". . . , -" />
+                                                                                            placeholder="" />
                                                                                     </td>
                                                                                     @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
                                                                                         @php
@@ -3331,6 +3341,14 @@ fill="none">
         inputForecasts.forEach(input => {
             input.addEventListener("focusout", async e => {
                 const nilaiForecast = Number(e.target.value.toString().replaceAll(",", ""));
+                if (nilaiForecast == 0) {
+                    Toast.fire({
+                        html: "Inputan tidak boleh 0 atau kosong",
+                        icon: "error",
+                    });
+                    e.target.value = "";
+                    return; 
+                }
                 const kodeProyek = input.getAttribute(attribute);
                 const dataMonth = input.getAttribute("data-month");
                 const dataColumn = input.getAttribute(dataColumnAttribute);
@@ -3440,29 +3458,37 @@ fill="none">
                     });
 
                     recalculateColumn();
-                    Swal.fire({
+                    Toast.fire({
                         html: saveNilaiForecastRes.msg,
-                        target: '#custom-toaster',
-                        customClass: {
-                            container: 'position-absolute'
-                        },
-                        toast: true,
-                        // timer: 3000,
-                        confirmButtonColor: "#008cb4",
-                        position: 'top-right'
+                        icon: "success",
                     });
+                    // Swal.fire({
+                    //     html: saveNilaiForecastRes.msg,
+                    //     target: '#custom-toaster',
+                    //     customClass: {
+                    //         container: 'position-absolute'
+                    //     },
+                    //     toast: true,
+                    //     // timer: 3000,
+                    //     confirmButtonColor: "#008cb4",
+                    //     position: 'top-right'
+                    // });
                 } else {
-                    Swal.fire({
+                    Toast.fire({
                         html: saveNilaiForecastRes.msg,
-                        target: '#custom-toaster',
-                        customClass: {
-                            container: 'position-absolute'
-                        },
-                        toast: true,
-                        confirmButtonColor: "#008cb4",
-                        // timer: 3000,
-                        position: 'top-right'
+                        icon: "error",
                     });
+                    // Swal.fire({
+                    //     html: saveNilaiForecastRes.msg,
+                    //     target: '#custom-toaster',
+                    //     customClass: {
+                    //         container: 'position-absolute'
+                    //     },
+                    //     toast: true,
+                    //     confirmButtonColor: "#008cb4",
+                    //     // timer: 3000,
+                    //     position: 'top-right'
+                    // });
                     // toaster.classList.remove("text-bg-success")
                     // toaster.classList.add("text-bg-danger")
                     // toastBody.innerHTML = saveNilaiForecastRes.msg;
@@ -3861,7 +3887,6 @@ fill="none">
 
     async function confirmedLock() {
         const getIconElt = monthEltBulanan.querySelector("i");
-
         // monthEltBulanan.setAttribute("disabled", "");
         const formData = new FormData();
         if (monthEltBulanan) {
@@ -3875,14 +3900,17 @@ fill="none">
                     },
                     body: formData,
                 }).then(res => res.json());
-
-                Swal.fire({
-                    title: getLockRes.status == "success" ? "Success" : "Failed",
-                    text: getLockRes.msg,
+                Toast.fire({
+                    html: getLockRes.msg,
                     icon: getLockRes.status == "failed" ? "error" : "success",
-                    timer: 3000,
-                    showConfirmButton: false,
                 });
+                // Swal.fire({
+                //     title: getLockRes.status == "success" ? "Success" : "Failed",
+                //     text: getLockRes.msg,
+                //     icon: getLockRes.status == "failed" ? "error" : "success",
+                //     timer: 3000,
+                //     showConfirmButton: false,
+                // });
                 // getIconElt.classList.remove("bi-unlock-fill");
                 // getIconElt.classList.add("bi-lock-fill");
                 monthEltBulanan.innerHTML = `
@@ -3901,13 +3929,17 @@ fill="none">
                 }).then(res => res.json());
                 getIconElt.classList.add("bi-unlock-fill");
                 getIconElt.classList.remove("bi-lock-fill");
-                Swal.fire({
-                    title: getLockRes.status == "success" ? "Success" : "Failed",
-                    text: getLockRes.msg,
+                Toast.fire({
+                    html: getLockRes.msg,
                     icon: getLockRes.status == "failed" ? "error" : "success",
-                    timer: 3000,
-                    showConfirmButton: false,
                 });
+                // Swal.fire({
+                //     title: getLockRes.status == "success" ? "Success" : "Failed",
+                //     text: getLockRes.msg,
+                //     icon: getLockRes.status == "failed" ? "error" : "success",
+                //     timer: 3000,
+                //     showConfirmButton: false,
+                // });
                 monthEltBulanan.innerHTML = `
                     <span class="text-white mx-2 fs-6">Lock Forecast</span>
                     <i class="bi bi-unlock-fill text-white"></i>

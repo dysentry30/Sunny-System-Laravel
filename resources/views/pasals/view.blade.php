@@ -118,7 +118,7 @@
                                 <th class="w-150px">Kategori Pasal</th>
                                 <th class="text-break">Pasal</th>
                                 <th class="">Prioritas</th>
-                                <th class="text-break">Ket</th>
+                                <th class="">Ket</th>
                             </tr>
                             <!--end::Table row-->
                         </thead>
@@ -379,7 +379,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select name="prioritas" id="prioritas" class="form-select form-select-solid"
+                                        <select name="prioritas-update" id="prioritas-update" class="form-select form-select-solid"
                                             data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
                                             <option value=""></option>
                                             <option value="Penting">Penting</option>
@@ -403,6 +403,17 @@
                             <textarea type="text" class="form-control form-control-solid" name="pasal-edit"
                                 id="pasal-edit" style="font-weight: normal" rows="6" value=""
                                 placeholder="Ketikan pasal disini..."></textarea>
+                            <!--end::Input-->
+                            <br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Keterangan :</span>
+                            </label>
+                            <!--end::Label-->
+
+                            <!--begin::Input-->
+                            <textarea class="form-control form-control-solid" name="keterangan-update" id="keterangan-update"
+                                style="font-weight: normal" rows="2" value="" placeholder="Ketikan keterangan disini."></textarea>
                             <!--end::Input-->
 
 
@@ -549,6 +560,7 @@
         const inputPasalElt = document.querySelector("#pasal");
         const inputTipePasalElt = document.querySelector("#tipe-pasal");
         const inputPrioritasElt = document.querySelector("#prioritas");
+        const inputPrioritasUpdateElt = document.querySelector("#prioritas-update");
         const inputKeteranganElt = document.querySelector("#keterangan");
         const tableBodyElt = document.querySelector("table tbody");
         const toaster = document.getElementById("liveToastBtn");
@@ -648,11 +660,25 @@
             inputGrupEditPasalElt.style.display = "none";
             const getResponse = await fetch(`/pasal/${id_pasal}`).then(res => res.json());
             if (getResponse.pasal) {
+                console.log(getResponse.pasal);
                 inputGrupEditPasalElt.style.display = "block";
                 loadingEditElt.style.display = "none";
                 document.getElementById("pasal-edit").value = getResponse.pasal.pasal;
                 document.getElementById("tipe-pasal-edit").value = getResponse.pasal.tipe_pasal;
                 document.getElementById("id-pasal").value = getResponse.pasal.id;
+                document.getElementById("keterangan-update").value = getResponse.pasal.keterangan;
+                document.getElementById("prioritas-update").value = getResponse.pasal.prioritas;
+                $("#prioritas-update").select2("data", {id: "1", text: getResponse.pasal.prioritas});
+                $("#prioritas-update").select2({
+                    minimumInputLength: -1,
+                    minimumResultsForSearch: -1,
+                }).trigger("change");
+                // document.querySelectorAll("#prioritas-update option").forEach(opt => {
+                //     console.log(opt.getAttribute("value"), getResponse.pasal.prioritas);
+                //     if(opt.getAttribute("value") == getResponse.pasal.prioritas) {
+                //         opt.setAttribute("selected", "");
+                //     }
+                // });
                 document.getElementById("pasal-edit").focus();
 
             }
@@ -668,6 +694,8 @@
             formData.append("id_pasal", id_pasal);
             formData.append("pasal", pasalChanges);
             formData.append("tipe-pasal", tipePasalChanges);
+            formData.append("keterangan", document.querySelector("#keterangan-update").value);
+            formData.append("prioritas", $("#prioritas-update").val());
             const updatePasal = await fetch("/pasal/update", {
                 method: "POST",
                 header: {
