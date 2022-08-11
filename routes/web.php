@@ -290,6 +290,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 ]);
             }
         } else {
+            $nilai_kontrak_keseluruhan = $proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast = new Forecast();
             $forecast->nilai_forecast = $data["nilai_forecast"];
             $forecast->month_forecast = (int) $data["forecast_month"];
@@ -297,9 +298,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->month_realisasi = $proyek->bulan_ri_perolehan;
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
-            $forecast->realisasi_forecast = str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+            $forecast->realisasi_forecast = (int) $nilai_kontrak_keseluruhan;
             $forecast->kode_proyek = $data["kode_proyek"];
-            // dump($proyek);
             if ($forecast->save()) {
                 if ($proyek->kode_proyek == $data["kode_proyek"]) {
                     $proyek->forecast += (int) $data["nilai_forecast"];
@@ -368,12 +368,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         foreach ($proyeks as $index => $proyek) {
             $kode_proyek = $proyek[0]->kode_proyek;
             $current_proyek = Proyek::find($kode_proyek);
-            $forecasts = $proyek->filter(function ($data) {
-                // return str_contains($data->created_at->format("m"), date("m")) && $data->nilai_forecast != 0;
-                return $data->nilai_forecast != 0;
+            $forecasts = $proyek->filter(function ($data) use($current_proyek) {
+                return str_contains($data->created_at->format("m"), date("m")) && $data->nilai_forecast != 0 && $current_proyek->unit_kerja == Auth::user()->unit_kerja;
+                // return $data->nilai_forecast != 0;
             });
-
-            foreach ($forecasts as $index => $forecast) {
+            foreach ($forecasts as $forecast) {
                 if ($forecast->month_forecast > $farestMonth) {
                     $farestMonth = $forecast->month_forecast;
                 }
@@ -386,7 +385,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecast->month_forecast = $farestMonth;
             $history_forecast->rkap_forecast = (int) str_replace(",", "", $current_proyek->nilai_rkap) ?? 0;
             $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan;
-            $history_forecast->realisasi_forecast = (int) str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0) != "" ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            $history_forecast->realisasi_forecast = (int) $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
             $history_forecast->month_realisasi = (int) $current_proyek->bulan_ri_perolehan;
             $history_forecast->periode_prognosa = (int) date("m");
@@ -486,6 +485,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     //     "msg" => "OKe",
         //     // ]);
         // }
+        if (Auth::user()->check_administrator) {
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", (int) date("m"))->get();
+            # code...
+        } else {
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", (int) date("m"))->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        }
+        foreach($history_forecasts as $history_forecast) {
+            $history_forecast->delete();
+        }
         return response()->json([
             "status" => "success",
             "msg" => "Forecast berhasil dibuka",

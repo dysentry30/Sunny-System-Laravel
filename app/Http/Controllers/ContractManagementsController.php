@@ -1041,6 +1041,7 @@ class ContractManagementsController extends Controller
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_ba_defect, $id_document);
             }
+            $contract->list_dokumen_ba_defect = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["ba-defect"][0], $id_document);
