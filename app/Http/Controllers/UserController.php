@@ -356,12 +356,46 @@ class UserController extends Controller
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast tidak disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], false, $is_rejected);
             return;
         }
-        if($to_user->check_administrator == 1) {
+        if($to_user->check_administrator == 1 && $is_approved) {
             $unit_kerja = $from_user->UnitKerja;
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast sudah disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], $is_approved ?? false, $is_rejected ?? false);
             return;
         }
         LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast", $next_user, false, false);
+        // $from_user = 
+    }
+
+    public function requestUnlockAnswer(Request $request) {
+        $data = $request->all();
+        if(Str::length($data["next_user"]) < 2) {
+            $to_user = $data["next_user"];
+        } else {
+            $next_user = explode(",", $data["next_user"]);
+            $to_user = array_splice($next_user, 0, 1)[0];
+        }
+        // array splice return array jadi harus dikasih index 0 biar dapet value di index pertama
+
+        $to_user = User::find((int) $to_user);
+        $from_user = User::find($data["from_user"]);
+
+        if(isset($data["is_approved"])) {
+            $is_approved = true;
+        } else {
+            $is_rejected = true;
+        }
+        if(isset($data["is_rejected"]) && $data["is_rejected"]) {
+            $to_user = User::find($data["from_user"]);
+            $from_user = User::find($data["next_user"]);
+            $unit_kerja = $from_user->UnitKerja;
+            LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast tidak disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], false, $is_rejected);
+            return;
+        }
+        if($to_user->check_administrator == 1 && $is_approved) {
+            $unit_kerja = $from_user->UnitKerja;
+            LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast sudah disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], $is_approved ?? false, $is_rejected ?? false);
+            return;
+        }
+        LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast", $next_user, false, false);
         // $from_user = 
     }
 

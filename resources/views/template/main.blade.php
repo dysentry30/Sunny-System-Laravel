@@ -892,7 +892,7 @@
 
         // Begin Lock/Unlock Forecast
         window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent",async data => {
-            console.log("Data Received");
+            // console.log("Data Received");
             console.log(data);
 
             const mainNotifContent = document.querySelector("#main-content-notif");
@@ -918,6 +918,7 @@
                     const formData = new FormData();
                     formData.append("_token", "{{csrf_token()}}");
                     formData.append("set-lock", true);
+                    
                     const setLockForecastRes = await fetch("/forecast/set-lock", {
                         method: "POST",
                         header: {
@@ -926,24 +927,24 @@
                         body: formData,
                     }).then(res => res.json());
                     if(data.is_approved) {
-                        if(icon.classList.contains("bi-lock-fill")) {
-                            icon.classList.add("bi-unlock-fill")
-                            icon.classList.remove("bi-lock-fill")
-                        } else {
-                            icon.classList.remove("bi-unlock-fill")
-                            icon.classList.add("bi-lock-fill")
+                        // if(icon.classList.contains("bi-lock-fill")) {
+                        //     icon.classList.add("bi-unlock-fill")
+                        //     icon.classList.remove("bi-lock-fill")
+                        // } else {
+                        //     icon.classList.remove("bi-unlock-fill")
+                        //     icon.classList.add("bi-lock-fill")
+                        // }
+                        lockForecastBtn.removeAttribute("disabled");
+                        const allInputsForecast = document.querySelectorAll("input[data-month]");
+                        if(allInputsForecast) {
+                            allInputsForecast.forEach(input => {
+                                if (input.hasAttribute("disabled")) {
+                                    input.removeAttribute("disabled");
+                                } else {
+                                    input.setAttribute("disabled", "");
+                                }
+                            });
                         }
-                    }
-                    lockForecastBtn.removeAttribute("disabled");
-                    const allInputsForecast = document.querySelectorAll("input[data-month]");
-                    if(allInputsForecast) {
-                        allInputsForecast.forEach(input => {
-                            if (input.hasAttribute("disabled")) {
-                                input.removeAttribute("disabled");
-                            } else {
-                                input.setAttribute("disabled", "");
-                            }
-                        });
                     }
                     Swal.fire({
                         title: 'Success',
@@ -997,6 +998,12 @@
                         `;
                 mainNotifContent.innerHTML += html;
             } else {
+                let buttonActionUnlock = "";
+                if (data.message.includes("Unlock")) {
+                    buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id }, true)`;
+                } else {
+                    buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })`;
+                }
                 if (data.to_user.id == idUser)
                     html = `
                         <!--begin::Item-->
@@ -1034,7 +1041,7 @@
             }
         });
 
-        async function lockUnlockForecast(elt, isRejected = false, nextUser, fromUser) {
+        async function lockUnlockForecast(elt, isRejected = false, nextUser, fromUser, isUnlock = false) {
             const idNotification = elt.getAttribute("data-parent-item");
             const parentElt = document.querySelector(`#item-${idNotification}`);
             const nameFrom = parentElt.querySelector("#title-notif").innerText;
@@ -1094,8 +1101,8 @@
                         <!--end::Label-->
                 `;
             parentElt.innerHTML = html;
-
-            const nextApprovalUserLock = await fetch("/user/forecast/set-lock", {
+            let url = isUnlock ? "/user/forecast/set-unlock" : "/user/forecast/set-lock";
+            const nextApprovalUserLock = await fetch(url, {
                 method: "POST",
                 header: {
                     "Content-Type": "application/json",

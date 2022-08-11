@@ -129,11 +129,15 @@ class PasalController extends Controller
     
     public function pasalUpdate(Request $request) {
         $pasal = $request->get("pasal");
+        $keterangan = $request->keterangan;
+        $prioritas = $request->prioritas;
         $tipePasal = $request->get("tipe-pasal");
         $id_pasal = $request->get("id_pasal");
         $pasals = Pasals::find($id_pasal);
         $pasals->pasal = $pasal;
         $pasals->tipe_pasal = $tipePasal;
+        $pasals->keterangan = $keterangan;
+        $pasals->prioritas = $prioritas;
         if ($pasals->save()) {
             Alert::success('Success', $pasal.", Berhasil Diubah")->autoClose(3000);
             return response()->json([
