@@ -2306,7 +2306,6 @@
                             <thead>
                                 <!--begin::Table row-->
                                 <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">No</th>
                                     <th class="min-w-125px">Dokumen</th>
                                 </tr>
                                 <!--end::Table row-->
@@ -2322,7 +2321,7 @@
                                     <tr>
                                         <!--begin::Name=-->
                                         <td>
-                                            <a class="text-gray-600 text-hover-primary">Dokumen BA Defect #{{$key + 1}}</a>
+                                            <a href="/document/view/{{$contract->id_contract}}/{{$ba_defect}}" class="text-gray-600 text-hover-primary">Dokumen BA Defect #{{$key + 1}}</a>
                                         </td>
                                         <!--end::Name=-->
                                     </tr>

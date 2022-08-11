@@ -23,6 +23,7 @@ class ForecastController extends Controller
         // $dopProyek = Proyek::find($id);
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->get();
         if(Auth::user()->check_administrator) {
+            // $proyeks = collect();
             $proyeks = Proyek::all();
             $dops = Dop::all();
         } else {
