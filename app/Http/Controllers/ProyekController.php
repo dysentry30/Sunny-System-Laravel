@@ -126,6 +126,11 @@ class ProyekController extends Controller
         $newProyek->stage = "1";
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
+        $newProyek->kurs_review = 1;
+        $newProyek->kurs_awal = 1;
+        $newProyek->mata_uang_review = "IDR";
+        $newProyek->mata_uang_awal = "IDR";
+        $newProyek->nilaiok_awal = $dataProyek["nilai-rkap"];
 
         //begin::Generate Kode Proyek
         if ($proyekAll->last() == null) {
@@ -155,17 +160,21 @@ class ProyekController extends Controller
         //end::Generate Kode Proyek
 
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
-
+        
         if ($newProyek->save()) {
             return redirect("/proyek/view/$kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
     }
-
-
+    
+    
     public function edit($kode_proyek)
     {
         $proyek = Proyek::find($kode_proyek);
+        if (empty($proyek)) {
+            Alert::warning('Warning', "Proyek Tidak Ditemukan");
+            return redirect("/proyek");
+        }
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->where("kode_proyek", "=", $kode_proyek)->get();
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
@@ -314,6 +323,35 @@ class ProyekController extends Controller
 
         // Form update Customer dan auto Proyek Berjalan
         // $newProyek->customer= $dataProyek["customer"];
+        
+        if (!empty($dataProyek["jenis-proyek"]) || !empty($dataProyek["tipe-proyek"])) {
+            # code...
+            //begin::Generate Kode Proyek
+            $kode_proyek = str_split($dataProyek["edit-kode-proyek"]);
+            // $unit_kerja = $dataProyek["unit-kerja"];
+            $kode_proyek[1] = $dataProyek["jenis-proyek"];
+            $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
+
+            $kode_proyek[2] = $dataProyek["tipe-proyek"];
+            $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
+
+            $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+            $tahun = $dataProyek["tahun-perolehan"];
+            $kode_tahun = $tahun == 2021 ? "A" : "O";
+            $kode_proyek[3] = $kode_tahun;
+            
+            // Menggabungkan semua kode beserta nomor urut
+            $kode_proyek = $kode_proyek[0] . $kode_proyek[1] . $kode_proyek[2] . $kode_proyek[3] . $kode_proyek[4] . $kode_proyek[5] . $kode_proyek[6];
+            // dd($kode_proyek);
+            $newProyek->kode_proyek = $kode_proyek;
+
+            Alert::success('Success', "Kode Proyek Berhasil Diubah : " . $kode_proyek);
+
+            $newProyek->save();
+            return redirect("/proyek/view/".$kode_proyek);
+        }
+
+        //end::Generate Kode Proyek
 
         Alert::success('Success', "Edit Berhasil")->autoClose(3000);
 
