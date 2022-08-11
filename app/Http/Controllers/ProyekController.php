@@ -206,8 +206,11 @@ class ProyekController extends Controller
             "nilai-rkap" => "required",
             "sumber-dana" => "required",
             "bulan-pelaksanaan" => "required",
-            "porsi-jo" => "numeric"
+            // "porsi-jo" => "numeric"
         ];
+        if (isset($dataProyek["porsi-jo"])) {
+            $rules["porsi-jo"] = "numeric";
+        }
         $validation = Validator::make($dataProyek, $rules, $messages);
         // if ($validation->fails()) {
             // dd($validation);
