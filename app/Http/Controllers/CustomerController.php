@@ -10,6 +10,8 @@ use App\Models\ProyekBerjalans;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
 use App\Models\StrukturCustomer;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 
@@ -184,6 +186,11 @@ class CustomerController extends Controller
     public function view ($id_customer) 
     {
         $customer = Customer::find($id_customer);
+        // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
+        // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
+        
+        $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
+        // dd(storage_path("/app/public/data/provinsi.json"));
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         // dd($struktur);
         return view('Customer/viewCustomer', [
@@ -194,6 +201,7 @@ class CustomerController extends Controller
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => Proyek::all(),
             "strukturs" => $struktur,
+            "data_provinsi" => $data_provinsi,
         ]);
     }
 

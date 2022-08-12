@@ -5,7 +5,9 @@
 {{-- Begin::Title --}}
 @section('title', 'Ubah Pelanggan')
 {{-- End::Title --}}
-
+<style>
+    /* #map { height: 350px; } */
+</style>
 <!--begin::Main-->
 @section('content')
 
@@ -389,6 +391,70 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
+
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Provinsi</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="false" 
+                                                                        onchange="selectProvinsi(this)"
+                                                                        data-placeholder="Pilih Customer Provinsi">
+                                                                        <option value=""></option>
+                                                                        @foreach ($data_provinsi as $provinsi)
+                                                                            <option value="{{$provinsi->id}}">{{$provinsi->name}}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Kota / Kabupaten</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select name="kabupaten" id="kabupaten" class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="false" 
+                                                                        {{-- onchange="selectKabupaten(this)" --}}
+                                                                        data-placeholder="Pilih Customer Kabupaten">
+                                                                        <option value="" disabled></option>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            
+                                                            <!--begin::Fungsi Select Negara-->
+                                                                <script>
+                                                                    async function selectProvinsi(elt) {
+                                                                        const idProvinsi = elt.value;
+                                                                        let html = ``;
+                                                                        const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                        getKabupaten.forEach(kabupaten => {
+                                                                            html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                        });
+                                                                        document.querySelector("#kabupaten").innerHTML = html;
+                                                                    }
+                                                                </script>
+                                                            <!--end::Fungsi Select Negara-->
+
+                                                            <div class="col">
+                                                                {{-- <div id="map"></div> --}}
+                                                            </div>
+
                                                         </div>
                                                         <!--End begin::Row-->
 
@@ -1524,6 +1590,42 @@
 
 
 
+@endsection
 
+@section('js-script')
+    <script>
+        // var map = L.map('map').setView([51.505, -0.09], 13);
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     maxZoom: 19,
+        //     attribution: '© OpenStreetMap'
+        // }).addTo(map);
 
+        // let prevCityLayer = null;
+        // let prevCityMarker = null;
+
+        // begin select kabupaten
+        // async function selectKabupaten(elt) {
+        //     let kabupatenName = elt.options[elt.selectedIndex].innerText.replaceAll(/Kabupaten|Kota|/gi, "");
+        //     const getCoorKabupaten = await fetch(`/get-kabupaten-coordinate/${kabupatenName}`).then(res => res.json());
+        //     const kotaCoord = getCoorKabupaten.geojson;
+        //     map.panTo(new L.LatLng(getCoorKabupaten.lat, getCoorKabupaten.lon));
+        //     const cityMarker = L.marker([getCoorKabupaten.lat, getCoorKabupaten.lon]).addTo(map)
+        //     const cityLayer = L.geoJSON().addTo(map);
+        //     cityLayer.addData(kotaCoord);
+
+        //     if (prevCityLayer && prevCityMarker) {
+        //         map.removeLayer(prevCityLayer);
+        //         map.removeLayer(prevCityMarker);
+        //     }
+        //     prevCityLayer = cityLayer;
+        //     prevCityMarker = cityMarker;
+
+        //     // L.polygon(kotaCoord, {color: "blue"}).addTo(map);
+        //     // kotaCoord.forEach(coor => {
+        //     // });
+        //     // L.polygon([[...kotaCoord]]).addTo(map);
+            
+        // }
+        // end select kabupaten
+    </script>
 @endsection

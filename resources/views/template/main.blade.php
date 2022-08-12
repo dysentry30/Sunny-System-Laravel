@@ -25,6 +25,12 @@
         type='text/css' />
     {{-- end::Froala CSS --}}
 
+    {{-- Begin:: Leaflet Map --}}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/>
+    {{-- End:: Leaflet Map --}}
+
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     <link href="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
         type="text/css" />
@@ -1123,6 +1129,12 @@
     {{-- end::Bootstrap JS --}}
 
     {{-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> --}}
+
+    {{-- Begin:: Leaflet JS --}}
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+    {{-- End:: Leaflet JS --}}
 
     <!--begin::Global Javascript Bundle(used by all pages)-->
     <script src="{{ asset('/plugins/global/plugins.bundle.js') }}"></script>
