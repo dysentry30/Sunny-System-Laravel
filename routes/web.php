@@ -39,6 +39,8 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -239,6 +241,22 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Add Struktur Organisasi    
     Route::post('/customer/struktur', [CustomerController::class, 'struktur']);
+
+    // Begin :: get Kabupaten
+    Route::get('/get-kabupaten/{id}', function ($id) {
+        // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();
+        $data_kabupaten = json_decode(Storage::get("/public/data/$id.json"));
+        return $data_kabupaten;
+    });
+    // End :: get Kabupaten
+
+    // Begin :: get coordinate kabupaten
+    Route::get('/get-kabupaten-coordinate/{city_name}', function ($city_name) {
+        $data = Http::get("https://nominatim.openstreetmap.org/search.php?q=$city_name+Indonesia&polygon_geojson=1&format=json");
+        // dd($data->json());
+        return $data[0];
+    });
+    // End :: get coordinate kabupaten
     //End :: Customer
 
 
@@ -260,12 +278,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE data customer pada dasboard customer by ID 
     Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
 
-    // ADD Team Proyek 
-    Route::post('proyek/user/add', [ProyekController::class, 'assignTeam']);
-
     // Stage Update 
     Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
-
+    
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
         $proyek = Proyek::find($data["kode_proyek"]);
@@ -314,26 +329,42 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 ]);
             }
         }
-
+        
         return response()->json([
             "status" => "failed",
             "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
         ]);
     });
-
-    // ADD Kriteria 
+    
+    // GET Kriteria 
     Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
-
+    
+    // ADD Kriteria 
     Route::post('/proyek/kriteria-add', [ProyekController::class, 'tambahKriteria']);
-
+    
     // EDIT Kriteria 
     Route::post('/proyek/{id}/kriteria-edit', [ProyekController::class, 'editKriteria']);
-
+    
     // DELETE Kriteria 
     Route::delete('/proyek/kriteria-delete/{id}', [ProyekController::class, 'deleteKriteria']);
-
+    
     // ADD Porsi-JO 
     Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
+    
+    // DELETE Porsi-JO 
+    Route::delete('/proyek/porsi-delete/{id}', [ProyekController::class, "deleteJO"]);
+    
+    // ADD Team Proyek 
+    Route::post('proyek/user/add', [ProyekController::class, 'assignTeam']);
+    
+    // DELETE Team Proyek 
+    Route::delete('proyek/user-delete/{id}', [ProyekController::class, 'deleteTeam']);
+
+    // ADD Peserta Tender 
+    Route::post('proyek/peserta-tender/add', [ProyekController::class, 'tambahTender']);
+    
+    // DELETE Peserta Tender 
+    Route::delete('proyek/peserta-tender/delete/{id}', [ProyekController::class, 'deleteTender']);
 
     //End :: Project
 
