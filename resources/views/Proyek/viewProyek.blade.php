@@ -24,6 +24,10 @@
         border-radius: 0 !important;
         background-color: transparent !important;
     }
+    #nilai-kontrak-keseluruhan::placeholder {
+    color: red;
+    opacity: 1; /* Firefox */
+}
 </style>
 
 <!--begin::Main-->
@@ -646,12 +650,12 @@
                                                     @endif
 
                                                     <!--begin:::Tab item Forecast-->
-                                                    <li class="nav-item">
+                                                    {{-- <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
                                                             style="font-size:14px;">Forecast</a>
-                                                    </li>
+                                                    </li> --}}
                                                     <!--end:::Tab item Forecast-->
 
                                                     <!--begin:::Tab item Approval-->
@@ -776,8 +780,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tipe Proyek <i
-                                                                                class="bi bi-key"></i></span>
+                                                                        <span class="required">Tipe Proyek <i class="bi bi-key"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1467,7 +1470,7 @@
                                                         <!--Begin::Title Biru Form: Kriteria pasar-->
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Kriteria pasar
+                                                            style="font-size:14px;">Kriteria Pasar
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_kriteria_pasardini">+</a>
                                                         </h3>
@@ -1616,22 +1619,36 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="sbu" name="sbu"
+                                                                    <select onchange="getSBU(this)" id="sbu" name="sbu"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih SBU">
                                                                         <option></option>
                                                                         @foreach ($sbus as $sbu)
                                                                             @if ($sbu->sbu == $proyek->sbu)
-                                                                                <option value="{{ $sbu->sbu }}"
-                                                                                    selected>{{ $sbu->sbu }}</option>
+                                                                                <option value="{{ $sbu->sbu }}" data-klasifikasi="{{ $sbu->klasifikasi }}" data-sub="{{ $sbu->sub_klasifikasi }}" selected>{{ $sbu->sbu }}</option>
                                                                             @else
-                                                                                <option value="{{ $sbu->sbu }}">
-                                                                                    {{ $sbu->sbu }}</option>
+                                                                                <option value="{{ $sbu->sbu }}" data-klasifikasi="{{ $sbu->klasifikasi }}" data-sub="{{ $sbu->sub_klasifikasi }}">{{ $sbu->sbu }}</option>
                                                                             @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <!--end::Input-->
+                                                                    <script>
+                                                                        function getSBU(e) {
+                                                                            // console.log(e);
+                                                                            let klasifikasi = "";
+                                                                            let subKlasifikasi = "";
+                                                                            e.options.forEach(option => {
+                                                                            if (option.selected) {
+                                                                                // console.log(option);
+                                                                                klasifikasi = option.getAttribute("data-klasifikasi");
+                                                                                subKlasifikasi = option.getAttribute("data-sub");
+                                                                            }
+                                                                            document.querySelector("#klasifikasi").value = klasifikasi;
+                                                                            document.querySelector("#sub-klasifikasi").value = subKlasifikasi;
+                                                                        })                                                                            
+                                                                        }
+                                                                    </script>
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
@@ -1667,7 +1684,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Klasifikasi</span>
+                                                                        <span>Klasifikasi <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1675,7 +1692,7 @@
                                                                         class="form-control form-control-solid"
                                                                         id="klasifikasi" name="klasifikasi"
                                                                         value="{{ $proyek->klasifikasi }}"
-                                                                        placeholder="Klasifikasi" />
+                                                                        placeholder="Klasifikasi" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1720,7 +1737,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Sub-Klasifikasi</span>
+                                                                        <span>Sub-Klasifikasi <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1728,7 +1745,7 @@
                                                                         class="form-control form-control-solid"
                                                                         id="sub-klasifikasi" name="sub-klasifikasi"
                                                                         value="{{ $proyek->sub_klasifikasi }}"
-                                                                        placeholder="Sub-Klasifikasi" />
+                                                                        placeholder="Sub-Klasifikasi" readonly/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1745,7 +1762,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>DOP <i class="bi bi-key"></i></span>
+                                                                        <span>DOP <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1801,7 +1818,7 @@
                                                         <!--Begin::Title Biru Form: Kriteria pasar-->
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Kriteria pasar
+                                                            style="font-size:14px;">Kriteria Pasar
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_kriteria_pasardini">+</a>
                                                         </h3>
@@ -1999,20 +2016,19 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i
-                                                                                class="bi bi-percent text-dark"></i>)</span>
+                                                                        <span>Porsi JO (<i class="bi bi-percent text-dark"></i>) <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    <input type="number" min="1" max="100"
                                                                         class="form-control form-control-solid"
                                                                         id="porsi-jo" name="porsi-jo"
                                                                         value="{{ $proyek->porsi_jo }}"
-                                                                        placeholder="Porsi JO" />
-                                                                    @error('porsi-jo')
+                                                                        placeholder="Porsi JO" readonly/>
+                                                                    {{-- @error('porsi-jo')
                                                                         <h6 class="text-danger fw-normal">{{ $message }}
                                                                         </h6>
-                                                                    @enderror
+                                                                    @enderror --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2059,6 +2075,7 @@
                                                                                 <th class="w-50px text-center">No.</th>
                                                                                 <th class="w-auto">Company</th>
                                                                                 <th class="w-auto">Porsi JO</th>
+                                                                                <th class="w-100px"></th>
                                                                             </tr>
                                                                             <!--end::Table row-->
                                                                         </thead>
@@ -2083,9 +2100,20 @@
                                                                                     <!--end::Column-->
                                                                                     <!--begin::Column-->
                                                                                     <td>
-                                                                                        {{ $porsi->porsi_jo }}%
+                                                                                        {{ $porsi->porsi_jo }}<i class="bi bi-percent text-dark"></i>
                                                                                     </td>
                                                                                     <!--end::Column-->
+                                                                                    <!--begin::Action-->
+                                                                                    <td class="text-center">
+                                                                                        <small>
+                                                                                            <p data-bs-toggle="modal"
+                                                                                                data-bs-target="#kt_porsi_delete_{{ $porsi->id }}"
+                                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                                Delete
+                                                                                            </p>
+                                                                                        </small>
+                                                                                    </td>
+                                                                                    <!--end::Action-->
                                                                             </tbody>
                                                                         @endforeach
                                                                         <!--end::Table body-->
@@ -2163,6 +2191,7 @@
                                                                                 <th class="w-50px text-center">No.</th>
                                                                                 <th class="w-auto">Nama</th>
                                                                                 <th class="w-auto">Role/Jabatan</th>
+                                                                                <th class="w-100px"></th>
                                                                             </tr>
                                                                             <!--end::Table row-->
                                                                         </thead>
@@ -2190,6 +2219,18 @@
                                                                                         {{ $team->role }}
                                                                                     </td>
                                                                                     <!--end::Column-->
+                                                                                    <!--begin::Action-->
+                                                                                    <td class="text-center">
+                                                                                        <small>
+                                                                                            <p data-bs-toggle="modal"
+                                                                                                data-bs-target="#kt_team_delete_{{ $team->id }}"
+                                                                                                id="modal-delete"
+                                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                                Delete
+                                                                                            </p>
+                                                                                        </small>
+                                                                                    </td>
+                                                                                    <!--end::Action-->
                                                                             </tbody>
                                                                         @endforeach
                                                                         <!--end::Table body-->
@@ -2374,10 +2415,10 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid"
+                                                                        class="form-control form-control-solid {{ $proyek->penawaran_tender == null ? 'text-danger' : '' }}"
                                                                         id="penawaran-perolehan"
                                                                         name="penawaran-perolehan"
-                                                                        value="{{ $proyek->penawaran_tender }}"
+                                                                        value="{{ $proyek->penawaran_tender ?? '*Nilai Penawaran Belum Ditentukan'}}"
                                                                         placeholder="Nilai Penawaran" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2493,9 +2534,79 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">List Peserta Tender
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                data-bs-target="#kt_modal_peserta_tender">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
+                                                        <!--begin::Table Kriteria Pasar-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Nama Peserta Tender</th>
+                                                                    <th class="w-auto">Nilai Penawaran</th>
+                                                                    <th class="w-auto"><i class="bi bi-percent"></i>OE</th>
+                                                                    <th class="w-auto">Status</th>
+                                                                    <th class="w-100px"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($pesertatender as $peserta)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->nilai_tender_peserta ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->oe_tender ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->status ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
                                                         <!--End::Title Biru Form: List Peserta Tender-->
 
 
@@ -2661,8 +2772,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Porsi JO (<i
-                                                                                class="bi bi-percent text-dark"></i>) <i
+                                                                        <span>Porsi JO (<i class="bi bi-percent text-dark"></i>) <i
                                                                                 class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
@@ -2893,7 +3003,8 @@
                                                             @php
                                                                 if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
                                                                     $nilaiPerolehan = (int) str_replace(',', '', $proyek->nilai_perolehan);
-                                                                    $nilaiKontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+                                                                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+                                                                    $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
                                                                 } else {
                                                                     $nilaiKontrakKeseluruhan = 0;
                                                                 }
@@ -2909,10 +3020,10 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format($nilaiKontrakKeseluruhan, 0, ',', ',') }}"
-                                                                        name="nilai-kontrak-keseluruhan"
-                                                                        placeholder="Nilai Kontrak Keseluruhan"
+                                                                        class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
+                                                                        value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
+                                                                        id="nilai-kontrak-keseluruhan" name="nilai-kontrak-keseluruhan"
+                                                                        placeholder="*Nilai Perolehan Belum Ditentukan"
                                                                         readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2964,8 +3075,8 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
-                                                                        class="form-control form-control-solid reformat"
-                                                                        value="{{ $proyek->nilai_perolehan }}"
+                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_perolehan == null ? 'text-danger' : '' }}"
+                                                                        value="{{ $proyek->nilai_perolehan ?? '*Nilai Perolehan Belum Ditentukan' }}"
                                                                         placeholder="Nilai Kontrak (Porsi WIKA)"
                                                                         readonly />
                                                                     <!--end::Input-->
@@ -3031,9 +3142,9 @@
                                                                         <option value="Proyek Kecil"
                                                                             {{ $proyek->klasifikasi_terkontrak == 'Proyek Kecil' ? 'selected' : '' }}>
                                                                             Proyek Kecil</option>
-                                                                        <option value="Proyek Mega"
-                                                                            {{ $proyek->klasifikasi_terkontrak == 'Proyek Mega' ? 'selected' : '' }}>
-                                                                            Proyek Mega</option>
+                                                                        <option value="Mega Proyek"
+                                                                            {{ $proyek->klasifikasi_terkontrak == 'Mega Proyek' ? 'selected' : '' }}>
+                                                                            Mega Proyek</option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3079,8 +3190,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jenis Kontrak <i
-                                                                                class="bi bi-lock"></i></span>
+                                                                        <span>Jenis Kontrak</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -3090,12 +3200,12 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Jenis Kontrak">
                                                                         <option></option>
-                                                                        <option value="Internal"
-                                                                            {{ $proyek->jenis_terkontrak == 'Internal' ? 'selected' : '' }}>
-                                                                            Internal</option>
-                                                                        <option value="External"
-                                                                            {{ $proyek->jenis_terkontrak == 'External' ? 'selected' : '' }}>
-                                                                            External</option>
+                                                                        <option value="Cost-Plus" {{ $proyek->jenis_terkontrak == 'Cost-Plus' ? 'selected' : '' }}>Cost-Plus</option>
+                                                                        <option value="Design & Build" {{ $proyek->jenis_terkontrak == 'Design & Build' ? 'selected' : '' }}>Design & Build</option>
+                                                                        <option value="Lumpsum" {{ $proyek->jenis_terkontrak == 'Lumpsum' ? 'selected' : '' }}>Lumpsum</option>
+                                                                        <option value="OM" {{ $proyek->jenis_terkontrak == 'OM' ? 'selected' : '' }}>OM</option>
+                                                                        <option value="Turnkey" {{ $proyek->jenis_terkontrak == 'Turnkey' ? 'selected' : '' }}>Turnkey</option>
+                                                                        <option value="Unit Price" {{ $proyek->jenis_terkontrak == 'Unit Price' ? 'selected' : '' }}>Unit Price</option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3109,23 +3219,23 @@
                                                     <!--end:::Tab Pasar Terkontrak New-->
 
 
-<!--begin:::        -->
+<!--begin::-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: Approval-->
                                                         &nbsp;<br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (user interface)
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal"> </a>
+                                                            data-bs-target="#kt_modal_create_namemodal"> </a>
                                                         </h3>
                                                         &nbsp;<br>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
+                                                        <!--End::Title Biru Form: Approval-->
 
                                                         <!--begin::Table-->
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                            id="kt_customers_table">
+                                                            id="approval_table">
                                                             <!--begin::Table head-->
                                                             <thead>
                                                                 <!--begin::Table row-->
@@ -3190,10 +3300,10 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (Head interface)
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal"> </a>
+                                                                data-bs-target="#kt_modal"> </a>
                                                         </h3>
                                                         &nbsp;<br>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
+                                                        <!--End::Title Biru Form: Approval -->
 
                                                         <!--begin::Table-->
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -3275,7 +3385,7 @@
                                                     <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
-                                                        <!--Begin::Title Biru Form: Approval-->
+                                                        <!--Begin::Title Biru Form: Feed back-->
                                                         &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Proyek Feedback
@@ -3283,7 +3393,7 @@
                                                                 data-bs-target="#kt_modal_feedback">+</a>
                                                         </h3>
                                                         &nbsp;<br>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
+                                                        <!--End::Title Biru Form: List Feed back-->
 
                                                         <!--begin::Table-->
                                                         <table class="table align-middle table-row-dashed fs-6 gy-2"
@@ -3336,12 +3446,12 @@
                                                     <div class="tab-pane fade" id="kt_user_view_overview_forecast"
                                                         role="tabpanel">
 
-                                                        <!--Begin::Title Biru Form: Approval-->
+                                                        <!--Begin::Title Biru Form: History-->
                                                         &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">History Forecast</h3>
                                                         &nbsp;<br>
-                                                        <!--End::Title Biru Form: List Peserta Tender-->
+                                                        <!--End::Title Biru Form: List History-->
 
                                                         {{-- begin::Detail History Forecast --}}
                                                         <div class="d-flex flex-row-reverse mb-5">
@@ -3451,6 +3561,179 @@
 
 
 <!--begin::Modal-->
+<!--begin::modal ADD PESERTA TENDER-->
+<form action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
+@csrf
+<input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
+<div class="modal fade" id="kt_modal_peserta_tender" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-800px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Tambah List Peserta Tender :</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Nama Peserta Tender</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select id="peserta-tender" name="peserta-tender" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
+                                <option></option>
+                                @foreach ($customers as $customer)
+                                    <option value="{{ $customer->name }}"> {{ $customer->name }}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Nilai Penawaran</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid reformat" id="nilai-tender"
+                                name="nilai-tender" placeholder="Nilai Penawaran" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span><i class="bi bi-percent text-dark"></i> OE</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
+                                name="oe-tender" placeholder="% OE" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Status</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" id="status-tender"
+                                name="status-tender" placeholder="Status" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+</form>
+<!--end::modal ADD PESERTA TENDER-->
+
+<!--begin::DELETE PESERTA TENDER-->
+@foreach ($pesertatender as $peserta)
+<form action="/proyek/peserta-tender/delete/{{ $peserta->id }}" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_tender_delete_{{ $peserta->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus Peserta Tender : {{ $peserta->peserta_tender }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE PESERTA TENDER-->
 
 <!--begin::modal ADD USER SKAT-->
 <form action="/proyek/user/add" method="post" enctype="multipart/form-data">
@@ -3540,6 +3823,54 @@
 </div>
 </form>
 <!--end::modal ADD USER SKAT-->
+
+<!--begin::DELETE USER SKAT-->
+@foreach ($teams as $team)
+<form action="/proyek/user-delete/{{ $team->id }}" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_team_delete_{{ $team->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $team->User->name }} - {{ $team->role }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE USER SKAT-->
 
 <!--begin::modal KRITERIA PASAR-->
 <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
@@ -3822,7 +4153,7 @@
                                 bobot = option.getAttribute("data-bobot");
                             }
                         })
-                        console.log(bobot);
+                        // console.log(bobot);
                         document.querySelector("#" + editBobot).value = bobot;
                     }
                 </script>
@@ -3939,16 +4270,15 @@
                                 }
                             @endphp
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span><b id="max-porsi" value="{{ $proyek->porsi_jo - $joCompany }}">Max Porsi
-                                        JO : {{ $proyek->porsi_jo }}% </b></span>
+                                <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span>
                             </label>
                             <!--end::Label-->
                             <br>
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo - $joCompany }} - </b><b
-                                        id="selisih-porsi">0</b><b id="sisa-porsi"> =
-                                        {{ $proyek->porsi_jo - $joCompany }}%</b></span>
+                                <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo }} - </b>
+                                    <b id="selisih-porsi">0</b>
+                                    <b id="sisa-porsi"> = {{ $proyek->porsi_jo }}%</b></span>
                             </label>
                             <!--end::Label-->
                         </div>
@@ -3974,7 +4304,7 @@
                                 data-placeholder="Pilih Company JO">
                                 <option></option>
                                 @foreach ($customers as $customer)
-                                    <option value="{{ $customer->id_customer }}">
+                                    <option value="{{ $customer->name }}">
                                         {{ $customer->name }}</option>
                                 @endforeach
                             </select>
@@ -3988,14 +4318,17 @@
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Porsi JO Company (1 - {{ $proyek->porsi_jo - $joCompany }} %)</span>
+                                <span>Porsi JO Company (1 - {{ $proyek->porsi_jo }} %)</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="number" min="1" max="{{ $proyek->porsi_jo - $joCompany }}"
+                            <input type="number" min="1" max="{{ $proyek->porsi_jo }}"
                                 onkeyup="getJO()" onchange="getJO()" class="form-control form-control-solid"
                                 id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
                             <!--end::Input-->
+                            <!--begin::Hidden Input-->
+                            <input type="hidden" id="sisa-input" name="sisa-input" value="">
+                            <!--end::Hidden Input-->
                         </div>
                         <!--end::Input group-->
                     </div>
@@ -4011,6 +4344,7 @@
                         // console.log(porsiJO.value);
                         document.getElementById("selisih-porsi").innerHTML = porsiJO.value;
                         document.getElementById("sisa-porsi").innerHTML = " = " + sisaJO + "%";
+                        document.getElementById("sisa-input").value = sisaJO;
                     }
                 </script>
 
@@ -4029,6 +4363,54 @@
 </div>
 </form>
 <!--end::modal PORSI JO-->
+
+<!--begin::DELETE PORSI JO-->
+@foreach ($porsiJO as $porsi)
+<form action="/proyek/porsi-delete/{{ $porsi->id }}" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_porsi_delete_{{ $porsi->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $porsi->company_jo }} - {{ $porsi->porsi_jo }}%
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE PORSI JO-->
 
 
 {{-- <!--begin::modal APPROVAL-->
@@ -4198,6 +4580,11 @@
     $('#kt_modal_porsijo').on('show.bs.modal', function() {
         $("#company-jo").select2({
             dropdownParent: $("#kt_modal_porsijo")
+        });
+    });
+    $('#kt_modal_peserta_tender').on('show.bs.modal', function() {
+        $("#peserta-tender").select2({
+            dropdownParent: $("#kt_modal_peserta_tender")
         });
     });
 </script>

@@ -203,13 +203,13 @@
                             <!--end::FORECAST LINE CHART-->
                             <hr>
 
-                            <figure class="highcharts-figure py-12">
+                            {{-- <figure class="highcharts-figure py-12">
                                 <div class="py-12" id="forecast-3wulan">
                                     <!--begin::FORECAST 3 WULAN CHART-->
                                     <!--end::FORECAST 3 WULAN CHART-->
                                 </div>
 
-                                {{-- Begin :: Data Table Triwulan --}}
+                                <!-- Begin :: Data Table Triwulan -->
                                 <div class="" id="datatable-triwulan" style="display:none;">
                                     <hr>
                                     <div class="text-center">
@@ -223,26 +223,26 @@
                                         <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                             onclick="toggleFullscreen()" id="exit-fullscreen"><i
                                                 class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                        <!-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> -->
                                     </div>
                                     <br>
                                     <table class="table align-middle table-row-dashed fs-6 gy-2">
                                         <!--begin::Table head-->
                                         <thead id="table-line-head">
-                                            {{-- THead Here --}}
+                                            <!-- THead Here -->
                                         </thead>
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold" id="table-line-body">
-                                            {{-- Data Here --}}
+                                            <!-- Data Here -->
                                         </tbody>
                                         <!--end::Table body-->
                                     </table>
                                     <!--end::Table Proyek-->
                                 </div>
-                                {{-- End :: Data Table Triwulan --}}
+                                <!-- End :: Data Table Triwulan -->
                             </figure>
-                            <hr>
+                            <hr> --}}
 
                             <figure class="highcharts-figure py-12">
                                 <div class="py-12" id="nilai-realisasi">
@@ -764,7 +764,7 @@
     <!--end::FORECAST LINE-->
 
     <!--begin::FORECAST 3WULAN-->
-    <script>
+    {{-- <script>
         let forecast3Wulan = JSON.parse("{!! json_encode($nilaiForecastTriwunalArray) !!}");
 
         Highcharts.chart('forecast-3wulan', {
@@ -848,7 +848,7 @@
             },
 
         });
-    </script>
+    </script> --}}
     <!--end::FORECAST 3WULAN-->
 
     <!--begin::NILAI REALISASI-->
