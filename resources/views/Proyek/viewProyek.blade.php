@@ -2965,15 +2965,39 @@
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>No Kontrak <i class="bi bi-journal-text"></i></span>
-                                                                        {{-- <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a> --}}
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="nomor-terkontrak" name="nomor-terkontrak"
-                                                                        value="{{ $proyek->nomor_terkontrak }}"
-                                                                        placeholder="No Kontrak" />
+                                                                    <div class="d-flex align-items-center position-relative">
+                                                                        <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                                                                        <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
+                                                                            <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
+                                                                        </span>
+                                                                        <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
+                                                                            class="form-control form-control-solid"
+                                                                            value="" readonly/>
+                                                                        <!--end::Svg Icon-->
+                                                                        <input onfocusout="displayKontrak(this)" type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            id="nomor-terkontrak" name="nomor-terkontrak"
+                                                                            value="{{ $proyek->nomor_terkontrak }}"
+                                                                            placeholder="" style="display: none" />
+                                                                    </div>
+                                                                    <script>
+                                                                        function viewKontrak(e) {
+                                                                            document.getElementById('fake-terkontrak').style.display = "none";
+                                                                            document.getElementById('view-kontrak').style.display = "none";
+                                                                            document.getElementById('nomor-terkontrak').style.display = "";
+                                                                            // e.value = "{{ $proyek->nomor_terkontrak }}";
+                                                                        }
+                                                                        function displayKontrak(e) {
+                                                                            document.getElementById('view-kontrak').style.display = "";
+                                                                            document.getElementById('view-kontrak').innerHTML = e.value;
+                                                                            document.getElementById('fake-terkontrak').style.display = "";
+                                                                            document.getElementById('nomor-terkontrak').style.display = "none";
+                                                                            // console.log(e);
+                                                                        }
+                                                                    </script>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
