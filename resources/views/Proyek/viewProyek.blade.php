@@ -760,10 +760,12 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="edit-kode-proyek" name="edit-kode-proyek"
-                                                                        value="{{ $proyek->kode_proyek }}" readonly />
+                                                                    @isset($proyek->kode_proyek)
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            id="edit-kode-proyek" name="edit-kode-proyek"
+                                                                            value="{{ $proyek->kode_proyek }}" readonly />
+                                                                    @endisset
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -811,13 +813,16 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
+                                                                    {{-- @isset($proyek->jenis_proyek) --}}
+                                                                    {{-- @dump($proyek->jenis_proyek) --}}
                                                                     <select id="jenis-proyek" name="jenis-proyek"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="E" {{ $proyek->jenis_proyek == 'E' ? 'selected' : '' }}>External</option>
                                                                     </select>
+                                                                    {{-- @endisset --}}
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="jenis-proyek" name="jenis-proyek"
@@ -1289,7 +1294,7 @@
                                                                         <input type="text" onkeyup="hitungAwal()"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
-                                                                        value="{{ $proyek->nilai_valas_awal }}"
+                                                                        value="{{ $proyek->nilai_rkap }}"
                                                                         placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
                                                                         readonly />
                                                                         <!--end::Input-->
@@ -1369,7 +1374,7 @@
                                                                             data-placeholder="Bulan Pelaksanaan" disabled>
                                                                             <option></option>
                                                                             <option selected>
-                                                                                @switch($proyek->bulan_awal)
+                                                                                @switch($proyek->bulan_pelaksanaan)
                                                                                 @case('1')
                                                                                 Januari
                                                                                 @break
@@ -1600,11 +1605,24 @@
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="negara" name="negara"
                                                                         value="{{ $proyek->negara }}"
-                                                                        placeholder="Negara" />
+                                                                        placeholder="Negara" /> --}}
+                                                                    <select name="negara" id="negara" class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="false" 
+                                                                        onchange="selectProvinsi(this)"
+                                                                        data-placeholder="Pilih Negara">
+                                                                        <option value=""></option>
+                                                                        @foreach ($data_negara as $negara)
+                                                                            @if ($negara->country == $proyek->negara)
+                                                                                <option value="{{$negara->country}}" selected>{{$negara->country}}</option>
+                                                                            @else
+                                                                                <option value="{{$negara->country}}">{{$negara->country}}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1669,11 +1687,24 @@
                                                                     <!--end::Label-->
 
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="provinsi" name="provinsi"
                                                                         value="{{ $proyek->provinsi }}"
-                                                                        placeholder="Provinsi" />
+                                                                        placeholder="Provinsi" /> --}}
+                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="false" 
+                                                                        onchange="selectProvinsi(this)"
+                                                                        data-placeholder="Pilih Provinsi">
+                                                                        <option value=""></option>
+                                                                        @foreach ($data_provinsi as $provinsi)
+                                                                            @if ($provinsi->id == $proyek->provinsi)
+                                                                                <option value="{{$provinsi->id}}" selected>{{ucwords(strtolower($provinsi->name))}}</option>
+                                                                            @else
+                                                                                <option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1716,7 +1747,7 @@
                                                                     <!--begin::Input-->
                                                                     @php
                                                                         if ($statusPasar == '') {
-                                                                            $statusPasar = 'Kriteria Pasar Belum Diisi';
+                                                                            $statusPasar = '*Kriteria Pasar Belum Diisi';
                                                                         } elseif ($statusPasar >= 0.75) {
                                                                             $statusPasar = 'Potensial';
                                                                         } else {
@@ -2701,7 +2732,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>No SPK External</span>
+                                                                        <span>No SPK External <i class="bi bi-journal-text"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
 
@@ -2746,7 +2777,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal SPK Internal</span>
+                                                                        <span>Tanggal SPK Internal</i></span>
                                                                     </label>
                                                                     <a href="#" class="btn"
                                                                         style="background: transparent;"
@@ -2933,7 +2964,8 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>No Kontrak</span>
+                                                                        <span>No Kontrak <i class="bi bi-journal-text"></i></span>
+                                                                        {{-- <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a> --}}
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -3042,7 +3074,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Mulai Kontrak</span>
+                                                                        <span>Tanggal Mulai Kontrak <i class="bi bi-journal-text"></i></span>
                                                                     </label>
                                                                     <a href="#" class="btn"
                                                                         style="background: transparent;"
@@ -3069,7 +3101,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Kontrak (Porsi WIKA) <i
+                                                                        <span>Nilai Kontrak (Porsi WIKA) <i class="bi bi-journal-text"></i> <i
                                                                                 class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
@@ -3096,7 +3128,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Tanggal Akhir Kontrak</span>
+                                                                        <span>Tanggal Akhir Kontrak <i class="bi bi-journal-text"></i></span>
                                                                     </label>
                                                                     <a href="#" class="btn"
                                                                         style="background: transparent;"

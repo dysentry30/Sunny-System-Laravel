@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string("kurs_review")->nullable();
             $table->integer("bulan_review")->nullable();
             $table->string("nilaiok_review")->nullable();
-            $table->string("nilai_valas_awal")->nullable();
+            // $table->string("nilai_valas_awal")->nullable();
             $table->string("mata_uang_awal")->nullable();
             $table->string("kurs_awal")->nullable();
             $table->integer("bulan_awal")->nullable();

@@ -190,7 +190,8 @@ class CustomerController extends Controller
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
         
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        // dd(storage_path("/app/public/data/provinsi.json"));
+        $id_kabupaten = $customer->provinsi; 
+        $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         // dd($struktur);
         return view('Customer/viewCustomer', [
@@ -202,6 +203,7 @@ class CustomerController extends Controller
             "proyeks" => Proyek::all(),
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
+            "data_kabupaten" => $data_kabupaten,
         ]);
     }
 
@@ -212,6 +214,7 @@ class CustomerController extends Controller
         {
 
         $data = $request->all(); 
+        // dd($data);
         $messages = [
             "required" => "This field is required",
         ];
@@ -231,7 +234,6 @@ class CustomerController extends Controller
         }
 
 
-        // dd($data); //tes log hasil $data 
         $editCustomer=Customer::find($data["id-customer"]);
         $editCustomer->name = $data["name-customer"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -242,12 +244,14 @@ class CustomerController extends Controller
         $editCustomer->email = $data["email"];
         $editCustomer->phone_number = $data["phone-number"];
         $editCustomer->website = $data["website"];
-
+        
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $editCustomer->provinsi = $data["provinsi"];
+        $editCustomer->kota_kabupaten = $data["kabupaten"];
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
         $editCustomer->name_pic = $data["name-pic"];
