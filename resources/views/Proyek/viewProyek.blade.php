@@ -85,15 +85,19 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                        Cancel</button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     {{-- <a class="btn btn-sm btn-light btn-active-primary fs-7 px-4 mx-3" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_approval" id="kt_toolbar_primary_button"
                                         style="padding: 8px">
                                         Req Approval
                                     </a> --}}
-                                    &nbsp;
-                                    &nbsp;
                                     <!--end::Button-->
-
+                                    &nbsp;
+                                    &nbsp;
                                     <!--begin::Button-->
                                     <a href="/proyek" class="btn btn-sm btn-light btn-active-primary"
                                         id="customer_new_close">
