@@ -284,7 +284,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
         $proyek = Proyek::find($data["kode_proyek"]);
-        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->orderByDesc("created_at")->first();
+        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", (int) date("m"))->orderByDesc("created_at")->first();
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
             if ($forecast->update(["nilai_forecast" => (int) $data["nilai_forecast"]])) {
@@ -314,6 +314,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (int) $nilai_kontrak_keseluruhan;
+            $forecast->periode_prognosa = (int) date("m");
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
                 if ($proyek->kode_proyek == $data["kode_proyek"]) {
@@ -327,7 +328,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     "status" => "success",
                     "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
                 ]);
-            }
+            } 
+            return response()->json([
+                "status" => "failed",
+                "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
+            ]);
         }
         
         return response()->json([
@@ -481,6 +486,55 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     "status" => "failed",
         //     "msg" => "Maaf, anda bukan admin",
         // ]);
+    });
+
+
+    Route::post('/forecast/set-unlock-previous-forecast', function (Request $request) {
+        $data = $request->all();
+        // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
+        // $from_user = Auth::user();
+        // $unit_kerjas = UnitKerja::find(1);
+        // // dd($unit_kerjas);
+        // if (auth()->user()->check_administrator) {
+        //     if ($unit_kerjas->metode_approval == "Sequence") {
+        //         $next_user = [];
+        //         $to_user = $unit_kerjas->User_1;
+        //         if (!empty($unit_kerjas->User_2)) {
+        //             array_push($next_user, $unit_kerjas->User_2->id);
+        //         }
+
+        //         if (!empty($unit_kerjas->User_3)) {
+        //             array_push($next_user, $unit_kerjas->User_3->id);
+        //         }
+        //         // $next_user = $unit_kerjas->user_2;
+        //         LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast", $next_user, 0, 0);
+        //         // Alert::success("Success", "Forecast has been locked");
+        //         return response()->json([
+        //             "status" => "success",
+        //             "msg" => "Silahkan tunggu sampai approval selesai. Cek notifikasi anda secara berkala!",
+        //         ]);
+        //     } else {
+        //         // $unit_kerjas->each(function ($unit_kerja) {
+        //         // });
+        //     }
+        //     // return response()->json([
+        //     //     "status" => "success",
+        //     //     "msg" => "OKe",
+        //     // ]);
+        // }
+        if (Auth::user()->check_administrator) {
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
+        } else {
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        }
+        dd($history_forecasts);
+        foreach($history_forecasts as $history_forecast) {
+            $history_forecast->delete();
+        }
+        return response()->json([
+            "status" => "success",
+            // "msg" => "Forecast berhasil dibuka",
+        ]);
     });
 
     Route::post('/forecast/set-unlock', function (Request $request) {

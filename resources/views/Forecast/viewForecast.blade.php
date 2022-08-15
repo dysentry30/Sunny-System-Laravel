@@ -64,63 +64,75 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     <!--begin::Title-->
                                     <h1 class="d-flex align-items-center fs-3 my-1">Forecast
                                     </h1>
-                                    <div>
-                                        {{-- begin::Tabs Forecast --}}
-                                        @if ($proyeks->count() > 0)
-                                            <ul
-                                                class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
-                                                <!--begin:::Tab item Forecast Bulanan-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                        href="#kt_user_view_overview_forecast_bulanan"
-                                                        style="font-size:14px;">Forecast
-                                                        Bulanan</a>
+                                    <div class="row">
+                                        <div class="col">
 
+                                            {{-- begin::Tabs Forecast --}}
+                                            @if ($proyeks->count() > 0)
+                                                <ul
+                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
+                                                    <!--begin:::Tab item Forecast Bulanan-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_forecast_bulanan"
+                                                            style="font-size:14px;">Forecast
+                                                            Bulanan</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast Bulanan-->
+    
+                                                    <!--begin:::Tab item Forecast Internal-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
+                                                            style="font-size:14px;">Forecast Internal</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast Internal-->
+    
+                                                    <!--begin:::Tab item Forecast S/D-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
+                                                            style="font-size:14px;">Forecast S/D</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast S/D-->
+    
+                                                    <!--begin:::Tab item Forecast S/D-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
+                                                            style="font-size:14px;">Forecast S/D Internal</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast S/D-->
+                                                </ul>
+                                            @endif
+                                        </div>
 
-                                                    <button type="button" style="background-color: #008CB4;" id="lock-forecast"
-                                                        onclick="lockMonthForecastBulanan(this)"
-                                                        class="btn btn-sm btn-active-primary mt-4">
-                                                        <script>
-                                                            const historyForecast = "{{ count($historyForecast) }}";
-                                                        </script>
+                                        <div class="row">
+                                            <div class="d-flex col-6 align-items-center justify-content-between">
+                                                <button type="button" style="background-color: #008CB4;" id="lock-forecast"
+                                                    onclick="lockMonthForecastBulanan(this)"
+                                                    class="btn btn-sm btn-active-primary mt-4">
+                                                    <script>
+                                                        const historyForecast = "{{ count($historyForecast) }}";
+                                                    </script>
 
-                                                        @if (count($historyForecast) > 0)
-                                                            <span class="text-white mx-2 fs-6">Unlock Forecast</span>
-                                                            <i class="bi bi-lock-fill text-white"></i>
-                                                        @else
-                                                            <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                            <i class="bi bi-unlock-fill text-white"></i>
-                                                        @endif
-                                                    </button>
+                                                    @if (count($historyForecast) > 0)
+                                                        <span class="text-white mx-2 fs-6">Unlock Forecast</span>
+                                                        <i class="bi bi-lock-fill text-white"></i>
+                                                    @else
+                                                        <span class="text-white mx-2 fs-6">Lock Forecast</span>
+                                                        <i class="bi bi-unlock-fill text-white"></i>
+                                                    @endif
 
-                                                </li>
-                                                <!--end:::Tab item Forecast Bulanan-->
-
-                                                <!--begin:::Tab item Forecast Internal-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
-                                                        style="font-size:14px;">Forecast Internal</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast Internal-->
-
-                                                <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
-                                                        style="font-size:14px;">Forecast S/D</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast S/D-->
-
-                                                <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
-                                                        style="font-size:14px;">Forecast S/D Internal</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast S/D-->
-                                            </ul>
-                                        @endif
+                                                </button>
+                                                <button type="button" id="unlock-previous-forecast"
+                                                onclick="unlockPreviousForecast()"
+                                                class="btn btn-sm btn-light btn-active-primary mt-4">
+                                                        <span class="mx-2 fs-6">Unlock Forecast Sebelumnya</span>
+                                                        <i class="bi bi-lock-fill"></i>
+                                                </button>
+                                            </div>
+                                        </div>
 
                                         {{-- end::Tabs Forecast --}}
                                     </div>
@@ -674,6 +686,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
 
                                                                                         @for ($i = 0; $i < 12; $i++)
+                                                                                            @php
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", (int) date("m"));
+                                                                                            @endphp
                                                                                             @foreach ($proyek->Forecasts as $forecast)
                                                                                                 @if ($forecast->month_forecast == $month_counter)
                                                                                                     @php
@@ -3993,6 +4008,78 @@ fill="none">
                     input.setAttribute("disabled", "");
                 }
             });
+        }
+    }
+
+    async function unlockPreviousForecast() {
+        let historyForecast = JSON.parse('{!!$historyForecast_all->toJson()!!}');
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                            ];
+        historyForecast = Object.keys(historyForecast);
+        const minMonth = Math.min(historyForecast);
+        const maxMonth = Math.max(historyForecast);
+        const jsonVariable = {};
+        const date = new Date();
+        for(var i=minMonth; i <= maxMonth; i++) {
+            jsonVariable[i] = monthNames[i - 1];        
+        }
+        console.log(jsonVariable);
+
+        const {value: monthForecast} = await Swal.fire({
+            title: 'Pilih Bulan Forecast',
+            input: 'select',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#7e8299',
+            inputOptions: jsonVariable,
+            inputPlaceholder: 'Tekan di sini untuk memilih bulan',
+            showCancelButton: true,
+            inputValidator: (value) => {
+                return new Promise(resolve => {
+                    if (value == "") {
+                        resolve("Silahkan pilih bulan forecast");
+                    }
+                    else {
+                        resolve();
+                    }
+                })
+            }
+        });
+        if (monthForecast) {
+            Swal.fire({
+                title: `Apakah anda yakin ingin Unlock Forecast pada bulan ${monthNames[monthForecast - 1]}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#7e8299',
+                confirmButtonText: 'Lanjut'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        const formData = new FormData();
+                        formData.append("_token", "{{csrf_token()}}");
+                        formData.append("periode_prognosa",  monthForecast);
+                        const getUnlockForecastPreviousMonthRes = await fetch(`/forecast/set-unlock-previous-forecast`, {
+                            method: "POST",
+                            header: {
+                                "content-type": "application/json"
+                            },
+                            body: formData,
+                        }).then(res => res.json());
+
+                        if (res.status == "success") {
+                            Toast.fire({
+                                icon: 'success',
+                                text: "Forecast bulan lalu berhasil di Unlock",
+                            })
+                            return;
+                        }
+                        Toast.fire({
+                            icon: 'error',
+                            text: "Forecast bulan lalu gagal di Unlock",
+                        })
+                            return;
+                    }
+                })
         }
     }
 </script>

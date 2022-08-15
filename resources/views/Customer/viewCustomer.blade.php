@@ -280,6 +280,15 @@
                                                     </li>
                                                     <!--end:::Tab item Atachment & Notes-->
 
+                                                    <!--begin:::Tab Overview-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview"
+                                                            style="font-size:14px;">OVERVIEW</a>
+                                                    </li>
+                                                    <!--end:::Tab Overview-->
+
                                                 </ul>
                                                 <!--end:::Tabs-->
 
@@ -1342,6 +1351,18 @@
                                                             <!--end::Input Note-->
 
                                                         </div>
+                                                    </div>
+                                                    <!--end:::Tab pane Atachment & Notes-->
+
+                                                    <!--begin:::Tab pane Atachment & Notes-->
+                                                    <div class="tab-pane fade" id="kt_user_view_overview" role="tabpanel">
+                                                        <input type="file" id="file" class="file" hidden>
+                                                        <!--begin::Attachment-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                            Overview
+                                                        </h3>
+                                                        <br>
                                                     </div>
                                                     <!--end:::Tab pane Atachment & Notes-->
 
