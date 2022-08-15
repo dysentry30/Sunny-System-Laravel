@@ -62,7 +62,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 row">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast {{"| " . $month_title}}
                                     </h1>
                                     <div class="row">
                                         <div class="col">
@@ -123,14 +123,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                         <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
-
                                                 </button>
-                                                <button type="button" id="unlock-previous-forecast"
+                                                @if ($previous_forecast->count() > 0)
+                                                    <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4">
+                                                        <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
+                                                        <i class="bi bi-lock-fill"></i>
+                                                    </a>                                                    
+                                                @endif
+                                                {{-- <button type="button" id="unlock-previous-forecast"
                                                 onclick="unlockPreviousForecast()"
                                                 class="btn btn-sm btn-light btn-active-primary mt-4">
                                                         <span class="mx-2 fs-6">Unlock Forecast Sebelumnya</span>
                                                         <i class="bi bi-lock-fill"></i>
-                                                </button>
+                                                </button> --}}
                                             </div>
                                         </div>
 
@@ -687,7 +693,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                         @for ($i = 0; $i < 12; $i++)
                                                                                             @php
-                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", (int) date("m"));
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                             @endphp
                                                                                             @foreach ($proyek->Forecasts as $forecast)
                                                                                                 @if ($forecast->month_forecast == $month_counter)
@@ -1450,6 +1456,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @php
                                                                                                         $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
                                                                                                         $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? 0;
+                                                                                                        $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                         
                                                                                                     @endphp
                                                                                                     @foreach ($proyek->Forecasts as $forecast)
@@ -2199,6 +2206,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         $index = 1;
                                                                                                     @endphp
                                                                                                 @endif
+                                                                                                @php
+                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
+                                                                                                @endphp
                                                                                                 {{-- @php
                                                                                                     if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                                         $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
@@ -2971,7 +2981,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         // if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->nilai_kontrak_keseluruhan != null) {
                                                                                                         //     $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
                                                                                                         // }
-                                                                                                        
+                                                                                                        $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                     @endphp
                                                                                                     @foreach ($proyek->Forecasts as $forecast)
                                                                                                         @if ($forecast->month_forecast == $i + 1)
@@ -3906,21 +3916,34 @@ fill="none">
     function lockMonthForecastBulanan(elt) {
         monthEltBulanan = elt;
         const getIconElt = monthEltBulanan.querySelector("i");
+        let monthTitle = "{{ $month_title }}";
         if (getIconElt.classList.contains("bi-lock-fill")) {
-            modalBody.innerHTML = `
-                @php
-                    setlocale(LC_TIME, 'id.UTF-8');
-                @endphp
-                <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
-            `;
+            if (monthTitle) {
+                modalBody.innerHTML = `
+                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ $month_title }}</b>?</p>
+                `;
+            } else {
+                modalBody.innerHTML = `
+                    @php
+                        setlocale(LC_TIME, 'id.UTF-8');
+                    @endphp
+                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
+                `;
+            }
             modalFooterBtn.innerText = "Request Authorize";
         } else {
-            modalBody.innerHTML = `
-                @php
-                    setlocale(LC_TIME, 'id.UTF-8');
-                @endphp
-                <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
-            `;
+            if (monthTitle) {
+                modalBody.innerHTML = `
+                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ $month_title }}</b>?</p>
+                `;
+            } else {
+                modalBody.innerHTML = `
+                    @php
+                        setlocale(LC_TIME, 'id.UTF-8');
+                    @endphp
+                    <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
+                `;
+            }
             modalFooterBtn.innerText = "Lanjut";
         }
         modalBoots.show();
@@ -3932,7 +3955,7 @@ fill="none">
         const formData = new FormData();
         if (monthEltBulanan) {
             formData.append("_token", "{{ csrf_token() }}");
-            formData.append("periode_prognosa", "{{ date('m') }}");
+            formData.append("periode_prognosa", "{{$periode == "" ? (int) date('m') : (int) $periode}}" );
             if (getIconElt.classList.contains("bi-unlock-fill")) {
                 const getLockRes = await fetch("/forecast/set-lock", {
                     method: "POST",

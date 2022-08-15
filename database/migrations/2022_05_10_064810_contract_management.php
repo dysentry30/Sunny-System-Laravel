@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create("contract_managements", function (Blueprint $table) {
             $table->id();
-            $table->integer("id_contract")->unique();
+            $table->mediumText("id_contract")->unique();
             $table->mediumText("project_id");
             $table->mediumText("contract_proceed");
             $table->tinyInteger("stages");
@@ -26,7 +26,7 @@ return new class extends Migration
             $table->longText("list_dokumen_ba_defect")->nullable();
             $table->longText("dokumen_pendukung")->nullable();
             $table->longText("dokumen_kontrak_dan_addendum")->nullable();
-            $table->bigInteger("number_spk");
+            $table->text("number_spk");
             $table->bigInteger("value");
             $table->bigInteger("value_review");
         });

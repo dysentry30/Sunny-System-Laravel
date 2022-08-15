@@ -379,6 +379,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Home Page Forecast
     Route::get('/forecast', [ForecastController::class, 'index']);
 
+    // Home Page Forecast with Specific periode
+    Route::get('/forecast/{periode}/{year}', [ForecastController::class, 'index']);
+
     // Get all data from database
     Route::post('/forecast', [ForecastController::class, 'getAllData']);
     Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
@@ -392,7 +395,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $from_user = Auth::user();
 
 
-        $history_forecast = HistoryForecast::where("periode_prognosa", "=", (int) date("m"));
+        $history_forecast = HistoryForecast::where("periode_prognosa", "=", $request->periode_prognosa);
         if (!empty($history_forecast->get()->all())) {
             $history_forecast->delete();
         }
@@ -424,7 +427,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecast->realisasi_forecast = (int) $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
             $history_forecast->month_realisasi = (int) $current_proyek->bulan_ri_perolehan;
-            $history_forecast->periode_prognosa = (int) date("m");
+            $history_forecast->periode_prognosa = $request->periode_prognosa;
             $history_forecast->save();
             if ($index == $forecasts->count() - 1) {
                 return response()->json([
@@ -574,7 +577,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", (int) date("m"))->get();
             # code...
         } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", (int) date("m"))->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         }
         foreach($history_forecasts as $history_forecast) {
             $history_forecast->delete();

@@ -51,6 +51,11 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    <button type="button" class="btn btn-sm btn-danger ms-4" onclick="document.location.reload()" style="display: none;" id="customer_cancel">
+                                        Cancel</button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-4"
                                         id="customer_new_close">
                                         Close</a>
@@ -1055,7 +1060,7 @@
                                 </div>
                                 <!--end::Step 4-->
                                 <!--begin::Step 5-->
-                                <div data-kt-stepper-element="content">
+                                {{-- <div data-kt-stepper-element="content">
                                     <div class="w-100 text-center">
                                         <!--begin::Heading-->
                                         <h1 class="fw-bolder text-dark mb-3">Release!</h1>
@@ -1071,12 +1076,12 @@
                                         </div>
                                         <!--end::Illustration-->
                                     </div>
-                                </div>
+                                </div> --}}
                                 <!--end::Step 5-->
                                 <!--begin::Actions-->
                                 <div class="d-flex flex-stack pt-10">
                                     <!--begin::Wrapper-->
-                                    <div class="me-2">
+                                    {{-- <div class="me-2">
                                         <button type="button" class="btn btn-lg btn-light-primary me-3"
                                             data-kt-stepper-action="previous">
                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr063.svg-->
@@ -1092,9 +1097,9 @@
                                             </span>
                                             <!--end::Svg Icon-->Back
                                         </button>
-                                    </div>
+                                    </div> --}}
                                     <!--end::Wrapper-->
-                                    <!--begin::Wrapper-->
+                                    {{-- <!--begin::Wrapper-->
                                     <div>
                                         <button type="button" class="btn btn-lg btn-primary"
                                             data-kt-stepper-action="submit">
@@ -1134,7 +1139,7 @@
                                             <!--end::Svg Icon-->
                                         </button>
                                     </div>
-                                    <!--end::Wrapper-->
+                                    <!--end::Wrapper--> --}}
                                 </div>
                                 <!--end::Actions-->
                             </form>
@@ -1152,4 +1157,20 @@
     </div>
     <!--end::Modal - Create App-->
 
+@endsection
+
+@section('js-script')
+    <script>
+        const cancelAllInput = document.querySelectorAll("input");
+        
+        cancelAllInput.forEach(input => {
+            input.addEventListener("click", e => {
+                document.querySelector("#customer_cancel").style.display = "";
+            });
+        });
+        
+        $("select").select2().on("change", e => {
+            document.querySelector("#customer_cancel").style.display = "";
+        });
+    </script>
 @endsection

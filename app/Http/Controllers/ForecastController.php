@@ -6,6 +6,7 @@ use App\Models\Dop;
 use App\Models\Proyek;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -17,12 +18,33 @@ class ForecastController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index($periode = "", $year = "")
     {
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
-        $historyForecast_all = HistoryForecast::all()->groupBy("periode_prognosa");
-        $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->get();
+        $periode = $periode != "" ? (int) $periode : (int) date("m");
+        $year = $year != "" ? (int) $year : (int) date("Y");
+        $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
+        $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
+        if($previous_periode_prognosa < 1) {
+            $year_previous_forecast--;
+            $previous_periode_prognosa = 12;
+        }
+        
+        if ($periode != "" && $year != "" && Auth::user()->check_administrator) {
+            $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $historyForecast = HistoryForecast::select("history_forecast.*")->join("proyeks", "proyeks.kode_proyek", "=", "history_forecasts.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $year)->get();
+            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", "=", $year_previous_forecast)->where("f.periode_prognosa", '=', $periode)->get();
+        } else {
+            $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("f.created_at", "=", $year_previous_forecast)->where("f.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("f.created_at", "=", (int) $year)->get();
+        }
+
+        $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
+        if($periode != "") {
+            $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
+        }
         if(Auth::user()->check_administrator) {
             // $proyeks = collect();
             $proyeks = Proyek::all();
@@ -40,7 +62,13 @@ class ForecastController extends Controller
                 // 'dops' => Dop::all(),
                 "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
-                'proyeks' => $proyeks
+                'proyeks' => $proyeks,
+                "previous_periode_prognosa" => $previous_periode_prognosa,
+                "year_previous_forecast" => $year_previous_forecast,   
+                "month_title" => $month_title,
+                "periode" => $periode,
+                "year" => $year,
+                "previous_forecast" => $previous_forecast,
             ]
         );
         // 'unitkerjas' => UnitKerja::all()]);
