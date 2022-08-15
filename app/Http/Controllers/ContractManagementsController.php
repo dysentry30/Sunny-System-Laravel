@@ -47,9 +47,10 @@ class ContractManagementsController extends Controller
         // $sorted_contracts = $contract_managements->sortBy("contract_in");
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
         if (Auth::user()->check_administrator) {
+            // $proyeks = Proyek::all()->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "");
             $proyeks = Proyek::all();
         } else {
-            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->sortBy("kode_proyek");
+            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
         }
         return view("4_Contract", compact(["proyeks"]));
     }
