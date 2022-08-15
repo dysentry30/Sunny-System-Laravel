@@ -22,6 +22,7 @@ return new class extends Migration
             $table->mediumInteger('month_rkap')->nullable();
             $table->bigInteger('realisasi_forecast')->nullable();
             $table->mediumInteger('month_realisasi')->nullable();
+            $table->tinyInteger('periode_prognosa');
             $table->timestamps();
         });
     }

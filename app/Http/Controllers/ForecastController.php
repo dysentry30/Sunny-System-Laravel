@@ -21,12 +21,14 @@ class ForecastController extends Controller
     {
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
+        $historyForecast_all = HistoryForecast::all()->groupBy("periode_prognosa");
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", date("m"))->get();
         if(Auth::user()->check_administrator) {
             // $proyeks = collect();
             $proyeks = Proyek::all();
             $dops = Dop::all();
         } else {
+            // $proyeks = collect();
             $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $dops = Dop::join("unit_kerjas", "unit_kerjas.dop", "=", "dops.dop")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
         }
@@ -36,6 +38,7 @@ class ForecastController extends Controller
                 // 'forecast' => Forecast::all(),
                 "historyForecast" => $historyForecast, 
                 // 'dops' => Dop::all(),
+                "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
                 'proyeks' => $proyeks
             ]

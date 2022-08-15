@@ -65,6 +65,11 @@
         tr td, tr td a{
             color: #3f4254 !important;
         }
+        .swal2-select {
+            border-radius: 0;
+            border: 0;
+            border-bottom: 1px dashed #606061;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -353,19 +358,21 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
-                                    <!--begin::Menu Colapse-->
-                                    <div id="#kt_aside_menu" data-kt-menu="true"
-                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#008CB4' : '' }}">
-                                        <a class="menu-link " href="/user" style="color:white;">
-                                            <span class="menu-icon">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                <i class="bi bi-people-fill text-white"></i>
-                                                <!--end::Svg Icon-->
-                                            </span>
-                                            <span class="menu-title-2">Users</span>
-                                        </a>
-                                    </div>
-                                    <!--end::Menu Colapse-->
+                                    @if (!auth()->user()->check_user_sales)
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/user" style="color:white;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    <i class="bi bi-people-fill text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title-2">Users</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endif
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#008CB4' : '' }}">
