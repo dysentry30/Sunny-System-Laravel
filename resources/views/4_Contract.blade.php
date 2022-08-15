@@ -243,7 +243,7 @@
                                                 $data_found = false;
                                             @endphp
                                             @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek) && ($proyek->stage == 6 || $proyek->stage == 8) && empty($proyek->ContractManagements))
+                                                @if (!empty($proyek) && ($proyek->stage == 6 || $proyek->stage == 8) && empty($proyek->ContractManagements) && $proyek->nomor_terkontrak != null)
                                                     @php
                                                         $data_found = true;
                                                     @endphp
@@ -251,9 +251,9 @@
                                                         <!--begin::Name=-->
                                                         <td>
                                                             {{-- <a class="text-hover-primary 
-                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                </a> --}}
-                                                            <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract ?? "" }}"
+                                                                href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
+                                                            </a> --}}
+                                                            <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}"
                                                                 id="click-name"
                                                                 class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
                                                         </td>
