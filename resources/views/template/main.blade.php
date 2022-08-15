@@ -1329,6 +1329,26 @@
     </script>
     <!--end:: show calendar-->
     
+    <!--begin:: Cancel Button-->
+    <script>
+        const cancelAllInput = document.querySelectorAll("input");
+        
+        cancelAllInput.forEach(input => {
+            input.addEventListener("click", e => {
+                document.querySelector("#cancel-button").style.display = "";
+                console.log(e);
+            });
+            input.addEventListener("input", e => {
+                document.querySelector("#cancel-button").style.display = "";
+            });
+        });
+        
+        $("select").select2().on("change", e => {
+            document.querySelector("#cancel-button").style.display = "";
+        });
+    </script>
+    <!--end:: Cancel Button-->
+    
     <!--end::Javascript-->
 
 </body>

@@ -51,7 +51,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-danger ms-4" onclick="document.location.reload()" style="display: none;" id="customer_cancel">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
                                         Cancel</button>
                                     <!--end::Button-->
 
@@ -1157,20 +1157,4 @@
     </div>
     <!--end::Modal - Create App-->
 
-@endsection
-
-@section('js-script')
-    <script>
-        const cancelAllInput = document.querySelectorAll("input");
-        
-        cancelAllInput.forEach(input => {
-            input.addEventListener("click", e => {
-                document.querySelector("#customer_cancel").style.display = "";
-            });
-        });
-        
-        $("select").select2().on("change", e => {
-            document.querySelector("#customer_cancel").style.display = "";
-        });
-    </script>
 @endsection
