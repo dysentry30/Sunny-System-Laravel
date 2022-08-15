@@ -899,6 +899,9 @@
                 //     depth: 40
                 // }
             },
+            credits: {
+                enabled: false
+            },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
             series: [{
                 name: 'Nilai OK Kumulatif',

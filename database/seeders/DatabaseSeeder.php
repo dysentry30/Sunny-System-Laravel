@@ -47,12 +47,17 @@ class DatabaseSeeder extends Seeder
             'tipe_proyek' => "R",
             'jenis_proyek' => "I",
             'nilai_rkap' => "1,500,000,000",
+            'nilaiok_awal' => "1,500,000,000",
             'stage' => "1",
             'sumber_dana' => "BUMN",
             'bulan_pelaksanaan' => 3,
             'dop' => "DOP 1",
-            'nilai_kontrak_keseluruhan' => "4,500,000,000",
-
+            'porsi_jo' => "100",
+            'kurs_review' => 1,
+            'kurs_awal' => 1,
+            'mata_uang_review' => "IDR",
+            'mata_uang_awal' => "IDR",
+            
         ]);
         Proyek::create([
             'nama_proyek' => "Pembangunan Masjid Raya Ragunan",
@@ -62,12 +67,17 @@ class DatabaseSeeder extends Seeder
             'tipe_proyek' => "P",
             'jenis_proyek' => "E",
             'nilai_rkap' => "23,500,000,000",
+            'nilaiok_awal' => "23,500,000,000",
             'stage' => "4",
             'sumber_dana' => "BUMN",
             'bulan_pelaksanaan' => 4,
             'dop' => "EA",
             'company' => "Wika Industry & Konstruksi",
-            'nilai_kontrak_keseluruhan' => "4,500,000,000",
+            'porsi_jo' => "100",
+            'kurs_review' => 1,
+            'kurs_awal' => 1,
+            'mata_uang_review' => "IDR",
+            'mata_uang_awal' => "IDR",
         ]);
         // end :: Proyek.
 

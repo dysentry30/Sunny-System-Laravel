@@ -234,13 +234,21 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
                                                 <!--begin:::Tabs-->
-                                                <ul
-                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                    <!--begin:::Tab Overview-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview"
+                                                            style="font-size:12px;">OVERVIEW</a>
+                                                    </li>
+                                                    <!--end:::Tab Overview-->
+                                                    
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4 active"
                                                             data-bs-toggle="tab" href="#kt_user_view_company"
-                                                            style="font-size:14px;">COMPANY INFORMATION</a>
+                                                            style="font-size:12px;">COMPANY INFORMATION</a>
                                                     </li>
                                                     <!--end:::Tab item Informasi Perusahaan-->
 
@@ -249,7 +257,7 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_performance"
-                                                            style="font-size:14px;">PERFORMANCE</a>
+                                                            style="font-size:12px;">PERFORMANCE</a>
                                                     </li>
                                                     <!--end:::Tab item Atachment & Notes-->
 
@@ -258,7 +266,7 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_organisasi"
-                                                            style="font-size:14px;">STRUKTUR ORGANISASI</a>
+                                                            style="font-size:12px;">STRUKTUR ORGANISASI</a>
                                                     </li>
                                                     <!--end:::Tab item History-->
 
@@ -267,7 +275,7 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_history"
-                                                            style="font-size:14px;">HISTORY</a>
+                                                            style="font-size:12px;">HISTORY</a>
                                                     </li>
                                                     <!--end:::Tab item History-->
 
@@ -276,18 +284,10 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_Notes"
-                                                            style="font-size:14px;">ATTACHMENTS</a>
+                                                            style="font-size:12px;">ATTACHMENTS</a>
                                                     </li>
                                                     <!--end:::Tab item Atachment & Notes-->
 
-                                                    <!--begin:::Tab Overview-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview"
-                                                            style="font-size:14px;">OVERVIEW</a>
-                                                    </li>
-                                                    <!--end:::Tab Overview-->
 
                                                 </ul>
                                                 <!--end:::Tabs-->
@@ -416,7 +416,11 @@
                                                                         data-placeholder="Pilih Customer Provinsi">
                                                                         <option value=""></option>
                                                                         @foreach ($data_provinsi as $provinsi)
-                                                                            <option value="{{$provinsi->id}}">{{$provinsi->name}}</option>
+                                                                            @if ($provinsi->id == $customer->provinsi)
+                                                                                <option value="{{$provinsi->id}}" selected>{{$provinsi->name}}</option>
+                                                                            @else
+                                                                                <option value="{{$provinsi->id}}">{{$provinsi->name}}</option>
+                                                                            @endif
                                                                         @endforeach
                                                                     </select>
                                                                     <!--end::Input-->
@@ -438,7 +442,16 @@
                                                                         data-control="select2" data-hide-search="false" 
                                                                         {{-- onchange="selectKabupaten(this)" --}}
                                                                         data-placeholder="Pilih Customer Kabupaten">
-                                                                        <option value="" disabled></option>
+                                                                        <option value="" ></option>
+                                                                        @if (isset($data_kabupaten))
+                                                                            @foreach ($data_kabupaten as $kabupaten)
+                                                                                @if ($kabupaten->id == $customer->kota_kabupaten)
+                                                                                    <option value="{{$kabupaten->id}}" selected>{{$kabupaten->name}}</option>
+                                                                                @else
+                                                                                    <option value="{{$kabupaten->id}}">{{$kabupaten->name}}</option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -450,6 +463,7 @@
                                                                 <script>
                                                                     async function selectProvinsi(elt) {
                                                                         const idProvinsi = elt.value;
+                                                                        // console.log(elt.value);
                                                                         let html = ``;
                                                                         const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
                                                                         getKabupaten.forEach(kabupaten => {
