@@ -1807,10 +1807,10 @@
 
 
 <script>
-    var map = L.map('map').setView([51.505, -0.09], 13);
+    var map = L.map('map').setView([51.505, -0.09], 7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 15,
-        minZoom: 6
+        maxZoom: 13,
+        minZoom: 6,
         attribution: '© OpenStreetMap'
     }).addTo(map);
 
@@ -1818,9 +1818,7 @@
     // let prevCityMarker = null;
 
     const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
-    const proyekLocation = JSON.parse('{!! $kategoriProyek->toJson() !!}');
-
-    // const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}'); // jika proyek lebih dari 2 maka pake ini
+    const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}');
 
     // console.log(proyekCoord[0]["JAWA BARAT"]);
 
