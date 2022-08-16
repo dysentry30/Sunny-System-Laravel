@@ -192,8 +192,35 @@ class CustomerController extends Controller
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $id_kabupaten = $customer->provinsi; 
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
+        $data_negara = json_decode(Storage::get("/public/data/country.json"));
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         // dd($struktur);
+        
+        // begin::chart Performance Pelanggan
+        // $kategoriProyek = [];
+        $proyekBerjalan = ProyekBerjalans::all();
+        $kategoriProyek = $proyekBerjalan->where("id_customer", "=", $id_customer);
+        $namaProyek = [];
+        $nilaiOK = [];
+        $nilaiForecast = 0;
+        $proyekOngoing = 0;
+        $proyekClosed = 0;
+        foreach ($kategoriProyek as $kategori){
+            array_push($namaProyek, $kategori->nama_proyek);
+            $nilai = (int) str_replace(",", "", $kategori->nilaiok_proyek);
+            array_push($nilaiOK, $nilai);
+            $nilaiForecast += $kategori->proyek->forecast;
+            if ($kategori->proyek->stage <= 7) {
+                $proyekOngoing ++;
+            }
+            if ($kategori->proyek->stage > 7) {
+                $proyekClosed ++;
+            }
+            // dump($kategori->proyek->forecast);
+        }
+        // dump($kategori->proyek);
+        // end::chart Performance Pelanggan
+        
         return view('Customer/viewCustomer', [
             "customer" => $customer, 
             "attachment" => $customer->customerAttachments->all(),   
@@ -204,6 +231,13 @@ class CustomerController extends Controller
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             "data_kabupaten" => $data_kabupaten,
+            "data_negara" => $data_negara,
+            "kategoriProyek" => $kategoriProyek,
+            "nilaiOK" => $nilaiOK,
+            "namaProyek" => $namaProyek,
+            "nilaiForecast" => $nilaiForecast,
+            "proyekOngoing" => $proyekOngoing,
+            "proyekClosed" => $proyekClosed,
         ]);
     }
 
@@ -235,6 +269,7 @@ class CustomerController extends Controller
 
 
         $editCustomer=Customer::find($data["id-customer"]);
+        // dd($request);
         $editCustomer->name = $data["name-customer"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
         $editCustomer->check_partner = $request->has("check-partner"); //boolean check
@@ -250,6 +285,7 @@ class CustomerController extends Controller
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $editCustomer->npwp_company = $data["npwp-company"];
         $editCustomer->kode_nasabah = $data["kodenasabah-company"];
+        $editCustomer->negara = $data["negara"];
         $editCustomer->provinsi = $data["provinsi"];
         $editCustomer->kota_kabupaten = $data["kabupaten"];
         // $editCustomer->journey_company = $data["journey-company"];

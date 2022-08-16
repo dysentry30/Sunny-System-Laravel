@@ -32,6 +32,7 @@ return new class extends Migration
             $table->string('kode_pelanggan')->nullable();
             $table->string('kode_nasabah')->nullable();
             $table->string('npwp_company')->nullable();
+            $table->string('negara')->nullable();
             $table->string('provinsi')->nullable();
             $table->string('kota_kabupaten')->nullable();
             $table->string('name_pic')->nullable();
