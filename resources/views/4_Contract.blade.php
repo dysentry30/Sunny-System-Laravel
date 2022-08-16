@@ -163,58 +163,35 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @php
-                                                $data_found = false;
-                                            @endphp
-                                            @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek) && $proyek->stage <= 4)
-                                                    @php
-                                                        $data_found = true;
-                                                    @endphp
-                                                    <tr>
-                                                        <!--begin::Name=-->
-                                                        <td>
-                                                            {{-- <a class="text-hover-primary 
-                                                    href="/claim-management/view/{{ $claim->id_claim }}">{{ $claim->id_claim }}
-                                                </a> --}}
-                                                            {{-- <a href="/contract-management/view/{{ $proyek->kode_proyek }}"
-                                                                id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a> --}}
-                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                    id="click-name"
-                                                                    class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Name=-->
-                                                        <td>
+                                            @forelse ($proyeks_tender_awal as $proyek)
+                                                <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
                                                             <a href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                 id="click-name"
-                                                                class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                        </td>
-                                                        <!--end::Name=-->
-                                                        <!--begin::Email=-->
-                                                        <td>
-                                                            {{ $proyek->UnitKerja->unit_kerja }}
-                                                        </td>
-                                                        <!--end::Email=-->
-                                                        <!--begin::Action=-->
-                                                        <td>
-                                                            {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
-                                                        </td>
-                                                        <!--end::Action=-->
-                                                    </tr>
-                                                    @endif
-                                                @endforeach
-                                                @if (!$data_found)
-                                                    @php
-                                                        $data_found = false;
-                                                    @endphp
+                                                                class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                            id="click-name"
+                                                            class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                    </td>
+                                                    <!--end::Name=-->
+                                                    <!--begin::Email=-->
+                                                    <td>
+                                                        {{ $proyek->UnitKerja->unit_kerja }}
+                                                    </td>
+                                                    <!--end::Email=-->
+                                                </tr>
+                                            @empty
                                                 <tr>
                                                     <td colspan="3">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
-                                                @endif
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
@@ -239,14 +216,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
-                                            @php
-                                                $data_found = false;
-                                            @endphp
-                                            @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek) && ($proyek->stage == 6 || $proyek->stage == 8) && empty($proyek->ContractManagements) && $proyek->nomor_terkontrak != null)
-                                                    @php
-                                                        $data_found = true;
-                                                    @endphp
+                                            @forelse ($proyeks_terkontrak as $proyek)
                                                     <tr>
                                                         <!--begin::Name=-->
                                                         <td>
@@ -276,18 +246,13 @@
                                                         </td>
                                                         <!--end::Action=-->
                                                     </tr>
-                                                    @endif
-                                                @endforeach
-                                                @if (!$data_found)
-                                                    @php
-                                                        $data_found = false;
-                                                    @endphp
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <p class="text-center bg-gray-100">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
-                                                @endif
+                                                @empty 
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
@@ -313,12 +278,12 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @php
-                                                $data_found = false;
+                                                $is_data_found = false;
                                             @endphp
-                                            @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek->ContractManagements) && $proyek->ContractManagements->stages == 3)
+                                            @forelse ($proyeks_pelaksanaan_serah_terima as $proyek)
+                                                @if ($proyek->stages == 3)
                                                     @php
-                                                        $data_found = true;
+                                                        $is_data_found = true;
                                                     @endphp
                                                     <tr>
                                                         <!--begin::Name=-->
@@ -350,16 +315,19 @@
                                                         <!--end::Action=-->
                                                     </tr>
                                                     @endif
-                                                @endforeach
-                                                @if (!$data_found)
-                                                    @php
-                                                        $data_found = false;
-                                                    @endphp
-                                                <tr>
-                                                    <td colspan="3">
-                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
-                                                    </td>
-                                                </tr>
+                                                @empty 
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                        </td>
+                                                    </tr>
+                                                @endforelse
+                                                @if (!$is_data_found && $proyeks_pelaksanaan_serah_terima->count() > 0)
+                                                    <tr>
+                                                        <td colspan="3">
+                                                            <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                        </td>
+                                                    </tr>
                                                 @endif
                                         </tbody>
                                     </table>
@@ -386,12 +354,12 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600 fs-6">
                                             @php
-                                                $data_found = false;
+                                                $is_data_found = false
                                             @endphp
-                                            @foreach ($proyeks as $proyek)
-                                                @if (!empty($proyek->ContractManagements) && $proyek->ContractManagements->stages == 4)
+                                            @forelse ($proyeks_pelaksanaan_serah_terima as $proyek)
+                                                @if ($proyek->stages == 4)
                                                     @php
-                                                        $data_found = true;
+                                                        $is_data_found = true;
                                                     @endphp
                                                     <tr>
                                                         <!--begin::Name=-->
@@ -423,17 +391,20 @@
                                                         <!--end::Action=-->
                                                     </tr>
                                                     @endif
-                                                @endforeach
-                                                @if (!$data_found)
-                                                    @php
-                                                        $data_found = false;
-                                                    @endphp
+                                            @empty
                                                 <tr>
                                                     <td colspan="3">
                                                         <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
                                                     </td>
                                                 </tr>
-                                                @endif
+                                            @endforelse
+                                            @if (!$is_data_found && $proyeks_pelaksanaan_serah_terima->count() > 0)
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                    </td>
+                                                </tr>
+                                            @endif
                                         </tbody>
                                     </table>
                                     <!--end::Table -->

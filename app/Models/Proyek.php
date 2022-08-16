@@ -84,4 +84,9 @@ class Proyek extends Model
     {
         return $this->hasMany(TeamProyek::class, "kode_proyek", "kode_proyek");
     }
+
+    public function DokumenPrakualifikasi()
+    {
+        return $this->hasMany(DokumenPrakualifikasi::class, "kode_proyek");
+    }
 }
