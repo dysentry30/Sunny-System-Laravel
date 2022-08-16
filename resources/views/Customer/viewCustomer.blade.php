@@ -6,7 +6,7 @@
 @section('title', 'Ubah Pelanggan')
 {{-- End::Title --}}
 <style>
-    /* #map { height: 350px; } */
+    #map { height: 350px; }
 </style>
 <!--begin::Main-->
 @section('content')
@@ -552,64 +552,10 @@
                                                                 </script>
                                                             <!--end::Fungsi Select Provinsi-->
 
-                                                            <div class="col">
-                                                                {{-- <div id="map"></div> --}}
-                                                            </div>
 
                                                         </div>
                                                         <!--End begin::Row-->
 
-                                                        <!--begin::Row-->
-                                                        {{-- <div class="row fv-row">
-																<!--begin::Col-->
-																<div class="col-6">
-																    <!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span class="required">Customer Journey</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<select name="journey-company" 
-                                                                            class="form-select form-select-solid" 
-                                                                            data-control="select2" data-hide-search="true" 
-                                                                            data-placeholder="Pilih Customer Journey">
-                                                                                <option ></option>
-                                                                                <option value="Customer" {{ $customer->journey_company == "Customer" ? "selected" : "" }}>Customer</option>
-                                                                                <option value="Loyal" {{ $customer->journey_company == "Loyal" ? "selected" : "" }}>Loyal</option>
-                                                                                <option value="Advocate" {{ $customer->journey_company == "Advocate" ? "selected" : "" }}>Advocate</option>
-                                                                            </select>
-                                                                            <!--end::Input-->
-                                                                        </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-																	<div class="fv-row mb-7">
-																		<!--begin::Label-->
-																		<label class="fs-6 fw-bold form-label mt-3">
-																			<span class="required">Segmentation</span>
-																		</label>
-																		<!--end::Label-->
-																		<!--begin::Input-->
-																		<select name="segmentation-company" 
-																		class="form-select form-select-solid" 
-																		data-control="select2" data-hide-search="true" 
-																		data-placeholder="Pilih Segmentation">
-																			<option ></option>
-																			<option value="Silver" {{ $customer->segmentation_company == "Silver" ? "selected" : "" }}>Silver</option>
-																			<option value="Gold" {{ $customer->segmentation_company == "Gold" ? "selected" : "" }}>Gold</option>
-																			<option value="VIP" {{ $customer->segmentation_company == "VIP" ? "selected" : "" }}>VIP</option>
-																		</select>
-																		<!--end::Input-->
-																	</div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-															</div> --}}
-                                                        <!--End begin::Row-->
                                                         <br>
                                                         <br>
                                                         <br>
@@ -1499,7 +1445,10 @@
                                                             <!--end::MONITORING PROYEK-->
                                                         </div>
                                                         <hr>
-                                                        
+
+                                                        <div class="col">
+                                                            <div id="map"></div>
+                                                        </div>
                                                     </div>
 <!--end:::Tab pane Over View-->
 
@@ -1858,38 +1807,58 @@
 
 
 <script>
-    // var map = L.map('map').setView([51.505, -0.09], 13);
-    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    //     maxZoom: 19,
-    //     attribution: '© OpenStreetMap'
-    // }).addTo(map);
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 15,
+        minZoom: 6
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
 
     // let prevCityLayer = null;
     // let prevCityMarker = null;
 
+    const proyekCoord = JSON.parse('{!! $area_proyeks->toJson() !!}');
+    const proyekLocation = JSON.parse('{!! $kategoriProyek->toJson() !!}');
+
+    // const proyekLocation = JSON.parse('{!! $kategoriProyek->flatten()->toJson() !!}'); // jika proyek lebih dari 2 maka pake ini
+
+    // console.log(proyekCoord[0]["JAWA BARAT"]);
+
+    proyekCoord.forEach(coord => {
+        proyekLocation.forEach(loc => {
+            if (loc.proyek.provinsi == Object.keys(coord)) {
+                const coordGeoJson = L.geoJSON().addTo(map);
+                coordGeoJson.addData(coord[loc.proyek.provinsi].geojson);
+                map.panTo(new L.LatLng(coord[loc.proyek.provinsi].lat, coord[loc.proyek.provinsi].lon));
+            }
+        });
+        // coord.forEach(c => {
+        // });
+    });
+
     // begin select kabupaten
-    // async function selectKabupaten(elt) {
-    //     let kabupatenName = elt.options[elt.selectedIndex].innerText.replaceAll(/Kabupaten|Kota|/gi, "");
-    //     const getCoorKabupaten = await fetch(`/get-kabupaten-coordinate/${kabupatenName}`).then(res => res.json());
-    //     const kotaCoord = getCoorKabupaten.geojson;
-    //     map.panTo(new L.LatLng(getCoorKabupaten.lat, getCoorKabupaten.lon));
-    //     const cityMarker = L.marker([getCoorKabupaten.lat, getCoorKabupaten.lon]).addTo(map)
-    //     const cityLayer = L.geoJSON().addTo(map);
-    //     cityLayer.addData(kotaCoord);
+    async function selectKabupaten(elt) {
+        // let kabupatenName = elt.options[elt.selectedIndex].innerText.replaceAll(/Kabupaten|Kota|/gi, "");
+        // const getCoorKabupaten = await fetch(`/get-kabupaten-coordinate/${kabupatenName}`).then(res => res.json());
+        // const kotaCoord = getCoorKabupaten.geojson;
+        // map.panTo(new L.LatLng(getCoorKabupaten.lat, getCoorKabupaten.lon));
+        // const cityMarker = L.marker([getCoorKabupaten.lat, getCoorKabupaten.lon]).addTo(map)
+        // const cityLayer = L.geoJSON().addTo(map);
+        // cityLayer.addData(kotaCoord);
 
-    //     if (prevCityLayer && prevCityMarker) {
-    //         map.removeLayer(prevCityLayer);
-    //         map.removeLayer(prevCityMarker);
-    //     }
-    //     prevCityLayer = cityLayer;
-    //     prevCityMarker = cityMarker;
+        // if (prevCityLayer && prevCityMarker) {
+        //     map.removeLayer(prevCityLayer);
+        //     map.removeLayer(prevCityMarker);
+        // }
+        // prevCityLayer = cityLayer;
+        // prevCityMarker = cityMarker;
 
-    //     // L.polygon(kotaCoord, {color: "blue"}).addTo(map);
-    //     // kotaCoord.forEach(coor => {
-    //     // });
-    //     // L.polygon([[...kotaCoord]]).addTo(map);
+        // L.polygon(kotaCoord, {color: "blue"}).addTo(map);
+        // kotaCoord.forEach(coor => {
+        // });
+        // L.polygon([[...kotaCoord]]).addTo(map);
         
-    // }
+    }
     // end select kabupaten
 </script>
 @endsection
