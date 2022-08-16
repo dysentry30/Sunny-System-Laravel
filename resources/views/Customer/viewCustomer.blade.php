@@ -56,6 +56,11 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                        Cancel</button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
                                     <a href="/customer" class="btn btn-sm btn-light btn-active-primary"
                                         id="customer-edit-close" style="margin-left:10px;">
                                         Close</a>
@@ -103,6 +108,45 @@
                                                     </div>
                                                     <!--end::Input group Name-->
 
+                                                    <!--begin::Input group Email-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Email</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="email"
+                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                        id="email" name="email" value="{{ $customer->email }}"
+                                                        placeholder="Email" />
+                                                        @error('email')
+                                                        <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+                                                    
+                                                    <!--begin::Input group Phone-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Kontak Nomor</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text"
+                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                        id="phone-number" name="phone-number"
+                                                        value="{{ $customer->phone_number }}"
+                                                        placeholder="Kontak Nomor" />
+                                                        @error('phone-number')
+                                                        <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
                                                     <!--begin::Options-->
                                                     @php
                                                         $check_customer = $customer->check_customer ? 'checked' : '';
@@ -137,45 +181,6 @@
                                                         <!--end::Options-->
                                                     </div>
                                                     <!--end::Options-->
-
-                                                    <!--begin::Input group Email-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">Email</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="email"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            id="email" name="email" value="{{ $customer->email }}"
-                                                            placeholder="Email" />
-                                                        @error('email')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
-                                                        @enderror
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
-
-                                                    <!--begin::Input group Phone-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">Kontak Nomor</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            id="phone-number" name="phone-number"
-                                                            value="{{ $customer->phone_number }}"
-                                                            placeholder="Kontak Nomor" />
-                                                        @error('phone-number')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
-                                                        @enderror
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
 
                                                     <!--begin::Input group Website-->
                                                     <div class="fv-row mb-7">
@@ -237,7 +242,7 @@
                                                 <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     <!--begin:::Tab Overview-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
+                                                        <a class="nav-link text-active-primary pb-4 active"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview"
                                                             style="font-size:12px;">OVERVIEW</a>
@@ -246,7 +251,7 @@
                                                     
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                        <a class="nav-link text-active-primary pb-4"
                                                             data-bs-toggle="tab" href="#kt_user_view_company"
                                                             style="font-size:12px;">COMPANY INFORMATION</a>
                                                     </li>
@@ -295,8 +300,8 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    <!--begin:::Tab pane Informasi Perusahaan-->
-                                                    <div class="tab-pane fade show active" id="kt_user_view_company"
+<!--begin:::Tab pane Informasi Perusahaan-->
+                                                    <div class="tab-pane fade" id="kt_user_view_company"
                                                         role="tabpanel">
 
                                                         <!--begin::Row-->
@@ -307,7 +312,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Instansi</span>
+                                                                        <span class="">Instansi</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -342,7 +347,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Owner</span>
+                                                                        <span class="">Kode Owner</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -367,7 +372,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">NPWP</span>
+                                                                        <span class="">NPWP</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -386,7 +391,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kode Nasabah</span>
+                                                                        <span class="">Kode Nasabah</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -400,26 +405,29 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
-
+                                                            
+                                                            <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Provinsi</span>
+                                                                        <span class="">Instansi</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                    <select name="negara" id="negara" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="false" 
-                                                                        onchange="selectProvinsi(this)"
-                                                                        data-placeholder="Pilih Customer Provinsi">
+                                                                        onchange="selectNegara(this)"
+                                                                        data-placeholder="Pilih Negara">
                                                                         <option value=""></option>
-                                                                        @foreach ($data_provinsi as $provinsi)
-                                                                            @if ($provinsi->id == $customer->provinsi)
-                                                                                <option value="{{$provinsi->id}}" selected>{{$provinsi->name}}</option>
+                                                                        @foreach ($data_negara as $negara)
+                                                                            @if ($negara->country == $customer->negara)
+                                                                                <option value="{{$negara->country}}" selected>{{$negara->country}}</option>
                                                                             @else
-                                                                                <option value="{{$provinsi->id}}">{{$provinsi->name}}</option>
+                                                                                <option value="{{$negara->country}}">{{$negara->country}}</option>
                                                                             @endif
                                                                         @endforeach
                                                                     </select>
@@ -428,39 +436,109 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
-
+                                                        </div>
+                                                        <!--End begin::Row-->
+                                                            
+                                                            <!--Begin::Col-->
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Kota / Kabupaten</span>
+                                                                        <span class="">Provinsi</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select name="kabupaten" id="kabupaten" class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="false" 
-                                                                        {{-- onchange="selectKabupaten(this)" --}}
-                                                                        data-placeholder="Pilih Customer Kabupaten">
-                                                                        <option value="" ></option>
-                                                                        @if (isset($data_kabupaten))
-                                                                            @foreach ($data_kabupaten as $kabupaten)
-                                                                                @if ($kabupaten->id == $customer->kota_kabupaten)
-                                                                                    <option value="{{$kabupaten->id}}" selected>{{$kabupaten->name}}</option>
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="input-provinsi" name="provinsi"
+                                                                        value="{{$customer->provinsi}}"
+                                                                        placeholder="Provinsi" style="display: none"/>
+                                                                    <div id="div-provinsi">
+                                                                        <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                            data-control="select2" data-hide-search="false" 
+                                                                            onchange="selectProvinsi(this)"
+                                                                            data-placeholder="Pilih Customer Provinsi">
+                                                                            <option value="{{$customer->provinsi}}">{{$customer->provinsi}}</option>
+                                                                            @foreach ($data_provinsi as $provinsi)
+                                                                                @if ($provinsi->id == $customer->provinsi)
+                                                                                    <option value="{{$provinsi->id}}" selected>{{ucwords(strtolower($provinsi->name))}}</option>
                                                                                 @else
-                                                                                    <option value="{{$kabupaten->id}}">{{$kabupaten->name}}</option>
+                                                                                    <option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
                                                                                 @endif
                                                                             @endforeach
-                                                                        @endif
-                                                                    </select>
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <!--end::Row-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Kota / Kabupaten</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="input-kabupaten" name="kabupaten"
+                                                                        value="{{$customer->kota_kabupaten}}"
+                                                                        placeholder="Kabupaten" style="display: none"/>
+                                                                    <div  id="div-kabupaten">
+                                                                        <select name="kabupaten" id="kabupaten" class="form-select form-select-solid"
+                                                                            data-control="select2" data-hide-search="false" 
+                                                                            {{-- onchange="selectKabupaten(this)" --}}
+                                                                            data-placeholder="Pilih Customer Kabupaten">
+                                                                            <option value="{{$customer->kota_kabupaten}}">{{$customer->kota_kabupaten}}</option>
+                                                                            @if (isset($data_kabupaten))
+                                                                                @foreach ($data_kabupaten as $kabupaten)
+                                                                                    @if ($kabupaten->id == $customer->kota_kabupaten)
+                                                                                        <option value="{{$kabupaten->id}}" selected>{{ucwords(strtolower($kabupaten->name))}}</option>
+                                                                                    @else
+                                                                                        <option value="{{$kabupaten->id}}">{{ucwords(strtolower($kabupaten->name))}}</option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </select>
+                                                                    </div>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
                                                             
-                                                            <!--begin::Fungsi Select Negara-->
+                                                            <!--begin::Fungsi Select Provinsi-->
                                                                 <script>
+                                                                    function selectNegara(e) {
+                                                                        // console.log(e.value);
+
+                                                                        if (e.value != "Indonesia") {
+                                                                            document.querySelector("#input-provinsi").style.display = "";
+                                                                            document.querySelector("#input-provinsi").value = "";
+                                                                            document.querySelector("#provinsi").disabled = true;
+                                                                            document.querySelector("#div-provinsi").style.display = "none";
+
+                                                                            document.querySelector("#input-kabupaten").style.display = "";
+                                                                            document.querySelector("#input-kabupaten").value = "";
+                                                                            document.querySelector("#kabupaten").disabled = true;
+                                                                            document.querySelector("#div-kabupaten").style.display = "none";
+                                                                        } else {
+                                                                            document.querySelector("#input-provinsi").style.display = "none";
+                                                                            document.querySelector("#div-provinsi").style.display = "";
+                                                                            document.querySelector("#provinsi").disabled = false;
+                                                                            document.querySelector("#input-kabupaten").style.display = "none";
+                                                                            document.querySelector("#div-kabupaten").style.display = "";
+                                                                            document.querySelector("#kabupaten").disabled = false;
+
+                                                                        }
+                                                                    }
                                                                     async function selectProvinsi(elt) {
                                                                         const idProvinsi = elt.value;
                                                                         // console.log(elt.value);
@@ -472,7 +550,7 @@
                                                                         document.querySelector("#kabupaten").innerHTML = html;
                                                                     }
                                                                 </script>
-                                                            <!--end::Fungsi Select Negara-->
+                                                            <!--end::Fungsi Select Provinsi-->
 
                                                             <div class="col">
                                                                 {{-- <div id="map"></div> --}}
@@ -629,9 +707,9 @@
                                                         <!--End begin::Row-->
 
                                                     </div>
-                                                    <!--end:::Tab pane Informasi Perusahaan-->
+<!--end:::Tab pane Informasi Perusahaan-->
 
-                                                    <!--begin:::Tab pane Performance-->
+<!--begin:::Tab pane Performance-->
                                                     <div class="tab-pane fade" id="kt_user_view_performance"
                                                         role="tabpanel">
                                                         <div class="tab-pane fade show active"
@@ -725,10 +803,10 @@
                                                             <!--End begin::Row-->
                                                         </div>
                                                     </div>
-                                                    <!--end:::Tab pane Performance-->
+<!--end:::Tab pane Performance-->
 
 
-                                                    <!--begin:::Tab pane Struktur Organisasi-->
+<!--begin:::Tab pane Struktur Organisasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_organisasi"
                                                         role="tabpanel">
                                                         <!--begin::Input-->
@@ -795,10 +873,10 @@
                                                         <br>
 
                                                     </div>
-                                                    <!--end:::Tab pane Struktur Organisasi-->
+<!--end:::Tab pane Struktur Organisasi-->
 
 
-                                                    <!--begin:::Tab pane History-->
+<!--begin:::Tab pane History-->
                                                     <div class="tab-pane fade" id="kt_user_view_history" role="tabpanel">
 
                                                         <!--begin::Proyek Berjalan-->
@@ -1260,10 +1338,10 @@
 
                                                         <!--begin:: FORECAST Proyek-->
                                                     </div>
-                                                    <!--end:::Tab pane History-->
+<!--end:::Tab pane History-->
 
 
-                                                    <!--begin:::Tab pane Atachment & Notes-->
+<!--begin:::Tab pane Atachment & Notes-->
                                                     <div class="tab-pane fade" id="kt_user_view_Notes" role="tabpanel">
                                                         <input type="file" id="file" class="file" hidden>
                                                         <!--begin::Attachment-->
@@ -1366,28 +1444,69 @@
 
                                                         </div>
                                                     </div>
-                                                    <!--end:::Tab pane Atachment & Notes-->
+<!--end:::Tab pane Atachment & Notes-->
 
-                                                    <!--begin:::Tab pane Atachment & Notes-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview" role="tabpanel">
-                                                        <input type="file" id="file" class="file" hidden>
-                                                        <!--begin::Attachment-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            Overview
-                                                        </h3>
+<!--begin:::Tab pane Over View-->
+                                                    <div class="tab-pane fade show active" id="kt_user_view_overview" role="tabpanel">
                                                         <br>
+                                                        <div class="row">
+                                                            <div class="row">
+                                                                <div class="col py-6 text-center">
+                                                                    <b class="h3">Proyek Forecast</b>
+                                                                </div>
+                                                                <div class="col py-6 text-center">
+                                                                    <b class="h3">Proyek Berjalan</b>
+                                                                </div>
+                                                                <div class="col py-6 text-center">
+                                                                    <b class="h3">Proyek Selesai</b>
+                                                                </div>
+                                                            </div>
+
+                                                            <br><br>
+                                                            <div class="col py-12 pb-20 text-center" id="proyek-forecast">
+                                                                <!--begin::proyek forecast-->
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                    style="font-size:20px;">
+                                                                    {{ number_format($nilaiForecast, 0, '.', ',') }}
+                                                                </h3>
+                                                                <!--end::proyek forecast-->
+                                                            </div>
+                                                            <span class="vr" style="padding: 0.5px"></span>
+                                                            <div class="col py-12 text-center" id="proyek-ongoing">
+                                                                <!--begin::proyek ongoing-->
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                    style="font-size:20px;">
+                                                                    {{ $proyekOngoing }}
+                                                                </h3>
+                                                                <!--end::proyek ongoing-->
+                                                            </div>
+                                                            <span class="vr" style="padding: 0.5px"></span>
+                                                            <div class="col py-12 text-center" id="proyek-close">
+                                                                <!--begin::proyek close-->
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                    style="font-size:20px;">
+                                                                    {{ $proyekClosed }}
+                                                                </h3>
+                                                                <!--end::proyek close-->
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <br>
+                                                        <hr>
+                                                        
+                                                        <div class="py-12" id="performance-pelanggan">
+                                                            <!--begin::MONITORING PROYEK-->
+                                                            <!--end::MONITORING PROYEK-->
+                                                        </div>
+                                                        <hr>
+                                                        
                                                     </div>
-                                                    <!--end:::Tab pane Atachment & Notes-->
-
-
+<!--end:::Tab pane Over View-->
 
                                                 </div>
                                                 <!--end:::Tab content-->
                     </form>
                 </div>
-                <!--end::Card body-->
-            </div>
             <!--end::Contacts-->
         </div>
         <!--end::Content-->
@@ -1627,40 +1746,150 @@
 
 @endsection
 
+
 @section('js-script')
-    <script>
-        // var map = L.map('map').setView([51.505, -0.09], 13);
-        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //     maxZoom: 19,
-        //     attribution: '© OpenStreetMap'
-        // }).addTo(map);
 
-        // let prevCityLayer = null;
-        // let prevCityMarker = null;
+<!--begin::CDN High Chart-->
+<script src="/js/highcharts/highcharts.js"></script>
+<script src="/js/highcharts/series-label.js"></script>
+<script src="/js/highcharts/exporting.js"></script>
+<script src="/js/highcharts/export-data.js"></script>
+<script src="/js/highcharts/drilldown.js"></script>
+<script src="/js/highcharts/funnel.js"></script>
+<script src="/js/highcharts/accessibility.js"></script>
+<script src="/js/highcharts/highcharts-3d.js"></script>
+<!--end::CDN High Chart-->
 
-        // begin select kabupaten
-        // async function selectKabupaten(elt) {
-        //     let kabupatenName = elt.options[elt.selectedIndex].innerText.replaceAll(/Kabupaten|Kota|/gi, "");
-        //     const getCoorKabupaten = await fetch(`/get-kabupaten-coordinate/${kabupatenName}`).then(res => res.json());
-        //     const kotaCoord = getCoorKabupaten.geojson;
-        //     map.panTo(new L.LatLng(getCoorKabupaten.lat, getCoorKabupaten.lon));
-        //     const cityMarker = L.marker([getCoorKabupaten.lat, getCoorKabupaten.lon]).addTo(map)
-        //     const cityLayer = L.geoJSON().addTo(map);
-        //     cityLayer.addData(kotaCoord);
-
-        //     if (prevCityLayer && prevCityMarker) {
-        //         map.removeLayer(prevCityLayer);
-        //         map.removeLayer(prevCityMarker);
-        //     }
-        //     prevCityLayer = cityLayer;
-        //     prevCityMarker = cityMarker;
-
-        //     // L.polygon(kotaCoord, {color: "blue"}).addTo(map);
-        //     // kotaCoord.forEach(coor => {
-        //     // });
-        //     // L.polygon([[...kotaCoord]]).addTo(map);
+<!--begin::Performance Pelanggan-->
+<script>
+    let namaProyek = {!! json_encode($namaProyek) !!};
+    let nilaiOK = {!! json_encode($nilaiOK) !!};
+    if (namaProyek.length == 0) {
+    namaProyek = ["..."];
+    nilaiOK = [0];
+    }    
+    // console.log(namaProyek.length);
+    // console.log(nilaiOK);
+        
+    Highcharts.chart('performance-pelanggan', {
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 5,
+                beta: 15,
+                viewDistance: 50,
+                depth: 100
+            }
+        },
+        title: {
+            align: 'center',
+            text: '<b class="h3">Nilai OK Proyek</b>'
+        },
+        subtitle: {
+            align: 'center',
+            text: ' '
+        },
+        accessibility: {
+            announceNewData: {
+                enabled: true
+            }
+        },
+        // xAxis: {
+        //     type: 'category'
+        // },
+        xAxis: {
+            categories: namaProyek,
+            labels: {
+                skew3d: true,
+                style: {
+                    fontSize: '16px'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
             
-        // }
-        // end select kabupaten
-    </script>
+        },
+        colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                showInLegend: false
+            },
+        },
+        tooltip: {
+            // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+        },
+
+        // series: [{
+        //     name: "Pelanggan Proyek",
+        //     colorByPoint: true,
+        //     data: [{
+        //             name: "Proyek Forecast",
+        //             y: 3,
+        //         },
+        //         {
+        //             name: "Proyek OnGoing",
+        //             y: 4,
+        //         },
+        //         {
+        //             name: "Proyek Closed",
+        //             y: 2,
+        //         }
+        //     ]
+        // }],
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Nilai OK',
+            data: nilaiOK,
+            // stack: 'male'
+        }]
+    });
+</script>
+<!--end::Performance Pelanggan-->
+
+
+<script>
+    // var map = L.map('map').setView([51.505, -0.09], 13);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     maxZoom: 19,
+    //     attribution: '© OpenStreetMap'
+    // }).addTo(map);
+
+    // let prevCityLayer = null;
+    // let prevCityMarker = null;
+
+    // begin select kabupaten
+    // async function selectKabupaten(elt) {
+    //     let kabupatenName = elt.options[elt.selectedIndex].innerText.replaceAll(/Kabupaten|Kota|/gi, "");
+    //     const getCoorKabupaten = await fetch(`/get-kabupaten-coordinate/${kabupatenName}`).then(res => res.json());
+    //     const kotaCoord = getCoorKabupaten.geojson;
+    //     map.panTo(new L.LatLng(getCoorKabupaten.lat, getCoorKabupaten.lon));
+    //     const cityMarker = L.marker([getCoorKabupaten.lat, getCoorKabupaten.lon]).addTo(map)
+    //     const cityLayer = L.geoJSON().addTo(map);
+    //     cityLayer.addData(kotaCoord);
+
+    //     if (prevCityLayer && prevCityMarker) {
+    //         map.removeLayer(prevCityLayer);
+    //         map.removeLayer(prevCityMarker);
+    //     }
+    //     prevCityLayer = cityLayer;
+    //     prevCityMarker = cityMarker;
+
+    //     // L.polygon(kotaCoord, {color: "blue"}).addTo(map);
+    //     // kotaCoord.forEach(coor => {
+    //     // });
+    //     // L.polygon([[...kotaCoord]]).addTo(map);
+        
+    // }
+    // end select kabupaten
+</script>
 @endsection

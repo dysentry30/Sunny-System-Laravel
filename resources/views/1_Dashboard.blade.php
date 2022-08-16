@@ -309,7 +309,7 @@
                             <hr>
 
                             
-                            <div class="px-8 py-12" id="monitoring-proyek">
+                            <div class="px-8 py-12" id="pareto-proyek">
                                 <h1 class="text-center bold pb-8">
                                     Pareto Proyek
                                 </h1>
@@ -719,12 +719,14 @@
 
             plotOptions: {
                 series: {
-                    allowPointSelect: true
+                    dataLabels: {
+                        enabled: true
+                    }
+                // allowPointSelect: true
                 },
                 // label: {
                 //     connectorAllowed: false
                 // },
-                // pointStart: 2021
             },
 
             series: [{
@@ -894,6 +896,11 @@
                 pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}: {point.y}'
             },
             plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
                 // column: {
                 //     stacking: 'normal',
                 //     depth: 40
