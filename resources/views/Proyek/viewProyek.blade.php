@@ -2165,9 +2165,48 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Document Prakualifikasi
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
                                                         </h3>
+                                                        <br>
+                                                        <div class="w-50">
+                                                            <input type="file" class="form-control form-input-solid" name="dokumen-prakualifikasi" accept=".docx">
+                                                        </div>
+                                                        <br>
+                                                        <!--begin::Table-->
+                                                        <table
+                                                            class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-auto">Nama Document</th>
+                                                                    <th class="w-auto">Dibuat Pada Tanggal</th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            <a href="/document/view/{{$dokumen_prakualifikasi->id_dokumen_prakualifikasi}}/{{$dokumen_prakualifikasi->id_document}}" class="text-hover-primary">{{$dokumen_prakualifikasi->nama_dokumen}}</a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat("d F Y")}}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--end::Table-->
+                                                        {{-- proyek/dokumen-prakualifikasi/upload --}}
                                                         <br>
                                                         <!--End::Title Biru Form: Document Prakualifikasi-->
 
@@ -2204,6 +2243,8 @@
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_add_user">+</a>
                                                         </h3>
+
+
                                                         <br>
                                                         <!--End::Title Biru Form: SKT Personil-->
 

@@ -26,7 +26,7 @@ class AdminAuth
             ]);
         }
         $allowed_url_admin_kontrak = join(" ", ["dashboard", "customer", "forecast", "proyek", "knowledge-base", "company", "sumber-dana", "dop", "pasal", "user", "team-proyek", "sbu", "unit-kerja", "document", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim", "claim-management", "approval-claim", "detail-claim", "kpi", "change-request", "kriteria-pasar", "addendum-contract", "mom-meeting", "perjanjian-kso", "dokumen-pendukung", "kontrak-tanda-tangan", "klarifikasi-negosiasi", "stage"]);
-        $allowed_url_user_sales = join(" ", ["dashboard", "customer", "forecast", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "team-proyek", "dop", "sbu", "unit-kerja", "kriteria-pasar", "get-kabupaten", "get-kabupaten-coordinate"]);
+        $allowed_url_user_sales = join(" ", ["dashboard", "customer", "forecast", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "team-proyek", "dop", "sbu", "unit-kerja", "kriteria-pasar", "get-kabupaten", "get-kabupaten-coordinate", "document"]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
 

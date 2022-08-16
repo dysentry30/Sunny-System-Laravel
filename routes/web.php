@@ -370,6 +370,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/delete/{id}', [ProyekController::class, 'deleteTender']);
+    
+    // UPLOAD Dokumen Prakualifikasi
+    Route::post('proyek/dokumen-prakualifikasi/upload', [ProyekController::class, 'tambahuploadDokumenPrakualifikasiTender']);
+
 
     //End :: Project
 
@@ -407,8 +411,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         foreach ($proyeks as $index => $proyek) {
             $kode_proyek = $proyek[0]->kode_proyek;
             $current_proyek = Proyek::find($kode_proyek);
-            $forecasts = $proyek->filter(function ($data) use($current_proyek) {
-                return str_contains($data->created_at->format("m"), date("m")) && $data->nilai_forecast != 0 && $current_proyek->unit_kerja == Auth::user()->unit_kerja;
+            $forecasts = $proyek->filter(function ($data) {
+                return str_contains($data->created_at->format("m"), date("m")) && $data->nilai_forecast != 0 && $data->unit_kerja == Auth::user()->unit_kerja;
                 // return $data->nilai_forecast != 0;
             });
             foreach ($forecasts as $forecast) {

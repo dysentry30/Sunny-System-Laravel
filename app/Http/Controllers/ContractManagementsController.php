@@ -36,6 +36,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ContractManagementsController extends Controller
@@ -48,13 +49,46 @@ class ContractManagementsController extends Controller
         // return view('4_Contract', ["contracts" => $sorted_contracts]);
         if (Auth::user()->check_administrator) {
             // $proyeks = Proyek::all()->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "");
-            $proyeks = Proyek::all();
+            // $proyeks = DB::table("proyeks as p")->select("p.*")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek");
+            $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) { return self::stdClassToModel($data, Proyek::class); });
+            $proyeks_tender_awal = Proyek::all()->where("stages", "<", 8)->whereNotNull("nomor_terkontrak");
+            $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) { return self::stdClassToModel($data, Proyek::class); });
+            // $proyeks_pelaksanaan = Proyek::join("contract_managements as c", "c.kode_proyek", "=", "proyeks.kode_proyek")->where("c.stages", "=", 3)->whereNotNull("nomor_terkontrak")->get();
+            // $proyeks_serah_terima = Proyek::join("contract_managements as c", "c.kode_proyek", "=", "proyeks.kode_proyek")->where("c.stages", "=", 4)->whereNotNull("nomor_terkontrak")->get();
+            // dd($proyeks_pelaksanaan_serah_terima);
+            // $proyeks = $proyeks->map(function ($data) {
+            //     self::stdClassToModel($data, Proyek::class);
+            // });
         } else {
-            $proyeks = Proyek::where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
+            // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
+            $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.kode_proyek", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
         }
-        return view("4_Contract", compact(["proyeks"]));
+        // return view("4_Contract", compact(["proyeks"]));
+        return view("4_Contract", compact(["proyeks_terkontrak", "proyeks_tender_awal", "proyeks_pelaksanaan_serah_terima"]));
     }
 
+    private function stdClassToModel($data, $instance) {
+        // backup fillable
+        $keys = array_keys(get_object_vars($data));
+        $proyek = new $instance;
+        $fillable = $proyek->getFillable();
+
+        // set id and other fields you want to be filled
+        $proyek->fillable($keys);
+
+        // fill $proyek->attributes array
+        $proyek->fill((array) $data);
+
+        // fill $proyek->original array
+        $proyek->syncOriginal();
+
+        $proyek->exists = true;
+
+        // restore fillable
+        $proyek->fillable($fillable);
+
+        return $proyek;
+    }
 
     public function new()
     {

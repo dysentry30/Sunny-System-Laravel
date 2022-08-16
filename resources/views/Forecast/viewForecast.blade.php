@@ -125,18 +125,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     @endif
                                                 </button>
                                                 @if ($previous_forecast->count() > 0)
-                                                    <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
+                                                    {{-- <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
                                                         <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
                                                         <i class="bi bi-lock-fill"></i>
-                                                    </a>                                                    
+                                                    </a>                                                     --}}
+                                                    <button type="button" id="unlock-previous-forecast"
+                                                    onclick="unlockPreviousForecast()"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4">
+                                                            <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
+                                                    </button>
                                                 @endif
-                                                {{-- <button type="button" id="unlock-previous-forecast"
-                                                onclick="unlockPreviousForecast()"
-                                                class="btn btn-sm btn-light btn-active-primary mt-4">
-                                                        <span class="mx-2 fs-6">Unlock Forecast Sebelumnya</span>
-                                                        <i class="bi bi-lock-fill"></i>
-                                                </button> --}}
                                             </div>
                                         </div>
 
