@@ -194,8 +194,29 @@ class CustomerController extends Controller
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
-        // dd($struktur);
+        $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
+        $area_proyeks = collect();
         
+        foreach($proyeks as $p) {
+            $p = Proyek::find($p->kode_proyek);
+            // $coord_kabupaten = json_decode(Storage::get("/public/data/$p->kabupaten.json"));
+            $coord_provinsi = collect(json_decode(Storage::get("/public/data/provinsi.json")))->filter(function($data) use($p) {
+                $data = (array) $data;
+                return $data["id"] == $p->provinsi;
+            })->first();
+            // $coord_provinsi = array_filter(, function($data) use($p) {
+            //     return $data["province_id"] == $p->provinsi;
+            // });
+            // dd($p->negara);
+            // dd($coord_provinsi);
+            if (!empty($coord_provinsi)) {
+                $location = $p->negara . " " . $coord_provinsi->name;
+                $getCoordCountry = Http::get("https://nominatim.openstreetmap.org/search.php?q=$location&polygon_geojson=1&format=json")->json();
+                if (empty($area_proyeks->keys()->get($p->provinsi))) {
+                    $area_proyeks->push(["$p->provinsi" => $getCoordCountry[0]]);
+                }
+            }
+        }
         // begin::chart Performance Pelanggan
         // $kategoriProyek = [];
         $proyekBerjalan = ProyekBerjalans::all();
@@ -227,7 +248,7 @@ class CustomerController extends Controller
             "proyekberjalan" => $customer->proyekBerjalans->all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
-            "proyeks" => Proyek::all(),
+            "proyeks" => $proyeks,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             "data_kabupaten" => $data_kabupaten,
@@ -238,6 +259,7 @@ class CustomerController extends Controller
             "nilaiForecast" => $nilaiForecast,
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
+            "area_proyeks" => $area_proyeks,
         ]);
     }
 
