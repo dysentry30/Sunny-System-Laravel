@@ -52,8 +52,8 @@ class ContractManagementsController extends Controller
             // $proyeks = DB::table("proyeks as p")->select("p.*")->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("p.stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek");
             $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
                 return self::stdClassToModel($data, Proyek::class);
-            });
-            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 6)->whereNotNull("nomor_terkontrak");
+            })->whereNotNull("nomor_terkontrak");
+            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5);
             $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
                 return self::stdClassToModel($data, Proyek::class);
             });
@@ -305,7 +305,8 @@ class ContractManagementsController extends Controller
 
         $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
         $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
-        return view('Contract/view', ["contract" => ContractManagements::find($id_contract), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts]);
+        $projects = Proyek::all();
+        return view('Contract/view', ["contract" => ContractManagements::find($id_contract), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects ]);
     }
 
 
@@ -1295,7 +1296,6 @@ class ContractManagementsController extends Controller
     public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft)
     {
         $data = $request->all();
-
         $messages = [
             "required" => "Field di atas wajib diisi",
             "file" => "This field must be file only",
@@ -1303,10 +1303,9 @@ class ContractManagementsController extends Controller
         $rules = [
             "kategori" => "required",
             "id-contract" => "required",
+            "id-review-contract" => "required",
             "keterangan" => "required",
-            "deskripsi-klausul-awal" => "required",
-            "usulan-peurbahan-klausul" => "required",
-            "keterangan" => "required",
+            "pasals" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1322,12 +1321,14 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
 
+        $pasals = collect($data["pasals"]);
+        $pasals = $pasals->join("|");
+
         $usulanPerubahanDraft->id_contract = $contract->id_contract;
+        $usulanPerubahanDraft->id_review_draft = $data["id-review-contract"];
         $usulanPerubahanDraft->kategori = $data["kategori"];
-        $usulanPerubahanDraft->isu = $data["keterangan"];
-        $usulanPerubahanDraft->deskripsi_klausul_awal = $data["deskripsi-klausul-awal"];
-        $usulanPerubahanDraft->usulan_perubahan_klausul = $data["usulan-peurbahan-klausul"];
         $usulanPerubahanDraft->keterangan = $data["keterangan"];
+        $usulanPerubahanDraft->pasal_perbaikan = $pasals;
         if ($usulanPerubahanDraft->save()) {
             Alert::success("Success", "Usulan Perubahan Draft berhasil ditambahkan");
             return redirect()->back();

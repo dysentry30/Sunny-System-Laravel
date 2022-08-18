@@ -1043,10 +1043,9 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Isu</th>
-                                        <th class="min-w-125px">Deskripsi Klausul Awal</th>
-                                        <th class="min-w-125px">Usulan Perubahan Klausul</th>
+                                        <th class="min-w-125px">Review Usulan</th>
                                         <th class="min-w-125px">Keterangan</th>
+                                        <th class="min-w-125px">Pasal Perbaikan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -1061,11 +1060,17 @@
                                         </tr>
                                         <tr>
                                             @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @php
+                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                                @endphp
                                                 @if ($perubahan_draft->kategori == 1)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
+                                                    <td>
+                                                        @foreach ($pasals as $pasal)
+                                                        - {{$pasal}} <br> 
+                                                        @endforeach
+                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
@@ -1079,11 +1084,17 @@
                                         </tr>
                                         <tr>
                                             @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @php
+                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                                @endphp
                                                 @if ($perubahan_draft->kategori == 2)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
+                                                    <td>
+                                                        @foreach ($pasals as $pasal)
+                                                        - {{$pasal}} <br>
+                                                        @endforeach
+                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
@@ -1097,17 +1108,21 @@
                                         </tr>
                                         <tr>
                                             @foreach ($contract->UsulanPerubahanDraft as $perubahan_draft)
+                                                @php
+                                                    $pasals = collect(explode("|", $perubahan_draft->pasal_perbaikan));
+                                                @endphp
                                                 @if ($perubahan_draft->kategori == 3)
-                                                    <td>{{$perubahan_draft->isu}}</td>
-                                                    <td>{{$perubahan_draft->deskripsi_klausul_awal}}</td>
-                                                    <td>{{$perubahan_draft->usulan_perubahan_klausul}}</td>
+                                                    <td>{{$perubahan_draft->ReviewContract->DraftContract->title_draft}}</td>
                                                     <td>{{$perubahan_draft->keterangan}}</td>
+                                                    <td>
+                                                        @foreach ($pasals as $pasal)
+                                                        - {{$pasal}} <br>
+                                                        @endforeach
+                                                    </td>
                                                 @endif
                                             @endforeach
                                         </tr>
                                     @endif
-
-
                                 </tbody>
                                 <!--end::Table body-->
 
@@ -5613,7 +5628,7 @@ aria-hidden="true">
 
     async function pilihDraftKontrak(e, showEltResult, isList = false) {
         const idDraft = e.value;
-        const idContract = "{{ $contract->id_contract }}";
+        const idContract = "{{ $contract->id_contract ?? 0}}";
         const getDraftContractRes = await fetch(`/contract-management/view/${idContract}/draft-contract/${idDraft}`, {
             headers: {
                 "X-Requested-With": "XMLHttpRequest",
@@ -5627,7 +5642,7 @@ aria-hidden="true">
                     <li class="list-group-item">
                         <!--begin::Options-->
                         <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                        <input class="form-check-input" name="1" type="checkbox" value="${pasal}">
+                        <input class="form-check-input" name="pasals[]" type="checkbox" value="${pasal}">
                         <span class="form-check-label">${pasal}</span>
                         </label>
                         <!--end::Options-->

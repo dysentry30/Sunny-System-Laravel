@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('usulan_perubahan_drafts', function (Blueprint $table) {
             $table->id('id_usulan_perubahan_draft');
             $table->text('id_contract');
-            $table->text('id_draft');
+            $table->text('id_review_draft');
             $table->tinyInteger('kategori');
-            $table->longText('pasal-perbaikan');
+            $table->longText('pasal_perbaikan');
             // $table->text("isu");
             // $table->longText("deskripsi_klausul_awal");
             // $table->longText("usulan_perubahan_klausul");

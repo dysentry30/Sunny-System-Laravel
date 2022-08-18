@@ -133,7 +133,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <button type="button" id="unlock-previous-forecast"
                                                     onclick="unlockPreviousForecast()"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
-                                                            <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
+                                                            <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
                                                     </button>
                                                 @endif
                                             </div>
@@ -4034,20 +4034,34 @@ fill="none">
     }
 
     async function unlockPreviousForecast() {
-        let historyForecast = JSON.parse('{!!$historyForecast_all->toJson()!!}');
+        let historyForecast = JSON.parse('{!!$previous_forecast->toJson()!!}');
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
                             ];
-        historyForecast = Object.keys(historyForecast);
-        const minMonth = Math.min(historyForecast);
-        const maxMonth = Math.max(historyForecast);
+        const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
+        const minMonth = Math.min(...historyForecastObj);
+        const maxMonth = Math.max(...historyForecastObj);
         const jsonVariable = {};
         const date = new Date();
+        let getAvgMonth = [];
         for(var i=minMonth; i <= maxMonth; i++) {
-            jsonVariable[i] = monthNames[i - 1];        
+            const objectMonth = Object.keys(historyForecast[i]);
+            let avgDate = null;
+            for(var j=0; j < objectMonth.length; j++) {
+                avgDate += new Date(objectMonth[j]).getTime();
+            }
+            avgDate /= objectMonth.length;
+            getAvgMonth[`${i}`] = `${i}, ${new Date(avgDate)}`;
+            // getAvgMonth.push({
+            //     i: new Date(avgDate),
+            // });
+            avgDate = 0;
         }
-        console.log(jsonVariable);
-
+        
+        for(var i=minMonth; i <= maxMonth; i++) {
+            let date = getAvgMonth[i].split(", ")[1];
+            jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
+        }
         const {value: monthForecast} = await Swal.fire({
             title: 'Pilih Bulan Forecast',
             input: 'select',
@@ -4068,8 +4082,9 @@ fill="none">
             }
         });
         if (monthForecast) {
+            const choosenForecast = monthForecast.split(", ");
             Swal.fire({
-                title: `Apakah anda yakin ingin Unlock Forecast pada bulan ${monthNames[monthForecast - 1]}?`,
+                title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast[0] - 1]}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -4077,29 +4092,26 @@ fill="none">
                 confirmButtonText: 'Lanjut'
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        const formData = new FormData();
-                        formData.append("_token", "{{csrf_token()}}");
-                        formData.append("periode_prognosa",  monthForecast);
-                        const getUnlockForecastPreviousMonthRes = await fetch(`/forecast/set-unlock-previous-forecast`, {
-                            method: "POST",
-                            header: {
-                                "content-type": "application/json"
-                            },
-                            body: formData,
-                        }).then(res => res.json());
+                        let url = `/forecast/${choosenForecast[0]}/${choosenForecast[1]}`;
+                        location.href = url;
+                        // const formData = new FormData();
+                        // formData.append("_token", "{{csrf_token()}}");
+                        // formData.append("periode_prognosa",  monthForecast);
+                        // const getUnlockForecastPreviousMonthRes = await fetch(`/forecast/set-unlock-previous-forecast`, {
+                        //     method: "POST",
+                        //     header: {
+                        //         "content-type": "application/json"
+                        //     },
+                        //     body: formData,
+                        // }).then(res => res.json());
 
-                        if (res.status == "success") {
-                            Toast.fire({
-                                icon: 'success',
-                                text: "Forecast bulan lalu berhasil di Unlock",
-                            })
-                            return;
-                        }
-                        Toast.fire({
-                            icon: 'error',
-                            text: "Forecast bulan lalu gagal di Unlock",
-                        })
-                            return;
+                        // if (res.status == "success") {
+                        //     Toast.fire({
+                        //         icon: 'success',
+                        //         text: "Forecast bulan lalu berhasil di Unlock",
+                        //     })
+                        //     return;
+                        // }
                     }
                 })
         }

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DraftContractController extends Controller
 {
@@ -89,7 +90,8 @@ class DraftContractController extends Controller
     
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
-            return Redirect::back()->with("error", "Contract not exist");
+            Alert::error("Error", "Pastikan Draft Kontrak memiliki Kontrak terlebih dahulu");
+            return Redirect::back();
         }
     
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
@@ -107,8 +109,10 @@ class DraftContractController extends Controller
         $draftContracts->title_draft = $data["draft-contract-title"];
         if ($draftContracts->save()) {
             moveFileTemp($file, $id_document);
-            return Redirect::to("/contract-management/view/$draftContracts->id_contract")->with("success", "Your Draft Contract has been saved");
+            Alert::success("Success", "Draft Kontrak berhasil dibuat");
+            return Redirect::to("/contract-management/view/$draftContracts->id_contract");
         }
-        return Redirect::back()->with("error", "Your Draft Contract failed to save");
+        Alert::error("Error", "Draft Kontrak gagal dibuat");
+        return Redirect::back();
     }
 }
