@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('review_pembatalan_kontraks', function (Blueprint $table) {
             $table->id('id_review_pembatalan_kontrak');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->mediumText('id_document');
             $table->longText('document_name');
             $table->longText('note');

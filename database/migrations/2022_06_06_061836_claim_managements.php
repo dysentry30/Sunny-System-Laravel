@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('claim_managements', function (Blueprint $table) {
             $table->string('id_claim', 15)->primary();
             $table->mediumText('kode_proyek');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->mediumText('pic');
             $table->longText('approval_claim')->nullable();
             $table->tinyInteger('stages');

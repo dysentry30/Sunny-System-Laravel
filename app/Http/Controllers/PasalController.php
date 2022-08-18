@@ -169,12 +169,14 @@ class PasalController extends Controller
             $count_pasal = Pasals::all()->count();
             $importPasal = [];
             for($i=3; $i<count($sheetData); $i++){
-                $tipePasal = $sheetData[$i]['1'];
-                $pasal = $sheetData[$i]['2'];
-                array_push($importPasal, (object) [
-                    "id_pasal" => ++$count_pasal,
-                    "pasal" => $pasal
-                ]);
+                $tipePasal = trim($sheetData[$i]['1']);
+                $pasal = trim($sheetData[$i]['2']);
+                if ($pasal != "") {
+                    array_push($importPasal, (object) [
+                        "id_pasal" => ++$count_pasal,
+                        "pasal" => $pasal
+                    ]);
+                }
                 // array_push()
             }
             if (Session::has("pasals")) {

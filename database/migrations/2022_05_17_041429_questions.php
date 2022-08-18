@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('questions_project', function (Blueprint $table) {
             $table->bigIncrements('id_question');
-            $table->integer("id_contract");
+            $table->text("id_contract");
             $table->mediumText("id_document");
             $table->text("document_name_question");
             $table->text("kategori_question");

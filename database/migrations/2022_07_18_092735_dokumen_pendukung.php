@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('dokumen_pendukungs', function (Blueprint $table) {
             $table->id('id_dokumen_pendukung');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->mediumText('id_document');
             $table->longText('document_name');
             $table->longText('note');

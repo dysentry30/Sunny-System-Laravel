@@ -38,13 +38,13 @@ class ClaimController extends Controller
         } else {
             $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         }
-        if (!empty($column)){
-            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%');
-            
-            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->where($column, 'like', '%'.$filter.'%');
-            
-            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->where($column, 'like', '%'.$filter.'%');
-            
+        if (!empty($column)) {
+            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->where($column, 'like', '%' . $filter . '%');
+
+            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->where($column, 'like', '%' . $filter . '%');
+
+            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->where($column, 'like', '%' . $filter . '%');
+
             // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) use ($column, $filter){
             //     $claim->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%');
             // });
@@ -52,15 +52,15 @@ class ClaimController extends Controller
             // $proyekAnti = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Anti Claim");
             // })->where($column, 'like', '%'.$filter.'%');
-            
+
             // $proyekAsuransi = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Claim Asuransi");
             // })->where($column, 'like', '%'.$filter.'%');
-        }else{
+        } else {
             $proyekClaim = $claims->where('jenis_claim', '=', "Claim");
-            
+
             $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim");
-            
+
             $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi");
 
             // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
@@ -70,11 +70,11 @@ class ClaimController extends Controller
             // $proyekAnti = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Anti Claim");
             // })->get();
-            
+
             // $proyekAsuransi = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
             //     $claim->where('jenis_claim', '=', "Claim Asuransi");
             // })->get();
-        }    
+        }
 
         return view("5_Claim", compact(["proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }
@@ -406,10 +406,11 @@ class ClaimController extends Controller
         // return redirect()->back();
     }
 
-    public function claimDraftUpload(Request $request, ClaimContractDrafts $claimContractDrafts) {
+    public function claimDraftUpload(Request $request, ClaimContractDrafts $claimContractDrafts)
+    {
         $data = $request->all();
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             // $request->old("note-addendum");
             // $request->old("document-name-addendum");
@@ -422,7 +423,7 @@ class ClaimController extends Controller
         $pasals = [];
         if (Session::has("pasals")) {
             foreach (Session::get("pasals") as $pasal) {
-                if($pasal instanceof Pasals) {
+                if ($pasal instanceof Pasals) {
                     array_push($pasals, $pasal->id_pasal);
                 } else {
                     array_push($pasals, $pasal->pasal);
@@ -435,20 +436,22 @@ class ClaimController extends Controller
         $id_document_proposal_claim = $faker->uuid3();
         $id_document_surat_instruksi = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
-            $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+        if (isset($data["dokumen-pendukung"])) {
+            if (count($data["dokumen-pendukung"]) > 1) {
+                $list_id_document_pendukung = [];
+                foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
+                    $id_document = $faker->uuid3();
+                    array_push($list_id_document_pendukung, $id_document);
+                    moveFileTemp($dokumen_pendukung, $id_document);
+                }
+                $claimContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
+            } else {
                 $id_document = $faker->uuid3();
-                array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_pendukung, $id_document);
+                moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+                $claimContractDrafts->dokumen_pendukung = $id_document;
             }
-            $claimContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
-        } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $claimContractDrafts->dokumen_pendukung = $id_document;
         }
-        
+
         $claimContractDrafts->id_claim = $data["id-claim"];
         $claimContractDrafts->no_claim_draft = $data["no-draft-claim"];
         $claimContractDrafts->uraian_claim_draft = $data["uraian-claim"];
@@ -474,10 +477,11 @@ class ClaimController extends Controller
         return Redirect::back();
     }
 
-    public function claimDiajukanUpload(Request $request, ClaimContractDiajukan $claimContractDiajukan) {
+    public function claimDiajukanUpload(Request $request, ClaimContractDiajukan $claimContractDiajukan)
+    {
         $data = $request->all();
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         if (empty($is_id_contract_exist)) {
             // $request->old("note-addendum");
             // $request->old("document-name-addendum");
@@ -489,18 +493,20 @@ class ClaimController extends Controller
 
         $faker = new Uuid;
         $id_document_proposal_claim = $faker->uuid3();
-
-        if(count($data["dokumen-pendukung"]) > 1) {
-            $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+        if (isset($data["dokumen-pendukung"])) {
+            if (count($data["dokumen-pendukung"]) > 1) {
+                $list_id_document_pendukung = [];
+                foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
+                    $id_document = $faker->uuid3();
+                    array_push($list_id_document_pendukung, $id_document);
+                    moveFileTemp($dokumen_pendukung, $id_document);
+                }
+                $claimContractDiajukan->dokumen_pendukung = join(",", $list_id_document_pendukung);
+            } else {
                 $id_document = $faker->uuid3();
-                array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_pendukung, $id_document);
+                moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+                $claimContractDiajukan->dokumen_pendukung = $id_document;
             }
-        } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $claimContractDiajukan->list_id_document_pendukung = $id_document;
         }
 
         $claimContractDiajukan->id_claim = $data["id-claim"];
@@ -508,7 +514,6 @@ class ClaimController extends Controller
         $claimContractDiajukan->tanggal_diajukan = $data["tanggal-diajukan"];
         $claimContractDiajukan->rekomendasi = (bool) $data["diajukan-rekomendasi"];
         $claimContractDiajukan->uraian_rekomendasi = $data["uraian-rekomendasi"];
-        $claimContractDiajukan->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($claimContractDiajukan->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["proposal-claim"], $id_document_proposal_claim);
@@ -520,27 +525,30 @@ class ClaimController extends Controller
         return Redirect::back();
     }
 
-    public function claimNegosiasiUpload(Request $request, ClaimContractNegoisasi $claimContractNegoisasi) {
+    public function claimNegosiasiUpload(Request $request, ClaimContractNegoisasi $claimContractNegoisasi)
+    {
         $data = $request->all();
 
         $faker = new Uuid();
-        if(count($data["dokumen-pendukung"]) > 1) {
-            $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+        if (isset($data["dokumen-pendukung"])) {
+            if (count($data["dokumen-pendukung"]) > 1) {
+                $list_id_document_pendukung = [];
+                foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
+                    $id_document = $faker->uuid3();
+                    array_push($list_id_document_pendukung, $id_document);
+                    moveFileTemp($dokumen_pendukung, $id_document);
+                }
+                $claimContractNegoisasi->dokumen_pendukung = join(",", $list_id_document_pendukung);
+            } else {
                 $id_document = $faker->uuid3();
-                array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_pendukung, $id_document);
+                moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+                $claimContractNegoisasi->dokumen_pendukung = $id_document;
             }
-        } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $claimContractNegoisasi->list_id_document_pendukung = $id_document;
         }
 
         $claimContractNegoisasi->id_claim = $data["id-claim"];
         $claimContractNegoisasi->uraian_activity = $data["uraian-activity"];
         $claimContractNegoisasi->tanggal_activity = $data["tanggal-activity"];
-        $claimContractNegoisasi->dokumen_pendukung = join(",", $list_id_document_pendukung);
         $claimContractNegoisasi->keterangan = $data["keterangan"];
         if ($claimContractNegoisasi->save()) {
             // Session::forget("pasals");
@@ -552,7 +560,8 @@ class ClaimController extends Controller
         return Redirect::back();
     }
 
-    public function claimDisetujuiUpload(Request $request, ClaimContractDisetujui $claimContractDisetujui) {
+    public function claimDisetujuiUpload(Request $request, ClaimContractDisetujui $claimContractDisetujui)
+    {
         $data = $request->all();
         // $messages = [
         //     "required" => "This field is required",
@@ -573,7 +582,7 @@ class ClaimController extends Controller
         // ];
         // $validation = Validator::make($data, $rules, $messages);
         // $validation->validate();
-    
+
         $faker = new Uuid();
         $id_document = $faker->uuid3();
         // if ($validation->fails()) {
@@ -585,10 +594,10 @@ class ClaimController extends Controller
         //     Alert::error("Error", "Silahkan isi data yang kosong!");
         //     return Redirect::back();
         // }
-    
+
         // // Check ID Contract exist
         // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
-    
+
         // if (empty($is_id_contract_exist)) {
         //     $request->old("note-addendum");
         //     $request->old("document-name-addendum");
@@ -598,20 +607,22 @@ class ClaimController extends Controller
         //     return Redirect::back();
         // }
 
-        
-        $id_document_surat_disetujui = $faker->uuid3();
 
-        if(count($data["dokumen-pendukung"]) > 1) {
-            $list_id_document_pendukung = [];
-            foreach($data["dokumen-pendukung"] as $dokumen_pendukung) {
+        $id_document_surat_disetujui = $faker->uuid3();
+        if (isset($data["dokumen-pendukung"])) {
+            if (count($data["dokumen-pendukung"]) > 1) {
+                $list_id_document_pendukung = [];
+                foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
+                    $id_document = $faker->uuid3();
+                    array_push($list_id_document_pendukung, $id_document);
+                    moveFileTemp($dokumen_pendukung, $id_document);
+                }
+                $claimContractDisetujui->dokumen_pendukung = join(",", $list_id_document_pendukung);
+            } else {
                 $id_document = $faker->uuid3();
-                array_push($list_id_document_pendukung, $id_document);
-                moveFileTemp($dokumen_pendukung, $id_document);
+                moveFileTemp($data["dokumen-pendukung"][0], $id_document);
+                $claimContractDisetujui->dokumen_pendukung = $id_document;
             }
-        } else {
-            $id_document = $faker->uuid3();
-            moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $claimContractDisetujui->list_id_document_pendukung = $id_document;
         }
 
         $claimContractDisetujui->id_claim = $data["id-claim"];
@@ -620,7 +631,6 @@ class ClaimController extends Controller
         $claimContractDisetujui->biaya_disetujui = $data["biaya-disetujui"];
         $claimContractDisetujui->waktu_eot_disetujui = $data["waktu-eot-disetujui"];
         $claimContractDisetujui->keterangan = $data["keterangan-disetujui"];
-        $claimContractDisetujui->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($claimContractDisetujui->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["surat-disetujui"], $id_document_surat_disetujui);

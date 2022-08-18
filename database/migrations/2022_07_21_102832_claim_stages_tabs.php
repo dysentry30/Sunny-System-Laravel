@@ -19,7 +19,7 @@ return new class extends Migration
             $table->text("no_claim_draft");
             $table->longText("id_document_surat_instruksi");
             $table->longText("uraian_claim_draft");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->longText("pasals");
             $table->bigInteger("pengajuan_biaya");
             $table->dateTime("pengajuan_waktu_eot");
@@ -32,7 +32,7 @@ return new class extends Migration
         Schema::create('claim_diajukans', function (Blueprint $table) {
             $table->id('id_diajukans');
             $table->text("id_claim");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->dateTime("tanggal_diajukan");
             $table->text("id_document_proposal_claim");
             $table->boolean("rekomendasi");
@@ -43,7 +43,7 @@ return new class extends Migration
         Schema::create('claim_negosiasis', function (Blueprint $table) {
             $table->id('id_negosiasi');
             $table->text("id_claim");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->longText("uraian_activity");
             $table->dateTime("tanggal_activity");
             $table->longText("keterangan");
@@ -58,7 +58,7 @@ return new class extends Migration
             $table->bigInteger("biaya_disetujui");
             $table->dateTime("waktu_eot_disetujui");
             $table->longText("keterangan");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->timestamps();
         });
     }

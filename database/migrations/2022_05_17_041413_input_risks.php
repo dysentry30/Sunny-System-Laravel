@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('input_risks', function (Blueprint $table) {
             $table->bigIncrements('id_risk');
-            $table->integer("id_contract");
+            $table->text("id_contract");
             $table->longText("resiko");
             $table->longText("dampak");
             $table->longText("penyebab");

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('klarifikasi_negosiasi_cdas', function (Blueprint $table) {
             $table->id('id_klarifikasi');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->mediumText('id_document');
             $table->longText('document_name');
             $table->longText('note');

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->dateTime("tanggal_diajukan");
             $table->boolean("rekomendasi");
             $table->longText("uraian_rekomendasi");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->timestamps();
         });
     }
