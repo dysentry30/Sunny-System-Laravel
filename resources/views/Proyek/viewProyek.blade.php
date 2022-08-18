@@ -79,13 +79,13 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
+                                    <button type="submit" class="btn btn-sm btn-primary" id="proyek-save"
                                         style="background-color:#008CB4">
                                         Save</button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2" onclick="document.location.reload()" style="display: none;" id="cancel-button">
                                         Cancel</button>
                                     <!--end::Button-->
 
@@ -100,7 +100,7 @@
                                     &nbsp;
                                     <!--begin::Button-->
                                     <a href="/proyek" class="btn btn-sm btn-light btn-active-primary"
-                                        id="customer_new_close">
+                                        id="proyek-close">
                                         Close</a>
                                     <!--end::Button-->
 
@@ -1616,7 +1616,6 @@
                                                                         placeholder="Negara" /> --}}
                                                                     <select name="negara" id="negara" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="false" 
-                                                                        onchange="selectProvinsi(this)"
                                                                         data-placeholder="Pilih Negara">
                                                                         <option value=""></option>
                                                                         @foreach ($data_negara as $negara)
@@ -1698,7 +1697,6 @@
                                                                         placeholder="Provinsi" /> --}}
                                                                     <select name="provinsi" id="provinsi" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="false" 
-                                                                        onchange="selectProvinsi(this)"
                                                                         data-placeholder="Pilih Provinsi">
                                                                         <option value=""></option>
                                                                         @foreach ($data_provinsi as $provinsi)
@@ -3457,7 +3455,6 @@
                                                                             <!--begin::Button-->
                                                                             <button type="submit"
                                                                                 class="btn btn-sm btn-primary"
-                                                                                id="customer_new_save"
                                                                                 style="background-color:#008CB4; margin-left:10px">
                                                                                 Approve</button>
                                                                             <!--end::Button-->
