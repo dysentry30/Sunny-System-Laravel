@@ -19,7 +19,6 @@ return new class extends Migration
             $table->text("id_draft_contract");
             $table->longText("ketentuan");
             $table->tinyInteger("stage");
-            $table->longText("sub_pasal");
             // $table->longText("uraian");
             // $table->text("pic_cross");
             // $table->longText("catatan");
