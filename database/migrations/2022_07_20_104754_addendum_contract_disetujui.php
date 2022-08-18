@@ -21,7 +21,7 @@ return new class extends Migration
             $table->bigInteger("biaya_disetujui");
             $table->dateTime("waktu_eot_disetujui");
             $table->longText("keterangan");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->timestamps();
         });
     }

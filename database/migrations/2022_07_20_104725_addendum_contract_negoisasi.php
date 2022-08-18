@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('id_addendum');
             $table->text("uraian_activity");
             $table->dateTime("tanggal_activity");
-            $table->longText("dokumen_pendukung");
+            $table->longText("dokumen_pendukung")->nullable();
             $table->longText("keterangan");
             $table->timestamps();
         });

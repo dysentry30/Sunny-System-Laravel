@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('pending_issues', function (Blueprint $table) {
             $table->id('id_pending_issue');
-            $table->bigInteger('id_contract');
+            $table->text("id_contract");
             $table->longText("issue"); // bisa id dokumen ataupun teks biasa
             $table->boolean("status");
             $table->longText("penyebab");

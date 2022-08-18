@@ -15,4 +15,8 @@ class ReviewContracts extends Model
     public function User() {
         return $this->hasOne(User::class, "id", "pic_cross");
     }
+
+    public function DraftContract() {
+        return $this->hasOne(DraftContracts::class, "id_draft", "id_draft_contract");
+    }
 }

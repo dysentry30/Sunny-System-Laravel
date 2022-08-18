@@ -538,7 +538,7 @@
                                                     <span class="">No. SPK: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->number_spk ?? 0 }}</b>
+                                                    <b>{{ $contract->project->nospk_external ?? 0 }}</b>
                                                 </div>
                                             </div>
                                             <!--end::Input group Name-->
@@ -818,11 +818,8 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Draft Contract Review</th>
                                         <th class="min-w-125px">Ketentuan</th>
-                                        <th class="min-w-125px">Sub Pasal</th>
-                                        <th class="min-w-125px">Uraian Penjelasan</th>
-                                        <th class="min-w-125px">PIC <i>Cross Function</i></th>
-                                        <th class="min-w-125px">Catatan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -835,33 +832,16 @@
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <p>{{$reviewProject->ketentuan}}</p>
+                                                        <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{$reviewProject->id_draft_contract}}" target="_blank">
+                                                            <p>{{$reviewProject->draftContract->title_draft}}</p>
+                                                        </a>
                                                     </td>
                                                     <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
-                                                        <p>{{$reviewProject->sub_pasal}}</p>
+                                                        <p>{{$reviewProject->ketentuan}}</p>
                                                     </td>
                                                     <!--end::Name=-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->uraian}}</p>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        @if (!empty($reviewProject->User))
-                                                            <p>{{$reviewProject->User->name}}</p>
-                                                        @else 
-                                                            <p>{{$reviewProject->pic_cross}}</p>
-                                                        @endif
-                                                    </td>
-                                                    <!--end::Unit=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->catatan}}</p>
-                                                    </td>
-                                                    <!--end::Unit=-->
                                                 </tr>
                                             @endif
 
@@ -4439,130 +4419,6 @@
     <!--end::Modal - Question Tender Menang-->
 
     <!--begin::Modal - Question Tender Menang-->
-    <div class="modal fade" id="kt_modal_usulan_perubahan_draft_kontrak" tabindex="-1" aria-hidden="true">
-        <!--begin::Modal dialog-->
-        <div class="modal-dialog modal-dialog-centered mw-900px">
-            <!--begin::Modal content-->
-            <div class="modal-content">
-                <!--begin::Modal header-->
-                <div class="modal-header">
-                    <!--begin::Modal title-->
-                    <h2>Add Usulan Perubahan Draft Kontrak</h2>
-                    <!--end::Modal title-->
-                    <!--begin::Close-->
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16"
-                                    height="2" rx="1" transform="rotate(-45 6 17.3137)"
-                                    fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2"
-                                    rx="1" transform="rotate(45 7.41422 6)" fill="black" />
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon-->
-                    </div>
-                    <!--end::Close-->
-                </div>
-                <!--end::Modal header-->
-                <!--begin::Modal body-->
-                <div class="modal-body py-lg-6 px-lg-6">
-
-                    <!--begin::Input group Website-->
-                    <div class="fv-row mb-5">
-                        <form action="/contract-management/usulan-perubahan-draft/upload" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label">
-                                <span style="font-weight: normal">Kategori</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            {{-- <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
-                         --}}
-                            <select name="kategori" id="kategori" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori" tabindex="-1" aria-hidden="false">
-                                <option value=""></option>
-                                <option value="1">Surat Perjanjian Kontrak</option>
-                                <option value="2">Syarat-syarat Umum Kontrak (SSUK)</option>
-                                <option value="3">Syarat-syarat Khusus Kontrak (SSKK)</option>
-                            </select>
-                            <!--end::Input-->
-
-                            <br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label">
-                                <span style="font-weight: normal">Isu</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            {{-- <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
-                         --}}
-                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
-                                name="id-contract">
-                            <input type="hidden" class="modal-name">
-                            <input type="text" class="form-control form-control-solid"
-                                name="isu-perubahan-draft" id="isu-perubahan-draft" value=""
-                                placeholder="Isu" />
-                            <!--end::Input-->
-
-                            <br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label">
-                                <span style="font-weight: normal">Deskripsi Klausul Awal</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <textarea class="form-control form-control-solid" name="deskripsi-klausul-awal" id="deskripsi-klausul-awal" rows="1"></textarea>
-                            <!--end::Input-->
-
-                            <br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label">
-                                <span style="font-weight: normal">Usulan Perubahan Klausul</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="text" style="font-weight: normal"
-                                class="form-control form-control-solid" name="usulan-peurbahan-klausul" id="usulan-peurbahan-klausul"
-                                value="" placeholder="Usulan" />
-                            <!--end::Input-->
-
-                            <br><br>
-
-                            <!--begin::Label-->
-                            <label class="fs-6 fw-bold form-label">
-                                <span style="font-weight: normal">Keterangan</span>
-                            </label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <textarea style="font-weight: normal"
-                                class="form-control form-control-solid" name="keterangan" id="keterangan" rows="1" placeholder="Keterangan"></textarea>
-                            <!--end::Input-->
-
-                    </div>
-                    <!--end::Input group-->
-
-                    <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary">Save</button>
-                    </form>
-
-
-                </div>
-                <!--end::Modal body-->
-            </div>
-            <!--end::Modal content-->
-        </div>
-        <!--end::Modal dialog-->
-    </div>
-    <!--end::Modal - Question Tender Menang-->
-
-    <!--begin::Modal - Question Tender Menang-->
     <div class="modal fade" id="kt_modal_input_rencana_kerja_kontrak" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-900px">
@@ -4649,6 +4505,116 @@
     <!--end::Modal - Question Tender Menang-->
 @endif
 @endisset
+
+<!--begin::Modal - Question Tender Menang-->
+<div class="modal fade" id="kt_modal_usulan_perubahan_draft_kontrak" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-900px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Add Usulan Perubahan Draft Kontrak</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16"
+                                height="2" rx="1" transform="rotate(-45 6 17.3137)"
+                                fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2"
+                                rx="1" transform="rotate(45 7.41422 6)" fill="black" />
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+            <!--begin::Input group Website-->
+                <form action="/contract-management/usulan-perubahan-draft/upload" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-6">
+
+                            @csrf
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Kategori</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            {{-- <input type="hidden" value="1" name="is-tender-menang">
+                            <input type="hidden" class="modal-name">
+                            --}}
+                            <select name="kategori" id="kategori" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori" tabindex="-1" aria-hidden="true">
+                                <option value=""></option>
+                                <option value="1">Surat Perjanjian Kontrak</option>
+                                <option value="2">Syarat-syarat Umum Kontrak (SSUK)</option>
+                                <option value="3">Syarat-syarat Khusus Kontrak (SSKK)</option>
+                            </select>
+                            <!--end::Input-->
+    
+                            <br><br>
+    
+                            <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
+                                name="id-contract">
+                            <input type="hidden" class="modal-name">
+
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Pilih Review Kontrak</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select name="id-review-contract" id="id-review-contract" onchange="pilihDraftKontrak(this, '#pasal-perbaikan', true)"  class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Review Kontrak" tabindex="-1" aria-hidden="true">
+                                <option value=""></option>
+                                @foreach ($review_contracts as $review)
+                                    <option value="{{$review->id_draft_contract}}">{{$review->DraftContract->title_draft}}</option>
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                            <br><br>
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span style="font-weight: normal">Keterangan</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <textarea style="font-weight: normal"
+                                class="form-control form-control-solid" name="keterangan" id="keterangan" rows="1" placeholder="Keterangan"></textarea>
+                            <!--end::Input-->
+                        </div>
+                        <div class="col-1 d-flex w-20px">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-5">
+                            <b>Pilih Pasal yang ingin diperbaiki:</b> <br>
+                            <ul class="list-group list-group-flush" name="pasal-perbaikan" id="pasal-perbaikan">
+                            </ul>
+                        </div>
+                    </div>
+                <!--end::Input group-->
+                <br><br>
+
+                <button type="submit" id="save-question-tender-menang" class="btn btn-lg btn-primary">Save</button>
+                </form>
+
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+<!--end::Modal - Question Tender Menang-->
 
 <!--begin::Modal - Laporan Bulanan-->
 <div class="modal fade" id="kt_modal_laporan_bulanan" tabindex="-1" aria-hidden="true">
@@ -4789,47 +4755,71 @@
                     <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
                     <input type="hidden" class="modal-name">
                     <input type="hidden" value="1" name="stage">
-                    <div class="row mb-5">  
-                        <div class="col-6 border-end">
-                            <div class="row ">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="id-draft-contract" class="fs-6 fw-bold form-label mt-3">Pilih Draft Kontrak</label>
+                                    <select name="id-draft-contract" onchange="pilihDraftKontrak(this, '#preview-pasal')" id="id-draft-contract" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Draft Kontrak" tabindex="-1" aria-hidden="true">
+                                        <option value=""></option>
+                                        @foreach ($draftContracts as $draft)
+                                        <option value="{{ $draft->id_draft }}">{{ $draft->title_draft }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row mb-5">  
                                 <div class="col">
                                     <label for="ketentuan-review" class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
                                     <input type="text" name="ketentuan-review" id="ketentuan-review" class="form-control form-control-solid">
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
-                                    <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                {{-- <div class="col-6 border-end">
+                                    <div class="row ">
+                                    </div>
+                                    <br> --}}
+                                    {{-- <div class="row">
+                                        <div class="col">
+                                            <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
+                                            <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
+                                            <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
+                                            <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
+                                            <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
-                                    <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
-                                    <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
-                                    <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
-                                </div>
+        
+                                <div class="col-6 d-flex flex-column justify-content-center">
+                                    <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
+                                    <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                                </div> --}}
                             </div>
                         </div>
-
-                        <div class="col-6 d-flex flex-column justify-content-center">
-                            <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
-                            <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                        <div class="col-1 d-flex w-20px">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col-5">
+                            <b>Preview Pasal:</b> <br><br>
+                            <div id="preview-pasal">
+                            </div>
                         </div>
                     </div>
 
@@ -4838,6 +4828,8 @@
                     </div>
 
                 </form>
+
+                
 
 
                 <!--begin::Input group Website-->
@@ -5598,7 +5590,6 @@ aria-hidden="true">
     modalNameElts.forEach(async elt => {
         const getModalIDName = await getModalID(elt).then(res => res.id);
         elt.value = getModalIDName;
-        console.log(elt);
     });
 
     async function getModalID (elt) {
@@ -5619,6 +5610,43 @@ aria-hidden="true">
     // modalNameElts.forEach(elt => {
         
     // });
+
+    async function pilihDraftKontrak(e, showEltResult, isList = false) {
+        const idDraft = e.value;
+        const idContract = "{{ $contract->id_contract }}";
+        const getDraftContractRes = await fetch(`/contract-management/view/${idContract}/draft-contract/${idDraft}`, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            }
+        }).then(res => res.json());
+        if (getDraftContractRes.length > 0) {
+            let html = "";
+            if (isList) {
+                getDraftContractRes.forEach(pasal => {
+                    html += `
+                    <li class="list-group-item">
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                        <input class="form-check-input" name="1" type="checkbox" value="${pasal}">
+                        <span class="form-check-label">${pasal}</span>
+                        </label>
+                        <!--end::Options-->
+                    </li>
+                    `;
+                });
+            } else {
+                getDraftContractRes.forEach(pasal => {
+                    html += `<p>- ${pasal}</p>`;
+                });
+            }
+            document.querySelector(showEltResult).innerHTML = html;
+        } else {
+            Toast.fire({
+                icon: "error",
+                text: "Pasal tidak ditemukan pada kontrak ini",
+            });
+        }
+    }
 </script>
 
 @if (Session::has("modal")) {

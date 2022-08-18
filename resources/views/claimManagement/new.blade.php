@@ -505,7 +505,7 @@
                                                                         <td class="text-gray-600">{{$claim_contrat_draft->no_claim_draft}}</td>
                                                                         <td class="text-gray-600">{{$claim_contrat_draft->uraian_claim_draft}}</td>
                                                                         <td class="text-gray-600">
-                                                                            <a href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_surat_instruksi}}">{{$claim_contrat_draft->id_document_surat_instruksi}}</a>
+                                                                            <a target="_blank" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_surat_instruksi}}">{{$claim_contrat_draft->id_document_surat_instruksi}}</a>
                                                                         </td>
                                                                         @php
                                                                             $pasals_claim_draft = explode(",", $claim_contrat_draft->pasals);
@@ -532,82 +532,15 @@
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
                                                                                 $list_dokumen = explode(",", $claim_contrat_draft->dokumen_pendukung);
+                                                                                array_pop($list_dokumen);
                                                                             @endphp
-                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
+                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
                                                                                - <a target="_blank" class="text-hover-primary" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @endforeach
+                                                                            @empty
+                                                                                <p class="text-danger">Kosong</p>
+                                                                            @endforelse
                                                                         </td>
                                                                     </tr>
-                                                                    {{-- <tr>
-                                                                        <td class="text-gray-600">{{$key + 1}}</td>
-                                                                        <td class="text-gray-600">{{$draft_addendum->uraian_perubahan}}</td>
-                                                                        <td class="text-gray-600">
-                                                                            <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_instruksi}}">{{$draft_addendum->id_document_instruksi}}</a>
-                                                                        </td>
-
-                                                                        @php
-                                                                            $pasals_filter = [];
-                                                                            $addendum_pasals = array_filter(explode(",", $draft_addendum->pasals), function($data) {
-                                                                                return $data != "";
-                                                                            });
-                                                                            $is_pasals_exist = false;
-                                                                            if(count($addendum_pasals) > 0) {
-                                                                                $is_pasals_exist = true;
-                                                                            }
-                                                                            
-                                                                        @endphp
-
-                                                                        @if ($is_pasals_exist)
-                                                                            @php
-                                                                                foreach ($addendum_pasals as $pasal) {
-                                                                                array_push($pasals_filter, $pasal);
-                                                                            }
-                                                                            @endphp
-                                                                            <td class="text-gray-600">
-                                                                                @foreach ($pasals_filter as $pasal)
-                                                                                @php
-                                                                                    $pasal = $pasals->where("id_pasal", (int) $pasal)->first();
-                                                                                @endphp
-                                                                                    - {{$pasal->pasal}} <br>
-                                                                                    <hr>
-                                                                                @endforeach
-                                                                            </td>
-                                                                        @else 
-                                                                            <td class="text-gray-600">
-                                                                                -
-                                                                            </td>
-                                                                        @endif
-
-                                                                        <td class="text-gray-600">
-                                                                            {{ number_format($draft_addendum->pengajuan_biaya, 0, ",", ",")}}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600">
-                                                                            {{ date_format(new DateTime($draft_addendum->pengajuan_waktu), "d-M-Y") }}
-                                                                        </td>
-                                                                        
-                                                                        <td class="text-gray-600">
-                                                                            <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_draft_proposal_addendum}}">{{$draft_addendum->id_document_draft_proposal_addendum}}</a>
-                                                                        </td>
-
-                                                                        <td class="text-gray-600">
-                                                                            {{ $draft_addendum->rekomendasi ? "Yes" : "No" }}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            {{ $draft_addendum->uraian_rekomendasi }}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            @php
-                                                                                $list_dokumen = explode(",", $draft_addendum->list_id_document_pendukung);
-                                                                            @endphp
-                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @endforeach
-                                                                        </td>
-
-                                                                    </tr> --}}
                                                                 @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->
@@ -656,9 +589,9 @@
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($claimContract->claimContractDiajukan as $key => $draft_addendum)
-                                                                    {{-- <tr>
+                                                                    <tr>
                                                                         <td class="text-gray-600">
-                                                                            <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_addendum_contract_diajukan }}/{{$draft_addendum->id_document_proposal_addendum}}">{{$draft_addendum->id_document_proposal_addendum}}</a>
+                                                                            <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_diajukans }}/{{$draft_addendum->id_document_proposal_claim}}">{{$draft_addendum->id_document_proposal_claim}}</a>
                                                                         </td>
 
                                                                         <td class="text-gray-600">
@@ -676,12 +609,15 @@
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
                                                                                 $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
+                                                                                array_pop($list_dokumen);
                                                                             @endphp
-                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
+                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
                                                                                - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_addendum_contract_diajukan }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @endforeach
+                                                                            @empty
+                                                                                <p class="text-danger">Kosong</p>
+                                                                            @endforelse
                                                                         </td>
-                                                                    </tr> --}}
+                                                                    </tr>
                                                                 @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->
@@ -728,7 +664,7 @@
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($claimContract->claimContractNegoisasi as $key => $draft_addendum)
-                                                                    {{-- <tr>
+                                                                    <tr>
                                                                         <td>
                                                                             <p class="text-gray-600">{{$draft_addendum->uraian_activity}}</p>
                                                                         </td>
@@ -744,12 +680,15 @@
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
                                                                                 $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
+                                                                                array_pop($list_dokumen);
                                                                             @endphp
-                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
+                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
                                                                                - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_addendum_contract_diajukan }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @endforeach
+                                                                            @empty
+                                                                                <p class="text-danger">Kosong</p>
+                                                                            @endforelse
                                                                         </td>
-                                                                    </tr> --}}
+                                                                    </tr>
                                                                 @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->
@@ -795,7 +734,7 @@
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($claimContract->claimContractDisetujui as $key => $draft_addendum)
-                                                                    {{-- <tr>
+                                                                    <tr>
                                                                         <td class="text-gray-600 text-hover-primary">
                                                                             <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_contract_disetujui}}/{{$draft_addendum->id_document_surat_disetujui}}">{{$draft_addendum->id_document_surat_disetujui}}</a>
                                                                         </td>
@@ -811,12 +750,15 @@
                                                                         <td class="min-w-100px text-break">
                                                                             @php
                                                                                 $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
+                                                                                array_pop($list_dokumen);
                                                                             @endphp
-                                                                            @foreach ($list_dokumen as $key => $dokumen_pendukung)
+                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
                                                                                - <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_contract_disetujui}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @endforeach
+                                                                            @empty
+                                                                                <p class="text-danger">Kosong</p>
+                                                                            @endforelse
                                                                         </td>
-                                                                    </tr> --}}
+                                                                    </tr>
                                                                 @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->

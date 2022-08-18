@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create("draft_contracts", function (Blueprint $table) {
             $table->id("id_draft");
             $table->mediumText("id_document");
-            $table->mediumInteger("id_contract");
+            $table->text("id_contract");
             $table->mediumText("document_name");
             $table->mediumText("created_by");
             $table->date("start_date");

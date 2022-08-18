@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('mom_kick_off_meetings', function (Blueprint $table) {
             $table->id('id_mom');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->mediumText('id_document');
             $table->longText('document_name');
             $table->longText('note');

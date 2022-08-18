@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('monthly_reports', function (Blueprint $table) {
             $table->bigIncrements('id_report');
-            $table->integer("id_contract");
+            $table->text("id_contract");
             $table->mediumText("id_document");
             $table->text("document_name_report");
             $table->longText("note_report");

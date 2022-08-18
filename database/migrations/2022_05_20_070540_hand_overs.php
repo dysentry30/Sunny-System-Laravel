@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('hand_overs', function (Blueprint $table) {
             $table->bigIncrements('id_handover');
-            $table->integer("id_contract");
+            $table->text("id_contract");
             $table->mediumText("id_document");
             $table->text("document_name_terima");
             $table->longText("note_terima");

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('addendum_contract_drafts', function (Blueprint $table) {
             $table->id('id_addendum_draft');
             $table->integer('id_addendum');
-            $table->integer('id_contract');
+            $table->text("id_contract");
             $table->longText('id_document_instruksi');
             $table->boolean('rekomendasi');
             $table->longText('uraian_rekomendasi');

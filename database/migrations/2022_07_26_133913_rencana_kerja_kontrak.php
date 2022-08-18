@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('rencana_kerja_manajemens', function (Blueprint $table) {
             $table->id('id_rencana_kerja_manajemen');
-            $table->bigInteger('id_contract');
+            $table->text("id_contract");
             $table->longText("ketentuan_rencana_kerja");
             $table->longText("informasi_lengkap_adkon");
             $table->timestamps();

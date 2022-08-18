@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('issue_projects', function (Blueprint $table) {
             $table->bigIncrements('id_issue');
-            $table->integer("id_contract");
+            $table->text("id_contract");
             $table->mediumText("id_document");
             $table->text("document_name_issue");
             $table->longText("note_issue");
