@@ -2168,7 +2168,7 @@
                                                         </h3>
                                                         <br>
                                                         <div class="w-50">
-                                                            <input type="file" class="form-control form-input-solid" name="dokumen-prakualifikasi" accept=".docx">
+                                                            <input type="file" class="form-control form-input-solid" name="dokumen-prakualifikasi" accept=".docx, .doc, .xlsx, .xls, .pdf">
                                                         </div>
                                                         <br>
                                                         <!--begin::Table-->

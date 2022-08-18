@@ -126,8 +126,7 @@ class ProyekController extends Controller
 
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
-
+        
         $newProyek->stage = "1";
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
@@ -390,7 +389,7 @@ class ProyekController extends Controller
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
                 $contractManagements->project_id = $kode_proyek;
-                $contractManagements->id_contract = (int) $dataProyek["nomor-terkontrak"];
+                $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
                 $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
                 $contractManagements->number_spk = (int) $dataProyek["nospk-external"];
@@ -401,8 +400,8 @@ class ProyekController extends Controller
                 $contractManagements->save();
             } else {
                 // dd($contractManagements);
-                $contractManagements->id_contract = $newProyek->nomor_terkontrak;
                 $contractManagements->project_id = $kode_proyek;
+                $contractManagements->id_contract = $newProyek->nomor_terkontrak;
                 $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
                 $contractManagements->number_spk = (int) $dataProyek["nospk-external"];
