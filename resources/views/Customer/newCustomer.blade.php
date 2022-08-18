@@ -47,9 +47,13 @@
                                             Save</button>
                                         <!--end::Button-->
 
+										<!--begin::Button-->
+										<button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+											Cancel</button>
+										<!--end::Button-->
+
                                         <!--begin::Button-->
-                                        <a href="/customer" class="btn btn-sm btn-light btn-active-primary" id="customer_new_close    "
-                                            style="margin-left:10px">
+                                        <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3" id="">
                                             Close</a>
                                         <!--end::Button-->
                                         
@@ -304,60 +308,141 @@
 																	<!--end::Input group-->
 																</div>
 																<!--End begin::Col-->
-																</div>
-																<!--End begin::Row-->
 
 																<!--begin::Row-->
-																{{-- <div class="row fv-row">
+																<div class="row fv-row">
 																	<!--begin::Col-->
 																	<div class="col-6">
-																	<!--begin::Input group Website-->
+																		<!--begin::Input group Website-->
 																		<div class="fv-row mb-7">
 																			<!--begin::Label-->
 																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="required">Customer Journey</span>
+																				<span class="">Negara</span>
 																			</label>
 																			<!--end::Label-->
 																			<!--begin::Input-->
-																			<select name="journey-company" 
-																				class="form-select form-select-solid" 
-																				data-control="select2" data-hide-search="true" 
-																				data-placeholder="Customer Journey">
-																					<option></option>
-																					<option value="Customer">Customer</option>
-																					<option value="Loyal">Loyal</option>
-																					<option value="Advocate">Advocate</option>
-																				</select>
-																				<!--end::Input-->
-																			</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																	<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="required">Segmentation</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<select name="segmentation-company" 
-																			class="form-select form-select-solid" 
-																			data-control="select2" data-hide-search="true" 
-																			data-placeholder="Segmentation">
-																				<option></option>
-																				<option value="Silver">Silver</option>
-																				<option value="Gold">Gold</option>
-																				<option value="VIP">VIP</option>
+																			<select name="negara" id="negara" class="form-select form-select-solid"
+																				data-control="select2" data-hide-search="false" 
+																				onchange="selectNegara(this)"
+																				data-placeholder="Pilih Negara">
+																				<option value=""></option>
+																				@foreach ($data_negara as $negara)
+																					<option value="{{$negara->country}}">{{$negara->country}}</option>
+																				@endforeach
 																			</select>
 																			<!--end::Input-->
 																		</div>
-																	<!--end::Input group-->
+																		<!--end::Input group-->
 																	</div>
 																	<!--End begin::Col-->
-																</div> --}}
+																</div>
 																<!--End begin::Row-->
+																	
+																	<!--Begin::Col-->
+																	<div class="col-6">
+																		<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="">Provinsi</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text"
+																				class="form-control form-control-solid"
+																				id="input-provinsi" name="provinsi"
+																				value=""
+																				placeholder="Provinsi" style="display: none"/>
+																			<div id="div-provinsi">
+																				<select name="provinsi" id="provinsi" class="form-select form-select-solid"
+																					data-control="select2" data-hide-search="false" 
+																					onchange="selectProvinsi(this)"
+																					data-placeholder="Pilih Customer Provinsi">
+																					<option value=""></option>
+																					@foreach ($data_provinsi as $provinsi)
+																							<option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
+																					@endforeach
+																				</select>
+																			</div>
+																			<!--end::Input-->
+																		</div>
+																		<!--end::Input group-->
+																	</div>
+																	<!--End begin::Col-->
+																	<!--end::Row-->
+		
+																	<!--begin::Row-->
+																	<div class="col-6">
+																		<!--begin::Input group Website-->
+																		<div class="fv-row mb-7">
+																			<!--begin::Label-->
+																			<label class="fs-6 fw-bold form-label mt-3">
+																				<span class="">Kota / Kabupaten</span>
+																			</label>
+																			<!--end::Label-->
+																			<!--begin::Input-->
+																			<input type="text"
+																				class="form-control form-control-solid"
+																				id="input-kabupaten" name="kabupaten"
+																				value=""
+																				placeholder="Kabupaten" style="display: none"/>
+																			<div  id="div-kabupaten">
+																				<select name="kabupaten" id="kabupaten" class="form-select form-select-solid"
+																					data-control="select2" data-hide-search="false" 
+																					{{-- onchange="selectKabupaten(this)" --}}
+																					data-placeholder="Pilih Customer Kabupaten">
+																					<option value=""></option>
+																					@if (isset($data_kabupaten))
+																						@foreach ($data_kabupaten as $kabupaten)
+																								<option value="{{$kabupaten->id}}">{{ucwords(strtolower($kabupaten->name))}}</option>
+																						@endforeach
+																					@endif
+																				</select>
+																			</div>
+																			<!--end::Input-->
+																		</div>
+																		<!--end::Input group-->
+																	</div>
+																	<!--End begin::Col-->
+																	
+																	<!--begin::Fungsi Select Provinsi-->
+																		<script>
+																			function selectNegara(e) {
+																				// console.log(e.value);
+		
+																				if (e.value != "Indonesia") {
+																					document.querySelector("#input-provinsi").style.display = "";
+																					document.querySelector("#input-provinsi").value = "";
+																					document.querySelector("#provinsi").disabled = true;
+																					document.querySelector("#div-provinsi").style.display = "none";
+		
+																					document.querySelector("#input-kabupaten").style.display = "";
+																					document.querySelector("#input-kabupaten").value = "";
+																					document.querySelector("#kabupaten").disabled = true;
+																					document.querySelector("#div-kabupaten").style.display = "none";
+																				} else {
+																					document.querySelector("#input-provinsi").style.display = "none";
+																					document.querySelector("#div-provinsi").style.display = "";
+																					document.querySelector("#provinsi").disabled = false;
+																					document.querySelector("#input-kabupaten").style.display = "none";
+																					document.querySelector("#div-kabupaten").style.display = "";
+																					document.querySelector("#kabupaten").disabled = false;
+		
+																				}
+																			}
+																			async function selectProvinsi(elt) {
+																				const idProvinsi = elt.value;
+																				// console.log(elt.value);
+																				let html = ``;
+																				const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+																				getKabupaten.forEach(kabupaten => {
+																					html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+																				});
+																				document.querySelector("#kabupaten").innerHTML = html;
+																			}
+																		</script>
+																	<!--end::Fungsi Select Provinsi-->
+
 																&nbsp;<br>
 																&nbsp;<br>
 																&nbsp;<br>

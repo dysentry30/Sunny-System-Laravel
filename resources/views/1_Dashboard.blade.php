@@ -67,9 +67,24 @@
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
                                     @if (Auth::user()->check_administrator)
-                                        {{-- Begin :: Select Options Unit Kerja --}}
+                                        <!-- Begin :: Select Options Unit Kerja -->
+                                        {{-- <select id="dop" name="dop"
+                                            class="form-select form-select-solid w-150px"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                            data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                            aria-hidden="true">
+                                            <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
+                                            @foreach ($dops as $dop)
+                                                @php
+                                                    $is_unit_kerja_selected = $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '';
+                                                @endphp
+                                                <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
+                                            @endforeach
+                                        </select> --}}
+                                        <!-- End :: Select Options Unit Kerja -->
+                                        <!-- Begin :: Select Options Unit Kerja -->
                                         <select id="unit-kerja" name="unit-kerja"
-                                            class="form-select form-select-solid w-200px"
+                                            class="form-select form-select-solid w-150px ms-2"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
@@ -81,12 +96,12 @@
                                                 <option value="{{ $unit_kerja->divcode }}" {{ $is_unit_kerja_selected }} >{{ $unit_kerja->unit_kerja }}</option>
                                             @endforeach
                                         </select>
-                                        {{-- End :: Select Options Unit Kerja --}}
+                                        <!-- End :: Select Options Unit Kerja -->
                                     @endif
 
                                     <!--begin::Select Options-->
                                     <select id="periode-prognosa" name="periode-prognosa"
-                                        class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
+                                        class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
@@ -112,7 +127,7 @@
                                     @endphp
                                     <!--begin::Select Options-->
                                     <select id="tahun-history" name="tahun-history"
-                                        class="form-select form-select-solid select2-hidden-accessible w-200px ms-2"
+                                        class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
                                         @if ($year == null)

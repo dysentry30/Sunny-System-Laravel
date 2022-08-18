@@ -392,9 +392,9 @@ class ProyekController extends Controller
                 $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
                 $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = (int) $dataProyek["nospk-external"];
+                $contractManagements->number_spk = $dataProyek["nospk-external"];
                 $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = (int) preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
                 $contractManagements->stages = (int) 1;
                 $contractManagements->value_review = 0;
                 $contractManagements->save();
@@ -404,9 +404,9 @@ class ProyekController extends Controller
                 $contractManagements->id_contract = $newProyek->nomor_terkontrak;
                 $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
-                $contractManagements->number_spk = (int) $dataProyek["nospk-external"];
+                $contractManagements->number_spk = $dataProyek["nospk-external"];
                 $contractManagements->contract_proceed = "Belum Selesai";
-                $contractManagements->value = (int) preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
                 $contractManagements->stages = (int) 1;
                 $contractManagements->value_review = 0;
                 $contractManagements->save();

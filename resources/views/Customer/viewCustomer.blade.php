@@ -56,13 +56,13 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
                                         Cancel</button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/customer" class="btn btn-sm btn-light btn-active-primary"
-                                        id="customer-edit-close" style="margin-left:10px;">
+                                    <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3"
+                                        id="customer-edit-close">
                                         Close</a>
                                     <!--end::Button-->
 
@@ -406,7 +406,7 @@
                                                             </div>
                                                             <!--End begin::Col-->
                                                             
-                                                            <!--begin::Row-->
+                                                        <!--begin::Row-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
                                                             <div class="col-6">
@@ -414,7 +414,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Instansi</span>
+                                                                        <span class="">Negara</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -651,7 +651,6 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
-
                                                     </div>
 <!--end:::Tab pane Informasi Perusahaan-->
 

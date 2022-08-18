@@ -51,12 +51,12 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-4" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
                                         Cancel</button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-4"
+                                    <a href="/user" class="btn btn-sm btn-light btn-active-primary ms-3"
                                         id="customer_new_close">
                                         Close</a>
                                     <!--end::Button-->

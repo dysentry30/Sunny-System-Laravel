@@ -1334,75 +1334,85 @@
         let isEditing = false;
         const cancelAllInput = document.querySelectorAll("input");
         
+        // function closeButton(e){
+        //     if (isEditing == true) {
+        //         // console.log("close");
+        //         e.preventDefault();
+        //         e.setAttribute("type", "button");
+        //         // console.log(e.getAttribute("href"));
+        //         Swal.fire({
+        //             title: '',
+        //             text: "Edited File will be deleted ?",
+        //             icon: false,
+        //             showCancelButton: true,
+        //             confirmButtonColor: '#008CB4',
+        //             cancelButtonColor: '#BABABA',
+        //             confirmButtonText: 'Ya'
+        //         }).then((result) => {
+        //             if (result.isConfirmed) {
+        //                 formSend.submit();
+        //             }
+        //             return false;
+        //         });
+        //     } else {
+        //         return true;
+        //     }
+        // }
+        
         cancelAllInput.forEach(input => {
             input.addEventListener("click", e => {
                 isEditing = true;
                 if (document.querySelector("#cancel-button")) {
-                document.querySelector("#cancel-button").style.display = "";
-                    window.onbeforeunload = async (e) => {
-                        // console.log("oke");
-                        // return;
-                        // const data = await Swal.fire({
-                        //     title: 'Are you sure?',
-                        //     text: "You won't be able to revert this!",
-                        //     icon: 'warning',
-                        //     showCancelButton: true,
-                        //     confirmButtonColor: '#3085d6',
-                        //     cancelButtonColor: '#d33',
-                        //     confirmButtonText: 'Yes, delete it!'
-                        //     }).then((result) => {
-                        //     if (result.isConfirmed) {
-                        //         return result;
-                        //         // Swal.fire(
-                        //         // 'Deleted!',
-                        //         // 'Your file has been deleted.',
-                        //         // 'success'
-                        //         // )
-                        //     }
-                        // })
-                        // return data;
-                        // if(isEditing) {
-                        //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
-                        //     if (!isConfirmed) {
-                        //         return;
-                        //     }
-                        // }
-                    }
+                    document.querySelector("#cancel-button").style.display = "";
+
+                    // console.log(input.getAttribute("type"));
+                    // if(isEditing == true){
+                    // }
+                    // else{
+                    //     window.onbeforeunload = async (e) => {
+                    //     }
+                    // }
+                    
+                    // if (!document.querySelector("#proyek-save")) {
+                    //     console.log("on save button");
+                    // }
+                    // function saveProyek() {
+                    // }
                 }
             });
             input.addEventListener("input", e => {
                 isEditing = true;
                 if (document.querySelector("#cancel-button")) {
                 document.querySelector("#cancel-button").style.display = "";
-                    window.onbeforeunload = async (e) => {
-                        // console.log("oke");
-                        // return;
-                        // const data = await Swal.fire({
-                        //     title: 'Are you sure?',
-                        //     text: "You won't be able to revert this!",
-                        //     icon: 'warning',
-                        //     showCancelButton: true,
-                        //     confirmButtonColor: '#3085d6',
-                        //     cancelButtonColor: '#d33',
-                        //     confirmButtonText: 'Yes, delete it!'
-                        //     }).then((result) => {
-                        //     if (result.isConfirmed) {
-                        //         return result;
-                        //         // Swal.fire(
-                        //         // 'Deleted!',
-                        //         // 'Your file has been deleted.',
-                        //         // 'success'
-                        //         // )
-                        //     }
-                        // })
-                        // return data;
-                        // if(isEditing) {
-                        //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
-                        //     if (!isConfirmed) {
-                        //         return;
-                        //     }
-                        // }
-                    };
+                    // window.onbeforeunload = async (e) => {
+                    //     // console.log("oke");
+                    //     // return;
+                    //     // const data = await Swal.fire({
+                    //     //     title: 'Are you sure?',
+                    //     //     text: "You won't be able to revert this!",
+                    //     //     icon: 'warning',
+                    //     //     showCancelButton: true,
+                    //     //     confirmButtonColor: '#3085d6',
+                    //     //     cancelButtonColor: '#d33',
+                    //     //     confirmButtonText: 'Yes, delete it!'
+                    //     //     }).then((result) => {
+                    //     //     if (result.isConfirmed) {
+                    //     //         return result;
+                    //     //         // Swal.fire(
+                    //     //         // 'Deleted!',
+                    //     //         // 'Your file has been deleted.',
+                    //     //         // 'success'
+                    //     //         // )
+                    //     //     }
+                    //     // })
+                    //     // return data;
+                    //     // if(isEditing) {
+                    //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
+                    //     //     if (!isConfirmed) {
+                    //     //         return;
+                    //     //     }
+                    //     // }
+                    // };
                 }
             });
         });
@@ -1411,35 +1421,35 @@
             isEditing = true;
             if (document.querySelector("#cancel-button")) {
                 document.querySelector("#cancel-button").style.display = "";
-                window.onbeforeunload = async (e) => {
-                    // console.log("oke");
-                    // return;
-                    // const data = await Swal.fire({
-                    //     title: 'Are you sure?',
-                    //     text: "You won't be able to revert this!",
-                    //     icon: 'warning',
-                    //     showCancelButton: true,
-                    //     confirmButtonColor: '#3085d6',
-                    //     cancelButtonColor: '#d33',
-                    //     confirmButtonText: 'Yes, delete it!'
-                    //     }).then((result) => {
-                    //     if (result.isConfirmed) {
-                    //         return result;
-                    //         // Swal.fire(
-                    //         // 'Deleted!',
-                    //         // 'Your file has been deleted.',
-                    //         // 'success'
-                    //         // )
-                    //     }
-                    // })
-                    // return data;
-                    // if(isEditing) {
-                    //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
-                    //     if (!isConfirmed) {
-                    //         return;
-                    //     }
-                    // }
-                };
+                // window.onbeforeunload = async (e) => {
+                //     // console.log("oke");
+                //     // return;
+                //     // const data = await Swal.fire({
+                //     //     title: 'Are you sure?',
+                //     //     text: "You won't be able to revert this!",
+                //     //     icon: 'warning',
+                //     //     showCancelButton: true,
+                //     //     confirmButtonColor: '#3085d6',
+                //     //     cancelButtonColor: '#d33',
+                //     //     confirmButtonText: 'Yes, delete it!'
+                //     //     }).then((result) => {
+                //     //     if (result.isConfirmed) {
+                //     //         return result;
+                //     //         // Swal.fire(
+                //     //         // 'Deleted!',
+                //     //         // 'Your file has been deleted.',
+                //     //         // 'success'
+                //     //         // )
+                //     //     }
+                //     // })
+                //     // return data;
+                //     // if(isEditing) {
+                //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
+                //     //     if (!isConfirmed) {
+                //     //         return;
+                //     //     }
+                //     // }
+                // };
             }
         });
         </script>

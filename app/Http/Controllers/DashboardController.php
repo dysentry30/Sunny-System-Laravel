@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
+use App\Models\Dop;
 use App\Models\Forecast;
 use App\Models\HistoryForecast;
 use App\Models\Proyek;
@@ -25,10 +26,12 @@ class DashboardController extends Controller
             $year = (int) $request->get("tahun-history") ?? (int) date("Y");
             $month = $request->get("periode-prognosa") ?? "";
             $unit_kerja_get = $request->get("unit-kerja") ?? "";
+            $dop_get = $request->get("dop") ?? "";
         } else {
             $year = "";
             $month = (int) date("m");
             $unit_kerja_get = "";
+            $dop_get = "";
             // $nilaiHistoryForecast = HistoryForecast::all();
         }
 
@@ -39,12 +42,21 @@ class DashboardController extends Controller
             $unitKerja = UnitKerja::all();
             $proyeks = Proyek::all();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
+            $dops = Proyek::join("dops", "dops.dop", "=", "proyeks.dop")->get();
+            // dd($dops);
             if (!empty($request->get("unit-kerja"))) {
                 $nilaiHistoryForecast = $nilaiHistoryForecast->where("unit_kerja", $request->get("unit-kerja"));
                 $claims = $claims->where("unit_kerja", $request->get("unit-kerja"));
                 $proyeks = $proyeks->where("unit_kerja", $request->get("unit-kerja"));
                 $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
             }
+            // if (!empty($request->get("dop"))) {
+            //     $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
+            //     $claims = $claims->where("dop", $request->get("dop"));
+            //     $proyeks = $proyeks->where("dop", $request->get("dop"));
+            //     $contracts = $contracts->where("dop", $request->get("dop"));
+            //     // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
+            // }
         } else {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $proyeks = Proyek::where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
@@ -138,6 +150,19 @@ class DashboardController extends Controller
             }
             array_push($nilaiOkKumulatif, $nilaiOk);
             array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
+        // } else if (!empty($request->get("dop"))) {
+        //     $unitKerja_nilai_OK = $unitKerja->where("dop", $request->get("dop"))->first();
+        //     // dump($unitKerja_nilai_OK);
+        //     $nilaiOk = 0;
+        //     $nilaiRealisasi = 0;
+        //     array_push($kategoriunitKerja, $unitKerja_nilai_OK->unit_kerja);
+        //     foreach($unitKerja_nilai_OK->proyeks as $proyekUnit){
+        //         $nilaiOk += (int) str_replace(",", "", $proyekUnit->nilai_rkap); 
+        //         $nilaiRealisasi += (int) str_replace(",", "", $proyekUnit->nilai_kontrak_keseluruhan); 
+        //         // dump((int) str_replace(",", "", $proyekUnit->nilai_rkap));
+        //     }
+        //     array_push($nilaiOkKumulatif, $nilaiOk);
+        //     array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
         } else {
             foreach ($unitKerja as $unit) {
                 // dump($unit->proyeks);
@@ -282,7 +307,7 @@ class DashboardController extends Controller
         //end::Pareto
 
 
-        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get"]));
+        return view('1_Dashboard', compact(["claim_status_array","anti_claim_status_array","claim_asuransi_status_array","nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
     }
 
     /**

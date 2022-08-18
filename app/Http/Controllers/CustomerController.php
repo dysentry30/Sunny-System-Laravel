@@ -123,7 +123,11 @@ class CustomerController extends Controller
     }
 
     public function new () {
-        return view('Customer/newCustomer');
+        $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
+        // $id_kabupaten = $customer->provinsi; 
+        // $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
+        $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        return view('Customer/newCustomer', compact(["data_provinsi", "data_negara"]));
     }
     
     public function saveNew (Request $request, Customer $newCustomer) {
@@ -162,6 +166,9 @@ class CustomerController extends Controller
         $newCustomer->kode_pelanggan = $data["kodepelanggan-company"];
         $newCustomer->kode_nasabah = $data["kodenasabah-company"];
         $newCustomer->npwp_company = $data["npwp-company"];
+        $newCustomer->negara = $data["negara"];
+        $newCustomer->provinsi = $data["provinsi"];
+        $newCustomer->kota_kabupaten = $data["kabupaten"];
         // $newCustomer->journey_company = $data["journey-company"];
         // $newCustomer->segmentation_company = $data["segmentation-company"];
         $newCustomer->name_pic = $data["name-pic"];
