@@ -116,9 +116,9 @@ class CustomerController extends Controller
 
     public function delete ($id_customer) 
     { 
-        $id_customer = Customer::find($id_customer);
-        $id_customer->delete();
-        Alert::success('Delete', $id_customer->name.", Berhasil Dihapus");
+        $customer = Customer::find($id_customer);
+        $customer->delete();
+        Alert::success('Delete', $customer->name.", Berhasil Dihapus");
         return redirect("/customer")->with('status', 'Customer deleted');   
     }
 
