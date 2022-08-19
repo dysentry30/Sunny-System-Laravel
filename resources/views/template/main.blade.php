@@ -1491,8 +1491,8 @@
             modalWantToOpenBoots.show();
         </script>
     }
+    @endif
     <!-- End :: Show Modal jika terjadi error pada inputan -->
-        
 
 
     <!--end::Javascript-->
