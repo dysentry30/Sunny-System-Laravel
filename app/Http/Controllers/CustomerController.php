@@ -143,11 +143,11 @@ class CustomerController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         $validation->validate();
         if ($validation->fails()) {
-            // Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
+            Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
             $request->old("name-customer");
             $request->old("email");
             $request->old("phone-number");
-            return redirect()->back();
+            return redirect()->back()->with("modal", $data["modal-name"]);
         }
         
         $newCustomer->name = $data["name-customer"];
@@ -161,26 +161,20 @@ class CustomerController extends Controller
         $newCustomer->website = $data["website"];
 
         // form company information
-        $newCustomer->jenis_instansi = $data["jenis-instansi"];
-        // $newCustomer->kode_proyek = $data["kodeproyek-company"];
-        $newCustomer->kode_pelanggan = $data["kodepelanggan-company"];
-        $newCustomer->kode_nasabah = $data["kodenasabah-company"];
-        $newCustomer->npwp_company = $data["npwp-company"];
-        $newCustomer->negara = $data["negara"];
-        $newCustomer->provinsi = $data["provinsi"];
-        $newCustomer->kota_kabupaten = $data["kabupaten"];
-        // $newCustomer->journey_company = $data["journey-company"];
-        // $newCustomer->segmentation_company = $data["segmentation-company"];
-        $newCustomer->name_pic = $data["name-pic"];
-        $newCustomer->kode_pic = $data["kode-pic"];
-        $newCustomer->email_pic = $data["email-pic"];
-        $newCustomer->phone_number_pic = $data["phone-number-pic"];
-        
-        // form table performance
-        // $newCustomer->nilaiok = $data["nilaiok-performance"];
-        // $newCustomer->piutang = $data["piutang-performance"];
-        // $newCustomer->laba = $data["laba-performance"];
-        // $newCustomer->rugi = $data["rugi-performance"];
+        // $newCustomer->jenis_instansi = $data["jenis-instansi"];
+        // // $newCustomer->kode_proyek = $data["kodeproyek-company"];
+        // $newCustomer->kode_pelanggan = $data["kodepelanggan-company"];
+        // $newCustomer->kode_nasabah = $data["kodenasabah-company"];
+        // $newCustomer->npwp_company = $data["npwp-company"];
+        // $newCustomer->negara = $data["negara"];
+        // $newCustomer->provinsi = $data["provinsi"];
+        // $newCustomer->kota_kabupaten = $data["kabupaten"];
+        // // $newCustomer->journey_company = $data["journey-company"];
+        // // $newCustomer->segmentation_company = $data["segmentation-company"];
+        // $newCustomer->name_pic = $data["name-pic"];
+        // $newCustomer->kode_pic = $data["kode-pic"];
+        // $newCustomer->email_pic = $data["email-pic"];
+        // $newCustomer->phone_number_pic = $data["phone-number-pic"];
         
         // form attachment
         Alert::success('Success', $data["name-customer"].", Berhasil Ditambahkan");

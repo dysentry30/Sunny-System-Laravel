@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttachmentMenang;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\User;
@@ -310,11 +311,12 @@ class ProyekController extends Controller
         $newProyek->oe_wika = $dataProyek["oe-wika"];
         $newProyek->peringkat_wika = $dataProyek["peringkat-wika"];
         $newProyek->laporan_perolehan = $dataProyek["laporan-perolehan"];
-
+        
         // form MENANG
         $newProyek->aspek_pesaing = $dataProyek["aspek-pesaing"];
         $newProyek->aspek_non_pesaing = $dataProyek["aspek-non-pesaing"];
         $newProyek->saran_perbaikan = $dataProyek["saran-perbaikan"];
+        $newProyek->laporan_menang = $dataProyek["laporan-menang"];
 
         // form TERKONTRAK
         $newProyek->nospk_external = $dataProyek["nospk-external"];
@@ -439,6 +441,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
+                if (isset($dataProyek["attachment-menang"])) {
+                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
+                }
             }
             $customerHistory->save();
             return redirect("/proyek/view/" . $kode_proyek);
@@ -447,9 +452,36 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
+                if (isset($dataProyek["attachment-menang"])) {
+                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
+                }
             }
             return redirect("/proyek/view/" . $kode_proyek);
         }
+    }
+    
+    private function attachmentMenang(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $attachment = new AttachmentMenang();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_attachment = date("His_") . $file_name;
+        moveFileTemp($uploadedFile, $id_document);
+        $attachment->nama_attachment = $nama_attachment;
+        $attachment->id_document = $id_document;
+        $attachment->kode_proyek = $kode_proyek;
+        // dd($attachment);
+        $attachment->save();
+    }
+
+    public function deleteAttachmentMenang($id)
+    {
+        $delete = AttachmentMenang::find($id);
+        // dd($delete);
+        $delete->delete();
+        Alert::success("Success", "Attachment Menang Berhasil Dihapus");
+        return redirect()->back();
     }
 
     private function uploadDokumenPrakualifikasi(UploadedFile $uploadedFile, $kode_proyek)
@@ -457,12 +489,23 @@ class ProyekController extends Controller
         $faker = new Uuid();
         $dokumen_prakualifikasi = new DokumenPrakualifikasi();
         $id_document = $faker->uuid3();
-        $nama_document = date("Ymd_His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
         moveFileTemp($uploadedFile, $id_document);
         $dokumen_prakualifikasi->nama_dokumen = $nama_document;
         $dokumen_prakualifikasi->id_document = $id_document;
         $dokumen_prakualifikasi->kode_proyek = $kode_proyek;
         $dokumen_prakualifikasi->save();
+    }
+
+    public function deleteDokumenPrakualifikasi($id)
+    {
+        $deleteDokumenPrakualifikasi = DokumenPrakualifikasi::find($id);
+        // dd($deleteDokumenPrakualifikasi);
+        $deleteDokumenPrakualifikasi->delete();
+        Alert::success("Success", "Dokumen Prakualifikasi Berhasil Dihapus");
+        return redirect()->back();
     }
 
     public function delete($kode_proyek)
@@ -710,4 +753,6 @@ class ProyekController extends Controller
         Alert::success("Success", "Peserta Tender Berhasil Dihapus");
         return redirect()->back();
     }
+
+
 }

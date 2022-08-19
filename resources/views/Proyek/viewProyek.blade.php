@@ -1581,7 +1581,7 @@
                                                         </h3>
                                                         <br>
                                                         <div class="form-group">
-                                                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control form-control-solid"
+                                                            <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control"
                                                                 id="exampleFormControlTextarea1" rows="3">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
@@ -1952,7 +1952,7 @@
                                                         </h3>
                                                         &nbsp;<br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="laporan-kualitatif-paspot" name="laporan-kualitatif-paspot"
+                                                            <textarea class="form-control" id="laporan-kualitatif-paspot" name="laporan-kualitatif-paspot"
                                                                 rows="3">{{ $proyek->laporan_kualitatif_paspot }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
@@ -2170,24 +2170,33 @@
                                                         </div>
                                                         <br>
                                                         <!--begin::Table-->
-                                                        <table
-                                                            class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
                                                             id="kt_customers_table">
                                                             <!--begin::Table head-->
                                                             <thead>
                                                                 <!--begin::Table row-->
                                                                 <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
                                                                     <th class="w-auto">Nama Document</th>
                                                                     <th class="w-auto">Dibuat Pada Tanggal</th>
+                                                                    <th class="w-auto text-center"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
                                                             <!--end::Table head-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
                                                                     <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Nomor-->
                                                                         <!--begin::Name-->
                                                                         <td>
                                                                             <a href="/document/view/{{$dokumen_prakualifikasi->id_dokumen_prakualifikasi}}/{{$dokumen_prakualifikasi->id_document}}" class="text-hover-primary">{{$dokumen_prakualifikasi->nama_dokumen}}</a>
@@ -2198,17 +2207,36 @@
                                                                             {{Carbon\Carbon::parse($dokumen_prakualifikasi->created_at)->translatedFormat("d F Y")}}
                                                                         </td>
                                                                         <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
+                                                            
                                                         <!--end::Table-->
                                                         {{-- proyek/dokumen-prakualifikasi/upload --}}
                                                         <br>
                                                         <!--End::Title Biru Form: Document Prakualifikasi-->
 
 
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Ketua Team Tender
+                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_porsijo">+</a> --}}
+                                                        </h3>
+                                                        <br>
                                                         <!--begin::Row-->
                                                         <div class="row fv-row">
                                                             <!--begin::Col-->
@@ -2216,16 +2244,11 @@
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Ketua Team Tender</span>
-                                                                    </label>
+                                                                    </label> --}}
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="ketua-tender" name="ketua-tender"
-                                                                        value="{{ $proyek->ketua_tender }}"
-                                                                        placeholder="Ketua Team Tender" /> --}}
                                                                     <select id="ketua-tender" name="ketua-tender" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true" data-placeholder="Ketua Team Tender">
                                                                         <option></option>
@@ -2288,11 +2311,11 @@
                                                                             <tbody class="fw-bold text-gray-600">
 
                                                                                 <tr>
-                                                                                    <!--begin::Name-->
+                                                                                    <!--begin::Nomor-->
                                                                                     <td class="text-center">
                                                                                         {{ $no++ }}
                                                                                     </td>
-                                                                                    <!--end::Name-->
+                                                                                    <!--end::Nomor-->
                                                                                     <!--begin::Column-->
                                                                                     <td>
                                                                                         {{ $team->User->name }}
@@ -2333,7 +2356,7 @@
                                                         </h3>
                                                         <br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="laporan-prakualifikasi" name="laporan-prakualifikasi"
+                                                            <textarea class="form-control" id="laporan-prakualifikasi" name="laporan-prakualifikasi"
                                                                 rows="3">{{ $proyek->laporan_prakualifikasi }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
@@ -2533,7 +2556,7 @@
                                                         </h3>
                                                         &nbsp;<br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="laporan-tender" name="laporan-tender" rows="3">{{ $proyek->laporan_tender }}</textarea>
+                                                            <textarea class="form-control" id="laporan-tender" name="laporan-tender" rows="3">{{ $proyek->laporan_tender }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -2782,7 +2805,7 @@
                                                         </h3>
                                                         <br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="laporan-perolehan" name="laporan-perolehan"
+                                                            <textarea class="form-control" id="laporan-perolehan" name="laporan-perolehan"
                                                                 rows="3">{{ $proyek->laporan_perolehan }}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
@@ -2839,16 +2862,114 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+                                                        
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Usulan Saran Perbaikan</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
 
-
-                                                        <!--Begin::Title Biru Form: Usulan Saran Perbaikan-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Usulan Saran Perbaikan</span>
-                                                        </label>
-                                                        <div class="form-group">
-                                                            <textarea class="form-control form-control-solid" id="saran-perbaikan" name="saran-perbaikan" rows="3">{{ $proyek->saran_perbaikan }}</textarea>
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="saran-perbaikan" name="saran-perbaikan"
+                                                                        value="{{ $proyek->saran_perbaikan }}"
+                                                                        placeholder="Saran Perbaikan" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
                                                         </div>
-                                                        <!--End::Title Biru Form: Usulan Saran Perbaikan-->
+                                                        <!--End begin::Row-->
+
+                                                        <!--Begin::Title Biru Form: Attachment Menang-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Attachment
+                                                        </h3>
+                                                        <br>
+                                                        <div class="w-50">
+                                                            <input type="file" class="form-control form-input-solid" name="attachment-menang" accept=".docx, .doc, .xlsx, .xls, .pdf">
+                                                        </div>
+                                                        <br>
+                                                        <!--begin::Table-->
+                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Nama Document</th>
+                                                                    <th class="w-auto">Dibuat Pada Tanggal</th>
+                                                                    <th class="w-auto text-center"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($proyek->AttachmentMenang as $attachment)
+                                                                    <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Nomor-->
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            <a href="/document/view/{{$attachment->id}}/{{$attachment->id_document}}" class="text-hover-primary">{{$attachment->nama_attachment}}</a>
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{Carbon\Carbon::parse($attachment->created_at)->translatedFormat("d F Y")}}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_attachment_delete_{{ $attachment->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                            
+                                                        <!--end::Table-->
+                                                        <br>
+                                                        <!--End::Title Biru Form: Attachment Menang-->
+
+                                                        <!--Begin::Title Biru Form: Laporan Kualitatif-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Laporan Kualitatif
+                                                        </h3>
+                                                        <br>
+                                                        <div class="form-group">
+                                                            <textarea class="form-control" id="laporan-menang" name="laporan-menang"
+                                                                rows="3">{{ $proyek->laporan_menang }}</textarea>
+                                                        </div>
+                                                        <!--End::Title Biru Form: Laporan Kualitatif-->
 
                                                     </div>
                                                     <!--end:::Tab Menang-->
@@ -3962,7 +4083,7 @@
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Team Proyek</span>
+                                <span class="required">Team Proyek</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
@@ -3983,7 +4104,7 @@
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Role/Jabatan</span>
+                                <span class="required">Role/Jabatan</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
@@ -4600,6 +4721,100 @@
 </form>
 @endforeach
 <!--end::DELETE PORSI JO-->
+
+<!--begin::DELETE DOKUMEN PRAKUALIFIKASI-->
+@foreach ($proyek->DokumenPrakualifikasi as $dokumen_prakualifikasi)
+<form action="/proyek/dokumen-prakualifikasi/{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}/delete" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_dokumen_prakualifikasi_delete_{{ $dokumen_prakualifikasi->id_dokumen_prakualifikasi }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $dokumen_prakualifikasi->nama_dokumen }}</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE DOKUMEN PRAKUALIFIKASI-->
+
+<!--begin::DELETE ATTACHMENT MENANG-->
+@foreach ($proyek->AttachmentMenang as $attachment)
+<form action="/proyek/attachment-menang/{{ $attachment->id }}/delete" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_attachment_delete_{{ $attachment->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $attachment->nama_attachment }}</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE ATTACHMENT MENANG-->
 
 
 {{-- <!--begin::modal APPROVAL-->

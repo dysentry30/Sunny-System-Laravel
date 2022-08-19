@@ -41,7 +41,7 @@ return new class extends Migration
             $table->string("kurs_awal")->nullable();
             $table->integer("bulan_awal")->nullable();
             $table->string("nilaiok_awal")->nullable();
-            $table->string("laporan_kualitatif_pasdin")->nullable();
+            $table->text("laporan_kualitatif_pasdin")->nullable();
             
             //#table PASAR POTENSIAL
             $table->string("negara")->nullable();
@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string("status_pasar")->nullable();
             $table->string("dop")->nullable();
             $table->string("company")->nullable();
-            $table->string("laporan_kualitatif_paspot")->nullable();
+            $table->text("laporan_kualitatif_paspot")->nullable();
             
             //#table PRA-KUALIFIKASI
             $table->date("jadwal_pq")->nullable();
@@ -60,14 +60,14 @@ return new class extends Migration
             $table->string("hps_pagu")->nullable();
             $table->string("porsi_jo")->nullable(); 
             $table->string("ketua_tender")->nullable();
-            $table->string("laporan_prakualifikasi")->nullable();
+            $table->text("laporan_prakualifikasi")->nullable();
             
             //#table TENDER DIIKUTI
             $table->date("jadwal_tender")->nullable();
             $table->string("lokasi_tender")->nullable();
             $table->string("penawaran_tender")->nullable();
             // $table->string("hps_tender")->nullable();
-            $table->string("laporan_tender")->nullable();
+            $table->text("laporan_tender")->nullable();
             
             //#table PEROLEHAN
             $table->string("biaya_praproyek")->nullable();
@@ -75,12 +75,13 @@ return new class extends Migration
             $table->string("nilai_perolehan")->nullable();
             $table->string("oe_wika")->nullable();
             $table->string("peringkat_wika")->nullable();
-            $table->string("laporan_perolehan")->nullable();
+            $table->text("laporan_perolehan")->nullable();
             
             //#table MENANG
             $table->string("aspek_pesaing")->nullable();
             $table->string("aspek_non_pesaing")->nullable();
             $table->string("saran_perbaikan")->nullable();
+            $table->text("laporan_menang")->nullable();
             
             //#table TERKONTRAK
             $table->string("nospk_external")->nullable();
