@@ -316,9 +316,7 @@
 <form action="/customer/save" method="post" enctype="multipart/form-data">
     @csrf
 
-    <!--begin::Get Modal JS-->
-    <input type="hidden" class="modal-name">
-    <!--end::Get Modal JS-->
+    
 
     <!--begin::Modal - Create Proyek-->
     <div class="modal fade" id="kt_modal_create_pelanggan" tabindex="-1" aria-hidden="true">
@@ -380,6 +378,9 @@
                                 <!--begin::Input-->
                                 <input type="email" class="form-control form-control-solid" 
                                 id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                <!--begin::Get Modal JS-->
+                                <input type="hidden" class="modal-name" name="modal-name">
+                                <!--end::Get Modal JS-->
                                 @error('email')
                                 <h6 class="text-danger">{{ $message }}</h6>
                                 @enderror
