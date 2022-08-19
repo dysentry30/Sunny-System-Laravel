@@ -41,10 +41,14 @@
                                 <div class="d-flex align-items-center py-1">
 
                                         <!--begin::Button-->
-                                        <a href="customer/new" class="btn btn-sm btn-primary w-80px"
+                                        {{-- <a href="customer/new" class="btn btn-sm btn-primary w-80px"
                                         id="kt_toolbar_primary_button"
                                         style="background-color:#008CB4; padding: 6px">
-                                        New</a>
+                                        New</a> --}}
+                                        <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_pelanggan" id="kt_toolbar_primary_button"
+                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                        New</button>
 
                                         <!--begin::Wrapper-->
                                         <div class="me-4" style="margin-left:10px;">
@@ -308,8 +312,203 @@
     </div>
     <!--end::Root-->
 
+<!--begin::Modal New Proyek-->
+<form action="/customer/save" method="post" enctype="multipart/form-data">
+    @csrf
 
-{{-- begin::modal DELETE --}}
+    <!--begin::Get Modal JS-->
+    <input type="hidden" class="modal-name">
+    <!--end::Get Modal JS-->
+
+    <!--begin::Modal - Create Proyek-->
+    <div class="modal fade" id="kt_modal_create_pelanggan" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>New Pelanggan</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Name</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" id="name-customer" name="name-customer" class="form-control form-control-solid" 
+                                value="{{ old('name-customer') }}" placeholder="Name" />
+                                @error('name-customer')
+                                <h6 class="text-danger">{{ $message }}</h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Email</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="email" class="form-control form-control-solid" 
+                                id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                @error('email')
+                                <h6 class="text-danger">{{ $message }}</h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Phone Number</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" 
+                                id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                @error('phone-number')
+                                <h6 class="text-danger">{{ $message }}</h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                 <!--begin::Label-->
+                                 <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Website</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" 
+                                id="website" name="website" value="" placeholder="Website" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+
+                    <!--begin::Options-->
+                    <br>
+                    <div class="d-flex" style="flex-direction: row">
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
+                            <input class="form-check-input" type="checkbox" value="" id="check-customer" name="check-customer" />
+                            <span class="form-check-label me-8"><b>Customer</b></span>
+                        </label>
+                        <!--end::Options-->
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                            <input class="form-check-input" type="checkbox" value="" id="check-partner" name="check-partner" />
+                            <span class="form-check-label me-8"><b>Partner</b></span>
+                        </label>
+                        <!--end::Options-->
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                            <input class="form-check-input" type="checkbox" value="" id="check-competitor" name="check-competitor" />
+                            <span class="form-check-label me-8"><b>Competitor</b></span>
+                        </label>
+                        <!--end::Options-->
+                    </div>
+                    <br>
+                    <!--end::Options-->
+
+
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Address Line 1</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea class="form-control form-control-solid" name="AddressLine1"></textarea>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Address Line 2</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <textarea class="form-control form-control-solid" name="AddressLine2"></textarea>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                            style="background-color:#008CB4" id="proyek_new_save">Save</button>
+                    </div>
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+    <!--end::Modal - Create App-->
+</form>
+<!--end::Modal New Proyek-->
+<!--begin::Modal Delete-->
     @foreach ($all_customer as $customers)
         <form action="/customer/delete/{{ $customers->id_customer }}" method="post" enctype="multipart/form-data">
             @method('delete')
@@ -354,8 +553,7 @@
             </div>
         </form>
     @endforeach
-{{-- end::modal DELETE --}}
-
+<!--end::Modal Delete-->
 
 @endsection
 {{-- End::Main --}}
