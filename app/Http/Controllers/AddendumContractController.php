@@ -25,21 +25,26 @@ class AddendumContractController extends Controller
         $column = $request->get("column");
         $filter = $request->get("filter");
         
-        if ($column == "uraian_perubahan"){
-            $addendumContracts = AddendumContractDrafts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
-        }else if (!empty($column)){
-            $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where($column, 'like', '%'.$filter.'%')->get();
-        }else{
-            $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-        // $arrayDrafts = [];
-        // foreach ($addendumContracts as $addendumContract) {
-        //     $idAddendum = $addendumContract->id_addendum;
-        //     $addendumDrafts = AddendumContractDrafts::sortable()->where("id_addendum", '=', $idAddendum)->get();
-        //     // dump($addendumDrafts->each);
-        //     array_push($arrayDrafts, $addendumDrafts->each);
-        //     }
-        //     dump($arrayDrafts);
-        }    
+        if (Auth::user()->check_administrator) {
+            // $addendumContracts = AddendumContracts::sortable()->join("addendum_contract_drafts", "addendum_contracts.id_addendum", "=", "addendum_contract_drafts.id_addendum")->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("uraian_perubahan", 'like', '%'.$filter.'%')->select("addendum_contracts.*")->get();
+            $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->select("addendum_contracts.*")->get();
+        } else {
+            if ($column == "uraian_perubahan"){
+                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
+            }else if (!empty($column)){
+                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where($column, 'like', '%'.$filter.'%')->get();
+            }else{
+                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            // $arrayDrafts = [];
+            // foreach ($addendumContracts as $addendumContract) {
+            //     $idAddendum = $addendumContract->id_addendum;
+            //     $addendumDrafts = AddendumContractDrafts::sortable()->where("id_addendum", '=', $idAddendum)->get();
+            //     // dump($addendumDrafts->each);
+            //     array_push($arrayDrafts, $addendumDrafts->each);
+            //     }
+            //     dump($arrayDrafts);
+            }    
+        }
         // dd();
         
         return view("9_Change_request", compact(["addendumContracts", 'column', 'filter']));
@@ -220,6 +225,7 @@ class AddendumContractController extends Controller
     {
 
         $data = $request->all();
+        // dd($data);
         $messages = [
             "required" => "This field is required",
             "numeric" => "This field must be numeric only",
@@ -234,7 +240,7 @@ class AddendumContractController extends Controller
             "draft-rekomendasi" => "required|boolean",
             "uraian-rekomendasi" => "required|string",
             "uraian-perubahan" => "required|string",
-            "pengajuan-biaya" => "required|numeric",
+            "pengajuan-biaya" => "required|string",
             "id-addendum" => "required|numeric",
         ];
         $validation = Validator::make($data, $rules, $messages);
@@ -301,7 +307,7 @@ class AddendumContractController extends Controller
         $addendumContractDrafts->uraian_rekomendasi = $data["uraian-rekomendasi"];
         $addendumContractDrafts->uraian_perubahan = $data["uraian-perubahan"];
         $addendumContractDrafts->pengajuan_waktu = $data["pengajuan-waktu"];
-        $addendumContractDrafts->pengajuan_biaya = $data["pengajuan-biaya"];
+        $addendumContractDrafts->pengajuan_biaya = str_replace(",", "", $data["pengajuan-biaya"]);
         $addendumContractDrafts->id_document_draft_proposal_addendum = $id_document_draft_proposal_addendum_name;
         $addendumContractDrafts->pasals = join(",", $pasals);
         if ($addendumContractDrafts->save()) {
