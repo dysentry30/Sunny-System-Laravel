@@ -238,7 +238,7 @@
 
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
-                                                <!--begin:::Tabs-->
+<!--begin:::Tabs-->
                                                 <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     <!--begin:::Tab Overview-->
                                                     <li class="nav-item">
@@ -295,7 +295,7 @@
 
 
                                                 </ul>
-                                                <!--end:::Tabs-->
+<!--end:::Ta    bs-->
 
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
@@ -1394,56 +1394,140 @@
 <!--begin:::Tab pane Over View-->
                                                     <div class="tab-pane fade show active" id="kt_user_view_overview" role="tabpanel">
                                                         <br>
-                                                        <div class="row">
-                                                            <div class="row">
-                                                                <div class="col py-6 text-center">
-                                                                    <b class="h3">Proyek Forecast</b>
-                                                                </div>
-                                                                <div class="col py-6 text-center">
-                                                                    <b class="h3">Proyek Berjalan</b>
-                                                                </div>
-                                                                <div class="col py-6 text-center">
-                                                                    <b class="h3">Proyek Selesai</b>
-                                                                </div>
-                                                            </div>
-
-                                                            <br><br>
-                                                            <div class="col py-12 pb-20 text-center" id="proyek-forecast">
-                                                                <!--begin::proyek forecast-->
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:20px;">
-                                                                    {{ number_format($nilaiForecast, 0, '.', ',') }}
-                                                                </h3>
-                                                                <!--end::proyek forecast-->
-                                                            </div>
-                                                            <span class="vr" style="padding: 0.5px"></span>
-                                                            <div class="col py-12 text-center" id="proyek-ongoing">
-                                                                <!--begin::proyek ongoing-->
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:20px;">
-                                                                    {{ $proyekOngoing }}
-                                                                </h3>
-                                                                <!--end::proyek ongoing-->
-                                                            </div>
-                                                            <span class="vr" style="padding: 0.5px"></span>
-                                                            <div class="col py-12 text-center" id="proyek-close">
-                                                                <!--begin::proyek close-->
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:20px;">
-                                                                    {{ $proyekClosed }}
-                                                                </h3>
-                                                                <!--end::proyek close-->
-                                                            </div>
-                                                        </div>
-                                                        <br>
-                                                        <br>
-                                                        <hr>
+                                                        <!--Begin::Title Biru Form: Nilai RKAP Review-->
                                                         
-                                                        <div class="py-12" id="performance-pelanggan">
-                                                            <!--begin::MONITORING PROYEK-->
-                                                            <!--end::MONITORING PROYEK-->
-                                                        </div>
-                                                        <hr>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Overview Project &nbsp;
+                                                            <i onclick="hideOverview()" id="hide-overview" class="bi bi-arrows-collapse"></i><i onclick="showOverview()" id="show-overview" style="display: none" class="bi bi-arrows-expand"></i> 
+                                                        </h3>
+                                                        <script>
+                                                            function hideOverview() {
+                                                                document.getElementById("overViewProject").style.display = "none";
+                                                                document.getElementById("hide-overview").style.display = "none";
+                                                                document.getElementById("show-overview").style.display = "";
+                                                            }
+                                                            function showOverview() {
+                                                                document.getElementById("overViewProject").style.display = "";
+                                                                document.getElementById("hide-overview").style.display = "";
+                                                                document.getElementById("show-overview").style.display = "none";
+                                                            }
+                                                        </script>
+
+                                                        <br>
+                                                        
+                                                        <div id="overViewProject">
+                                                            <div class="row">
+                                                                <div class="row">
+                                                                    <div class="col py-3 text-center">
+                                                                        <b class="h3">Proyek Forecast</b>
+                                                                    </div>
+                                                                    <div class="col py-3 text-center">
+                                                                        <b class="h3">Proyek Berjalan</b>
+                                                                    </div>
+                                                                    <div class="col py-3 text-center">
+                                                                        <b class="h3">Proyek Selesai</b>
+                                                                    </div>
+                                                                </div>
+
+                                                                <br>
+    
+                                                                <div class="col py-6 text-center" id="proyek-forecast">
+                                                                    <!--begin::proyek forecast-->
+                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                        style="font-size:20px;">
+                                                                        {{ number_format($nilaiForecast, 0, '.', ',') }}
+                                                                    </h3>
+                                                                    <!--end::proyek forecast-->
+                                                                </div>
+                                                                <span class="vr" style="padding: 0.5px"></span>
+                                                                <div class="col py-6 text-center" id="proyek-ongoing">
+                                                                    <!--begin::proyek ongoing-->
+                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                        style="font-size:20px;">
+                                                                        {{ $proyekOngoing }}
+                                                                    </h3>
+                                                                    <!--end::proyek ongoing-->
+                                                                </div>
+                                                                <span class="vr" style="padding: 0.5px"></span>
+                                                                <div class="col py-6 text-center" id="proyek-close">
+                                                                    <!--begin::proyek close-->
+                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                        style="font-size:20px;">
+                                                                        {{ $proyekClosed }}
+                                                                    </h3>
+                                                                    <!--end::proyek close-->
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                            <hr>
+                                                        </div> <!--overViewProject-->
+                                                        
+                                                        <!--Begin::Title Biru Form: Pelanggan Performance-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Pelanggan Performance &nbsp;
+                                                            <i onclick="hidePerformance()" id="hide-performance" class="bi bi-arrows-collapse"></i><i onclick="showPerformance()" id="show-performance" style="display: none" class="bi bi-arrows-expand"></i> 
+                                                        </h3>
+                                                        <!--End::Title Biru Form: Pelanggan Performance-->
+                                                        <script>
+                                                            function hidePerformance() {
+                                                                document.getElementById("pelangganPerformance").style.display = "none";
+                                                                document.getElementById("hide-performance").style.display = "none";
+                                                                document.getElementById("show-performance").style.display = "";
+                                                            }
+                                                            function showPerformance() {
+                                                                document.getElementById("pelangganPerformance").style.display = "";
+                                                                document.getElementById("hide-performance").style.display = "";
+                                                                document.getElementById("show-performance").style.display = "none";
+                                                            }
+                                                        </script>
+                                                        <div id="pelangganPerformance">
+                                                            <div class="py-6" id="performance-pelanggan">
+                                                                <!--begin::MONITORING PROYEK-->
+                                                                <!--end::MONITORING PROYEK-->
+                                                            </div>
+                                                            <hr>
+
+                                                            <div class="py-6" id="piutang-pelanggan">
+                                                                <!--begin::MONITORING PROYEK-->
+                                                                <!--end::MONITORING PROYEK-->
+                                                            </div>
+                                                            <hr>
+
+                                                            <div class="py-6" id="labarugi-pelanggan">
+                                                                <!--begin::MONITORING PROYEK-->
+                                                                <!--end::MONITORING PROYEK-->
+                                                            </div>
+                                                            <hr>
+                                                        </div> <!--pelangganPerformance--> 
+
+                                                        <!--Begin::Title Biru Form: Pelanggan Performance-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Score CSI &nbsp;
+                                                            <i onclick="hideCSI()" id="hide-csi" class="bi bi-arrows-collapse"></i><i onclick="showCSI()" id="show-csi" style="display: none" class="bi bi-arrows-expand"></i> 
+                                                        </h3>
+                                                        <!--End::Title Biru Form: Pelanggan Performance-->
+                                                        <script>
+                                                            function hideCSI() {
+                                                                document.getElementById("scoreCSI").style.display = "none";
+                                                                document.getElementById("hide-csi").style.display = "none";
+                                                                document.getElementById("show-csi").style.display = "";
+                                                            }
+                                                            function showCSI() {
+                                                                document.getElementById("scoreCSI").style.display = "";
+                                                                document.getElementById("hide-csi").style.display = "";
+                                                                document.getElementById("show-csi").style.display = "none";
+                                                            }
+                                                        </script>
+                                                        <div id="scoreCSI">
+                                                            <figure class="highcharts-figure">
+                                                                {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                <div id="score-csi" class="chart-container"></div>
+                                                            </figure>
+                                                            <hr>
+
+                                                        </div> <!--scoreCSI--> 
 
                                                         <div class="col">
                                                             <div id="map"></div>
@@ -1706,6 +1790,8 @@
 <script src="/js/highcharts/funnel.js"></script>
 <script src="/js/highcharts/accessibility.js"></script>
 <script src="/js/highcharts/highcharts-3d.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
 <!--end::CDN High Chart-->
 
 <!--begin::Performance Pelanggan-->
@@ -1803,6 +1889,452 @@
     });
 </script>
 <!--end::Performance Pelanggan-->
+
+<!--begin::Piutang Pelanggan-->
+<script>
+    let namaPiutang = {!! json_encode($namaProyek) !!};
+    let nilaiPiutang = {!! json_encode($nilaiOK) !!};
+    if (namaPiutang.length == 0) {
+    namaPiutang = ["..."];
+    nilaiPiutang = [0];
+    }    
+    Highcharts.chart('piutang-pelanggan', {
+        chart: {
+            type: 'column',
+            options3d: {
+                enabled: true,
+                alpha: 5,
+                beta: 15,
+                viewDistance: 50,
+                depth: 100
+            }
+        },
+        title: {
+            align: 'center',
+            text: '<b class="h3">Piutang</b>'
+        },
+        subtitle: {
+            align: 'center',
+            text: ' '
+        },
+        accessibility: {
+            announceNewData: {
+                enabled: true
+            }
+        },
+        // xAxis: {
+        //     type: 'category'
+        // },
+        xAxis: {
+            categories: namaPiutang,
+            labels: {
+                skew3d: true,
+                style: {
+                    fontSize: '16px'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+            
+        },
+        colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                showInLegend: false
+            },
+        },
+        tooltip: {
+            // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+        },
+
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Nilai Piutang',
+            data: nilaiPiutang,
+            // stack: 'male'
+        }]
+    });
+</script>
+<!--end::Piutang Pelanggan-->
+
+<!--begin::Laba Rugi Pelanggan-->
+<script>
+    let namaLabaRugi = {!! json_encode($namaProyek) !!};
+    let nilaiLabaRugi = {!! json_encode($nilaiOK) !!};
+    if (namaLabaRugi.length == 0) {
+    namaLabaRugi = ["..."];
+    nilaiLabaRugi = [0];
+    }    
+    Highcharts.chart('labarugi-pelanggan', {
+        chart: {
+            type: 'pie',
+            options3d: {
+                enabled: true,
+                alpha: 5,
+                beta: 15,
+                viewDistance: 50,
+                depth: 100
+            }
+        },
+        title: {
+            align: 'center',
+            text: '<b class="h3">Laba / Rugi</b>'
+        },
+        subtitle: {
+            align: 'center',
+            text: ' '
+        },
+        accessibility: {
+            announceNewData: {
+                enabled: true
+            }
+        },
+        // xAxis: {
+        //     type: 'category'
+        // },
+        xAxis: {
+            categories: namaLabaRugi,
+            labels: {
+                skew3d: true,
+                style: {
+                    fontSize: '16px'
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: ''
+            }
+            
+        },
+        colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+        plotOptions: {
+            series: {
+                dataLabels: {
+                    enabled: true
+                },
+                showInLegend: false
+            },
+        },
+        tooltip: {
+            // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+        },
+
+        // series: [{
+        //     name: "Pelanggan Proyek",
+        //     colorByPoint: true,
+        //     data: [{
+        //             name: "Proyek Forecast",
+        //             y: 3,
+        //         },
+        //         {
+        //             name: "Proyek OnGoing",
+        //             y: 4,
+        //         },
+        //         {
+        //             name: "Proyek Closed",
+        //             y: 2,
+        //         }
+        //     ]
+        // }],
+        credits: {
+            enabled: false
+        },
+        series: [{
+            name: 'Laba / Rugi',
+            data: nilaiLabaRugi,
+            // stack: 'male'
+        }]
+    });
+</script>
+<!--end::Laba Rugi Pelanggan-->
+
+<!--begin::Score CSI-->
+<script>
+    var gaugeOptions = {
+        chart: {
+            type: 'solidgauge'
+        },
+
+        title: null,
+
+        pane: {
+            center: ['50%', '65%'],
+            size: '100%',
+            startAngle: -90,
+            endAngle: 90,
+            background: {
+                backgroundColor:
+                    Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
+                innerRadius: '60%',
+                outerRadius: '100%',
+                shape: 'arc'
+            }
+        },
+
+        exporting: {
+            enabled: false
+        },
+
+        tooltip: {
+            enabled: false
+        },
+
+        // the value axis
+        yAxis: {
+            stops: [
+                [0.1, '#ED6D3F'], // red
+                [0.5, '#F7C13E'], // yellow
+                [0.9, '#61CB65'], // green
+            ],
+            lineWidth: 0,
+            tickWidth: 0,
+            minorTickInterval: null,
+            tickAmount: 1,
+            title: {
+                y: -70
+            },
+            labels: {
+                y: 16
+            }
+        },
+
+        plotOptions: {
+            solidgauge: {
+                dataLabels: {
+                    y: 5,
+                    borderWidth: 0,
+                    useHTML: true
+                }
+            }
+        }
+    };
+
+    // The speed gauge
+    var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
+        yAxis: {
+            min: 0,
+            max: 100,
+            title: {
+                // text: 'Speed'
+            }
+        },
+
+        credits: {
+            enabled: false
+        },
+
+        series: [{
+            name: 'Speed',
+            data: [70],
+            dataLabels: {
+                format:
+                    '<div style="text-align:center; margin-bottom: 100px">' +
+                    '<span style="font-size:50px">{y}</span><br/>' +
+                    // '<span style="font-size:12px;opacity:0.4">km/h</span>' +
+                    '</div>'
+            },
+            tooltip: {
+                // valueSuffix: ' km/h'
+            }
+        }]
+
+    }));
+
+    // Bring life to the dials
+    // setInterval(function () {
+    //     // Speed
+    //     var point,
+    //         newVal,
+    //         inc;
+
+    //     if (chartSpeed) {
+    //         point = chartSpeed.series[0].points[0];
+    //         inc = Math.round((Math.random() - 0.5) * 100);
+    //         newVal = point.y + inc;
+
+    //         if (newVal < 0 || newVal > 200) {
+    //             newVal = point.y - inc;
+    //         }
+
+    //         point.update(newVal);
+    //     }
+
+    //     // RPM
+    //     if (chartRpm) {
+    //         point = chartRpm.series[0].points[0];
+    //         inc = Math.random() - 0.5;
+    //         newVal = point.y + inc;
+
+    //         if (newVal < 0 || newVal > 5) {
+    //             newVal = point.y - inc;
+    //         }
+
+    //         point.update(newVal);
+    //     }
+    // }, 2000);
+
+</script>
+<script>
+    Highcharts.chart('score-csi', {
+
+    chart: {
+        type: 'gauge',
+        plotBackgroundColor: null,
+        plotBackgroundImage: null,
+        plotBorderWidth: 0,
+        plotShadow: false
+    },
+
+    title: {
+        text: '<b class="h3">Gauge CSI</b>'
+    },
+
+    pane: {
+        center: ['50%', '70%'],
+        size: '100%',
+        startAngle: -100,
+        endAngle: 100,
+        background: [{
+            backgroundColor: {
+                linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+                stops: [
+                    [0, '#ffffff00'],
+                    [1, '#ffffff00']
+                ]
+            },  
+            borderWidth: 0,
+            outerRadius: '10%'
+        // }, {
+        //     backgroundColor: {
+        //         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
+        //         stops: [
+        //             [0, '#333'],
+        //             [1, '#FFF']
+        //         ]
+        //     },
+        //     borderWidth: 1,
+        //     outerRadius: '107%'
+        // }, {
+        //     // default background
+        // }, {
+        //     backgroundColor: '#DDD',
+        //     borderWidth: 0,
+        //     outerRadius: '105%',
+        //     innerRadius: '103%'
+        }]
+    },
+
+    // the value axis
+    yAxis: {
+        min: 0,
+        max: 100,
+
+        minorTickInterval: 'auto',
+        minorTickWidth: 1,
+        minorTickLength: 1,
+        // minorTickPosition: 'inside',
+        // minorTickColor: '#ffffff00',
+
+        // tickPixelInterval: 30,
+        // tickWidth: 2,
+        tickPosition: 'inside',
+        tickLength: 1,
+        // tickColor: '#666',
+        labels: {
+            step: 1,
+            // rotation: 'auto'
+        },
+        title: {
+            // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+            // text: '<span style="font-size:11px">{series.data}</span><br>'
+        },
+        plotBands: [{
+            from: 0,
+            to: 25,
+            color: '#ED6D3F' // red
+        }, {
+            from: 25,
+            to: 50,
+            color: '#F7C13E' // yellow
+        }, {
+            from: 50,
+            to: 100,
+            color: '#61CB65' // green
+        }]
+    },
+
+    credits: {
+            enabled: false
+        },
+    
+    plotOptions: {
+        gauge: {
+            dataLabels: {
+                enabled: true,
+                borderColor: false,
+            },
+            dial: {
+                radius: '60%',
+                backgroundColor: 'black',
+                borderColor: 'black',
+                borderWidth: 1,
+                baseWidth: 0,
+                topWidth: 18,
+                baseLength: '120%', // of radius
+                rearLength: '-100%'
+            },
+            pivot: {
+            radius: 0
+        }
+        }
+    },
+
+    series: [{
+        name: 'Score CSI',
+        data: [75],
+        dataLabels: {
+                format:
+                    // '<div style="text-align:center;">' +
+                    '<span style="font-size:70px; color:#009ef7">{y}</span><br/>'
+                    // '</div>'
+            },
+        // tooltip: {
+        //     valueSuffix: ' km/h'
+        // }
+    }]
+
+    // },
+    // // Add some life
+    // function (chart) {
+    // if (!chart.renderer.forExport) {
+    //     setInterval(function () {
+    //         var point = chart.series[0].points[0],
+    //             newVal,
+    //             inc = Math.round((Math.random() - 0.5) * 20);
+
+    //         newVal = point.y + inc;
+    //         if (newVal < 0 || newVal > 200) {
+    //             newVal = point.y - inc;
+    //         }
+
+    //         point.update(newVal);
+
+    //     }, 3000);
+    // }
+    });
+</script>
+<!--end::Score CSI-->
 
 
 <script>

@@ -371,9 +371,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/delete/{id}', [ProyekController::class, 'deleteTender']);
     
-    // UPLOAD Dokumen Prakualifikasi
-    Route::post('proyek/dokumen-prakualifikasi/upload', [ProyekController::class, 'tambahuploadDokumenPrakualifikasiTender']);
+    // DELETE Dokumen Prakualifikasi
+    Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
 
+    // DELETE Attachment Menang
+    Route::delete('/proyek/attachment-menang/{id}/delete', [ProyekController::class, 'deleteAttachmentMenang']);
 
     //End :: Project
 

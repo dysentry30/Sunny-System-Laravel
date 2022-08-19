@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DokumenPrakualifikasi extends Model
+class AttachmentMenang extends Model
 {
     use HasFactory;
-    protected $primaryKey   = 'id_dokumen_prakualifikasi';
 }
