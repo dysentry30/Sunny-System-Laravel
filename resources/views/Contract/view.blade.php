@@ -2607,7 +2607,7 @@
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                         name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" style="font-weight: normal" class="form-control form-control-solid"
                         name="attach-file-terima" id="attach-file-terima" value="" accept=".docx"
                         placeholder="Name terima" />
@@ -2720,7 +2720,7 @@
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                         name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" class="form-control form-control-solid" name="attach-file-draft"
                         id="attach-file-draft" value="" style="font-weight: normal" accept=".docx"
                         placeholder="Name draft" />
@@ -2824,7 +2824,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid"
@@ -2921,7 +2921,7 @@
                 <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="hidden" value="2" name="stage">
                     <div class="row mb-5">  
                         <div class="col-6 border-end">
@@ -3074,7 +3074,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name" name="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3179,7 +3179,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3284,7 +3284,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3389,7 +3389,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3494,7 +3494,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3598,7 +3598,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                            <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" style="font-weight: normal"
@@ -3703,7 +3703,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid" name="attach-file-issue"
@@ -3803,7 +3803,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                         <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
                             style="font-weight: normal" value="" placeholder="Resiko" />
@@ -3896,7 +3896,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="3" name="stage">
-                        <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                         <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
                             style="font-weight: normal" value="" placeholder="Resiko" />
@@ -3989,7 +3989,7 @@
                         <!--end::Label-->
                         <!--begin::Input-->
                         <input type="hidden" value="4" name="stage">
-                        <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                         <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
                             style="font-weight: normal" value="" placeholder="Resiko" />
@@ -4075,7 +4075,7 @@
         
                     <form action="/contract-management/ba-defect/upload" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{$contract->id_contract}}">
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -4134,7 +4134,7 @@
         
                     <form action="/contract-management/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
                         @csrf
-                        <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                         <input type="hidden" name="id-contract" value="{{$contract->id_contract}}">
                         <!--begin::Label-->
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -4194,7 +4194,7 @@
                     <form action="/contract-management/pending-issue/upload" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="id-contract" value="{{$contract->id_contract}}">
-                        <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
 
                         <div class="row">
                             <div class="col d-flex flex-column justify-content-center">
@@ -4372,7 +4372,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
                             <input type="file" class="form-control form-control-solid"
@@ -4477,7 +4477,7 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     {{-- <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                                  --}}
                                     <textarea name="ketentuan-rencana-kerja" id="ketentuan-rencana-kerja" rows="10" class="form-control form-control-solid"></textarea>
                                     <!--end::Input-->
@@ -4493,11 +4493,11 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     {{-- <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                                  --}}
                                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                         name="id-contract">
-                                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                                     <textarea name="kelengkapan-adkon" id="kelengkapan-adkon" rows="10" class="form-control form-control-solid"></textarea>
                                     <!--end::Input-->
                                 </div>
@@ -4566,7 +4566,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             {{-- <input type="hidden" value="1" name="is-tender-menang">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                             --}}
                             <select name="kategori" id="kategori" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Kategori" tabindex="-1" aria-hidden="true">
                                 <option value=""></option>
@@ -4580,7 +4580,7 @@
     
                             <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                                 name="id-contract">
-                            <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
 
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label">
@@ -4674,7 +4674,7 @@
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                         name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" class="form-control form-control-solid" name="attach-file-bulanan"
                         id="attach-file-bulanan" value="" style="font-weight: normal" accept=".docx"
                         placeholder="Name draft" />
@@ -4768,7 +4768,7 @@
                 <form action="/review-contract/upload" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="hidden" value="1" name="stage">
                     <div class="row">
                         <div class="col-6">
@@ -4943,7 +4943,7 @@
                 </label>
                 <!--end::Label-->
                 <!--begin::Input-->
-                <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                 <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" name="id-contract">
                 <input type="text" class="form-control form-control-solid" name="resiko" id="resiko"
                     style="font-weight: normal" value="" placeholder="Resiko" />
@@ -5041,7 +5041,7 @@
                     <!--begin::Input-->
                     <input type="hidden" value="{{ $contract->id_contract ?? 0 }}" id="id-contract"
                         name="id-contract">
-                    <input type="hidden" class="modal-name">
+                    <input type="hidden" class="modal-name" name="modal-name">
                     <input type="file" class="form-control form-control-solid" name="attach-file-question"
                         id="attach-file-question" value="" style="font-weight: normal" accept=".docx"
                         placeholder="Name Proyek" />
@@ -5638,16 +5638,6 @@ aria-hidden="true">
         }
     }
 </script>
-
-@if (Session::has("modal")) {
-    <script>
-        const modalWantToOpenElt = document.querySelector("#{{Session::get('modal')}}");
-        const modalWantToOpenBoots = new bootstrap.Modal(modalWantToOpenElt, {});
-        modalWantToOpenBoots.show();
-    </script>
-}
-    
-@endif
 
 @endsection
 
