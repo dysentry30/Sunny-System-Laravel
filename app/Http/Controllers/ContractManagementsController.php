@@ -37,6 +37,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class ContractManagementsController extends Controller
@@ -306,7 +307,7 @@ class ContractManagementsController extends Controller
         $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
         $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
         $projects = Proyek::all();
-        return view('Contract/view', ["contract" => ContractManagements::find($id_contract), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects ]);
+        return view('Contract/view', ["contract" => ContractManagements::find($id_contract), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects]);
     }
 
 
@@ -360,25 +361,25 @@ class ContractManagementsController extends Controller
 
     public function draftContractView($id_contract, DraftContracts $draftContracts, Request $request)
     {
-        
+
         if ($request->ajax()) {
             $pasals = collect();
             $draft_pasals = collect(explode(",", $draftContracts->pasals));
-            foreach($draft_pasals as $pasal) {
+            foreach ($draft_pasals as $pasal) {
                 $pasal_model = Pasals::find($pasal);
-                if(empty($pasal_model)) {
+                if (empty($pasal_model)) {
                     $pasals->push($pasal);
                 } else {
                     $pasals->push(($pasal_model->pasal));
                 }
             }
-            return response()->json($pasals);    
+            return response()->json($pasals);
         }
         if (!$draftContracts instanceof DraftContracts) {
             $is_tender_menang = true;
             return view("DraftContract/view", ["contract" => ContractManagements::find($id_contract), "pasals" => Pasals::all(), "id_contract" => $id_contract, "is_tender_menang" => $is_tender_menang]);
         }
-        
+
 
         $id_pasals = explode(",", $draftContracts->pasals);
         $res_pasals = [];
@@ -412,8 +413,8 @@ class ContractManagementsController extends Controller
         ];
 
         $is_input_has_set = $data["ketentuan-review"] != null ||
-        $data["id-draft-contract"] != null ||
-        $data["id-contract"] != null;
+            $data["id-draft-contract"] != null ||
+            $data["id-contract"] != null;
         // $data["pic-cross-review"] != null ||
         // $data["catatan-review"] != null;
 
@@ -449,7 +450,8 @@ class ContractManagementsController extends Controller
         if ($validation->fails()) {
             // dd($validation->errors());
             Alert::error('Error', "Review Contract gagal diperbarui");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
 
@@ -500,7 +502,8 @@ class ContractManagementsController extends Controller
             return redirect($_SERVER["HTTP_REFERER"]);
         }
         Alert::error('Error', "Review Contract gagal dibuat");
-        return redirect($_SERVER["HTTP_REFERER"]);
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
     // Upload Issue Project of Contract to server or database
@@ -527,7 +530,8 @@ class ContractManagementsController extends Controller
         if ($validation->fails()) {
             // dd($validation->errors());
             Alert::error('Error', "Issue Contract gagal dibuat");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
         // Check ID Contract exist
@@ -536,7 +540,8 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
         $is_tender_menang = !empty($data["is-tender-menang"]) ? 1 : 0;
@@ -553,7 +558,8 @@ class ContractManagementsController extends Controller
             return Redirect::back();
         }
         Alert::success('Success', "Issue Contract berhasil ditambahkan");
-        return redirect($_SERVER["HTTP_REFERER"]);
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
     // Upload Questions of Contract to server or database
@@ -581,7 +587,8 @@ class ContractManagementsController extends Controller
 
         if ($validation->fails()) {
             Alert::error('Error', "Question gagal ditambahkan");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
             // dd($validation->errors());
         }
 
@@ -591,7 +598,8 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
         $validation->validate();
 
@@ -609,7 +617,8 @@ class ContractManagementsController extends Controller
             return Redirect::back();
         }
         Alert::error('Error', "Question gagal ditambahkan");
-        return redirect($_SERVER["HTTP_REFERER"]);
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
     // Upload Risk of Contract to server or database
@@ -635,7 +644,8 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Resiko gagal ditambahkan");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
             // dd($validation->errors());
         }
 
@@ -667,7 +677,8 @@ class ContractManagementsController extends Controller
             return Redirect::back();
         }
         Alert::error('Error', "Resiko gagal ditambahkan");
-        return redirect($_SERVER["HTTP_REFERER"]);
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
     // Upload Laporan Bulanan of Contract to server or database
@@ -693,7 +704,8 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Review Contract gagal ditambahkan");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
             // dd($validation->errors());
         }
         $validation->validate();
@@ -704,7 +716,8 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
         $monthlyReports->id_contract = $data["id-contract"];
@@ -714,10 +727,11 @@ class ContractManagementsController extends Controller
         if ($monthlyReports->save()) {
             moveFileTemp($file, $id_document);
             Alert::success('Success', "Laporan Bulanan berhasil ditambahkan");
-            return Redirect::back();
+            // return Redirect::back();
         }
         Alert::error('Error', "Laporan Bulanan gagal ditambahkan");
-        return redirect($_SERVER["HTTP_REFERER"]);
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect($_SERVER["HTTP_REFERER"]);
     }
 
     // Uplaod Serah Terima of Contract to server or database
@@ -754,7 +768,8 @@ class ContractManagementsController extends Controller
         if (empty($is_id_contract_exist)) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
             Alert::error('Error', "Pastikan contract sudah dibuat terlebih dahulu");
-            return Redirect::back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return Redirect::back();
         }
 
         $content_word_html = $data["content-word-terima"];
@@ -768,7 +783,8 @@ class ContractManagementsController extends Controller
             return Redirect::back();
         }
         Alert::error('Error', "Serah Terima Kontrak gagal ditambahkan");
-        return Redirect::back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return Redirect::back();
     }
 
     public function klarifikasiNegoUpload(Request $request)
@@ -812,7 +828,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Hasil Klarifikasi dan Negosiasi CDA gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function kontrakTandaTanganUpload(Request $request)
@@ -857,7 +874,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Kontrak Tanda Tangan gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function reviewPembatalanKontrak(Request $request)
@@ -902,7 +920,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Review Pembatalan Kontrak gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function perjanjianKSO(Request $request)
@@ -932,7 +951,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
         $file = $request->file("attach-file");
         $model = new PerjanjianKso();
@@ -947,7 +967,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Perjanjian KSO gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function dokumenPendukungUpload(Request $request)
@@ -977,7 +998,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
         $file = $request->file("attach-file");
         $model = new DokumenPendukung();
@@ -992,7 +1014,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "Dokumen Pendukung gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function momMeeting(Request $request)
@@ -1022,7 +1045,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
         $file = $request->file("attach-file");
         $model = new MomKickOffMeeting();
@@ -1037,7 +1061,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Error", "MoM Kick Off Meeting gagal dibuat");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function documentBastContractUpload(Request $request)
@@ -1056,31 +1081,46 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Dokument Bast gagal ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+            return Redirect::back();
             // dd($validation->errors());
         }
         $validation->validate();
 
         $faker = new Uuid();
         $contract_managements = ContractManagements::find($data["id-contract"]);
+
         if (isset($data["dokumen-bast-1"])) {
+            if (!empty($contract_managements->dokumen_bast_1)) {
+                $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
+                if (!empty($get_dokumen)) {
+                    File::delete(public_path("/words/$contract_managements->dokumen_bast_1.docx"));
+                }
+            }
             $id_document = $faker->uuid3();
             $contract_managements->dokumen_bast_1 = $id_document;
             moveFileTemp($data["dokumen-bast-1"], $id_document);
         }
 
         if (isset($data["dokumen-bast-2"])) {
+            if (!empty($contract_managements->dokumen_bast_2)) {
+                $get_dokumen = File::get(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
+                if (!empty($get_dokumen)) {
+                    File::delete(public_path("/words/$contract_managements->dokumen_bast_2.docx"));
+                }
+            }
             $id_document = $faker->uuid3();
             $contract_managements->dokumen_bast_2 = $id_document;
             moveFileTemp($data["dokumen-bast-2"], $id_document);
         }
+
 
         if ($contract_managements->save()) {
             Alert::success("Success", "Dokument Bast berhasil ditambahkan");
             return redirect()->back();
         }
         Alert::error("Erorr", "Dokument Bast gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back();
+        // return redirect()->back();
     }
 
     public function baDefectContractUpload(Request $request)
@@ -1106,7 +1146,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
 
         $faker = new Uuid();
@@ -1129,7 +1170,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "BA Defect gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function dokumenPendukungContractUpload(Request $request)
@@ -1155,7 +1197,18 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
+        }
+
+        if (!empty($contract->dokumen_kontrak_dan_addendum)) {
+            $list_dokumen_kontrak_dan_addendum = collect(explode(", ", $contract->dokumen_pendukung));
+            foreach ($list_dokumen_kontrak_dan_addendum as $dokumen) {
+                $get_dokumen = File::get(public_path("/words/$dokumen.docx"));
+                if (!empty($get_dokumen)) {
+                    File::delete(public_path("/words/$dokumen.docx"));
+                }
+            }
         }
 
         $faker = new Uuid();
@@ -1178,7 +1231,8 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Dokumen gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function pendingIssueContractUpload(Request $request, PendingIssue $pendingIssue)
@@ -1211,7 +1265,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
 
         $faker = new Uuid();
@@ -1236,10 +1291,12 @@ class ContractManagementsController extends Controller
         $pendingIssue->target_waktu_penyelesaian = $data["target-waktu-penyelesaian"];
         if ($pendingIssue->save()) {
             Alert::success("Success", "Pending Issue berhasil ditambahkan");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
         Alert::error("Erorr", "Pending Issue gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 
     public function penutupanProyekContractUpload(Request $request)
@@ -1257,7 +1314,7 @@ class ContractManagementsController extends Controller
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Dokumen Kontrak dan Addendum gagal ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+            return Redirect::back();
             // dd($validation->errors());
         }
         $validation->validate();
@@ -1265,11 +1322,22 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back();
+            // return redirect()->back();
         }
 
         $contract = ContractManagements::find($data["id-contract"]);
         $faker = new Uuid();
+
+        if (!empty($contract->dokumen_kontrak_dan_addendum)) {
+            $list_dokumen_kontrak_dan_addendum = collect(explode(",", $contract->dokumen_kontrak_dan_addendum));
+            foreach ($list_dokumen_kontrak_dan_addendum as $dokumen) {
+                $get_dokumen = File::get(public_path("/words/$dokumen.docx"));
+                if (!empty($get_dokumen)) {
+                    File::delete(public_path("/words/$dokumen.docx"));
+                }
+            }
+        }
 
         if (count($data["kontrak-dan-addendum-file"]) > 1) {
             $list_id_document_kontrak_dan_addendum = [];
@@ -1281,16 +1349,18 @@ class ContractManagementsController extends Controller
             $contract->dokumen_kontrak_dan_addendum = join(",", $list_id_document_kontrak_dan_addendum);
         } else {
             $id_document = $faker->uuid3();
-            moveFileTemp($data["kontrak-dan-addendum-file"], $id_document);
+            moveFileTemp($data["kontrak-dan-addendum-file"][0], $id_document);
             $contract->dokumen_kontrak_dan_addendum = $id_document;
         }
 
         if ($contract->save()) {
             Alert::success("Success", "Dokumen Kontrak dan Addendum berhasil ditambahkan");
-            return redirect()->back();
+            // return redirect()->back();
+            return Redirect::back();
         }
-        Alert::error("Erorr", "Dokumen Kontrak dan Addendum gagal ditambahkan");
-        return redirect()->back();
+        Alert::error("Error", "Dokumen Kontrak dan Addendum gagal ditambahkan");
+        // return redirect()->back();
+        return Redirect::back();
     }
 
     public function usulanPerubahanDraftContractUpload(Request $request, UsulanPerubahanDraft $usulanPerubahanDraft)
@@ -1318,7 +1388,7 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
         }
 
         $pasals = collect($data["pasals"]);
@@ -1334,7 +1404,7 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Usulan Perubahan Draft gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
     }
 
     public function rencanaKerjaManajemenContractUpload(Request $request, RencanKerjaManajemenKontrak $rencanKerjaManajemenKontrak)
@@ -1361,7 +1431,8 @@ class ContractManagementsController extends Controller
         $contract = ContractManagements::find($data["id-contract"]);
         if (empty($contract)) {
             Alert::error("Error", "Pastikan contract sudah dibuat terlebih dahulu");
-            return redirect()->back();
+            return Redirect::back()->with("modal", $data["modal-name"]);
+            // return redirect()->back();
         }
 
         $rencanKerjaManajemenKontrak->id_contract = $contract->id_contract;
@@ -1372,6 +1443,7 @@ class ContractManagementsController extends Controller
             return redirect()->back();
         }
         Alert::error("Erorr", "Rencana Kerja Manajemen Kontrak gagal ditambahkan");
-        return redirect()->back();
+        return Redirect::back()->with("modal", $data["modal-name"]);
+        // return redirect()->back();
     }
 }

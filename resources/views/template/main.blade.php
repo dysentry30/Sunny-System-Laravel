@@ -1331,8 +1331,8 @@
     
     <!--begin:: Cancel Button-->
     <script>
-        let isEditing = false;
-        const cancelAllInput = document.querySelectorAll("input");
+        // let isEditing = false;
+        // const cancelAllInput = document.querySelectorAll("input");
         
         // function closeButton(e){
         //     if (isEditing == true) {
@@ -1359,99 +1359,99 @@
         //     }
         // }
         
-        cancelAllInput.forEach(input => {
-            input.addEventListener("click", e => {
-                isEditing = true;
-                if (document.querySelector("#cancel-button")) {
-                    document.querySelector("#cancel-button").style.display = "";
+        // cancelAllInput.forEach(input => {
+        //     input.addEventListener("click", e => {
+        //         isEditing = true;
+        //         if (document.querySelector("#cancel-button")) {
+        //             document.querySelector("#cancel-button").style.display = "";
 
-                    // console.log(input.getAttribute("type"));
-                    // if(isEditing == true){
-                    // }
-                    // else{
-                    //     window.onbeforeunload = async (e) => {
-                    //     }
-                    // }
+        //             // console.log(input.getAttribute("type"));
+        //             // if(isEditing == true){
+        //             // }
+        //             // else{
+        //             //     window.onbeforeunload = async (e) => {
+        //             //     }
+        //             // }
                     
-                    // if (!document.querySelector("#proyek-save")) {
-                    //     console.log("on save button");
-                    // }
-                    // function saveProyek() {
-                    // }
-                }
-            });
-            input.addEventListener("input", e => {
-                isEditing = true;
-                if (document.querySelector("#cancel-button")) {
-                document.querySelector("#cancel-button").style.display = "";
-                    // window.onbeforeunload = async (e) => {
-                    //     // console.log("oke");
-                    //     // return;
-                    //     // const data = await Swal.fire({
-                    //     //     title: 'Are you sure?',
-                    //     //     text: "You won't be able to revert this!",
-                    //     //     icon: 'warning',
-                    //     //     showCancelButton: true,
-                    //     //     confirmButtonColor: '#3085d6',
-                    //     //     cancelButtonColor: '#d33',
-                    //     //     confirmButtonText: 'Yes, delete it!'
-                    //     //     }).then((result) => {
-                    //     //     if (result.isConfirmed) {
-                    //     //         return result;
-                    //     //         // Swal.fire(
-                    //     //         // 'Deleted!',
-                    //     //         // 'Your file has been deleted.',
-                    //     //         // 'success'
-                    //     //         // )
-                    //     //     }
-                    //     // })
-                    //     // return data;
-                    //     // if(isEditing) {
-                    //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
-                    //     //     if (!isConfirmed) {
-                    //     //         return;
-                    //     //     }
-                    //     // }
-                    // };
-                }
-            });
-        });
+        //             // if (!document.querySelector("#proyek-save")) {
+        //             //     console.log("on save button");
+        //             // }
+        //             // function saveProyek() {
+        //             // }
+        //         }
+        //     });
+        //     input.addEventListener("input", e => {
+        //         isEditing = true;
+        //         if (document.querySelector("#cancel-button")) {
+        //         document.querySelector("#cancel-button").style.display = "";
+        //             // window.onbeforeunload = async (e) => {
+        //             //     // console.log("oke");
+        //             //     // return;
+        //             //     // const data = await Swal.fire({
+        //             //     //     title: 'Are you sure?',
+        //             //     //     text: "You won't be able to revert this!",
+        //             //     //     icon: 'warning',
+        //             //     //     showCancelButton: true,
+        //             //     //     confirmButtonColor: '#3085d6',
+        //             //     //     cancelButtonColor: '#d33',
+        //             //     //     confirmButtonText: 'Yes, delete it!'
+        //             //     //     }).then((result) => {
+        //             //     //     if (result.isConfirmed) {
+        //             //     //         return result;
+        //             //     //         // Swal.fire(
+        //             //     //         // 'Deleted!',
+        //             //     //         // 'Your file has been deleted.',
+        //             //     //         // 'success'
+        //             //     //         // )
+        //             //     //     }
+        //             //     // })
+        //             //     // return data;
+        //             //     // if(isEditing) {
+        //             //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
+        //             //     //     if (!isConfirmed) {
+        //             //     //         return;
+        //             //     //     }
+        //             //     // }
+        //             // };
+        //         }
+        //     });
+        // });
         
-        $("select").select2().on("change", e => {
-            isEditing = true;
-            if (document.querySelector("#cancel-button")) {
-                document.querySelector("#cancel-button").style.display = "";
-                // window.onbeforeunload = async (e) => {
-                //     // console.log("oke");
-                //     // return;
-                //     // const data = await Swal.fire({
-                //     //     title: 'Are you sure?',
-                //     //     text: "You won't be able to revert this!",
-                //     //     icon: 'warning',
-                //     //     showCancelButton: true,
-                //     //     confirmButtonColor: '#3085d6',
-                //     //     cancelButtonColor: '#d33',
-                //     //     confirmButtonText: 'Yes, delete it!'
-                //     //     }).then((result) => {
-                //     //     if (result.isConfirmed) {
-                //     //         return result;
-                //     //         // Swal.fire(
-                //     //         // 'Deleted!',
-                //     //         // 'Your file has been deleted.',
-                //     //         // 'success'
-                //     //         // )
-                //     //     }
-                //     // })
-                //     // return data;
-                //     // if(isEditing) {
-                //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
-                //     //     if (!isConfirmed) {
-                //     //         return;
-                //     //     }
-                //     // }
-                // };
-            }
-        });
+        // $("select").select2().on("change", e => {
+        //     isEditing = true;
+        //     if (document.querySelector("#cancel-button")) {
+        //         document.querySelector("#cancel-button").style.display = "";
+        //         // window.onbeforeunload = async (e) => {
+        //         //     // console.log("oke");
+        //         //     // return;
+        //         //     // const data = await Swal.fire({
+        //         //     //     title: 'Are you sure?',
+        //         //     //     text: "You won't be able to revert this!",
+        //         //     //     icon: 'warning',
+        //         //     //     showCancelButton: true,
+        //         //     //     confirmButtonColor: '#3085d6',
+        //         //     //     cancelButtonColor: '#d33',
+        //         //     //     confirmButtonText: 'Yes, delete it!'
+        //         //     //     }).then((result) => {
+        //         //     //     if (result.isConfirmed) {
+        //         //     //         return result;
+        //         //     //         // Swal.fire(
+        //         //     //         // 'Deleted!',
+        //         //     //         // 'Your file has been deleted.',
+        //         //     //         // 'success'
+        //         //     //         // )
+        //         //     //     }
+        //         //     // })
+        //         //     // return data;
+        //         //     // if(isEditing) {
+        //         //     //     let isConfirmed = confirm("apakah anda yakin ingin pindah halaman?");
+        //         //     //     if (!isConfirmed) {
+        //         //     //         return;
+        //         //     //     }
+        //         //     // }
+        //         // };
+        //     }
+        // });
         </script>
     <!--end:: Cancel Button-->
     
@@ -1484,13 +1484,12 @@
     <!-- End :: Get Modal ID -->
     
     <!-- begin :: Show Modal jika terjadi error pada inputan -->
-    @if (Session::has("modal")) {
+    @if (Session::has("modal"))
         <script>
             const modalWantToOpenElt = document.querySelector("#{{Session::get('modal')}}");
             const modalWantToOpenBoots = new bootstrap.Modal(modalWantToOpenElt, {});
             modalWantToOpenBoots.show();
         </script>
-    }
     @endif
     <!-- End :: Show Modal jika terjadi error pada inputan -->
 

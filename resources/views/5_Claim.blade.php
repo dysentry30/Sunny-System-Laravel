@@ -201,7 +201,7 @@
                                                         <!--end::Action-->
                                                     </tr>
                                             @empty
-                                                <tr>
+                                                <tr class="bg-gray-100 text-center">
                                                     <td colspan="4">Data Klaim tidak ditemukan</td>
                                                 </tr>
                                             @endforelse
@@ -257,7 +257,7 @@
                                                     <!--end::Action-->
                                                 </tr>
                                         @empty
-                                            <tr>
+                                            <tr class="bg-gray-100 text-center">
                                                 <td colspan="4">Data Klaim tidak ditemukan</td>
                                             </tr>
                                         @endforelse
@@ -312,7 +312,7 @@
                                                         <!--end::Action-->
                                                     </tr>
                                             @empty
-                                                <tr>
+                                                <tr class="bg-gray-100 text-center">
                                                     <td colspan="4">Data Klaim tidak ditemukan</td>
                                                 </tr>
                                             @endforelse
