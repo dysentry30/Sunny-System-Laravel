@@ -88,7 +88,7 @@
                                                             </label>
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
-                                                            <input type="text" id="name-customer" name="name-customer"                                                            class="form-control form-control-solid" 
+                                                            <input type="text" id="name-customer" name="name-customer" class="form-control form-control-solid" 
                                                             value="{{ old('name-customer') }}" placeholder="Name" />
                                                             @error('name-customer')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
@@ -131,8 +131,8 @@
 														</div>
 														<!--end::Input group-->
 
-                                                          <!--begin::Options-->
-                                                          <div class="d-flex" style="flex-direction: column;">
+														<!--begin::Options-->
+														<div class="d-flex" style="flex-direction: column;">
                                                             <!--begin::Options-->
                                                             <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
                                                                 <input class="form-check-input" type="checkbox" value="" id="check-customer" name="check-customer" />

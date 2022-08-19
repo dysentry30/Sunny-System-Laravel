@@ -515,9 +515,12 @@
 
 
     <!--begin::Modal New Proyek-->
-
     <form action="/proyek/save" method="post" enctype="multipart/form-data">
         @csrf
+
+        <!--begin::Get Modal JS-->
+        <input type="hidden" class="modal-name">
+        <!--end::Get Modal JS-->
 
         <!--begin::Modal - Create Proyek-->
         <div class="modal fade" id="kt_modal_create_proyek" tabindex="-1" aria-hidden="true">

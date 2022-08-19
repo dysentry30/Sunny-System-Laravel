@@ -793,7 +793,7 @@
                                                                     <select id="tipe-proyek" name="tipe-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? 'disabled' : 'disabled'}}>
                                                                         <option value="R" {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>Retail</option>
                                                                         <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                                                     </select>
@@ -822,7 +822,7 @@
                                                                     <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                    data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? 'disabled' : 'disabled'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="E" {{ $proyek->jenis_proyek == 'E' ? 'selected' : '' }}>External</option>
                                                                     </select>
@@ -866,7 +866,7 @@
                                                                     <select id="tahun-perolehan" name="tahun-perolehan"
                                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
-                                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? 'disabled' : 'disabled'}}>
                                                                         @for ($i = 2021; $i < $years + 20; $i++)
                                                                             <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                                                 {{ $i }}</option>
@@ -2221,11 +2221,21 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="ketua-tender" name="ketua-tender"
                                                                         value="{{ $proyek->ketua_tender }}"
-                                                                        placeholder="Ketua Team Tender" />
+                                                                        placeholder="Ketua Team Tender" /> --}}
+                                                                    <select id="ketua-tender" name="ketua-tender" class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true" data-placeholder="Ketua Team Tender">
+                                                                        <option></option>
+                                                                        @foreach ($users as $user)
+                                                                            @if ( $user->id == $proyek->ketua_tender )
+                                                                                <option value="{{ $user->id }}" selected>{{ $user->name }}</option>
+                                                                            @endif
+                                                                                <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -2434,10 +2444,90 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+                                                        <!--Begin::Title Biru Form: List Peserta Tender-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Kompetitor
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_peserta_tender">+</a>
+                                                        </h3>
+                                                        <br>
+                                                        <!--begin::Table Kriteria Pasar-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Nama Peserta Tender</th>
+                                                                    <th class="w-auto">Nilai Penawaran</th>
+                                                                    <th class="w-auto"><i class="bi bi-percent"></i>OE</th>
+                                                                    <th class="w-auto">Status</th>
+                                                                    <th class="w-100px"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($pesertatender as $peserta)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_tender_{{ $peserta->id }}">{{ $peserta->peserta_tender }}</a>
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->nilai_tender_peserta ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->oe_tender ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $peserta->status ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_tender_delete_{{ $peserta->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--End::Title Biru Form: List Peserta Tender-->
 
+                                                        <br>
+                                                        <br>
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Laporan Kualitatif
                                                         </h3>
@@ -2603,8 +2693,9 @@
                                                         </div>
                                                         <!--End begin::Row-->
 
+                                                        <br>
+
                                                         <!--Begin::Title Biru Form: List Peserta Tender-->
-                                                        &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">List Peserta Tender
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
@@ -2685,11 +2776,11 @@
 
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Laporan Kualitatif
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control form-control-solid" id="laporan-perolehan" name="laporan-perolehan"
                                                                 rows="3">{{ $proyek->laporan_perolehan }}</textarea>
@@ -3323,13 +3414,13 @@
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: Approval-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (user interface)
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                             data-bs-target="#kt_modal_create_namemodal"> </a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: Approval-->
 
                                                         <!--begin::Table-->
@@ -3394,14 +3485,14 @@
                                                         <!--end::Table-->
 
                                                         <!--Begin::Title Biru Form: Approval-->
-                                                        &nbsp;<br>
-                                                        &nbsp;<br>
+                                                        <br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Approval (Head interface)
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal"> </a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: Approval -->
 
                                                         <!--begin::Table-->
@@ -3484,13 +3575,13 @@
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: Feed back-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Proyek Feedback
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_feedback">+</a>
                                                         </h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: List Feed back-->
 
                                                         <!--begin::Table-->
@@ -3545,10 +3636,10 @@
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: History-->
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">History Forecast</h3>
-                                                        &nbsp;<br>
+                                                        <br>
                                                         <!--End::Title Biru Form: List History-->
 
                                                         {{-- begin::Detail History Forecast --}}
@@ -4612,7 +4703,7 @@
                     <br>
                     <!--begin::Label-->
                     <label class="fs-6 fw-bold form-label mt-3">
-                        <span>Peringkat :&nbsp;&nbsp;</span>
+                        <span>Peringkat :&nbsp;</span>
                     </label>
                     <!--end::Label-->
                     <!--begin::Input-->
