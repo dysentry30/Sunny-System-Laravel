@@ -461,7 +461,7 @@
                                     <!--begin::Col-->
                                     <div class="col-6">
                                         <!--begin::Input group Website-->
-
+                                        {{-- @dd($contract) --}}
                                         <!--begin::Input group Name-->
                                         <div class="d-flex align-items-center">
                                             <div class="col-5 text-end me-5">
@@ -1847,7 +1847,7 @@
                             <br>
 
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Addendum Kontrak
+                                Change Request
                                 <a href="/contract-management/view/{{ $contract->id_contract }}/addendum-contract"
                                     Id="Plus">+</a>
                             </h3>
@@ -1858,7 +1858,7 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">No. Dokumen</th>
+                                        <th class="min-w-125px">No. Change Request</th>
                                         <th class="min-w-125px">Dibuat Oleh
                                         </th>
                                         <th class="min-w-125px">Tanggal</th>
@@ -5600,31 +5600,6 @@ aria-hidden="true">
     const tabContent = document.querySelector(`.nav li:nth-child(${proyekStage}) a`);
     const tabBoots = new bootstrap.Tab(tabContent, {});
     tabBoots.show();
-
-    const modalNameElts = document.querySelectorAll(".modal-name");
-    modalNameElts.forEach(async elt => {
-        const getModalIDName = await getModalID(elt).then(res => res.id);
-        elt.value = getModalIDName;
-    });
-
-    async function getModalID (elt) {
-        const promises = new Promise((success) => {
-            let modalElement = returnParentElement(elt);
-            const isContainsKTMODAL = modalElement.id.includes("kt_modal");
-            if (!isContainsKTMODAL) {
-                modalElement = getModalID(modalElement);
-            }
-            return success(modalElement);
-        });
-        return promises;
-    }
-
-    function returnParentElement(elt) {
-        return elt.parentElement;
-    }
-    // modalNameElts.forEach(elt => {
-        
-    // });
 
     async function pilihDraftKontrak(e, showEltResult, isList = false) {
         const idDraft = e.value;

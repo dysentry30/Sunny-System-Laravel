@@ -12,11 +12,13 @@ class ContractManagements extends Model
 
     protected $primaryKey   = "id_contract";
     public $timestamps      = false;
+    protected $keyType = 'string';
+    public $incrementing = false;
     protected $fillable     = ["*"];
     protected $visible      = ["*"];
     protected $casts        = [
         "contract_in" => "datetime:Y-m-d",
-        "contract_out" => "datetime:Y-m-d"
+        "contract_out" => "datetime:Y-m-d",
     ];
     protected $dateFormat   = "Y-m-d";
 

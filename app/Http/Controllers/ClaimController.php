@@ -75,7 +75,6 @@ class ClaimController extends Controller
             //     $claim->where('jenis_claim', '=', "Claim Asuransi");
             // })->get();
         }
-
         return view("5_Claim", compact(["proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }
 

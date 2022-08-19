@@ -1455,6 +1455,46 @@
         </script>
     <!--end:: Cancel Button-->
     
+    <!-- Begin :: Get Modal ID -->
+     <script>
+        const modalNameElts = document.querySelectorAll(".modal-name");
+        if (modalNameElts) {
+            modalNameElts.forEach(async elt => {
+                const getModalIDName = await getModalID(elt).then(res => res.id);
+                elt.value = getModalIDName;
+            });
+        }
+
+        async function getModalID (elt) {
+            const promises = new Promise((success) => {
+                let modalElement = returnParentElement(elt);
+                const isContainsKTMODAL = modalElement.id.includes("kt_modal");
+                if (!isContainsKTMODAL) {
+                    modalElement = getModalID(modalElement);
+                }
+                return success(modalElement);
+            });
+            return promises;
+        }
+
+        function returnParentElement(elt) {
+            return elt.parentElement;
+        }
+     </script>
+    <!-- End :: Get Modal ID -->
+    
+    <!-- begin :: Show Modal jika terjadi error pada inputan -->
+    @if (Session::has("modal")) {
+        <script>
+            const modalWantToOpenElt = document.querySelector("#{{Session::get('modal')}}");
+            const modalWantToOpenBoots = new bootstrap.Modal(modalWantToOpenElt, {});
+            modalWantToOpenBoots.show();
+        </script>
+    }
+    <!-- End :: Show Modal jika terjadi error pada inputan -->
+        
+
+
     <!--end::Javascript-->
 
 </body>

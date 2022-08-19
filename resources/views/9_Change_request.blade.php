@@ -151,18 +151,26 @@
                                             <!--end::Tanggal Diajukan-->
                                             <!--begin::Uraian Perubahan-->
                                             <td>
-                                                @foreach ($addendumContract->addendumContractDrafts as $adendumDraft)
-                                                <p class="">
-                                                    {{ $adendumDraft->uraian_perubahan }}
-                                                </p>
-                                                @endforeach
+                                                @forelse ($addendumContract->addendumContractDrafts as $adendumDraft)
+                                                    <p class="">
+                                                        {{ $adendumDraft->uraian_perubahan }}
+                                                    </p>
+                                                @empty
+                                                    <p class="text-danger">
+                                                        Harus buat <b>Addendum Kontrak Draft</b> dahulu
+                                                    </p>
+                                                @endforelse
                                             </td>
                                             <!--end::Uraian Perubahan-->
                                             <!--begin::Tanggal Disetujui-->
                                             <td>
-                                                @foreach ($addendumContract->addendumContractDisetujui as $adendumDisetujui)
-                                                {{ date_format(date_create($adendumDisetujui->tanggal_disetujui), 'd M Y' ) }}
-                                                @endforeach
+                                                @forelse ($addendumContract->addendumContractDisetujui as $adendumDisetujui)
+                                                    {{ date_format(date_create($adendumDisetujui->tanggal_disetujui), 'd M Y' ) }}
+                                                @empty
+                                                    <p class="text-danger">
+                                                        Klaim belum disetujui
+                                                    </p>
+                                                @endforelse
                                             </td>
                                             <!--end::Tanggal Disetujui-->
                                             <!--begin::Status-->
@@ -185,20 +193,44 @@
                                             </td>
                                             <!--end::Status-->
                                             <!--begin::Tanggal Amandemen-->
-                                            <td>
-                                                @foreach ($addendumContract->addendumContractAmandemen as $adendumAmandemen)
-                                                {{ date_format(date_create($adendumAmandemen->tanggal_amandemen), 'd M Y') }}
-                                            </td>
+                                            @forelse ($addendumContract->addendumContractAmandemen as $adendumAmandemen)
+                                                <td>
+                                                    {{ date_format(date_create($adendumAmandemen->tanggal_amandemen), 'd M Y') }}
+                                                </td>
+                                            @empty
+                                                <td>
+                                                    <p class="text-danger">
+                                                        Klaim harus berada di <b>Amandemen</b>
+                                                    </p>
+                                                </td>
+                                            @endforelse
                                             <!--end::Tanggal Amandemen-->
                                             <!--begin::Nilai Amandemen-->
-                                            <td>
-                                                {{ number_format($adendumAmandemen->biaya_amandemen, 0, '.', ',') }}
-                                            </td>
+                                            @forelse ($addendumContract->addendumContractAmandemen as $adendumAmandemen)
+                                                <td>
+                                                    {{ number_format($adendumAmandemen->biaya_amandemen, 0, '.', ',') }}
+                                                </td>
+                                            @empty
+                                                <td>
+                                                    <p class="text-danger">
+                                                        Klaim harus berada di <b>Amandemen</b>
+                                                    </p>
+                                                </td>
+                                            @endforelse
                                             <!--begin::Nilai Amandemen-->
                                             <!--begin::Waktu Amandemen-->
-                                            <td>
+                                            @forelse ($addendumContract->addendumContractAmandemen as $adendumAmandemen)
+                                                <td>
                                                 {{ date_format(date_create($adendumAmandemen->waktu_eot_amandemen), 'd M Y') }}
-                                                @endforeach
+                                                </td>
+                                            @empty
+                                                <td>
+                                                    <p class="text-danger">
+                                                        Klaim harus berada di <b>Amandemen</b>
+                                                    </p>
+                                                </td>
+                                            @endforelse
+                                            <td>
                                             </td>
                                             <!--begin::Waktu Amandemen-->
                                             </tr>

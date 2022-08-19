@@ -36,7 +36,7 @@
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Addendum Contract
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Change Request
                                     </h1>
                                     <!--end::Title-->
                                 </div>
@@ -953,7 +953,7 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">No. Addendum Contract</span>
+                                                                    <span class="required">No. Change Request</span>
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 {{-- begin::input --}}

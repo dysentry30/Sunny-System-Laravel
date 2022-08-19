@@ -177,7 +177,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
-                                            @foreach ($proyekClaim as $proyekClaims)
+                                            @forelse ($proyekClaim as $proyekClaims)
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
@@ -200,7 +200,11 @@
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4">Data Klaim tidak ditemukan</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
@@ -229,7 +233,7 @@
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
                                         {{-- @foreach ($claims as $claim) --}}
-                                            @foreach ($proyekAnti as $proyekAntis)
+                                            @forelse ($proyekAnti as $proyekAntis)
                                                 <tr>
                                                     <!--begin::Name-->
                                                     <td>
@@ -238,12 +242,12 @@
                                                     <!--end::Name-->
                                                     <!--begin::Name Proyek-->
                                                     <td>
-                                                        {{ $proyekClaims->project->nama_proyek }}
+                                                        {{ $proyekAntis->project->nama_proyek }}
                                                     </td>
                                                     <!--end::Name Proyek-->
                                                     <!--begin::Unit Kerja-->
                                                     <td>
-                                                        {{ $proyekClaims->project->UnitKerja->unit_kerja }}
+                                                        {{ $proyekAntis->project->UnitKerja->unit_kerja }}
                                                     </td>
                                                     <!--end::Unit Kerja-->
                                                     <!--begin::Action-->
@@ -252,7 +256,11 @@
                                                     </td>
                                                     <!--end::Action-->
                                                 </tr>
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="4">Data Klaim tidak ditemukan</td>
+                                            </tr>
+                                        @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
@@ -280,7 +288,7 @@
                                         <!--end::Table head-->
                                         <!--begin::Table body-->
                                         <tbody class="fw-bold text-gray-600">
-                                            @foreach ($proyekAsuransi as $proyekAsuransis)
+                                            @forelse ($proyekAsuransi as $proyekAsuransis)
                                                     <tr>
                                                         <!--begin::Name-->
                                                         <td>
@@ -289,12 +297,12 @@
                                                         <!--end::Name-->
                                                         <!--begin::Name Proyek-->
                                                         <td>
-                                                            {{ $proyekClaims->project->nama_proyek }}
+                                                            {{ $proyekAsuransis->project->nama_proyek }}
                                                         </td>
                                                         <!--end::Name Proyek-->
                                                         <!--begin::Unit Kerja-->
                                                         <td>
-                                                            {{ $proyekClaims->project->UnitKerja->unit_kerja }}
+                                                            {{ $proyekAsuransis->project->UnitKerja->unit_kerja }}
                                                         </td>
                                                         <!--end::Unit Kerja-->
                                                         <!--begin::Action-->
@@ -303,7 +311,11 @@
                                                         </td>
                                                         <!--end::Action-->
                                                     </tr>
-                                            @endforeach
+                                            @empty
+                                                <tr>
+                                                    <td colspan="4">Data Klaim tidak ditemukan</td>
+                                                </tr>
+                                            @endforelse
                                         </tbody>
                                     </table>
                                     <!--end::Table -->
