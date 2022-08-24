@@ -239,6 +239,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Edit Customer Proyek History by view id_customer    
     Route::post('/customer/save-modal', [CustomerController::class, 'customerHistory']);
 
+    // DELETE Attachment 
+    Route::delete('/customer/attachment/{id}/delete', [CustomerController::class, 'deleteAttachment']);
+
+    // Add Struktur Organisasi    
+    Route::post('/customer/pic', [CustomerController::class, 'pic']);
+
     // Add Struktur Organisasi    
     Route::post('/customer/struktur', [CustomerController::class, 'struktur']);
 
@@ -276,7 +282,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/update', [ProyekController::class, 'update']);
 
     // DELETE data customer pada dasboard customer by ID 
-    Route::delete('proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+    Route::delete('/proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
+
+    // CANCEL data  
+    Route::post('/proyek/cancel-modal/{kode_proyek}', [ProyekController::class, 'cancelProyek']);
 
     // Stage Update 
     Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
@@ -284,7 +293,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
         $proyek = Proyek::find($data["kode_proyek"]);
-        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", (int) date("m"))->orderByDesc("created_at")->first();
+        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at")->first();
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
             if ($forecast->update(["nilai_forecast" => (int) $data["nilai_forecast"]])) {
@@ -314,7 +323,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (int) $nilai_kontrak_keseluruhan;
-            $forecast->periode_prognosa = (int) date("m");
+            $forecast->periode_prognosa = (int) $data["periode_prognosa"];
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
                 if ($proyek->kode_proyek == $data["kode_proyek"]) {
@@ -364,18 +373,27 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     // DELETE Team Proyek 
     Route::delete('proyek/user-delete/{id}', [ProyekController::class, 'deleteTeam']);
-
+    
     // ADD Peserta Tender 
     Route::post('proyek/peserta-tender/add', [ProyekController::class, 'tambahTender']);
     
     // DELETE Peserta Tender 
-    Route::delete('proyek/peserta-tender/delete/{id}', [ProyekController::class, 'deleteTender']);
+    Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
     
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
-
+    
+    // DELETE Dokumen Prakualifikasi
+    Route::delete('proyek/risk-tender/{id}/delete', [ProyekController::class, 'deleteRiskTender']);
+    
     // DELETE Attachment Menang
     Route::delete('/proyek/attachment-menang/{id}/delete', [ProyekController::class, 'deleteAttachmentMenang']);
+    
+    // ADD History Adendum 
+    Route::post('proyek/adendum/add', [ProyekController::class, 'tambahAdendum']);
+    
+    // DELETE History Adendum 
+    Route::delete('proyek/adendum/{id}/delete', [ProyekController::class, 'deleteAdendum']);
 
     //End :: Project
 
@@ -640,6 +658,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // NEW SBU after SAVE
     Route::post('/sbu/save', [SbuController::class, 'store']);
+
+    // EDIT SBU
+    Route::post('/sbu/{id}/edit', [SbuController::class, 'update']);
 
     // DELETE SBU
     Route::delete('/sbu/delete/{id}', [SbuController::class, 'delete']);

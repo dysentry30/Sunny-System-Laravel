@@ -347,7 +347,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Kode Owner</span>
+                                                                        <span class="">Kode Pelanggan</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -355,7 +355,7 @@
                                                                         class="form-control form-control-solid"
                                                                         name="kodepelanggan-company"
                                                                         value="{{ $customer->kode_pelanggan }}"
-                                                                        placeholder="Kode Owner" />
+                                                                        placeholder="Kode Pelanggan" />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -564,93 +564,57 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">
                                                             Contact / PIC
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_pic">+</a>
                                                         </h3>
                                                         <!--end::INPUT PIC-->
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nama</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="name-pic" value="{{ $customer->name_pic }}"
-                                                                        placeholder="Nama" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jabatan</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="kode-pic" value="{{ $customer->kode_pic }}"
-                                                                        placeholder="Jabatan" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
-
-                                                        <!--begin::Row-->
-                                                        <div class="row fv-row">
-                                                            <!--begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Email</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="email-pic"
-                                                                        value="{{ $customer->email_pic }}"
-                                                                        placeholder="Email" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Kontak Nomor</span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="phone-number-pic"
-                                                                        value="{{ $customer->phone_number_pic }}"
-                                                                        placeholder="Kontak Nomor" />
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                        </div>
-                                                        <!--End begin::Row-->
+                                                        <!--begin::Table-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="min-w-auto">Nama</th>
+                                                                    <th class="min-w-auto">Email</th>
+                                                                    <th class="min-w-auto">Jabatan</th>
+                                                                    <th class="min-w-auto">Kontak Nomor</th>
+                                                                    <th class="min-w-auto"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($pics as $pic)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            {{ $pic->nama_pic ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Email-->
+                                                                        <td>
+                                                                            {{ $pic->email_pic ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Email-->
+                                                                        <!--begin::Jabatan-->
+                                                                        <td>
+                                                                            {{ $pic->jabatan_pic ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Jabatan-->
+                                                                        <!--begin::Phone-->
+                                                                        <td>
+                                                                            {{ $pic->phone_pic ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Phone-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--end::Table-->
                                                     </div>
 <!--end:::Tab pane Informasi Perusahaan-->
 
@@ -660,6 +624,12 @@
                                                         <div class="tab-pane fade show active"
                                                             id="kt_user_view_performance" role="tabpanel">
                                                             <!--begin::Row-->
+                                                            <!--begin::Data Performance-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                Data Performance
+                                                            </h3>
+                                                            <!--end::Data Performance-->
                                                             <div class="row fv-row">
                                                                 <!--begin::Col-->
                                                                 <div class="col-6">
@@ -761,13 +731,13 @@
                                                             <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file"> --}}
                                                         <!--end::Input-->
 
-                                                        <!--begin::Table-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">
                                                             Input Struktur Organisasi
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_struktur">+</a>
                                                         </h3>
+                                                        <!--begin::Table-->
                                                         <table class="table align-middle table-row-dashed fs-6 gy-5"
                                                             id="kt_customers_table">
                                                             <!--begin::Table head-->
@@ -789,22 +759,22 @@
                                                                     <tr>
                                                                         <!--begin::Name-->
                                                                         <td>
-                                                                            {{ $struktur->nama_struktur }}
+                                                                            {{ $struktur->nama_struktur ?? "-" }}
                                                                         </td>
                                                                         <!--end::Name-->
                                                                         <!--begin::Email-->
                                                                         <td>
-                                                                            {{ $struktur->email_struktur }}
+                                                                            {{ $struktur->email_struktur ?? "-" }}
                                                                         </td>
                                                                         <!--end::Email-->
                                                                         <!--begin::Jabatan-->
                                                                         <td>
-                                                                            {{ $struktur->jabatan_struktur }}
+                                                                            {{ $struktur->jabatan_struktur ?? "-" }}
                                                                         </td>
                                                                         <!--end::Jabatan-->
                                                                         <!--begin::Phone-->
                                                                         <td>
-                                                                            {{ $struktur->phone_struktur }}
+                                                                            {{ $struktur->phone_struktur ?? "-" }}
                                                                         </td>
                                                                         <!--end::Phone-->
                                                                     </tr>
@@ -927,9 +897,9 @@
                                                                         <th class="min-w-auto">Nama Proyek</th>
                                                                         <th class="min-w-auto">Nomor SPK</th>
                                                                         <th class="min-w-auto">Unit kerja</th>
-                                                                        <th class="min-w-auto">Stage</th>
+                                                                        {{-- <th class="min-w-auto">Stage</th> --}}
                                                                         <th class="min-w-auto">Divisi</th>
-                                                                        <th class="min-w-auto">Provinsi</th>
+                                                                        <th class="min-w-auto">Nilai OK</th>
                                                                         <th class="min-w-auto">Tgl Mulai Kontrak</th>
                                                                         <th class="min-w-auto">Durasi</th>
                                                                     </tr>
@@ -961,7 +931,7 @@
                                                                                     </td>
                                                                                     <!--end::Unit-->
                                                                                     <!--begin::Nama Proyek-->
-                                                                                    <td class="text-center">
+                                                                                    {{-- <td class="text-center">
                                                                                         @switch($proyekberjalan6->stage)
                                                                                             @case('1')
                                                                                                 Pasar Dini
@@ -1002,16 +972,16 @@
                                                                                             @default
                                                                                                 Selesai
                                                                                         @endswitch
-                                                                                    </td>
+                                                                                    </td> --}}
                                                                                     <!--end::Nama Proyek-->
                                                                                     <!--begin::Divisi-->
                                                                                     <td>{{ $proyekberjalan6->proyek->UnitKerja->divisi }}
                                                                                     </td>
                                                                                     <!--end::Divisi-->
-                                                                                    <!--begin::Provinsi-->
-                                                                                    <td>{{ $proyekberjalan6->proyek->provinsi }}
+                                                                                    <!--begin::NilaiOK-->
+                                                                                    <td>{{ $proyekberjalan6->proyek->nilai_rkap }}
                                                                                     </td>
-                                                                                    <!--end::Provinsi-->
+                                                                                    <!--end::NilaiOK-->
                                                                                     <!--begin::Tanggal Kontrak-->
                                                                                     <td>{{ $proyekberjalan6->proyek->tanggal_mulai_terkontrak }}
                                                                                     </td>
@@ -1288,7 +1258,7 @@
 
 <!--begin:::Tab pane Atachment & Notes-->
                                                     <div class="tab-pane fade" id="kt_user_view_Notes" role="tabpanel">
-                                                        <input type="file" id="file" class="file" hidden>
+                                                        {{-- <input type="file" id="file" class="file" hidden> --}}
                                                         <!--begin::Attachment-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">
@@ -1297,79 +1267,78 @@
 
                                                         <div>
                                                             <label for="doc-attachment" class="form-label"></label>
-                                                            <input class="form-control form-control-lg"
-                                                                id="doc-attachment" name="doc-attachment" type="file">
+                                                            <input onchange="this.form.submit()" class="form-control form-control-sm"
+                                                                id="doc-attachment" name="doc-attachment" type="file" accept=".docx, .pdf">
                                                         </div>
+
                                                         <br>
                                                         {{-- <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button> --}}
 
                                                         <!--End::Attachment-->
 
+                                                        <div class="ms-3">
+                                                            <table class="table align-middle table-row-dashed fs-6"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
+                                                                        <th class="min-w-auto">Attachment Name</th>
+                                                                        <th class="min-w-auto">Modified On</th>
+                                                                        <th class="min-w-auto">Modified By</th>
+                                                                        <th class="w-100px"></th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @if (isset($attachment))
+                                                                        @foreach ($attachment as $attachments)
+                                                                            <tr>
+                                                                                <!--begin::Name-->
+                                                                                <td>
+                                                                                    @if (str_contains("$attachments->name_attachment", ".doc"))
+                                                                                        <a href="/document/view/{{$attachments->id_customer}}/{{$attachments->id_document}}" class="text-hover-primary">{{$attachments->name_attachment}}</a>
+                                                                                    @else
+                                                                                        <a target="_blank" href="{{ asset("words/".$attachments->id_document.".pdf") }}" class="text-hover-primary">{{$attachments->name_attachment}}</a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <!--end::Name-->
+                                                                                <!--begin::Time-->
+                                                                                <td>
+                                                                                    <a>{{ $attachments->created_at }}</a>
+                                                                                </td>
+                                                                                <!--end::Time-->
+                                                                                <!--begin::Kode-->
+                                                                                <td>
+                                                                                    <a>{{ $attachments->created_by }}</a>
+                                                                                </td>
+                                                                                <!--end::Kode-->
+                                                                                <!--begin::Action-->
+                                                                                <td class="text-center">
+                                                                                    <small>
+                                                                                        <p data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_attachment_delete_{{ $attachments->id }}"
+                                                                                            id="modal-delete"
+                                                                                            class="btn btn-sm btn-light btn-active-primary">
+                                                                                            Delete
+                                                                                        </p>
+                                                                                    </small>
+                                                                                </td>
+                                                                                <!--end::Action-->
+                                                                            </tr>
+                                                                        @endforeach
+                                                                    @endif
+
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
 
                                                         <!--EDITED begin::Attachement Table-->
-                                                        <div
-                                                            style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
-
-                                                            <div>
-                                                                <table
-                                                                    class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                    id="kt_customers_table">
-                                                                    <!--begin::Table head-->
-                                                                    <thead>
-                                                                        <!--begin::Table row-->
-                                                                        <tr
-                                                                            class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                            <th class="min-w-auto">Customer Name</th>
-                                                                            <th class="min-w-auto">Attachment Name</th>
-                                                                            <th class="min-w-auto">Updated at</th>
-                                                                        </tr>
-                                                                        <!--end::Table row-->
-                                                                    </thead>
-                                                                    <!--end::Table head-->
-                                                                    <!--begin::Table body-->
-                                                                    <tbody class="fw-bold text-gray-600">
-
-
-                                                                        @if (isset($attachment))
-                                                                            @foreach ($attachment as $attachment)
-                                                                                <tr>
-                                                                                    <!--begin::Name-->
-
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $attachment->name_customer }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name-->
-                                                                                    <!--begin::Kode-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                                                            {{ $attachment->name_attachment }}</a>
-                                                                                    </td>
-                                                                                    <!--end::Kode-->
-                                                                                    <!--begin::Time-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                                                            {{ $attachment->created_at }}</a>
-                                                                                    </td>
-                                                                                    <!--end::Time-->
-                                                                                </tr>
-                                                                            @endforeach
-                                                                        @endif
-
-                                                                    </tbody>
-                                                                    <!--end::Table body-->
-                                                                </table>
-                                                            </div>
-                                                            <br>
-                                                            <br>
-                                                            <br>
-                                                            <!--end::Attachement Table-->
-
-
+                                                        <div style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
 
                                                             <!--begin::Note-->
                                                             <div class="fv-row mb-7">
@@ -1413,12 +1382,11 @@
                                                             }
                                                         </script>
 
-                                                        <br>
-                                                        
                                                         <div id="overViewProject">
+                                                            <br>
                                                             <div class="row">
                                                                 <div class="row">
-                                                                    <div class="col py-3 text-center">
+                                                                    <div class="col py-3  text-center">
                                                                         <b class="h3">Proyek Forecast</b>
                                                                     </div>
                                                                     <div class="col py-3 text-center">
@@ -1529,9 +1497,10 @@
 
                                                         </div> <!--scoreCSI--> 
 
+                                                        {{-- <br>
                                                         <div class="col">
                                                             <div id="map"></div>
-                                                        </div>
+                                                        </div> --}}
                                                     </div>
 <!--end:::Tab pane Over View-->
 
@@ -1646,6 +1615,142 @@
         <!--end::Modal - Create App-->
     </form>
 
+    <!--begin::modal PIC-->
+    <form action="/customer/pic" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer">
+
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_pic" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Input Contact / PIC : </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Nama</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="name-pic" value=""
+                                        placeholder="Nama" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Jabatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="kode-pic" value=""
+                                        placeholder="Jabatan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Email</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="email-pic"
+                                        value=""
+                                        placeholder="Email" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kontak Nomor</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="phone-number-pic"
+                                        value=""
+                                        placeholder="Kontak Nomor" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                            style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    <!--end::modal PIC-->
+
+    
     <!--begin::modal Struktur Organisasi-->
     <form action="/customer/struktur" method="post" enctype="multipart/form-data">
         @csrf
@@ -1772,6 +1877,53 @@
     </form>
     <!--end::modal Struktur Organisasi-->
 
+<!--begin::DELETE ATTACHMENT-->
+@foreach ($attachment as $attachments)
+<form action="/customer/attachment/{{ $attachments->id }}/delete" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_attachment_delete_{{ $attachments->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus : {{ $attachments->name_attachment }}</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE ATTACHMENT-->
+
     <!--end::Modals-->
 
 
@@ -1783,15 +1935,15 @@
 
 <!--begin::CDN High Chart-->
 <script src="/js/highcharts/highcharts.js"></script>
-<script src="/js/highcharts/series-label.js"></script>
-<script src="/js/highcharts/exporting.js"></script>
-<script src="/js/highcharts/export-data.js"></script>
-<script src="/js/highcharts/drilldown.js"></script>
-<script src="/js/highcharts/funnel.js"></script>
-<script src="/js/highcharts/accessibility.js"></script>
+{{-- <script src="/js/highcharts/series-label.js"></script> --}}
+{{-- <script src="/js/highcharts/exporting.js"></script> --}}
+{{-- <script src="/js/highcharts/export-data.js"></script> --}}
+{{-- <script src="/js/highcharts/drilldown.js"></script> --}}
+{{-- <script src="/js/highcharts/funnel.js"></script> --}}
+{{-- <script src="/js/highcharts/accessibility.js"></script> --}}
 <script src="/js/highcharts/highcharts-3d.js"></script>
-<script src="https://code.highcharts.com/highcharts-more.js"></script>
-<script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+<script src="/js/highcharts/highcharts-more.js"></script>
+<script src="/js/highcharts/solid-gauge.js"></script>
 <!--end::CDN High Chart-->
 
 <!--begin::Performance Pelanggan-->
@@ -2061,131 +2213,6 @@
 
 <!--begin::Score CSI-->
 <script>
-    var gaugeOptions = {
-        chart: {
-            type: 'solidgauge'
-        },
-
-        title: null,
-
-        pane: {
-            center: ['50%', '65%'],
-            size: '100%',
-            startAngle: -90,
-            endAngle: 90,
-            background: {
-                backgroundColor:
-                    Highcharts.defaultOptions.legend.backgroundColor || '#EEE',
-                innerRadius: '60%',
-                outerRadius: '100%',
-                shape: 'arc'
-            }
-        },
-
-        exporting: {
-            enabled: false
-        },
-
-        tooltip: {
-            enabled: false
-        },
-
-        // the value axis
-        yAxis: {
-            stops: [
-                [0.1, '#ED6D3F'], // red
-                [0.5, '#F7C13E'], // yellow
-                [0.9, '#61CB65'], // green
-            ],
-            lineWidth: 0,
-            tickWidth: 0,
-            minorTickInterval: null,
-            tickAmount: 1,
-            title: {
-                y: -70
-            },
-            labels: {
-                y: 16
-            }
-        },
-
-        plotOptions: {
-            solidgauge: {
-                dataLabels: {
-                    y: 5,
-                    borderWidth: 0,
-                    useHTML: true
-                }
-            }
-        }
-    };
-
-    // The speed gauge
-    var chartSpeed = Highcharts.chart('container-speed', Highcharts.merge(gaugeOptions, {
-        yAxis: {
-            min: 0,
-            max: 100,
-            title: {
-                // text: 'Speed'
-            }
-        },
-
-        credits: {
-            enabled: false
-        },
-
-        series: [{
-            name: 'Speed',
-            data: [70],
-            dataLabels: {
-                format:
-                    '<div style="text-align:center; margin-bottom: 100px">' +
-                    '<span style="font-size:50px">{y}</span><br/>' +
-                    // '<span style="font-size:12px;opacity:0.4">km/h</span>' +
-                    '</div>'
-            },
-            tooltip: {
-                // valueSuffix: ' km/h'
-            }
-        }]
-
-    }));
-
-    // Bring life to the dials
-    // setInterval(function () {
-    //     // Speed
-    //     var point,
-    //         newVal,
-    //         inc;
-
-    //     if (chartSpeed) {
-    //         point = chartSpeed.series[0].points[0];
-    //         inc = Math.round((Math.random() - 0.5) * 100);
-    //         newVal = point.y + inc;
-
-    //         if (newVal < 0 || newVal > 200) {
-    //             newVal = point.y - inc;
-    //         }
-
-    //         point.update(newVal);
-    //     }
-
-    //     // RPM
-    //     if (chartRpm) {
-    //         point = chartRpm.series[0].points[0];
-    //         inc = Math.random() - 0.5;
-    //         newVal = point.y + inc;
-
-    //         if (newVal < 0 || newVal > 5) {
-    //             newVal = point.y - inc;
-    //         }
-
-    //         point.update(newVal);
-    //     }
-    // }, 2000);
-
-</script>
-<script>
     Highcharts.chart('score-csi', {
 
     chart: {
@@ -2337,7 +2364,8 @@
 <!--end::Score CSI-->
 
 
-<script>
+<!--begin::MAP Leaflet-->
+{{-- <script>
     var map = L.map('map').setView([51.505, -0.09], 7);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 13,
@@ -2389,5 +2417,6 @@
         
     }
     // end select kabupaten
-</script>
+</script> --}}
+<!--end::MAP Leaflet-->
 @endsection

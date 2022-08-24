@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Faqs::factory(7)->create();
         ContractManagements::factory(1)->create();
         User::factory(15)->create();
-        Proyek::factory(8)->create();
+        // Proyek::factory(8)->create();
         // DraftContracts::factory(5)->create();
 
         // begin :: Proyek.
@@ -46,13 +46,15 @@ class DatabaseSeeder extends Seeder
             'tahun_perolehan' => 2021,
             'tipe_proyek' => "R",
             'jenis_proyek' => "I",
-            'nilai_rkap' => "1,500,000,000",
-            'nilaiok_awal' => "1,500,000,000",
+            'nilai_rkap' => "18,500,000,000",
+            'nilaiok_awal' => "18,500,000,000",
             'stage' => "1",
-            'sumber_dana' => "BUMN",
             'bulan_pelaksanaan' => 3,
             'dop' => "DOP 1",
             'porsi_jo' => "100",
+            'nilai_valas_review' => "18,500,000,000",
+            'bulan_review' => 3,
+            'nilaiok_review' => "18,500,000,000",
             'kurs_review' => 1,
             'kurs_awal' => 1,
             'mata_uang_review' => "IDR",
@@ -69,11 +71,13 @@ class DatabaseSeeder extends Seeder
             'nilai_rkap' => "23,500,000,000",
             'nilaiok_awal' => "23,500,000,000",
             'stage' => "4",
-            'sumber_dana' => "BUMN",
             'bulan_pelaksanaan' => 4,
             'dop' => "EA",
             'company' => "Wika Industry & Konstruksi",
             'porsi_jo' => "100",
+            'nilai_valas_review' => "23,500,000,000",
+            'bulan_review' => 4,
+            'nilaiok_review' => "23,500,000,000",
             'kurs_review' => 1,
             'kurs_awal' => 1,
             'mata_uang_review' => "IDR",
@@ -221,13 +225,12 @@ class DatabaseSeeder extends Seeder
 
         // begin :: SBU.
         Sbu::create([
-            'sbu' => "SBU1",
             'kode_sbu' => "D06E",
-            'klasifikasi' => "Minyak dan Gas",
-            'referensi1' => "LPJK 3/2015",
-            'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
-            'referensi2' => "LPJK 4/2015",
             'lingkup_kerja' => "Pertambangan",
+            'klasifikasi' => "Minyak dan Gas",
+            'sub_klasifikasi' => "Fasilitas Produksi Mineral & Pertambangan",
+            'referensi1' => "LPJK 3/2015",
+            'referensi2' => "LPJK 4/2015",
             'referensi3' => "LPJK 6/2018",
         ]);
         // begin :: SBU.

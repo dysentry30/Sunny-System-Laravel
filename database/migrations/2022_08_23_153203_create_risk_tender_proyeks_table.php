@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customer_attachments', function (Blueprint $table) {
-            $table->id('id');
-            $table->mediumInteger('id_customer');
-            $table->string('name_attachment')->nullable();
+        Schema::create('risk_tender_proyeks', function (Blueprint $table) {
+            $table->id();
+            $table->string("kode_proyek");
+            $table->string("nama_risk_tender");
             $table->string("id_document");
             $table->string("created_by");
             $table->timestamps();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_attachments');
+        Schema::dropIfExists('risk_tender_proyeks');
     }
 };

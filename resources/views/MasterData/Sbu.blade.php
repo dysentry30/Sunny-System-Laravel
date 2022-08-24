@@ -202,7 +202,7 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">@sortablelink('sbu', 'Nama')</th>
+                                        {{-- <th class="min-w-auto">@sortablelink('sbu', 'Nama')</th> --}}
                                         <th class="min-w-auto">@sortablelink('kode_sbu', 'Kode')</th>
                                         <th class="min-w-auto">@sortablelink('klasifikasi', 'Klasifikasi')</th>
                                         <th class="min-w-auto">@sortablelink('referensi1', 'Referensi 1')</th>
@@ -225,12 +225,12 @@
                                     <tbody class="fw-bold text-gray-600">
                                         <tr>
 
-                                            <!--begin::Name=-->
+                                            {{-- <!--begin::Name-->
                                             <td>
                                                 <a href="#" id="click-name"
                                                     class="text-gray-600 text-hover-primary mb-1">{{ $sbu->sbu }}</a>
                                             </td>
-                                            <!--end::Name=-->
+                                            <!--end::Name--> --}}
                                             <!--begin::Coloumn-->
                                             <td>
                                                 {{ $sbu->kode_sbu }}
@@ -258,7 +258,7 @@
                                             <!--end::Coloumn-->
                                             <!--begin::Coloumn-->
                                             <td>
-                                                <a href="#" id="click-no"
+                                                <a data-bs-toggle="modal" data-bs-target="#kt_modal_edit_{{ $sbu->id }}" id="click-no"
                                                     class="text-gray-600 text-hover-primary mb-1">
                                                     {{ $sbu->lingkup_kerja }}
                                                 </a>
@@ -271,7 +271,7 @@
                                             <!--end::Coloumn-->
 
                                             @if (auth()->user()->check_administrator)
-                                                <!--begin::Action=-->
+                                                <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
@@ -281,7 +281,7 @@
                                                     </button>
                                                     <!--end::Button-->
                                                 </td>
-                                                <!--end::Action=-->
+                                                <!--end::Action-->
                                             @endif
                                         </tr>
                                 @endforeach
@@ -325,7 +325,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>SBU</h2>
+                        <h2>New SBU</h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -351,12 +351,15 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama SBU</span>
+                                        <span class="required">Kode SBU</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="sbu"
-                                        name="sbu" value="{{ old('sbu') }}" placeholder="Nama SBU" />
+                                    <input type="text" class="form-control form-control-solid" id="kode-sbu"
+                                        name="kode-sbu" value="{{ old('kode-sbu') }}" placeholder="Kode SBU" />
+                                        @error('kode-sbu')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                        @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -367,12 +370,15 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Kode SBU</span>
+                                        <span class="required">Lingkup Pekerjaan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="kode-sbu"
-                                        name="kode-sbu" value="{{ old('kode-sbu') }}" placeholder="Kode SBU" />
+                                    <input type="text" class="form-control form-control-solid" id="lingkup"
+                                        name="lingkup" value="{{ old('lingkup') }}" placeholder="Lingkup Pekerjaan" />
+                                        @error('lingkup')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                        @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -396,12 +402,15 @@
                                     <select id="klasifikasi" name="klasifikasi" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Klasifikasi">
                                         <option selected></option>
-                                        <option value="Bangun Gedung">Bangun Gedung</option>
-                                        <option value="Kontruksi manufaktur">Kontruksi manufaktur</option>
-                                        <option value="Minyak dan Gas">Minyak dan Gas</option>
-                                        <option value="Sumber Daya Air">Sumber Daya Air</option>
-                                        <option value="Transportasi">Transportasi</option>
+                                        <option value="Bangun Gedung" {{ old('klasifikasi') == 'Bangun Gedung' ? 'selected' : ''  }}>Bangun Gedung</option>
+                                        <option value="Kontruksi manufaktur" {{ old('klasifikasi') == 'Kontruksi manufaktur' ? 'selected' : ''  }}>Kontruksi manufaktur</option>
+                                        <option value="Minyak dan Gas" {{ old('klasifikasi') == 'Minyak dan Gas' ? 'selected' : ''  }}>Minyak dan Gas</option>
+                                        <option value="Sumber Daya Air" {{ old('klasifikasi') == 'Sumber Daya Air' ? 'selected' : ''  }}>Sumber Daya Air</option>
+                                        <option value="Transportasi" {{ old('klasifikasi') == 'Transportasi' ? 'selected' : ''  }}>Transportasi</option>
                                     </select>
+                                    @error('klasifikasi')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                        @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -419,6 +428,9 @@
                                     <input type="text" class="form-control form-control-solid" id="sub-klasifikasi"
                                         name="sub-klasifikasi" value="{{ old('sub-klasifikasi') }}"
                                         placeholder="Sub-Klasifikasi" />
+                                    @error('sub-klasifikasi')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -430,22 +442,6 @@
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Lingkup Pekerjaan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="lingkup"
-                                        name="lingkup" value="" placeholder="Lingkup Pekerjaan" />
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
                             <div class="col-6">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
@@ -519,8 +515,214 @@
         </div>
         <!--end::Modal - Create App-->
     </form>
-
     <!--end::Modals-->
+
+    <!--begin::Modal EDIT-->
+    @foreach ($sbus as $sbu)
+    <form action="/sbu/{{ $sbu->id }}/edit" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_edit_{{ $sbu->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit SBU</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Kode SBU</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-kode-sbu"
+                                        name="edit-kode-sbu" value="{{ $sbu->kode_sbu }}" placeholder="Kode SBU" />
+                                        @error('edit-kode-sbu')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                        @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Lingkup Pekerjaan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-lingkup"
+                                        name="edit-lingkup" value="{{ $sbu->lingkup_kerja }}" placehoedit-lder="Lingkup Pekerjaan" />
+                                        @error('edit-lingkup')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                        @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Klasifikasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="edit-klasifikasi" name="edit-klasifikasi" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Klasifikasi">
+                                        <option selected></option>
+                                        <option value="Bangun Gedung" {{ $sbu->klasifikasi == 'Bangun Gedung' ? 'selected' : ''  }}>Bangun Gedung</option>
+                                        <option value="Kontruksi manufaktur" {{ $sbu->klasifikasi == 'Kontruksi manufaktur' ? 'selected' : ''  }}>Kontruksi manufaktur</option>
+                                        <option value="Minyak dan Gas" {{ $sbu->klasifikasi == 'Minyak dan Gas' ? 'selected' : ''  }}>Minyak dan Gas</option>
+                                        <option value="Sumber Daya Air" {{ $sbu->klasifikasi == 'Sumber Daya Air' ? 'selected' : ''  }}>Sumber Daya Air</option>
+                                        <option value="Transportasi" {{ $sbu->klasifikasi == 'Transportasi' ? 'selected' : ''  }}>Transportasi</option>
+                                    </select>
+                                    @error('edit-klasifikasi')
+                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Sub-Klasifikasi</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-sub-klasifikasi"
+                                        name="edit-sub-klasifikasi" value="{{ $sbu->sub_klasifikasi }}"
+                                        placeholder="Sub-Klasifikasi" />
+                                    @error('edit-sub-klasifikasi')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Referensi 1</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-referensi1"
+                                        name="edit-referensi1" value="{{ $sbu->referensi1 }}" placeholder="Referensi 1" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Referensi 2</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-referensi2"
+                                        name="edit-referensi2" value="{{ $sbu->referensi1 }}" placeholder="Referensi 2" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Referensi 3</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="edit-referensi3"
+                                        name="edit-referensi3" value="{{ $sbu->referensi1 }}" placeholder="Referensi 3" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" id="new_save" class="btn btn-sm btn-light btn-active-primary text-white"
+                            style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    @endforeach
+    <!--end::Modal EDIT-->
 
     <!--begin::modal DELETE-->
     @foreach ($sbus as $sbu)

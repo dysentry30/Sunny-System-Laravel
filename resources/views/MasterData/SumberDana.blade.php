@@ -202,7 +202,7 @@
                                         <th class="min-w-auto">@sortablelink('nama_sumber', 'Instansi')</th>
                                         <th class="min-w-auto">@sortablelink('kategori', 'Kategori')</th>
                                         <th class="min-w-auto">@sortablelink('unique_code', 'Unique Code')</th>
-                                        <th class="min-w-auto">@sortablelink('sumber_dana_id', 'Sumber Dana ID')</th>
+                                        <th class="min-w-auto">@sortablelink('sumber_dana_id', 'Sumber Dana Code')</th>
                                         <th class="min-w-auto">@sortablelink('kode_proyek_id', 'Kode Proyek ID')</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">Action</th>

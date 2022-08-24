@@ -13,12 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customer_attachments', function (Blueprint $table) {
-            $table->id('id');
-            $table->mediumInteger('id_customer');
-            $table->string('name_attachment')->nullable();
-            $table->string("id_document");
-            $table->string("created_by");
+        Schema::create('customer_pics', function (Blueprint $table) {
+            $table->id();
+            $table->integer("id_customer");
+            $table->mediumText("nama_pic");
+            $table->string("email_pic")->nullable();
+            $table->string("jabatan_pic")->nullable();
+            $table->string("phone_pic")->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_attachments');
+        Schema::dropIfExists('customer_pics');
     }
 };

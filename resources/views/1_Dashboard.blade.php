@@ -23,16 +23,50 @@
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Toolbar-->
-                    <div class="toolbar" id="kt_toolbar">
+                    <div style=" height:75px" class="toolbar" id="kt_toolbar">
                         <!--begin::Container-->
                         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                             <!--begin::Page title-->
                             <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                                class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                class="page-title d-flex align-items-center flex-wrap me-3 row">
                                 <!--begin::Title-->
                                 <h1 class="d-flex align-items-center fs-3 my-1">Dashboard
                                 </h1>
+                                <div class="row">
+                                    <div class="col">
+                                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
+                                            <!--begin:::Tab item Forecast Bulanan-->
+                                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                                <li class="nav-item">
+                                                    <a onclick="showCRM()" class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                        href="#kt_view_dashboard_crm" style="font-size:14px;">Dashboard CRM</a>
+                                                </li>
+                                            @endif
+                                            <!--end:::Tab item Forecast Bulanan-->
+
+                                            <!--begin:::Tab item Forecast Internal-->
+                                            @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                                                <li class="nav-item">
+                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                        data-bs-toggle="tab" href="#kt_view_dashboard_ccm"
+                                                        style="font-size:14px;">Dashboard CCM</a>
+                                                </li>
+                                            @endif
+                                            <!--end:::Tab item Forecast Internal-->
+                                        </ul>
+                                        <script>
+                                            function showCRM() {
+                                                document.querySelector("#kt_view_dashboard_crm").style.display = "";
+                                                document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
+                                            }
+                                            function showCCM() {
+                                                document.querySelector("#kt_view_dashboard_crm").style.display = "none";
+                                                document.querySelector("#kt_view_dashboard_ccm").style.display = "";
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
@@ -68,22 +102,19 @@
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
                                     @if (Auth::user()->check_administrator)
                                         <!-- Begin :: Select Options Unit Kerja -->
-                                        {{-- <select id="dop" name="dop"
+                                        <select onchange="this.form.submit()" id="dop" name="dop"
                                             class="form-select form-select-solid w-150px"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
                                             @foreach ($dops as $dop)
-                                                @php
-                                                    $is_unit_kerja_selected = $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '';
-                                                @endphp
                                                 <option value="{{ $dop->dop }}" {{ $dop_get == $dop->dop ? 'selected' : '' }} >{{ $dop->dop }}</option>
                                             @endforeach
-                                        </select> --}}
+                                        </select>
                                         <!-- End :: Select Options Unit Kerja -->
                                         <!-- Begin :: Select Options Unit Kerja -->
-                                        <select id="unit-kerja" name="unit-kerja"
+                                        <select onchange="this.form.submit()" id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-150px ms-2"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
@@ -100,7 +131,7 @@
                                     @endif
 
                                     <!--begin::Select Options-->
-                                    <select id="periode-prognosa" name="periode-prognosa"
+                                    <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                         data-placeholder="Bulan" data-select2-id="select2-data-bulan" tabindex="-1"
@@ -126,7 +157,7 @@
                                         // $year = 2030 ;
                                     @endphp
                                     <!--begin::Select Options-->
-                                    <select id="tahun-history" name="tahun-history"
+                                    <select onchange="this.form.submit()" id="tahun-history" name="tahun-history"
                                         class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
@@ -149,12 +180,19 @@
                                         id="kt_toolbar_primary_button">
                                         Filter</button>
 
+                                    <!--begin:: RESET-->
                                     <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
                                         onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
-                                    <!--end::Action Filter-->
+                                        
+                                    <script>
+                                        function resetFilter() {
+                                            window.location.href = "/dashboard";
+                                        }
+                                    </script>
+                                    <!--end:: RESET-->
                                 </form>
                                 <!--begin::RESET FILTER-->
-                                <script>
+                                {{-- <script>
                                     function resetFilter() {
                                         $("#periode-prognosa").select2({
                                             minimumResultsForSearch: -1
@@ -166,7 +204,7 @@
 
                                         $("#unit-kerja").select2({}).val("").trigger("change");
                                     }
-                                </script>
+                                </script> --}}
                                 <!--end::RESET FILTER-->
                             </div>
                             <!--begin::Card title-->
@@ -178,483 +216,487 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
-                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                            <!--begin::FORECAST LINE CHART-->
-                            <figure class="highcharts-figure py-12">
-                                <div id="forecast-line" style="display:">
-                                </div>
-                                <!--begin::Table Proyek-->
-                                <div class="" id="datatable" style="display:none;">
+                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
+                                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                    <!--begin::FORECAST LINE CHART-->
+                                    <figure class="highcharts-figure py-12">
+                                        <div id="forecast-line" style="display:">
+                                        </div>
+                                        <!--begin::Table Proyek-->
+                                        <div class="" id="datatable" style="display:none;">
+                                            <hr>
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable','#forecast-line')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    Chart</button>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                            </div>
+                                            <br>
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                <!--begin::Table head-->
+                                                <thead id="table-line-head">
+                                                    {{-- THead Here --}}
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold" id="table-line-body">
+                                                    {{-- Data Here --}}
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                    </figure>
+                                    <!--end::FORECAST LINE CHART-->
                                     <hr>
-                                    <div class="text-center">
-                                        <h2 id="title-table"></h2>
-                                        <h4 id="total"></h4>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                            onclick="hideTable('#datatable','#forecast-line')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
-                                            Chart</button>
-                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
-                                    </div>
-                                    <br>
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                        <!--begin::Table head-->
-                                        <thead id="table-line-head">
-                                            {{-- THead Here --}}
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold" id="table-line-body">
-                                            {{-- Data Here --}}
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table Proyek-->
-                                </div>
-                            </figure>
-                            <!--end::FORECAST LINE CHART-->
-                            <hr>
 
-                            {{-- <figure class="highcharts-figure py-12">
-                                <div class="py-12" id="forecast-3wulan">
-                                    <!--begin::FORECAST 3 WULAN CHART-->
-                                    <!--end::FORECAST 3 WULAN CHART-->
-                                </div>
+                                    {{-- <figure class="highcharts-figure py-12">
+                                        <div class="py-12" id="forecast-3wulan">
+                                            <!--begin::FORECAST 3 WULAN CHART-->
+                                            <!--end::FORECAST 3 WULAN CHART-->
+                                        </div>
 
-                                <!-- Begin :: Data Table Triwulan -->
-                                <div class="" id="datatable-triwulan" style="display:none;">
+                                        <!-- Begin :: Data Table Triwulan -->
+                                        <div class="" id="datatable-triwulan" style="display:none;">
+                                            <hr>
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable-triwulan','#forecast-3wulan')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    Chart</button>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                <!-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> -->
+                                            </div>
+                                            <br>
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                <!--begin::Table head-->
+                                                <thead id="table-line-head">
+                                                    <!-- THead Here -->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold" id="table-line-body">
+                                                    <!-- Data Here -->
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                        <!-- End :: Data Table Triwulan -->
+                                    </figure>
+                                    <hr> --}}
+
+                                    <figure class="highcharts-figure py-12">
+                                        <div class="py-12" id="nilai-realisasi">
+                                            <!--begin::NILAI REALISASI-->
+                                            <!--end::NILAI REALISASI-->
+            
+                                        </div>
+                                        <div class="" id="datatable-realisasi" style="display:none;">
+                                            <hr>
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    Chart</button>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                            </div>
+                                            <br>
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                <!--begin::Table head-->
+                                                <thead id="table-line-head">
+                                                    {{-- THead Here --}}
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold" id="table-line-body">
+                                                    {{-- Data Here --}}
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                    </figure>
                                     <hr>
-                                    <div class="text-center">
-                                        <h2 id="title-table"></h2>
-                                        <h4 id="total"></h4>
-                                    </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                            onclick="hideTable('#datatable-triwulan','#forecast-3wulan')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
-                                            Chart</button>
-                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                        <!-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> -->
-                                    </div>
-                                    <br>
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                        <!--begin::Table head-->
-                                        <thead id="table-line-head">
-                                            <!-- THead Here -->
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold" id="table-line-body">
-                                            <!-- Data Here -->
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table Proyek-->
-                                </div>
-                                <!-- End :: Data Table Triwulan -->
-                            </figure>
-                            <hr> --}}
 
-                            <figure class="highcharts-figure py-12">
-                                <div class="py-12" id="nilai-realisasi">
-                                    <!--begin::NILAI REALISASI-->
-                                    <!--end::NILAI REALISASI-->
-    
-                                </div>
-                                <div class="" id="datatable-realisasi" style="display:none;">
+                                    <div class="py-12" id="monitoring-proyek">
+                                        <!--begin::MONITORING PROYEK-->
+                                        <!--end::MONITORING PROYEK-->
+                                    </div>
                                     <hr>
-                                    <div class="text-center">
-                                        <h2 id="title-table"></h2>
-                                        <h4 id="total"></h4>
+                                    
+                                    <div class="py-12" id="terendah-terkontrak">
+                                        <!--begin::TERENDAH - TERKONTRAK-->
+                                        <!--end::TERENDAH - TERKONTRAK-->
                                     </div>
-                                    <div class="d-flex justify-content-end">
-                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                            onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
-                                            Chart</button>
-                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                    <hr>
+                                    
+                                    <div class="row">
+                                        <div class="col py-12" id="index-jumlah">
+                                            <!--begin::INDEX JUMLAH-->
+                                            <!--end::INDEX JUMLAH-->
+                                        </div>
+                                        <span class="vr" style="padding: 0.5px"></span>
+                                        <div class="col py-12" id="index-nilai">
+                                            <!--begin::INDEX NILAI-->
+                                            <!--end::INDEX NILAI-->
+                                        </div>
                                     </div>
-                                    <br>
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                        <!--begin::Table head-->
-                                        <thead id="table-line-head">
-                                            {{-- THead Here --}}
-                                        </thead>
-                                        <!--end::Table head-->
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold" id="table-line-body">
-                                            {{-- Data Here --}}
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table Proyek-->
-                                </div>
-                            </figure>
-                            <hr>
+                                    <hr>
 
-                            <div class="py-12" id="monitoring-proyek">
-                                <!--begin::MONITORING PROYEK-->
-                                <!--end::MONITORING PROYEK-->
-                            </div>
-                            <hr>
-                            
-                            <div class="py-12" id="terendah-terkontrak">
-                                <!--begin::TERENDAH - TERKONTRAK-->
-                                <!--end::TERENDAH - TERKONTRAK-->
-                            </div>
-                            <hr>
-                            
-                            <div class="row">
-                                <div class="col py-12" id="index-jumlah">
-                                    <!--begin::INDEX JUMLAH-->
-                                    <!--end::INDEX JUMLAH-->
-                                </div>
-                                <span class="vr" style="padding: 0.5px"></span>
-                                <div class="col py-12" id="index-nilai">
-                                    <!--begin::INDEX NILAI-->
-                                    <!--end::INDEX NILAI-->
-                                </div>
-                            </div>
-                            <hr>
+                                    
+                                    <div class="px-8 py-12" id="pareto-proyek">
+                                        <h1 class="text-center bold pb-8">
+                                            Pareto Proyek
+                                        </h1>
 
-                            
-                            <div class="px-8 py-12" id="pareto-proyek">
-                                <h1 class="text-center bold pb-8">
-                                    Pareto Proyek
-                                </h1>
-
-                                <!--begin::Table pareto proyek  -->
-                                <div class="tab-content" id="myTabContent">
-                                    <!--begin::Table-->
-                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                        <!--begin::Table head-->
-                                        <thead>
-                                            <!--begin::Table row-->
-                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
-                                                <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
-                                                <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
-                                                <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
-                                            </tr>
-                                            <!--end::Table row-->
-                                        </thead>
-                                        <!--begin::Table body-->
-                                        <tbody class="fw-bold">
-                                            @foreach ($paretoProyek as $proyek)
-                                                {{-- @foreach ($proyek as $proyek) --}}
-                                                <tr>
-                                                    <!--begin::Name-->
-                                                    <td>
-                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}" id=""
-                                                            class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                        <!--end::Name-->
-                                                        <!--begin::Unit Kerja-->
-                                                    <td>
-                                                        <a href="#" id=""
-                                                            class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
-                                                    </td>
-                                                    <!--end::Unit Kerja-->
-
-                                                    <!--end::Stage-->
-                                                    <td>
-                                                        @switch($proyek->stage)
-                                                            @case('1')
-                                                                Pasar Dini
-                                                            @break
-
-                                                            @case('2')
-                                                                Pasar Potensial
-                                                            @break
-
-                                                            @case('3')
-                                                                Prakualifikasi
-                                                            @break
-
-                                                            @case('4')
-                                                                Tender Diikuti
-                                                            @break
-
-                                                            @case('5')
-                                                                Perolehan
-                                                            @break
-
-                                                            @case('6')
-                                                                Menang
-                                                            @break
-
-                                                            @case('7')
-                                                                Kalah
-                                                            @break
-
-                                                            @case('8')
-                                                                Terkontrak
-                                                            @break
-
-                                                            @case('9')
-                                                                Terendah
-                                                            @break
-
-                                                            @default
-                                                                Selesai
-                                                        @endswitch
-                                                    </td>
-                                                    <!--end::Stage-->
-
-                                                    <!--begin::Nilai Forecast-->
-                                                    <td class="text-end">
-                                                        {{-- @php
-                                                            $nilaiForecast = 0;
-                                                            foreach ($proyek->Forecasts as $forecast)
-                                                            if ($forecast->nilai_forecast != "") {
-                                                                $nilaiForecast += $forecast->nilai_forecast;
-                                                            }
-                                                        @endphp --}}
-                                                        {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
-                                                        {{-- @foreach ($proyek->Forecasts as $forecast)
-                                                                {{ $forecast->nilai_forecast }};
-                                                                @endforeach --}}
-                                                        {{ number_format($proyek->forecast, 0, '.', ',') }}
-                                                    </td>
-                                                    <!--end::Nilai Forecast-->
-                                                </tr>
-                                                {{-- @endforeach --}}
-                                            @endforeach
-                                        </tbody>
-                                        <!--end::Table body-->
-                                    </table>
-                                    <!--end::Table -->
-                                    {{-- {{ $paretoClaim->links() }} --}}
-                                    {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
-                                </div>
-                                <!--end::Table pareto proyek-->
-                            </div>
-                            <hr>
-                            @endif 
-
-                            @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
-                            <div class="py-12" id="marketing-pipeline">
-                                <!--begin::MARKETING PIPELINE-->
-                                <!--end::MARKETING PIPELINE-->
-                            </div>
-                            <hr>
-
-                            <div class="py-12" id="claim">
-                                <!--begin::STATUS CLAIM-->
-                                <!--end::STATUS CLAIM-->
-                            </div>
-                            <hr>
-
-                            <!--begin:: PARETO-->
-
-                            <div class="px-8 pb-18 py-12">
-                                <h1 class="text-center bold">
-                                    Pareto Claim
-                                </h1>
-                                <!--begin::Tabs Navigasi-->
-                                <ul
-                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                    <!--begin:::Tab item Claim-->
-                                    <li class="nav-item">
-                                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                            href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
-                                    </li>
-                                    <!--end:::Tab item Claim-->
-
-                                    <!--begin:::Tab item Anti Claim-->
-                                    <li class="nav-item">
-                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                            data-bs-toggle="tab" href="#kt_user_view_anticlaim"
-                                            style="font-size:14px;">Anti Claim</a>
-                                    </li>
-                                    <!--end:::Tab item Anti Claim-->
-
-                                    <!--begin:::Tab item -->
-                                    <li class="nav-item">
-                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                            data-bs-toggle="tab" href="#kt_user_view_asuransi"
-                                            style="font-size:14px;">Claim Asuransi</a>
-                                    </li>
-                                    <!--end:::Tab item -->
-                                </ul>
-                                <!--end::Tabs Navigasi-->
-
-
-                                <!--begin::Table Pannel Claim  -->
-                                <div class="tab-content" id="myTabContent">
-                                    <!--begin::Pareto Claim-->
-                                    <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                    <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold">
-                                                @foreach ($paretoClaim as $claim)
-                                                    {{-- @foreach ($claim as $claim) --}}
-                                                    <tr>
-                                                        <!--begin::Name-->
-                                                        <td>
-                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
-                                                            <!--end::Name-->
-                                                            <!--begin::Unit Kerja-->
-                                                        <td>
-                                                            <a href="#" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
-                                                        </td>
-                                                        <!--end::Unit Kerja-->
-                                                        <!--begin::Nilai Claim-->
-                                                        <td>
-                                                            @php
-                                                                $nilaiClaim = 0;
-                                                                foreach ($claim as $nilai) {
-                                                                    if ($nilai->nilai_claim != '') {
-                                                                        $nilaiClaim += $nilai->nilai_claim;
-                                                                    }
-                                                                }
-                                                            @endphp
-                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
-                                                        </td>
-                                                        <!--end::Nilai Claim-->
+                                        <!--begin::Table pareto proyek  -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!--begin::Table-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
+                                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
+                                                        <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
+                                                        <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
                                                     </tr>
-                                                    {{-- @endforeach --}}
-                                                @endforeach
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table -->
-                                        {{-- {{ $paretoClaim->links() }} --}}
-                                        {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
-                                    </div>
-                                    <!--end::Pareto Claim-->
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold">
+                                                    @foreach ($paretoProyek as $proyek)
+                                                        {{-- @foreach ($proyek as $proyek) --}}
+                                                        <tr>
+                                                            <!--begin::Name-->
+                                                            <td>
+                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id=""
+                                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                <!--end::Name-->
+                                                                <!--begin::Unit Kerja-->
+                                                            <td>
+                                                                <a href="#" id=""
+                                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
+                                                            </td>
+                                                            <!--end::Unit Kerja-->
 
-                                    <!--begin:::Pareto Anti Claim-->
-                                    <div class="tab-pane fade" id="kt_user_view_anticlaim" role="tabpanel">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                    <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold">
-                                                @foreach ($paretoAntiClaim as $claim)
-                                                    {{-- @foreach ($claim as $claim) --}}
-                                                    <tr>
-                                                        <!--begin::Name-->
-                                                        <td>
-                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Anti-Claim" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
-                                                            <!--end::Name-->
-                                                            <!--begin::Unit Kerja-->
-                                                        <td>
-                                                            <a href="#" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
-                                                        </td>
-                                                        <!--end::Unit Kerja-->
-                                                        <!--begin::Nilai Claim-->
-                                                        <td>
-                                                            @php
-                                                                $nilaiClaim = 0;
-                                                                foreach ($claim as $nilai) {
-                                                                    if ($nilai->nilai_claim != '') {
-                                                                        $nilaiClaim += $nilai->nilai_claim;
+                                                            <!--end::Stage-->
+                                                            <td>
+                                                                @switch($proyek->stage)
+                                                                    @case('1')
+                                                                        Pasar Dini
+                                                                    @break
+
+                                                                    @case('2')
+                                                                        Pasar Potensial
+                                                                    @break
+
+                                                                    @case('3')
+                                                                        Prakualifikasi
+                                                                    @break
+
+                                                                    @case('4')
+                                                                        Tender Diikuti
+                                                                    @break
+
+                                                                    @case('5')
+                                                                        Perolehan
+                                                                    @break
+
+                                                                    @case('6')
+                                                                        Menang
+                                                                    @break
+
+                                                                    @case('7')
+                                                                        Kalah
+                                                                    @break
+
+                                                                    @case('8')
+                                                                        Terkontrak
+                                                                    @break
+
+                                                                    @case('9')
+                                                                        Terendah
+                                                                    @break
+
+                                                                    @default
+                                                                        Selesai
+                                                                @endswitch
+                                                            </td>
+                                                            <!--end::Stage-->
+
+                                                            <!--begin::Nilai Forecast-->
+                                                            <td class="text-end">
+                                                                {{-- @php
+                                                                    $nilaiForecast = 0;
+                                                                    foreach ($proyek->Forecasts as $forecast)
+                                                                    if ($forecast->nilai_forecast != "") {
+                                                                        $nilaiForecast += $forecast->nilai_forecast;
                                                                     }
-                                                                }
-                                                            @endphp
-                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
-                                                        </td>
-                                                        <!--end::Nilai Claim-->
-                                                    </tr>
-                                                    {{-- @endforeach --}}
-                                                @endforeach
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table -->
+                                                                @endphp --}}
+                                                                {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
+                                                                {{-- @foreach ($proyek->Forecasts as $forecast)
+                                                                        {{ $forecast->nilai_forecast }};
+                                                                        @endforeach --}}
+                                                                {{ number_format($proyek->forecast, 0, '.', ',') }}
+                                                            </td>
+                                                            <!--end::Nilai Forecast-->
+                                                        </tr>
+                                                        {{-- @endforeach --}}
+                                                    @endforeach
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table -->
+                                            {{-- {{ $paretoClaim->links() }} --}}
+                                            {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
+                                        </div>
+                                        <!--end::Table pareto proyek-->
                                     </div>
-                                    <!--end:::Pareto Anti Claim-->
+                                    <hr>
+                                @endif
+                            </div> 
 
-                                    <!--begin:::Pareto Asuransi-->
-                                    <div class="tab-pane fade" id="kt_user_view_asuransi" role="tabpanel">
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
-                                                    <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
-                                                    <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold text-gray-800">
-                                                @foreach ($paretoAsuransi as $claim)
-                                                    {{-- @foreach ($claim as $claim) --}}
-                                                    <tr>
-                                                        <!--begin::Name-->
-                                                        <td>
-                                                            <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim-Asuransi" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
-                                                            <!--end::Name-->
-                                                            <!--begin::Unit Kerja-->
-                                                        <td>
-                                                            <a href="#" id=""
-                                                                class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
-                                                        </td>
-                                                        <!--end::Unit Kerja-->
-                                                        <!--begin::Nilai Claim-->
-                                                        <td>
-                                                            @php
-                                                                $nilaiClaim = 0;
-                                                                foreach ($claim as $nilai) {
-                                                                    if ($nilai->nilai_claim != '') {
-                                                                        $nilaiClaim += $nilai->nilai_claim;
-                                                                    }
-                                                                }
-                                                            @endphp
-                                                            {{ number_format($nilaiClaim, 0, '.', ',') }}
-                                                        </td>
-                                                        <!--end::Nilai Claim-->
-                                                    </tr>
-                                                    {{-- @endforeach --}}
-                                                @endforeach
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table -->
+                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? 'show active' : '' }}" id="kt_view_dashboard_ccm" role="tabpanel" style="{{ auth()->user()->check_administrator ? 'display : none' : '' }}">
+                                @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                                    <div class="py-12" id="marketing-pipeline">
+                                        <!--begin::MARKETING PIPELINE-->
+                                        <!--end::MARKETING PIPELINE-->
                                     </div>
-                                    <!--end:::Pareto Asuransi-->
+                                    <hr>
 
-                                </div>
-                                <!--end::Table Pannel Claim-->
+                                    <div class="py-12" id="claim">
+                                        <!--begin::STATUS CLAIM-->
+                                        <!--end::STATUS CLAIM-->
+                                    </div>
+                                    <hr>
+
+                                    <!--begin:: PARETO-->
+
+                                    <div class="px-8 pb-18 py-12">
+                                        <h1 class="text-center bold">
+                                            Claim Management dan Change Request
+                                        </h1>
+                                        <!--begin::Tabs Navigasi-->
+                                        <ul
+                                            class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                            <!--begin:::Tab item Claim-->
+                                            <li class="nav-item">
+                                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                    href="#kt_user_view_claim" style="font-size:14px;">Claim</a>
+                                            </li>
+                                            <!--end:::Tab item Claim-->
+
+                                            <!--begin:::Tab item Anti Claim-->
+                                            <li class="nav-item">
+                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                    data-bs-toggle="tab" href="#kt_user_view_anticlaim"
+                                                    style="font-size:14px;">Anti Claim</a>
+                                            </li>
+                                            <!--end:::Tab item Anti Claim-->
+
+                                            <!--begin:::Tab item -->
+                                            <li class="nav-item">
+                                                <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                    data-bs-toggle="tab" href="#kt_user_view_asuransi"
+                                                    style="font-size:14px;">Change Request</a>
+                                            </li>
+                                            <!--end:::Tab item -->
+                                        </ul>
+                                        <!--end::Tabs Navigasi-->
+
+
+                                        <!--begin::Table Pannel Claim  -->
+                                        <div class="tab-content" id="myTabContent">
+                                            <!--begin::Pareto Claim-->
+                                            <div class="tab-pane fade show active" id="kt_user_view_claim" role="tabpanel">
+                                                <!--begin::Table-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Claim')</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold">
+                                                        @foreach ($paretoClaim as $claim)
+                                                            {{-- @foreach ($claim as $claim) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    <a href="#" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+                                                                <!--begin::Nilai Claim-->
+                                                                <td>
+                                                                    @php
+                                                                        $nilaiClaim = 0;
+                                                                        foreach ($claim as $nilai) {
+                                                                            if ($nilai->nilai_claim != '') {
+                                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                                            }
+                                                                        }
+                                                                    @endphp
+                                                                    {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                                </td>
+                                                                <!--end::Nilai Claim-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                        @endforeach
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table -->
+                                                {{-- {{ $paretoClaim->links() }} --}}
+                                                {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
+                                            </div>
+                                            <!--end::Pareto Claim-->
+
+                                            <!--begin:::Pareto Anti Claim-->
+                                            <div class="tab-pane fade" id="kt_user_view_anticlaim" role="tabpanel">
+                                                <!--begin::Table-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Anti Claim')</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold">
+                                                        @foreach ($paretoAntiClaim as $claim)
+                                                            {{-- @foreach ($claim as $claim) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Anti-Claim" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    <a href="#" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+                                                                <!--begin::Nilai Claim-->
+                                                                <td>
+                                                                    @php
+                                                                        $nilaiClaim = 0;
+                                                                        foreach ($claim as $nilai) {
+                                                                            if ($nilai->nilai_claim != '') {
+                                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                                            }
+                                                                        }
+                                                                    @endphp
+                                                                    {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                                </td>
+                                                                <!--end::Nilai Claim-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                        @endforeach
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table -->
+                                            </div>
+                                            <!--end:::Pareto Anti Claim-->
+
+                                            <!--begin:::Pareto Asuransi-->
+                                            <div class="tab-pane fade" id="kt_user_view_asuransi" role="tabpanel">
+                                                <!--begin::Table-->
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead>
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('kode_proyek', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('nilai_claim', 'Nilai Change Request')</th>
+                                                        </tr>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold text-gray-800">
+                                                        @foreach ($paretoAsuransi as $claim)
+                                                            {{-- @foreach ($claim as $claim) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a href="/claim-management/proyek/{{ $claim->first()->project->kode_proyek }}/Claim-Asuransi" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->nama_proyek }}</a>
+                                                                    <!--end::Name-->
+                                                                    <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    <a href="#" id=""
+                                                                        class="text-gray-800 text-hover-primary mb-1">{{ $claim->first()->project->UnitKerja->unit_kerja }}</a>
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+                                                                <!--begin::Nilai Claim-->
+                                                                <td>
+                                                                    @php
+                                                                        $nilaiClaim = 0;
+                                                                        foreach ($claim as $nilai) {
+                                                                            if ($nilai->nilai_claim != '') {
+                                                                                $nilaiClaim += $nilai->nilai_claim;
+                                                                            }
+                                                                        }
+                                                                    @endphp
+                                                                    {{ number_format($nilaiClaim, 0, '.', ',') }}
+                                                                </td>
+                                                                <!--end::Nilai Claim-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                        @endforeach
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                                <!--end::Table -->
+                                            </div>
+                                            <!--end:::Pareto Asuransi-->
+
+                                        </div>
+                                        <!--end::Table Pannel Claim-->
+                                    </div>
+                                    <!--end::: PARETO-->
+                                    <hr>
+
+                                @endif
                             </div>
-                            <!--end::: PARETO-->
-                            <hr>
-
-                            @endif
                         </div>
                         <!--end::Card body-->
                     </div>
@@ -871,9 +913,12 @@
     <!--begin::NILAI REALISASI-->
     <script>
         let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
-        let nilaiOkKumulatif = {!! json_encode($nilaiOkKumulatif) !!};
-        let nilaiRealisasiKumulatif = {!! json_encode($nilaiRealisasiKumulatif) !!};
-        // console.log(kategoriunitKerja);
+        let arrayNilaiOk = {!! json_encode($nilaiOkKumulatif) !!};
+        let nilaiOkKumulatif = arrayNilaiOk.map(nilaiOKsatuan => nilaiOKsatuan / 1000000);
+        let arrayNilaiRealisasi = {!! json_encode($nilaiRealisasiKumulatif) !!};
+        let nilaiRealisasiKumulatif = arrayNilaiRealisasi.map(nilaiRealsatuan => nilaiRealsatuan / 1000000);
+        // console.log(nilaiOkKumulatif);
+        // console.log(nilaiOkKumulatif.map(nilaiOKsatuan => nilaiOKsatuan / 1000000));
         Highcharts.chart('nilai-realisasi', {
             chart: {
                 type: 'column',
@@ -886,7 +931,7 @@
                 }
             },
             title: {
-                text: '<b class="h1">Nilai Realisasi OK per Unit Kerja</b>'
+                text: '<b class="h1">Nilai Realisasi OK per Divisi dan EA (Dalam Jutaan)</b>'
             },
             xAxis: {
                 categories: kategoriunitKerja,
@@ -1274,7 +1319,7 @@
                 type: 'funnel'
             },
             title: {
-                text: '<b class="h1">Marketing Pipeline</b>'
+                text: '<b class="h1">Status Proyek</b>'
             },
             plotOptions: {
                 series: {
@@ -1296,7 +1341,7 @@
             series: [{
                 name: 'Jml Proyek',
                 data: [
-                    ['Proses Tender', {{ $prosesTender }}],
+                    ['Perolehan', {{ $prosesTender }}],
                     ['Terkontrak', {{ $terkontrak }}],
                     ['Pelaksanaan', {{ $pelaksanaan }}],
                     ['Serah Terima Pekerjaan', {{ $serahTerima }}],
@@ -1342,7 +1387,7 @@
                 }
             },
             title: {
-                text: '<b class="h1">Status Claim</b>'
+                text: '<b class="h1">Claim Management dan Change Request</b>'
             },
             subtitle: {
                 text: ''
@@ -1391,7 +1436,7 @@
                 data: JSON.parse("{!! json_encode($anti_claim_status_array) !!}")
 
             }, {
-                name: 'Claim Asuransi',
+                name: 'Change Request',
                 data: JSON.parse("{!! json_encode($claim_asuransi_status_array) !!}")
 
             }]

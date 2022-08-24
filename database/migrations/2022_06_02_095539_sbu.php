@@ -15,13 +15,13 @@ return new class extends Migration
     {
         Schema::create('sbus', function (Blueprint $table) {
             $table->id();
-            $table->string('sbu');
-            $table->string('kode_sbu')->nullable();
-            $table->string('klasifikasi')->nullable();
+            // $table->string('sbu');
+            $table->string('kode_sbu');
+            $table->string('klasifikasi');
+            $table->string('sub_klasifikasi');
+            $table->string('lingkup_kerja');
             $table->string('referensi1')->nullable();
-            $table->string('sub_klasifikasi')->nullable();
             $table->string('referensi2')->nullable();
-            $table->string('lingkup_kerja')->nullable();
             $table->string('referensi3')->nullable();
             $table->timestamps();
         });

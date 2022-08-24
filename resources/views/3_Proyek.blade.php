@@ -518,10 +518,6 @@
     <form action="/proyek/save" method="post" enctype="multipart/form-data">
         @csrf
 
-        <!--begin::Get Modal JS-->
-        <input type="hidden" class="modal-name">
-        <!--end::Get Modal JS-->
-
         <!--begin::Modal - Create Proyek-->
         <div class="modal fade" id="kt_modal_create_proyek" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -548,6 +544,9 @@
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
 
+                        <!--begin::Get Modal JS-->
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <!--end::Get Modal JS-->
 
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
@@ -585,13 +584,13 @@
                                         <option></option>
                                         @foreach ($unitkerjas as $unitkerja)
                                             <option value="{{ $unitkerja->divcode }}"
-                                                {{ Auth::user()->unit_kerja == $unitkerja->divcode ? 'selected' : '' }}>
+                                                {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }} {{ Auth::user()->unit_kerja == $unitkerja->divcode ? 'selected' : '' }}>
                                                 {{ $unitkerja->unit_kerja }}</option>
                                         @endforeach
                                     </select>
-                                    {{-- @error('unit-kerja')
+                                    @error('unit-kerja')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror --}}
+                                    @enderror
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -664,13 +663,13 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nilai OK RKAP</span>
+                                        <span class="required">Nilai OK (Exclude Ppn)</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid reformat"
                                         id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}"
-                                        placeholder="Nilai OK RKAP" />
+                                        placeholder="Nilai OK (Exclude Ppn)" />
                                     @error('nilai-rkap')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                     @enderror
@@ -683,12 +682,12 @@
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
+                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
                                         <span class="required">Sumber Dana</span>
-                                    </label>
+                                    </label> --}}
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select id="sumber-dana" name="sumber-dana" class="form-select form-select-solid"
+                                    {{-- <select id="sumber-dana" name="sumber-dana" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Sumber Dana">
                                         <option></option>
                                         @foreach ($sumberdanas as $sumberdana)
@@ -699,7 +698,7 @@
                                     </select>
                                     @error('sumber-dana')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
+                                    @enderror --}}
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -717,7 +716,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Tahun Perolehan</span>
+                                        <span class="required">RA Tahun Perolehan</span>
                                     </label>
                                     <!--end::Label-->
                                     @php
@@ -748,7 +747,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Bulan Pelaksanaan</span>
+                                        <span class="required">RA Bulan Pelaksanaan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--Begin::Input-->
