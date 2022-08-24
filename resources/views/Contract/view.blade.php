@@ -582,10 +582,10 @@
                                         <div class="col-6">
                                             <div class="d-flex align-items-center">
                                                 <div class="col-5 text-end me-5">
-                                                    <span class="">Sumber Dana: </span>
+                                                    <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project->sumber_dana }}</b>
+                                                    <b>{{ $contract->project->nilaiok_review ?? 0 }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -594,8 +594,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                    <!--End begin::Col-->
+                                <br>
+                                <!--End begin::Col-->
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="col-5 text-end me-6">
+                                                <span class="">Sumber Dana: </span>
+                                            </div>
+                                            <div class="text-dark text-start">
+                                                <b>{{ $contract->project->sumber_dana }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
                                 <h6 id="status-msg" style="display: none"></h6>
 
                                 <!--End begin::Row-->
@@ -690,7 +703,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="rekomendasi" class="form-select form-select-solid"
+                                    <select name="rekomendasi-1" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
                                         <option value="1">Yes</option>
                                         <option value="0">No</option>
@@ -785,14 +798,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -847,14 +860,14 @@
 
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center bg-gray-100">
+                                                <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center bg-gray-100">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -919,14 +932,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1010,14 +1023,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center bg-gray-100">
+                                                <td colspan="5" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center bg-gray-100">
+                                            <td colspan="5" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1031,7 +1044,7 @@
                             <br>
                             <br>
 
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                 Usulan Perubahan Draft Kontrak
                                 <a href="#" Id="Plus" data-bs-toggle="modal"
                                     data-bs-target="#kt_modal_usulan_perubahan_draft_kontrak">+</a>
@@ -1054,7 +1067,7 @@
                                 <tbody class="fw-bold text-gray-600">
                                     @if ($contract->UsulanPerubahanDraft->contains("kategori", 1))
                                         <tr>
-                                            <td colspan="5" class="bg-gray-100 px-4">
+                                            <td colspan="5" class= px-4">
                                                 <b>Surat Perjanjian Kontrak</b>
                                             </td>
                                         </tr>
@@ -1078,7 +1091,7 @@
 
                                     @if ($contract->UsulanPerubahanDraft->contains("kategori", 2))
                                         <tr>
-                                            <td colspan="5" class="bg-gray-100 px-4">
+                                            <td colspan="5" class= px-4">
                                                 <b>Syarat-syarat Umum Kontrak (SSUK)</b>
                                             </td>
                                         </tr>
@@ -1102,7 +1115,7 @@
 
                                     @if ($contract->UsulanPerubahanDraft->contains("kategori", 3))
                                         <tr>
-                                            <td colspan="5" class="bg-gray-100 px-4">
+                                            <td colspan="5" class= px-4">
                                                 <b>Syarat-syarat Khusus Kontrak (SSKK)</b>
                                             </td>
                                         </tr>
@@ -1127,7 +1140,7 @@
                                 <!--end::Table body-->
 
                             </table>
-                            <!--End:Table: Review-->
+                            <!--End:Table: Review--> --}}
                         </div>
                     </div>
                     <!--end:::Tab pane Informasi Perusahaan-->
@@ -1147,9 +1160,8 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select name="Instansi" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Instansi">
-                                        <option></option>
+                                    <select name="rekomendasi-2" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true" data-placeholder="Rekomendasi">
                                         <option value="Yes">Yes</option>
                                         <option value="No">No</option>
                                     </select>
@@ -1175,7 +1187,7 @@
                         <!--begin::Card title-->
                         <div class="card-title m-0">
                             <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Draft Kontrak
+                                Kontrak
                                 <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/tender-menang/1"
                                     Id="Plus">+</a>
                             </h3>
@@ -1232,14 +1244,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1308,14 +1320,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center text-dark bg-gray-100">
+                                                <td colspan="5" class="text-center text-dark">
                                                     <b>There is no data</b>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center text-dark bg-gray-100">
+                                            <td colspan="5" class="text-center text-dark">
                                                 <b>There is no data</b>
                                             </td>
                                         </tr>
@@ -1384,14 +1396,14 @@
                                             @endif --}}
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1454,14 +1466,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspa colspan="4" class="text-center bg-gray-100">
+                                            <td colspa colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1524,14 +1536,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspa colspan="4" class="text-center bg-gray-100">
+                                            <td colspa colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1594,14 +1606,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1665,14 +1677,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1736,14 +1748,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1828,14 +1840,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1897,14 +1909,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center bg-gray-100">
+                                                <td colspan="3" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="3" class="text-center bg-gray-100">
+                                            <td colspan="3" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -1968,14 +1980,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="3" class="text-center bg-gray-100">
+                                                <td colspan="3" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="3" class="text-center bg-gray-100">
+                                            <td colspan="3" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2037,14 +2049,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2107,14 +2119,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2165,14 +2177,14 @@
                                             </tr>
                                         @empty
                                             <tr>
-                                                <td colspan="2" class="text-center bg-gray-100">
+                                                <td colspan="3" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="2" class="text-center bg-gray-100">
+                                            <td colspan="3" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2269,14 +2281,14 @@
                                             @endif
                                         @empty
                                             <tr>
-                                                <td colspan="4" class="text-center bg-gray-100">
+                                                <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="4" class="text-center bg-gray-100">
+                                            <td colspan="4" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2322,14 +2334,14 @@
                                     </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="2" class="text-center bg-gray-100">
+                                            <td colspan="2" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                     @endforelse
                                 @else
                                     <tr>
-                                        <td colspan="2" class="text-center bg-gray-100">
+                                        <td colspan="2" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -2435,7 +2447,7 @@
                                     @endforeach
                                 @else
                                         <tr>
-                                            <td colspan="10" class="text-center bg-gray-100">
+                                            <td colspan="10" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
@@ -2478,14 +2490,14 @@
                                     </tr>
                                     @empty
                                         <tr>
-                                            <td colspan="3" class="text-center bg-gray-100">
+                                            <td colspan="3" class="text-center">
                                                 <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                     @endforelse
                                 @else
                                     <tr>
-                                        <td colspan="3" class="text-center bg-gray-100">
+                                        <td colspan="3" class="text-center">
                                             <h6><b>There is no data</b></h6>
                                         </td>
                                     </tr>
@@ -5522,7 +5534,7 @@ aria-hidden="true">
         //         document.querySelector(".toast-body").innerText = clearPasalsRes.message
         //         html = `
         //         <tr>
-        //             <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum terpilih</b></td>
+        //             <td colspan="2" class="text-center"><b>Pasal belum terpilih</b></td>
         //         </tr>
         //         `
         //         Toast.fire({

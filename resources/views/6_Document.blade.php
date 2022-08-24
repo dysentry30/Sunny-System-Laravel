@@ -60,7 +60,7 @@
                                     <i class="bi bi-search"></i>
                                 </span>
                                 <!--end::Svg Icon-->
-                                <input type="text" data-kt-customer-table-filter="search"
+                                <input type="text" onkeyup="searchDocument(this)" data-kt-customer-table-filter="search"
                                     class="form-control form-control-solid w-250px ps-15" placeholder="Search Document">
                             </div>
                             <!--end::Search-->
@@ -87,7 +87,7 @@
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
-                        <tbody class="fw-bold text-gray-600">
+                        <tbody class="fw-bold text-gray-600" id="tbody-content">
                             @php
                                 $counter = 0;
                             @endphp
@@ -97,7 +97,8 @@
                                     <td><a href="/document/view/{{$id_documents[$i][0]}}/{{$document->id_document}}"
                                             class="text-hover-primary text-gray-500">{{ $documents_name[$i] }}</a>
                                     </td>
-                                    <td>{{ date_format(date_create($document->created_at), 'd M Y') }}</td>
+                                    {{-- <td>{{ date_format(date_create($document->created_at), 'd M Y') }}</td> --}}
+                                    <td>{{ Carbon\Carbon::parse($document->created_at)->translatedFormat("d F Y") }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -126,6 +127,33 @@
 
         <!--end::Footer-->
     </div>
+@endsection
+
+@section('js-script');
+    <script>
+        function searchDocument(e) {
+            const documentArr = JSON.parse('{!! $all_document->toJson() !!}');
+            const documentName = e.value;
+            console.log(documentArr);
+            const documentResult = documentArr.filter(document => {
+                return document.document_name.includes(documentName);
+            });
+            let html = ``;
+            documentResult.forEach((data, i) => {
+                const date = new Date(Date.parse(data.created_at));
+                html += `
+                    <tr>
+                        <td>${++i}</td>
+                        <td><a href="/document/view/${data.id_document}/${data.id_document}"
+                                class="text-hover-primary text-gray-500">${ data.document_name }</a>
+                        </td>
+                        <td>${date.toLocaleDateString("id-ID", {year: 'numeric', month: 'long', day: 'numeric'})}</td>
+                    </tr>
+                `;
+            });
+            document.querySelector("#tbody-content").innerHTML = html;
+        }
+    </script>
 @endsection
 
 {{-- @section('aside')

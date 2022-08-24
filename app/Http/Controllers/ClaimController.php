@@ -34,46 +34,30 @@ class ClaimController extends Controller
         $column = $request->get("column");
         $filter = $request->get("filter");
         if (Auth::user()->check_administrator) {
-            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
+            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->select("claim_managements.*")->get();
         } else {
-            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $claims = ClaimManagements::sortable()->join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->select("claim_managements.*")->get();
         }
         if (!empty($column)) {
-            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->where($column, 'like', '%' . $filter . '%');
 
-            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->where($column, 'like', '%' . $filter . '%');
+            $proyekClaim = $claims->where('jenis_claim', '=', "Claim")->filter(function($data) use($column, $filter) {
+                return preg_match("/^$filter/", $data[$column]);
+            });
+            
+            $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim")->filter(function($data) use($column, $filter) {
+                return preg_match("/^$filter/", $data[$column]);
+            });
 
-            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->where($column, 'like', '%' . $filter . '%');
-
-            // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) use ($column, $filter){
-            //     $claim->where('jenis_claim', '=', "Claim")->where($column, 'like', '%'.$filter.'%');
-            // });
-
-            // $proyekAnti = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
-            //     $claim->where('jenis_claim', '=', "Anti Claim");
-            // })->where($column, 'like', '%'.$filter.'%');
-
-            // $proyekAsuransi = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
-            //     $claim->where('jenis_claim', '=', "Claim Asuransi");
-            // })->where($column, 'like', '%'.$filter.'%');
+            $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi")->filter(function($data) use($column, $filter) {
+                return preg_match("/^$filter/", $data[$column]);
+            });
+            
         } else {
             $proyekClaim = $claims->where('jenis_claim', '=', "Claim");
 
             $proyekAnti = $claims->where('jenis_claim', '=', "Anti Claim");
 
             $proyekAsuransi = $claims->where('jenis_claim', '=', "Claim Asuransi");
-
-            // $proyekClaim = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
-            //     $claim->where('jenis_claim', '=', "Claim");
-            // })->get();
-
-            // $proyekAnti = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
-            //     $claim->where('jenis_claim', '=', "Anti Claim");
-            // })->get();
-
-            // $proyekAsuransi = Proyek::sortable()->WhereHas('ClaimManagements', function ($claim) {
-            //     $claim->where('jenis_claim', '=', "Claim Asuransi");
-            // })->get();
         }
         return view("5_Claim", compact(["proyekClaim", "proyekAnti", "proyekAsuransi", "column", "filter"]));
     }
@@ -150,8 +134,8 @@ class ClaimController extends Controller
 
         $messages = [
             "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-            "string" => "This field must be alphabet only",
+            "numeric" => "Field ini hanya berisi angka",
+            "string" => "Field ini harus Alphanumeric",
             "date" => "This field must be date format only",
         ];
         $rules = [
@@ -179,6 +163,7 @@ class ClaimController extends Controller
         $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
         $claimManagements->pic = $data["pic"];
         $claimManagements->jenis_claim = $data["jenis-claim"];
+        $claimManagements->nilai_claim = (int) str_replace(",", "", $data["total-claim"]);
 
         if ($claimManagements->save()) {
             Alert::success("Success", "Claim Berhasil Ditambahkan");
@@ -299,14 +284,15 @@ class ClaimController extends Controller
     public function update(Request $request)
     {
         $data = $request->all();
+
         // if (preg_match("/[^,0-9]/i", $data["total-claim"])) {
         //     return redirect()->back()->with("failed", "Total Claim must be numeric or ',' only");
         // }
         $claimManagements = ClaimManagements::find($data["id-claim"]);
         $messages = [
             "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-            "string" => "This field must be alphabet only",
+            "numeric" => "Field ini hanya berisi angka",
+            "string" => "Field ini harus Alphanumeric",
             "date" => "This field must be date format only",
         ];
         $rules = [
@@ -329,6 +315,7 @@ class ClaimController extends Controller
         $claimManagements->id_contract = $data["id-contract"];
         $claimManagements->tanggal_claim = new DateTime($data["approve-date"]);
         $claimManagements->pic = $data["pic"];
+        $claimManagements->nilai_claim = (int) str_replace(",", "", $data["total-claim"]);
 
         if ($claimManagements->save()) {
             return redirect("/claim-management/view/$claimManagements->id_claim")->with("success", "This claim has been updated");
@@ -342,9 +329,9 @@ class ClaimController extends Controller
         $id_claim = $data["id-claim"];
         $messages = [
             "required" => "This field is required",
-            "numeric" => "This field must be numeric only",
-            "string" => "This field must be alphabet only",
-            "file" => "This field must be file only"
+            "numeric" => "Field ini hanya berisi angka",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file"
         ];
         $rules = [
             "attach-file-claim-detail" => "required|file",
@@ -408,15 +395,50 @@ class ClaimController extends Controller
     public function claimDraftUpload(Request $request, ClaimContractDrafts $claimContractDrafts)
     {
         $data = $request->all();
+        $messages = [
+            "required" => "Field ini mandatory",
+            "numeric" => "Field ini hanya berisi angka",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file",
+            "not_in" => "Field ini harus lebih besar dari 0",
+            "mimes" => "Field ini harus berextensi :values"
+        ];
+        $rules = [
+            "surat-instruksi" => "required|file|mimes:docx",
+            "proposal-claim" => "required|file|mimes:docx",
+            "no-draft-claim" => "required",
+            "uraian-claim" => "required|string",
+            "rekomendasi" => "required|boolean",
+            "uraian-rekomendasi" => "required|string",
+            "pengajuan-biaya" => "required|not_in:0",
+            "pengajuan-waktu" => "required|date",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            if (!Session::has("pasals")) {
+                session()->flash("pasal-error", true);
+            }
+            $request->old("no-draft-claim");
+            $request->old("uraian-claim");
+            $request->old("rekomendasi");
+            $request->old("uraian-rekomendasi");
+            $request->old("pengajuan-biaya");
+            $request->old("pengajuan-waktu");
+            Alert::toast("Gagal membuat Klaim Kontrak Draft", "error")->autoClose(3000)->timerProgressBar(true);
+            redirect()->back()->with("modal", $data["modal-name"]);
+        }
+        $validation->validate();
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
         if (empty($is_id_contract_exist)) {
-            // $request->old("note-addendum");
-            // $request->old("document-name-addendum");
-            // $request->old("document-name-addendum-menang");
-            // $request->old("attach-file-addendum");
-            Alert::error("Error", "Pastikan kontrak sudah dibuat!");
-            return Redirect::back();
+            $request->old("no-draft-claim");
+            $request->old("uraian-claim");
+            $request->old("rekomendasi");
+            $request->old("uraian-rekomendasi");
+            $request->old("pengajuan-biaya");
+            $request->old("pengajuan-waktu");
+            Alert::toast("Pastikan kontrak sudah dibuat!", "error")->autoClose(3000)->timerProgressBar(true);
+            return Redirect::back()->with("modal", $data["modal-name"]);
         }
 
         $pasals = [];
@@ -429,6 +451,9 @@ class ClaimController extends Controller
                 }
             }
             Session::forget("pasals");
+        } else {
+            Alert::toast("Pastikan pasal sudah ditambahkan!", "error")->autoClose(3000)->timerProgressBar(true);
+            return Redirect::back()->with("modal", $data["modal-name"]);
         }
 
         $faker = new Uuid;
@@ -436,18 +461,20 @@ class ClaimController extends Controller
         $id_document_surat_instruksi = $faker->uuid3();
 
         if (isset($data["dokumen-pendukung"])) {
+            $list_id_document_pendukung = collect();
             if (count($data["dokumen-pendukung"]) > 1) {
-                $list_id_document_pendukung = [];
                 foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                     $id_document = $faker->uuid3();
-                    array_push($list_id_document_pendukung, $id_document);
+                    // array_push($list_id_document_pendukung, $id_document);
+                    $list_id_document_pendukung->push($id_document);
                     moveFileTemp($dokumen_pendukung, $id_document);
                 }
-                $claimContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
+                $claimContractDrafts->dokumen_pendukung = $list_id_document_pendukung->join(",");
             } else {
                 $id_document = $faker->uuid3();
                 moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-                $claimContractDrafts->dokumen_pendukung = $id_document;
+                // $list_id_document_pendukung->push($id_document);
+                $claimContractDrafts->dokumen_pendukung = $id_document . ",";
             }
         }
 
@@ -463,48 +490,70 @@ class ClaimController extends Controller
         $claimContractDrafts->pasals = join(",", $pasals);
         if ($claimContractDrafts->save()) {
             $claim_management = ClaimManagements::find($data["id-claim"]);
-            $claim_management->nilai_claim += $claimContractDrafts->pengajuan_biaya;
             $claim_management->save();
             // Session::forget("pasals");
             moveFileTemp($data["proposal-claim"], $id_document_proposal_claim);
             moveFileTemp($data["surat-instruksi"], $id_document_surat_instruksi);
-            Alert::success("Success", "Buat Draft Claim berhasil");
+            Alert::success("Success", "Berhasil membuat Klaim Kontrak Draft");
             return redirect()->back();
         }
 
-        Alert::error("Error", "Buat Draft Claim gagal");
+        Alert::error("Error", "Gagal membuat Klaim Kontrak Draft");
         return Redirect::back();
     }
 
     public function claimDiajukanUpload(Request $request, ClaimContractDiajukan $claimContractDiajukan)
     {
         $data = $request->all();
+        $messages = [
+            "required" => "Field ini mandatory",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file",
+            "date" => "Field ini harus berisi tanggal"
+        ];
+        $rules = [
+            "tanggal-diajukan" => "required|date",
+            "proposal-claim" => "required|file",
+            "diajukan-rekomendasi" => "required|string",
+            "uraian-rekomendasi" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("tanggal-diajukan");
+            $request->old("diajukan-rekomendasi");
+            $request->old("uraian-rekomendasi");
+            Alert::toast("Klaim Diajukan gagal disimpan", "error");
+            redirect()->back()->with("modal", $data["modal-name"]);
+        }
+        $validation->validate();
+
         $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
         if (empty($is_id_contract_exist)) {
-            // $request->old("note-addendum");
-            // $request->old("document-name-addendum");
-            // $request->old("document-name-addendum-menang");
-            // $request->old("attach-file-addendum");
-            Alert::error("Error", "Pastikan kontrak sudah dibuat!");
-            return Redirect::back();
+            $request->old("tanggal-diajukan");
+            $request->old("diajukan-rekomendasi");
+            $request->old("uraian-rekomendasi");
+            Alert::toast("Pastikan kontrak sudah dibuat!", "error")->autoClose(3000)->timerProgressBar(true);
+            return Redirect::back()->with("modal", $data["modal-name"]);
         }
 
         $faker = new Uuid;
         $id_document_proposal_claim = $faker->uuid3();
         if (isset($data["dokumen-pendukung"])) {
+            $list_id_document_pendukung = collect();
             if (count($data["dokumen-pendukung"]) > 1) {
-                $list_id_document_pendukung = [];
                 foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                     $id_document = $faker->uuid3();
-                    array_push($list_id_document_pendukung, $id_document);
+                    // array_push($list_id_document_pendukung, $id_document);
+                    $list_id_document_pendukung->push($id_document);
                     moveFileTemp($dokumen_pendukung, $id_document);
                 }
-                $claimContractDiajukan->dokumen_pendukung = join(",", $list_id_document_pendukung);
+                $claimContractDiajukan->dokumen_pendukung = $list_id_document_pendukung->join(",");
             } else {
                 $id_document = $faker->uuid3();
                 moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-                $claimContractDiajukan->dokumen_pendukung = $id_document;
+                // $list_id_document_pendukung->push($id_document);
+                $claimContractDiajukan->dokumen_pendukung = $id_document . ",";
             }
         }
 
@@ -516,11 +565,11 @@ class ClaimController extends Controller
         if ($claimContractDiajukan->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["proposal-claim"], $id_document_proposal_claim);
-            Alert::success("Success", "Buat Claim Diajukan berhasil");
+            Alert::success("Success", "Klaim Diajukan berhasil disimpan");
             return redirect()->back();
         }
 
-        Alert::error("Error", "Buat Claim Diajukan gagal");
+        Alert::error("Error", "Klaim Diajukan gagal disimpan");
         return Redirect::back();
     }
 
@@ -528,20 +577,44 @@ class ClaimController extends Controller
     {
         $data = $request->all();
 
+        $messages = [
+            "required" => "Field ini mandatory",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file",
+            "date" => "Field ini harus berisi tanggal"
+        ];
+        $rules = [
+            "tanggal-activity" => "required|date",
+            "id-claim" => "required",
+            "uraian-activity" => "required|string",
+            "keterangan" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("tanggal-activity");
+            $request->old("uraian-activity");
+            $request->old("keterangan");
+            Alert::toast("Klaim Negosiasi gagal disimpan", "error")->autoClose(3000)->timerProgressBar(true);;
+            redirect()->back()->with("modal", $data["modal-name"]);
+        }
+        $validation->validate();
+
         $faker = new Uuid();
         if (isset($data["dokumen-pendukung"])) {
+            $list_id_document_pendukung = collect();
             if (count($data["dokumen-pendukung"]) > 1) {
-                $list_id_document_pendukung = [];
                 foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                     $id_document = $faker->uuid3();
-                    array_push($list_id_document_pendukung, $id_document);
+                    // array_push($list_id_document_pendukung, $id_document);
+                    $list_id_document_pendukung->push($id_document);
                     moveFileTemp($dokumen_pendukung, $id_document);
                 }
-                $claimContractNegoisasi->dokumen_pendukung = join(",", $list_id_document_pendukung);
+                $claimContractNegoisasi->dokumen_pendukung = $list_id_document_pendukung->join(",");
             } else {
                 $id_document = $faker->uuid3();
                 moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-                $claimContractNegoisasi->dokumen_pendukung = $id_document;
+                // $list_id_document_pendukung->push($id_document);
+                $claimContractNegoisasi->dokumen_pendukung = $id_document . ",";
             }
         }
 
@@ -551,93 +624,118 @@ class ClaimController extends Controller
         $claimContractNegoisasi->keterangan = $data["keterangan"];
         if ($claimContractNegoisasi->save()) {
             // Session::forget("pasals");
-            Alert::success("Success", "Buat Data Negosiasi berhasil");
+            Alert::success("Success", "Klaim Negosiasi berhasil disimpan");
             return redirect()->back();
         }
-
-        Alert::error("Error", "Buat Data Negosiasi gagal");
-        return Redirect::back();
+        $request->old("tanggal-diajukan");
+        $request->old("diajukan-rekomendasi");
+        $request->old("uraian-rekomendasi");
+        $request->old("keterangan");
+        Alert::error("Error", "Klaim Negosiasi gagal disimpan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
     }
 
     public function claimDisetujuiUpload(Request $request, ClaimContractDisetujui $claimContractDisetujui)
     {
         $data = $request->all();
-        // $messages = [
-        //     "required" => "This field is required",
-        //     "numeric" => "This field must be numeric only",
-        //     "file" => "This field must be file only",
-        //     "string" => "This field must be alphabet only",
-        //     "date" => "This field must be date format only",
-        // ];
-        // $rules = [
-        //     "pengajuan-waktu" => "required|date",
-        //     "surat-instruksi" => "required|file",
-        //     "draft-proposal-addendum" => "required|file",
-        //     "draft-rekomendasi" => "required|boolean",
-        //     "uraian-rekomendasi" => "required|string",
-        //     "uraian-perubahan" => "required|string",
-        //     "pengajuan-biaya" => "required|numeric",
-        //     "id-addendum" => "required|numeric",
-        // ];
-        // $validation = Validator::make($data, $rules, $messages);
-        // $validation->validate();
-
         $faker = new Uuid();
         $id_document = $faker->uuid3();
-        // if ($validation->fails()) {
-        //     // Session::flash("failed", "Please fill 'Draft Contract' empty field");
-        //     // $request->old("note-addendum");
-        //     // $request->old("document-name-addendum");
-        //     // $request->old("document-name-addendum-menang");
-        //     // $request->old("attach-file-addendum");
-        //     Alert::error("Error", "Silahkan isi data yang kosong!");
-        //     return Redirect::back();
-        // }
 
-        // // Check ID Contract exist
-        // $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
+        $messages = [
+            "required" => "Field ini mandatory",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file",
+            "date" => "Field ini harus berisi tanggal"
+        ];
+        $rules = [
+            "tanggal-disetujui" => "required|date",
+            "waktu-eot-disetujui" => "required|date",
+            "id-claim" => "required",
+            "biaya-disetujui" => "required",
+            "keterangan-disetujui" => "required|string",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("tanggal-disetujui");
+            $request->old("waktu-eot-disetujui");
+            $request->old("biaya-disetujui");
+            $request->old("keterangan-disetujui");
+            Alert::toast("Klaim Disetujui gagal disimpan", "error")->autoClose(3000)->timerProgressBar(true);;
+            redirect()->back()->with("modal", $data["modal-name"]);
+        }
+        $validation->validate();
 
-        // if (empty($is_id_contract_exist)) {
-        //     $request->old("note-addendum");
-        //     $request->old("document-name-addendum");
-        //     $request->old("document-name-addendum-menang");
-        //     $request->old("attach-file-addendum");
-        //     Alert::error("Error", "Pastikan kontrak sudah dibuat!");
-        //     return Redirect::back();
-        // }
+        // Check ID Contract exist
+        $is_id_contract_exist = ContractManagements::find($data["id-contract"]);
 
+        if (empty($is_id_contract_exist)) {
+            $request->old("tanggal-disetujui");
+            $request->old("waktu-eot-disetujui");
+            $request->old("biaya-disetujui");
+            $request->old("keterangan-disetujui");
+            Alert::error("Error", "Pastikan kontrak sudah dibuat!")->autoClose(3000)->timerProgressBar(true);;
+            return Redirect::back()->with("modal", $data["modal-name"]);
+        }
+
+        $messages = [
+            "required" => "Field ini mandatory",
+            "string" => "Field ini harus Alphanumeric",
+            "file" => "Field ini harus berisi file",
+            "date" => "Field ini harus berisi tanggal"
+        ];
+        $rules = [
+            "tanggal-disetujui" => "required|date",
+            "waktu-eot-disetujui" => "required|date",
+            "id-claim" => "required",
+            "biaya-disetujui" => "required|string",
+            "keterangan-disetujui" => "required|string",
+            "surat-disetujui" => "required|file",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("tanggal-activity");
+            $request->old("proposal-claimndasi");
+            $request->old("uraian-activity");
+            $request->old("keterangan");
+            dd($validation->errors());
+            Alert::toast("Klaim Disetujui gagal disimpan", "error")->autoClose(3000)->timerProgressBar(true);;
+            redirect()->back()->with("modal", $data["modal-name"]);
+        }
+        $validation->validate();
 
         $id_document_surat_disetujui = $faker->uuid3();
         if (isset($data["dokumen-pendukung"])) {
+            $list_id_document_pendukung = collect();
             if (count($data["dokumen-pendukung"]) > 1) {
-                $list_id_document_pendukung = [];
                 foreach ($data["dokumen-pendukung"] as $dokumen_pendukung) {
                     $id_document = $faker->uuid3();
-                    array_push($list_id_document_pendukung, $id_document);
+                    // array_push($list_id_document_pendukung, $id_document);
+                    $list_id_document_pendukung->push($id_document);
                     moveFileTemp($dokumen_pendukung, $id_document);
                 }
-                $claimContractDisetujui->dokumen_pendukung = join(",", $list_id_document_pendukung);
+                $claimContractDisetujui->dokumen_pendukung = $list_id_document_pendukung->join(",");
             } else {
                 $id_document = $faker->uuid3();
                 moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-                $claimContractDisetujui->dokumen_pendukung = $id_document;
+                // $list_id_document_pendukung->push($id_document);
+                $claimContractDisetujui->dokumen_pendukung = $id_document . ",";
             }
         }
 
         $claimContractDisetujui->id_claim = $data["id-claim"];
         $claimContractDisetujui->id_document_surat_disetujui = $id_document_surat_disetujui;
         $claimContractDisetujui->tanggal_disetujui = $data["tanggal-disetujui"];
-        $claimContractDisetujui->biaya_disetujui = $data["biaya-disetujui"];
+        $claimContractDisetujui->biaya_disetujui = (int) str_replace(",", "", $data["biaya-disetujui"]);
         $claimContractDisetujui->waktu_eot_disetujui = $data["waktu-eot-disetujui"];
         $claimContractDisetujui->keterangan = $data["keterangan-disetujui"];
         if ($claimContractDisetujui->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["surat-disetujui"], $id_document_surat_disetujui);
-            Alert::success("Success", "Buat Data Disetujui berhasil");
+            Alert::success("Success", "Klaim Disetujui berhasil disimpan");
             return redirect()->back();
         }
 
-        Alert::error("Error", "Buat Data Disetujui gagal");
-        return Redirect::back();
+        Alert::error("Error", "Klaim Disetujui gagal disimpan");
+        return Redirect::back()->with("modal", $data["modal-name"]);
     }
 }

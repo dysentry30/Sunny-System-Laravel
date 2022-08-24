@@ -58,18 +58,16 @@ class ContractManagementsController extends Controller
             $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
                 return self::stdClassToModel($data, Proyek::class);
             });
-            // $proyeks_pelaksanaan = Proyek::join("contract_managements as c", "c.kode_proyek", "=", "proyeks.kode_proyek")->where("c.stages", "=", 3)->whereNotNull("nomor_terkontrak")->get();
-            // $proyeks_serah_terima = Proyek::join("contract_managements as c", "c.kode_proyek", "=", "proyeks.kode_proyek")->where("c.stages", "=", 4)->whereNotNull("nomor_terkontrak")->get();
-            // dd($proyeks_pelaksanaan_serah_terima);
-            // $proyeks = $proyeks->map(function ($data) {
-            //     self::stdClassToModel($data, Proyek::class);
-            // });
+
+            $proyeks_pelaksanaan_closing_proyek = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", 5)->get()->map(function ($data) {
+                return self::stdClassToModel($data, Proyek::class);
+            });
         } else {
             // $proyeks = Proyek::join()where("unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("nomor_terkontrak", "!=", "")->get()->sortBy("kode_proyek");
             $proyeks = DB::table("proyeks as p")->join("contract_managements as c", "c.kode_proyek", "=", "p.kode_proyek")->where("p.unit_kerja", "=", Auth::user()->unit_kerja)->where("stage", ">", 7)->where("p.nomor_terkontrak", "!=", "")->where("c.stages", "<", 3)->get()->sortBy("kode_proyek");
         }
         // return view("4_Contract", compact(["proyeks"]));
-        return view("4_Contract", compact(["proyeks_terkontrak", "proyeks_tender_awal", "proyeks_pelaksanaan_serah_terima"]));
+        return view("4_Contract", compact(["proyeks_terkontrak", "proyeks_tender_awal", "proyeks_pelaksanaan_serah_terima", "proyeks_pelaksanaan_closing_proyek"]));
     }
 
     private function stdClassToModel($data, $instance)

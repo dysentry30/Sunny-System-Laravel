@@ -27,5 +27,6 @@ class Forecast extends Model
     public function Proyek()
     {
         return $this->belongsTo(Proyek::class, "kode_proyek");
+        // return $this->hasOne(Proyek::class, "kode_proyek");
     }
 }

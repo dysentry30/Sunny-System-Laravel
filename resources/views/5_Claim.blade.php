@@ -74,7 +74,7 @@
                                 <!--end::Search-->
 
                                 <!--Begin:: BUTTON FILTER-->
-                                <form action="" class="d-flex flex-row w-auto" method="get">
+                                <form action="#" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
                                     <select id="column" name="column" class="form-select form-select-solid select2-hidden-accessible" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1" aria-hidden="true">
                                         <option {{$column == "" ? "selected": ""}}></option>

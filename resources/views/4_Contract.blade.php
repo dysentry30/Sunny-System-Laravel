@@ -106,7 +106,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
                                                 aria-selected="true"
-                                                href="#kt_user_view_tender_awal" style="font-size:14px;">Tender Awal</a>
+                                                href="#kt_user_view_tender_awal" style="font-size:14px;">Perolehan</a>
                                         </li>
                                         <!--end:::Tab item Claim-->
 
@@ -114,7 +114,7 @@
                                         <li class="nav-item">
                                             <a class="nav-link text-active-primary pb-4"
                                                 data-bs-toggle="tab" href="#kt_user_view_overview_tender_menang"
-                                                style="font-size:14px;">Tender Menang - Terkontrak</a>
+                                                style="font-size:14px;">Terkontrak</a>
                                         </li>
                                         <!--end:::Tab item Anti Claim-->
 
@@ -131,6 +131,14 @@
                                             <a class="nav-link text-active-primary pb-4"
                                                 data-bs-toggle="tab" href="#kt_user_view_overview_serah_terima"
                                                 style="font-size:14px;">Serah Terima Pekerjaan</a>
+                                        </li>
+                                        <!--end:::Tab item -->
+
+                                        <!--begin:::Tab item -->
+                                        <li class="nav-item">
+                                            <a class="nav-link text-active-primary pb-4"
+                                                data-bs-toggle="tab" href="#kt_user_view_overview_closing_proyek"
+                                                style="font-size:14px;">Closing Proyek</a>
                                         </li>
                                         <!--end:::Tab item -->
                                     </ul>
@@ -410,6 +418,74 @@
                                     <!--end::Table -->
                                 </div>
                                 {{-- End :: Tab Content Serah Terima Pekerjaan --}}
+
+                                {{-- Begin :: Tab Content Closing Proyek --}}
+                                <div class="tab-pane fade" id="kt_user_view_overview_closing_proyek" role="tabpanel">
+                                    <!--begin::Table Claim-->
+                                    <table class="table align-middle table-row-dashed" id="kt_proyek_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-auto">Kode Proyek</th>
+                                                <th class="min-w-auto">Nama Proyek</th>
+                                                <th class="min-w-auto">Unit Kerja</th>
+                                                {{-- <th class="min-w-auto">ID Contract</th> --}}
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-600 fs-6">
+                                            @php
+                                                $is_data_found = false
+                                            @endphp
+                                            @forelse ($proyeks_pelaksanaan_closing_proyek as $proyek)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a href="/contract-management/view/{{ $proyek->ContractManagements->id_contract }}"
+                                                        id="click-name"
+                                                        class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                        id="click-name"
+                                                        class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Email=-->
+                                                <td>
+                                                    {{ $proyek->UnitKerja->unit_kerja }}
+                                                </td>
+                                                <!--end::Email=-->
+                                                <!--begin::Action=-->
+                                                <td>
+                                                    {{-- <a href="/contract-management/view/{{ $proyek}}" id="click-name" class="text-gray-800 text-hover-primary mb-1">{{ $proyekClaims->ContractManagements->id_contract }}</a> --}}
+                                                </td>
+                                                <!--end::Action=-->
+                                            </tr>
+                                            @empty
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                    </td>
+                                                </tr>
+                                            @endforelse
+                                            @if ($proyeks_pelaksanaan_closing_proyek->count() < 1)
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <p class="text-center bg-gray-200">Data proyek tidak ditemukan</p>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
+                                    <!--end::Table -->
+                                </div>
+                                {{-- End :: Tab Content Closing Proyek --}}
 
                             </div>
                         </div>
