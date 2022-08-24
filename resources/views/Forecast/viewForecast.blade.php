@@ -23,22 +23,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                 @extends('template.header')
                 <!--end::Header-->
 
-                {{-- begin:: Toaster Notification --}}
-                <div aria-live="polite" aria-atomic="true" class="position-sticky mx-5" style="z-index: 999">
-                    <div class="toast-container top-0 end-0">
-                        <div class="toast fade align-items-center text-bg-success border-0 " role="alert"
-                            aria-live="assertive" aria-atomic="true">
-                            <div class="d-flex">
-                                <div class="toast-body text-white">
-                                    Hello, world! This is a toast message.
-                                </div>
-                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                                    aria-label="Close"></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                {{-- end:: Toaster Notification --}}
 
                 <div class="custom-toaster">
 
@@ -108,7 +92,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                         </div>
 
                                         <div class="row">
-                                            <div class="d-flex col-6 align-items-center justify-content-between">
+                                            <div class="d-flex {{$periode != (int) date("m") ? "col-8" : "col-6"}} align-items-center justify-content-between">
                                                 <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                     onclick="lockMonthForecastBulanan(this)"
                                                     class="btn btn-sm btn-active-primary mt-4">
@@ -135,6 +119,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
                                                             <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
                                                     </button>
+
+                                                @endif
+                                                
+                                                @if ($periode != (int) date("m"))
+                                                    <div class="d-flex flex-row col-5 align-items-center justify-content-center">
+                                                        <button type="button" onClick="window.location.href='/forecast';" id="unlock-previous-forecast"
+                                                            class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
+                                                                <span class="mx-2 fs-6">Pindah Forecast ke Bulan Ini</span>
+                                                        </button>
+                                                        <i class="bi bi-info-circle-fill text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
+                                                        data-bs-custom-class="custom-tooltip"
+                                                        data-bs-title="Jika Tombol <b>Pindah Forecast Bulan Ini</b> di klik, maka halaman Forecast ini akan pindah ke halaman Forecast bulan sekarang"></i>
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
@@ -169,6 +166,50 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                         <!--begin::Contacts-->
                                         <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
+                                            <div class="card-header pt-10">
+                                                <div class="col">
+                                                    <form action=""></form>
+                                                    <form action="/forecast" class="row w-700px" method="GET">
+                                                        <div class="col">
+                                                            <!--Begin:: Select Options-->
+                                                            <select id="column" name="column" class="form-select form-select-solid" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Pilih filter" data-select2-id="select2-filter-forecast" tabindex="-1" aria-hidden="true">
+                                                                <option value="" {{$column == "" ? "selected": ""}}></option>
+                                                                <option value="dop" {{$column == "dop" ? "selected": ""}}>DOP</option>
+                                                                <option value="unit_kerja" {{$column == "unit_kerja" ? "selected": ""}}>Unit Kerja</option>
+                                                                <option value="nama_proyek" {{$column == "nama_proyek" ? "selected": ""}}>Nama Proyek</option>
+                                                                {{-- <option {{$column == "" ? "selected": ""}}></option>
+                                                                <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
+                                                                <option value="kode_proyek" {{$column ==    "kode_proyek" ? "selected" : ""}}>Kode Proyek</option> --}}
+                                                                {{-- <option value="uraian_perubahan" {{$column == "uraian_perubahan" ? "selected" : ""}}>Uraian Perubahan</option> --}}
+                                                            </select>
+                                                            <!--End:: Select Options-->
+                                                        </div>
+                                                        <div class="col">
+                                                            <input type="text" name="filter" class="form-control form-control-solid" value="{{ $filter ?? "" }}" placeholder="Apa yang ingin anda cari?">
+                                                        </div>
+
+                                                        <div class="col-4">
+                                                            <div class="d-flex flex-row">
+                                                                <div class="col">
+                                                                    <button type="submit" id="button-filter"
+                                                                        class="btn btn-sm btn-light btn-active-primary mt-1">
+                                                                            <span class="mx-2 fs-6">Search</span>
+                                                                    </button>
+                                                                </div>
+        
+                                                                <div class="col">
+                                                                    <button type="button" onclick="window.location.href = '/forecast';" id="button-reset"
+                                                                        class="btn btn-sm btn-light btn-active-danger mt-1">
+                                                                            <span class="mx-2 fs-6">Reset</span>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+
+                                            <hr>
 
                                             <!--begin::Card body-->
                                             <div class="card-body" style="background-color: white;">
@@ -479,6 +520,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         $total_month_forecast = 0;
                                                                         $total_year_forecast = 0;
                                                                         $index = 1;
+                                                                        if ($column == "unit_kerja") {
+                                                                            $dops = $dops->filter(function($data) use($filter) {
+                                                                                $is_unit_kerjas_exist = $data->UnitKerjas->contains(function($data) use($filter) {
+                                                                                    return str_contains(strtolower($data->unit_kerja), strtolower($filter)) && $data->Proyeks->count() > 0;
+                                                                                });
+                                                                                if ($data->UnitKerjas->count() > 0 && $is_unit_kerjas_exist) {
+                                                                                    return $data;
+                                                                                    // return $data->UnitKerjas->filter(function($unit_kerja) use($filter, $data) {
+                                                                                        
+                                                                                    //     if ($unit_kerja->Proyeks->count() > 0 && str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter))) {
+                                                                                    //     }
+                                                                                    // });
+                                                                                }
+                                                                            });
+                                                                        }
                                                                     @endphp
                                                                     @foreach ($dops as $dop)
                                                                         {{-- @if (count($dop->UnitKerjas) > 0) --}}
@@ -578,7 +634,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             <!--end::Total Coloumn-->
 
                                                                         </tr>
-
                                                                         {{-- begin:: Foreach Unit Kerja --}}
                                                                         @foreach ($dop->UnitKerjas as $unitKerja)
                                                                             @if (count($unitKerja->proyeks) > 0 && ($unitKerja->divcode == Auth::user()->unit_kerja || Auth::user()->check_administrator))
@@ -674,171 +729,339 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     <!--end::Total Coloumn-->
                                                                                 </tr>
                                                                                 {{-- begin:: Foreach Proyek --}}
-                                                                                @foreach ($unitKerja->proyeks as $proyek)
-                                                                                    <tr id="{{ $unitKerja->divcode }}"
-                                                                                        class="collapse"
-                                                                                        aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                        data-bs-parent="#{{ $unitKerja->divcode }}"
-                                                                                        style="text-align: right;">
-                                                                                        <td
-                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                                            <!--begin::Child=-->
-                                                                                            <p class="ms-12">
-                                                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                                                    class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
-                                                                                            </p>
-                                                                                            <!--end::Child=-->
-                                                                                        </td>
-
-                                                                                        @for ($i = 0; $i < 12; $i++)
-                                                                                            @php
-                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                            @endphp
-                                                                                            @foreach ($proyek->Forecasts as $forecast)
-                                                                                                @if ($forecast->month_forecast == $month_counter)
-                                                                                                    @php
-                                                                                                        $total_forecast += (int) $forecast->nilai_forecast;
-                                                                                                        $total_year_forecast += $total_forecast;
-                                                                                                        
-                                                                                                    @endphp
-                                                                                                    @if ($month_counter == (int) $forecast->rkap_month)
-                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                            {{ $proyek->nilai_rkap }}
-                                                                                                        </td>
-                                                                                                    @else
-                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                            
-                                                                                                        </td>
-                                                                                                    @endif
-                                                                                                    <td>
-                                                                                                        <input type="text"
-                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                            data-month="{{ $month_counter }}"
-                                                                                                            data-column-forecast="{{ $month_counter }}"
-                                                                                                            class="form-control border-bottom-1"
-                                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                            id="nilai-forecast"
-                                                                                                            name="nilai-forecast"
-                                                                                                            onkeyup="reformatNumber(this)"
-                                                                                                            value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
-                                                                                                            placeholder="" />
-                                                                                                    </td>
-                                                                                                    @if ($month_counter == (int) $forecast->month_realisasi)
-                                                                                                        @php
-                                                                                                            // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
-                                                                                                        @endphp
-                                                                                                        <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                            {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
-                                                                                                        </td>
-                                                                                                    @else
-                                                                                                        <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                            </td>
-                                                                                                    @endif
-                                                                                                    @php
-                                                                                                        $is_data_found = true;
-                                                                                                    @endphp
-                                                                                                @break
-                                                                                            @endif
-                                                                                        @endforeach
-                                                                                        @if (!$is_data_found)
-                                                                                            @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
-                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                    {{ $proyek->nilai_rkap }}
-                                                                                                </td>
-                                                                                            @else
-                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                    
-                                                                                                </td>
-                                                                                            @endif
-                                                                                            <td>
-                                                                                                <input type="text"
-                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                    data-month="{{ $month_counter }}"
-                                                                                                    data-column-forecast="{{ $month_counter }}"
-                                                                                                    class="form-control border-bottom-1"
-                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                    id="nilai-forecast"
-                                                                                                    name="nilai-forecast"
-                                                                                                    onkeyup="reformatNumber(this)"
-                                                                                                    value=""
-                                                                                                    placeholder="" />
+                                                                                @if ($column != "" && $column == "nama_proyek")
+                                                                                    @foreach ($proyeks as $proyek)
+                                                                                        <tr id="{{ $unitKerja->divcode }}"
+                                                                                            class="collapse"
+                                                                                            aria-labelledby="{{ $unitKerja->divcode }}"
+                                                                                            data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                            style="text-align: right;">
+                                                                                            <td
+                                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                                <!--begin::Child=-->
+                                                                                                <p class="ms-12">
+                                                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                        class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
+                                                                                                </p>
+                                                                                                <!--end::Child=-->
                                                                                             </td>
-                                                                                            @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+
+                                                                                            @for ($i = 0; $i < 12; $i++)
                                                                                                 @php
-                                                                                                    $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                 @endphp
-                                                                                                <td
-                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                    {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
-                                                                                                </td>
-                                                                                            @else
-                                                                                                <td
-                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                @foreach ($proyek->Forecasts as $forecast)
+                                                                                                    @if ($forecast->month_forecast == $month_counter)
+                                                                                                        @php
+                                                                                                            $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                            $total_year_forecast += $total_forecast;
+                                                                                                            
+                                                                                                        @endphp
+                                                                                                        @if ($month_counter == (int) $forecast->rkap_month)
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                
+                                                                                                            </td>
+                                                                                                        @endif
+                                                                                                        <td>
+                                                                                                            <input type="text"
+                                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                                data-month="{{ $month_counter }}"
+                                                                                                                data-column-forecast="{{ $month_counter }}"
+                                                                                                                class="form-control border-bottom-1"
+                                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                id="nilai-forecast"
+                                                                                                                name="nilai-forecast"
+                                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                                value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
+                                                                                                                placeholder="" />
+                                                                                                        </td>
+                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi)
+                                                                                                            @php
+                                                                                                                // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                            @endphp
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                </td>
+                                                                                                        @endif
+                                                                                                        @php
+                                                                                                            $is_data_found = true;
+                                                                                                        @endphp
+                                                                                                    @break
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @if (!$is_data_found)
+                                                                                                @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        {{ $proyek->nilai_rkap }}
                                                                                                     </td>
+                                                                                                @else
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        
+                                                                                                    </td>
+                                                                                                @endif
+                                                                                                <td>
+                                                                                                    <input type="text"
+                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                        data-month="{{ $month_counter }}"
+                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                        class="form-control border-bottom-1"
+                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        id="nilai-forecast"
+                                                                                                        name="nilai-forecast"
+                                                                                                        onkeyup="reformatNumber(this)"
+                                                                                                        value=""
+                                                                                                        placeholder="" />
+                                                                                                </td>
+                                                                                                @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @php
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                    @endphp
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                                    </td>
+                                                                                                @else
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        </td>
+                                                                                                @endif
                                                                                             @endif
-                                                                                        @endif
+                                                                                            @php
+                                                                                                $is_data_found = false;
+                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                $month_counter++;
+                                                                                            @endphp
+                                                                                        @endfor
+                                                                                        <!--begin::Total Side Coloumn-->
                                                                                         @php
-                                                                                            $is_data_found = false;
-                                                                                            $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap);
-                                                                                            $month_counter++;
+                                                                                            $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                            $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                            $total_forecast = 0;
+                                                                                            $total_ok = 0;
+                                                                                            $month_counter = 1;
                                                                                         @endphp
-                                                                                    @endfor
-                                                                                    <!--begin::Total Side Coloumn-->
-                                                                                    @php
-                                                                                        $total_ok_formatted = number_format($total_ok, 0, ',', ',');
-                                                                                        $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
-                                                                                        $total_forecast = 0;
-                                                                                        $total_ok = 0;
-                                                                                        $month_counter = 1;
-                                                                                    @endphp
-                                                                                    <td class="pinForecast HidePin">
-                                                                                        <center>
-                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast HidePin"
-                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}">
-                                                                                        <center>
-                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast HidePin"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                        <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        <center>
-                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        <center>
-                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        <center>
-                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
-                                                                                        </center>
-                                                                                    </td>
-                                                                                    <!--end::Total Side Coloumn-->
-                                                                            @endforeach
+                                                                                        <td class="pinForecast HidePin">
+                                                                                            <center>
+                                                                                                <b>{{ $total_ok_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast HidePin"
+                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}">
+                                                                                            <center>
+                                                                                                <b>{{ $total_forecast_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast HidePin"
+                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                            <center>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin"
+                                                                                            data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                            <center>
+                                                                                                <b>{{ $total_ok_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin total-month-x-forecast"
+                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                            <center>
+                                                                                                <b>{{ $total_forecast_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
+                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                            <center>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <!--end::Total Side Coloumn-->
+                                                                                    @endforeach
+                                                                                @else
+                                                                                    @foreach ($unitKerja->proyeks as $proyek)
+                                                                                        <tr id="{{ $unitKerja->divcode }}"
+                                                                                            class="collapse"
+                                                                                            aria-labelledby="{{ $unitKerja->divcode }}"
+                                                                                            data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                            style="text-align: right;">
+                                                                                            <td
+                                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                                <!--begin::Child=-->
+                                                                                                <p class="ms-12">
+                                                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                        class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
+                                                                                                </p>
+                                                                                                <!--end::Child=-->
+                                                                                            </td>
+
+                                                                                            @for ($i = 0; $i < 12; $i++)
+                                                                                                @php
+                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
+                                                                                                @endphp
+                                                                                                @foreach ($proyek->Forecasts as $forecast)
+                                                                                                    @if ($forecast->month_forecast == $month_counter)
+                                                                                                        @php
+                                                                                                            $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                            $total_year_forecast += $total_forecast;
+                                                                                                            
+                                                                                                        @endphp
+                                                                                                        @if ($month_counter == (int) $forecast->rkap_month)
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                
+                                                                                                            </td>
+                                                                                                        @endif
+                                                                                                        <td>
+                                                                                                            <input type="text"
+                                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                                data-month="{{ $month_counter }}"
+                                                                                                                data-column-forecast="{{ $month_counter }}"
+                                                                                                                class="form-control border-bottom-1"
+                                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                id="nilai-forecast"
+                                                                                                                name="nilai-forecast"
+                                                                                                                onkeyup="reformatNumber(this)"
+                                                                                                                value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
+                                                                                                                placeholder="" />
+                                                                                                        </td>
+                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi)
+                                                                                                            @php
+                                                                                                                // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                            @endphp
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                </td>
+                                                                                                        @endif
+                                                                                                        @php
+                                                                                                            $is_data_found = true;
+                                                                                                        @endphp
+                                                                                                    @break
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                            @if (!$is_data_found)
+                                                                                                @if ($month_counter == (int) $proyek->bulan_pelaksanaan && $proyek->bulan_pelaksanaan != null)
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        {{ $proyek->nilai_rkap }}
+                                                                                                    </td>
+                                                                                                @else
+                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        
+                                                                                                    </td>
+                                                                                                @endif
+                                                                                                <td>
+                                                                                                    <input type="text"
+                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                        data-month="{{ $month_counter }}"
+                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                        class="form-control border-bottom-1"
+                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        id="nilai-forecast"
+                                                                                                        name="nilai-forecast"
+                                                                                                        onkeyup="reformatNumber(this)"
+                                                                                                        value=""
+                                                                                                        placeholder="" />
+                                                                                                </td>
+                                                                                                @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                                    @php
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                    @endphp
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}
+                                                                                                    </td>
+                                                                                                @else
+                                                                                                    <td
+                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        </td>
+                                                                                                @endif
+                                                                                            @endif
+                                                                                            @php
+                                                                                                $is_data_found = false;
+                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                $month_counter++;
+                                                                                            @endphp
+                                                                                        @endfor
+                                                                                        <!--begin::Total Side Coloumn-->
+                                                                                        @php
+                                                                                            $total_ok_formatted = number_format($total_ok, 0, ',', ',');
+                                                                                            $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
+                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                            $total_forecast = 0;
+                                                                                            $total_ok = 0;
+                                                                                            $month_counter = 1;
+                                                                                        @endphp
+                                                                                        <td class="pinForecast HidePin">
+                                                                                            <center>
+                                                                                                <b>{{ $total_ok_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast HidePin"
+                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}">
+                                                                                            <center>
+                                                                                                <b>{{ $total_forecast_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast HidePin"
+                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                            <center>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin"
+                                                                                            data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                            <center>
+                                                                                                <b>{{ $total_ok_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin total-month-x-forecast"
+                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                            <center>
+                                                                                                <b>{{ $total_forecast_formatted }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
+                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                            <center>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                            </center>
+                                                                                        </td>
+                                                                                        <!--end::Total Side Coloumn-->
+                                                                                    @endforeach
+                                                                                @endif
                                                                             {{-- end:: Foreach Proyek --}}
                                                                         @endif
                                                                         @php
@@ -3426,6 +3649,7 @@ fill="none">
                 formData.append("nilai_forecast", nilaiForecast);
                 formData.append("forecast_month", dataMonth);
                 formData.append("kode_proyek", kodeProyek);
+                formData.append("periode_prognosa", "{{$periode}}");
                 const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
                     method: "POST",
                     header: {
@@ -4043,24 +4267,28 @@ fill="none">
         const maxMonth = Math.max(...historyForecastObj);
         const jsonVariable = {};
         const date = new Date();
-        let getAvgMonth = [];
-        for(var i=minMonth; i <= maxMonth; i++) {
-            const objectMonth = Object.keys(historyForecast[i]);
-            let avgDate = null;
-            for(var j=0; j < objectMonth.length; j++) {
-                avgDate += new Date(objectMonth[j]).getTime();
-            }
-            avgDate /= objectMonth.length;
-            getAvgMonth[`${i}`] = `${i}, ${new Date(avgDate)}`;
-            // getAvgMonth.push({
-            //     i: new Date(avgDate),
-            // });
-            avgDate = 0;
-        }
+        // let getAvgMonth = [];
+        // for(var i=minMonth; i <= maxMonth; i++) {
+        //     const objectMonth = Object.keys(historyForecast[i]);
+        //     let avgDate = null;
+        //     for(var j=0; j < objectMonth.length; j++) {
+        //         avgDate += new Date(objectMonth[j]).getTime();
+        //     }
+        //     avgDate /= objectMonth.length;
+        //     getAvgMonth[`${i}`] = `${i}, ${new Date(avgDate)}`;
+        //     // getAvgMonth.push({
+        //     //     i: new Date(avgDate),
+        //     // });
+        //     avgDate = 0;
+        // }
         
-        for(var i=minMonth; i <= maxMonth; i++) {
-            let date = getAvgMonth[i].split(", ")[1];
-            jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
+        // for(var i=minMonth; i <= maxMonth; i++) {
+        //     let date = getAvgMonth[i].split(", ")[1];
+        //     jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
+        // }
+
+        for(let i = 0; i < monthNames.length; i++) {
+            jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
         }
         const {value: monthForecast} = await Swal.fire({
             title: 'Pilih Bulan Forecast',
@@ -4082,7 +4310,6 @@ fill="none">
             }
         });
         if (monthForecast) {
-            const choosenForecast = monthForecast.split(", ");
             Swal.fire({
                 title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast[0] - 1]}?`,
                 icon: 'warning',
@@ -4092,26 +4319,8 @@ fill="none">
                 confirmButtonText: 'Lanjut'
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        let url = `/forecast/${choosenForecast[0]}/${choosenForecast[1]}`;
+                        let url = `/forecast/${monthForecast}/${new Date().getFullYear()}`;
                         location.href = url;
-                        // const formData = new FormData();
-                        // formData.append("_token", "{{csrf_token()}}");
-                        // formData.append("periode_prognosa",  monthForecast);
-                        // const getUnlockForecastPreviousMonthRes = await fetch(`/forecast/set-unlock-previous-forecast`, {
-                        //     method: "POST",
-                        //     header: {
-                        //         "content-type": "application/json"
-                        //     },
-                        //     body: formData,
-                        // }).then(res => res.json());
-
-                        // if (res.status == "success") {
-                        //     Toast.fire({
-                        //         icon: 'success',
-                        //         text: "Forecast bulan lalu berhasil di Unlock",
-                        //     })
-                        //     return;
-                        // }
                     }
                 })
         }

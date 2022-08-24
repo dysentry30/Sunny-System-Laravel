@@ -114,3 +114,7 @@ html #exit-fullscreen {
 #forecast-line .highcharts-point, #forecast-3wulan .highcharts-point, #nilai-realisasi .highcharts-point {
     cursor: pointer;
 }
+
+a.menu-link:hover {
+    background: #008CB4;
+}

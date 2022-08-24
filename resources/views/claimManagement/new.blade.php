@@ -324,11 +324,19 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid"
-                                                            name="total-claim" id="total-claim"
-                                                            onkeyup="reformatNumber(this)"
-                                                            value="{{ number_format((int) ($claimContract->nilai_claim ?? 0), 0, ',', ',') }}"
-                                                            placeholder="Type number here..." disabled>
+                                                        @if (!empty($claimContract->nilai_claim))
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                name="total-claim" id="total-claim"
+                                                                onkeyup="reformatNumber(this)"
+                                                                value="{{ old("total-claim") ?? number_format($claimContract->nilai_claim, 0, ",", ",") }}"
+                                                                placeholder="Type number here...">
+                                                        @else
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                name="total-claim" id="total-claim"
+                                                                onkeyup="reformatNumber(this)"
+                                                                value="{{ old("total-claim") ?? 0 }}"
+                                                                placeholder="Type number here...">
+                                                        @endif
                                                         <!--end::Input-->
 
                                                         {{-- begin::erorr message --}}
@@ -531,8 +539,9 @@
                                                                         <td class="text-gray-600">{{$claim_contrat_draft->uraian_rekomendasi}}</td>
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
-                                                                                $list_dokumen = explode(",", $claim_contrat_draft->dokumen_pendukung);
-                                                                                array_pop($list_dokumen);
+                                                                                $list_dokumen = collect(explode(",", $claim_contrat_draft->dokumen_pendukung))->filter(function($data) {
+                                                                                    return !empty($data);
+                                                                                });
                                                                             @endphp
                                                                             @forelse ($list_dokumen as $key => $dokumen_pendukung)
                                                                                - <a target="_blank" class="text-hover-primary" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
@@ -608,11 +617,12 @@
 
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
-                                                                                $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
-                                                                                array_pop($list_dokumen);
+                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
+                                                                                    return !empty($data);
+                                                                                });
                                                                             @endphp
                                                                             @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_addendum_contract_diajukan }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_diajukans }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
                                                                             @empty
                                                                                 <p class="text-danger">Kosong</p>
                                                                             @endforelse
@@ -679,11 +689,12 @@
 
                                                                         <td class="text-gray-600 min-w-100px text-break">
                                                                             @php
-                                                                                $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
-                                                                                array_pop($list_dokumen);
+                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
+                                                                                return !empty($data);});
                                                                             @endphp
                                                                             @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_addendum_contract_diajukan }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_negosiasi
+                                                                            }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
                                                                             @empty
                                                                                 <p class="text-danger">Kosong</p>
                                                                             @endforelse
@@ -749,11 +760,11 @@
 
                                                                         <td class="min-w-100px text-break">
                                                                             @php
-                                                                                $list_dokumen = explode(",", $draft_addendum->dokumen_pendukung);
-                                                                                array_pop($list_dokumen);
+                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
+                                                                                return !empty($data);});
                                                                             @endphp
                                                                             @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_contract_disetujui}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                               - <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_disetujui}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
                                                                             @empty
                                                                                 <p class="text-danger">Kosong</p>
                                                                             @endforelse
@@ -826,6 +837,7 @@
                     @csrf
                     <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
                     <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
@@ -833,19 +845,25 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col">
-                                        <label for="no-draft-claim" class="form-label fs-6 fw-normal">No Klaim Draft</label>
-                                        <input type="text" placeholder="No Draft Klaim" name="no-draft-claim" class="form-control form-control-solid fw-normal">
+                                        <label for="no-draft-claim" class="form-label fs-6 fw-normal"><span class="required">No Klaim Draft</span></label>
+                                        <input type="text" placeholder="No Draft Klaim" value="{{ old("no-draft-claim") ?? ""}}" name="no-draft-claim" class="form-control form-control-solid fw-normal">
+                                        @error('no-draft-claim')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col">
-                                        <label for="uraian-claim" class="form-label fs-6 fw-normal">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</label>
-                                        <input type="text" name="uraian-claim" placeholder="Uraian Klaim" class="form-control form-control-solid">
+                                        <label for="uraian-claim" class="form-label fs-6 fw-normal"><span class="required">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
+                                        <input type="text" name="uraian-claim" value="{{ old("uraian-claim") ?? ""}}" placeholder="Uraian Klaim" class="form-control form-control-solid">
+                                        @error('uraian-claim')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-6">
                                         <div class="d-flex flex-row">
-                                            <button type="button" onclick="showModalPasal()" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal">Pasal-pasal<i class="mx-2 bi bi-plus text-primary"></i></button>
+                                            <button type="button" onclick="showModalPasal()" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal"><span class="required">Pasal-pasal</span><i class="mx-2 bi bi-plus text-primary"></i></button>
                                             @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
                                                 <a name="clear-pasal" id="clear-pasal"
                                                     class="btn btn-sm btn-danger">Clear
@@ -894,48 +912,73 @@
                                             <!--end::Table body-->
                                     </table>
 
+                                    @if (Session::has("pasal-error"))
+                                        <span class="text-danger">Field ini mandatory</span>
+                                    @endif
+
                                     </div>
                                     <div class="col-6">
-                                        <label for="pengajuan-biaya" class="form-label fs-6 fw-normal">Pengajuan Biaya</label>
-                                        <input type="text" name="pengajuan-biaya" value="0" onkeyup="reformatNumber(this)" class="form-control form-control-solid">
+                                        <label for="pengajuan-biaya" class="form-label fs-6 fw-normal"><span class="required">Pengajuan Biaya</span></label>
+                                        <input type="text" name="pengajuan-biaya" value="0" value="{{ old("pengajuan-biaya") ?? ""}}" onkeyup="reformatNumber(this)" class="form-control form-control-solid">
+                                        @error('pengajuan-biaya')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="pengajuan-waktu" class="form-label fs-6 fw-normal">Pengajuan Waktu / EOT </label>
+                                        <label for="pengajuan-waktu" class="form-label fs-6 fw-normal"><span class="required">Pengajuan Waktu / EOT</span></label>
                                         <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="pengajuan-waktu" class="form-control form-control-solid">
+                                        <input type="date" value="{{ date_format(date_create(old("pengajuan-waktu")),"Y-m-d")}}" name="pengajuan-waktu" class="form-control form-control-solid">
+                                        @error('pengajuan-waktu')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Draft Proposal {{$claimContract->jenis_claim ?? "Claim"}}</label>
+                                        <label for="proposal-claim" class="form-label fs-6 fw-normal"><span class="required">Draft Proposal {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
                                         <input type="file" name="proposal-claim" accept=".docx" class="form-control form-control-solid fw-normal">
+                                        @error('proposal-claim')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="rekomendasi" class="form-label fs-6 fw-normal">Rekomendasi</label>
+                                        <label for="rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Rekomendasi</span></label>
                                         <select name="rekomendasi" id="rekomendasi" style="z-index: 9999999;" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Apakah draft ini direkomendasi?" data-select2-id="select2-data-claim-rekomendasi" aria-hidden="true">
                                             <option value=""></option>
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
+                                            <option value="1" {{ old("pengajuan-biaya") == "1" ? "selected": ""}}>Yes</option>
+                                            <option value="0" {{ old("pengajuan-biaya") == "0" ? "selected": ""}}>No</option>
                                         </select>
+                                        @error('rekomendasi')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal">Uraian Rekomendasi</label>
-                                        <textarea name="uraian-rekomendasi" placeholder="Uraian Rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Uraian Rekomendasi</span></label>
+                                        <textarea name="uraian-rekomendasi" placeholder="Uraian Rekomendasi" rows="1" class="form-control form-control-solid fw-normal">{!! old("uraian-rekomendasi") ?? "" !!}</textarea>
+                                        @error('uraian-rekomendasi')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col">
-                                        <label for="surat-instruksi" class="form-label fs-6 fw-normal">Surat / Instruksi (Dari Owner)</label>
+                                        <label for="surat-instruksi" class="form-label fs-6 fw-normal"><span class="required">Surat / Instruksi (Dari Owner)</span></label>
                                         <input type="file" accept=".docx" name="surat-instruksi" class="form-control form-control-solid fw-normal">
+                                        @error('surat-instruksi')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+
                                     </div>
                                     <div class="col">
                                         <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
                                         <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                                        <small>* Support multiple files upload</small>
+                                        
                                     </div>
                                 </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
@@ -992,6 +1035,7 @@
                     @csrf
                     <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
                     <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
@@ -999,28 +1043,40 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal">Proposal {{$claimContract->jenis_claim ?? "Claim"}}</label>
+                                        <label for="proposal-claim" class="form-label fs-6 fw-normal"><span class="required">Proposal {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
                                         <input type="file" accept=".docx" name="proposal-claim" class="form-control form-control-solid fw-normal">
+                                        @error('proposal-claim')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="tanggal-diajukan" class="form-label fs-6 fw-normal">Tanggal Diajukan</label>
+                                        <label for="tanggal-diajukan" class="form-label fs-6 fw-normal"><span class="required">Tanggal Diajukan</span></label>
                                         <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
                                         <input type="date" name="tanggal-diajukan" class="form-control form-control-solid">
+                                        @error('tanggal-diajukan')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="diajukan-rekomendasi" class="form-label fs-6 fw-normal">Rekomendasi</label>
+                                        <label for="diajukan-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Rekomendasi</span></label>
                                         <select name="diajukan-rekomendasi" id="diajukan-rekomendasi" style="z-index: 9999999;" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Apakah draft ini direkomendasi?" data-select2-id="select2-data-draft-rekomendasi" aria-hidden="true">
                                             <option value=""></option>
                                             <option value="1">Yes</option>
                                             <option value="0">No</option>
                                         </select>
+                                        @error('diajukan-rekomendasi')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal">Uraian Rekomendasi</label>
+                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Uraian Rekomendasi</span></label>
                                         <textarea name="uraian-rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                        @error('uraian-rekomendasi')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
@@ -1082,6 +1138,7 @@
                     @csrf
                     <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
                     <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
@@ -1089,13 +1146,19 @@
                             {{-- <form action=""></form> --}}
                                 <div class="row">
                                     <div class="col-6">
-                                        <label for="uraian-activity" class="form-label fs-6 fw-normal">Uraian Activity</label>
-                                        <input type="text" name="uraian-activity" class="form-control form-control-solid fw-normal">
+                                        <label for="uraian-activity" class="form-label fs-6 fw-normal"><span class="required">Uraian Activity</span></label>
+                                        <input type="text" name="uraian-activity" value="{{ old("uraian-activity") ?? "" }}" class="form-control form-control-solid fw-normal">
+                                        @error('uraian-activity')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                     <div class="col-6">
-                                        <label for="tanggal-activity" class="form-label fs-6 fw-normal">Tanggal Activity</label>
+                                        <label for="tanggal-activity" class="form-label fs-6 fw-normal"><span class="required">Tanggal Activity</span></label>
                                         <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="tanggal-activity" class="form-control form-control-solid">
+                                        <input type="date" name="tanggal-activity" value="{{ date_format(date_create(old("tanggal-activity")), "Y-m-d") ?? "" }}" class="form-control form-control-solid">
+                                        @error('tanggal-activity')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <br>
@@ -1105,8 +1168,11 @@
                                         <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
                                     </div>
                                     <div class="col-6">
-                                        <label for="keterangan" class="form-label fs-6 fw-normal">Keterangan</label>
-                                        <textarea name="keterangan" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                        <label for="keterangan" class="form-label fs-6 fw-normal"><span class="required">Keterangan</span></label>
+                                        <textarea name="keterangan" rows="1" class="form-control form-control-solid fw-normal">{{old("tanggal-activity") ?? ""}}</textarea>
+                                        @error('keterangan')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
@@ -1163,6 +1229,7 @@
                     @csrf
                     <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
                     <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
@@ -1170,32 +1237,47 @@
                             {{-- <form action=""></form> --}}
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal">Surat Disetujui Dari Owner</label>
+                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal"><span class="required">Surat Disetujui Dari Owner</span></label>
                                     <input type="file" accept=".docx" name="surat-disetujui" class="form-control form-control-solid fw-normal">
+                                    @error('surat-disetujui')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal">Tanggal Disetujui</label>
+                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal"><span class="required">Tanggal Disetujui</span></label>
                                         <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="tanggal-disetujui" class="form-control form-control-solid">
+                                        <input type="date" name="tanggal-disetujui" value="{{date_format(date_create(old("surat-disetujui")), "Y-m-d") ?? ""}}" class="form-control form-control-solid">
+                                        @error('tanggal-disetujui')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal">Biaya Disetujui</label>
-                                    <input type="text" name="biaya-disetujui" class="form-control form-control-solid fw-normal">
+                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal"><span class="required">Biaya Disetujui</span></label>
+                                    <input type="text" name="biaya-disetujui" onkeyup="reformatNumber(this)" value="{{old("biaya-disetujui") ?? ""}}" class="form-control form-control-solid fw-normal">
+                                    @error('biaya-disetujui')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal">Waktu / EOT Disetujui</label>
+                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal"><span class="required">Waktu / EOT Disetujui</span></label>
                                         <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="waktu-eot-disetujui" class="form-control form-control-solid">
+                                        <input type="date" name="waktu-eot-disetujui" value="{{date_format(date_create(old("waktu-eot-disetujui")), "Y-m-d") ?? ""}}" class="form-control form-control-solid">
+                                        @error('waktu-eot-disetujui')
+                                            <span class="text-danger">{{$message}}</span>
+                                        @enderror
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal">Keterangan</label>
-                                    <textarea rows="1" name="keterangan-disetujui" class="form-control form-control-solid fw-normal"></textarea>
+                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal"><span class="required">Keterangan</span></label>
+                                    <textarea rows="1" name="keterangan-disetujui" class="form-control form-control-solid fw-normal">{{old("keterangan-disetujui") ?? ""}}</textarea>
+                                    @error('keterangan-disetujui')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                                 <div class="col-6">
                                     <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
@@ -2044,5 +2126,20 @@
         }
     </script>
     {{-- End Confirm Action Claim --}}
+
+    {{-- begin Show tabs sesuai dengan stage --}}
+    <script>
+        const tabsElt = document.querySelectorAll(".nav-link[data-bs-toggle='tab']");
+        if (tabsElt) {
+            const stage = "{{$claimContract->stages ?? 0}}";
+            tabsElt.forEach((elt, i) => {
+                if(i == stage) {
+                    const tabPaneBoots = new bootstrap.Tab(elt);
+                    tabPaneBoots.show();
+                }
+            });
+        }
+    </script>
+    {{-- end Show tabs sesuai dengan stage --}}
 
 @endsection

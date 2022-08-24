@@ -2,7 +2,11 @@
 @php
     // Session::forget("pasals")
 @endphp
-@section('title', 'Draft Contract')
+@isset($is_tender_menang)
+    @section('title', 'Contract')
+@else
+    @section('title', 'Draft Contract')
+@endisset
 @section('content')
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
@@ -31,7 +35,11 @@
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Draft Contract
+                                    @isset($is_tender_menang)
+                                        <h1 class="d-flex align-items-center fs-3 my-1">Contract
+                                    @else
+                                        <h1 class="d-flex align-items-center fs-3 my-1">Draft Contract
+                                    @endisset
                                     </h1>
                                     <!--end::Title-->
                                 </div>
@@ -125,7 +133,11 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Draft Version</span>
+                                                                    @isset($is_tender_menang)
+                                                                        <span class="required">Version</span>
+                                                                    @else
+                                                                        <span class="required">Draft Version</span>
+                                                                    @endisset
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -133,7 +145,11 @@
                                                                     id="draft-contract-version"
                                                                     class="form-select form-select-solid" data-control="select2"
                                                                     data-hide-search="true" data-placeholder="">
-                                                                    <option selected>Choose draft version...</option>
+                                                                    @isset($is_tender_menang)
+                                                                        <option selected>Pilih Versi Kontrak...</option>
+                                                                    @else
+                                                                        <option selected>Pilih Versi Draft Kontrak...</option>
+                                                                    @endisset
                                                                     <option
                                                                         {{ old('draft-contract-version') == '1' || $draftContract->draft_contract_version == '1' ? 'selected' : '' }}
                                                                         value="1">1</option>
@@ -521,7 +537,11 @@
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span class="required">Draft Version</span>
+                                                                    @isset($is_tender_menang)
+                                                                        <span class="required">Kontrak Version</span>
+                                                                    @else
+                                                                        <span class="required">Draft Kontrak Version</span>
+                                                                    @endisset
                                                                 </label>
                                                                 <!--end::Label-->
                                                                 <!--begin::Input-->
@@ -530,8 +550,11 @@
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="">
-                                                                    <option value="null" selected>Choose draft version...
-                                                                    </option>
+                                                                    @isset($is_tender_menang)
+                                                                        <option selected>Pilih Versi Kontrak...</option>
+                                                                    @else
+                                                                        <option selected>Pilih Versi Draft Kontrak...</option>
+                                                                    @endisset
                                                                     <option
                                                                         {{ old('draft-contract-version') == '1' ? 'selected' : '' }}
                                                                         value="1">1</option>

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->mediumText('pic');
             $table->longText('approval_claim')->nullable();
             $table->tinyInteger('stages');
-            $table->bigInteger('nilai_claim')->nullable();
+            $table->text('nilai_claim')->nullable();
             $table->dateTime('tanggal_claim');
             $table->string('jenis_claim');
             // $table->mediumText('approval_by')->nullable();
