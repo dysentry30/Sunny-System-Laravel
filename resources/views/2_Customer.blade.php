@@ -154,17 +154,12 @@
                                     <!--end:: Filter-->
                                     
                                     <!--begin:: RESET-->
-                                    <button type="submit" class="btn btn-sm btn-light btn-active-primary ms-2" 
-                                    onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                    <button type="button" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        onclick="resetFilter()" id="kt_toolbar_primary_button">Reset</button>
+                                        
                                     <script>
                                         function resetFilter() {
-                                            $("#column").select2({
-                                                minimumResultsForSearch: -1
-                                            }).val("").trigger("change");
-                                            
-                                            $("#filter").text({
-                                                minimumResultsForSearch: -1
-                                            }).val("").trigger("change");
+                                            window.location.href = "/customer   ";
                                         }
                                     </script>
                                     <!--end:: RESET-->
@@ -184,10 +179,10 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         {{-- <th class="min-w-auto">No.</th> --}}
-                                        <th class="min-w-auto">@sortablelink('kode_pelanggan','Kode Owner')</th>
+                                        <th class="min-w-auto">@sortablelink('kode_pelanggan','Kode Pelanggan')</th>
                                         <th class="min-w-auto">@sortablelink('name','Pelanggan')</th>
                                         <th class="min-w-auto">Email</th>
-                                        <th class="min-w-auto">Kontak Nomor</th>
+                                        {{-- <th class="min-w-auto">Kontak Nomor</th> --}}
                                         <th class="max-w-auto">@sortablelink('check_customer','Customer')</th>
                                         <th class="min-w-auto">@sortablelink('check_partner','Partner')</th>
                                         <th class="min-w-auto">@sortablelink('check_competitor','Competitor')</th>
@@ -234,9 +229,9 @@
                                                 </td>
                                                 <!--end::Email-->
                                                 <!--begin::Nomor-->
-                                                <td>
+                                                {{-- <td>
                                                 {{ $customers->phone_number }}
-                                                </td>
+                                                </td> --}}
                                                 <!--end::Nomor-->
                                                 <!--begin::check_customer-->
                                                 <td>
@@ -315,9 +310,7 @@
 <!--begin::Modal New Proyek-->
 <form action="/customer/save" method="post" enctype="multipart/form-data">
     @csrf
-
     
-
     <!--begin::Modal - Create Proyek-->
     <div class="modal fade" id="kt_modal_create_pelanggan" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
@@ -340,10 +333,13 @@
                     <!--end::Close-->
                 </div>
                 <!--end::Modal header-->
-
+                
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
-
+                    
+                    <!--begin::Get Modal JS-->
+                    <input type="hidden" class="modal-name" name="modal-name">
+                    <!--end::Get Modal JS-->
 
                     <!--begin::Row Kanan+Kiri-->
                     <div class="row fv-row">
@@ -360,7 +356,7 @@
                                 <input type="text" id="name-customer" name="name-customer" class="form-control form-control-solid" 
                                 value="{{ old('name-customer') }}" placeholder="Name" />
                                 @error('name-customer')
-                                <h6 class="text-danger">{{ $message }}</h6>
+                                <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                 @enderror
                                 <!--end::Input-->
                             </div>
@@ -378,11 +374,8 @@
                                 <!--begin::Input-->
                                 <input type="email" class="form-control form-control-solid" 
                                 id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
-                                <!--begin::Get Modal JS-->
-                                <input type="hidden" class="modal-name" name="modal-name">
-                                <!--end::Get Modal JS-->
                                 @error('email')
-                                <h6 class="text-danger">{{ $message }}</h6>
+                                <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                 @enderror
                                 <!--end::Input-->
                             </div>
@@ -407,7 +400,7 @@
                                 <input type="text" class="form-control form-control-solid" 
                                 id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
                                 @error('phone-number')
-                                <h6 class="text-danger">{{ $message }}</h6>
+                                <h6 class="text-danger fw-normal">{{ $message }}</h6>
                                 @enderror
                                 <!--end::Input-->
                             </div>

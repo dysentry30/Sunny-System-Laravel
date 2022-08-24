@@ -2,14 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use Faker\Core\Uuid;
 use App\Models\Proyek;
 use App\Models\Customer;
 use App\Models\UnitKerja;
+use App\Models\CustomerPic;
 use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
+use App\Models\StrukturCustomer;
+use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
-use App\Models\StrukturCustomer;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -69,11 +73,6 @@ class CustomerController extends Controller
                             <a href="#">'.($customers->email).'</a>
                             </td>
                             <!--end::Email=-->
-                            <!--begin::Nomor=-->
-                            <td>
-                            '.$customers->phone_number.'
-                            </td>
-                            <!--end::Nomor-->
                             <!--begin::check_customer-->
                             <td>
                             '.($customers->check_customer == 1 ? "Yes" : "No").'
@@ -131,7 +130,8 @@ class CustomerController extends Controller
     }
     
     public function saveNew (Request $request, Customer $newCustomer) {
-        $data = $request->all(); 
+        $data = $request->all();
+        // dd($data); 
         $messages = [
             "required" => "This field is required",
         ];
@@ -141,14 +141,16 @@ class CustomerController extends Controller
             "phone-number" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
-        $validation->validate();
         if ($validation->fails()) {
-            Alert::error('Error', "Pelanggan Gagal Dibuat, Periksa Kembali !");
+            Alert::toast("Pelanggan Gagal Dibuat, Periksa Kembali !", "error")->autoClose(3000);
+            // dd($request);
             $request->old("name-customer");
             $request->old("email");
             $request->old("phone-number");
-            return redirect()->back()->with("modal", $data["modal-name"]);
+            redirect()->back()->with("modal", $data["modal-name"]);
         }
+        
+        $validation->validate();
         
         $newCustomer->name = $data["name-customer"];
         $newCustomer->check_customer = $request->has("check-customer"); //boolean check
@@ -194,6 +196,7 @@ class CustomerController extends Controller
         $id_kabupaten = $customer->provinsi; 
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
+        $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
@@ -250,6 +253,7 @@ class CustomerController extends Controller
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => $proyeks,
+            "pics" => $pic,
             "strukturs" => $struktur,
             "data_provinsi" => $data_provinsi,
             "data_kabupaten" => $data_kabupaten,
@@ -313,10 +317,10 @@ class CustomerController extends Controller
         $editCustomer->kota_kabupaten = $data["kabupaten"];
         // $editCustomer->journey_company = $data["journey-company"];
         // $editCustomer->segmentation_company = $data["segmentation-company"];
-        $editCustomer->name_pic = $data["name-pic"];
-        $editCustomer->kode_pic = $data["kode-pic"];
-        $editCustomer->email_pic = $data["email-pic"];
-        $editCustomer->phone_number_pic = $data["phone-number-pic"];
+        // $editCustomer->name_pic = $data["name-pic"];
+        // $editCustomer->kode_pic = $data["kode-pic"];
+        // $editCustomer->email_pic = $data["email-pic"];
+        // $editCustomer->phone_number_pic = $data["phone-number-pic"];
         
         // form table performance
         $editCustomer->nilaiok = $data["nilaiok-performance"];
@@ -327,7 +331,7 @@ class CustomerController extends Controller
         // form attachment
         $editCustomer->note_attachment = $data["note-attachment"];
         $customerAttachments->id_customer=$data["id-customer"];
-        $customerAttachments->name_customer=$data["name-customer"];
+        // $customerAttachments->name_customer=$data["name-customer"];
         
         
         
@@ -338,18 +342,79 @@ class CustomerController extends Controller
             $editCustomer->save();
         }else{
             $editCustomer->save();
+            // dd($data);
+            $faker = new Uuid();
+            $fileAttachment = $data['doc-attachment'];
+            $id_document = $faker->uuid3();
             $file_name = $request->file("doc-attachment")->getClientOriginalName();
-            $customerAttachments->name_attachment = $file_name;
-            $request->file("doc-attachment")->storeAs("public/CustomerAttachments", $file_name);
+            $customerAttachments->name_attachment = date("His_") . $file_name;
+            $customerAttachments->id_document = $id_document;
+            $customerAttachments->created_by = Auth::user()->name;
+            moveFileTemp($fileAttachment, $id_document);
+            // $request->file("doc-attachment")->storeAs("public/CustomerAttachments", $file_name);
             $customerAttachments->save();
         }
 
         return redirect()->back();
     }
 
+    public function deleteAttachment($id)
+    {
+        $delete = CustomerAttachments::find($id);
+        // dd($delete);
+        $delete->delete();
+        Alert::success("Success", "Attachment Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function pic (Request $request, CustomerPic $newPIC)
+    {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-pic" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::toast("PIC Gagal Ditambahkan, Periksa Kembali !" , "error");
+            return redirect()->back();
+        }
+
+        $validation->validate();
+        
+        $newPIC->id_customer = $data["id-customer"];
+        $newPIC->nama_pic = $data["name-pic"];
+        $newPIC->jabatan_pic = $data["kode-pic"];
+        $newPIC->email_pic = $data["email-pic"];
+        $newPIC->phone_pic = $data["phone-number-pic"];
+
+        Alert::toast($data["kode-pic"].$data["name-pic"].", Berhasil Ditambahkan" , "success");
+
+        $newPIC->save();
+        return redirect()->back();
+        
+    }
+
     public function struktur (Request $request, StrukturCustomer $newStruktur)
     {
         $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-struktur" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::toast("Struktur Gagal Ditambahkan, Periksa Kembali !" , "error");
+            return redirect()->back();
+        }
+
+        $validation->validate();
         
         // $idCustomer=Customer::find($data["id-customer"]);
         // dd($idCustomer);
@@ -359,6 +424,8 @@ class CustomerController extends Controller
         $newStruktur->jabatan_struktur = $data["jabatan-struktur"];
         $newStruktur->email_struktur = $data["email-struktur"];
         $newStruktur->phone_struktur = $data["phone-struktur"];
+
+        Alert::toast($data["jabatan-struktur"].$data["name-struktur"].", Berhasil Ditambahkan" , "success");
 
         $newStruktur->save();
         return redirect()->back();

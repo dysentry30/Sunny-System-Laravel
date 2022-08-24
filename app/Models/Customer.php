@@ -38,4 +38,9 @@ class Customer extends Model
         return $this->hasMany(StrukturCustomer::class, "id_customer");
     }
 
+    public function pic()
+    {
+        return $this->hasMany(CustomerPic::class, "id_customer");
+    }
+
 }

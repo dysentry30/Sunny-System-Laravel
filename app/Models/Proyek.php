@@ -85,6 +85,11 @@ class Proyek extends Model
         return $this->hasMany(TeamProyek::class, "kode_proyek", "kode_proyek");
     }
 
+    public function AdendumProyek()
+    {
+        return $this->hasMany(ProyekAdendum::class, "kode_proyek");
+    }
+
     public function DokumenPrakualifikasi()
     {
         return $this->hasMany(DokumenPrakualifikasi::class, "kode_proyek");
@@ -93,5 +98,10 @@ class Proyek extends Model
     public function AttachmentMenang()
     {
         return $this->hasMany(AttachmentMenang::class, "kode_proyek");
+    }
+
+    public function RiskTenderProyek()
+    {
+        return $this->hasMany(RiskTenderProyek::class, "kode_proyek");
     }
 }

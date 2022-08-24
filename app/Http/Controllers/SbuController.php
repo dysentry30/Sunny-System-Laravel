@@ -40,31 +40,30 @@ class SbuController extends Controller
             "required" => "This field is required",
         ];
         $rules = [
-            "sbu" => "required",
             "kode-sbu" => "required",
+            "lingkup" => "required",
             "klasifikasi" => "required",
             "sub-klasifikasi" => "required",
         ];
         $validation = Validator::make($dataSbu, $rules, $messages);
         if ($validation->fails()) {
-            $request->old("sbu");
             $request->old("kode-sbu");
+            $request->old("lingkup");
             $request->old("klasifikasi");
             $request->old("sub-klasifikasi");
             Alert::error('Error', "SBU Gagal Dibuat, Periksa Kembali !");
         }
         $validation->validate();  
         
-        $newSbu->sbu = $dataSbu["sbu"];
         $newSbu->kode_sbu = $dataSbu["kode-sbu"];
+        $newSbu->lingkup_kerja = $dataSbu["lingkup"];
         $newSbu->klasifikasi = $dataSbu["klasifikasi"];
         $newSbu->sub_klasifikasi = $dataSbu["sub-klasifikasi"];
-        $newSbu->lingkup_kerja = $dataSbu["lingkup"];
         $newSbu->referensi1 = $dataSbu["referensi1"];
         $newSbu->referensi2 = $dataSbu["referensi2"];
         $newSbu->referensi3 = $dataSbu["referensi3"];
 
-        Alert::success('Success', $dataSbu["sbu"].", Berhasil Ditambahkan");
+        Alert::success('Success', "SBU, Berhasil Ditambahkan");
 
         if ($newSbu->save()) {
             return redirect()->back();
@@ -89,9 +88,43 @@ class SbuController extends Controller
      * @param  \App\Models\Sbu  $sbu
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Sbu $sbu)
+    public function update(Request $request, $id)
     {
-        //
+        $dataSbu = $request->all();
+        // dd($dataSbu);
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "edit-kode-sbu" => "required",
+            "edit-lingkup" => "required",
+            "edit-klasifikasi" => "required",
+            "edit-sub-klasifikasi" => "required",
+        ];
+        $validation = Validator::make($dataSbu, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("edit-kode-sbu");
+            $request->old("edit-lingkup");
+            $request->old("edit-klasifikasi");
+            $request->old("edit-sub-klasifikasi");
+            Alert::error('Error', "SBU Gagal Dibuat, Periksa Kembali !");
+        }
+        $validation->validate();  
+        
+        $editSbu = Sbu::find($id);
+        $editSbu->kode_sbu = $dataSbu["edit-kode-sbu"];
+        $editSbu->lingkup_kerja = $dataSbu["edit-lingkup"];
+        $editSbu->klasifikasi = $dataSbu["edit-klasifikasi"];
+        $editSbu->sub_klasifikasi = $dataSbu["edit-sub-klasifikasi"];
+        $editSbu->referensi1 = $dataSbu["edit-referensi1"];
+        $editSbu->referensi2 = $dataSbu["edit-referensi2"];
+        $editSbu->referensi3 = $dataSbu["edit-referensi3"];
+
+        Alert::success('Success', "SBU, Berhasil Diubah");
+
+        if ($editSbu->save()) {
+            return redirect()->back();
+        }
     }
 
     /**

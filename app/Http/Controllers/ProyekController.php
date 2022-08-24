@@ -23,6 +23,8 @@ use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
 use App\Models\DokumenPrakualifikasi;
 use App\Models\KriteriaPasarProyek;
+use App\Models\ProyekAdendum;
+use App\Models\RiskTenderProyek;
 use Faker\Core\Uuid;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
@@ -98,30 +100,33 @@ class ProyekController extends Controller
             "jenis-proyek" => "required",
             "tipe-proyek" => "required",
             "nilai-rkap" => "required",
-            "sumber-dana" => "required",
+            // "sumber-dana" => "required",
             "tahun-perolehan" => "required",
             "bulan-pelaksanaan" => "required",
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Proyek Gagal Dibuat, Periksa Kembali !");
+            Alert::toast("Proyek Gagal Dibuat, Periksa Kembali !", "error")->autoClose(3000);
             $request->old("nama-proyek");
             $request->old("unit-kerja");
             $request->old("jenis-proyek");
             $request->old("tipe-proyek");
             $request->old("nilai-rkap");
-            $request->old("sumber-dana");
+            // $request->old("sumber-dana");
             $request->old("tahun-perolehan");
             $request->old("bulan-pelaksanaan");
-            Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
+            redirect()->back()->with("modal", $dataProyek["modal-name"]);
+            // Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
         }
+
         $validation->validate();
+
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
         $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
-        $newProyek->sumber_dana = $dataProyek["sumber-dana"];
+        // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
 
@@ -131,9 +136,14 @@ class ProyekController extends Controller
         $newProyek->stage = "1";
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
+
+        $newProyek->nilai_valas_review = $dataProyek["nilai-rkap"];
+        $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->nilaiok_review = $dataProyek["nilai-rkap"];
         $newProyek->kurs_review = 1;
-        $newProyek->kurs_awal = 1;
         $newProyek->mata_uang_review = "IDR";
+
+        $newProyek->kurs_awal = 1;
         $newProyek->mata_uang_awal = "IDR";
         $newProyek->nilaiok_awal = $dataProyek["nilai-rkap"];
         $newProyek->porsi_jo = 100;
@@ -229,7 +239,7 @@ class ProyekController extends Controller
         $rules = [
             "nama-proyek" => "required",
             "nilai-rkap" => "required",
-            "sumber-dana" => "required",
+            // "sumber-dana" => "required",
             "bulan-pelaksanaan" => "required",
             // "porsi-jo" => "numeric"
         ];
@@ -250,11 +260,11 @@ class ProyekController extends Controller
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         // $newProyek->kode_proyek = $dataProyek["kode-proyek"];
         // $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-        $newProyek->sumber_dana = $dataProyek["sumber-dana"];
+        $newProyek->sumber_dana = $dataProyek["sumber-dana"];   
         // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
         // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
 
-        $newProyek->pic = $dataProyek["pic"];
+        // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         if (Auth::user()->check_administrator) {
@@ -269,6 +279,8 @@ class ProyekController extends Controller
         $newProyek->kurs_awal = $dataProyek["kurs-awal"];
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilaiok_awal = $dataProyek["nilaiok-awal"];
+        $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
+        $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
 
         // form PASAR POTENSIAL
@@ -278,13 +290,14 @@ class ProyekController extends Controller
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
+        $newProyek->proyek_strategis = $request->has("proyek-strategis");
         // $newProyek->dop = $dataProyek["dop"];
         // $newProyek->company = $dataProyek["company"];
         $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
 
         // form PASAR PRAKUALIFIKASI
         $newProyek->jadwal_pq = $dataProyek["jadwal-pq"];
-        $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
+        // $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
         $newProyek->hps_pagu = $dataProyek["hps-pagu"];
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
@@ -342,8 +355,11 @@ class ProyekController extends Controller
         // $newProyek->nilai_wika_terkontrak = $dataProyek["nilai-wika-terkontrak"];
         $newProyek->tanggal_akhir_terkontrak = $dataProyek["tanggal-akhir-kontrak"];
         $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
-        $newProyek->tanggal_selesai_terkontrak = $dataProyek["tanggal-selesai-kontrak"];
+        $newProyek->tanggal_selesai_pho = $dataProyek["tanggal-selesai-kontrak-pho"];
+        $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
         $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
+        $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
 
         $idCustomer = $dataProyek["customer"];
 
@@ -378,7 +394,7 @@ class ProyekController extends Controller
             // return redirect("/proyek/view/".$kode_proyek);
             // $newProyek->save();
         } else {
-            Alert::success('Success', "Edit Berhasil")->autoClose(3000);
+            Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
         }
         //end::Generate Kode Proyek
 
@@ -441,6 +457,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
+                if (isset($dataProyek["risk-tender"])) {
+                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
+                }
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
                 }
@@ -451,6 +470,9 @@ class ProyekController extends Controller
             if ($newProyek->save()) {
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
+                }
+                if (isset($dataProyek["risk-tender"])) {
+                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
                 }
                 if (isset($dataProyek["attachment-menang"])) {
                     self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
@@ -484,6 +506,31 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    private function riskTender(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $attachment = new RiskTenderProyek();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_attachment = date("His_") . $file_name;
+        moveFileTemp($uploadedFile, $id_document);
+        $attachment->nama_risk_tender = $nama_attachment;
+        $attachment->id_document = $id_document;
+        $attachment->kode_proyek = $kode_proyek;
+        $attachment->created_by = Auth::user()->name;
+        // dd($attachment);
+        $attachment->save();
+    }
+
+    public function deleteRiskTender($id)
+    {
+        $delete = RiskTenderProyek::find($id);
+        // dd($delete);
+        $delete->delete();
+        Alert::success("Success", "Risk Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
     private function uploadDokumenPrakualifikasi(UploadedFile $uploadedFile, $kode_proyek)
     {
         $faker = new Uuid();
@@ -496,6 +543,7 @@ class ProyekController extends Controller
         $dokumen_prakualifikasi->nama_dokumen = $nama_document;
         $dokumen_prakualifikasi->id_document = $id_document;
         $dokumen_prakualifikasi->kode_proyek = $kode_proyek;
+        // dd($dokumen_prakualifikasi);
         $dokumen_prakualifikasi->save();
     }
 
@@ -542,10 +590,23 @@ class ProyekController extends Controller
         return redirect("/proyek")->with("success", "Proyek Berhasil Dihapus");
     }
 
+    public function cancelProyek($kode_proyek)
+    {
+        $cancelProyek = Proyek::find($kode_proyek);
+        $cancelProyek->stage = 0 ;
+        $cancelProyek->save();
+
+        Alert::warning('Cancel', $cancelProyek->nama_proyek . ", Telah ter-Cancel");
+
+        return redirect()->back();
+    }
+
     public function stage(Request $request)
     {
         $kodeProyek = $request->kode_proyek;
         $proyekStage = Proyek::find($kodeProyek);
+        $proyekAttach = $proyekStage->AttachmentMenang;
+        // dd($proyekStage);
         if (!$request->is_ajax) {
             $data = $request->all();
             // Check kalo variable di bawah ini ada
@@ -555,9 +616,20 @@ class ProyekController extends Controller
             } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
-                $request->stage = 8;
+                // dd($proyekAttach->count() > 0);
+                if ($proyekAttach->count() == 0) {
+                    Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
+                    return redirect()->back();
+                } else {
+                    $request->stage = 8;
+                }
             } elseif (!empty($data["stage-terendah"]) && $data["stage-terendah"] == "Terendah") {
-                $request->stage = 9;
+                if ($proyekAttach->count() == 0) {
+                    Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
+                    return redirect()->back();
+                } else {
+                    $request->stage = 9;
+                }
             }
         }
         $proyekStage->stage = $request->stage;
@@ -643,9 +715,11 @@ class ProyekController extends Controller
         Alert::success("Success", "Kriteria Berhasil Dihapus");
         return redirect()->back();
     }
+
     public function tambahJO(Request $request, PorsiJO $newPorsiJO)
     {
         $dataPorsiJO = $request->all();
+        // dd($dataPorsiJO);
         $messages = [
             "required" => "*This field is required",
         ];
@@ -701,7 +775,7 @@ class ProyekController extends Controller
         ];
         $validation = Validator::make($assignTeam, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "Assign Team Gagal, Periksa Kembali !");
+            Alert::error('Error', "Assign Personil Gagal, Periksa Kembali !");
         }
         $validation->validate();
         $newTeam->id_user = $assignTeam["nama-team"];
@@ -747,6 +821,46 @@ class ProyekController extends Controller
     }
 
     public function deleteTender($id)
+    {
+        $deleteTender = PesertaTender::find($id);
+        $deleteTender->delete();
+        Alert::success("Success", "Peserta Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
+    public function tambahAdendum(Request $request, ProyekAdendum $newAdendum)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*This field is required",
+        ];
+        $rules = [
+            "nomor-adendum" => "required",
+            "nilai-adendum" => "required",
+            "pelanggan-adendum" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-adendum");
+            $request->old("nilai-adendum");
+            $request->old("pelanggan-adendum");
+            Alert::error('Error', "History Adendum Gagal Ditambahkan, Periksa Kembali !");
+        }
+        $validation->validate();
+
+        $newAdendum->kode_proyek = $data["adendum-kode-proyek"];
+        $newAdendum->nomor_adendum = $data["nomor-adendum"];
+        $newAdendum->nilai_adendum = $data["nilai-adendum"];
+        $newAdendum->pelanggan_adendum = $data["pelanggan-adendum"];
+        $newAdendum->tanggal_adendum = $data["tanggal-adendum"];
+        $newAdendum->tanggal_selesai_proyek = $data["tanggal-selesai-adendum-proyek"];
+
+        $newAdendum->save();
+        Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function deleteAdendum($id)
     {
         $deleteTender = PesertaTender::find($id);
         $deleteTender->delete();

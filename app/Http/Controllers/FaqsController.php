@@ -48,7 +48,8 @@ class FaqsController extends Controller
         }else{
             $path = "faqs/";
             $file_name = $file->getClientOriginalName();
-            $file_id =  date('Ymd_His_').$file_name;
+            // $file_id =  date('Ymd_His_').$file_name;
+            $file_id =  date('His_').$file_name;
             // dd($file_id);
             $file->move(public_path($path), $file_id);
 

@@ -31,6 +31,8 @@ return new class extends Migration
             $table->integer('bulan_pelaksanaan')->nullable();
             // $table->integer('tahun_pelaksanaan')->nullable();
             $table->string("nilai_rkap")->nullable();
+            $table->string("status_pasdin")->nullable();
+            $table->string("info_asal_proyek")->nullable();
             $table->string("nilai_valas_review")->nullable();
             $table->string("mata_uang_review")->nullable();
             $table->string("kurs_review")->nullable();
@@ -52,11 +54,12 @@ return new class extends Migration
             $table->string("status_pasar")->nullable();
             $table->string("dop")->nullable();
             $table->string("company")->nullable();
+            $table->string("proyek_strategis")->nullable();
             $table->text("laporan_kualitatif_paspot")->nullable();
             
             //#table PRA-KUALIFIKASI
             $table->date("jadwal_pq")->nullable();
-            $table->date("jadwal_proyek")->nullable();
+            // $table->date("jadwal_proyek")->nullable();
             $table->string("hps_pagu")->nullable();
             $table->string("porsi_jo")->nullable(); 
             $table->string("ketua_tender")->nullable();
@@ -98,10 +101,13 @@ return new class extends Migration
             $table->string("nilai_kontrak_keseluruhan")->nullable();
             $table->date("tanggal_mulai_terkontrak")->nullable();
             // $table->string("nilai_wika_terkontrak")->nullable();
-            $table->date("tanggal_akhir_terkontrak")->nullable();
             $table->string("klasifikasi_terkontrak")->nullable();
-            $table->date("tanggal_selesai_terkontrak")->nullable();
+            $table->date("tanggal_akhir_terkontrak")->nullable();
+            $table->date("tanggal_selesai_pho")->nullable();
+            $table->date("tanggal_selesai_fho")->nullable();
             $table->string("jenis_terkontrak")->nullable();
+            $table->string("sistem_bayar")->nullable();
+            $table->text("laporan_terkontrak")->nullable();
             
             //# Approval Table
             
