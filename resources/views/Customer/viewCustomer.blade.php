@@ -576,6 +576,7 @@
                                                                 <!--begin::Table row-->
                                                                 <tr
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="text-center">No.</th>
                                                                     <th class="min-w-auto">Nama</th>
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
@@ -586,12 +587,23 @@
                                                             </thead>
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($pics as $pic)
                                                                     <tr>
                                                                         <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Name-->
                                                                         <td>
-                                                                            {{ $pic->nama_pic ?? "-" }}
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_pic_{{ $pic->id }}">{{ $pic->nama_pic }}</a>
                                                                         </td>
                                                                         <!--end::Name-->
                                                                         <!--begin::Email-->
@@ -609,6 +621,18 @@
                                                                             {{ $pic->phone_pic ?? "-" }}
                                                                         </td>
                                                                         <!--end::Phone-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_pic_delete_{{ $pic->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -623,13 +647,13 @@
                                                         role="tabpanel">
                                                         <div class="tab-pane fade show active"
                                                             id="kt_user_view_performance" role="tabpanel">
-                                                            <!--begin::Row-->
                                                             <!--begin::Data Performance-->
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Data Performance
                                                             </h3>
                                                             <!--end::Data Performance-->
+                                                            <!--begin::Row-->
                                                             <div class="row fv-row">
                                                                 <!--begin::Col-->
                                                                 <div class="col-6">
@@ -716,6 +740,77 @@
                                                                 <!--End begin::Col-->
                                                             </div>
                                                             <!--End begin::Row-->
+
+                                                            <br>
+
+                                                            <!--begin::Data CSI-->
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                CSI
+                                                            </h3>
+                                                            <!--end::Data CSI-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai RA</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            value=""
+                                                                            placeholder="Nilai RA" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Presentase</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            placeholder="Presentase" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai RI</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            placeholder="Nilai RI" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
                                                         </div>
                                                     </div>
 <!--end:::Tab pane Performance-->
@@ -738,28 +833,41 @@
                                                                 data-bs-target="#kt_modal_struktur">+</a>
                                                         </h3>
                                                         <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                        <table class="table align-middle table-row-dashed fs-6"
                                                             id="kt_customers_table">
                                                             <!--begin::Table head-->
                                                             <thead>
                                                                 <!--begin::Table row-->
                                                                 <tr
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="text-center">No.</th>
                                                                     <th class="min-w-auto">Nama</th>
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
+                                                                    <th class="min-w-auto"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
                                                             <tbody class="fw-bold text-gray-600">
                                                                 @foreach ($strukturs as $struktur)
                                                                     <tr>
                                                                         <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Name-->
                                                                         <td>
-                                                                            {{ $struktur->nama_struktur ?? "-" }}
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_struktur_{{ $struktur->id }}">{{ $struktur->nama_struktur }}</a>
                                                                         </td>
                                                                         <!--end::Name-->
                                                                         <!--begin::Email-->
@@ -777,6 +885,18 @@
                                                                             {{ $struktur->phone_struktur ?? "-" }}
                                                                         </td>
                                                                         <!--end::Phone-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_struktur_delete_{{ $struktur->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
                                                                     </tr>
                                                                 @endforeach
                                                             </tbody>
@@ -1052,8 +1172,12 @@
                                                                                 </td>
                                                                                 <!--end::Divisi-->
                                                                                 <!--begin::Stage-->
-                                                                                <td class="text-center">
+                                                                                <td class="">
                                                                                     @switch($proyekberforecast->stage)
+                                                                                        @case('0')
+                                                                                            Proyek Canceled
+                                                                                        @break
+
                                                                                         @case('1')
                                                                                             Pasar Dini
                                                                                         @break
@@ -1630,7 +1754,7 @@
                     <!--begin::Modal header-->
                     <div class="modal-header">
                         <!--begin::Modal title-->
-                        <h2>Input Contact / PIC : </h2>
+                        <h2>Tambah Contact / PIC : </h2>
                         <!--end::Modal title-->
                         <!--begin::Close-->
                         <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -1655,7 +1779,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Nama</span>
+                                        <span class="required">Nama</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -1750,6 +1874,190 @@
     </form>
     <!--end::modal PIC-->
 
+    <!--begin::modal Edit PIC-->
+    @foreach ($pics as $pic)
+    <form action="/customer/pic/{{ $pic->id }}/edit" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer">
+
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_edit_pic_{{ $pic->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Edit Contact / PIC : </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="name-pic" value="{{ $pic->nama_pic }}"
+                                        placeholder="Nama" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Jabatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="kode-pic" value="{{ $pic->jabatan_pic }}"
+                                        placeholder="Jabatan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Email</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="email-pic"
+                                        value="{{ $pic->email_pic }}"
+                                        placeholder="Email" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kontak Nomor</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control form-control-solid"
+                                        name="phone-number-pic"
+                                        value="{{ $pic->phone_pic }}"
+                                        placeholder="Kontak Nomor" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                            style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    @endforeach
+    <!--end::modal Edit PIC-->
+
+    <!--begin::DELETE PIC-->
+    @foreach ($pics as $pic)
+    <form action="/customer/pic/{{ $pic->id }}/delete" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_pic_delete_{{ $pic->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $pic->nama_pic }}
+                        </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+    <!--end::DELETE PIC-->
     
     <!--begin::modal Struktur Organisasi-->
     <form action="/customer/struktur" method="post" enctype="multipart/form-data">
@@ -1808,7 +2116,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Jabatan</span>
+                                        <span class="required">Jabatan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -1876,6 +2184,182 @@
         <!--end::Modal - Create App-->
     </form>
     <!--end::modal Struktur Organisasi-->
+    
+    <!--begin::modal EDIT Struktur Organisasi-->
+    @foreach ($strukturs as $struktur)
+    <form action="/customer/struktur/{{ $struktur->id }}/edit" method="post" enctype="multipart/form-data">
+        @csrf
+
+        <input type="hidden" name="id-customer" value="{{ $customer->id_customer }}" id="id-customer">
+
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_edit_struktur_{{ $struktur->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Input Struktur Organisasi : </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Nama</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="name-struktur"
+                                        value="{{ $struktur->nama_struktur }}" placeholder="Nama" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Jabatan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="jabatan-struktur"
+                                        value="{{ $struktur->jabatan_struktur }}" placeholder="Jabatan" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Email</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="email-struktur"
+                                        value="{{ $struktur->email_struktur }}" placeholder="Email" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Kontak Nomor</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" name="phone-struktur"
+                                        value="{{ $struktur->phone_struktur }}" placeholder="Kontak Nomor" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
+                            style="background-color:#008CB4">Save</button>
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    @endforeach
+    <!--end::modal EDIT Struktur Organisasi-->
+
+    <!--begin::DELETE STRUKTUR-->
+    @foreach ($strukturs as $struktur)
+    <form action="/customer/struktur/{{ $struktur->id }}/delete" method="post" enctype="multipart/form-data">
+        @method('delete')
+        @csrf
+        <div class="modal fade" id="kt_struktur_delete_{{ $struktur->id }}" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>Hapus : {{ $struktur->nama_struktur }}
+                        </h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                        <br>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                    </div>
+                    <!--end::Input group-->
+
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+        </div>
+    </form>
+    @endforeach
+    <!--end::DELETE STRUKTUR-->
 
 <!--begin::DELETE ATTACHMENT-->
 @foreach ($attachment as $attachments)
@@ -2043,13 +2527,11 @@
 <!--end::Performance Pelanggan-->
 
 <!--begin::Piutang Pelanggan-->
+@php
+$nilaiPiutang = (int) str_replace(",", "", $customer->piutang);
+@endphp
 <script>
-    let namaPiutang = {!! json_encode($namaProyek) !!};
-    let nilaiPiutang = {!! json_encode($nilaiOK) !!};
-    if (namaPiutang.length == 0) {
-    namaPiutang = ["..."];
-    nilaiPiutang = [0];
-    }    
+    let nilaiPiutang = {!! $nilaiPiutang !!};
     Highcharts.chart('piutang-pelanggan', {
         chart: {
             type: 'column',
@@ -2067,7 +2549,7 @@
         },
         subtitle: {
             align: 'center',
-            text: ' '
+            text: ''
         },
         accessibility: {
             announceNewData: {
@@ -2078,7 +2560,7 @@
         //     type: 'category'
         // },
         xAxis: {
-            categories: namaPiutang,
+            categories: [''],
             labels: {
                 skew3d: true,
                 style: {
@@ -2098,43 +2580,45 @@
                 dataLabels: {
                     enabled: true
                 },
-                showInLegend: false
+                showInLegend: true
             },
         },
         tooltip: {
-            // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
         },
 
         credits: {
             enabled: false
         },
         series: [{
-            name: 'Nilai Piutang',
-            data: nilaiPiutang,
-            // stack: 'male'
-        }]
+            name: "Piutang : " + "{{ number_format($nilaiPiutang, 0, ',' , ',' ) }}",
+            colorByPoint: true,
+            data: [{
+                    name: 'Nilai Piutang',
+                    y: nilaiPiutang,
+                }
+            ]
+        }],
     });
 </script>
 <!--end::Piutang Pelanggan-->
 
 <!--begin::Laba Rugi Pelanggan-->
+@php
+$nilaiLaba = (int) str_replace(",", "", $customer->laba);
+$nilaiRugi = (int) str_replace(",", "", $customer->rugi);
+@endphp
 <script>
-    let namaLabaRugi = {!! json_encode($namaProyek) !!};
-    let nilaiLabaRugi = {!! json_encode($nilaiOK) !!};
-    if (namaLabaRugi.length == 0) {
-    namaLabaRugi = ["..."];
-    nilaiLabaRugi = [0];
-    }    
+    let nilaiLaba = {!! $nilaiLaba !!};
+    let nilaiRugi = {!! $nilaiRugi !!};
+    // console.log(typeof(nilaiLaba), nilaiLaba);
     Highcharts.chart('labarugi-pelanggan', {
         chart: {
             type: 'pie',
             options3d: {
                 enabled: true,
-                alpha: 5,
-                beta: 15,
-                viewDistance: 50,
-                depth: 100
+                alpha: 45
             }
         },
         title: {
@@ -2150,11 +2634,11 @@
                 enabled: true
             }
         },
-        // xAxis: {
-        //     type: 'category'
-        // },
         xAxis: {
-            categories: namaLabaRugi,
+            type: 'category'
+        },
+        xAxis: {
+            // categories: namaLabaRugi,
             labels: {
                 skew3d: true,
                 style: {
@@ -2170,49 +2654,55 @@
         },
         colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
         plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true
-                },
-                showInLegend: false
-            },
+            // series: {
+            //     dataLabels: {
+            //         enabled: true
+            //     },
+            //     showInLegend: true
+            // },
+            pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.y}',
+                    },
+                    showInLegend: true
+                }
         },
         tooltip: {
-            // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+            headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+            pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
         },
-
-        // series: [{
-        //     name: "Pelanggan Proyek",
-        //     colorByPoint: true,
-        //     data: [{
-        //             name: "Proyek Forecast",
-        //             y: 3,
-        //         },
-        //         {
-        //             name: "Proyek OnGoing",
-        //             y: 4,
-        //         },
-        //         {
-        //             name: "Proyek Closed",
-        //             y: 2,
-        //         }
-        //     ]
-        // }],
+        series: [{
+            name: "Laba / Rugi",
+            colorByPoint: true,
+            data: [{
+                    name: "Laba : " + "{{ number_format($nilaiLaba, 0, ',' , ',' ) }}",
+                    y: nilaiLaba,
+                },
+                {
+                    name: "Rugi : " + "{{ number_format($nilaiRugi, 0, ',' , ',' ) }}",
+                    y: nilaiRugi,
+                }
+            ]
+        }],
         credits: {
             enabled: false
         },
-        series: [{
-            name: 'Laba / Rugi',
-            data: nilaiLabaRugi,
-            // stack: 'male'
-        }]
+        // series: [{
+        //     name: 'Laba / Rugi',
+        //     data: nilaiLabaRugi,
+        //     // stack: 'male'
+        // }]
     });
 </script>
 <!--end::Laba Rugi Pelanggan-->
 
 <!--begin::Score CSI-->
 <script>
+    let nilaiCsi = 20;
     Highcharts.chart('score-csi', {
 
     chart: {
@@ -2242,23 +2732,6 @@
             },  
             borderWidth: 0,
             outerRadius: '10%'
-        // }, {
-        //     backgroundColor: {
-        //         linearGradient: { x1: 0, y1: 0, x2: 0, y2: 1 },
-        //         stops: [
-        //             [0, '#333'],
-        //             [1, '#FFF']
-        //         ]
-        //     },
-        //     borderWidth: 1,
-        //     outerRadius: '107%'
-        // }, {
-        //     // default background
-        // }, {
-        //     backgroundColor: '#DDD',
-        //     borderWidth: 0,
-        //     outerRadius: '105%',
-        //     innerRadius: '103%'
         }]
     },
 
@@ -2272,15 +2745,17 @@
         minorTickLength: 1,
         // minorTickPosition: 'inside',
         // minorTickColor: '#ffffff00',
-
-        // tickPixelInterval: 30,
-        // tickWidth: 2,
+        
+        // tickPixelInterval: 5,
+        tickPositions: [0, 25, 50, 100],
+        tickWidth: 0,
         tickPosition: 'inside',
-        tickLength: 1,
+        // tickLength: 5,
         // tickColor: '#666',
         labels: {
+            distance: -35,
             step: 1,
-            // rotation: 'auto'
+            rotation: 'auto'
         },
         title: {
             // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
@@ -2289,21 +2764,27 @@
         plotBands: [{
             from: 0,
             to: 25,
+            thickness: 20,
             color: '#ED6D3F' // red
         }, {
             from: 25,
             to: 50,
+            thickness: 20,
             color: '#F7C13E' // yellow
         }, {
             from: 50,
             to: 100,
+            thickness: 20,
             color: '#61CB65' // green
         }]
     },
+    tooltip: {
+        enabled: false
+    },
 
     credits: {
-            enabled: false
-        },
+        enabled: false
+    },
     
     plotOptions: {
         gauge: {
@@ -2313,8 +2794,8 @@
             },
             dial: {
                 radius: '60%',
-                backgroundColor: 'black',
-                borderColor: 'black',
+                backgroundColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
+                borderColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
                 borderWidth: 1,
                 baseWidth: 0,
                 topWidth: 18,
@@ -2327,20 +2808,24 @@
         }
     },
 
+    // series: [{
+    //     name: 'Score CSI',
+    //     data: [75,50],
+    //     dataLabels: {
+    //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+    //     },
+    // }]
     series: [{
-        name: 'Score CSI',
-        data: [75],
-        dataLabels: {
-                format:
-                    // '<div style="text-align:center;">' +
-                    '<span style="font-size:70px; color:#009ef7">{y}</span><br/>'
-                    // '</div>'
-            },
-        // tooltip: {
-        //     valueSuffix: ' km/h'
-        // }
-    }]
-
+            name: "Score CSI",
+            colorByPoint: true,
+            data: [{
+                    y: nilaiCsi,
+                    dataLabels: {
+                        format: `<span style="font-size:70px; ${nilaiCsi > 50 ? 'color:#61CB65' : nilaiCsi > 25 ? 'color:#F7C13E' : 'color:#ED6D3F' }">{y}</span><br/>`,
+                    },
+                }
+            ]
+        }],
     // },
     // // Add some life
     // function (chart) {

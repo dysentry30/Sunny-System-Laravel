@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         Pasals::factory(5)->create();
         Customer::factory(50)->create();
         Faqs::factory(7)->create();
-        ContractManagements::factory(1)->create();
+        // ContractManagements::factory(1)->create();
         User::factory(15)->create();
         // Proyek::factory(8)->create();
         // DraftContracts::factory(5)->create();
@@ -51,6 +51,7 @@ class DatabaseSeeder extends Seeder
             'stage' => "1",
             'bulan_pelaksanaan' => 3,
             'dop' => "DOP 1",
+            'company' => "Wika Gedung",
             'porsi_jo' => "100",
             'nilai_valas_review' => "18,500,000,000",
             'bulan_review' => 3,

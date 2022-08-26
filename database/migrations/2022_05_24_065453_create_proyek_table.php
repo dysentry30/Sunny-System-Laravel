@@ -107,6 +107,9 @@ return new class extends Migration
             $table->date("tanggal_selesai_fho")->nullable();
             $table->string("jenis_terkontrak")->nullable();
             $table->string("sistem_bayar")->nullable();
+            $table->string("nilai_sisa_risiko")->nullable();
+            $table->string("cadangan_risiko")->nullable();
+            $table->string("nilai_disetujui")->nullable();
             $table->text("laporan_terkontrak")->nullable();
             
             //# Approval Table
