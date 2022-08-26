@@ -242,11 +242,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Attachment 
     Route::delete('/customer/attachment/{id}/delete', [CustomerController::class, 'deleteAttachment']);
 
-    // Add Struktur Organisasi    
+    // Add PIC    
     Route::post('/customer/pic', [CustomerController::class, 'pic']);
 
+    // Edit PIC    
+    Route::post('/customer/pic/{id}/edit', [CustomerController::class, 'editPic']);
+
+    // Delete PIC    
+    Route::delete('/customer/pic/{id}/delete', [CustomerController::class, 'deletePic']);
+    
     // Add Struktur Organisasi    
     Route::post('/customer/struktur', [CustomerController::class, 'struktur']);
+    
+    // EDIT Struktur Organisasi    
+    Route::post('/customer/struktur/{id}/edit', [CustomerController::class, 'editStruktur']);
+    
+    // Delete Struktur Organisasi    
+    Route::delete('/customer/struktur/{id}/delete', [CustomerController::class, 'deleteStruktur']);
 
     // Begin :: get Kabupaten
     Route::get('/get-kabupaten/{id}', function ($id) {
@@ -376,6 +388,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     // ADD Peserta Tender 
     Route::post('proyek/peserta-tender/add', [ProyekController::class, 'tambahTender']);
+    
+    // EDIT Peserta Tender 
+    Route::post('/proyek/peserta-tender/{id}/edit', [ProyekController::class, 'editTender']);
     
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
@@ -704,7 +719,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     //Begin :: History Autorisasi
     Route::get('/history-autorisasi', function () {
-        return view("/12_Autorisasi");
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("dops", "dops.dop", "=", "proyeks.dop")->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja")->get();
+        return view("/12_Autorisasi", compact("history_forecasts"));
     });
     //End :: History Autorisasi
 
@@ -736,6 +752,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // });
 
     Route::post("/review-contract/upload", [ContractManagementsController::class, "reviewContractUpload"]);
+
+    Route::post("/review-pembatalan-kontrak/upload", [ContractManagementsController::class, "reviewPembatalanKontrak"]);
 
     Route::post("/issue-project/upload", [ContractManagementsController::class, "issueProjectUpload"]);
 

@@ -337,7 +337,7 @@ class CustomerController extends Controller
         
         if ($_FILES['doc-attachment']['size'] == 0)
         {   
-            Alert::success('Success', "Edit Berhasil")->autoClose(3000);
+            Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
             // file is empty (and not an error)
             $editCustomer->save();
         }else{
@@ -379,7 +379,7 @@ class CustomerController extends Controller
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::toast("PIC Gagal Ditambahkan, Periksa Kembali !" , "error");
+            Alert::error("Error", "PIC Gagal Ditambahkan, Periksa Kembali !");
             return redirect()->back();
         }
 
@@ -391,11 +391,53 @@ class CustomerController extends Controller
         $newPIC->email_pic = $data["email-pic"];
         $newPIC->phone_pic = $data["phone-number-pic"];
 
-        Alert::toast($data["kode-pic"].$data["name-pic"].", Berhasil Ditambahkan" , "success");
+        Alert::success("Success" , $data["kode-pic"].": ".$data["name-pic"].", PIC Berhasil Ditambah");
 
         $newPIC->save();
         return redirect()->back();
+
+    }
+
+    public function editPic (Request $request, $id)
+    {
+        $data = $request->all();
+
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-pic" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error("Error", "PIC Gagal Ditambahkan, Periksa Kembali !");
+            return redirect()->back();
+        }
+
+        $validation->validate();
         
+        $editPIC = CustomerPic::find($id);
+
+        $editPIC->id_customer = $data["id-customer"];
+        $editPIC->nama_pic = $data["name-pic"];
+        $editPIC->jabatan_pic = $data["kode-pic"];
+        $editPIC->email_pic = $data["email-pic"];
+        $editPIC->phone_pic = $data["phone-number-pic"];
+
+        Alert::success("Success" , $data["kode-pic"].": ".$data["name-pic"].", PIC Berhasil Diubah");
+
+        $editPIC->save();
+        return redirect()->back();
+
+    }
+
+    public function deletePic($id)
+    {
+        $delete = CustomerPic::find($id);
+        // dd($delete);
+        $delete->delete();
+        Alert::success("Success", "PIC Berhasil Dihapus");
+        return redirect()->back();
     }
 
     public function struktur (Request $request, StrukturCustomer $newStruktur)
@@ -407,10 +449,11 @@ class CustomerController extends Controller
         ];
         $rules = [
             "name-struktur" => "required",
+            "jabatan-struktur" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
-            Alert::toast("Struktur Gagal Ditambahkan, Periksa Kembali !" , "error");
+            Alert::error("Error", "Struktur Gagal Ditambahkan, Periksa Kembali !");
             return redirect()->back();
         }
 
@@ -425,11 +468,53 @@ class CustomerController extends Controller
         $newStruktur->email_struktur = $data["email-struktur"];
         $newStruktur->phone_struktur = $data["phone-struktur"];
 
-        Alert::toast($data["jabatan-struktur"].$data["name-struktur"].", Berhasil Ditambahkan" , "success");
+        Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
 
         $newStruktur->save();
         return redirect()->back();
         
+    }
+
+    public function editStruktur (Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "This field is required",
+        ];
+        $rules = [
+            "name-struktur" => "required",
+            "jabatan-struktur" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error("Error", "Struktur Gagal Ditambahkan, Periksa Kembali !");
+            return redirect()->back();
+        }
+
+        $validation->validate();
+        
+        $editStruktur = StrukturCustomer::find($id);        
+        $editStruktur->id_customer = $data["id-customer"];
+        $editStruktur->nama_struktur = $data["name-struktur"];
+        $editStruktur->jabatan_struktur = $data["jabatan-struktur"];
+        $editStruktur->email_struktur = $data["email-struktur"];
+        $editStruktur->phone_struktur = $data["phone-struktur"];
+
+        Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
+
+        $editStruktur->save();
+        return redirect()->back();
+        
+    }
+
+    public function deleteStruktur ($id)
+    {
+        $delete = StrukturCustomer::find($id);
+        // dd($delete);
+        $delete->delete();
+        Alert::success("Success", "Struktur Berhasil Dihapus");
+        return redirect()->back();
     }
 
     public function customerHistory (

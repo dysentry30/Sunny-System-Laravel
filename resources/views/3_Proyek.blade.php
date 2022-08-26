@@ -326,9 +326,22 @@
                                             <!--end::Company-->
 
                                             <!--begin::Stage-->
-                                            <td>
+                                            @php
+                                                if ($proyek->stage == 0 || $proyek->stage == 7 ){
+                                                    $stageColor = "text-danger";
+                                                } else if ($proyek->stage == 8 || $proyek->stage == 9){
+                                                    $stageColor = "text-success";
+                                                } else {
+                                                    $stageColor = "";
+                                                }                                                    
+                                            @endphp
+                                            <td class="{{ $stageColor }}">
                                                 <small>
                                                     @switch($proyek->stage)
+                                                        @case('0')
+                                                            Proyek Canceled
+                                                        @break
+
                                                         @case('1')
                                                             Pasar Dini
                                                         @break

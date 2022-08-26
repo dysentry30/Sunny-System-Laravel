@@ -183,35 +183,48 @@
 														<!--begin::Nama Proyek=-->
 														<td class="text-center">
                                                             @switch($teamProyek->Proyek->stage)
-                                                                @case("1")
-                                                                    Pasar Dini
-                                                                    @break
-                                                                @case("2")
-                                                                    Pasar Potensial
-                                                                    @break
-                                                                @case("3")
-                                                                    Prakualifikasi
-                                                                    @break
-                                                                @case("4")
-                                                                    Tender Diikuti
-                                                                    @break
-                                                                @case("5")
-                                                                    Perolehan
-                                                                    @break
-                                                                @case("6")
-                                                                    Menang
-                                                                    @break
-                                                                @case("7")
-                                                                    Terkontrak
-                                                                    @break
-                                                                @case("8")
-                                                                    Approval
-                                                                    @break
-                                                                @case("9")
-                                                                    Selesai
-                                                                    @break
-                                                                @default
-                                                                    Kosong
+																@case('0')
+																	Proyek Canceled
+																@break
+		
+																@case('1')
+																	Pasar Dini
+																@break
+		
+																@case('2')
+																	Pasar Potensial
+																@break
+		
+																@case('3')
+																	Prakualifikasi
+																@break
+		
+																@case('4')
+																	Tender Diikuti
+																@break
+		
+																@case('5')
+																	Perolehan
+																@break
+		
+																@case('6')
+																	Menang
+																@break
+		
+																@case('7')
+																	Kalah
+																@break
+		
+																@case('8')
+																	Terkontrak
+																@break
+		
+																@case('9')
+																	Terendah
+																@break
+		
+																@default
+																	Selesai
                                                             @endswitch
 														</td>
 														<!--end::Nama Proyek=-->

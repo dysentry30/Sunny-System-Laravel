@@ -359,6 +359,9 @@ class ProyekController extends Controller
         $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
         $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
         $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
+        $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
+        $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
         $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
 
         $idCustomer = $dataProyek["customer"];
@@ -737,8 +740,13 @@ class ProyekController extends Controller
         $newPorsiJO->company_jo = $dataPorsiJO["company-jo"];
         $newPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
         // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
-
+        
         $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
+        if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
+            // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
+            Alert::error('Error', "Partner JO Gagal Dihapus, Hubungi Admin !");
+            return redirect()->back();
+        }
         $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
         // dd($dataPorsiJO);
 
@@ -755,6 +763,15 @@ class ProyekController extends Controller
         $proyek = Proyek::find($deleteJO->kode_proyek);
         // dd($deleteJO->porsi_jo, $deleteJO->kode_proyek);
         $maxPorsiJo = $proyek->porsi_jo + $deleteJO->porsi_jo;
+        if ($maxPorsiJo > 100) {
+            // dd($maxPorsiJo);
+            $proyek->porsi_jo = 100;
+            $proyek->save();
+            $deleteJO->delete();
+
+            Alert::warning('Error', "Partner JO Berhasil Dihapus, Hubungi Admin !");
+            return redirect()->back();
+        }
         $proyek->porsi_jo = $maxPorsiJo;
 
         $proyek->save();
@@ -795,7 +812,34 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
-    public function tambahTender(Request $request, PesertaTender $newTender)
+    public function tambahTender(Request $request,  PesertaTender $newTender)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*This field is required",
+        ];
+        $rules = [
+            "peserta-tender" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
+
+        $newTender->peserta_tender = $data["peserta-tender"];
+        $newTender->nilai_tender_peserta = $data["nilai-tender"];
+        $newTender->oe_tender = $data["oe-tender"];
+        $newTender->status = $data["status-tender"];
+        $newTender->kode_proyek = $data["tender-kode-proyek"];
+
+        $newTender->save();
+        Alert::success("Success", "Peserta Tender Berhasil Diubah");
+        return redirect()->back();
+    }
+
+    public function editTender(Request $request, $id)
     {
         $data = $request->all();
         $messages = [
@@ -808,14 +852,17 @@ class ProyekController extends Controller
         if ($validation->fails()) {
             Alert::error('Error', "Peserta Tender Gagal Ditambahkan, Periksa Kembali !");
         }
-        $validation->validate();
-        $newTender->peserta_tender = $data["peserta-tender"];
-        $newTender->nilai_tender_peserta = $data["nilai-tender"];
-        $newTender->oe_tender = $data["oe-tender"];
-        $newTender->status = $data["status-tender"];
-        $newTender->kode_proyek = $data["tender-kode-proyek"];
 
-        $newTender->save();
+        $validation->validate();
+
+        $editTender = PesertaTender::find($id);
+        $editTender->peserta_tender = $data["peserta-tender"];
+        $editTender->nilai_tender_peserta = $data["nilai-tender"];
+        $editTender->oe_tender = $data["oe-tender"];
+        $editTender->status = $data["status-tender"];
+        $editTender->kode_proyek = $data["tender-kode-proyek"];
+
+        $editTender->save();
         Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
         return redirect()->back();
     }
@@ -862,9 +909,9 @@ class ProyekController extends Controller
 
     public function deleteAdendum($id)
     {
-        $deleteTender = PesertaTender::find($id);
-        $deleteTender->delete();
-        Alert::success("Success", "Peserta Tender Berhasil Dihapus");
+        $delete = ProyekAdendum::find($id);
+        $delete->delete();
+        Alert::success("Success", "History Adendum Berhasil Dihapus");
         return redirect()->back();
     }
 

@@ -348,7 +348,7 @@
                                         <!--end::TERENDAH - TERKONTRAK-->
                                     </div>
                                     <hr>
-                                    
+
                                     <div class="row">
                                         <div class="col py-12" id="index-jumlah">
                                             <!--begin::INDEX JUMLAH-->
@@ -361,7 +361,19 @@
                                         </div>
                                     </div>
                                     <hr>
-
+                                    
+                                    <div class="row">
+                                        <div class="col py-12" id="sumber-dana-rkap">
+                                            <!--begin::INDEX JUMLAH-->
+                                            <!--end::INDEX JUMLAH-->
+                                        </div>
+                                        <span class="vr" style="padding: 0.5px"></span>
+                                        <div class="col py-12" id="sumber-dana-realisasi">
+                                            <!--begin::INDEX NILAI-->
+                                            <!--end::INDEX NILAI-->
+                                        </div>
+                                    </div>
+                                    <hr>
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
                                         <h1 class="text-center bold pb-8">
@@ -766,18 +778,17 @@
 
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
             legend: {
-                // layout: 'vertical',
-                // align: 'right',
-                // verticalAlign: 'middle'
                 layout: 'horizontal',
                 align: 'center',
                 verticalAlign: 'bottom'
             },
 
+            
             plotOptions: {
                 series: {
                     dataLabels: {
                         enabled: true
+                        // format: '',
                     }
                 // allowPointSelect: true
                 },
@@ -785,17 +796,22 @@
                 //     connectorAllowed: false
                 // },
             },
+            
+            tooltip: {
+                headerFormat: '<b>{point.key}</b><br>',
+                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}'
+            },
 
             series: [{
-                    name: 'Forecast',
+                    name: 'Forecast ' + nilaiForecast[11],
                     data: nilaiForecast,
                 },
                 {
-                    name: 'Nilai OK',
+                    name: 'Nilai OK ' + nilaiRkap[11],
                     data: nilaiRkap,
                 },
                 {
-                    name: 'Nilai Realisasi',
+                    name: 'Nilai Realisasi ' + nilaiRealisasi[11],
                     data: nilaiRealisasi,
                 }
             ],
@@ -915,8 +931,10 @@
         let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
         let arrayNilaiOk = {!! json_encode($nilaiOkKumulatif) !!};
         let nilaiOkKumulatif = arrayNilaiOk.map(nilaiOKsatuan => nilaiOKsatuan / 1000000);
+        let sumNilaiOk = nilaiOkKumulatif.reduce((a, b) => a + b, 0);
         let arrayNilaiRealisasi = {!! json_encode($nilaiRealisasiKumulatif) !!};
         let nilaiRealisasiKumulatif = arrayNilaiRealisasi.map(nilaiRealsatuan => nilaiRealsatuan / 1000000);
+        let sumNilaiRealisasi = nilaiRealisasiKumulatif.reduce((a, b) => a + b, 0);
         // console.log(nilaiOkKumulatif);
         // console.log(nilaiOkKumulatif.map(nilaiOKsatuan => nilaiOKsatuan / 1000000));
         Highcharts.chart('nilai-realisasi', {
@@ -971,11 +989,11 @@
             },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
             series: [{
-                name: 'Nilai OK Kumulatif',
+                name: 'Nilai OK Kumulatif ' + sumNilaiOk,
                 data: nilaiOkKumulatif,
                 // stack: 'male'
             }, {
-                name: 'Nilai Realisasi Kumulatif',
+                name: 'Nilai Realisasi Kumulatif ' + sumNilaiRealisasi,
                 data: nilaiRealisasiKumulatif,
                 // stack: 'female'
             }]
@@ -1065,6 +1083,210 @@
         });
     </script>
     <!--end::MONITORING PROYEK-->
+    
+    <!--begin::SEBARAN SUMBEER DANA-->
+    <script>
+        Highcharts.chart('sumber-dana-rkap', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Sebaran Sumber Dana RKAP</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Jumlah</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x}',
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                        y: 10000,
+                        x: "BUMN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                    {
+                        name: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "Swasta Nasional: " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "Swasta Nasional : " + Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                    },
+                    {
+                        name: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                    {
+                        name: "APBD:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "APBD : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
+                        y: 100,
+                        x: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
+                    },
+                    {
+                        name: "Loan:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "Loan : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                ]
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <script>
+        Highcharts.chart('sumber-dana-realisasi', {
+            chart: {
+                type: 'pie',
+                options3d: {
+                    enabled: true,
+                    alpha: 25
+                }
+            },
+            title: {
+                align: 'center',
+                text: '<b class="h2">Sebaran Sumber Dana Realisasi</b>'
+            },
+            subtitle: {
+                align: 'center',
+                text: '<b>Berdasarkan Jumlah</b>'
+            },
+            accessibility: {
+                announceNewData: {
+                    enabled: true
+                }
+            },
+            xAxis: {
+                type: 'category'
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+                
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            plotOptions: {
+                pie: {
+                    innerSize: 75,
+                    depth: 25,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        format: '{point.x}',
+                    },
+                    showInLegend: true
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span>'
+            },
+
+            series: [{
+                name: "",
+                colorByPoint: true,
+                data: [
+                    {
+                        name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                        y: 10000,
+                        x: "BUMN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                    {
+                        name: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "Swasta Nasional: " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "Swasta Nasional : " + Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                    },
+                    {
+                        name: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                    {
+                        name: "APBD:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "APBD : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
+                        y: 100,
+                        x: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
+                    },
+                    {
+                        name: "Loan:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                        y: 1000,
+                        x: "Loan : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
+                    },
+                    {
+                        name: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                        y: 10000,
+                        x: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
+                    },
+                ]
+            }],
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::SEBARAN SUMBEER DANA-->
+
 
     <!--begin::TERENDAH vs TERKONTRAK-->
     @php

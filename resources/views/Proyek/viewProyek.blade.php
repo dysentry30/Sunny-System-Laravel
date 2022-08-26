@@ -83,19 +83,25 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="proyek-save"
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2" onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                        Cancel <i class="bi bi-x"></i></button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
+                                    <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                         style="background-color:#008CB4">
                                         Save</button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-2" onclick="document.location.reload()" style="display: none;" id="cancel-button">
-                                        Cancel</button>
+                                    <a class="btn btn-sm btn-light btn-active-danger ms-2"
+                                        data-bs-toggle="modal" data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
+                                    </a>
                                     <!--end::Button-->
 
                                     <!--begin::Action-->
                                     <!--begin::Wrapper-->
-                                    <div class="me-2" style="margin-left:10px;">
+                                    {{-- <div class="me-2" style="margin-left:10px;">
                                         <!--begin::Menu-->
                                         <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
                                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -104,9 +110,6 @@
                                         <div class="menu menu-sub menu-sub-dropdown w-auto" data-kt-menu="true"
                                             id="kt_menu_6155ac804a1c2">
                                             <!--begin::Header-->
-                                            {{-- <div class="px-7 py-5">
-                                                <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
-                                            </div> --}}
                                             <!--end::Header-->
                                             <!--begin::Menu separator-->
                                             <div class="separator border-gray-200"></div>
@@ -128,7 +131,7 @@
                                         </div>
                                         <!--end::Menu 1-->
                                         <!--end::Menu-->
-                                    </div>
+                                    </div> --}}
                                     <!--end::Wrapper-->
                                     <!--end::Action-->
                                     
@@ -141,7 +144,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/proyek" class="btn btn-sm btn-light btn-active-primary"
+                                    <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
                                         id="proyek-close">
                                         Close</a>
                                     <!--end::Button-->
@@ -634,6 +637,17 @@
 <!--begin:::Tabs Navigasi-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                    @if ($proyek->stage == 0)
+                                                        <!--begin:::Tab item Pasar Dini-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link"
+                                                                data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_pasardini"
+                                                                style="font-size:14px;">Proyek Canceled</a>
+                                                        </li>
+                                                        <!--end:::Tab item Pasar Dini-->
+                                                    @endif
+                                                    
                                                     @if ($proyek->stage > 0)
                                                         <!--begin:::Tab item Pasar Dini-->
                                                         <li class="nav-item">
@@ -642,7 +656,7 @@
                                                                 href="#kt_user_view_overview_pasardini"
                                                                 style="font-size:14px;">Pasar Dini</a>
                                                         </li>
-                                                    <!--end:::Tab item Pasar Dini-->
+                                                        <!--end:::Tab item Pasar Dini-->
                                                     @endif
 
                                                     @if ($proyek->stage > 1)
@@ -1954,7 +1968,7 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                         <!--begin::Options-->
                                                         <label class="form-check form-check-custom form-check-solid me-6 m-0 align-middle">
-                                                            <span class="me-4">Proyek Startegis : </span>
+                                                            <span class="me-4">Proyek Strategis : </span>
                                                             <input class="form-check-input" type="checkbox" style="border: 1px solid #b5b5c3" value="" id="proyek-strategis" name="proyek-strategis" {{ $proyek->proyek_strategis ? 'checked' : ''}}/>&nbsp; {{ $proyek->proyek_strategis ? ' Ya' : ''}}
                                                         </label>
                                                         <!--end::Options-->
@@ -2292,7 +2306,7 @@
                                                                 class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="w-50px text-center">No.</th>
                                                                     <th class="w-auto">Nama Document</th>
-                                                                    <th class="w-auto">Dibuat Pada Tanggal</th>
+                                                                    <th class="w-auto">Modified On</th>
                                                                     <th class="w-auto text-center"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -2343,10 +2357,9 @@
                                                         </table>
                                                             
                                                         <!--end::Table-->
-                                                        {{-- proyek/dokumen-prakualifikasi/upload --}}
-                                                        <br>
                                                         <!--End::Title Biru Form: Document Prakualifikasi-->
-
+                                                        
+                                                        <br>
 
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Ketua Team Tender
@@ -2392,8 +2405,8 @@
                                                                 data-bs-target="#kt_modal_add_user">+</a>
                                                         </h3>
 
-
                                                         <br>
+
                                                         <!--End::Title Biru Form: SKT Personil-->
 
                                                         <!--begin::Row-->
@@ -2465,6 +2478,8 @@
                                                             </div>
                                                         </div>
                                                         <!--End begin::Row-->
+
+                                                        <br>
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                         <br>
@@ -2663,8 +2678,9 @@
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
-                                                        <br>
                                                         <!--End::Title Biru Form: List Peserta Tender-->
+                                                        
+                                                        <br>
 
                                                         <!--Begin::Title Biru Form: Risk Peserta Tender-->
                                                         <br>
@@ -2687,7 +2703,7 @@
                                                                     <th class="w-50px text-center">No.</th>
                                                                     <th class="w-auto">Nama Documnet</th>
                                                                     <th class="w-auto">Modified On</th>
-                                                                    <th class="w-auto">Modified By</th>
+                                                                    <th class="w-auto">Upload By</th>
                                                                     <th class="w-100px"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -2993,6 +3009,7 @@
                                                         </table>
                                                         <!--End::Title Biru Form: List Peserta Tender-->
 
+                                                        <br>
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                         <br>
@@ -3128,7 +3145,7 @@
                                                                 class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="w-50px text-center">No.</th>
                                                                     <th class="w-auto">Nama Document</th>
-                                                                    <th class="w-auto">Dibuat Pada Tanggal</th>
+                                                                    <th class="w-auto">Modified On</th>
                                                                     <th class="w-auto text-center"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -3894,6 +3911,97 @@
                                                         </table>
                                                         <!--End::Title Biru Form: History Adendum-->
 
+                                                        <br>
+
+                                                        <!--Begin::Title Biru Form: History Adendum-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">Masalah Potensial
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_history_adendum">+</a>
+                                                        </h3>
+                                                        <br>
+                                                        <!--begin::Table Kriteria Pasar-->
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Pelanggan</th>
+                                                                    <th class="w-auto">PIC</th>
+                                                                    <th class="w-auto">RTL</th>
+                                                                    <th class="w-auto">Penyebab</th>
+                                                                    <th class="w-auto">Masalah</th>
+                                                                    <th class="w-auto">Status</th>
+                                                                    <th class="w-auto">Realisasi</th>
+                                                                    <th class="w-100px"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            {{-- <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($proyek->AdendumProyek as $adendum)
+                                                                    <tr>
+                                                                        <!--begin::Name-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            <a href="#"
+                                                                                class="text-gray-800 text-hover-primary"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_edit_adendum_{{ $adendum->id }}">{{ $adendum->pelanggan_adendum }}</a>
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $adendum->nomor_adendum ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $adendum->nilai_adendum ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $adendum->tanggal_adendum ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $adendum->tanggal_selesai_proyek ?? "-" }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_adendum_delete_{{ $adendum->id }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody> --}}
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                        <!--End::Title Biru Form: History Adendum-->
+
+                                                        <br>
 
                                                         <!--Begin::Title Biru Form: Resume Risiko-->
                                                         <br>
@@ -3930,8 +4038,8 @@
                                                                         <!--begin::Input-->
                                                                         <input type="text"
                                                                             class="form-control form-control-solid reformat"
-                                                                            id="nilai-valas-review" name="nilai-valas-review"
-                                                                            value="{{ $proyek->nilai_valas_review }}"
+                                                                            id="nilai-sisa-risiko" name="nilai-sisa-risiko"
+                                                                            value="{{ $proyek->nilai_sisa_risiko }}"
                                                                             placeholder="Nilai Sisa Risiko (Rupiah)"/>
                                                                         <!--end::Input-->
                                                                     </div>
@@ -3949,8 +4057,8 @@
                                                                         <!--begin::Input-->
                                                                         <input type="text"
                                                                             class="form-control form-control-solid reformat"
-                                                                            id="nilai-valas-review" name="nilai-valas-review"
-                                                                            value="{{ $proyek->nilai_valas_review }}"
+                                                                            id="nilai-disetujui" name="nilai-disetujui"
+                                                                            value="{{ $proyek->nilai_disetujui }}"
                                                                             placeholder="Nilai Yang Disetujui (Rupiah)"/>
                                                                         <!--end::Input-->
                                                                     </div>
@@ -3974,8 +4082,8 @@
                                                                         <!--begin::Input-->
                                                                         <input type="text"
                                                                             class="form-control form-control-solid reformat"
-                                                                            id="nilaiok-review" name="nilaiok-review"
-                                                                            value="{{ $proyek->nilaiok_review }}"
+                                                                            id="cadangan-risiko" name="cadangan-risiko"
+                                                                            value="{{ $proyek->cadangan_risiko }}"
                                                                             placeholder="Cadangan Risiko (Rupiah)"/>
                                                                         <!--end::Input-->
                                                                     </div>
@@ -4532,6 +4640,54 @@
 </form>
 <!--end::modal HISTORY ADENDUM-->
 
+<!--begin::DELETE HISTORY ADENDUM-->
+@foreach ($proyek->AdendumProyek as $adendum)
+<form action="/proyek/adendum/{{ $adendum->id }}/delete" method="post" enctype="multipart/form-data">
+    @method('delete')
+    @csrf
+    <div class="modal fade" id="kt_adendum_delete_{{ $adendum->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Hapus History Adendum : {{ $adendum->pelanggan_adendum }}
+                    </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                    <br>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                </div>
+                <!--end::Input group-->
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::DELETE HISTORY ADENDUM-->
+
 <!--begin::modal ADD PESERTA TENDER-->
 <form action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
 @csrf
@@ -4544,7 +4700,7 @@
             <!--begin::Modal header-->
             <div class="modal-header">
                 <!--begin::Modal title-->
-                <h2>Tambah List Peserta Tender :</h2>
+                <h2>Tambah Peserta Tender :</h2>
                 <!--end::Modal title-->
                 <!--begin::Close-->
                 <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
@@ -4569,7 +4725,7 @@
                         <div class="fv-row mb-7">
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">
-                                <span>Nama Peserta Tender</span>
+                                <span class="required">Nama Peserta Tender</span>
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
@@ -4657,6 +4813,138 @@
 </div>
 </form>
 <!--end::modal ADD PESERTA TENDER-->
+
+<!--begin::modal EDIT PESERTA TENDER-->
+@foreach ($pesertatender as $peserta)
+<form action="/proyek/peserta-tender/{{ $peserta->id }}/edit" method="post" enctype="multipart/form-data">
+@csrf
+<input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
+<div class="modal fade" id="kt_modal_edit_tender_{{ $peserta->id }}" tabindex="-1" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-800px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Edit Peserta Tender :</h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span class="required">Nama Peserta Tender</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select id="peserta-tender" name="peserta-tender" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
+                                <option></option>
+                                @foreach ($customers as $customer)
+                                    @if ( $customer->name == $peserta->peserta_tender)
+                                        <option value="{{ $customer->name }}" selected> {{ $customer->name }}</option>
+                                    @else
+                                        <option value="{{ $customer->name }}"> {{ $customer->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Nilai Penawaran</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid reformat" id="nilai-tender"
+                                name="nilai-tender" value="{{ $peserta->nilai_tender_peserta }}" placeholder="Nilai Penawaran" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+                <!--begin::Row-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span><i class="bi bi-percent text-dark"></i> OE</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid reformat" id="oe-tender"
+                                name="oe-tender" value="{{ $peserta->oe_tender }}" placeholder="% OE" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Status</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="text" class="form-control form-control-solid" id="status-tender"
+                                name="status-tender" value="{{ $peserta->status }}" placeholder="Status" />
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                </div>
+                <!--End begin::Row-->
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+</form>
+@endforeach
+<!--end::modal EDIT PESERTA TENDER-->
 
 <!--begin::DELETE PESERTA TENDER-->
 @foreach ($pesertatender as $peserta)
@@ -5740,6 +6028,32 @@
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></scrip> --}}
 @section('js-script')
+<script>
+    let journal = document.getElementsByClassName("bi-journal-text");
+        for (i = 0; i < journal.length; ++i) {
+        journal[i].setAttribute("data-bs-toggle", "tooltip");
+        journal[i].setAttribute("data-bs-html", "true");
+        journal[i].setAttribute("data-bs-placement", "right");
+        journal[i].setAttribute("data-bs-custom-class", "text-start");
+        journal[i].setAttribute("data-bs-title", "Mandatori / Required untuk lanjut ke Contract Management");
+    }
+    let gembok = document.getElementsByClassName("bi-lock");
+        for (i = 0; i < gembok.length; ++i) {
+        gembok[i].setAttribute("data-bs-toggle", "tooltip");
+        gembok[i].setAttribute("data-bs-html", "true");
+        gembok[i].setAttribute("data-bs-placement", "right");
+        gembok[i].setAttribute("data-bs-custom-class", "text-start");
+        gembok[i].setAttribute("data-bs-title", "Tidak Dapat Diubah dan Mandatori, Readonly!");
+    }
+    let admin = document.getElementsByClassName("bi-key");
+        for (i = 0; i < admin.length; ++i) {
+        admin[i].setAttribute("data-bs-toggle", "tooltip");
+        admin[i].setAttribute("data-bs-html", "true");
+        admin[i].setAttribute("data-bs-placement", "right");
+        admin[i].setAttribute("data-bs-custom-class", "text-start");
+        admin[i].setAttribute("data-bs-title", "Hanya Bisa Diubah Oleh Admin");
+    }
+</script>
 <script>
     $('#kt_modal_porsijo').on('show.bs.modal', function() {
         $("#company-jo").select2({
