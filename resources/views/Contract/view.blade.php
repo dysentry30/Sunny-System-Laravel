@@ -161,12 +161,15 @@
                                                             <!--end::Label-->
                                                             <!--begin::Input-->
 
-                                                            <a href="#" class="btn btn-sm mx-3"
-                                                                style="background: transparent;width:1rem;height:2.3rem;"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_calendar-start"><i
-                                                                    class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                    style="color: #008CB4"></i></a>
+                                                            <!--<a href="#" class="btn btn-sm mx-3"-->
+                                                            <!--    style="background: transparent;width:1rem;height:2.3rem;"-->
+                                                            <!--    data-bs-toggle="modal"-->
+                                                            <!--    data-bs-target="#kt_modal_calendar-start"><i-->
+                                                            <!--        class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"-->
+                                                            <!--        style="color: #008CB4"></i></a>-->
+                                                            <a class="btn btn-sm" href="#" style="background: transparent; width:1rem;height:2.3rem" onclick="showCalendarModal(this)" id="start-date-modal">
+                                                                <i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008CB4"></i>
+                                                            </a>
                                                             <input type="Date"
                                                                 class="form-control form-control-solid ps-12"
                                                                 placeholder="Select a date"
@@ -904,9 +907,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->inputRisks->contains("tender_menang", 0))
+                                    @if ($contract->inputRisks->contains("stage", 0))
                                         @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->tender_menang == 0)
+                                            @if ($inputRisk->stage == 0)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
@@ -1140,7 +1143,7 @@
                                 <!--end::Table body-->
 
                             </table>
-                            <!--End:Table: Review--> --}}
+                            End:Table: Review--> --}}
                         </div>
                     </div>
                     <!--end:::Tab pane Informasi Perusahaan-->
@@ -1649,9 +1652,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->inputRisks->contains("tender_menang", 1))
+                                    @if ($contract->inputRisks->contains("stage", 1))
                                         @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->tender_menang == 1)
+                                            @if ($inputRisk->stage == 1)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
@@ -2091,9 +2094,9 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->inputRisks->contains("tender_menang", 3))
+                                    @if ($contract->inputRisks->contains("stage", 3))
                                         @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->tender_menang == 3)
+                                            @if ($inputRisk->stage == 3)
                                                 <tr>
                                                     <!--begin::Name=-->
                                                     <td>
@@ -2230,74 +2233,77 @@
 
                             <hr>
                             <div class="row">
-
-                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                                Input Resiko
-                                <a href="#" Id="Plus" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_input_resiko_serah_terima">+</a>
-                            </h3>
-
-                            <!--begin:Table: Review-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                                <!--begin::Table head-->
-                                <thead>
-                                    <!--begin::Table row-->
-                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-125px">Item Resiko</th>
-                                        <th class="min-w-125px">Penyebab</th>
-                                        <th class="min-w-125px">Dampak</th>
-                                        <th class="min-w-125px">Mitigasi</th>
-                                    </tr>
-                                    <!--end::Table row-->
-                                </thead>
-                                <!--end::Table head-->
-                                <!--begin::Table body-->
-                                <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->inputRisks->contains("stage", 4))
-                                        @forelse ($contract->inputRisks as $inputRisk)
-                                            @if ($inputRisk->stage == 4)
+                                <div class"col">
+                                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                                    Input Resiko
+                                    <a href="#" Id="Plus" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_input_resiko_serah_terima">+</a>
+                                </h3>
+    
+                                <!--begin:Table: Review-->
+                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <!--begin::Table row-->
+                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                            <th class="min-w-125px">Item Resiko</th>
+                                            <th class="min-w-125px">Penyebab</th>
+                                            <th class="min-w-125px">Dampak</th>
+                                            <th class="min-w-125px">Mitigasi</th>
+                                        </tr>
+                                        <!--end::Table row-->
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody class="fw-bold text-gray-400">
+                                        @if ($contract->inputRisks->contains("stage", 4))
+                                            @forelse ($contract->inputRisks as $inputRisk)
+                                                @if ($inputRisk->stage == 4)
+                                                    <tr>
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Name=-->
+                                                        <td>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
+                                                        </td>
+                                                        <!--end::Name=-->
+                                                        <!--begin::Kode=-->
+                                                        <td>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
+                                                        </td>
+                                                        <!--end::Kode=-->
+                                                        <!--begin::Unit=-->
+                                                        <td>
+                                                            <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
+                                                        </td>
+                                                        <!--end::Unit=-->
+                                                    </tr>
+                                                @endif
+                                            @empty
                                                 <tr>
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->resiko }}</p>
+                                                    <td colspan="4" class="text-center">
+                                                        <h6><b>There is no data</b></h6>
                                                     </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->penyebab }}</p>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->dampak }}</p>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p class="text-gray-600 mb-1">{{ $inputRisk->mitigasi }}</p>
-                                                    </td>
-                                                    <!--end::Unit=-->
                                                 </tr>
-                                            @endif
-                                        @empty
+                                            @endforelse
+                                        @else
                                             <tr>
                                                 <td colspan="4" class="text-center">
                                                     <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
-                                        @endforelse
-                                    @else
-                                        <tr>
-                                            <td colspan="4" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                                <!--end::Table body-->
+                                        @endif
+                                    </tbody>
+                                    <!--end::Table body-->
+    
+                                </table>
 
-                            </table>
-
+                                </div>
+                            </div>
+                            
                         </div>
                         {{-- list_dokumen_ba_defect --}}
 
@@ -2507,9 +2513,6 @@
 
                         </table>
                         </div>
-                    </div>
-                    <!--end:::Tab pane Serah Terima-->
-
                     <!--begin:::Tab pane Serah Terima-->
                     <div class="tab-pane fade" id="kt_user_view_overview_penutupan_proyek" role="tabpanel">
                         <div class="card-title m-0">
@@ -2544,6 +2547,9 @@
                         {{-- list_dokumen_ba_defect --}}
                     </div>
                     <!--end:::Tab pane Serah Terima-->
+                    </div>
+                    <!--end:::Tab pane Serah Terima-->
+                    
 
                 </div>
                 <!--end:::Tab content-->
@@ -3392,7 +3398,7 @@
 
                     <!--begin::Input group Website-->
                     <div class="fv-row mb-5">
-                        <form action="/dokumen-pendukung/upload" method="POST" enctype="multipart/form-data">
+                        <form action="/review-pembatalan-kontrak/upload" method="POST" enctype="multipart/form-data">
                             @csrf
                             <!--begin::Label-->
                             <label class="fs-6 fw-bold form-label mt-3">

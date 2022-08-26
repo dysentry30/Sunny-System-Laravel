@@ -114,7 +114,6 @@
             // });
             // const content = htmlDocx.asBlob(html.outerHTML);
             const content = new Blob([html.innerHTML]);
-            // console.log(content);
             // return;
             // const parser = new XMLSerializer().serializeToString(html);
             // console.log(html.innerText);

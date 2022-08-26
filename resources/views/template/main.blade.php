@@ -76,6 +76,10 @@
                 transition: width 0.3s ease;
             }
         } */
+        
+        .fr-wrapper div:not(.fr-element.fr-view):nth-child(1) {
+            display: none;
+        }
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -137,7 +141,7 @@
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                             <div class="menu-item">
                                 <a class="menu-link " href="/dashboard"
-                                    style="color:white; padding-left:20px; padding-top:0px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
+                                    style="color:white; padding-left:20px; padding-top:10px; {{ str_contains(Request::Path(), 'dashboard') ? 'background-color:#008CB4' : '' }}">
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
@@ -414,7 +418,7 @@
                             <!--end::Master Data Expand-->
                         @endif
 
-                        @if (auth()->user()->check_administrator)
+                        {{-- @if (auth()->user()->check_administrator)
                             <div class="menu-item">
                                 <a class="menu-link " href="/rkap"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'rkap') ? 'background-color:#008CB4' : '' }}">
@@ -429,9 +433,9 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Group RKAP</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="/kpi"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'kpi') ? 'background-color:#008CB4' : '' }}">
@@ -446,7 +450,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">KPI</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
                             <div class="menu-item">
@@ -482,7 +486,7 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
+                        {{-- @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                             <div class="menu-item">
                                 <a class="menu-link " href="stakeholder-communication"
                                     style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'stakeholder-communication') ? 'background-color:#008CB4' : '' }}">
@@ -497,7 +501,7 @@
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Stakeholder Communication</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif --}}
 
                         @if (auth()->user()->check_administrator)
                             <div class="menu-item">
@@ -1324,7 +1328,16 @@
             let dateInputElt = null;
             function showCalendarModal(elt) {
                 calendarBoots.show();
-                dateInputElt = elt.parentElement.querySelector("input[type='date']");
+                // dateInputElt = elt.parentElement.querySelector("input[type='date']");
+                dateInputElt = returnParentElement(elt, "input[type='date']");
+            }
+            
+            function returnParentElement(elt, targetInput) {
+                const inputDate = elt.querySelector(targetInput);
+                if (inputDate) {
+                    return inputDate;
+                }
+                return returnParentElement(elt.parentElement, targetInput);
             }
     
             function setCalendar() {

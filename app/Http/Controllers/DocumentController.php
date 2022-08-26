@@ -35,7 +35,7 @@ class DocumentController extends Controller
             $array = get_object_vars($array);
             $array_keys = array_keys($array);
             foreach ($array_keys as $key) {
-                if (str_contains($key, "document_name")) {
+                if (str_contains($key, "document_name") || str_contains($key, "nama_attach")) {
                     return $array[$key];
                 }
             }
@@ -65,7 +65,7 @@ class DocumentController extends Controller
                     if (!empty($data)) {
                         $id_contract_redirect = $data->id_contract;
                         $primary_column = array_keys(get_object_vars($data));
-                        // $docx_writer = writeDOCXFile($request->get("content_word"));
+                        // $docx_writer = writeDOCXFile($file->getContent());
                         $counter = explode("_", $data->id_document);
                         if (empty($counter[1])) {
                             $file_name = trim($counter[0]) . "_2";
@@ -73,6 +73,7 @@ class DocumentController extends Controller
                             // header('Content-Type: application/octet-stream');
                             // header("Content-Disposition: attachment;filename=$file_name.docx");
                             // $docx_writer->save(public_path("words/" . $file_name . ".docx"));
+                            // moveFileTemp($file, $file_name);
                             $file->move(public_path("words/"), $file_name . ".docx");
                         } else {
                             $num = (int) $counter[1] + 1;
@@ -81,6 +82,7 @@ class DocumentController extends Controller
                             // header('Content-Type: application/octet-stream');
                             // header("Content-Disposition: attachment;filename=$file_name.docx");
                             $file->move(public_path("words/"), $file_name . ".docx");
+                            // moveFileTemp($file, $file_name);
                             // $docx_writer->save(public_path("words/" . $file_name . ".docx"));
                         }
                         DB::update("UPDATE $table_name SET id_document = '$file_name' WHERE  $primary_column[0] = $id");
