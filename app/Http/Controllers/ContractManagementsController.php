@@ -1236,13 +1236,11 @@ class ContractManagementsController extends Controller
     public function pendingIssueContractUpload(Request $request, PendingIssue $pendingIssue)
     {
         $data = $request->all();
-
         $messages = [
             "required" => "Field di atas wajib diisi",
             "file" => "This field must be file only",
         ];
         $rules = [
-            "pending-issue-file" => "required",
             "status" => "required",
             "biaya" => "required",
             "waktu" => "required",
@@ -1251,7 +1249,13 @@ class ContractManagementsController extends Controller
             "rencana-tindak-lanjut" => "required",
             "target-waktu-penyelesaian" => "required",
             "id-contract" => "required",
+            "penyebab" => "required",
         ];
+        if (isset($data["pending-issue-file"])) {
+            $rules["pending-issue-file"] = "required|file";
+        } else {
+            $rules["pending-issue"] = "required";
+        }
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Pending Issue gagal ditambahkan");
@@ -1279,7 +1283,7 @@ class ContractManagementsController extends Controller
 
         $pendingIssue->status = (bool) $data["status"];
         $pendingIssue->id_contract = $contract->id_contract;
-        $pendingIssue->penyebab = $data["pending-issue"];
+        $pendingIssue->penyebab = $data["penyebab"];
         $pendingIssue->biaya = (int) str_replace(",", "", $data["biaya"]);
         $pendingIssue->waktu = $data["waktu"];
         $pendingIssue->mutu = $data["mutu"];
@@ -1289,7 +1293,7 @@ class ContractManagementsController extends Controller
         $pendingIssue->target_waktu_penyelesaian = $data["target-waktu-penyelesaian"];
         if ($pendingIssue->save()) {
             Alert::success("Success", "Pending Issue berhasil ditambahkan");
-            return Redirect::back()->with("modal", $data["modal-name"]);
+            return Redirect::back();
             // return redirect()->back();
         }
         Alert::error("Erorr", "Pending Issue gagal ditambahkan");

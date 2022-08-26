@@ -32,14 +32,14 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Group RKAP
+                                <h1 class="d-flex align-items-center fs-3 my-1">History Autorisasi
                                 </h1>
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
                             @if (auth()->user()->check_administrator)
                                 <!--begin::Actions-->
-                                <div class="d-flex align-items-center py-1">
+                                {{-- <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
                                     <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal"
@@ -83,7 +83,7 @@
                                     <!--end::Wrapper-->
 
 
-                                </div>
+                                </div> --}}
                                 <!--end::Actions-->
                             @endif
                         </div>
@@ -138,9 +138,14 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
-                                        <th class="min-w-auto text-center">Tahun Pelaksanaan</th>
-                                        <th class="min-w-auto text-center">Total OK Awal</th>
+                                        <th class="min-w-auto text-center">DOP</th>
+                                        <th class="min-w-auto text-center">Bulan Pelaporan</th>
+                                        <th class="min-w-auto text-center">Tahun Pelaporan</th>
                                         <th class="min-w-auto text-center">Total OK Review</th>
+                                        <th class="min-w-auto text-center">Total OK Awal</th>
+                                        <th class="min-w-auto text-center">Total Forecast</th>
+                                        <th class="min-w-auto text-center">Total Realisasi</th>
+                                        <th class="min-w-auto text-center">Tanggal Locked</th>
                                         <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th>
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
@@ -150,6 +155,91 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
+                                    @foreach ($history_forecasts as $history)
+                                        <tr>
+                                            <td class="">
+                                                <a href="#" id="click-name"
+                                                    class="text-hover-primary mb-1">{{ $history->unit_kerja }}</a>
+                                            </td>
+                                            <td class="text-center">
+                                                {{$history->dop}}
+                                            </td>
+                                            <td class="text-center">
+                                                @switch($history->periode_prognosa)
+                                                    @case('1')
+                                                    Januari
+                                                    @break
+                                                    
+                                                    @case('2')
+                                                    Februari
+                                                    @break
+                                                    
+                                                    @case('3')
+                                                    Maret
+                                                    @break
+                                                    
+                                                    @case('4')
+                                                    April
+                                                    @break
+
+                                                    @case('5')
+                                                    Mei
+                                                    @break
+
+                                                    @case('6')
+                                                        Juni
+                                                    @break
+
+                                                    @case('7')
+                                                    Juli
+                                                    @break
+                                                    
+                                                    @case('8')
+                                                    Agustus
+                                                    @break
+                                                    
+                                                    @case('9')
+                                                    September
+                                                    @break
+                                                    
+                                                    @case('10')
+                                                    Oktober
+                                                    @break
+                                                    
+                                                    @case('11')
+                                                    November
+                                                    @break
+                                                    
+                                                    @case('12')
+                                                    Desember
+                                                    @break
+                                                @endswitch
+                                            </td>
+                                            <td class="text-center">
+                                                {{-- {{2022}} --}}
+                                                2022
+                                            </td>
+                                            <td class="text-center">
+                                                {{$history->nilaiok_review}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{$history->nilaiok_awal}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{number_format($history->nilai_forecast, 0, ",", ",")}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{number_format($history->realisasi_forecast, 0, ",", ",")}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{Carbon\Carbon::parse($history->created_at)->translatedFormat("d F Y")}}
+                                            </td>
+                                            <td class="text-center">
+                                                {{-- {{$history->dop}} --}}
+                                                Yes
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                     {{-- @foreach ($proyeks as $proyekArray)
                                         @foreach ($proyekArray as $proyek)
                                         <tr>

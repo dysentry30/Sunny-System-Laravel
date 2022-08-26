@@ -108,7 +108,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
                                                 </button>
-                                                @if ($previous_forecast->count() > 0)
+                                                {{-- @if ($previous_forecast->count() > 0) --}}
                                                     {{-- <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
                                                         <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
@@ -120,13 +120,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                             <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
                                                     </button>
 
-                                                @endif
+                                                {{-- @endif --}}
                                                 
                                                 @if ($periode != (int) date("m"))
                                                     <div class="d-flex flex-row col-5 align-items-center justify-content-center">
                                                         <button type="button" onClick="window.location.href='/forecast';" id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
-                                                                <span class="mx-2 fs-6">Pindah Forecast ke Bulan Ini</span>
+                                                                <span class="mx-2 fs-6">Pindah Forecast ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
                                                         </button>
                                                         <i class="bi bi-info-circle-fill text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
                                                         data-bs-custom-class="custom-tooltip"
@@ -4290,6 +4290,7 @@ fill="none">
         for(let i = 0; i < monthNames.length; i++) {
             jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
         }
+        console.log(jsonVariable);
         const {value: monthForecast} = await Swal.fire({
             title: 'Pilih Bulan Forecast',
             input: 'select',
@@ -4311,7 +4312,7 @@ fill="none">
         });
         if (monthForecast) {
             Swal.fire({
-                title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast[0] - 1]}?`,
+                title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast - 1]}?`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
