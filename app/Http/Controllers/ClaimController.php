@@ -133,16 +133,15 @@ class ClaimController extends Controller
         // }
 
         $messages = [
-            "required" => "This field is required",
-            "numeric" => "Field ini hanya berisi angka",
+            "required" => "Field ini mandatory",
             "string" => "Field ini harus Alphanumeric",
-            "date" => "This field must be date format only",
+            "date" => "Field ini harus berisikan tanggal",
         ];
         $rules = [
             "approve-date" => "required|date",
             "pic" => "required|string",
             "project-id" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -151,8 +150,8 @@ class ClaimController extends Controller
             // $request->old("project-id");
             // $request->old("id-contract");
             $request->old("number-claim");
-            $request->old("jenis-claim");
-            return redirect()->back()->with("failed", "This claim failed to add");
+            Alert::error("Error", "Klaim gagal dibuat!");
+            return redirect()->back();
         }
         $validation->validate();
         $claimManagements->id_claim = $data["number-claim"];
@@ -290,10 +289,10 @@ class ClaimController extends Controller
         // }
         $claimManagements = ClaimManagements::find($data["id-claim"]);
         $messages = [
-            "required" => "This field is required",
+            "required" => "Field ini mandatory",
             "numeric" => "Field ini hanya berisi angka",
             "string" => "Field ini harus Alphanumeric",
-            "date" => "This field must be date format only",
+            "date" => "Field ini harus berisikan tanggal",
         ];
         $rules = [
             "approve-date" => "required|date",
@@ -328,7 +327,7 @@ class ClaimController extends Controller
         $data = $request->all();
         $id_claim = $data["id-claim"];
         $messages = [
-            "required" => "This field is required",
+            "required" => "Field ini mandatory",
             "numeric" => "Field ini hanya berisi angka",
             "string" => "Field ini harus Alphanumeric",
             "file" => "Field ini harus berisi file"
