@@ -470,7 +470,7 @@
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ $proyek->nilai_kontrak_keseluruhan ?? '-' }}
+                                                    {{ $proyek->nilai_perolehan ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->
