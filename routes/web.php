@@ -39,6 +39,7 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Models\Opportunity;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -178,6 +179,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
+    
+    Route::post('/claim-management/delete', [ClaimController::class, 'claimDelete']);
 
     Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
 
@@ -317,16 +320,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at")->first();
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            if ($forecast->update(["nilai_forecast" => (int) $data["nilai_forecast"]])) {
+            if ($forecast->update(["nilai_forecast" => (string) $data["nilai_forecast"]])) {
                 if (!empty($proyek->forecast)) {
                     $totalfc = 0;
                     foreach ($proyek->Forecasts as $proyekfc) {
                         $totalfc += $proyekfc->nilai_forecast;
                     }
-                    $proyek->forecast = $totalfc;
+                    $proyek->forecast = (string) $totalfc;
                     $proyek->save();
                 } else {
-                    $proyek->forecast = (int) $data["nilai_forecast"];
+                    $proyek->forecast = (string) $data["nilai_forecast"];
                     $proyek->save();
                 }
                 return response()->json([
@@ -337,13 +340,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $nilai_kontrak_keseluruhan = $proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
             $forecast = new Forecast();
-            $forecast->nilai_forecast = $data["nilai_forecast"];
+            $forecast->nilai_forecast = (string) $data["nilai_forecast"];
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
             $forecast->month_realisasi = $proyek->bulan_ri_perolehan;
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
-            $forecast->realisasi_forecast = (int) $nilai_kontrak_keseluruhan;
+            $forecast->realisasi_forecast = (string) $nilai_kontrak_keseluruhan;
             $forecast->periode_prognosa = (int) $data["periode_prognosa"];
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
@@ -445,7 +448,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // begin :: Set lock / unlock data month forecast
     Route::post('/forecast/set-lock', function (Request $request) {
         $data = $request->all();
-        // dd($data);
         $from_user = Auth::user();
 
 
@@ -461,9 +463,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         foreach ($proyeks as $index => $proyek) {
             $kode_proyek = $proyek[0]->kode_proyek;
             $current_proyek = Proyek::find($kode_proyek);
-            $forecasts = $proyek->filter(function ($data) {
-                return str_contains($data->created_at->format("m"), date("m")) && $data->nilai_forecast != 0 && $data->unit_kerja == Auth::user()->unit_kerja;
+            $forecasts = $proyek->filter(function ($p) {
+                // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
+                return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
                 // return $data->nilai_forecast != 0;
+            })->filter(function($f) use($data) {
+                return $f->periode_prognosa == $data["periode_prognosa"];
             });
             foreach ($forecasts as $forecast) {
                 if ($forecast->month_forecast > $farestMonth) {
@@ -474,24 +479,24 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             // dd(current_proyek)
             $history_forecast = new HistoryForecast();
             $history_forecast->kode_proyek = $kode_proyek;
-            $history_forecast->nilai_forecast = $total_forecast;
+            $history_forecast->nilai_forecast = (string) $total_forecast;
             $history_forecast->month_forecast = $farestMonth;
-            $history_forecast->rkap_forecast = (int) str_replace(",", "", $current_proyek->nilai_rkap) ?? 0;
+            $history_forecast->rkap_forecast = str_replace(",", "", $current_proyek->nilai_rkap) ?? 0;
             $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan;
-            $history_forecast->realisasi_forecast = (int) $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
             $history_forecast->month_realisasi = (int) $current_proyek->bulan_ri_perolehan;
             $history_forecast->periode_prognosa = $request->periode_prognosa;
             $history_forecast->save();
-            if ($index == $forecasts->count() - 1) {
-                return response()->json([
-                    "status" => "success",
-                    "msg" => "Forecast berhasil dikunci",
-                ]);
-            }
+            // if ($index == $forecasts->count() - 1) {
+            // }
             $farestMonth = 0;
             $total_forecast = 0;
         }
+        return response()->json([
+            "status" => "success",
+            "msg" => "Forecast berhasil dikunci",
+        ]);
 
         // dump($total_forecast);
         // if ($total_forecast != 0) {
@@ -501,10 +506,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // foreach ($proyeks as $proyek) {
 
         // }
-        return response()->json([
-            "status" => "success",
-            "msg" => "Forecast berhasil dikunci",
-        ]);
+        // return response()->json([
+        //     "status" => "success",
+        //     "msg" => "Forecast berhasil dikunci",
+        // ]);
         // if (isset($data["set-lock"])) {
 
         // }
@@ -595,7 +600,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::post('/forecast/set-unlock', function (Request $request) {
-        // $data = $request->all();
+        $data = $request->all();
         // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
         // $from_user = Auth::user();
         // $unit_kerjas = UnitKerja::find(1);
@@ -628,7 +633,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     // ]);
         // }
         if (Auth::user()->check_administrator) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", (int) date("m"))->get();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
             # code...
         } else {
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();

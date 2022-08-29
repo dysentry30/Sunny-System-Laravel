@@ -91,9 +91,11 @@ class ClaimController extends Controller
             $approval->delete();
         });
         if ($claim->delete()) {
-            return redirect("/claim-management")->with("success", "Claim berhasil dihapus");
+            Alert::success("Success", "Claim berhasil dihapus");
+            return redirect("/claim-management");
         }
-        return redirect("/claim-management")->with("success", "Claim gagal dihapus");
+        Alert::error("Error", "Claim gagal dihapus");
+        return redirect("/claim-management");
     }
 
     /**

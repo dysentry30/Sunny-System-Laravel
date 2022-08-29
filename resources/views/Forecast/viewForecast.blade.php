@@ -784,7 +784,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($month_counter == (int) $forecast->month_realisasi)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -828,7 +828,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -850,7 +850,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', ',');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
@@ -950,7 +950,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($month_counter == (int) $forecast->month_realisasi)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -994,7 +994,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -1016,7 +1016,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', ',');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
@@ -1132,7 +1132,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         <td
                                                                             class="pinForecast HidePin total-year-realisasi-bulanan">
                                                                             <center>
-                                                                                <b>{{ $proyek->nilai_kontrak_keseluruhan }}</b>
+                                                                                <b>{{ $proyek->nilai_perolehan }}</b>
                                                                             </center>
                                                                         </td>
                                                                         <td class="pinForecast ShowPin total-year-ok-bulanan"
@@ -1152,7 +1152,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         <td class="pinForecast ShowPin total-year-realisasi-bulanan"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                             <center>
-                                                                                <b>{{ $proyek->nilai_kontrak_keseluruhan }}</b>
+                                                                                <b>{{ $proyek->nilai_perolehan }}</b>
                                                                             </center>
                                                                         </td>
                                                                         {{-- end::Total Year --}}
@@ -1677,7 +1677,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @endif
                                                                                                     @php
                                                                                                         $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan) ?? 0;
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? 0;
                                                                                                         $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                         
                                                                                                     @endphp
@@ -1798,7 +1798,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             <td
                                                                                                 class="pinForecast HidePin">
                                                                                                 <center>
-                                                                                                    <b>{{ $proyek->nilai_kontrak_keseluruhan ?? '-' }}</b>
+                                                                                                    <b>{{ $proyek->nilai_perolehan ?? '-' }}</b>
                                                                                                 </center>
                                                                                             </td>
                                                                                             <td class="pinForecast ShowPin total-month-x-ok-internal"
@@ -1817,7 +1817,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             <td class="pinForecast ShowPin total-month-x-realisasi-internal"
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                                 <center>
-                                                                                                    <b>{{ $proyek->nilai_kontrak_keseluruhan ?? '-' }}</b>
+                                                                                                    <b>{{ $proyek->nilai_perolehan ?? '-' }}</b>
                                                                                                 </center>
                                                                                             </td>
                                                                                             <!--end::Total Coloumn-->
@@ -2432,8 +2432,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                 @endphp
                                                                                                 {{-- @php
-                                                                                                    if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_kontrak_keseluruhan != null) {
-                                                                                                        $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                    if ($i + 1 >= array_search($proyek->bulan_ri_perolehan, $arrNamaBulan) && $proyek->nilai_perolehan != null) {
+                                                                                                        $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                     }
                                                                                                     
                                                                                                 @endphp --}}
@@ -2474,14 +2474,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         </td>
                                                                                                         @if ($i + 1 >= $proyek->bulan_ri_perolehan &&
                                                                                                             $proyek->bulan_ri_perolehan != null &&
-                                                                                                            $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                                            $proyek->nilai_perolehan != null)
                                                                                                             @php
-                                                                                                                $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                                $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                                 
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                                                {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
+                                                                                                                {{ number_format((int) str_replace(",", "", $proyek->nilai_perolehan), 0, ',', ',') }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td
@@ -2529,11 +2529,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                        $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-sd="{{ $month_counter }}">
-                                                                                                        {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
+                                                                                                        {{ number_format((int) str_replace(",", "", $proyek->nilai_perolehan), 0, ',', ',') }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td
@@ -3200,8 +3200,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @endphp
                                                                                                     @endif
                                                                                                     @php
-                                                                                                        // if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->nilai_kontrak_keseluruhan != null) {
-                                                                                                        //     $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                        // if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->nilai_perolehan != null) {
+                                                                                                        //     $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                         // }
                                                                                                         $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
                                                                                                     @endphp
@@ -3240,13 +3240,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     placeholder="" />
                                                                                                             </td>
                                                                                                             @if ($proyek->bulan_ri_perolehan >= $i + 1  &&
-                                                                                                                $proyek->nilai_kontrak_keseluruhan != null)
+                                                                                                                $proyek->nilai_perolehan != null)
                                                                                                                 @php
-                                                                                                                    $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                                    $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                                 @endphp
                                                                                                                 <td
                                                                                                                     data-column-realisasi-sd-eksternal="{{ $month_counter }}">
-                                                                                                                    {{ number_format((int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan), 0, ',', ',') }}
+                                                                                                                    {{ number_format((int) str_replace(",", "", $proyek->nilai_perolehan), 0, ',', ',') }}
                                                                                                                 </td>
                                                                                                             @else
                                                                                                                 <td
@@ -3293,7 +3293,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     </td>
                                                                                                     @if ($i + 1 >= $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->bulan_ri_perolehan != null)
                                                                                                         @php
-                                                                                                            $total_realisasi += (int) str_replace(',', '', $proyek->nilai_kontrak_keseluruhan);
+                                                                                                            $total_realisasi += (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                                         @endphp
                                                                                                         <td
                                                                                                             data-column-realisasi-sd-eksternal="{{ $month_counter }}">

@@ -443,6 +443,7 @@ class ContractManagementsController extends Controller
             // "pic-cross-review" => "required|numeric",
             "id-contract" => "required|numeric",
             "id-draft-contract" => "required|numeric",
+            "input-pasal" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -488,6 +489,7 @@ class ContractManagementsController extends Controller
             $reviewContracts->ketentuan = $data["ketentuan-review"];
             $reviewContracts->id_draft_contract = $data["id-draft-contract"];
             $reviewContracts->id_contract = $data["id-contract"];
+            $reviewContracts->pasal_perubahan = $data["input-pasal"];
             // $reviewContracts->sub_pasal = $data["sub-pasal-review"];
             // $reviewContracts->uraian = $data["uraian-penjelasan-review"];
             // $reviewContracts->pic_cross = $data["pic-cross-review"];
@@ -495,7 +497,6 @@ class ContractManagementsController extends Controller
         }
 
         if ($reviewContracts->save()) {
-
             Alert::success('Success', "Review Contract berhasil dibuat");
             return redirect($_SERVER["HTTP_REFERER"]);
         }
