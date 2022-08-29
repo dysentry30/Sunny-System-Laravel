@@ -102,7 +102,7 @@
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
                                     @if (Auth::user()->check_administrator)
                                         <!-- Begin :: Select Options Unit Kerja -->
-                                        <select onchange="this.form.submit()" id="dop" name="dop"
+                                        <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-150px"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
@@ -114,7 +114,7 @@
                                         </select>
                                         <!-- End :: Select Options Unit Kerja -->
                                         <!-- Begin :: Select Options Unit Kerja -->
-                                        <select onchange="this.form.submit()" id="unit-kerja" name="unit-kerja"
+                                        <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-150px ms-2"
                                             style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
@@ -127,6 +127,16 @@
                                                 <option value="{{ $unit_kerja->divcode }}" {{ $is_unit_kerja_selected }} >{{ $unit_kerja->unit_kerja }}</option>
                                             @endforeach
                                         </select>
+                                        <script>
+                                            function selectUnitKerja(e) {
+                                                document.getElementById("dop").value = "";
+                                                e.form.submit();
+                                            }
+                                            function selectDOP(e) {
+                                                document.getElementById("unit-kerja").value = "";
+                                                e.form.submit();
+                                            }
+                                        </script>
                                         <!-- End :: Select Options Unit Kerja -->
                                     @endif
 
@@ -780,7 +790,8 @@
             legend: {
                 layout: 'horizontal',
                 align: 'center',
-                verticalAlign: 'bottom'
+                verticalAlign: 'bottom',
+                format : '<b>{point.key}</b><br>',
             },
 
             
@@ -799,7 +810,7 @@
             
             tooltip: {
                 headerFormat: '<b>{point.key}</b><br>',
-                pointFormat: '<span style="color:{series.color}">\u25CF</span> {series.name}'
+                pointFormat: '<span style="color:{series.color}">\u25CF</span>{point.y}'
             },
 
             series: [{

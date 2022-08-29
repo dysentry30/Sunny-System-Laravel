@@ -1081,10 +1081,19 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="status-pasardini" name="status-pasardini" placeholder="Status Pasar Dini"
-                                                                        value="{{ $proyek->status_pasdin }}" />
+                                                                        value="{{ $proyek->status_pasdin }}" /> --}}
+                                                                    <select id="status-pasardini" name="status-pasardini"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Status Pasar Dini">
+                                                                    <option value=""></option>
+                                                                        <option value="Cadangan" {{ $proyek->status_pasdin == 'Cadangan' ? 'selected' : '' }}>Cadangan</option>
+                                                                        <option value="Potensial" {{ $proyek->status_pasdin == 'Potensial' ? 'selected' : '' }}>Potensial</option>
+                                                                        <option value="Sasaran" {{ $proyek->status_pasdin == 'Sasaran' ? 'selected' : '' }}>Sasaran</option>
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -3934,7 +3943,7 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Masalah Potensial
                                                             <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_history_adendum">+</a>
+                                                                data-bs-target="#kt_modal_masalah_potensial">+</a>
                                                         </h3>
                                                         <br>
                                                         <!--begin::Table Kriteria Pasar-->
@@ -3949,10 +3958,10 @@
                                                                     <th class="w-auto">Pelanggan</th>
                                                                     <th class="w-auto">PIC</th>
                                                                     <th class="w-auto">RTL</th>
-                                                                    <th class="w-auto">Penyebab</th>
-                                                                    <th class="w-auto">Masalah</th>
                                                                     <th class="w-auto">Status</th>
                                                                     <th class="w-auto">Realisasi</th>
+                                                                    <th class="w-auto">Penyebab</th>
+                                                                    <th class="w-auto">Masalah</th>
                                                                     <th class="w-100px"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -4472,6 +4481,227 @@
 
 <!--begin::Modal-->
 
+<!--begin::modal MASALAH POTENSIAL-->
+{{-- <form action="/proyek/adendum/add" method="post" enctype="multipart/form-data"> --}}
+    @csrf
+
+    <input type="hidden" name="masalah-kode-proyek" value="{{ $proyek->kode_proyek }}">
+
+    <div class="modal fade" id="kt_modal_masalah_potensial" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Tambah Masalah Potensial :</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+    
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nama Pelanggan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="pelanggan-masalah" name="pelanggan-masalah" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Pelanggan">
+                                    <option></option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->name }}" {{ old('pelanggan-masalah') == $customer->name ? 'selected' : ''}}> {{ $customer->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('pelanggan-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">PIC</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select name="pic-masalah" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih PIC">
+                                    <option></option>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('pic-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>RTL</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="pic-masalah"
+                                    value="{{ old('pic-masalah') }}" name="pic-masalah" placeholder="RTL" />
+                                @error('pic-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Status</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="status-masalah"
+                                    value="{{ old('status-masalah') }}" name="status-masalah" placeholder="Status" />
+                                @error('status-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Realisasi</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="realisasi-masalah"
+                                    value="{{ old('realisasi-masalah') }}" name="realisasi-masalah" placeholder="Realisasi" />
+                                @error('realisasi-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Penyebab</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="penyebab-masalah"
+                                    value="{{ old('penyebab-masalah') }}" name="penyebab-masalah" placeholder="Penyebab" />
+                                @error('penyebab-masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Masalah</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="masalah"
+                                    value="{{ old('masalah') }}" name="masalah" placeholder="Masalah" />
+                                @error('masalah')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                </div>
+                <div class="modal-footer">
+    
+                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                        id="new_save" style="background-color:#008CB4">Save</button>
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+{{-- </form> --}}
+<!--end::modal MASALAH POTENSIAL-->
+
 <!--begin::modal HISTORY ADENDUM-->
 <form action="/proyek/adendum/add" method="post" enctype="multipart/form-data">
     @csrf
@@ -4562,7 +4792,7 @@
                                 <!--end::Label-->
                                 <!--begin::Input-->
                                 <select id="pelanggan-adendum" name="pelanggan-adendum" class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
+                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Pelanggan">
                                     <option></option>
                                     @foreach ($customers as $customer)
                                         <option value="{{ $customer->name }}" {{ old('pelanggan-adendum') == $customer->name ? 'selected' : ''}}> {{ $customer->name }}</option>
@@ -5239,7 +5469,7 @@
                             <!--end::Label-->
                             <!--begin::Input-->
                             <select name="nama-team" class="form-select form-select-solid"
-                                data-control="select2" data-hide-search="true" data-placeholder="Pilih Team">
+                                data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
                                 <option></option>
                                 @foreach ($users as $user)
                                     <option value="{{ $user->id }}">{{ $user->name }}</option>
