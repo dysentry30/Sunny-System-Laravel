@@ -280,6 +280,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
 
     //Begin :: Project
+    Route::get('/opportunity', function (Request $request) {
+        $oppor = Opportunity::paginate(50);
+        $unitkerjas = UnitKerja::all();
+        // foreach($oppor as $o) {
+        //     dump($o->UsrKodeProyek);
+        // }
+        // dd();
+        return view("3_Opportunity", compact(["oppor", "unitkerjas"]));
+    });
 
     // Home Page Proyek
     Route::get('/proyek', [ProyekController::class, 'view']);
@@ -377,6 +386,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // ADD Porsi-JO 
     Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
     
+    // EDIT Porsi-JO 
+    Route::post('/proyek/porsi-jo/{id}/edit', [ProyekController::class, "editJO"]);
+    
     // DELETE Porsi-JO 
     Route::delete('/proyek/porsi-delete/{id}', [ProyekController::class, "deleteJO"]);
     
@@ -406,6 +418,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     
     // ADD History Adendum 
     Route::post('proyek/adendum/add', [ProyekController::class, 'tambahAdendum']);
+    
+    // EDIT History Adendum 
+    Route::post('proyek/adendum/{id}/edit', [ProyekController::class, 'editAdendum']);
     
     // DELETE History Adendum 
     Route::delete('proyek/adendum/{id}/delete', [ProyekController::class, 'deleteAdendum']);

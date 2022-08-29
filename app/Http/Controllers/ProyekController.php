@@ -332,16 +332,17 @@ class ProyekController extends Controller
         $newProyek->laporan_menang = $dataProyek["laporan-menang"];
 
         // form TERKONTRAK
-        $newProyek->nospk_external = $dataProyek["nospk-external"];
         // $newProyek->jenis_proyek_terkontrak = $dataProyek["jenis-proyek-terkontrak"];
-        $newProyek->tglspk_internal = $dataProyek["tglspk-internal"];
+        $newProyek->nospk_external = $dataProyek["nospk-external"];
         // $newProyek->porsijo_terkontrak = $dataProyek["porsijo-terkontrak"];
-        $newProyek->tahun_ri_perolehan = $dataProyek["tahun-ri-perolehan"];
+        $newProyek->tglspk_internal = $dataProyek["tglspk-internal"];
         // $newProyek->nilaiok_terkontrak = $dataProyek["nilaiok-terkontrak"];
-        $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
+        $newProyek->tahun_ri_perolehan = $dataProyek["tahun-ri-perolehan"];
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
-        $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
+        $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
+        $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
+        // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
         $newProyek->tanggal_terkontrak = $dataProyek["tanggal-terkontrak"];
         if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
             $nilaiPerolehan = (int) str_replace(',', '', $dataProyek["nilai-perolehan"]);
@@ -410,6 +411,7 @@ class ProyekController extends Controller
                 $contractManagements = new ContractManagements();
                 // dd($contractManagements);
                 $contractManagements->project_id = $kode_proyek;
+                // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
                 $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
                 $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
                 $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
@@ -757,6 +759,46 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    public function editJO(Request $request, $id)
+    {
+        $dataPorsiJO = $request->all();
+        // dd($dataPorsiJO);
+        $messages = [
+            "required" => "*This field is required",
+        ];
+        $rules = [
+            "company-jo" => "required",
+            "porsijo-company" => "required",
+        ];
+        $validation = Validator::make($dataPorsiJO, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Partner JO Gagal Diubah, Periksa Kembali !");
+        }
+        $validation->validate();
+
+        $editPorsiJO = PorsiJO::find($id);
+        
+        $editPorsiJO->kode_proyek = $dataPorsiJO["porsi-kode-proyek"];
+        $editPorsiJO->company_jo = $dataPorsiJO["company-jo"];
+        $editPorsiJO->porsi_jo = $dataPorsiJO["porsijo-company"];
+        // $editPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
+        
+        $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
+        $sisaJo = ($proyek->porsi_jo + $dataPorsiJO["porsijo-company-sebelumnya"]) - $dataPorsiJO["porsijo-company"]; 
+        $proyek->porsi_jo = $sisaJo;
+
+        if (($sisaJo + $dataPorsiJO["porsijo-company"]) > 100) {
+            // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
+            Alert::error('Error', "Partner JO Gagal Diubah, Hubungi Admin !");
+            return redirect()->back();
+        }
+        $proyek->save();
+        $editPorsiJO->save();
+        Alert::success("Success", "Porsi JO Berhasil Diubah");
+
+        return redirect()->back();
+    }
+
     public function deleteJO($id)
     {
         $deleteJO = PorsiJO::find($id);
@@ -903,7 +945,41 @@ class ProyekController extends Controller
         $newAdendum->tanggal_selesai_proyek = $data["tanggal-selesai-adendum-proyek"];
 
         $newAdendum->save();
-        Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
+        Alert::success("Success", "History Adendum Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editAdendum(Request $request, $id)
+    {
+        $data = $request->all();
+        $messages = [
+            "required" => "*This field is required",
+        ];
+        $rules = [
+            "nomor-adendum" => "required",
+            "nilai-adendum" => "required",
+            "pelanggan-adendum" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            $request->old("nomor-adendum");
+            $request->old("nilai-adendum");
+            $request->old("pelanggan-adendum");
+            Alert::error('Error', "History Adendum Gagal Diubah, Periksa Kembali !");
+        }
+        $validation->validate();
+
+        $newAdendum = ProyekAdendum::find($id);
+
+        $newAdendum->kode_proyek = $data["adendum-kode-proyek"];
+        $newAdendum->nomor_adendum = $data["nomor-adendum"];
+        $newAdendum->nilai_adendum = $data["nilai-adendum"];
+        $newAdendum->pelanggan_adendum = $data["pelanggan-adendum"];
+        $newAdendum->tanggal_adendum = $data["tanggal-adendum"];
+        $newAdendum->tanggal_selesai_proyek = $data["tanggal-selesai-adendum-proyek"];
+
+        $newAdendum->save();
+        Alert::success("Success", "History Adendum Berhasil Diubah");
         return redirect()->back();
     }
 

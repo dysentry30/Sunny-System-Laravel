@@ -25,7 +25,7 @@
         background-color: transparent !important;
     }
     #nilai-kontrak-keseluruhan::placeholder {
-    color: red;
+    color: #D9214E;
     opacity: 1; /* Firefox */
 }
 </style>
@@ -2255,7 +2255,11 @@
                                                                                     <!--end::Name-->
                                                                                     <!--begin::Column-->
                                                                                     <td>
-                                                                                        {{ $porsi->company_jo }}
+                                                                                        <a href=# data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_porsi_edit_{{ $porsi->id }}"
+                                                                                            class="text-hover-primary">
+                                                                                            {{ $porsi->company_jo }}
+                                                                                        </a>
                                                                                     </td>
                                                                                     <!--end::Column-->
                                                                                     <!--begin::Column-->
@@ -2379,7 +2383,7 @@
                                                                     </label> --}}
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="ketua-tender" name="ketua-tender" class="form-select form-select-solid"
+                                                                    <select onchange="this.form.submit()" id="ketua-tender" name="ketua-tender" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true" data-placeholder="Ketua Team Tender">
                                                                         <option></option>
                                                                         @foreach ($users as $user)
@@ -3468,6 +3472,7 @@
                                                                     <div class="d-flex align-items-center position-relative">
                                                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
                                                                         <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
+                                                                            {{-- <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ urldecode(urldecode($proyek->nomor_terkontrak)) }}</a> --}}
                                                                             <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
                                                                         </span>
                                                                         <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
@@ -3478,9 +3483,20 @@
                                                                             class="form-control form-control-solid"
                                                                             id="nomor-terkontrak" name="nomor-terkontrak"
                                                                             value="{{ $proyek->nomor_terkontrak }}"
-                                                                            placeholder="" style="display: none" />
+                                                                            placeholder="" style="display: none" onpaste="return false"/>
                                                                     </div>
+                                                                    <p style="display: none" id="char-error" class="text-danger fw-normal">*Not Allowed : / \ ? #;</p>
                                                                     <script>
+                                                                        document.getElementById("nomor-terkontrak").onkeypress = function(e) {
+                                                                            var chr = String.fromCharCode(e.which);
+                                                                            if (`/ \ ? #`.indexOf(chr) >= 0){
+                                                                            // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                                                                                document.getElementById('char-error').style.display = "";
+                                                                            // showError(chr)
+                                                                            return false;
+                                                                            }
+                                                                            return true
+                                                                        };
                                                                         function viewKontrak(e) {
                                                                             document.getElementById('fake-terkontrak').style.display = "none";
                                                                             document.getElementById('view-kontrak').style.display = "none";
@@ -4640,6 +4656,192 @@
 </form>
 <!--end::modal HISTORY ADENDUM-->
 
+<!--begin::edit HISTORY ADENDUM-->
+@foreach ($proyek->AdendumProyek as $adendum)
+<form action="/proyek/adendum/{{ $adendum->id }}/edit" method="post" enctype="multipart/form-data">
+    @csrf
+
+    <input type="hidden" name="adendum-kode-proyek" value="{{ $proyek->kode_proyek }}">
+
+    <div class="modal fade" id="kt_modal_edit_adendum_{{ $adendum->id }}" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Ubah History Adendum :</h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+    
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Adendum Ke</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="number" class="form-control form-control-solid reformat" id="nomor-adendum"
+                                    value="{{ $adendum->nomor_adendum ?? old('nomor-adendum') }}" name="nomor-adendum" placeholder="Adendum ke" />
+                                @error('nomor-adendum')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nilai Adendum</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid reformat" id="nilai-adendum"
+                                    value="{{ $adendum->nilai_adendum ?? "old('nilai-adendum')" }}" name="nilai-adendum" placeholder="Nilai Adendum" />
+                                @error('nilai-adendum')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Nama Pelanggan</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <select id="pelanggan-adendum" name="pelanggan-adendum" class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="false" data-placeholder="Pilih Team">
+                                    <option></option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->name }}" {{ $adendum->pelanggan_adendum == $customer->name ? 'selected' : ''}}> {{ $customer->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('pelanggan-adendum')
+                                    <h6 class="text-danger fw-normal">{{ $message }}
+                                    </h6>
+                                @enderror
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                    <!--begin::Row-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Tanggal Adendum</span>
+                                </label>
+                                <a href="#" class="btn"
+                                    style="background: transparent;"
+                                    id="start-date-modal"
+                                    onclick="showCalendarModal(this)">
+                                    <i class="bi bi-calendar2-plus-fill"
+                                        style="color: #008CB4"></i>
+                                </a>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="Date"
+                                    class="form-control form-control-solid"
+                                    id="tanggal-adendum"
+                                    name="tanggal-adendum"
+                                    value="{{ $adendum->tanggal_adendum }}"
+                                    placeholder="Tanggal Adendum" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-6">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Tanggal Selesai Proyek</span>
+                                </label>
+                                <a href="#" class="btn"
+                                    style="background: transparent;"
+                                    id="start-date-modal"
+                                    onclick="showCalendarModal(this)">
+                                    <i class="bi bi-calendar2-plus-fill"
+                                        style="color: #008CB4"></i>
+                                </a>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="Date"
+                                    class="form-control form-control-solid"
+                                    id="tanggal-selesai-adendum-proyek"
+                                    name="tanggal-selesai-adendum-proyek"
+                                    value="{{ $adendum->tanggal_selesai_proyek}}"
+                                    placeholder="Tanggal Selesai Proyek" />
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                    </div>
+                    <!--End begin::Row-->
+    
+                </div>
+                <div class="modal-footer">
+    
+                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                        id="new_save" style="background-color:#008CB4">Save</button>
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+</form>
+@endforeach
+<!--end::edit HISTORY ADENDUM-->
+
 <!--begin::DELETE HISTORY ADENDUM-->
 @foreach ($proyek->AdendumProyek as $adendum)
 <form action="/proyek/adendum/{{ $adendum->id }}/delete" method="post" enctype="multipart/form-data">
@@ -5622,6 +5824,139 @@
 </div>
 </form>
 <!--end::modal PORSI JO-->
+
+<!--begin::edit PORSI JO-->
+@foreach ($porsiJO as $porsi)
+<form action="/proyek/porsi-jo/{{ $porsi->id }}/edit" method="post" enctype="multipart/form-data">
+@csrf
+<input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
+
+<div class="modal fade" id="kt_porsi_edit_{{ $porsi->id }}" aria-hidden="true">
+    <!--begin::Modal dialog-->
+    <div class="modal-dialog modal-dialog-centered mw-800px">
+        <!--begin::Modal content-->
+        <div class="modal-content">
+            <!--begin::Modal header-->
+            <div class="modal-header">
+                <!--begin::Modal title-->
+                <h2>Ubah Porsi JO : </h2>
+                <!--end::Modal title-->
+                <!--begin::Close-->
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                    <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                    <span class="svg-icon svg-icon-1">
+                        <i class="bi bi-x-lg"></i>
+                    </span>
+                    <!--end::Svg Icon-->
+                </div>
+                <!--end::Close-->
+            </div>
+            <!--end::Modal header-->
+
+            <!--begin::Modal body-->
+            <div class="modal-body py-lg-6 px-lg-6">
+
+
+                <!--begin::Row Kanan+Kiri-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row">
+                            @php
+                                $joCompany = 0;
+                                foreach ($porsiJO as $porsi) {
+                                    if ($porsi->count() > 0) {
+                                        $joCompany += $porsi->porsi_jo;
+                                    }
+                                }
+                            @endphp
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label">
+                                <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}"></b></span>
+                                {{-- <span><b id="max-porsi" value="{{ $proyek->porsi_jo }}">Max Porsi JO : {{ $proyek->porsi_jo }}% </b></span> --}}
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Label-->
+                            {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                <span><b>Sisa Porsi JO : {{ $proyek->porsi_jo }} - </b>
+                                    <b id="selisih-porsi">0</b>
+                                    <b id="sisa-porsi"> = {{ $proyek->porsi_jo }}%</b></span>
+                            </label> --}}
+                            <!--end::Label-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                </div>
+                <!--End::Row Kanan+Kiri-->
+
+                <!--begin::Row Kanan+Kiri-->
+                <div class="row fv-row">
+                    <!--begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Company</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <select id="company-jo" name="company-jo" class="form-select form-select-solid"
+                                data-control="select2" data-hide-search="false"
+                                data-placeholder="Pilih Company JO">
+                                <option></option>
+                                @foreach ($customers as $customer)
+                                    @if ($porsi->company_jo == $customer->name)
+                                        <option value="{{ $customer->name }}" selected>{{ $customer->name }}</option>
+                                    @else
+                                        <option value="{{ $customer->name }}">{{ $customer->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <!--end::Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End begin::Col-->
+                    <div class="col-6">
+                        <!--begin::Input group Website-->
+                        <div class="fv-row mb-7">
+                            <!--begin::Label-->
+                            <label class="fs-6 fw-bold form-label mt-3">
+                                <span>Porsi JO Company (1 - {{ $proyek->porsi_jo }} %)</span>
+                            </label>
+                            <!--end::Label-->
+                            <!--begin::Input-->
+                            <input type="number" min="1" max="{{ $proyek->porsi_jo }}" value="{{ $porsi->porsi_jo }}"
+                                onkeyup="getJO()" onchange="getJO()" class="form-control form-control-solid"
+                                id="porsijo-company" name="porsijo-company" placeholder="Porsi JO" />
+                            <!--end::Input-->
+                            <!--begin::Hidden Input-->
+                            <input type="hidden" id="porsijo-company-sebelumnya" name="porsijo-company-sebelumnya" value="{{ $porsi->porsi_jo }}">
+                            <!--end::Hidden Input-->
+                        </div>
+                        <!--end::Input group-->
+                    </div>
+                    <!--End::Col-->
+                </div>
+                <!--End::Row Kanan+Kiri-->
+            </div>
+            <div class="modal-footer">
+
+                <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                    id="new_save" style="background-color:#008CB4">Save</button>
+
+            </div>
+            <!--end::Modal body-->
+        </div>
+        <!--end::Modal content-->
+    </div>
+    <!--end::Modal dialog-->
+</div>
+</form>
+@endforeach
+<!--end::edit PORSI JO-->
 
 <!--begin::DELETE PORSI JO-->
 @foreach ($porsiJO as $porsi)

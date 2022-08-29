@@ -471,6 +471,7 @@
                                                 <span class="">No. Contract: </span>
                                             </div>
                                             <div class="text-dark text-start">
+                                                {{-- <b>{{ urldecode(urldecode($contract->id_contract)) ?? '' }}</b> --}}
                                                 <b>{{ $contract->id_contract ?? '' }}</b>
                                             </div>
                                         </div>
@@ -483,7 +484,8 @@
                                                 <span class="">Proyek: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project->nama_proyek ?? '' }}</b>
+                                                <a href="/proyek/view/{{ $contract->project->kode_proyek }}" id="click-name"
+                                                    class="text-gray-900 text-hover-primary"><b>{{ $contract->project->nama_proyek ?? '' }}</b></a>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
