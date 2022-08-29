@@ -1281,59 +1281,44 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="min-w-125px">Draft Contract Review</th>
                                         <th class="min-w-125px">Ketentuan</th>
-                                        <th class="min-w-125px">Sub Pasal</th>
-                                        <th class="min-w-125px">Uraian Penjelasan</th>
-                                        <th class="min-w-125px">PIC <i>Cross Function</i></th>
-                                        <th class="min-w-125px">Catatan</th>
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-400">
-                                    @if ($contract->reviewProjects->contains("stage", 2))
-                                        @forelse ($contract->reviewProjects as $review)
-                                            @if ($review->stage == 2)
+                                    @if (isset($contract))
+                                        @forelse ($contract->reviewProjects as $reviewProject)
+                                            @if ($reviewProject->stage >= 2)
                                                 <tr>
+                                                    <!--begin::Name=-->
+                                                    <td>
+                                                        <a href="/contract-management/view/{{ $contract->id_contract }}/draft-contract/{{$reviewProject->id_draft_contract}}" target="_blank">
+                                                            <p>{{$reviewProject->draftContract->title_draft}}</p>
+                                                        </a>
+                                                    </td>
+                                                    <!--end::Name=-->
                                                     <!--begin::Name=-->
                                                     <td>
                                                         <p>{{$reviewProject->ketentuan}}</p>
                                                     </td>
                                                     <!--end::Name=-->
-                                                    <!--begin::Name=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->sub_pasal}}</p>
-                                                    </td>
-                                                    <!--end::Name=-->
-                                                    <!--begin::Kode=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->uraian}}</p>
-                                                    </td>
-                                                    <!--end::Kode=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->pic_cross}}</p>
-                                                    </td>
-                                                    <!--end::Unit=-->
-                                                    <!--begin::Unit=-->
-                                                    <td>
-                                                        <p>{{$reviewProject->catatan}}</p>
-                                                    </td>
-                                                    <!--end::Unit=-->
                                                 </tr>
                                             @endif
+
                                         @empty
                                             <tr>
-                                                <td colspan="5" class="text-center text-dark">
-                                                    <b>There is no data</b>
+                                                <td colspan="5" class="text-center">
+                                                    <h6><b>There is no data</b></h6>
                                                 </td>
                                             </tr>
                                         @endforelse
                                     @else
                                         <tr>
-                                            <td colspan="5" class="text-center text-dark">
-                                                <b>There is no data</b>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
                                             </td>
                                         </tr>
                                     @endif
@@ -2943,47 +2928,70 @@
                     <input type="hidden" value="{{$contract->id_contract ?? 0}}" name="id-contract">
                     <input type="hidden" class="modal-name" name="modal-name">
                     <input type="hidden" value="2" name="stage">
-                    <div class="row mb-5">  
-                        <div class="col-6 border-end">
-                            <div class="row ">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="row">
+                                <div class="col">
+                                    <label for="id-draft-contract" class="fs-6 fw-bold form-label mt-3">Pilih Draft Kontrak</label>
+                                    <select name="id-draft-contract" onchange="pilihDraftKontrak(this, '#input-pasal-2')" id="id-draft-contract-2" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Draft Kontrak" tabindex="-1" aria-hidden="true">
+                                        <option value=""></option>
+                                        @foreach ($draftContracts as $draft)
+                                        <option value="{{ $draft->id_draft }}">{{ $draft->title_draft }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row mb-5">  
                                 <div class="col">
                                     <label for="ketentuan-review" class="fs-6 fw-bold form-label mt-3">Ketentuan</label>
-                                    <input type="text" name="ketentuan-review" id="ketentuan-review" class="form-control form-control-solid">
+                                    <input type="text" name="ketentuan-review" id="ketentuan-review-2" placeholder="Ketik di sini..." class="form-control form-control-solid">
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
-                                    <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                {{-- <div class="col-6 border-end">
+                                    <div class="row ">
+                                    </div>
+                                    <br> --}}
+                                    {{-- <div class="row">
+                                        <div class="col">
+                                            <label for="sub-pasal-review" class="fs-6 fw-bold form-label mt-3">Sub Pasal</label>
+                                            <input type="text" name="sub-pasal-review" id="sub-pasal-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
+                                            <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
+                                            <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
+                                            <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="uraian-penjelasan-review" class="fs-6 fw-bold form-label mt-3">Uraian Penjelasan</label>
-                                    <input type="text" name="uraian-penjelasan-review" id="uraian-penjelasan-review" class="form-control form-control-solid">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="pic-cross-review" class="fs-6 fw-bold form-label mt-3">PIC <i class="text-dark">Cross Function</i></label>
-                                    <input type="text" name="pic-cross-review" id="pic-cross-review" class="form-control form-control-solid">
-                                </div>
-                            </div>
-                            <br>
-                            <div class="row">
-                                <div class="col">
-                                    <label for="catatan-review" class="fs-6 fw-bold form-label mt-3">Catatan</label>
-                                    <input type="text" name="catatan-review" id="catatan-review" class="form-control form-control-solid">
-                                </div>
+        
+                                <div class="col-6 d-flex flex-column justify-content-center">
+                                    <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
+                                    <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                                </div> --}}
                             </div>
                         </div>
-
-                        <div class="col-6 d-flex flex-column justify-content-center">
-                            <label for="upload-review" class="fs-6 fw-bold form-label mt-3">Upload Excel di bawah ini</label>
-                            <input type="file" accept=".xlsx" class="form-control form-control-solid" name="upload-review">
+                        <div class="col-1 d-flex w-20px">
+                            <div class="vr"></div>
+                        </div>
+                        <div class="col">
+                            <b>Buat perubahan pasal di bawah ini:</b>
+                            <textarea cols="5" rows="8" name="input-pasal" class="form-control form-textarea-solid" id="input-pasal-2"></textarea>
                         </div>
                     </div>
 
@@ -4851,10 +4859,9 @@
                         <div class="col-1 d-flex w-20px">
                             <div class="vr"></div>
                         </div>
-                        <div class="col-5">
-                            <b>Preview Pasal:</b> <br><br>
-                            <div id="preview-pasal">
-                            </div>
+                        <div class="col">
+                            <b>Buat perubahan pasal di bawah ini:</b>
+                            <textarea cols="5" rows="8" name="input-pasal" class="form-control form-textarea-solid" id="input-pasal"></textarea>
                         </div>
                     </div>
 
@@ -5646,7 +5653,7 @@ aria-hidden="true">
                 });
             } else {
                 getDraftContractRes.forEach(pasal => {
-                    html += `<p>- ${pasal}</p>`;
+                    html += `- ${pasal} &#13;&#10;`;
                 });
             }
             document.querySelector(showEltResult).innerHTML = html;
