@@ -285,7 +285,7 @@
                                         <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan Pelaksanaan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nilai_kontrak_keseluruhan', 'Nilai Realisasi')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="min-w-auto text-center"><small>Action</small></th>
