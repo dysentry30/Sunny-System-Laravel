@@ -46,6 +46,7 @@ class ProyekController extends Controller
         $filterJenis = $request->query("filter-jenis");
         $filterUnit = $request->query("filter-unit");
         // dd($column);
+        $customers = Customer::all();
         $sumberdanas = SumberDana::all();
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
@@ -56,26 +57,31 @@ class ProyekController extends Controller
         }
 
         // Begin::FILTER
-        if (!empty($filter)) {
-            // $proyeks = Proyek::sortable()->where($column, '=', $filter);
-            $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
-        } elseif (!empty($filterUnit)) {
-            $proyeks = $proyeks->where($column, 'like', '%' . $filterUnit . '%')->get();
-        } elseif (!empty($filterStage)) {
-            $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
-        } elseif (!empty($filterJenis)) {
-            $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
-        } else {
-            // if(!empty($cari)){
-            //     $proyeks = $proyeks->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
-            // }else{
-            $proyeks = $proyeks->get();
-            // }
-        }
+        // if (!empty($column)) {
+            if (!empty($filter)) {
+                // $proyeks = Proyek::sortable()->where($column, '=', $filter);
+                $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
+            } elseif (!empty($filterUnit)) {
+                $proyeks = $proyeks->where($column, 'like', '%' . $filterUnit . '%')->get();
+            } elseif (!empty($filterStage)) {
+                $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
+            } elseif (!empty($filterJenis)) {
+                $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
+            } else {
+                // if(!empty($cari)){
+                    //     $proyeks = $proyeks->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
+                    // }else{
+                        $proyeks = $proyeks->get();
+                        // }
+                    }
+        // } else {
+            // $column = "nama_proyek";
+            // $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
+        // }
 
         // $proyeks = Proyek::sortable()->get();
 
-        return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "sumberdanas", "unitkerjas"]));
+        return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
     }
 
 
@@ -92,14 +98,14 @@ class ProyekController extends Controller
         $unitKerja = UnitKerja::where('divcode', "=", $dataProyek["unit-kerja"])->get()->first();
 
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "nama-proyek" => "required",
             "unit-kerja" => "required",
             "jenis-proyek" => "required",
             "tipe-proyek" => "required",
-            "nilai-rkap" => "required",
+            // "nilai-rkap" => "required",
             // "sumber-dana" => "required",
             "tahun-perolehan" => "required",
             "bulan-pelaksanaan" => "required",
@@ -111,7 +117,7 @@ class ProyekController extends Controller
             $request->old("unit-kerja");
             $request->old("jenis-proyek");
             $request->old("tipe-proyek");
-            $request->old("nilai-rkap");
+            // $request->old("nilai-rkap");
             // $request->old("sumber-dana");
             $request->old("tahun-perolehan");
             $request->old("bulan-pelaksanaan");
@@ -129,25 +135,25 @@ class ProyekController extends Controller
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
-
+        
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
         
         $newProyek->stage = "1";
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
-
+        
         $newProyek->nilai_valas_review = $dataProyek["nilai-rkap"];
         $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilaiok_review = $dataProyek["nilai-rkap"];
         $newProyek->kurs_review = 1;
         $newProyek->mata_uang_review = "IDR";
-
+        
         $newProyek->kurs_awal = 1;
         $newProyek->mata_uang_awal = "IDR";
         $newProyek->nilaiok_awal = $dataProyek["nilai-rkap"];
         $newProyek->porsi_jo = 100;
-
+        
         //begin::Generate Kode Proyek
         $generateProyek = Proyek::all();
         if ($generateProyek->last() == null) {
@@ -157,28 +163,46 @@ class ProyekController extends Controller
             $no_urut = (int) preg_replace("/[^0-9]/i", "", $generateProyek->last()->kode_proyek) + 1;
         }
         // dd($generateProyek->last());
-
-
+        
+        
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
         $tipe_proyek = $dataProyek["tipe-proyek"];
         $tahun = $dataProyek["tahun-perolehan"];
-
+        
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
         $kode_tahun = $tahun == 2021 ? "A" : "O";
-
+        
         // Untuk membuat 3 digit nomor urut terakhir
         $no_urut = str_pad(strval($no_urut), 3, 0, STR_PAD_LEFT);
-
+        
         // Menggabungkan semua kode beserta nomor urut
         $kode_proyek = $unit_kerja . $jenis_proyek . $tipe_proyek . $kode_tahun . $no_urut;
-
+        
         $newProyek->kode_proyek = $kode_proyek;
         //end::Generate Kode Proyek
+        
+        
+        //end::Generate Kode Proyek
+        $idCustomer = $dataProyek["customer"];
 
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
 
         if ($newProyek->save()) {
+            if ($idCustomer != null) {
+                $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $kode_proyek)->get()->first();
+                // dd($customerHistory);
+                $customerHistory = new ProyekBerjalans();
+                $customerHistory->id_customer = $idCustomer;
+                $customerHistory->nama_proyek = $newProyek->nama_proyek;
+                $customerHistory->kode_proyek = $kode_proyek;
+                $customerHistory->pic_proyek = $newProyek->ketua_tender;
+                $customerHistory->unit_kerja = $newProyek->unit_kerja;
+                $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
+                $customerHistory->nilaiok_proyek = $newProyek->nilai_rkap;
+                $customerHistory->stage = $newProyek->stage;
+                $customerHistory->save();
+            } 
             return redirect("/proyek/view/$kode_proyek")->with("success", ($dataProyek["nama-proyek"] . ", Berhasil dibuat"));
         }
         // return redirect("/proyek")->with("failed", ($dataProyek["nama-proyek"].", Gagal Dibuat"));
@@ -229,11 +253,10 @@ class ProyekController extends Controller
         $dataProyek = $request->all();
         // dd($dataProyek); //console log hasil $dataProyek
         $newProyek = Proyek::find($dataProyek["kode-proyek"]);
-        $kode_proyek = $newProyek->kode_proyek;
 
         // dd($newProyek);
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
             "numeric" => "*Kolom ini harus numeric!",
         ];
         $rules = [
@@ -253,16 +276,17 @@ class ProyekController extends Controller
         //     $request->old("nama-proyek");
         //     Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
         // }
+        
         $validation->validate();
 
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
-        // $newProyek->kode_proyek = $dataProyek["kode-proyek"];
-        // $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+        $newProyek->kode_proyek = $dataProyek["kode-proyek"];
+        $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];   
-        // $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
-        // $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
+        $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
+        $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
 
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
@@ -318,10 +342,14 @@ class ProyekController extends Controller
         $newProyek->laporan_tender = $dataProyek["laporan-tender"];
 
         // form PEROLEHAN
-        $newProyek->biaya_praproyek = $dataProyek["biaya-praproyek"];
+        // $newProyek->biaya_praproyek = $dataProyek["biaya-praproyek"];
         $newProyek->nilai_perolehan = $dataProyek["nilai-perolehan"];
         // $newProyek->hps_perolehan = $dataProyek["hps-perolehan"];
-        $newProyek->oe_wika = $dataProyek["oe-wika"];
+        $oe_wika = 0;
+        if (!empty($dataProyek["nilai-kontrak-penawaran"]) && !empty($dataProyek["hps-pagu"])) {
+            $oe_wika = ( (int) $dataProyek["nilai-kontrak-penawaran"] / (int) $dataProyek["hps-pagu"]) *100;
+            $newProyek->oe_wika = $oe_wika;
+        };
         $newProyek->peringkat_wika = $dataProyek["peringkat-wika"];
         $newProyek->laporan_perolehan = $dataProyek["laporan-perolehan"];
         
@@ -360,9 +388,9 @@ class ProyekController extends Controller
         $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
         $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
         $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
-        $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
-        $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
-        $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
+        // $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
+        // $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
+        // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
         $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
 
         $idCustomer = $dataProyek["customer"];
@@ -372,35 +400,38 @@ class ProyekController extends Controller
 
         // dd(isset($dataProyek["jenis-proyek"]));
 
+        $kode_proyek = $newProyek->kode_proyek;
+        
+        // Begin :: EDIT KODE PROYEK
+        // if ((isset($dataProyek["jenis-proyek"]) && $newProyek->jenis_proyek != $dataProyek["jenis-proyek"]) || (isset($dataProyek["tipe-proyek"]) && $newProyek->tipe_proyek != $dataProyek["tipe-proyek"]) || (isset($dataProyek["tahun-perolehan"]) && $newProyek->tahun_perolehan != $dataProyek["tahun-perolehan"])) {
+        //     // dd($dataProyek);
+        //     //begin::Generate Kode Proyek
+        //     $kode_proyek = str_split($dataProyek["edit-kode-proyek"]);
+        //     // $unit_kerja = $dataProyek["unit-kerja"];
+        //     $kode_proyek[1] = $dataProyek["jenis-proyek"];
+        //     $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
 
-        if ((isset($dataProyek["jenis-proyek"]) && $newProyek->jenis_proyek != $dataProyek["jenis-proyek"]) || (isset($dataProyek["tipe-proyek"]) && $newProyek->tipe_proyek != $dataProyek["tipe-proyek"]) || (isset($dataProyek["tahun-perolehan"]) && $newProyek->tahun_perolehan != $dataProyek["tahun-perolehan"])) {
-            // dd($dataProyek);
-            //begin::Generate Kode Proyek
-            $kode_proyek = str_split($dataProyek["edit-kode-proyek"]);
-            // $unit_kerja = $dataProyek["unit-kerja"];
-            $kode_proyek[1] = $dataProyek["jenis-proyek"];
-            $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
+        //     $kode_proyek[2] = $dataProyek["tipe-proyek"];
+        //     $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
 
-            $kode_proyek[2] = $dataProyek["tipe-proyek"];
-            $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
-
-            $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
-            $tahun = $dataProyek["tahun-perolehan"];
-            $kode_tahun = $tahun == 2021 ? "A" : "O";
-            $kode_proyek[3] = $kode_tahun;
-
-            // Menggabungkan semua kode beserta nomor urut
-            $kode_proyek = $kode_proyek[0] . $kode_proyek[1] . $kode_proyek[2] . $kode_proyek[3] . $kode_proyek[4] . $kode_proyek[5] . $kode_proyek[6];
-            $newProyek->kode_proyek = $kode_proyek;
-
-            Alert::success('Success', "Kode Proyek Berhasil Diubah : " . $kode_proyek);
-
-            // return redirect("/proyek/view/".$kode_proyek);
-            // $newProyek->save();
-        } else {
+        //     $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+        //     $tahun = $dataProyek["tahun-perolehan"];
+        //     $kode_tahun = $tahun == 2021 ? "A" : "O";
+        //     $kode_proyek[3] = $kode_tahun;
+            
+        //     // Menggabungkan semua kode beserta nomor urut
+        //     $kode_proyek = $kode_proyek[0] . $kode_proyek[1] . $kode_proyek[2] . $kode_proyek[3] . $kode_proyek[4] . $kode_proyek[5] . $kode_proyek[6];
+        //     $newProyek->kode_proyek = $kode_proyek;
+            
+        //     Alert::success('Success', "Kode Proyek Berhasil Diubah : " . $kode_proyek);
+            
+        //     //end::Generate Kode Proyek
+        // } else {
+        //     Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
+        // }
+        // Begin :: EDIT KODE PROYEK
+        
             Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
-        }
-        //end::Generate Kode Proyek
 
         if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
             $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
@@ -611,7 +642,20 @@ class ProyekController extends Controller
         $kodeProyek = $request->kode_proyek;
         $proyekStage = Proyek::find($kodeProyek);
         $proyekAttach = $proyekStage->AttachmentMenang;
-        // dd($proyekStage);
+        // if ($request->stage == 2) {
+        //     // dd($proyekStage->status_pasdin);
+        //     if ($proyekStage->laporan_kualitatif_pasdin == null) {
+        //         Alert::error("Error", "Pastikan (*) Kolom Ini Harus Diisi !");
+        //         // return redirect()->back();
+        //     } else {
+        //         $request->stage = 2;
+        //     }
+        // } else if ($request->stage == 3){
+        //     # code...
+        // } else {
+        //     # code...
+        // }
+        
         if (!$request->is_ajax) {
             $data = $request->all();
             // Check kalo variable di bawah ini ada
@@ -726,7 +770,7 @@ class ProyekController extends Controller
         $dataPorsiJO = $request->all();
         // dd($dataPorsiJO);
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "company-jo" => "required",
@@ -764,7 +808,7 @@ class ProyekController extends Controller
         $dataPorsiJO = $request->all();
         // dd($dataPorsiJO);
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "company-jo" => "required",
@@ -826,7 +870,7 @@ class ProyekController extends Controller
     {
         $assignTeam = $request->all();
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "nama-team" => "required",
@@ -857,35 +901,9 @@ class ProyekController extends Controller
     public function tambahTender(Request $request,  PesertaTender $newTender)
     {
         $data = $request->all();
+        // dd($data);
         $messages = [
-            "required" => "*This field is required",
-        ];
-        $rules = [
-            "peserta-tender" => "required",
-        ];
-        $validation = Validator::make($data, $rules, $messages);
-        if ($validation->fails()) {
-            Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
-        }
-
-        $validation->validate();
-
-        $newTender->peserta_tender = $data["peserta-tender"];
-        $newTender->nilai_tender_peserta = $data["nilai-tender"];
-        $newTender->oe_tender = $data["oe-tender"];
-        $newTender->status = $data["status-tender"];
-        $newTender->kode_proyek = $data["tender-kode-proyek"];
-
-        $newTender->save();
-        Alert::success("Success", "Peserta Tender Berhasil Diubah");
-        return redirect()->back();
-    }
-
-    public function editTender(Request $request, $id)
-    {
-        $data = $request->all();
-        $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "peserta-tender" => "required",
@@ -896,16 +914,53 @@ class ProyekController extends Controller
         }
 
         $validation->validate();
+        $newTender->peserta_tender = $data["peserta-tender"];
+        $newTender->kode_proyek = $data["tender-kode-proyek"];
+        if ($data["stage-proyek"] >= 5) {
+            $newTender->nilai_tender_peserta = $data["nilai-tender"];
+            $newTender->status = $data["status-tender"];
+        }
+
+        $newTender->save();
+        Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
+        return redirect()->back();
+    }
+
+    public function editTender(Request $request, $id)
+    {
+        $data = $request->all();
+        // dd($data);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+        ];
+        $rules = [
+            "edit-peserta-tender" => "required",
+        ];
+        $validation = Validator::make($data, $rules, $messages);
+        if ($validation->fails()) {
+            Alert::error('Error', "Peserta Tender Gagal Diubah, Periksa Kembali !");
+        }
+
+        $validation->validate();
 
         $editTender = PesertaTender::find($id);
-        $editTender->peserta_tender = $data["peserta-tender"];
-        $editTender->nilai_tender_peserta = $data["nilai-tender"];
-        $editTender->oe_tender = $data["oe-tender"];
-        $editTender->status = $data["status-tender"];
+        $editTender->peserta_tender = $data["edit-peserta-tender"];
         $editTender->kode_proyek = $data["tender-kode-proyek"];
 
+        if ($data["stage-proyek"] >= 5) {
+        $editTender->nilai_tender_peserta = $data["nilai-tender"];
+        $editTender->status = $data["status-tender"];
+        $oe_wika = 0;
+        $nilai_tender = (int)  str_replace(',', '', $data["nilai-tender"]);
+        $nilai_pagu = (int)  str_replace(',', '', $data["tender-pagu"]);
+        if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
+            $oe_wika = ( $nilai_tender / $nilai_pagu) * 100;
+        };
+            $editTender->oe_tender = $oe_wika;
+        }
+
         $editTender->save();
-        Alert::success("Success", "Peserta Tender Berhasil Ditambahkan");
+        Alert::success("Success", "Peserta Tender Berhasil Diubah");
         return redirect()->back();
     }
 
@@ -921,7 +976,7 @@ class ProyekController extends Controller
     {
         $data = $request->all();
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "nomor-adendum" => "required",
@@ -953,7 +1008,7 @@ class ProyekController extends Controller
     {
         $data = $request->all();
         $messages = [
-            "required" => "*This field is required",
+            "required" => "*Kolom Ini Harus Diisi !",
         ];
         $rules = [
             "nomor-adendum" => "required",

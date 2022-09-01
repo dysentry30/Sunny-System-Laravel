@@ -118,10 +118,10 @@
                                         style="margin-right: 2rem" data-control="select2" data-hide-search="true"
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
-                                        <option {{ $column == '' ? 'selected' : '' }}></option>
-                                        <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode
-                                            Proyek</option>
+                                        {{-- <option {{ $column == '' ? 'selected' : '' }}></option> --}}
                                         <option value="nama_proyek" {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama
+                                            Proyek</option>
+                                        <option value="kode_proyek" {{ $column == 'kode_proyek' ? 'selected' : '' }}>Kode
                                             Proyek</option>
                                         <option value="tahun_perolehan"
                                             {{ $column == 'tahun_perolehan' ? 'selected' : '' }}>Tahun Perolehan</option>
@@ -166,6 +166,7 @@
                                                 <option></option>
                                                 <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
                                                 <option value="E" {{ $filter == 'E' ? 'selected' : '' }}>External</option>
+                                                <option value="J" {{ $filter == 'J' ? 'selected' : '' }}>JO</option>
                                             </select>
                                         </div>
                                     {{-- @elseif ($column == 'unit_kerja') --}}
@@ -327,7 +328,7 @@
 
                                             <!--begin::Stage-->
                                             @php
-                                                if ($proyek->stage == 0 || $proyek->stage == 7 ){
+                                                if ($proyek->stage == 0 || $proyek->stage == 7 || $proyek->stage == 10 ){
                                                     $stageColor = "text-danger";
                                                 } else if ($proyek->stage == 8 || $proyek->stage == 9){
                                                     $stageColor = "text-success";
@@ -378,8 +379,12 @@
                                                             Terendah
                                                         @break
 
+                                                        @case('10')
+                                                            Gugur Prakualifikasi
+                                                        @break
+
                                                         @default
-                                                            Selesai
+                                                            *Belum Ditentukan
                                                     @endswitch
                                                 </small>
                                             </td>
@@ -479,7 +484,22 @@
                                             <!--begin::Jenis Proyek-->
                                             <td class="text-center">
                                                 <small>
-                                                    {{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}
+                                                    @switch($proyek->jenis_proyek)
+                                                        @case('I')
+                                                            Internal
+                                                        @break
+
+                                                        @case('E')
+                                                            External
+                                                        @break
+
+                                                        @case('J')
+                                                            JO
+                                                        @break
+
+                                                        @default
+                                                            -
+                                                    @endswitch
                                                 </small>
                                             </td>
                                             <!--end::Jenis Proyek-->
@@ -631,6 +651,8 @@
                                             Internal</option>
                                         <option value="E" {{ old('jenis-proyek') == 'E' ? 'selected' : '' }}>
                                             External</option>
+                                        <option value="J" {{ old('jenis-proyek') == 'J' ? 'selected' : '' }}>
+                                            JO</option>
                                     </select>
                                     @error('jenis-proyek')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
@@ -676,7 +698,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nilai OK (Exclude Ppn)</span>
+                                        <span>Nilai OK (Exclude Ppn)</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
@@ -760,7 +782,7 @@
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->
                                     <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">RA Bulan Pelaksanaan</span>
+                                        <span class="required">RA Bulan Perolehan</span>
                                     </label>
                                     <!--end::Label-->
                                     <!--Begin::Input-->
@@ -791,10 +813,42 @@
                             <!--End::Col-->
                         </div>
                         <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Pelanggan</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="customer" name="customer"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="false"
+                                        data-placeholder="Pilih Customer">
+                                        <option></option>
+                                        @foreach ($customers as $customer)
+                                            <option value="{{ $customer->id_customer }}"> {{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
                                 style="background-color:#008CB4" id="proyek_new_save">Save</button>
                         </div>
+                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
                     </div>
                     <!--end::Modal body-->
                 </div>

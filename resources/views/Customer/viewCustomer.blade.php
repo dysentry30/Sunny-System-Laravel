@@ -321,21 +321,20 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
-                                                                        <option value="BUMN"
-                                                                            {{ $customer->jenis_instansi == 'BUMN' ? 'selected' : '' }}>
-                                                                            BUMN</option>
-                                                                        <option value="BUMND"
-                                                                            {{ $customer->jenis_instansi == 'BUMND' ? 'selected' : '' }}>
-                                                                            BUMND</option>
-                                                                        <option value="APBN"
-                                                                            {{ $customer->jenis_instansi == 'APBN' ? 'selected' : '' }}>
-                                                                            APBN</option>
-                                                                        <option value="Swasta"
-                                                                            {{ $customer->jenis_instansi == 'Swasta' ? 'selected' : '' }}>
-                                                                            Swasta</option>
-                                                                        <option value="Investasi"
-                                                                            {{ $customer->jenis_instansi == 'Investasi' ? 'selected' : '' }}>
-                                                                            Investasi</option>
+                                                                        @foreach ($sumberdanas as $sumberdana)
+                                                                            @if ($sumberdana->id == $customer->jenis_instansi)
+                                                                                <option
+                                                                                    value="{{ $sumberdana->id }}"
+                                                                                    selected>
+                                                                                    {{ $sumberdana->nama_sumber }}
+                                                                                </option>
+                                                                            @else
+                                                                                <option
+                                                                                    value="{{ $sumberdana->id }}">
+                                                                                    {{ $sumberdana->nama_sumber }}
+                                                                                </option>
+                                                                            @endif
+                                                                        @endforeach
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
