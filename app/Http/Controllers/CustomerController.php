@@ -6,6 +6,7 @@ use Faker\Core\Uuid;
 use App\Models\Proyek;
 use App\Models\Customer;
 use App\Models\UnitKerja;
+use App\Models\SumberDana;
 use App\Models\CustomerPic;
 use Illuminate\Http\Request;
 use App\Models\ProyekBerjalans;
@@ -250,6 +251,7 @@ class CustomerController extends Controller
             "customer" => $customer, 
             "attachment" => $customer->customerAttachments->all(),   
             "proyekberjalan" => $customer->proyekBerjalans->all(),
+            'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
             // "proyekberjalan6" => $customer->proyekBerjalans->where('stage', ">", 6),
             "proyeks" => $proyeks,

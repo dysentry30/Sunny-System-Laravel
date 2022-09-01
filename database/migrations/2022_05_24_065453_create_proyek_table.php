@@ -15,7 +15,6 @@ return new class extends Migration
     {
         Schema::create('proyeks', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
 
             //#table PASAR DINI
             $table->string("nama_proyek");
@@ -73,7 +72,7 @@ return new class extends Migration
             $table->text("laporan_tender")->nullable();
             
             //#table PEROLEHAN
-            $table->string("biaya_praproyek")->nullable();
+            // $table->string("biaya_praproyek")->nullable();
             // $table->string("penawaran_perolehan")->nullable();
             $table->string("nilai_perolehan")->nullable();
             $table->string("oe_wika")->nullable();
@@ -107,15 +106,17 @@ return new class extends Migration
             $table->date("tanggal_selesai_fho")->nullable();
             $table->string("jenis_terkontrak")->nullable();
             $table->string("sistem_bayar")->nullable();
-            $table->string("nilai_sisa_risiko")->nullable();
-            $table->string("cadangan_risiko")->nullable();
-            $table->string("nilai_disetujui")->nullable();
+            // $table->string("nilai_sisa_risiko")->nullable();
+            // $table->string("cadangan_risiko")->nullable();
+            // $table->string("nilai_disetujui")->nullable();
             $table->text("laporan_terkontrak")->nullable();
             
             //# Approval Table
             
             // Table untuk Halaman Forecast
             $table->bigInteger("forecast")->nullable();
+
+            $table->timestamps();
         });
     }
 

@@ -786,7 +786,7 @@
                 // }
             },
 
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#F7C13E", "#46AAF5", "#61CB65", "#ED6D3F", "#9575CD"],
             legend: {
                 layout: 'horizontal',
                 align: 'center',
@@ -824,7 +824,11 @@
                 {
                     name: 'Nilai Realisasi ' + nilaiRealisasi[11],
                     data: nilaiRealisasi,
-                }
+                },
+                // {
+                //     name: 'Nilai OK Review ' + nilaiForecast[11],
+                //     data: nilaiForecast,
+                // }
             ],
 
             responsive: {

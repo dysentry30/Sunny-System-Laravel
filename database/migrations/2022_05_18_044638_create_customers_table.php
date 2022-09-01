@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('provinsi')->nullable();
             $table->string('kota_kabupaten')->nullable();
             $table->string('name_pic')->nullable();
-            $table->string('kode_pic')->nullable();
+            // $table->string('kode_pic')->nullable();
             $table->string('email_pic')->nullable();
             $table->string('phone_number_pic')->nullable();
             
