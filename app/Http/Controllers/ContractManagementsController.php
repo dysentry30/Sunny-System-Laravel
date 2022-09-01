@@ -54,7 +54,7 @@ class ContractManagementsController extends Controller
             $proyeks_terkontrak = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->where("c.stages", "<", 3)->get()->sortBy("p.kode_proyek")->map(function ($data) {
                 return self::stdClassToModel($data, Proyek::class);
             })->whereNotNull("nomor_terkontrak");
-            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5);
+            $proyeks_tender_awal = Proyek::all()->where("stage", "<", 5)->where("stage", "!=", 0);
             $proyeks_pelaksanaan_serah_terima = DB::table("proyeks as p")->select(["p.*", "c.stages"])->join("contract_managements as c", "c.project_id", "=", "p.kode_proyek")->whereBetween("c.stages", [3, 4], "or")->get()->map(function ($data) {
                 return self::stdClassToModel($data, Proyek::class);
             });

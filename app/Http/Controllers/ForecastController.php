@@ -39,11 +39,19 @@ class ForecastController extends Controller
         if (($periode != "" && $year != "") || Auth::user()->check_administrator) {
             // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
             $historyForecast = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->where("history.periode_prognosa", "=", $periode, "or")->whereYear("history.created_at", $year)->get();
-            // $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", "=", $year_previous_forecast)->where("f.periode_prognosa", '=', $previous_periode_prognosa)->get()->groupBy(["periode_prognosa", "created_at"]);
-            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->get()->groupBy(["periode_prognosa"]);
+            // $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->get()->groupBy(["periode_prognosa"]);
+            $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get();
+            // $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "unit_kerja", "kode_proyek"]);
+            // $previous_forecast = [0 => $previous_forecast];
+            // $previous_forecast->map(function($data) {
+            //     $data->map(function($d) {
+            //         dd($d);
+            //     });
+            // });
+            // dd($previous_forecast);
         } else {
             // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
-            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("f.created_at", "=", $year_previous_forecast)->where("f.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->join("unit_kerjas", "proyeks.kode_proyek", "=", "unit_kerjas.divcode")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "kode_proyek"]);
             $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
         }
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
@@ -109,7 +117,10 @@ class ForecastController extends Controller
                         return str_contains(strtolower($data->nama_proyek), strtolower($filter));
                 }
             });
+            // $proyeks_eksternal = $proyeks->filter()
         }
+
+        // dd($proyeks->groupBy(["dop", "unit_kerja"]));
 
         return view(
             'Forecast/viewForecast',
