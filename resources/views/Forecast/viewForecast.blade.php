@@ -59,8 +59,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast_bulanan"
-                                                            style="font-size:14px;">Forecast
-                                                            Bulanan</a>
+                                                            style="font-size:14px;">Forecast Eksternal Bulanan</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast Bulanan-->
     
@@ -68,7 +67,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
-                                                            style="font-size:14px;">Forecast Internal</a>
+                                                            style="font-size:14px;">Forecast Bulanan Include Internal</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast Internal-->
     
@@ -76,7 +75,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
-                                                            style="font-size:14px;">Forecast S/D</a>
+                                                            style="font-size:14px;">Forecast Kumulatif Eksternal</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast S/D-->
     
@@ -84,7 +83,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
-                                                            style="font-size:14px;">Forecast S/D Internal</a>
+                                                            style="font-size:14px;">Forecast Kumulatif Include Internal</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast S/D-->
                                                 </ul>
@@ -636,6 +635,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         </tr>
                                                                         {{-- begin:: Foreach Unit Kerja --}}
                                                                         @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                            @php
+                                                                                $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);
+                                                                            @endphp
                                                                             @if (count($unitKerja->proyeks) > 0 && ($unitKerja->divcode == Auth::user()->unit_kerja || Auth::user()->check_administrator))
                                                                                 <tr class="collapse accordion-header"
                                                                                     id="{{ $dop_name }}"
@@ -645,9 +647,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <!--begin::Child=-->
                                                                                         <a class="ms-6" type="button"
                                                                                             data-bs-toggle="collapse"
-                                                                                            data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                            data-bs-target="#{{ $unit_kerja_name }}"
                                                                                             aria-expanded="false"
-                                                                                            aria-controls="{{ $unitKerja->divcode }}">
+                                                                                            aria-controls="{{ $unit_kerja_name }}">
                                                                                             <i class="bi bi-chevron-down"></i>
                                                                                             {{ $unitKerja->unit_kerja }}
                                                                                         </a>
@@ -731,10 +733,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 {{-- begin:: Foreach Proyek --}}
                                                                                 @if ($column != "" && $column == "nama_proyek")
                                                                                     @foreach ($proyeks as $proyek)
-                                                                                        <tr id="{{ $unitKerja->divcode }}"
+                                                                                        <tr id="{{ $unit_kerja_name }}"
                                                                                             class="collapse"
-                                                                                            aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                            data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                            aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                            data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                             style="text-align: right;">
                                                                                             <td
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
@@ -781,7 +783,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi)
+                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi && $month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
@@ -850,7 +852,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', ',');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
+                                                                                            // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
@@ -897,10 +899,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @endforeach
                                                                                 @else
                                                                                     @foreach ($unitKerja->proyeks as $proyek)
-                                                                                        <tr id="{{ $unitKerja->divcode }}"
+                                                                                        <tr id="{{ $unit_kerja_name }}"
                                                                                             class="collapse"
-                                                                                            aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                            data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                            aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                            data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                             style="text-align: right;">
                                                                                             <td
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
@@ -947,7 +949,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', ',') }}"
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi)
+                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi || $month_counter == (int) $proyek->bulan_ri_perolehan) && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
@@ -1016,7 +1018,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', ',');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', ',');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
+                                                                                            // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
@@ -1035,7 +1037,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
                                                                                             <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
                                                                                             </center>
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin"
@@ -1056,7 +1058,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                             <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', ',') }}</b>
+                                                                                                <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', ',') }}</b>
                                                                                             </center>
                                                                                         </td>
                                                                                         <!--end::Total Side Coloumn-->
@@ -1068,6 +1070,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                             $total_forecast = 0;
                                                                             $total_ok = 0;
                                                                             $month_counter = 1;
+                                                                            $nilai_terkontrak_formatted = 0;
                                                                             $total_year_forecast += $total_forecast;
                                                                         @endphp
                                                                     @endforeach
@@ -1556,6 +1559,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                             {{-- begin:: Foreach Unit Kerja --}}
                                                                             @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                                @php
+                                                                                    $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);
+                                                                                @endphp
                                                                                 @if (count($unitKerja->proyeks) > 0 && ($unitKerja->divcode == Auth::user()->unit_kerja || Auth::user()->check_administrator))
                                                                                     <tr class="collapse accordion-header"
                                                                                         id="{{ $dop_name }}"
@@ -1565,9 +1571,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             <!--begin::Child=-->
                                                                                             <a class="ms-6" type="button"
                                                                                                 data-bs-toggle="collapse"
-                                                                                                data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                                data-bs-target="#{{ $unit_kerja_name }}"
                                                                                                 aria-expanded="false"
-                                                                                                aria-controls="{{ $unitKerja->divcode }}">
+                                                                                                aria-controls="{{ $unit_kerja_name }}">
                                                                                                 <i
                                                                                                     class="bi bi-chevron-down"></i>
                                                                                                 {{ $unitKerja->unit_kerja }}
@@ -1655,10 +1661,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     {{-- begin:: Foreach Proyek --}}
                                                                                     @foreach ($unitKerja->proyeks as $proyek)
                                                                                         @if ($proyek->jenis_proyek == 'I')
-                                                                                            <tr id="{{ $unitKerja->divcode }}"
+                                                                                            <tr id="{{ $unit_kerja_name }}"
                                                                                                 class="collapse"
-                                                                                                aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                                data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                                aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                                data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                                 style="text-align: right;">
                                                                                                 <td
                                                                                                     style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
@@ -2313,6 +2319,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                             {{-- begin:: Foreach Unit Kerja --}}
                                                                             @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                                @php
+                                                                                    $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);
+                                                                                @endphp
                                                                                 @if (count($unitKerja->proyeks) > 0 && ($unitKerja->divcode == Auth::user()->unit_kerja || Auth::user()->check_administrator))
                                                                                     <tr class="collapse accordion-header"
                                                                                         id="{{ $dop_name }}"
@@ -2322,9 +2331,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             <!--begin::Child=-->
                                                                                             <a class="ms-6" type="button"
                                                                                                 data-bs-toggle="collapse"
-                                                                                                data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                                data-bs-target="#{{ $unit_kerja_name }}"
                                                                                                 aria-expanded="false"
-                                                                                                aria-controls="{{ $unitKerja->divcode }}">
+                                                                                                aria-controls="{{ $unit_kerja_name }}">
                                                                                                 <i
                                                                                                     class="bi bi-chevron-down"></i>
                                                                                                 {{ $unitKerja->unit_kerja }}
@@ -2408,10 +2417,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     </tr>
                                                                                     {{-- begin:: Foreach Proyek --}}
                                                                                     @foreach ($unitKerja->proyeks as $proyek)
-                                                                                        <tr id="{{ $unitKerja->divcode }}"
+                                                                                        <tr id="{{ $unit_kerja_name }}"
                                                                                             class="collapse"
-                                                                                            aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                            data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                            aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                            data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                             style="text-align: right;">
                                                                                             <td
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
@@ -3082,6 +3091,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                             {{-- begin:: Foreach Unit Kerja --}}
                                                                             @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                                @php
+                                                                                    $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);
+                                                                                @endphp
                                                                                 @if (count($unitKerja->proyeks) > 0 && ($unitKerja->divcode == Auth::user()->unit_kerja || Auth::user()->check_administrator))
                                                                                     <tr class="collapse accordion-header"
                                                                                         id="{{ $dop_name }}"
@@ -3091,9 +3103,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             <!--begin::Child=-->
                                                                                             <a class="ms-6" type="button"
                                                                                                 data-bs-toggle="collapse"
-                                                                                                data-bs-target="#{{ $unitKerja->divcode }}"
+                                                                                                data-bs-target="#{{ $unit_kerja_name }}"
                                                                                                 aria-expanded="false"
-                                                                                                aria-controls="{{ $unitKerja->divcode }}">
+                                                                                                aria-controls="{{ $unit_kerja_name }}">
                                                                                                 <i
                                                                                                     class="bi bi-chevron-down"></i>
                                                                                                 {{ $unitKerja->unit_kerja }}
@@ -3179,10 +3191,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @foreach ($unitKerja->proyeks as $proyek)
                                                                                         @if ($proyek->jenis_proyek == 'I')
 
-                                                                                            <tr id="{{ $unitKerja->divcode }}"
+                                                                                            <tr id="{{ $unit_kerja_name }}"
                                                                                                 class="collapse"
-                                                                                                aria-labelledby="{{ $unitKerja->divcode }}"
-                                                                                                data-bs-parent="#{{ $unitKerja->divcode }}"
+                                                                                                aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                                data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                                 style="text-align: right;">
                                                                                                 <td
                                                                                                     style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
@@ -3920,12 +3932,18 @@ fill="none">
         dataColumnTotalRealisasiBulanan.forEach((forecast, i) => {
             const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
             const dataColumnForecast = Array.from(document.querySelectorAll(
-                `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
+            `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
             if (dataColumnForecast.length > 10) {
                 dataColumnForecast.length = 10;
             }
+            if (dataColumnForecast.length > 2) {
+                dataColumnForecast.pop();
+            }
             dataColumnForecast.forEach(dataForecast => {
-                totalRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, "") ?? 0);
+                const nilaiRealisasi = Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
+                if(nilaiRealisasi) {
+                    totalRealisasiBulanan += nilaiRealisasi;
+                }
             });
             if (totalColumnForecast) {
                 const formattedForecastValue = Intl.NumberFormat("en-US", {
@@ -4258,15 +4276,14 @@ fill="none">
     }
 
     async function unlockPreviousForecast() {
-        let historyForecast = JSON.parse('{!!$previous_forecast->toJson()!!}');
+        // let historyForecast = JSON.parse('{!!$previous_forecast->toJson()!!}');
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
                             "Juli", "Agustus", "September", "Oktober", "November", "Desember"
                             ];
-        const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
-        const minMonth = Math.min(...historyForecastObj);
-        const maxMonth = Math.max(...historyForecastObj);
-        const jsonVariable = {};
-        const date = new Date();
+        // const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
+        // const minMonth = Math.min(...historyForecastObj);
+        // const maxMonth = Math.max(...historyForecastObj);
+        // const date = new Date();
         // let getAvgMonth = [];
         // for(var i=minMonth; i <= maxMonth; i++) {
         //     const objectMonth = Object.keys(historyForecast[i]);
@@ -4286,11 +4303,10 @@ fill="none">
         //     let date = getAvgMonth[i].split(", ")[1];
         //     jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
         // }
-
+        const jsonVariable = {};
         for(let i = 0; i < monthNames.length; i++) {
             jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
         }
-        console.log(jsonVariable);
         const {value: monthForecast} = await Swal.fire({
             title: 'Pilih Bulan Forecast',
             input: 'select',
