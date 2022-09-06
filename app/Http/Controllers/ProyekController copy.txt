@@ -46,25 +46,15 @@ class ProyekController extends Controller
         $filterJenis = $request->query("filter-jenis");
         $filterUnit = $request->query("filter-unit");
         // dd($column);
-        // $proyekBerjalan = ProyekBerjalans::all();
-        // dd($proyekBerjalan);
         $customers = Customer::all();
         $sumberdanas = SumberDana::all();
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
-            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable();
+            $proyeks = Proyek::with(['UnitKerja'])->sortable();
         } else {
             $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
-            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
+            $proyeks = Proyek::with(['UnitKerja'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
         }
-        // foreach ($customers as $customer) {
-        //     foreach ($proyeks as $proyek) {
-        //         if ($proyek->proyekBerjalan->id_customer == $customer->id_customer) {
-        //             $pelanggan = $customer->name;
-        //         }
-        //         dd($proyek->proyekBerjalan);
-        //     }
-        // }
 
         // Begin::FILTER
         // if (!empty($column)) {
@@ -230,7 +220,7 @@ class ProyekController extends Controller
         $teamProyek = TeamProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $kriteriaProyek = KriteriaPasarProyek::where("kode_proyek", "=", $kode_proyek)->get();
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
-        // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
+        $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
         // dd($proyek); //tes log hasil 
         return view(
@@ -251,7 +241,7 @@ class ProyekController extends Controller
                 'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
                 "historyForecast" => $historyForecast,
                 'porsiJO' => $porsiJO,
-                // 'data_provinsi' => $data_provinsi,
+                'data_provinsi' => $data_provinsi,
                 'data_negara' => $data_negara,
 
             ]
@@ -271,21 +261,21 @@ class ProyekController extends Controller
         ];
         $rules = [
             "nama-proyek" => "required",
-            "bulan-pelaksanaan" => "required",
-            // "nilai-rkap" => "required",
+            "nilai-rkap" => "required",
             // "sumber-dana" => "required",
+            "bulan-pelaksanaan" => "required",
             // "porsi-jo" => "numeric"
         ];
         // if (isset($dataProyek["porsi-jo"])) {
         //     $rules["porsi-jo"] = "numeric";
         // }
         $validation = Validator::make($dataProyek, $rules, $messages);
-        if ($validation->fails()) {
-            // dd($validation);
-            Alert::error('Error', "Proyek Gagal Diubah, Periksa Kembali !");
-            $request->old("nama-proyek");
-            Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
-        }
+        // if ($validation->fails()) {
+        //     dd($validation);
+        //     Alert::error('Error', "Proyek Gagal Diubah, Periksa Kembali !");
+        //     $request->old("nama-proyek");
+        //     Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
+        // }
         
         $validation->validate();
 
@@ -320,7 +310,7 @@ class ProyekController extends Controller
         // form PASAR POTENSIAL
         $newProyek->negara = $dataProyek["negara"];
         $newProyek->sbu = $dataProyek["sbu"];
-        // $newProyek->provinsi = $dataProyek["provinsi"];
+        $newProyek->provinsi = $dataProyek["provinsi"];
         $newProyek->klasifikasi = $dataProyek["klasifikasi"];
         $newProyek->status_pasar = $dataProyek["status-pasar"];
         $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
@@ -482,13 +472,12 @@ class ProyekController extends Controller
             // $customer = Customer::find($idCustomer);
 
             $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
-            
+            // dd($customerHistory);
+
             if ($customerHistory == null) {
-                
+
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
-                $nameCustomer = Customer::find($idCustomer);
-                $customerHistory->name_customer = $nameCustomer->name;
                 $customerHistory->nama_proyek = $newProyek->nama_proyek;
                 $customerHistory->kode_proyek = $newProyek->kode_proyek;
                 $customerHistory->pic_proyek = $newProyek->ketua_tender;
@@ -498,8 +487,6 @@ class ProyekController extends Controller
                 $customerHistory->stage = $newProyek->stage;
             } else {
                 $customerHistory->id_customer = $idCustomer;
-                $nameCustomer = Customer::find($idCustomer);
-                $customerHistory->name_customer = $nameCustomer->name;
             }
 
             if ($newProyek->save()) {
@@ -737,68 +724,20 @@ class ProyekController extends Controller
     public function getKriteria(Request $request)
     {
         $data = $request->all();
-        $kriteria = KriteriaPasar::where("kategori", "=", $data["kategori"])->get();
-        // $kriteria = KriteriaPasar::select("kriteria", "bobot")->where("kategori", "=", $data["kategori"])->get();
+        $kriteria = KriteriaPasar::select("kriteria", "bobot")->where("kategori", "=", $data["kategori"])->get();
         // dd($kriteria);
         return $kriteria->toJson();
     }
 
-    public function tambahKriteria(Request $request)
+    public function tambahKriteria(Request $request, KriteriaPasarProyek $newKriteria)
     {
         $dataKriteria = $request->all();
-        // dd($dataKriteria);
-        
-        $arrayKategori = collect($dataKriteria["kategori-pasar"]);
-        $arrayKriteria = collect($dataKriteria["kriteria-pasar"]);
-        $arrayBobot = collect($dataKriteria["bobot"]);
-        $kodeProyek = $dataKriteria["data-kriteria-proyek"];
+        $newKriteria->kode_proyek = $dataKriteria["data-kriteria-proyek"];
+        $newKriteria->kategori = $dataKriteria["kategori-pasar"];
+        $newKriteria->kriteria = $dataKriteria["kriteria-pasar"];
+        $newKriteria->bobot = $dataKriteria["bobot"];
 
-        $isKriteriaNull = $arrayKriteria->contains(function ($kriteria) {
-            return $kriteria == null;
-        });
-
-        if ($isKriteriaNull) {
-            Alert::error('Error', "Kriteria Pasar Gagal Ditambahkan, Periksa Kembali !");
-            return redirect()->back();
-        }
-        // dd($isKriteriaNull, $arrayKriteria);
-        
-        
-        
-        for ($i=0; $i < count($arrayKategori); $i++) { 
-            $newKriteria = new KriteriaPasarProyek();
-            // dd($newKriteria);
-
-            // $messages = [
-            //     "required" => "*Kolom Ini Harus Diisi !",
-            // ];
-            // $rules = [
-            //     $kodeProyek[$i] => "required",
-            //     $arrayKategori[$i] => "required",
-            //     $arrayKriteria[$i] => "required",
-            // ];
-            // $validation = Validator::make($newKriteria, $rules, $messages);
-            // if ($validation->fails()) {
-            //     Alert::error('Error', "Kriteria Pasar Gagal Ditambahkan, Periksa Kembali !");
-            // }
-            // $validation->validate();
-            
-            $newKriteria->kode_proyek = $kodeProyek;
-            $newKriteria->kategori = $arrayKategori[$i];
-            $newKriteria->kriteria = $arrayKriteria[$i];
-            $newKriteria->bobot = $arrayBobot[$i];
-            $newKriteria->save();
-        }
-            
-        // $newKriteria->kode_proyek = $dataKriteria["data-kriteria-proyek"];
-        // $newKriteria->kategori = $dataKriteria["kategori-pasar"];
-        // $newKriteria->kriteria = $dataKriteria["kriteria-pasar"];
-        // $newKriteria->bobot = $dataKriteria["bobot"];
-        // foreach ($dataKriteria as $key => $kriteria) {
-        //     dd($dataKriteria, $key, $kriteria);
-        // }
-
-        // $newKriteria->save();
+        $newKriteria->save();
         Alert::success("Success", "Kriteria Berhasil Ditambahkan");
         return redirect()->back();
     }
