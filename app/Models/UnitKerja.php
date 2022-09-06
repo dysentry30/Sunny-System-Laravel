@@ -31,4 +31,7 @@ class UnitKerja extends Model
     public function User_3() {
         return $this->hasOne(User::class, "id", "user_3");;
     }
+    public function Dop() {
+        return $this->belongsTo(Dop::class, "dop", "dop");
+    }
 }

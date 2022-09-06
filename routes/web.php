@@ -179,7 +179,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/claim-management/{proyek}/{contract}/new',  [ClaimController::class, 'new']);
 
     Route::post('/claim-management/save', [ClaimController::class, 'save']);
-    
+
     Route::post('/claim-management/delete', [ClaimController::class, 'claimDelete']);
 
     Route::get('claim-management/view/{claim_management}', [ClaimController::class, 'show']);
@@ -253,13 +253,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Delete PIC    
     Route::delete('/customer/pic/{id}/delete', [CustomerController::class, 'deletePic']);
-    
+
     // Add Struktur Organisasi    
     Route::post('/customer/struktur', [CustomerController::class, 'struktur']);
-    
+
     // EDIT Struktur Organisasi    
     Route::post('/customer/struktur/{id}/edit', [CustomerController::class, 'editStruktur']);
-    
+
     // Delete Struktur Organisasi    
     Route::delete('/customer/struktur/{id}/delete', [CustomerController::class, 'deleteStruktur']);
 
@@ -313,7 +313,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Stage Update 
     Route::post('/proyek/stage-save', [ProyekController::class, 'stage']);
-    
+
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
         $proyek = Proyek::find($data["kode_proyek"]);
@@ -361,70 +361,70 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     "status" => "success",
                     "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> berhasil di tambahkan",
                 ]);
-            } 
+            }
             return response()->json([
                 "status" => "failed",
                 "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
             ]);
         }
-        
+
         return response()->json([
             "status" => "failed",
             "msg" => "Nilai Forecast pada proyek <b>$proyek->nama_proyek</b> gagal di tambahkan",
         ]);
     });
-    
+
     // GET Kriteria 
     Route::post('/proyek/get-kriteria', [ProyekController::class, "getKriteria"]);
-    
+
     // ADD Kriteria 
     Route::post('/proyek/kriteria-add', [ProyekController::class, 'tambahKriteria']);
-    
+
     // EDIT Kriteria 
     Route::post('/proyek/{id}/kriteria-edit', [ProyekController::class, 'editKriteria']);
-    
+
     // DELETE Kriteria 
     Route::delete('/proyek/kriteria-delete/{id}', [ProyekController::class, 'deleteKriteria']);
-    
+
     // ADD Porsi-JO 
     Route::post('/proyek/porsi-jo', [ProyekController::class, "tambahJO"]);
-    
+
     // EDIT Porsi-JO 
     Route::post('/proyek/porsi-jo/{id}/edit', [ProyekController::class, "editJO"]);
-    
+
     // DELETE Porsi-JO 
     Route::delete('/proyek/porsi-delete/{id}', [ProyekController::class, "deleteJO"]);
-    
+
     // ADD Team Proyek 
     Route::post('proyek/user/add', [ProyekController::class, 'assignTeam']);
-    
+
     // DELETE Team Proyek 
     Route::delete('proyek/user-delete/{id}', [ProyekController::class, 'deleteTeam']);
-    
+
     // ADD Peserta Tender 
     Route::post('proyek/peserta-tender/add', [ProyekController::class, 'tambahTender']);
-    
+
     // EDIT Peserta Tender 
     Route::post('/proyek/peserta-tender/{id}/edit', [ProyekController::class, 'editTender']);
-    
+
     // DELETE Peserta Tender 
     Route::delete('proyek/peserta-tender/{id}/delete', [ProyekController::class, 'deleteTender']);
-    
+
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
-    
+
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/risk-tender/{id}/delete', [ProyekController::class, 'deleteRiskTender']);
-    
+
     // DELETE Attachment Menang
     Route::delete('/proyek/attachment-menang/{id}/delete', [ProyekController::class, 'deleteAttachmentMenang']);
-    
+
     // ADD History Adendum 
     Route::post('proyek/adendum/add', [ProyekController::class, 'tambahAdendum']);
-    
+
     // EDIT History Adendum 
     Route::post('proyek/adendum/{id}/edit', [ProyekController::class, 'editAdendum']);
-    
+
     // DELETE History Adendum 
     Route::delete('proyek/adendum/{id}/delete', [ProyekController::class, 'deleteAdendum']);
 
@@ -465,8 +465,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $current_proyek = Proyek::find($kode_proyek);
             $forecasts = $proyek->filter(function ($p) {
                 // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
-                return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
-                // return $data->nilai_forecast != 0;
+                // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
+                return $p->nilai_forecast != 0;
             })->filter(function($f) use($data) {
                 return $f->periode_prognosa == $data["periode_prognosa"];
             });
@@ -476,16 +476,18 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 }
                 $total_forecast += $forecast->nilai_forecast;
             }
-            // dd(current_proyek)
+            // dd($current_proyek);
             $history_forecast = new HistoryForecast();
             $history_forecast->kode_proyek = $kode_proyek;
             $history_forecast->nilai_forecast = (string) $total_forecast;
             $history_forecast->month_forecast = $farestMonth;
-            $history_forecast->rkap_forecast = str_replace(",", "", $current_proyek->nilai_rkap) ?? 0;
-            $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan;
-            $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            $history_forecast->rkap_forecast = str_replace(",", "", $current_proyek->nilai_rkap ?? 0) ?? 0;
+            // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+            $history_forecast->month_rkap = $current_proyek->bulan_pelaksanaan;
+            // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0) ?? 0;
             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
-            $history_forecast->month_realisasi = (int) $current_proyek->bulan_ri_perolehan;
+            $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
             $history_forecast->periode_prognosa = $request->periode_prognosa;
             $history_forecast->save();
             // if ($index == $forecasts->count() - 1) {
@@ -550,6 +552,29 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // ]);
     });
 
+    // Route::post('/forecast/set-lock', function (Request $request) {
+    //     $data = $request->all();
+    //     $proyeks = Forecast::where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
+    //     // loop 12 bulan
+    //     // $kode_proyeks = array_keys($proyeks);
+    //     foreach ($proyeks as $i => $p) {
+    //         foreach ($proyeks as $i => $p) {
+    //         }
+    //         // $proyek = Proyek::find($f->kode_proyek);
+    //         // for ($i = 1; $i <= 12; $i++) {
+    //         //     $history_forecast = new HistoryForecast();
+    //         //     $history_forecast->kode_proyek = $proyek->kode_proyek;
+    //         //     $history_forecast->month_forecast = $f->nilai_forecast;
+    //         //     $history_forecast->month_rkap = $proyek->bulan_pelaksanaan ?? 0;
+    //         //     $history_forecast->rkap_forecast = $proyek->nilai_rkap ?? 0;
+    //         //     $history_forecast->realisasi_forecast = $proyek->bulan_perolehan ?? 0;
+    //         //     $history_forecast->month_realisasi = $proyek->nilai_perolehan ?? 0;
+    //         //     $history_forecast->periode_prognosa = $i;
+    //         //     $history_forecast->save();
+    //         // }
+    //     }
+    // });
+
 
     Route::post('/forecast/set-unlock-previous-forecast', function (Request $request) {
         $data = $request->all();
@@ -590,7 +615,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         }
         dd($history_forecasts);
-        foreach($history_forecasts as $history_forecast) {
+        foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }
         return response()->json([
@@ -638,7 +663,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
         }
-        foreach($history_forecasts as $history_forecast) {
+        foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }
         return response()->json([
