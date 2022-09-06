@@ -256,8 +256,11 @@
                                                                     @case("I")
                                                                         Internal
                                                                         @break
-                                                                    @case("E")
+                                                                    @case("N")
                                                                         Eksternal
+                                                                        @break
+                                                                    @case("J")
+                                                                        JO
                                                                         @break
                                                                     @default
                                                                         

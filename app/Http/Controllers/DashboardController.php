@@ -40,7 +40,7 @@ class DashboardController extends Controller
             ->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $unitKerja = UnitKerja::all();
-            $proyeks = Proyek::all();
+            $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
             $dops = Dop::all();
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
@@ -61,7 +61,7 @@ class DashboardController extends Controller
             }
         } else {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-            $proyeks = Proyek::where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
             $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
@@ -226,9 +226,9 @@ class DashboardController extends Controller
         foreach ($proyeks as $proyek) {
             $stg = $proyek->stage;
             if ($stg == 8) {
-                $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
-            } else if ($stg == 9) {
-                $nilaiTerendah += (int) str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+                $nilaiTerkontrak += (int) str_replace(",", "", $proyek->nilai_perolehan);
+            } else if ($stg == 6 || ($stg == 5 && $proyek->peringkat_wika == "Peringkat 1")) {
+                $nilaiTerendah += (int) str_replace(",", "", $proyek->nilai_perolehan);
             };
             // dump($nilaiTerendah, $nilaiTerkontrak);
         };
@@ -244,7 +244,7 @@ class DashboardController extends Controller
             if ($stg == 6 || $stg == 8) {
                 $jumlahMenang++;
                 $nilaiMenang += (int) str_replace(",", "", $proyek->nilai_rkap);
-            } else if ($stg == 9) {
+            } else if ($stg == 7) {
                 $jumlahKalah++;
                 $nilaiKalah += (int) str_replace(",", "", $proyek->nilai_rkap);
             };
@@ -257,8 +257,10 @@ class DashboardController extends Controller
         $terkontrak = 0;
         foreach ($proyeks as $proyek) {
             $stg = $proyek->stage;
-            if ($stg <= 7) {
+            if ($stg < 5) {
                 $prosesTender++;
+            } else if ($stg == 7) {
+                continue;
             } else {
                 if(empty($proyek->ContractManagements)){
                     $terkontrak++;

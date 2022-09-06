@@ -66,7 +66,7 @@
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1  {{ $proyek->stage == 0 ? 'text-danger' : '' }}">
+                                    <h1 class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->stage == 0 ? 'text-danger' : '' }}">
                                         @if ($proyek->stage == 0)
                                             Proyek Canceled - &nbsp;
                                         @else
@@ -726,12 +726,12 @@
                                                     @endif
 
                                                     <!--begin:::Tab item Forecast-->
-                                                    {{-- <li class="nav-item">
+                                                    <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
                                                             style="font-size:14px;">Forecast</a>
-                                                    </li> --}}
+                                                    </li>
                                                     <!--end:::Tab item Forecast-->
 
                                                     <!--begin:::Tab item Approval-->
@@ -1111,7 +1111,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Excludde Ppn) <i class="bi bi-lock"></i></span>
+                                                                        <span>Nilai OK (Excludde Ppn)</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1119,7 +1119,7 @@
                                                                         class="form-control reformat form-control-solid"
                                                                         id="nilai-rkap" name="nilai-rkap"
                                                                         value="{{ $proyek->nilai_rkap }}"
-                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly/>
+                                                                        placeholder="Nilai OK (Excludde Ppn)"/>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1696,18 +1696,45 @@
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Provinsi</span>
+                                                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                                                        <span>Status Pasar <i
+                                                                                class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
-
+                                                                    <!--begin::Input-->
+                                                                    @php
+                                                                        $jumlahBobot = 0;
+                                                                        $statusPasar = '';
+                                                                        foreach ($kriteriapasarproyek as $kriteria) {
+                                                                            $jumlahBobot += $kriteria->bobot;
+                                                                            $jumlahKriteria = count($kriteriapasarproyek);
+                                                                            $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
+                                                                        }
+                                                                        if ($statusPasar == '') {
+                                                                            $statusPasar = '*Kriteria Pasar Belum Diisi';
+                                                                        } elseif ($statusPasar >= 0.75) {
+                                                                            $statusPasar = 'Potensial';
+                                                                        } else {
+                                                                            $statusPasar = 'Non-Potensial';
+                                                                        }
+                                                                    @endphp
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : ''}}"
+                                                                        id="status-pasar" name="status-pasar"
+                                                                        value="{{ $statusPasar }}" readonly />
+                                                                    <!--end::Input-->
+                                                                    <!--begin::Label-->
+                                                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Provinsi</span>
+                                                                    </label> --}}
+                                                                    <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="provinsi" name="provinsi"
                                                                         value="{{ $proyek->provinsi }}"
                                                                         placeholder="Provinsi" /> --}}
-                                                                    <select name="provinsi" id="provinsi" class="form-select form-select-solid"
+                                                                    {{-- <select name="provinsi" id="provinsi" class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="false" 
                                                                         data-placeholder="Pilih Provinsi">
                                                                         <option value=""></option>
@@ -1718,7 +1745,7 @@
                                                                                 <option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
                                                                             @endif
                                                                         @endforeach
-                                                                    </select>
+                                                                    </select> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1754,31 +1781,16 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Status Pasar <i
-                                                                                class="bi bi-lock"></i></span>
+                                                                        <span>DOP <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    @php
-                                                                        $jumlahBobot = 0;
-                                                                        $statusPasar = '';
-                                                                        foreach ($kriteriapasarproyek as $kriteria) {
-                                                                            $jumlahBobot += $kriteria->bobot;
-                                                                            $jumlahKriteria = count($kriteriapasarproyek);
-                                                                            $statusPasar = round($jumlahBobot / $jumlahKriteria, 2);
-                                                                        }
-                                                                        if ($statusPasar == '') {
-                                                                            $statusPasar = '*Kriteria Pasar Belum Diisi';
-                                                                        } elseif ($statusPasar >= 0.75) {
-                                                                            $statusPasar = 'Potensial';
-                                                                        } else {
-                                                                            $statusPasar = 'Non-Potensial';
-                                                                        }
-                                                                    @endphp
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid {{ $statusPasar == '*Kriteria Pasar Belum Diisi' ? 'text-danger' : ''}}"
-                                                                        id="status-pasar" name="status-pasar"
-                                                                        value="{{ $statusPasar }}" readonly />
+                                                                    <select id="dop" name="dop"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih DOP">
+                                                                        <option selected>{{ $proyek->dop }}</option>
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1814,33 +1826,6 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>DOP <i class="bi bi-lock"></i></span>
-                                                                    </label>
-                                                                    <!--end::Label-->
-                                                                    <!--begin::Input-->
-                                                                    <select id="dop" name="dop"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih DOP">
-                                                                        <option selected>{{ $proyek->dop }}</option>
-                                                                        {{-- @foreach ($dops as $dop)
-                                                                    @if ($dop->dop == $proyek->dop)
-                                                                        <option value="{{ $dop->dop }}" selected>{{$dop->dop }}</option>
-                                                                    @else
-                                                                        <option value="{{ $dop->dop }}">{{$dop->dop }}</option>
-                                                                    @endif
-                                                                    @endforeach --}}
-                                                                    </select>
-                                                                    <!--end::Input-->
-                                                                </div>
-                                                                <!--end::Input group-->
-                                                            </div>
-                                                            <!--End begin::Col-->
-                                                            <div class="col-6">
-                                                                <!--begin::Input group Website-->
-                                                                <div class="fv-row mb-7">
-                                                                    <!--begin::Label-->
-                                                                    <label class="fs-6 fw-bold form-label mt-3">
                                                                         <span>Company <i class="bi bi-lock"></i>
                                                                         </span>
                                                                     </label>
@@ -1864,6 +1849,27 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
+                                                            {{-- <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span>Company <i class="bi bi-lock"></i>
+                                                                        </span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select id="company" name="company"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Pilih Company">
+                                                                        <option selected>{{ $proyek->company }}</option>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div> --}}
+                                                            <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
 
@@ -1884,7 +1890,15 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Kriteria Pasar
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                            @php
+                                                                $style = "";
+                                                                foreach ($kriteriapasarproyek as $kriteria) {
+                                                                    if ($kriteria->count() > 0) {
+                                                                        $style = "none";
+                                                                    }
+                                                                }
+                                                            @endphp
+                                                            <a onclick="kategoriSelect()" href="#" Id="Plus" style="display: {{ $style }}" data-bs-toggle="modal"
                                                                 data-bs-target="#kt_modal_kriteria_pasardini">+</a>
                                                         </h3>
                                                         <br>
@@ -2804,15 +2818,16 @@
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Peringkat">
                                                                         <option></option>
-                                                                        <option value="Peringkat 1"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 1' ? 'selected' : '' }}>
-                                                                            Peringkat 1</option>
-                                                                        <option value="Peringkat 2"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 2' ? 'selected' : '' }}>
-                                                                            Peringkat 2</option>
-                                                                        <option value="Peringkat 3"
-                                                                            {{ $proyek->peringkat_wika == 'Peringkat 3' ? 'selected' : '' }}>
-                                                                            Peringkat 3</option>
+                                                                        <option value="Peringkat 1" {{ $proyek->peringkat_wika == 'Peringkat 1' ? 'selected' : '' }}>Peringkat 1</option>
+                                                                        <option value="Peringkat 2" {{ $proyek->peringkat_wika == 'Peringkat 2' ? 'selected' : '' }}>Peringkat 2</option>
+                                                                        <option value="Peringkat 3" {{ $proyek->peringkat_wika == 'Peringkat 3' ? 'selected' : '' }}>Peringkat 3</option>
+                                                                        <option value="Peringkat 4" {{ $proyek->peringkat_wika == 'Peringkat 4' ? 'selected' : '' }}>Peringkat 4</option>
+                                                                        <option value="Peringkat 5" {{ $proyek->peringkat_wika == 'Peringkat 5' ? 'selected' : '' }}>Peringkat 5</option>
+                                                                        <option value="Peringkat 6" {{ $proyek->peringkat_wika == 'Peringkat 6' ? 'selected' : '' }}>Peringkat 6</option>
+                                                                        <option value="Peringkat 7" {{ $proyek->peringkat_wika == 'Peringkat 7' ? 'selected' : '' }}>Peringkat 7</option>
+                                                                        <option value="Peringkat 8" {{ $proyek->peringkat_wika == 'Peringkat 8' ? 'selected' : '' }}>Peringkat 8</option>
+                                                                        <option value="Peringkat 9" {{ $proyek->peringkat_wika == 'Peringkat 9' ? 'selected' : '' }}>Peringkat 9</option>
+                                                                        <option value="Peringkat 10" {{ $proyek->peringkat_wika == 'Peringkat 10' ? 'selected' : '' }}>Peringkat 10</option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -5095,6 +5110,177 @@
 
 <!--begin::modal KRITERIA PASAR-->
 <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
+    @csrf
+    
+    <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
+    <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
+        <!--begin::Modal dialog-->
+        <div class="modal-dialog modal-dialog-centered mw-800px">
+            <!--begin::Modal content-->
+            <div class="modal-content">
+                <!--begin::Modal header-->
+                <div class="modal-header">
+                    <!--begin::Modal title-->
+                    <h2>Kriteria Proyek : </h2>
+                    <!--end::Modal title-->
+                    <!--begin::Close-->
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                        <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                        <span class="svg-icon svg-icon-1">
+                            <i class="bi bi-x-lg"></i>
+                        </span>
+                        <!--end::Svg Icon-->
+                    </div>
+                    <!--end::Close-->
+                </div>
+                <!--end::Modal header-->
+                
+                <!--begin::Modal body-->
+                <div class="modal-body py-lg-6 px-lg-6">
+                    @foreach ($kriteriapasar as $key => $kriteria)
+                    @php
+                        $kategories = strtolower(str_replace(' ', '', $kriteria->kategori));
+                        $kategori = str_replace('/', '', $kategories);
+                    @endphp
+                    <!--begin::Row Kanan+Kiri-->
+                    <div class="row fv-row">
+                        <!--begin::Col-->
+                        <div class="col-4">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Kategori</span>
+                                </label> 
+                                <!--end::Label-->
+                                <br>
+                                <!--begin::Input-->
+                                <label class="fs-6 fw-bolder form-label mt-3">
+                                    <span class="kategori-pasar" data-id="{{ $kriteria->id }}">{{ $kriteria->kategori }}</span>
+                                </label>
+                                {{-- <input type="hidden" name="kategori-pasar-{{ $kategori }}" value="{{ $kriteria->kategori }}"> --}}
+                                <input type="hidden" name="kategori-pasar[]" value="{{ $kriteria->kategori }}">
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-5">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span class="required">Kriteria</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                {{-- <select onchange="setBobot(this)" id="kriteria-pasar-{{ $kriteria->id }}" name="kriteria-pasar-{{ $kriteria->id }}"
+                                    class="form-select form-select-solid" data-control="select2"
+                                    data-hide-search="true" data-placeholder="Pilih Kriteria"> --}}
+                                <select onchange="setBobot(this)" id="kriteria-pasar-{{ $kriteria->id }}" name="kriteria-pasar[]"
+                                    class="form-select form-select-solid" data-control="select2"
+                                    data-hide-search="true" data-placeholder="Pilih Kriteria">
+                                    <option></option>
+                                    {{-- @if ($kriteria->kategori != null) --}}
+                                        {{-- <option value="{{ $kriteria->kriteria }}"> {{ $kriteria->kriteria }}</option> --}}
+                                    {{-- @endif --}}
+                                </select>
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End begin::Col-->
+                        <div class="col-2">
+                            <!--begin::Input group Website-->
+                            <div class="fv-row mb-7">
+                                <!--begin::Label-->
+                                <label class="fs-6 fw-bold form-label mt-3">
+                                    <span>Bobot</span>
+                                </label>
+                                <!--end::Label-->
+                                <!--begin::Input-->
+                                <input type="text" class="form-control form-control-solid" id="bobot-{{ $kategori }}"
+                                    name="bobot[]" placeholder="" readonly />
+                                {{-- <input type="text" class="form-control form-control-solid" id="bobot-{{ $kategori }}"
+                                    name="bobot-{{ $kategori }}" placeholder="" readonly /> --}}
+                                <!--end::Input-->
+                            </div>
+                            <!--end::Input group-->
+                        </div>
+                        <!--End::Col-->
+                    </div>
+                    <!--End::Row Kanan+Kiri-->
+                    <script>
+                        // let bobot = "";
+                        async function kategoriSelect() {
+                            let e = document.getElementsByClassName('kategori-pasar')
+                            // e.forEach(el => {
+                            //     console.log(el.innerText);
+                            // });
+                            for (let i = 0; i < e.length; i++) {
+                                const elm = e[i];
+                                // console.log(elm.innerText);
+                                
+                                const kategori = elm.innerText;
+                                const formData = new FormData();
+                                let html = `<option value=""></option>`;
+                                formData.append("_token", "{{ csrf_token() }}");
+                                formData.append("kategori", kategori);
+        
+                                const getKriteriaRes = await fetch("/proyek/get-kriteria", {
+                                    method: "POST",
+                                    header: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: formData,
+                                }).then(res => res.json());
+                                // console.log(getKriteriaRes);
+                                getKriteriaRes.forEach(data => {
+                                    
+                                    html += `<option data-id="${data.kategori.replaceAll(" ", "").replaceAll("/", "")}" data-bobot="${data.bobot}" value="${data.kriteria}">${data.kriteria}</option>`;
+                                });
+                                let id = elm.getAttribute("data-id");
+                                // console.log(id);
+                                document.querySelector("#kriteria-pasar-"+id).innerHTML = html;
+                                // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
+                            }
+                        }
+    
+                        function setBobot(e) {
+                            let bobot = "";
+                            let id = "";
+                            e.options.forEach(option => {
+                                // console.log(option.getAttribute("data-id"));
+                                if (option.selected) {
+                                    id = option.getAttribute("data-id");
+                                    console.log(option, id);
+                                    bobot = option.getAttribute("data-bobot");
+                                    // console.log(option.getAttribute("data-bobot"));
+                                }
+                            })
+                            // console.log(bobot, id);
+                            document.querySelector("#bobot-"+id).value = bobot;
+                        }
+                    </script>
+                @endforeach
+                </div>
+                <div class="modal-footer">
+    
+                    <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                        id="new_save" style="background-color:#008CB4">Save</button>
+    
+                </div>
+                <!--end::Modal body-->
+            </div>
+            <!--end::Modal content-->
+        </div>
+        <!--end::Modal dialog-->
+    </div>
+</form>
+<!--end::modal KRITERIA PASAR-->
+
+<!--begin::modal KRITERIA PASAR-->
+{{-- <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
 @csrf
 <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
 
@@ -5122,8 +5308,6 @@
 
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
-
-
                 <!--begin::Row Kanan+Kiri-->
                 <div class="row fv-row">
                     <!--begin::Col-->
@@ -5241,7 +5425,7 @@
     </div>
     <!--end::Modal dialog-->
 </div>
-</form>
+</form> --}}
 <!--end::modal KRITERIA PASAR-->
 
 <!--begin::modal EDIT KRITERIA PASAR-->

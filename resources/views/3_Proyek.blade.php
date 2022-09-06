@@ -283,10 +283,11 @@
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan Pelaksanaan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
+                                        <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="min-w-auto text-center"><small>Action</small></th>
@@ -457,9 +458,10 @@
                                             <!--end::Pelaksanaan-->
 
                                             <!--begin::Nilai OK-->
-                                            <td>
+                                            <td class="text-end">
                                                 <small>
-                                                    {{ $proyek->nilai_rkap }}
+                                                    {{-- {{ $proyek->nilai_rkap }} --}}
+                                                    {{ number_format((int)$proyek->nilai_rkap, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Nilai OK-->
@@ -467,15 +469,25 @@
                                             <!--begin::Forecast-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ number_format($proyek->forecast, 0, ',', ',') ?? '-' }}
+                                                    {{-- {{ $proyek->forecast }} --}}
+                                                    {{ number_format((int)$proyek->forecast, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->
-
+                                            
                                             <!--begin::Realisasi-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{ $proyek->nilai_perolehan ?? '-' }}
+                                                    {{-- {{ $proyek->nilai_perolehan }} --}}
+                                                    {{ number_format((int)$proyek->nilai_perolehan, 0, '.', '.') ?? '-' }}
+                                                </small>
+                                            </td>
+                                            <!--end::Realisasi-->
+
+                                            <!--begin::Realisasi-->
+                                            <td class="text-start {{ $proyek->proyekBerjalan ? '' : 'text-danger' }}">
+                                                <small>
+                                                    {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }}
                                                 </small>
                                             </td>
                                             <!--end::Realisasi-->
@@ -489,7 +501,7 @@
                                                             Internal
                                                         @break
 
-                                                        @case('E')
+                                                        @case('N')
                                                             External
                                                         @break
 
@@ -909,6 +921,15 @@
     <!--end::modal DELETE-->
 
 
+@endsection
+@section('js-script')
+<script>
+    $('#kt_modal_create_proyek').on('show.bs.modal', function() {
+        $("#customer").select2({
+            dropdownParent: $("#kt_modal_create_proyek")
+        });
+    });
+</script>
 @endsection
 
 <!--end::Main-->
