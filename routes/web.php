@@ -557,21 +557,22 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     //     $proyeks = Forecast::where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
     //     // loop 12 bulan
     //     // $kode_proyeks = array_keys($proyeks);
-    //     foreach ($proyeks as $i => $p) {
-    //         foreach ($proyeks as $i => $p) {
+    //     foreach ($proyeks as $forecasts) {
+    //         foreach ($forecasts as $f) {
+    //             $proyek = Proyek::find($f->kode_proyek);
+    //             for ($i = 1; $i <= 12; $i++) {
+    //                 $history_forecast = new HistoryForecast();
+    //                 $history_forecast->kode_proyek = $proyek->kode_proyek;
+    //                 $history_forecast->nilai_forecast = $f->nilai_forecast;
+    //                 $history_forecast->month_forecast = $f->month_forecast;
+    //                 $history_forecast->month_rkap = $proyek->bulan_pelaksanaan ?? 0;
+    //                 $history_forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap) ?? 0;
+    //                 $history_forecast->realisasi_forecast = str_replace(",", "", $proyek->bulan_perolehan) ?? 0;
+    //                 $history_forecast->month_realisasi = $proyek->nilai_perolehan ?? 0;
+    //                 $history_forecast->periode_prognosa = $i;
+    //                 $history_forecast->save();
+    //             }
     //         }
-    //         // $proyek = Proyek::find($f->kode_proyek);
-    //         // for ($i = 1; $i <= 12; $i++) {
-    //         //     $history_forecast = new HistoryForecast();
-    //         //     $history_forecast->kode_proyek = $proyek->kode_proyek;
-    //         //     $history_forecast->month_forecast = $f->nilai_forecast;
-    //         //     $history_forecast->month_rkap = $proyek->bulan_pelaksanaan ?? 0;
-    //         //     $history_forecast->rkap_forecast = $proyek->nilai_rkap ?? 0;
-    //         //     $history_forecast->realisasi_forecast = $proyek->bulan_perolehan ?? 0;
-    //         //     $history_forecast->month_realisasi = $proyek->nilai_perolehan ?? 0;
-    //         //     $history_forecast->periode_prognosa = $i;
-    //         //     $history_forecast->save();
-    //         // }
     //     }
     // });
 
@@ -906,6 +907,52 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return view("/Rkap/viewRkap", compact(["proyeks", "tahun_pelaksanaan", "rkaps"]));
     });
     // end RKAP
+
+    // begin RKAP AWAL dan REVIEW
+    Route::get('/ok-awal', function () {
+        if (Auth::user()->check_administrator) {
+            $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
+        } else {
+            $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
+        }
+
+        $proyeks = [];
+        foreach ($unitkerjas as $key => $unitkerja) {
+            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->get()->groupBy("tahun_perolehan");
+            array_push($proyeks, $proyek);
+            //    dump($proyeks);
+        }
+        // dd();
+
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+    });
+
+    Route::get('/ok-review', function () {
+        if (Auth::user()->check_administrator) {
+            $unitkerjas = Proyek::sortable()->get()->groupBy("unit_kerja");
+        } else {
+            $unitkerjas = Proyek::sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja)->get()->groupBy("unit_kerja");
+        }
+
+        $proyeks = [];
+        foreach ($unitkerjas as $key => $unitkerja) {
+            $proyek = Proyek::sortable()->where("unit_kerja", "=", $key)->get()->groupBy("tahun_perolehan");
+            array_push($proyeks, $proyek);
+            //    dump($proyeks);
+        }
+        // dd();
+
+        return view("/11_Rkap", compact(["unitkerjas", "proyeks"]));
+    });
+
+    Route::get('/rkap/{divcode}/{tahun_pelaksanaan}', function ($divcode, $tahun_pelaksanaan, Request $request) {
+        $proyeks = Proyek::where("tahun_perolehan", "=", $tahun_pelaksanaan)->where("unit_kerja", "=", $divcode)->get();
+        $rkaps = UnitKerja::where("divcode", "=", $divcode)->first();
+        // dd($rkaps);
+
+        return view("/Rkap/viewRkap", compact(["proyeks", "tahun_pelaksanaan", "rkaps"]));
+    });
+    // end RKAP AWAL dan REVIEW
 
 
     // begin email testing
