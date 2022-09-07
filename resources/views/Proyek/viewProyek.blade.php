@@ -1537,7 +1537,7 @@
                                                                                     @break
                                                                                     
                                                                                     @default
-                                                                                        Selesai
+                                                                                        *Bulan Belum Ditentukan
                                                                                 @endswitch
                                                                             </option>
                                                                         </select>
@@ -2439,7 +2439,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Jadwal Tender</span>
+                                                                        <span>Jadwal Pemasukan Tender</span>
                                                                     </label>
                                                                     <a href="#" class="btn"
                                                                         style="background: transparent;"

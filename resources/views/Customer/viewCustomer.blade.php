@@ -147,6 +147,26 @@
                                                     </div>
                                                     <!--end::Input group-->
 
+                                                    <!--begin::Input group Phone-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Nomor Handphone</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text"
+                                                        class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
+                                                        id="handphone" name="handphone"
+                                                        value="{{ $customer->handphone }}"
+                                                        placeholder="Nomor Handphone" />
+                                                        {{-- @error('phone-number')
+                                                        <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror --}}
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
                                                     <!--begin::Options-->
                                                     @php
                                                         $check_customer = $customer->check_customer ? 'checked' : '';
@@ -322,15 +342,15 @@
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
                                                                         @foreach ($sumberdanas as $sumberdana)
-                                                                            @if ($sumberdana->id == $customer->jenis_instansi)
+                                                                            @if ($sumberdana->nama_sumber == $customer->jenis_instansi)
                                                                                 <option
-                                                                                    value="{{ $sumberdana->id }}"
+                                                                                    value="{{ $sumberdana->nama_sumber }}"
                                                                                     selected>
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @else
                                                                                 <option
-                                                                                    value="{{ $sumberdana->id }}">
+                                                                                    value="{{ $sumberdana->nama_sumber }}">
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @endif

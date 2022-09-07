@@ -104,7 +104,7 @@
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-150px"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                             data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
@@ -116,7 +116,7 @@
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-150px ms-2"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
@@ -308,7 +308,7 @@
                                     </figure>
                                     <hr> --}}
 
-                                    <figure class="highcharts-figure py-12">
+                                    <figure class="highcharts-figure py-12" style="display:none;">
                                         <div class="py-12" id="nilai-realisasi">
                                             <!--begin::NILAI REALISASI-->
                                             <!--end::NILAI REALISASI-->
@@ -345,7 +345,7 @@
                                             <!--end::Table Proyek-->
                                         </div>
                                     </figure>
-                                    <hr>
+                                    {{-- <hr> --}}
 
                                     <div class="py-12" id="monitoring-proyek">
                                         <!--begin::MONITORING PROYEK-->
@@ -759,6 +759,7 @@
         let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
         let nilaiRkap = JSON.parse("{!! json_encode($nilaiRkapArray) !!}");
         let nilaiRealisasi = JSON.parse("{!! json_encode($nilaiRealisasiArray) !!}");
+        // console.log(nilaiRkap);
 
         const forecast1 = Highcharts.chart('forecast-line', {
 
@@ -814,19 +815,19 @@
             },
 
             series: [{
-                    name: 'Forecast ' + nilaiForecast[11],
+                    name: 'Forecast ' + nilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                     data: nilaiForecast,
                 },
                 {
-                    name: 'Nilai OK ' + nilaiRkap[11],
+                    name: 'Nilai OK ' + nilaiRkap[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                     data: nilaiRkap,
                 },
                 {
-                    name: 'Nilai Realisasi ' + nilaiRealisasi[11],
+                    name: 'Nilai Realisasi ' + nilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                     data: nilaiRealisasi,
                 },
                 // {
-                //     name: 'Nilai OK Review ' + nilaiForecast[11],
+                //     name: 'Nilai OK Review ' + nilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                 //     data: nilaiForecast,
                 // }
             ],
@@ -1099,7 +1100,7 @@
     </script>
     <!--end::MONITORING PROYEK-->
     
-    <!--begin::SEBARAN SUMBEER DANA-->
+    <!--begin::SEBARAN SUMBER DANA-->
     <script>
         Highcharts.chart('sumber-dana-rkap', {
             chart: {
@@ -1300,7 +1301,7 @@
             },
         });
     </script>
-    <!--end::SEBARAN SUMBEER DANA-->
+    <!--end::SEBARAN SUMBER DANA-->
 
 
     <!--begin::TERENDAH vs TERKONTRAK-->

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->boolean('check_competitor')->nullable();
             $table->string('email')->nullable();
             $table->string('phone_number')->nullable();
+            $table->string('handphone')->nullable();
             $table->string('website')->nullable();
             $table->string('address_1')->nullable();
             $table->string('address_2')->nullable();

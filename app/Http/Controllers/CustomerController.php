@@ -39,7 +39,7 @@ class CustomerController extends Controller
                 $all_customer = Customer::all(); //untuk delete modal
             } else {
                 // $results = Customer::sortable()->get();
-                $results = Customer::sortable()->orderBy('id_customer')->paginate(15);
+                $results = Customer::sortable()->orderBy('id_customer')->paginate(50);
                 $all_customer = Customer::all(); //untuk delete modal
                 $artilces = '';
                 if ($request->ajax()) {
@@ -300,6 +300,7 @@ class CustomerController extends Controller
         $editCustomer=Customer::find($data["id-customer"]);
         // dd($request);
         $editCustomer->name = $data["name-customer"];
+        $editCustomer->handphone = $data["handphone"];
         $editCustomer->check_customer = $request->has("check-customer"); //boolean check
         $editCustomer->check_partner = $request->has("check-partner"); //boolean check
         $editCustomer->check_competitor = $request->has("check-competitor"); //boolean check
