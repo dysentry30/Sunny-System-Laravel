@@ -75,11 +75,13 @@ class DashboardController extends Controller
         $nilaiForecast = 0;
         $nilaiForecastArray = [];
         $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
-
+        // dd($historyForecast);
+        
         $nilaiRkap = 0;
         $nilaiRkapArray = [];
         $historyRkap = $nilaiHistoryForecast->sortBy("month_rkap");
-
+        // dd($historyRkap);
+        
         $nilaiRealisasi = 0;
         $nilaiRealisasiArray = [];
         $historyRealisasi = $nilaiHistoryForecast->sortBy("month_realisasi");
@@ -96,19 +98,22 @@ class DashboardController extends Controller
                     $nilaiForecast == 0;
                 }
             }
+            // dd();
             array_push($nilaiForecastArray, $nilaiForecast);
 
-            foreach ($historyForecast as $rkap){
+            foreach ($historyRkap as $rkap){
                 if ($rkap->month_rkap == $i) {
                     $nilaiRkap += ceil($rkap->rkap_forecast/$per);
                 }else{
+                    // dump($rkap->month_rkap, $rkap->rkap_forecast);
                     $nilaiRkap == 0;
                 }
             }
             array_push($nilaiRkapArray, $nilaiRkap);
             
-            foreach ($historyForecast as $realisasi){
+            foreach ($historyRealisasi as $realisasi){
                 if ($realisasi->month_realisasi == $i) {
+                    // dump($realisasi->realisasi_forecast);
                     $nilaiRealisasi += ceil($realisasi->realisasi_forecast/$per);
                 }else{
                     $nilaiRealisasi == 0;
@@ -116,9 +121,8 @@ class DashboardController extends Controller
             }
             array_push($nilaiRealisasiArray, $nilaiRealisasi);
         }
-        // dump($nilaiRealisasiArray);
-        // dd();
-
+        // dump($nilaiRkapArray);
+        // dd($nilaiRkap);
 
         
         // begin :: Tri Wulan

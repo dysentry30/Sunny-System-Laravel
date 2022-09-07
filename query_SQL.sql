@@ -323,7 +323,7 @@ UPDATE `proyeks` SET `bulan_pelaksanaan`= 8,`nilai_rkap`='9933000000',`nilai_per
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 6,`nilai_rkap`='9933000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WINNER - PLTS Rooftop/Ground Universitas Negeri Surakarta";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 1,`nilai_rkap`='2867000000',`nilai_perolehan`= '3059915234',`bulan_ri_perolehan`= 7 WHERE `nama_proyek` = "WINNER - SWH Proyek";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 12,`nilai_rkap`='29002000143',`nilai_perolehan`= '18803878132',`bulan_ri_perolehan`= 8 WHERE `nama_proyek` = "WINNER - SWH Retail";
-UPDATE `proyeks` SET `bulan_pelaksanaan`= 4,`nilai_rkap`='70000000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - BM 1 Package Civil Work";
+UPDATE `proyeks` SET `bulan_pelaksanaan`= 4,`nilai_rkap`='70000000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - BM 1 Package Ci`vi`l Work";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 6,`nilai_rkap`='81189000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - BM 1 Package ME";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 9,`nilai_rkap`='278980000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - Cargill Plant";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 10,`nilai_rkap`='290989000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - ME Fasilitas Kawasan Industri";
