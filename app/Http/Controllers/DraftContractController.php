@@ -37,7 +37,7 @@ class DraftContractController extends Controller
             "attach-file-draft" => "required|file",
             "document-name-draft" => "required|string",
             "note-draft" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
             "draft-contract-title" => "required|string",
             "draft-contract-version" => "required|numeric",
             "draft-contract-start-date" => "required|date",
@@ -82,7 +82,8 @@ class DraftContractController extends Controller
             $request->old("document-name-draft");
             $request->old("document-name-draft-menang");
             $request->old("attach-file-draft");
-            return Redirect::back()->with("error", "Please fill 'Draft Contract' empty field");
+            Alert::error("Error", "Mohon diisi field yang kosong!");
+            return Redirect::back();
         }
     
         // Check ID Contract exist

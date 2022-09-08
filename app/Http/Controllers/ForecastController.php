@@ -61,7 +61,7 @@ class ForecastController extends Controller
         if (Auth::user()->check_administrator) {
             // $proyeks = collect();
             $proyeks = Proyek::with(["Forecasts", "HistoryForecasts"])->get();
-            $dops = Dop::all();
+            $dops = Dop::all()->sortBy("dop");
             // dd($proyeks);
         } else {
             // $proyeks = collect();

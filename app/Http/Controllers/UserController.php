@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Events\NotificationPasswordReset;
+use App\Models\Dop;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -154,10 +155,11 @@ class UserController extends Controller
         $user->check_admin_kontrak = $is_admin_kontrak;
         $user->check_user_sales = $is_user_sales;
         $user->check_team_proyek = $is_team_proyek;
-        $user->password = Hash::make($password);
+        // $user->password = Hash::make($password);
+        $user->password = Hash::make("password");
 
         if ($user->save()) {
-            Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
+            // Mail::to($user->email)->send(new UserPasswordEmail($user, $password));
             Alert::success("Success", 'User berhasil ditambahkan. Informasi Akun akan dikirimkan melalu email.');
             return redirect("/user");
         }
@@ -170,7 +172,7 @@ class UserController extends Controller
             Alert::error("Error", "User tidak ditemukan");
             return redirect("user");
         }
-        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all()]);
+        return view("/User/viewUser", ["user" => $user, "unit_kerjas" => UnitKerja::all(), "dops" => Dop::with("UnitKerjas")->get()->sortBy("dop")]);
     }
 
     public function update(Request $request)
@@ -228,7 +230,7 @@ class UserController extends Controller
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
-        $user->unit_kerja = $data["unit-kerja"];
+        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"];
         // $user->alamat = $data["alamat"];
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;

@@ -275,8 +275,8 @@
                                                     <div class="tab-pane fade" id="kt_user_view_overview_user_information"
                                                         role="tabpanel">
                                                         <!--begin:: D-flex -->
-                                                        <div class="d-flex flex-column h-100px justify-content-between">
-                                                            <select name="unit-kerja"
+                                                        <div class="d-flex flex-column h-70 justify-content-between">
+                                                            {{-- <select name="unit-kerja"
                                                                 class="form-select form-select-solid"
                                                                 data-control="select2" data-hide-search="true"
                                                                 data-placeholder="Unit Kerja" tabindex="-1"
@@ -298,8 +298,44 @@
                                                                             {{ $unitKerja->unit_kerja }}</option>
                                                                     @endforeach
                                                                 @endisset
-                                                            </select>
-                                                            <br>
+                                                            </select> --}}
+                                                            
+                                                            {{-- Begin :: Dropdown DOP --}}
+                                                            <div class="row">
+                                                                <div class="col" id="list-dop">
+                                                                    @php
+                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : $user->unit_kerja;
+                                                                        // dd($list_unit_kerja);
+                                                                    @endphp
+                                                                    @foreach ($dops as $dop)
+                                                                        <p><b>{{$dop->dop}}</b></p>
+                                                                        <div class="" style="display: grid; grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 2rem;">
+                                                                            @foreach ($dop->UnitKerjas as $unit_kerja)
+                                                                                <div class="form-check me-3 d-flex align-items-center">
+                                                                                    @php
+                                                                                        $is_unit_kerja_choosen = $list_unit_kerja->contains($unit_kerja->divcode);
+                                                                                    @endphp
+                                                                                    @if ($is_unit_kerja_choosen)
+                                                                                        <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                            value="{{$unit_kerja->divcode}}" checked
+                                                                                            name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
+                                                                                    @else 
+                                                                                        <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                            value="{{$unit_kerja->divcode}}"
+                                                                                            name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
+                                                                                    @endif
+                                                                                    <label class="form-check-label" for="{{$unit_kerja->divcode}}">
+                                                                                        <small>{{$unit_kerja->unit_kerja}}</small>
+                                                                                    </label>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+                                                                        <br>
+                                                                    @endforeach
+                                                                </div>
+                                                                {{-- End :: Dropdown DOP --}}
+                                                            </div>
+                                                        </div>
                     </form>
                     @if ($user->check_administrator == false)
                     <form action="/user/password/reset" method="post">
