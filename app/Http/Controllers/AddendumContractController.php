@@ -24,29 +24,29 @@ class AddendumContractController extends Controller
     {
         $column = $request->get("column");
         $filter = $request->get("filter");
-        
+
         if (Auth::user()->check_administrator) {
             // $addendumContracts = AddendumContracts::sortable()->join("addendum_contract_drafts", "addendum_contracts.id_addendum", "=", "addendum_contract_drafts.id_addendum")->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("uraian_perubahan", 'like', '%'.$filter.'%')->select("addendum_contracts.*")->get();
             $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->select("addendum_contracts.*")->get();
         } else {
-            if ($column == "uraian_perubahan"){
-                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("uraian_perubahan", 'like', '%'.$filter.'%')->get();
-            }else if (!empty($column)){
-                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where($column, 'like', '%'.$filter.'%')->get();
-            }else{
+            if ($column == "uraian_perubahan") {
+                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("uraian_perubahan", 'like', '%' . $filter . '%')->get();
+            } else if (!empty($column)) {
+                $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where($column, 'like', '%' . $filter . '%')->get();
+            } else {
                 $addendumContracts = AddendumContracts::sortable()->join("contract_managements", "contract_managements.id_contract", "=", "addendum_contracts.id_contract")->join("proyeks", "contract_managements.project_id", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
-            // $arrayDrafts = [];
-            // foreach ($addendumContracts as $addendumContract) {
-            //     $idAddendum = $addendumContract->id_addendum;
-            //     $addendumDrafts = AddendumContractDrafts::sortable()->where("id_addendum", '=', $idAddendum)->get();
-            //     // dump($addendumDrafts->each);
-            //     array_push($arrayDrafts, $addendumDrafts->each);
-            //     }
-            //     dump($arrayDrafts);
-            }    
+                // $arrayDrafts = [];
+                // foreach ($addendumContracts as $addendumContract) {
+                //     $idAddendum = $addendumContract->id_addendum;
+                //     $addendumDrafts = AddendumContractDrafts::sortable()->where("id_addendum", '=', $idAddendum)->get();
+                //     // dump($addendumDrafts->each);
+                //     array_push($arrayDrafts, $addendumDrafts->each);
+                //     }
+                //     dump($arrayDrafts);
+            }
         }
         // dd();
-        
+
         return view("9_Change_request", compact(["addendumContracts", 'column', 'filter']));
     }
 
@@ -293,11 +293,11 @@ class AddendumContractController extends Controller
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
-        $addendumContractDrafts->list_id_document_pendukung = join(",", $list_id_document_pendukung);
+            $addendumContractDrafts->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $addendumContractDrafts->list_id_document_pendukung = $id_document;
+            $addendumContractDrafts->dokumen_pendukung = $id_document;
         }
 
         $addendumContractDrafts->id_addendum = $data["id-addendum"];
@@ -449,10 +449,11 @@ class AddendumContractController extends Controller
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+            $addendumContractDiajukan->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $addendumContractDiajukan->list_id_document_pendukung = $id_document;
+            $addendumContractDiajukan->dokumen_pendukung = $id_document;
         }
 
         $addendumContractDiajukan->id_addendum = $data["id-addendum"];
@@ -460,7 +461,6 @@ class AddendumContractController extends Controller
         $addendumContractDiajukan->tanggal_diajukan = $data["tanggal-diajukan"];
         $addendumContractDiajukan->rekomendasi = (bool) $data["diajukan-rekomendasi"];
         $addendumContractDiajukan->uraian_rekomendasi = $data["uraian-rekomendasi"];
-        $addendumContractDiajukan->dokumen_pendukung = join(",", $list_id_document_pendukung);
         if ($addendumContractDiajukan->save()) {
             // Session::forget("pasals");
             moveFileTemp($data["proposal-addendum"], $id_document_proposal_addendum);
@@ -526,16 +526,16 @@ class AddendumContractController extends Controller
                 array_push($list_id_document_pendukung, $id_document);
                 moveFileTemp($dokumen_pendukung, $id_document);
             }
+            $addendumContractNegoisasi->dokumen_pendukung = join(",", $list_id_document_pendukung);
         } else {
             $id_document = $faker->uuid3();
             moveFileTemp($data["dokumen-pendukung"][0], $id_document);
-            $addendumContractNegoisasi->list_id_document_pendukung = $id_document;
+            $addendumContractNegoisasi->dokumen_pendukung = $id_document;
         }
 
         $addendumContractNegoisasi->id_addendum = $data["id-addendum"];
         $addendumContractNegoisasi->uraian_activity = $data["uraian-activity"];
         $addendumContractNegoisasi->tanggal_activity = $data["tanggal-activity"];
-        $addendumContractNegoisasi->dokumen_pendukung = join(",", $list_id_document_pendukung);
         $addendumContractNegoisasi->keterangan = $data["keterangan"];
         if ($addendumContractNegoisasi->save()) {
             // Session::forget("pasals");

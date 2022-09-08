@@ -726,7 +726,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     <!--end::Total Coloumn-->
                                                                                 </tr>
                                                                                 {{-- begin:: Foreach Proyek --}}
-                                                                                @if ($column != "" && $column == "nama_proyek")
+                                                                                @if ($column != "")
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         <tr id="{{ $unit_kerja_name }}"
                                                                                             class="accordion-collapse collapse"
@@ -970,10 +970,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @endforeach
                                                                                             @if (!$is_data_found)
-                                                                                                @if ($proyek->bulan_pelaksanaan == $month_counter && $proyek->bulan_pelaksanaan != null)
+                                                                                                @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ number_format($proyek->nilai_rkap, 0, ",", ".") }}
+                                                                                                        {{ number_format((float) $proyek->nilai_rkap, 0, ",", ".") }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"

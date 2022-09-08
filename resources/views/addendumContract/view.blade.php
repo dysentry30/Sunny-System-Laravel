@@ -1,6 +1,6 @@
 @extends('template.main')
 
-@section('title', 'Addendum Contract')
+@section('title', 'Change Request')
 @section('content')
     <!--begin::Root-->
     <div class=" d-flex flex-column flex-root">
@@ -468,7 +468,7 @@
                                                                                     <td class="text-gray-600">{{$key + 1}}</td>
                                                                                     <td class="text-gray-600">{{$draft_addendum->uraian_perubahan}}</td>
                                                                                     <td class="text-gray-600">
-                                                                                        <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_instruksi}}">{{$draft_addendum->id_document_instruksi}}</a>
+                                                                                        <a target="_blank" class="text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_instruksi}}">{{$draft_addendum->id_document_instruksi}}</a>
                                                                                     </td>
 
                                                                                     @php
@@ -513,7 +513,7 @@
                                                                                     </td>
                                                                                     
                                                                                     <td class="text-gray-600">
-                                                                                        <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_draft_proposal_addendum}}">{{$draft_addendum->id_document_draft_proposal_addendum}}</a>
+                                                                                        <a target="_blank" class="text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$draft_addendum->id_document_draft_proposal_addendum}}">{{$draft_addendum->id_document_draft_proposal_addendum}}</a>
                                                                                     </td>
 
                                                                                     <td class="text-gray-600">
@@ -529,7 +529,7 @@
                                                                                             $list_dokumen = explode(",", $draft_addendum->list_id_document_pendukung);
                                                                                         @endphp
                                                                                         @foreach ($list_dokumen as $key => $dokumen_pendukung)
-                                                                                           - <a target="_blank" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
+                                                                                           - <a target="_blank" class="text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
                                                                                         @endforeach
                                                                                     </td>
 
@@ -1247,7 +1247,7 @@
                                 <br>
                                 <div class="col">
                                     <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls,.pdf" class="form-control form-control-solid fw-normal">
                                 </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
                                 <span>Save</span>
@@ -1337,7 +1337,7 @@
                                 <br>
                                 <div class="col">
                                     <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls,.pdf" class="form-control form-control-solid fw-normal">
                                 </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
                                 <span>Save</span>
@@ -1413,7 +1413,7 @@
                                 <div class="row">
                                     <div class="col-6">
                                         <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls,.pdf" class="form-control form-control-solid fw-normal">
                                     </div>
                                     <div class="col-6">
                                         <label for="keterangan" class="form-label fs-6 fw-normal">Keterangan</label>
@@ -1510,7 +1510,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="dokumen-pendukung" class="form-label fs-6 fw-normal required">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx" multiple class="form-control form-control-solid">
+                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx,.pdf" multiple class="form-control form-control-solid">
                                 </div>
                             </div>
                         </div>
@@ -1598,7 +1598,7 @@
                                 </div>
                                 <div class="col-6">
                                     <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx" multiple class="form-control form-control-solid">
+                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx,.pdf" multiple class="form-control form-control-solid">
                                 </div>
                             </div>
                         </div>

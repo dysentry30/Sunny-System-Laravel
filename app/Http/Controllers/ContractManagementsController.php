@@ -427,7 +427,7 @@ class ContractManagementsController extends Controller
         //         "uraian-penjelasan-review" => "required|string",
         //         "catatan-review" => "required|string",
         //         "pic-cross-review" => "required|numeric",
-        //         "id-contract" => "required|numeric",
+        //         "id-contract" => "required|string",
         //     ];
         // } else {
         //     Alert::error("Error", "Pilih salah satu untuk dijadikan masukan");
@@ -441,7 +441,7 @@ class ContractManagementsController extends Controller
             // "uraian-penjelasan-review" => "required|string",
             // "catatan-review" => "required|string",
             // "pic-cross-review" => "required|numeric",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
             "id-draft-contract" => "required|numeric",
             "input-pasal" => "required|string",
         ];
@@ -523,7 +523,7 @@ class ContractManagementsController extends Controller
             "attach-file-issue" => "required|file",
             "document-name-issue" => "required|string",
             "note-issue" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -580,7 +580,7 @@ class ContractManagementsController extends Controller
             "document-name-question" => "required|string",
             "note-question" => "required|string",
             "kategori-Aanwitjzing" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
 
@@ -698,14 +698,13 @@ class ContractManagementsController extends Controller
             "attach-file-bulanan" => "required|file",
             "document-name-bulanan" => "required|string",
             "note-bulanan" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
             Alert::error('Error', "Review Contract gagal ditambahkan");
             return Redirect::back()->with("modal", $data["modal-name"]);
             // return Redirect::back();
-            // dd($validation->errors());
         }
         $validation->validate();
 
@@ -726,7 +725,7 @@ class ContractManagementsController extends Controller
         if ($monthlyReports->save()) {
             moveFileTemp($file, $id_document);
             Alert::success('Success', "Laporan Bulanan berhasil ditambahkan");
-            // return Redirect::back();
+            return Redirect::back();
         }
         Alert::error('Error', "Laporan Bulanan gagal ditambahkan");
         return Redirect::back()->with("modal", $data["modal-name"]);
@@ -751,7 +750,7 @@ class ContractManagementsController extends Controller
             "attach-file-terima" => "required|file",
             "document-name-terima" => "required|string",
             "note-terima" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -799,7 +798,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -845,7 +844,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -891,7 +890,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -937,7 +936,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -984,7 +983,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {
@@ -1031,7 +1030,7 @@ class ContractManagementsController extends Controller
             "attach-file" => "required|file",
             "document-name" => "required|string",
             "note" => "required|string",
-            "id-contract" => "required|numeric",
+            "id-contract" => "required|string",
         ];
         $validation = Validator::make($data, $rules, $messages);
         if ($validation->fails()) {

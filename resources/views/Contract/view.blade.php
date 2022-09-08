@@ -608,7 +608,7 @@
                                                 <span class="">Sumber Dana: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ $contract->project->sumber_dana }}</b>
+                                                <b>{{ $contract->project->sumber_dana ?? "-" }}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -2935,6 +2935,11 @@
                                     <label for="id-draft-contract" class="fs-6 fw-bold form-label mt-3">Pilih Draft Kontrak</label>
                                     <select name="id-draft-contract" onchange="pilihDraftKontrak(this, '#input-pasal-2')" id="id-draft-contract-2" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Draft Kontrak" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
+                                        @php
+                                            $draftContracts = $draftContracts->filter(function($d) {
+                                                return $d->tender_menang == 1; // harusnya stage
+                                            })
+                                        @endphp
                                         @foreach ($draftContracts as $draft)
                                         <option value="{{ $draft->id_draft }}">{{ $draft->title_draft }}</option>
                                         @endforeach
@@ -4803,7 +4808,7 @@
                             <div class="row">
                                 <div class="col">
                                     <label for="id-draft-contract" class="fs-6 fw-bold form-label mt-3">Pilih Draft Kontrak</label>
-                                    <select name="id-draft-contract" onchange="pilihDraftKontrak(this, '#preview-pasal')" id="id-draft-contract" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Draft Kontrak" tabindex="-1" aria-hidden="true">
+                                    <select name="id-draft-contract" onchange="pilihDraftKontrak(this, '#input-pasal')" id="id-draft-contract" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Pilih Draft Kontrak" tabindex="-1" aria-hidden="true">
                                         <option value=""></option>
                                         @foreach ($draftContracts as $draft)
                                         <option value="{{ $draft->id_draft }}">{{ $draft->title_draft }}</option>
