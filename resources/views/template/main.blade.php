@@ -207,23 +207,6 @@
                             </div>
                         @endif
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
-                            <div class="menu-item">
-                                <a class="menu-link " href="/forecast-include-internal"
-                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
-                                    <span class="menu-icon">
-                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                        <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-graph-up-arrow text-white"
-                                                style="font-size: 18px; margin-left:7px"></i>
-                                        </span>
-                                        <!--end::Svg Icon-->
-                                    </span>
-                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast Include Internal</span>
-                                </a>
-                            </div>
-                        @endif
-
                         @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_team_proyek)
                             <div class="menu-item">
                                 <a class="menu-link " href="/contract-management"

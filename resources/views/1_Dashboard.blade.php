@@ -804,8 +804,10 @@
             plotOptions: {
                 series: {
                     dataLabels: {
-                        enabled: true
-                        // format: '',
+                        enabled: true,
+                        // format: Intl.NumberFormat({}).format(parseInt('{y}')),
+                        format: '{y}',
+                        // format: typeof ('{y}'),
                     }
                 // allowPointSelect: true
                 },
@@ -958,7 +960,7 @@
         let sumNilaiRealisasi = nilaiRealisasiKumulatif.reduce((a, b) => a + b, 0);
         // console.log(nilaiOkKumulatif);
         // console.log(nilaiOkKumulatif.map(nilaiOKsatuan => nilaiOKsatuan / 1000000));
-        // Highcharts.chart('nilai-realisasi', {
+        Highcharts.chart('nilai-realisasi', {
             chart: {
                 type: 'column',
                 options3d: {
@@ -1566,6 +1568,14 @@
                     },
                     showInLegend: true
                 }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'20px',
+                },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',

@@ -6,6 +6,7 @@ use App\Models\Proyek;
 use App\Models\Forecast;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
+use App\Models\Opportunity;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 use App\Mail\UserPasswordEmail;
@@ -15,11 +16,14 @@ use Illuminate\Http\UploadedFile;
 use App\Events\LockForeacastEvent;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DopController;
 use App\Http\Controllers\SbuController;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\UserController;
+use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\ClaimController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
@@ -31,17 +35,14 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ForecastController;
 use App\Http\Controllers\DashboardController;
+
 use App\Http\Controllers\UnitKerjaController;
 use App\Http\Controllers\SumberDanaController;
 use App\Http\Controllers\TeamProyekController;
 use App\Http\Controllers\DraftContractController;
-
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
-use App\Models\Opportunity;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 /*
 |--------------------------------------------------------------------------
@@ -305,6 +306,34 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
 
+    Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
+
+    Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
+        $data = $request->all();
+        // dd($data, $i);
+        $forecast = new Forecast();
+        $forecast->kode_proyek = $data["kode-proyek"];
+
+        $forecast->nilai_forecast = (string) str_replace(".", "", $data["nilaiforecast-".$i]);
+        $forecast->month_forecast = (int) $i;
+        
+        $forecast->rkap_forecast = str_replace(".", "", $data["nilaiok-".$i]);
+        $forecast->month_rkap = (int) $i;
+        
+        $forecast->realisasi_forecast = (string) str_replace(".", "", $data["nilairealisasi-".$i]);
+        $forecast->month_realisasi = (int) $i;
+
+        $forecast->periode_prognosa = (int) $i;
+
+        
+        if ($forecast->save()) {
+            
+            Alert::success('Success', "Forecast Berhasil Dibuat");
+            return redirect()->back();
+        }
+        
+    });
+
     // DELETE data customer pada dasboard customer by ID 
     Route::delete('/proyek/delete/{kode_proyek}', [ProyekController::class, 'delete']);
 
@@ -436,6 +465,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Home Page Forecast
     Route::get('/forecast', [ForecastController::class, 'index']);
 
+    Route::get('/forecast-internal', [ForecastController::class, 'viewForecastInternal']);
+
     // Home Page Forecast with Specific periode
     Route::get('/forecast/{periode}/{year}', [ForecastController::class, 'index']);
 
@@ -465,6 +496,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             // dump();
             // $total_realisasi += $proyek->sum("realisasi_forecast");
             $current_proyek = Proyek::find($kode_proyek);
+            $forecasts = $proyek->filter(function ($p) use($request) {
+                // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
+                // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
+                return $p->periode_prognosa == $request->periode_prognosa;
+            });
             // $forecasts = $proyek->filter(function ($p) {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
