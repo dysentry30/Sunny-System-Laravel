@@ -555,7 +555,7 @@
                                                     <span class="">Nilai Kontrak Awal: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ number_format($contract->value ?? 0, 0, ',', ',') }}</b>
+                                                    <b>{{ number_format($contract->value ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -2409,7 +2409,7 @@
                                             </td>
 
                                             <td>
-                                                <p class="text-gray-600">{{number_format($pending_issue->biaya, 2, ",", ",")}}</p>
+                                                <p class="text-gray-600">{{number_format($pending_issue->biaya, 2, ".", ".")}}</p>
                                             </td>
 
                                             <td>

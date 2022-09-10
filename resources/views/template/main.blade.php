@@ -14,22 +14,22 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
 
-    {{-- begin::Bootstrap CSS --}}
+    <!-- begin::Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
-    {{-- end::Bootstrap CSS --}}
+    <!-- end::Bootstrap CSS -->
 
-    {{-- begin::Froala CSS --}}
+    <!-- begin::Froala CSS -->
     <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
         type='text/css' />
-    {{-- end::Froala CSS --}}
-
-    {{-- Begin:: Leaflet Map --}}
+    <!-- end::Froala CSS -->
+    
+    <!-- Begin:: Leaflet Map -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
     crossorigin=""/>
-    {{-- End:: Leaflet Map --}}
+    <!-- End:: Leaflet Map -->
 
     <!--begin::Page Vendor Stylesheets(used by this page)-->
     <link href="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
@@ -203,6 +203,23 @@
                                         <!--end::Svg Icon-->
                                     </span>
                                     <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast</span>
+                                </a>
+                            </div>
+                        @endif
+
+                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                            <div class="menu-item">
+                                <a class="menu-link " href="/forecast-include-internal"
+                                    style="color:white; padding-left:20px; {{ str_contains(Request::Path(), 'forecast') ? 'background-color:#008CB4' : '' }}">
+                                    <span class="menu-icon">
+                                        <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                        <span class="svg-icon svg-icon-2">
+                                            <i class="bi bi-graph-up-arrow text-white"
+                                                style="font-size: 18px; margin-left:7px"></i>
+                                        </span>
+                                        <!--end::Svg Icon-->
+                                    </span>
+                                    <span class="menu-title" style="font-size: 16px; padding-left: 10px">Forecast Include Internal</span>
                                 </a>
                             </div>
                         @endif
