@@ -53,17 +53,19 @@ class ProyekController extends Controller
         
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
+            // dd($unitkerjas);
             $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable();
         } else {
-            $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
             // $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
-            $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-            if($unit_kerja instanceof \Illuminate\Support\Collection) {
-                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja->toArray());
+            $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            if($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
-                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja);
+                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja_user);
             }
         }
+
         // Begin::FILTER
         // if (!empty($column)) {
             if (!empty($filter)) {
@@ -91,13 +93,6 @@ class ProyekController extends Controller
 
         return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
     }
-
-
-    // public function new()
-    // {
-    //     return view('Proyek/newProyek');   
-    // }
-
 
     public function save(Request $request, Proyek $newProyek)
     {
@@ -222,6 +217,7 @@ class ProyekController extends Controller
     public function edit($kode_proyek)
     {
         $proyek = Proyek::find($kode_proyek);
+        // dd($proyek);
         if (empty($proyek)) {
             Alert::warning('Warning', "Proyek Tidak Ditemukan");
             return redirect("/proyek");
@@ -232,30 +228,48 @@ class ProyekController extends Controller
         $porsiJO = PorsiJO::where("kode_proyek", "=", $kode_proyek)->get();
         // $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
-        // dd($proyek); //tes log hasil 
-        return view(
-            'Proyek/viewProyek',
-            ["proyek" => $proyek, "proyeks" => Proyek::all()],
-            [
-                'companies' => Company::all(),
-                'sumberdanas' => SumberDana::all(),
-                'dops' => Dop::all(),
-                'sbus' => Sbu::all(),
-                'unitkerjas' => UnitKerja::all(),
-                'customers' => Customer::all(),
-                'users' => User::all(),
-                'kriteriapasar' => KriteriaPasar::all()->unique("kategori"),
-                'kriteriapasarproyek' => $kriteriaProyek,
-                'teams' => $teamProyek,
-                'pesertatender' => PesertaTender::where("kode_proyek", "=", $kode_proyek)->get(),
-                'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
-                "historyForecast" => $historyForecast,
-                'porsiJO' => $porsiJO,
-                // 'data_provinsi' => $data_provinsi,
-                'data_negara' => $data_negara,
 
-            ]
-        );
+        $companies = Company::all();
+        $sumberdanas = SumberDana::all();
+        $dops = Dop::all();
+        $sbus = Sbu::all();
+        $unitkerjas = UnitKerja::all();
+        $customers = Customer::all();
+        $users = User::all();
+        $kriteriapasar = KriteriaPasar::all()->unique("kategori");
+        $kriteriapasarproyek = $kriteriaProyek;
+        $teams = $teamProyek;
+        $pesertatender = PesertaTender::where("kode_proyek", "=", $kode_proyek)->get();
+        $proyekberjalans = ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first();
+        // $historyForecast = $historyForecast;
+        // $porsiJO = $porsiJO;
+        // $data_negara = $data_negara;
+        // dd($proyek); //tes log hasil 
+        if ($proyek->tipe_proyek == "P") {
+            return view('Proyek/viewProyek', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara'])
+            // [
+                //     'companies' => Company::all(),
+                //     'sumberdanas' => SumberDana::all(),
+                //     'dops' => Dop::all(),
+                //     'sbus' => Sbu::all(),
+                //     'unitkerjas' => UnitKerja::all(),
+                //     'customers' => Customer::all(),
+                //     'users' => User::all(),
+                //     'kriteriapasar' => KriteriaPasar::all()->unique("kategori"),
+                //     'kriteriapasarproyek' => $kriteriaProyek,
+                //     'teams' => $teamProyek,
+                //     'pesertatender' => PesertaTender::where("kode_proyek", "=", $kode_proyek)->get(),
+                //     'proyekberjalans' => ProyekBerjalans::where("kode_proyek", "=", $kode_proyek)->get()->first(),
+                //     "historyForecast" => $historyForecast,
+                //     'porsiJO' => $porsiJO,
+                //     // 'data_provinsi' => $data_provinsi,
+                //     'data_negara' => $data_negara,
+                //     ]
+            );
+        } else {
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara']));
+            // return redirect()->back();
+        }
     }
 
     public function update(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)
@@ -402,6 +416,279 @@ class ProyekController extends Controller
         // $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
         // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
         $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
+
+        $idCustomer = $dataProyek["customer"];
+
+        // Form update Customer dan auto Proyek Berjalan
+        // $newProyek->customer= $dataProyek["customer"];
+
+        // dd(isset($dataProyek["jenis-proyek"]));
+
+        $kode_proyek = $newProyek->kode_proyek;
+        
+        // Begin :: EDIT KODE PROYEK
+        // if ((isset($dataProyek["jenis-proyek"]) && $newProyek->jenis_proyek != $dataProyek["jenis-proyek"]) || (isset($dataProyek["tipe-proyek"]) && $newProyek->tipe_proyek != $dataProyek["tipe-proyek"]) || (isset($dataProyek["tahun-perolehan"]) && $newProyek->tahun_perolehan != $dataProyek["tahun-perolehan"])) {
+        //     // dd($dataProyek);
+        //     //begin::Generate Kode Proyek
+        //     $kode_proyek = str_split($dataProyek["edit-kode-proyek"]);
+        //     // $unit_kerja = $dataProyek["unit-kerja"];
+        //     $kode_proyek[1] = $dataProyek["jenis-proyek"];
+        //     $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
+
+        //     $kode_proyek[2] = $dataProyek["tipe-proyek"];
+        //     $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
+
+        //     $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+        //     $tahun = $dataProyek["tahun-perolehan"];
+        //     $kode_tahun = $tahun == 2021 ? "A" : "O";
+        //     $kode_proyek[3] = $kode_tahun;
+            
+        //     // Menggabungkan semua kode beserta nomor urut
+        //     $kode_proyek = $kode_proyek[0] . $kode_proyek[1] . $kode_proyek[2] . $kode_proyek[3] . $kode_proyek[4] . $kode_proyek[5] . $kode_proyek[6];
+        //     $newProyek->kode_proyek = $kode_proyek;
+            
+        //     Alert::success('Success', "Kode Proyek Berhasil Diubah : " . $kode_proyek);
+            
+        //     //end::Generate Kode Proyek
+        // } else {
+        //     Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
+        // }
+        // Begin :: EDIT KODE PROYEK
+        
+            Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
+
+        if (isset($kode_proyek) && isset($dataProyek["nilai-perolehan"]) && isset($dataProyek["nospk-external"]) && isset($dataProyek["nomor-terkontrak"]) && isset($dataProyek["tanggal-mulai-kontrak"]) && isset($dataProyek["tanggal-akhir-kontrak"])) {
+            $contractManagements = ContractManagements::get()->where("project_id", "=", $kode_proyek)->first();
+            // $contractManagements = ContractManagements::find($newProyek->nomor_terkontrak);
+            // dd($contractManagements);
+
+            if (empty($contractManagements)) {
+                $contractManagements = new ContractManagements();
+                // dd($contractManagements);
+                $contractManagements->project_id = $kode_proyek;
+                // $contractManagements->id_contract = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
+                $contractManagements->id_contract = $dataProyek["nomor-terkontrak"];
+                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+                $contractManagements->number_spk = $dataProyek["nospk-external"];
+                $contractManagements->contract_proceed = "Belum Selesai";
+                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                $contractManagements->stages = (int) 1;
+                $contractManagements->value_review = 0;
+                $contractManagements->save();
+            } else {
+                // dd($contractManagements);
+                $contractManagements->project_id = $kode_proyek;
+                $contractManagements->id_contract = $newProyek->nomor_terkontrak;
+                $contractManagements->contract_in = $dataProyek["tanggal-mulai-kontrak"];
+                $contractManagements->contract_out = $dataProyek["tanggal-akhir-kontrak"];
+                $contractManagements->number_spk = $dataProyek["nospk-external"];
+                $contractManagements->contract_proceed = "Belum Selesai";
+                $contractManagements->value = preg_replace("/[^0-9]/i", "", $dataProyek["nilai-perolehan"]);
+                $contractManagements->stages = (int) 1;
+                $contractManagements->value_review = 0;
+                $contractManagements->save();
+            }
+        }
+
+        if ($idCustomer != null) {
+            // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
+            // $customer = Customer::find($idCustomer);
+
+            $customerHistory = ProyekBerjalans::where('kode_proyek', "=", $newProyek->kode_proyek)->get()->first();
+            
+            if ($customerHistory == null) {
+                
+                $customerHistory = new ProyekBerjalans();
+                $customerHistory->id_customer = $idCustomer;
+                $nameCustomer = Customer::find($idCustomer);
+                $customerHistory->name_customer = $nameCustomer->name;
+                $customerHistory->nama_proyek = $newProyek->nama_proyek;
+                $customerHistory->kode_proyek = $newProyek->kode_proyek;
+                $customerHistory->pic_proyek = $newProyek->ketua_tender;
+                $customerHistory->unit_kerja = $newProyek->unit_kerja;
+                $customerHistory->jenis_proyek = $newProyek->jenis_proyek;
+                $customerHistory->nilaiok_proyek = $newProyek->nilai_rkap;
+                $customerHistory->stage = $newProyek->stage;
+            } else {
+                $customerHistory->id_customer = $idCustomer;
+                $nameCustomer = Customer::find($idCustomer);
+                $customerHistory->name_customer = $nameCustomer->name;
+            }
+
+            if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-prakualifikasi"])) {
+                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
+                }
+                if (isset($dataProyek["risk-tender"])) {
+                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
+                }
+                if (isset($dataProyek["attachment-menang"])) {
+                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
+                }
+            }
+            $customerHistory->save();
+            return redirect("/proyek/view/" . $kode_proyek);
+        } else {
+            if ($newProyek->save()) {
+                if (isset($dataProyek["dokumen-prakualifikasi"])) {
+                    self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
+                }
+                if (isset($dataProyek["risk-tender"])) {
+                    self::riskTender($dataProyek["risk-tender"], $kode_proyek);
+                }
+                if (isset($dataProyek["attachment-menang"])) {
+                    self::attachmentMenang($dataProyek["attachment-menang"], $kode_proyek);
+                }
+            }
+            return redirect("/proyek/view/" . $kode_proyek);
+        }
+    }
+
+    public function updateRetail(Request $request, Proyek $newProyek, ProyekBerjalans $customerHistory)
+    {
+        $dataProyek = $request->all();
+        // dd($dataProyek); //console log hasil $dataProyek
+        $newProyek = Proyek::find($dataProyek["kode-proyek"]);
+
+        // dd($newProyek);
+        $messages = [
+            "required" => "*Kolom Ini Harus Diisi !",
+            "numeric" => "*Kolom ini harus numeric!",
+        ];
+        $rules = [
+            "nama-proyek" => "required",
+            // "bulan-pelaksanaan" => "required",
+            // "nilai-rkap" => "required",
+            // "sumber-dana" => "required",
+            // "porsi-jo" => "numeric"
+        ];
+        // if (isset($dataProyek["porsi-jo"])) {
+        //     $rules["porsi-jo"] = "numeric";
+        // }
+        $validation = Validator::make($dataProyek, $rules, $messages);
+        if ($validation->fails()) {
+            dd($validation);
+            Alert::error('Error', "Proyek Gagal Diubah, Periksa Kembali !");
+            $request->old("nama-proyek");
+            Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
+        }
+        
+        $validation->validate();
+
+        // form PASAR DINI
+        $newProyek->nama_proyek = $dataProyek["nama-proyek"];
+        // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
+        $newProyek->kode_proyek = $dataProyek["kode-proyek"];
+        $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
+        $newProyek->sumber_dana = $dataProyek["sumber-dana"];   
+        $newProyek->jenis_proyek= $dataProyek["jenis-proyek"];   
+        $newProyek->tipe_proyek= $dataProyek["tipe-proyek"];
+
+        // $newProyek->pic = $dataProyek["pic"];
+        $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
+        if (Auth::user()->check_administrator) {
+            $newProyek->nilai_valas_review = $dataProyek["nilai-valas-review"];
+            $newProyek->mata_uang_review = $dataProyek["mata-uang-review"];
+            $newProyek->kurs_review = $dataProyek["kurs-review"];
+            $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan-review"];
+            $newProyek->nilaiok_review = $dataProyek["nilaiok-review"];
+        }
+        // $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
+        $newProyek->mata_uang_awal = $dataProyek["mata-uang-awal"];
+        $newProyek->kurs_awal = $dataProyek["kurs-awal"];
+        $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
+        $newProyek->nilaiok_awal = $dataProyek["nilaiok-awal"];
+        $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
+        $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
+        $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
+
+        // // form PASAR POTENSIAL
+        // $newProyek->negara = $dataProyek["negara"];
+        // $newProyek->sbu = $dataProyek["sbu"];
+        // // $newProyek->provinsi = $dataProyek["provinsi"];
+        // $newProyek->klasifikasi = $dataProyek["klasifikasi"];
+        // $newProyek->status_pasar = $dataProyek["status-pasar"];
+        // $newProyek->sub_klasifikasi = $dataProyek["sub-klasifikasi"];
+        // $newProyek->proyek_strategis = $request->has("proyek-strategis");
+        // // $newProyek->dop = $dataProyek["dop"];
+        // // $newProyek->company = $dataProyek["company"];
+        // $newProyek->laporan_kualitatif_paspot = $dataProyek["laporan-kualitatif-paspot"];
+
+        // // form PASAR PRAKUALIFIKASI
+        // $newProyek->jadwal_pq = $dataProyek["jadwal-pq"];
+        // // $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
+        // $newProyek->hps_pagu = $dataProyek["hps-pagu"];
+        // $newProyek->porsi_jo = $dataProyek["porsi-jo"];
+        // $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+        // // foreach($allProyek as $proyek) {
+        // //     if($proyek->ketua_tender == $dataProyek["ketua-tender"] && !($proyek->stage > 8)) {
+        // //         return redirect()->back()->with("failed", "Ketua Tender sudah terdaftar di proyek lain");
+        // //     }
+        // // }
+        // $newProyek->ketua_tender = $dataProyek["ketua-tender"];
+        // $newProyek->laporan_prakualifikasi = $dataProyek["laporan-prakualifikasi"];
+
+        // // form TENDER DIIKUTI
+        // $newProyek->jadwal_tender = $dataProyek["jadwal-tender"];
+        // $newProyek->lokasi_tender = $dataProyek["lokasi-tender"];
+        // $newProyek->penawaran_tender = $dataProyek["nilai-kontrak-penawaran"];
+        // // $newProyek->nilai_kontrak_keseluruhan = $dataProyek["nilai-kontrak-penawaran"];
+        // // $newProyek->hps_tender = $dataProyek["hps-tender"];
+        // $newProyek->laporan_tender = $dataProyek["laporan-tender"];
+
+        // // form PEROLEHAN
+        // // $newProyek->biaya_praproyek = $dataProyek["biaya-praproyek"];
+        // $newProyek->nilai_perolehan = $dataProyek["nilai-perolehan"];
+        // // $newProyek->hps_perolehan = $dataProyek["hps-perolehan"];
+        // $oe_wika = 0;
+        // if (!empty($dataProyek["nilai-kontrak-penawaran"]) && !empty($dataProyek["hps-pagu"])) {
+        //     $oe_wika = ( (int) $dataProyek["nilai-kontrak-penawaran"] / (int) $dataProyek["hps-pagu"]) *100;
+        //     $newProyek->oe_wika = $oe_wika;
+        // };
+        // $newProyek->peringkat_wika = $dataProyek["peringkat-wika"];
+        // $newProyek->laporan_perolehan = $dataProyek["laporan-perolehan"];
+        
+        // // form MENANG
+        // $newProyek->aspek_pesaing = $dataProyek["aspek-pesaing"];
+        // $newProyek->aspek_non_pesaing = $dataProyek["aspek-non-pesaing"];
+        // $newProyek->saran_perbaikan = $dataProyek["saran-perbaikan"];
+        // $newProyek->laporan_menang = $dataProyek["laporan-menang"];
+
+        // // form TERKONTRAK
+        // // $newProyek->jenis_proyek_terkontrak = $dataProyek["jenis-proyek-terkontrak"];
+        // $newProyek->nospk_external = $dataProyek["nospk-external"];
+        // // $newProyek->porsijo_terkontrak = $dataProyek["porsijo-terkontrak"];
+        // $newProyek->tglspk_internal = $dataProyek["tglspk-internal"];
+        // // $newProyek->nilaiok_terkontrak = $dataProyek["nilaiok-terkontrak"];
+        // $newProyek->tahun_ri_perolehan = $dataProyek["tahun-ri-perolehan"];
+        // // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
+        // $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
+        // // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
+        // $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
+        // // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
+        // $newProyek->tanggal_terkontrak = $dataProyek["tanggal-terkontrak"];
+        // if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
+        //     $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+        //     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
+        //     $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
+
+        //     $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
+        // }
+        // // $newProyek->nilai_kontrak_keseluruhan = $dataProyek["nilai-kontrak-keseluruhan"];
+        // $newProyek->tanggal_mulai_terkontrak = $dataProyek["tanggal-mulai-kontrak"];
+        // // $newProyek->nilai_wika_terkontrak = $dataProyek["nilai-wika-terkontrak"];
+        // $newProyek->tanggal_akhir_terkontrak = $dataProyek["tanggal-akhir-kontrak"];
+        // $newProyek->klasifikasi_terkontrak = $dataProyek["klasifikasi-terkontrak"];
+        // $newProyek->tanggal_selesai_pho = $dataProyek["tanggal-selesai-kontrak-pho"];
+        // $newProyek->tanggal_selesai_fho = $dataProyek["tanggal-selesai-kontrak-fho"];
+        // $newProyek->jenis_terkontrak = $dataProyek["jenis-terkontrak"];
+        // $newProyek->sistem_bayar = $dataProyek["sistem-bayar"];
+        // // $newProyek->nilai_sisa_risiko = $dataProyek["nilai-sisa-risiko"];
+        // // $newProyek->cadangan_risiko = $dataProyek["cadangan-risiko"];
+        // // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
+        // $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
 
         $idCustomer = $dataProyek["customer"];
 
