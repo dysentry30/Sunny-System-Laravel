@@ -230,7 +230,7 @@ class UserController extends Controller
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
-        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"];
+        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
         // $user->alamat = $data["alamat"];
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
@@ -239,7 +239,7 @@ class UserController extends Controller
 
         if ($user->save()) {
             Alert::success("Success", "User berhasil diperbarui.")->autoClose(3000);
-            return redirect("/user");
+            return redirect()->back();
         }
     }
 
