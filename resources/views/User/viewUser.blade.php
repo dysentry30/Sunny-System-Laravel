@@ -304,8 +304,7 @@
                                                             <div class="row">
                                                                 <div class="col" id="list-dop">
                                                                     @php
-                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : $user->unit_kerja;
-                                                                        // dd($list_unit_kerja);
+                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : preg_replace("/[^A-Z]|[^a-z]/i", "", $user->unit_kerja);
                                                                     @endphp
                                                                     @foreach ($dops as $dop)
                                                                         <p><b>{{$dop->dop}}</b></p>
@@ -313,7 +312,9 @@
                                                                             @foreach ($dop->UnitKerjas as $unit_kerja)
                                                                                 <div class="form-check me-3 d-flex align-items-center">
                                                                                     @php
-                                                                                        $is_unit_kerja_choosen = $list_unit_kerja->contains($unit_kerja->divcode);
+                                                                                        // dd($list_unit_kerja);
+                                                                                        $is_unit_kerja_choosen =  $list_unit_kerja instanceof \Illuminate\Support\Collection ? $list_unit_kerja->contains($unit_kerja->divcode) : $list_unit_kerja == $unit_kerja->divcode;
+                                                                                        // dd($is_unit_kerja_choosen);
                                                                                     @endphp
                                                                                     @if ($is_unit_kerja_choosen)
                                                                                         <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"

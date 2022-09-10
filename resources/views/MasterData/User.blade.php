@@ -147,6 +147,7 @@ a{{-- Begin::Extend Header --}}
                                         <th class="min-w-auto">No.</th>
                                         <th class="min-w-auto">Nip</th>
                                         <th class="min-w-auto">Name</th>
+                                        <th class="min-w-auto">Username</th>
                                         <th class="min-w-auto">Unit Kerja</th>
                                         <th class="min-w-auto">Role</th>
                                         <th class="min-w-auto text-center">Is Active</th>
@@ -186,6 +187,13 @@ a{{-- Begin::Extend Header --}}
                                             <td>
                                                 <a href="/user/view/{{ $user->id }}"
                                                     class="text-hover-primary text-gray-600">{{ $user->name }}</a>
+                                            </td>
+                                            <!--end::Ketua tender-->
+
+                                            <!--begin::Ketua tender-->
+                                            <td>
+                                                <a href="/user/view/{{ $user->id }}"
+                                                    class="text-hover-primary text-gray-600">{{ $user->email }}</a>
                                             </td>
                                             <!--end::Ketua tender-->
 

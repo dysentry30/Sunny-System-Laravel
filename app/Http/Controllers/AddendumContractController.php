@@ -135,7 +135,6 @@ class AddendumContractController extends Controller
     // upload data addendum to server or database
     public function update(Request $request)
     {
-
         $data = $request->all();
         $messages = [
             "required" => "This field is required",
@@ -162,13 +161,13 @@ class AddendumContractController extends Controller
             $validation->validate();
             return Redirect::back()->with("error", "Pastikan pasal-pasal sudah di ceklis");
         }
-        if (Session::has("pasals")) {
-            $pasals = [];
-            foreach (Session::get("pasals") as $pasal) {
-                array_push($pasals, $pasal->id_pasal);
-            }
-            Session::forget("pasals");
-        }
+        // if (Session::has("pasals")) {
+        //     $pasals = [];
+        //     foreach (Session::get("pasals") as $pasal) {
+        //         array_push($pasals, $pasal->id_pasal);
+        //     }
+        //     Session::forget("pasals");
+        // }
 
         if ($validation->fails()) {
             // Session::flash("failed", "Please fill 'Draft Contract' empty field");
@@ -200,7 +199,7 @@ class AddendumContractController extends Controller
         $validation->validate();
 
         $addendumContracts = AddendumContracts::find($data["id-addendum"]);
-
+        // dd($addendumContracts);
         // Update Stages Contract
         $is_id_contract_exist->stages = 4;
         // $addendumContracts->document_name = $data["document-name-addendum"];
@@ -209,12 +208,12 @@ class AddendumContractController extends Controller
         $addendumContracts->id_contract = $data["id-contract"];
         $addendumContracts->tender_menang = $is_tender_menang;
         $addendumContracts->stages = 1;
-        $addendumContracts->pasals = join(",", $pasals) ?? "";
         $addendumContracts->addendum_contract_version = $data["addendum-contract-version"];
         $addendumContracts->no_addendum = $data["addendum-contract-title"];
         if ($addendumContracts->save() && $is_id_contract_exist->save()) {
             Alert::success("Success", "Addendum Contract berhasil diperbarui");
-            return Redirect::to("/contract-management/view/$addendumContracts->id_contract");
+            // return Redirect::to("/contract-management/view/$addendumContracts->id_contract");
+            return Redirect::to("/contract-management/view/$addendumContracts->id_contract/addendum-contract/$addendumContracts->id_addendum");
         }
         Alert::error("Error", "Addendum Contract gagal diperbarui");
         return Redirect::back();

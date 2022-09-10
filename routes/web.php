@@ -482,7 +482,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $history_forecast->kode_proyek = $kode_proyek;
             $history_forecast->nilai_forecast = (string) $total_forecast;
             $history_forecast->month_forecast = $farestMonth;
-            $history_forecast->rkap_forecast = str_replace(",", "", $current_proyek->nilai_rkap ?? 0) ?? 0;
+            $history_forecast->rkap_forecast = str_replace(".", "", $current_proyek->nilai_rkap ?? 0) ?? 0;
             // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
             $history_forecast->month_rkap = $current_proyek->bulan_awal;
             // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);

@@ -60,13 +60,28 @@ class ForecastController extends Controller
         }
         if (Auth::user()->check_administrator) {
             // $proyeks = collect();
-            $proyeks = Proyek::with(["Forecasts", "HistoryForecasts"])->get();
+            // $proyeks = Proyek::with(["Forecasts", "HistoryForecasts"])->get();
             $dops = Dop::all()->sortBy("dop");
             // dd($proyeks);
         } else {
             // $proyeks = collect();
-            $proyeks = Proyek::with("Forecasts")->where("unit_kerja", "=", Auth::user()->unit_kerja)->get();
-            $dops = Dop::join("unit_kerjas", "unit_kerjas.dop", "=", "dops.dop")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
+            // $dops = Dop::all()->sortBy("dop");
+
+            // dd($unit_kerja);
+            $dops = Dop::all();
+            // if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            //     // $proyeks = Proyek::with("Forecasts")->get()->whereIn("unit_kerja", $unit_kerja->toArray());
+            //     // dd($dops);
+            //     // dd($dops);
+            //     // foreach ($dops as $dop_name => $dop) {
+            //     //     $divcodes = $dop->map(function($data) {
+            //     //         return $data->divcode;
+            //     //     });
+            //     //     foreach ($dop as $item_dop) {
+            //     //         dd($item_dop->UnitKerjas->whereIn("divcode", $divcodes->toArray()));
+            //     //     }
+            //     // }
+            // } 
         }
 
         if (!empty($column) && !empty($filter)) {
@@ -76,37 +91,39 @@ class ForecastController extends Controller
                     case "dop":
                         return str_contains(strtolower($data->dop), strtolower($filter));
                     case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
                             return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
                         });
-                        foreach($unit_kerjas as $unit_kerja) {
-                            if($unit_kerja->dop == $data->dop) {
+                        foreach ($unit_kerjas as $unit_kerja) {
+                            if ($unit_kerja->dop == $data->dop) {
                                 return $data;
                             }
                         }
                     case "nama_proyek":
-                        $proyeks_arr = $proyeks->filter(function($data) use($filter) {
-                            return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                        $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
+                            // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                            // return false !== stripos($data->nama_proyek, $filter);
+                            return preg_match("/$filter/", $data->nama_proyek);
                         });
                         // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
                         //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
                         // });
 
-                        foreach($proyeks_arr as $proyek) {
-                            if($proyek->dop == $data->dop) {
+                        foreach ($proyeks_arr as $proyek) {
+                            if ($proyek->dop == $data->dop) {
                                 return $data;
                             }
                         }
                         // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
                 }
             });
-            
+
             $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
                 switch ($column) {
                     case "dop":
                         return str_contains(strtolower($data->dop), strtolower($filter));
                     case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($data, $filter) {
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
                             return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
                         });
                         foreach ($unit_kerjas as $unit_kerja) {
@@ -115,7 +132,8 @@ class ForecastController extends Controller
                             }
                         }
                     case "nama_proyek":
-                        return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                        return preg_match("/$filter/", $data->nama_proyek);
                 }
             });
             // $proyeks_eksternal = $proyeks->filter()
@@ -131,7 +149,7 @@ class ForecastController extends Controller
                 // 'dops' => Dop::all(),
                 // "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
-                'proyeks' => $proyeks,
+                // 'proyeks' => $proyeks,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
