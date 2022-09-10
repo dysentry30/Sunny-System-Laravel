@@ -39,10 +39,11 @@ class DashboardController extends Controller
             $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))
             ->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
-            $unitKerja = UnitKerja::all();
+            $unitKerja = UnitKerja::orderBy('unit_kerja')->get();
             $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
+            $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->paginate(25);
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
-            $dops = Dop::all();
+            $dops = Dop::orderBy('dop')->get();
             // $dopJoin = Dop::join("proyeks", "dops.dop", "=", "proyeks.dop")->get();
             // dd($dops);
             if (!empty($request->get("unit-kerja"))) {
@@ -62,6 +63,7 @@ class DashboardController extends Controller
         } else {
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->paginate(25);
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
             $unitKerja = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
             $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : date("m"))
@@ -93,33 +95,33 @@ class DashboardController extends Controller
         for ($i=1; $i <= 12; $i++) { 
             foreach ($historyForecast as $forecast){
                 if ($forecast->month_forecast == $i) {
-                    $nilaiForecast += ceil($forecast->nilai_forecast/$per);
+                    $nilaiForecast += $forecast->nilai_forecast/$per;
                 }else{
                     $nilaiForecast == 0;
                 }
             }
             // dd();
-            array_push($nilaiForecastArray, $nilaiForecast);
+            array_push($nilaiForecastArray, floor($nilaiForecast));
 
             foreach ($historyRkap as $rkap){
                 if ($rkap->month_rkap == $i) {
-                    $nilaiRkap += ceil($rkap->rkap_forecast/$per);
+                    $nilaiRkap += $rkap->rkap_forecast/$per;
                 }else{
                     // dump($rkap->month_rkap, $rkap->rkap_forecast);
                     $nilaiRkap == 0;
                 }
             }
-            array_push($nilaiRkapArray, $nilaiRkap);
+            array_push($nilaiRkapArray, floor($nilaiRkap));
             
             foreach ($historyRealisasi as $realisasi){
                 if ($realisasi->month_realisasi == $i) {
                     // dump($realisasi->realisasi_forecast);
-                    $nilaiRealisasi += ceil($realisasi->realisasi_forecast/$per);
+                    $nilaiRealisasi += $realisasi->realisasi_forecast/$per;
                 }else{
                     $nilaiRealisasi == 0;
                 }
             }
-            array_push($nilaiRealisasiArray, $nilaiRealisasi);
+            array_push($nilaiRealisasiArray, floor($nilaiRealisasi));
         }
         // dump($nilaiRkapArray);
         // dd($nilaiRkap);
@@ -314,7 +316,8 @@ class DashboardController extends Controller
         // End :: menghitung total dari status dan jenis claim asuransi
         
         //begin::Pareto
-        $paretoProyek = $proyeks->sortByDesc('forecast');
+        // $paretoProyek = $proyeks->sortByDesc('forecast');
+        $paretoProyek = $paretoProyeks->sortByDesc('nilai_perolehan');
         $paretoClaim = $claims->where("jenis_claim", "=", "Claim")->groupBy("kode_proyek");
         $paretoAntiClaim = $claims->where("jenis_claim", "=", "Anti Claim")->groupBy("kode_proyek");
         $paretoAsuransi = $claims->where("jenis_claim", "=", "Claim Asuransi")->groupBy("kode_proyek");
@@ -385,16 +388,22 @@ class DashboardController extends Controller
     {
         $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
         $data = [];
+        // dd($data);   
+        // dd($type, $prognosa, $month, $unit_kerja);   
         if ($type == "Forecast") {
-            // dd($type, $prognosa, $month);   
             $month = array_search($month, $arrNamaBulan);
             if (Auth::user()->check_administrator) {
-                $history_forecasts = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_forecast");
-                if ($unit_kerja != "") {
+                $history_forecasts = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("jenis_proyek", "!=" , "I")->where("periode_prognosa", "=" , $prognosa)->where("month_forecast", "!=", 0)->get()->sortBy("month_forecast");
+                if ($unit_kerja != "" && strlen($unit_kerja) == 1) {
                     $history_forecasts = $history_forecasts->where("divcode", $unit_kerja);
+                    // dd($unit_kerja, $history_forecasts, "ok");
+                } elseif ($unit_kerja != "") {
+                    $dop = str_replace("-", " ", $unit_kerja);
+                    $history_forecasts = $history_forecasts->where("dop", $dop);
+                    // dd($dop, $history_forecasts);
                 }
             } else {
-                $history_forecasts = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_forecast")->all();
+                $history_forecasts = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("jenis_proyek", "!=" , "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->where("month_forecast", "!=", 0)->get()->sortBy("month_forecast");
             }
             // dd($history_forecasts);
             // $history_forecasts = HistoryForecast::select("*")->join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.unit_kerja")->where("month_forecast", "<=" , $month)->get()->all();
@@ -410,12 +419,16 @@ class DashboardController extends Controller
         } elseif ($type == "NilaiOK") {
             $month = array_search($month, $arrNamaBulan);
             if (Auth::user()->check_administrator) {
-                $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_rkap");
-                if ($unit_kerja != "") {
+                // $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_rkap");
+                $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->where("month_rkap", "!=", 0)->get()->sortBy("month_rkap");
+                if ($unit_kerja != "" && strlen($unit_kerja) == 1) {
                     $history_rkap = $history_rkap->where("divcode", $unit_kerja);
-                }
+                } elseif ($unit_kerja != "") {
+                    $dop = str_replace("-", " ", $unit_kerja);
+                    $history_rkap = $history_rkap->where("dop", $dop);
+                    }
             } else {
-                $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_rkap")->all();
+                $history_rkap = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->where("month_rkap", "!=", 0)->get()->sortBy("month_rkap")->all();
             }
             // dd($history_rkap);
             foreach ($history_rkap as $history) {
@@ -426,12 +439,15 @@ class DashboardController extends Controller
         } else {
             $month = array_search($month, $arrNamaBulan);
             if (Auth::user()->check_administrator) {
-                $history_realisasi = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_realisasi");
-                if ($unit_kerja != "") {
+                $history_realisasi = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("periode_prognosa", "=" , $prognosa)->where("month_realisasi", "!=", 0)->get()->sortBy("month_realisasi");
+                if ($unit_kerja != "" && strlen($unit_kerja) == 1) {
                     $history_realisasi = $history_realisasi->where("divcode", $unit_kerja);
+                } elseif ($unit_kerja != "")  {
+                    $dop = str_replace("-", " ", $unit_kerja);
+                    $history_realisasi = $history_realisasi->where("dop", $dop);
                 }
             } else {
-                $history_realisasi = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->get()->sortBy("month_realisasi")->all();
+                $history_realisasi = Proyek::select("*")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("history_forecast", "history_forecast.kode_proyek", "=", "proyeks.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("periode_prognosa", "=" , $prognosa)->where("month_realisasi", "!=", 0)->get()->sortBy("month_realisasi")->all();
             }
             // dd($history_realisasi);
             foreach ($history_realisasi as $history) {

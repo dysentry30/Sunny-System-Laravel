@@ -68,12 +68,12 @@
                                             <!--begin::Form-->
                                             <div class="">
                                                 <!--begin::Item-->
-                                                <button type="submit"
+                                                {{-- <button type="submit"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     data-bs-toggle="modal" data-bs-target="#kt_modal_import"
                                                     id="kt_toolbar_import">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                                </button>
+                                                </button> --}}
                                                 <button type="submit"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     data-bs-toggle="modal" data-bs-target="#kt_modal_export"
@@ -460,7 +460,9 @@
                                             <!--begin::Nilai OK-->
                                             <td class="text-end">
                                                 <small>
-                                                    {{-- {{ $proyek->nilai_rkap }} --}}
+                                                    @php
+                                                        $proyek->nilai_rkap = str_replace(".", "", $proyek->nilai_rkap);
+                                                    @endphp
                                                     {{ number_format((int)$proyek->nilai_rkap, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>

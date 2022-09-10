@@ -6,30 +6,6 @@
 $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
 @endphp
 
-<!-- begin::DataTables -->
-<link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
-<link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
-<!-- end::DataTables -->
-
-<style>
-    /* th, td { white-space: nowrap; } */
-    div.dataTables_wrapper {
-        width: 100%;
-        /* height: 100%; */
-        /* min-height: 1000px;  */
-        margin: 0 auto;
-    }
-
-    /* .table>:not(caption)>*>* {
-    padding: 0.5rem 0.5rem;
-    background-color: var(--bs-table-bg);
-    border-bottom-width: 0px;
-    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
-    } */
-</style>
-
 {{-- Begin::Title --}}
 @section('title', 'Forecast')
 {{-- End::Title --}}
@@ -62,7 +38,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
 
                         <!--begin::Toolbar-->
-                        <div style=" height:175px" class="toolbar" id="kt_toolbar">
+                        <div style=" height:150px"class="toolbar" id="kt_toolbar">
                             <!--begin::Container-->
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                                 <!--begin::Page title-->
@@ -74,43 +50,48 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     </h1>
                                     <div class="row">
                                         <div class="col">
-                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
-                                                <!--begin:::Tab item Forecast Bulanan-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                        href="#kt_user_view_overview_forecast_bulanan"
-                                                        style="font-size:14px;">Forecast Eksternal Bulanan</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast Bulanan-->
 
-                                                <!--begin:::Tab item Forecast Internal-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
-                                                        style="font-size:14px;">Forecast Bulanan Include Internal</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast Internal-->
-
-                                                <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
-                                                        style="font-size:14px;">Forecast Kumulatif Eksternal</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast S/D-->
-
-                                                <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
-                                                        style="font-size:14px;">Forecast Kumulatif Include Internal</a>
-                                                </li>
-                                                <!--end:::Tab item Forecast S/D-->
-                                            </ul>
+                                            {{-- begin::Tabs Forecast --}}
+                                            {{-- @if ($proyeks->count() > 0) --}}
+                                                <ul
+                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
+                                                    <!--begin:::Tab item Forecast Bulanan-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_forecast_bulanan"
+                                                            style="font-size:14px;">Forecast Eksternal Bulanan</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast Bulanan-->
+    
+                                                    <!--begin:::Tab item Forecast Internal-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
+                                                            style="font-size:14px;">Forecast Bulanan Include Internal</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast Internal-->
+    
+                                                    <!--begin:::Tab item Forecast S/D-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
+                                                            style="font-size:14px;">Forecast Kumulatif Eksternal</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast S/D-->
+    
+                                                    <!--begin:::Tab item Forecast S/D-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
+                                                            style="font-size:14px;">Forecast Kumulatif Include Internal</a>
+                                                    </li>
+                                                    <!--end:::Tab item Forecast S/D-->
+                                                </ul>
+                                            {{-- @endif --}}
                                         </div>
 
                                         <div class="row">
-                                            <div class="d-flex {{$periode != (int) date("m") ? "col-6" : "col-6"}}">
+                                            <div class="d-flex {{$periode != (int) date("m") ? "col-8" : "col-6"}} align-items-center justify-content-between">
                                                 <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                     onclick="lockMonthForecastBulanan(this)"
                                                     class="btn btn-sm btn-active-primary mt-4">
@@ -126,13 +107,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         <i class="bi bi-unlock-fill text-white"></i>
                                                     @endif
                                                 </button>
-                                                
-                                                <button type="button" id="unlock-previous-forecast"
-                                                onclick="unlockPreviousForecast()"
-                                                class="btn btn-sm btn-light btn-active-primary mt-4 ms-6">
-                                                        <span class="fs-6">Pilih Bulan Forecast</span>
-                                                </button>
+                                                {{-- @if ($previous_forecast->count() > 0) --}}
+                                                    {{-- <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4">
+                                                        <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
+                                                        <i class="bi bi-lock-fill"></i>
+                                                    </a>                                                     --}}
+                                                    <button type="button" id="unlock-previous-forecast"
+                                                    onclick="unlockPreviousForecast()"
+                                                    class="btn btn-sm btn-light btn-active-primary mt-4">
+                                                            <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
+                                                    </button>
 
+                                                {{-- @endif --}}
                                                 
                                                 @if ($periode != (int) date("m") && isset($periode))
                                                     <div class="d-flex flex-row col-5 align-items-center justify-content-center">
@@ -146,7 +133,39 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </div>
                                                 @endif
                                             </div>
-                                            {{-- <div class="pt-2">
+                                        </div>
+
+                                        {{-- end::Tabs Forecast --}}
+                                    </div>
+                                    <!--end::Title-->
+                                </div>
+                                <!--end::Page title-->
+                            </div>
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Toolbar-->
+
+
+
+
+
+
+                        <!--begin::Post-->
+                        <div class="post d-flex flex-column-fluid mt-15" id="kt_post">
+                            <!--begin::Container-->
+                            <div id="kt_content_container"
+                                class="w-100"
+                                style="overflow: auto; background-color:white; white-space: nowrap;">
+                                <!--begin::Contacts App- Edit Contact-->
+                                <div class="">
+
+                                    <!--begin::All Content-->
+                                    <div class="col-xl-15">
+
+                                        <!--begin::Contacts-->
+                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
+
+                                            <div class="card-header pt-10">
                                                 <div class="col">
                                                     <form action=""></form>
                                                     <form action="/forecast" class="row w-700px" method="GET">
@@ -157,6 +176,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                 <option value="dop" {{$column == "dop" ? "selected": ""}}>DOP</option>
                                                                 <option value="unit_kerja" {{$column == "unit_kerja" ? "selected": ""}}>Unit Kerja</option>
                                                                 <option value="nama_proyek" {{$column == "nama_proyek" ? "selected": ""}}>Nama Proyek</option>
+                                                                {{-- <option {{$column == "" ? "selected": ""}}></option>
+                                                                <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
+                                                                <option value="kode_proyek" {{$column ==    "kode_proyek" ? "selected" : ""}}>Kode Proyek</option> --}}
+                                                                {{-- <option value="uraian_perubahan" {{$column == "uraian_perubahan" ? "selected" : ""}}>Uraian Perubahan</option> --}}
                                                             </select>
                                                             <!--End:: Select Options-->
                                                         </div>
@@ -183,146 +206,300 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         </div>
                                                     </form>
                                                 </div>
-                                            </div> --}}
-                                        </div>
+                                            </div>
 
-                                        {{-- end::Tabs Forecast --}}
-                                    </div>
-                                    <!--end::Title-->
-                                </div>
-                                <!--end::Page title-->
-                            </div>
-                            <!--end::Container-->
-                        </div>
-                        <!--end::Toolbar-->
-
-
-                        <!--begin::Post-->
-                        <div class="post d-flex flex-column-fluid mt-15" id="kt_post">
-                            <!--begin::Container-->
-                            <div id="kt_content_container"
-                                class="w-100"
-                                style="overflow: auto; background-color:white; white-space: nowrap;">
-                                <!--begin::Contacts App- Edit Contact-->
-                                <div class="">
-
-                                    <!--begin::All Content-->
-                                    <div class="col-xl-15">
-
-                                        <!--begin::Contacts-->
-                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                            <hr>
 
                                             <!--begin::Card body-->
-                                            <div class="card-body mt-4" style="background-color: white;">
+                                            <div class="card-body" style="background-color: white;">
                                                 {{-- @if ($proyeks->count() > 0) --}}
                                                         
                                                     <div class="tab-content" id="myTabContent">
 
                                                         {{-- begin::Tab Forecast Bulanan --}}
-                                                        <div class="tab-pane fade show active" style="border-width: 0px !important" id="kt_user_view_overview_forecast_bulanan" role="tabpanel">
-
+                                                        <div class="tab-pane fade show active"
+                                                            id="kt_user_view_overview_forecast_bulanan" role="tabpanel">
                                                             <!--begin::Table Forecast-->
-                                                            <table class="table align-middle fs-6"
-                                                                id="kt_forecast_table" style="border-width: 0px !important">
+                                                            <table class="table align-middle table-row-dashed fs-6"
+                                                                id="kt_customers_table">
                                                                 <!--begin::Table head-->
-                                                                <thead style="border-width: 0px !important">
-                                                                    <tr style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
-                                                                        <th style="padding: 0px 50px 0px 50px " class="w-auto text-center" rowspan="2">
+                                                                <thead>
+                                                                    <tr
+                                                                        style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
+                                                                        <th class="min-w-250px text-center" rowspan="2"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
                                                                             Proyek
                                                                         </th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Januari</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Februari</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Maret</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">April</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Mei</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Juni</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Juli</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Agustus</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">September</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Oktober</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">November</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Desember</th>
-                                                                        <th class="text-center pinForecast HidePin min-w-auto" colspan="3">Total &nbsp;&nbsp; <i class="text-center bi bi-pin-angle-fill" onclick="hidePin()"></i></th>
-                                                                        <th class="text-center pinForecast ShowPin min-w-auto" colspan="3"
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Januari
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Februari
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Maret
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                April
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Mei
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Juni
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Juli
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Agustus
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                September
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Oktober
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                November
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="min-w-auto" colspan="3">
+                                                                            <center>
+                                                                                Desember
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="pinForecast HidePin min-w-auto"
+                                                                            colspan="3">
+                                                                            <center>Total &nbsp;&nbsp; <i
+                                                                                    class="bi bi-pin-angle-fill"
+                                                                                    onclick="hidePin()"></i></center>
+                                                                        </th>
+                                                                        <th class="pinForecast ShowPin min-w-auto"
+                                                                            colspan="3"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            Total &nbsp;&nbsp; <i class="bi bi-pin-fill text-primary" onclick="hidePin()"></i>
+                                                                            <center>Total &nbsp;&nbsp; <i
+                                                                                    class="bi bi-pin-fill text-primary"
+                                                                                    onclick="hidePin()"></i></center>
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
                                                                         <!--begin::Sub-Judul Januari-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Januari-->
                                                                         <!--begin::Sub-Judul Februari-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Februari-->
                                                                         <!--begin::Sub-Judul Maret-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Maret-->
                                                                         <!--begin::Sub-Judul April-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul April-->
                                                                         <!--begin::Sub-Judul Mei-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Mei-->
                                                                         <!--begin::Sub-Judul Juni-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Juni-->
                                                                         <!--begin::Sub-Judul Juli-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Juli-->
                                                                         <!--begin::Sub-Judul Agustus-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Agustus-->
                                                                         <!--begin::Sub-Judul September-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul September-->
                                                                         <!--begin::Sub-Judul Oktober-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Oktober-->
                                                                         <!--begin::Sub-Judul November-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul November-->
                                                                         <!--begin::Sub-Judul Desember-->
-                                                                        <th class="text-center min-w-125px">OK</th>
-                                                                        <th class="text-center min-w-125px">Forecast</th>
-                                                                        <th class="text-center min-w-125px">Realisasi</th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="min-w-125px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
                                                                         <!--end::Sub-Judul Desember-->
                                                                         <!--begin::Sub-Judul Total-->
-                                                                        <th class="text-center pinForecast HidePin min-w-100px">OK</th>
-                                                                        <th class="text-center pinForecast HidePin min-w-100px">Forecast</th>
-                                                                        <th class="text-center pinForecast HidePin min-w-100px">Realisasi</th>
-                                                                        <th class="text-center pinForecast ShowPin min-w-100px"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">OK
+                                                                        <th class="pinForecast HidePin min-w-100px">
+                                                                            <center>OK</center>
                                                                         </th>
-                                                                        <th class="text-center pinForecast ShowPin min-w-100px"
+                                                                        <th class="pinForecast HidePin min-w-100px">
+                                                                            <center>Forecast</center>
+                                                                        </th>
+                                                                        <th class="pinForecast HidePin min-w-100px">
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
+                                                                        </th>
+                                                                        <th class="pinForecast ShowPin min-w-100px"
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                            <center>OK</center>
+                                                                        </th>
+                                                                        <th class="pinForecast ShowPin min-w-100px"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            Forecast
+                                                                            <center>Forecast</center>
                                                                         </th>
-                                                                        <th class="text-center pinForecast ShowPin min-w-100px"
+                                                                        <th class="pinForecast ShowPin min-w-100px"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            Realisasi
+                                                                            <center>Realisasi <a href="#" Id="Plus"
+                                                                                    data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                            </center>
                                                                         </th>
                                                                         <!--end::Sub-Judul Total-->
                                                                     </tr>
@@ -331,7 +508,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                 <!--begin::Table body-->
 
-                                                                <tbody class="fw-bold text-gray-600" id="table-body" style="border-width: 0px !important">
+                                                                <tbody class="fw-bold text-gray-600" id="table-body">
 
                                                                     @php
                                                                         $month_counter = 1;
@@ -370,7 +547,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 $dop_name = str_replace(' ', '-', $dop->dop);
                                                                             @endphp
                                                                             <td
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                                                 <small class="accordion-header">
                                                                                     <button class="accordion-button btn-sm collapsed button-dop" type="button" data-bs-toggle="collapse" data-bs-target="#{{$dop_name}}" aria-expanded="true" aria-controls="{{$dop_name}}">
                                                                                       {{$dop->dop}}
@@ -464,7 +641,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     id="{{ $dop_name }}"
                                                                                     style="text-align: right;">
                                                                                     <td
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 1rem !important; text-align: left">
+                                                                                        style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 3rem !important; text-align: left">
                                                                                         <!--begin::Child=-->
                                                                                         <small class="accordion-header">
                                                                                             <button class="accordion-button collapsed btn-sm button-unit-kerja" type="button" data-bs-toggle="collapse" data-bs-target="#{{$unit_kerja_name}}" aria-expanded="true" aria-controls="{{$unit_kerja_name}}">
@@ -728,7 +905,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-bs-parent="#{{ $unit_kerja_name }}"
                                                                                             style="text-align: right;">
                                                                                             <td
-                                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
+                                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
                                                                                                 <!--begin::Child=-->
                                                                                                 <p class="ms-12">
                                                                                                     <a href="/proyek/view/{{ $proyek->kode_proyek }}"
@@ -910,7 +1087,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                 <div class="m-4">
                                                                     <tr>
                                                                         <td
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 0px; text-align: left">
+                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 20px; text-align: left">
                                                                             <!--begin::Child=-->
                                                                             Total
                                                                             <!--end::Child=-->
@@ -994,8 +1171,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                             {{-- @endforeach --}}
                                                             </table>
-                                    
-                                                        </div>    
+                                                        </div>
                                                         <!--end::Table body-->
                                                         <!--end:::Tab Forecast Bulanan-->
                                                     </div>
@@ -1105,29 +1281,8 @@ fill="none">
 @endsection
 {{-- <script src="{{ asset('/js/custom/pages/contract/contract.js') }}"></script> --}}
 
-
 {{-- begin:: JS script --}}
 @section('js-script')
-
-<script src="/datatables/jquery-3.5.1.js"></script>
-<script src="/datatables/jquery.dataTables.min.js"></script>
-<script src="/datatables/dataTables.fixedColumns.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        var table = $('#kt_forecast_table').DataTable( {
-            scrollY:        "300px",
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         false,
-            fixedColumns:   {
-                left: 1,
-                right: 1
-            }
-        } );
-    } );
-</script>
-
 <script>
     const toaster = document.querySelector(".toast");
     const toastBody = document.querySelector(".toast-body")
@@ -1909,7 +2064,7 @@ fill="none">
         accord.addEventListener('click', event => {
             const id = event.target.getAttribute("data-bs-target")
             const items = document.querySelectorAll(`.button-unit-kerja[data-bs-target="${id}"]`);
-            // console.log(items);
+            console.log(items);
         });
 
         // accord.addEventListener('show.bs.collapse', event => {

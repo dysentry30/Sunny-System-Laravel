@@ -50,22 +50,20 @@ class ProyekController extends Controller
         // dd($proyekBerjalan);
         $customers = Customer::all();
         $sumberdanas = SumberDana::all();
+        
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
             $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable();
         } else {
             $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
-            $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
+            // $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", Auth::user()->unit_kerja);
+            $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            if($unit_kerja instanceof \Illuminate\Support\Collection) {
+                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->whereIn("unit_kerja", $unit_kerja->toArray());
+            } else {
+                $proyeks = Proyek::with(['UnitKerja', 'proyekBerjalan'])->sortable()->where("unit_kerja", "=", $unit_kerja);
+            }
         }
-        // foreach ($customers as $customer) {
-        //     foreach ($proyeks as $proyek) {
-        //         if ($proyek->proyekBerjalan->id_customer == $customer->id_customer) {
-        //             $pelanggan = $customer->name;
-        //         }
-        //         dd($proyek->proyekBerjalan);
-        //     }
-        // }
-
         // Begin::FILTER
         // if (!empty($column)) {
             if (!empty($filter)) {
@@ -118,7 +116,7 @@ class ProyekController extends Controller
             // "nilai-rkap" => "required",
             // "sumber-dana" => "required",
             "tahun-perolehan" => "required",
-            "bulan-pelaksanaan" => "required",
+            // "bulan-pelaksanaan" => "required",
         ];
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
@@ -130,7 +128,7 @@ class ProyekController extends Controller
             // $request->old("nilai-rkap");
             // $request->old("sumber-dana");
             $request->old("tahun-perolehan");
-            $request->old("bulan-pelaksanaan");
+            // $request->old("bulan-pelaksanaan");
             redirect()->back()->with("modal", $dataProyek["modal-name"]);
             // Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
         }
@@ -204,6 +202,8 @@ class ProyekController extends Controller
                 // dd($customerHistory);
                 $customerHistory = new ProyekBerjalans();
                 $customerHistory->id_customer = $idCustomer;
+                $nameCustomer = Customer::find($idCustomer);
+                $customerHistory->name_customer = $nameCustomer->name;
                 $customerHistory->nama_proyek = $newProyek->nama_proyek;
                 $customerHistory->kode_proyek = $kode_proyek;
                 $customerHistory->pic_proyek = $newProyek->ketua_tender;
@@ -271,7 +271,7 @@ class ProyekController extends Controller
         ];
         $rules = [
             "nama-proyek" => "required",
-            "bulan-pelaksanaan" => "required",
+            // "bulan-pelaksanaan" => "required",
             // "nilai-rkap" => "required",
             // "sumber-dana" => "required",
             // "porsi-jo" => "numeric"
@@ -281,7 +281,7 @@ class ProyekController extends Controller
         // }
         $validation = Validator::make($dataProyek, $rules, $messages);
         if ($validation->fails()) {
-            // dd($validation);
+            dd($validation);
             Alert::error('Error', "Proyek Gagal Diubah, Periksa Kembali !");
             $request->old("nama-proyek");
             Session::flash('failed', 'Proyek gagal dibuat, Periksa kembali button "NEW" !');
@@ -383,7 +383,7 @@ class ProyekController extends Controller
         // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
         $newProyek->tanggal_terkontrak = $dataProyek["tanggal-terkontrak"];
         if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
-            $nilaiPerolehan = (int) str_replace(',', '', $dataProyek["nilai-perolehan"]);
+            $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
             $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
             $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
 
@@ -1012,8 +1012,8 @@ class ProyekController extends Controller
         $editTender->nilai_tender_peserta = $data["nilai-tender"];
         $editTender->status = $data["status-tender"];
         $oe_wika = 0;
-        $nilai_tender = (int)  str_replace(',', '', $data["nilai-tender"]);
-        $nilai_pagu = (int)  str_replace(',', '', $data["tender-pagu"]);
+        $nilai_tender = (int)  str_replace('.', '', $data["nilai-tender"]);
+        $nilai_pagu = (int)  str_replace('.', '', $data["tender-pagu"]);
         if (!empty($data["nilai-tender"]) && !empty($data["tender-pagu"])) {
             $oe_wika = ( $nilai_tender / $nilai_pagu) * 100;
         };

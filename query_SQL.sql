@@ -333,3 +333,26 @@ UPDATE `proyeks` SET `bulan_pelaksanaan`= 11,`nilai_rkap`='150000000000',`nilai_
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 7,`nilai_rkap`='180000000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - Pabrik Kelapa Sawit JG";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 7,`nilai_rkap`='71000000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - Pabrik Rayon Package Civil Work";
 UPDATE `proyeks` SET `bulan_pelaksanaan`= 5,`nilai_rkap`='63754000000',`nilai_perolehan`= NULL,`bulan_ri_perolehan`= NULL WHERE `nama_proyek` = "WRK - Pabrik Rayon Package ME";
+
+
+UPDATE `proyeks` SET `nilaiok_review` = '400000000000' WHERE `proyeks`.`nama_proyek` = 'D3 STASIUN KCIC PADALARANG';
+
+UPDATE `proyeks` SET `nilaiok_review` = '120000000000' WHERE `proyeks`.`nama_proyek` = 'Irigasi Banjarcahyana';
+UPDATE `proyeks` SET `hps_pagu` = '135423280184' WHERE `proyeks`.`nama_proyek` = 'Irigasi Banjarcahyana';
+UPDATE `proyeks` SET `penawaran_tender` = '127749482762' WHERE `proyeks`.`nama_proyek` = 'Irigasi Banjarcahyana';
+
+UPDATE `proyeks` SET `nilaiok_review` = '400000000000' WHERE `proyeks`.`nama_proyek` = 'Manyar Maju Refinery project (MMR Project) Hatch';
+UPDATE `proyeks` SET `hps_pagu` = '600000000000' WHERE `proyeks`.`nama_proyek` = 'Manyar Maju Refinery project (MMR Project) Hatch';
+UPDATE `proyeks` SET `penawaran_tender` = '600000000000' WHERE `proyeks`.`nama_proyek` = 'Manyar Maju Refinery project (MMR Project) Hatch';
+
+UPDATE `proyeks` SET `hps_pagu` = '196819000000' WHERE `proyeks`.`nama_proyek` = 'Rehabilitation and Reconstruction of Gumbasa Irrigation System (Main Canal BGKn.42 - BGKn.54 - 1815 hectares); Kab. Sigi; Prov. Sulawesi Tengah 7,294 km 1815 hektar F K MYC';
+UPDATE `proyeks` SET `penawaran_tender` = '173265666253' WHERE `proyeks`.`nama_proyek` = 'Rehabilitation and Reconstruction of Gumbasa Irrigation System (Main Canal BGKn.42 - BGKn.54 - 1815 hectares); Kab. Sigi; Prov. Sulawesi Tengah 7,294 km 1815 hektar F K MYC';
+
+UPDATE `proyeks` UPDATE `proyeks` SET `hps_pagu` = '2020235029000' WHERE `proyeks`.`nama_proyek` = 'Jalan Tol IKN Segmen KKT Kariangau - Sp. Tempadung';
+UPDATE `proyeks` UPDATE `proyeks` SET `penawaran_tender` = '1908516031896' WHERE `proyeks`.`nama_proyek` = 'Jalan Tol IKN Segmen KKT Kariangau - Sp. Tempadung';
+UPDATE `proyeks` UPDATE `proyeks` SET `nilai_kontrak_keseluruhan` = '1719383812519' WHERE `proyeks`.`nama_proyek` = 'Jalan Tol IKN Segmen KKT Kariangau - Sp. Tempadung';
+UPDATE `proyeks` SET `nilai_perolehan` = '730738120320' WHERE `proyeks`.`nama_proyek` = 'Jalan Tol IKN Segmen KKT Kariangau - Sp. Tempadung';
+
+UPDATE `proyeks` SET `nilai_perolehan` = '18406516285' WHERE `proyeks`.`nama_proyek` = 'Penanganan Tanggap Darurat Bencana Alam Banjir Sungai Sampoloe Desa Astina dan Sungai Torue Desa Torue Kecamatan Torue Kabupaten Parigi Moutong Provinsi Sulawesi Tengah';
+
+UPDATE `proyeks` SET `hps_pagu` = '348545057000' WHERE `proyeks`.`nama_proyek` = 'FO Aloha';

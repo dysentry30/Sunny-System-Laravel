@@ -412,13 +412,12 @@
                                                         <tr>
                                                             <!--begin::Name-->
                                                             <td>
-                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id=""
-                                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                                <!--end::Name-->
-                                                                <!--begin::Unit Kerja-->
+                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                            </td>
+                                                            <!--end::Name-->
+                                                            <!--begin::Unit Kerja-->
                                                             <td>
-                                                                <a href="#" id=""
-                                                                    class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja }}</a>
+                                                                <a href="#" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja ?? "-" }}</a>
                                                             </td>
                                                             <!--end::Unit Kerja-->
 
@@ -480,7 +479,8 @@
                                                                 {{-- @foreach ($proyek->Forecasts as $forecast)
                                                                         {{ $forecast->nilai_forecast }};
                                                                         @endforeach --}}
-                                                                {{ number_format($proyek->forecast, 0, '.', ',') }}
+                                                                {{-- {{ number_format($proyek->forecast, 0, '.', ',') }} --}}
+                                                                {{ number_format(str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}
                                                             </td>
                                                             <!--end::Nilai Forecast-->
                                                         </tr>
@@ -787,12 +787,17 @@
                 // }
             },
 
-            colors: ["#F7C13E", "#46AAF5", "#61CB65", "#ED6D3F", "#9575CD"],
+            colors: ["#46AAF5", "#F7C13E", "#61CB65", "#ED6D3F", "#9575CD"],
             legend: {
                 layout: 'horizontal',
                 align: 'center',
                 verticalAlign: 'bottom',
                 format : '<b>{point.key}</b><br>',
+                itemStyle: {
+                    fontSize:'20px',
+                    // font: '20pt Trebuchet MS, Verdana, sans-serif',
+                    // color: '#A0A0A0'
+                },
             },
 
             
@@ -815,12 +820,12 @@
             },
 
             series: [{
-                    name: 'Forecast ' + nilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
-                    data: nilaiForecast,
-                },
-                {
                     name: 'Nilai OK ' + nilaiRkap[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
                     data: nilaiRkap,
+                },
+                {
+                    name: 'Forecast ' + nilaiForecast[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
+                    data: nilaiForecast,
                 },
                 {
                     name: 'Nilai Realisasi ' + nilaiRealisasi[11].toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."),
@@ -841,7 +846,7 @@
                         legend: {
                             layout: 'horizontal',
                             align: 'center',
-                            verticalAlign: 'bottom'
+                            verticalAlign: 'bottom',
                         }
                     }
                 }]
@@ -953,7 +958,7 @@
         let sumNilaiRealisasi = nilaiRealisasiKumulatif.reduce((a, b) => a + b, 0);
         // console.log(nilaiOkKumulatif);
         // console.log(nilaiOkKumulatif.map(nilaiOKsatuan => nilaiOKsatuan / 1000000));
-        Highcharts.chart('nilai-realisasi', {
+        // Highcharts.chart('nilai-realisasi', {
             chart: {
                 type: 'column',
                 options3d: {
@@ -1063,6 +1068,14 @@
                     showInLegend: true
                 }
             },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'20px',
+                },
+            },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> Total Proyek<br/>'
@@ -1144,6 +1157,14 @@
                     },
                     showInLegend: true
                 }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'15px',
+                },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
@@ -1244,6 +1265,14 @@
                     },
                     showInLegend: true
                 }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'15px',
+                },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
@@ -1361,7 +1390,14 @@
                     showInLegend: true
                 }
             },
-            
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'20px',
+                },
+            },
             tooltip: {
                 headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
                 pointFormat: '<span style="color:{point.color}"><b>{point.name}</b></span> <br> Presentase {point.x}</b>'
@@ -1371,12 +1407,12 @@
                 name: "",
                 colorByPoint: true,
                 data: [{
-                        name: "Terendah : " + "{{ number_format($nilaiTerendah, 0, ',' , ',' ) }}",
+                        name: "Terendah : " + "{{ number_format($nilaiTerendah, 0, '.' , '.' ) }}",
                         y: {{ $nilaiTerendah }},
                         x: "Terendah : " + presentaseTerendah + "%",
                     },
                     {
-                        name: "Terkontrak : " + "{{ number_format($nilaiTerkontrak, 0, ',' , ',' ) }}",
+                        name: "Terkontrak : " + "{{ number_format($nilaiTerkontrak, 0, '.' , '.' ) }}",
                         y: {{ $nilaiTerkontrak }},
                         x: "Terkontrak : " + presentaseTerkontrak + "%",
                     }
@@ -1443,6 +1479,14 @@
                     },
                     showInLegend: true
                 }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'20px',
+                },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px"><b>{series.name}</b></span><br>',
@@ -1664,6 +1708,14 @@
             credits: {
                 enabled: false
             },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                itemStyle: {
+                    fontSize:'20px',
+                },
+            },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
             series: [{
                 name: 'Claim',
@@ -1709,6 +1761,14 @@
                 if (unitKerja) {
                     url += `/${unitKerja}`;
                 }
+                const dop = $("#dop").select2({}).val();
+                if (dop) {
+                    let dopUrl = dop.replaceAll(" ", "-");
+                    // console.log(dop, dopUrl);
+                    url += `/${dopUrl}`;
+                    // url += `/${dop}`;
+                }
+                // console.log(url);
                 // console.log(prognosa);
                 getDataTable("#datatable", "#forecast-line", url, type, prognosa, month);
                 
@@ -1742,6 +1802,7 @@
                 const tableTriwulan = document.querySelector("#datatable-triwulan");
 
                 let url = `/dashboard/triwulan/${prognosa}/${type}/${month}`;
+                // console.log(url);
                 const unitKerja = $("#unit-kerja").select2({}).val();
                 if (unitKerja) {
                     url += `/${unitKerja}`;
@@ -1770,8 +1831,9 @@
                 const date = new Date().getMonth() + 1;
                 const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
                 const tableRealisasi = document.querySelector("#datatable-realisasi");
-
+                
                 let url = `/dashboard/realisasi/0/${type}/${unitKerja}`;
+                // console.log(url, unitKerja);
                 const unitKerjaCode = $("#unit-kerja").select2({}).val();
                 if (unitKerjaCode) {
                     url += `/${unitKerjaCode}`;
@@ -1789,6 +1851,7 @@
         async function getDataTable(tableElt, chartElt, url, type, prognosa, month = new Date("now")) {
             let filterRes = await fetch(url).then(res =>res.json());
             const table = document.querySelector(tableElt);
+            // console.log(tableElt);
             const thead = table.querySelector("#table-line-head");
             const tbody = table.querySelector("#table-line-body");
             const titleTable = table.querySelector("#title-table");
@@ -1804,18 +1867,19 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Nama Proyek</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai Forecast</th>`
                 '</tr>';
-
+                
                 filterRes.forEach(filter => {
+                    // console.log(filter);
                     let stage = "";
                     totalForecast += Number(filter.nilai_forecast);
-                    switch (filter.stage) {
+                    switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -1852,7 +1916,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (filter.month_forecast) {
+                    switch (Number(filter.month_forecast)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -1896,40 +1960,40 @@
 
                     tbodyHTML += `<tr>
 
-                            <!--begin::Name=-->
+                            <!--begin::Email-->
                             <td>
-                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
+                            <!--end::Email-->
+                            <!--begin::Name-->
                             <td>
-                                ${filter.nama_proyek}
+                                ${filter.status_pasdin}
                             </td>
-                            <!--end::Email=-->
-                            <!--begin::Stage=-->
+                            <!--end::Name-->
+                            <!--begin::Stage-->
                             <td>
                                 ${stage}
                             </td>
-                            <!--end::Stage=-->
+                            <!--end::Stage-->
 
-                            <!--begin::Unit Kerja=-->
+                            <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
                             </td>
-                            <!--end::Unit Kerja=-->
+                            <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan=-->
+                            <!--begin::Bulan-->
                             <td>
                                 ${bulan}
                             </td>
-                            <!--end::Bulan=-->
+                            <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast=-->
+                            <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
                             </td>
-                            <!--end::Nilai Forecast=-->
+                            <!--end::Nilai Forecast-->
                             </tr>`;
                 });
                 thead.innerHTML = theadHTML;
@@ -1945,8 +2009,8 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
@@ -1956,7 +2020,7 @@
                 filterRes.forEach(filter => {
                     let stage = "";
                     totalNilaiOk += Number(filter.rkap_forecast);
-                    switch (filter.stage) {
+                    switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -1993,7 +2057,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (filter.month_rkap) {
+                    switch (Number(filter.month_rkap)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2037,40 +2101,40 @@
 
                     tbodyHTML += `<tr>
 
-                            <!--begin::Name=-->
+                            <!--begin::Email-->
                             <td>
-                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
+                            <!--end::Email-->
+                            <!--begin::Name-->
                             <td>
-                                ${filter.nama_proyek}
+                                ${filter.status_pasdin}
                             </td>
-                            <!--end::Email=-->
-                            <!--begin::Stage=-->
+                            <!--end::Name-->
+                            <!--begin::Stage-->
                             <td>
                                 ${stage}
                             </td>
-                            <!--end::Stage=-->
+                            <!--end::Stage-->
 
-                            <!--begin::Unit Kerja=-->
+                            <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
                             </td>
-                            <!--end::Unit Kerja=-->
+                            <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan=-->
+                            <!--begin::Bulan-->
                             <td>
                                 ${bulan}
                             </td>
-                            <!--end::Bulan=-->
+                            <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast=-->
+                            <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 ${Intl.NumberFormat({}).format(filter.rkap_forecast)}
                             </td>
-                            <!--end::Nilai Forecast=-->
+                            <!--end::Nilai Forecast-->
                             </tr>`;
                 });
                 thead.innerHTML = theadHTML;
@@ -2087,8 +2151,8 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
@@ -2098,7 +2162,7 @@
                 filterRes.forEach(filter => {
                     let stage = "";
                     totalNilaiOk += Number(filter.nilai_rkap.replaceAll(",", ""));
-                    switch (filter.stage) {
+                    switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -2135,7 +2199,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (filter.bulan_pelaksanaan) {
+                    switch (Number(filter.bulan_pelaksanaan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2179,40 +2243,40 @@
 
                     tbodyHTML += `<tr>
 
-                            <!--begin::Name=-->
+                            <!--begin::Email-->
                             <td>
-                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>                                
                             </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
+                            <!--end::Email-->
+                            <!--begin::Name-->
                             <td>
-                                ${filter.nama_proyek}
+                                ${filter.status_pasdin}
                             </td>
-                            <!--end::Email=-->
-                            <!--begin::Stage=-->
+                            <!--end::Name-->
+                            <!--begin::Stage-->
                             <td>
                                 ${stage}
                             </td>
-                            <!--end::Stage=-->
+                            <!--end::Stage-->
 
-                            <!--begin::Unit Kerja=-->
+                            <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
                             </td>
-                            <!--end::Unit Kerja=-->
+                            <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan=-->
+                            <!--begin::Bulan-->
                             <td>
                                 ${bulan}
                             </td>
-                            <!--end::Bulan=-->
+                            <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast=-->
+                            <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 ${Intl.NumberFormat({}).format(Number(filter.nilai_rkap.replaceAll(",", "")))}
                             </td>
-                            <!--end::Nilai Forecast=-->
+                            <!--end::Nilai Forecast-->
                             </tr>`;
                 });
                 thead.innerHTML = theadHTML;
@@ -2229,8 +2293,8 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
@@ -2240,7 +2304,7 @@
                 filterRes.forEach(filter => {
                     let stage = "";
                     totalNilaiOk += Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", ""));
-                    switch (filter.stage) {
+                    switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -2277,7 +2341,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (filter.bulan_pelaksanaan) {
+                    switch (Number(filter.bulan_pelaksanaan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2321,40 +2385,40 @@
 
                     tbodyHTML += `<tr>
 
-                            <!--begin::Name=-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Email-->
                             <td>
                                 <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
-                            <td>
-                                ${filter.nama_proyek}
-                            </td>
-                            <!--end::Email=-->
-                            <!--begin::Stage=-->
+                            <!--end::Email-->
+                            <!--begin::Stage-->
                             <td>
                                 ${stage}
                             </td>
-                            <!--end::Stage=-->
+                            <!--end::Stage-->
 
-                            <!--begin::Unit Kerja=-->
+                            <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
                             </td>
-                            <!--end::Unit Kerja=-->
+                            <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan=-->
+                            <!--begin::Bulan-->
                             <td>
                                 ${bulan}
                             </td>
-                            <!--end::Bulan=-->
+                            <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast=-->
+                            <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 ${Intl.NumberFormat({}).format(Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", "")))}
                             </td>
-                            <!--end::Nilai Forecast=-->
+                            <!--end::Nilai Forecast-->
                             </tr>`;
                 });
                 thead.innerHTML = theadHTML;
@@ -2371,8 +2435,8 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Kode Proyek</th>' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
@@ -2382,7 +2446,7 @@
                 filterRes.forEach(filter => {
                     let stage = "";
                     totalNilaiRealisasi += Number(filter.realisasi_forecast);
-                    switch (filter.stage) {
+                    switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -2419,7 +2483,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (filter.month_realisasi) {
+                    switch (Number(filter.month_realisasi)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2463,40 +2527,40 @@
 
                     tbodyHTML += `<tr>
 
-                            <!--begin::Name=-->
+                            <!--begin::Email-->
                             <td>
-                                <a href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                                    class="text-gray-800 text-hover-primary mb-1">${filter.kode_proyek}</a>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
-                            <!--end::Name=-->
-                            <!--begin::Email=-->
+                            <!--end::Email-->
+                            <!--begin::Name-->
                             <td>
-                                ${filter.nama_proyek}
+                                ${filter.status_pasdin}
                             </td>
-                            <!--end::Email=-->
-                            <!--begin::Stage=-->
+                            <!--end::Name-->
+                            <!--begin::Stage-->
                             <td>
                                 ${stage}
                             </td>
-                            <!--end::Stage=-->
+                            <!--end::Stage-->
 
-                            <!--begin::Unit Kerja=-->
+                            <!--begin::Unit Kerja-->
                             <td>
                                 ${filter.unit_kerja}
                             </td>
-                            <!--end::Unit Kerja=-->
+                            <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan=-->
+                            <!--begin::Bulan-->
                             <td>
                                 ${bulan}
                             </td>
-                            <!--end::Bulan=-->
+                            <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast=-->
+                            <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
                             </td>
-                            <!--end::Nilai Forecast=-->
+                            <!--end::Nilai Forecast-->
                             </tr>`;
                 });
                 thead.innerHTML = theadHTML;

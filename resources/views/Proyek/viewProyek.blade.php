@@ -27,7 +27,8 @@
     #nilai-kontrak-keseluruhan::placeholder {
     color: #D9214E;
     opacity: 1; /* Firefox */
-}
+    }
+
 </style>
 
 <!--begin::Main-->
@@ -177,18 +178,25 @@
                                                 <div class="form-group">
                                                     <div id="stage-button" class="stage-list">
                                                         @if ($proyek->stage >= 1)
-                                                        <a href="#"
-                                                            class="stage-button stage-action color-is-default stage-is-done"
-                                                            style="outline: 0px; cursor: pointer;" stage="1">
-                                                            Pasar Dini 
-                                                        </a>
+                                                            @if ($proyek->tipe_proyek == "R")
+                                                                <a href="#" class="stage-button stage-action color-is-default stage-is-done"
+                                                                    style="outline: 0px; cursor: pointer;" stage="1">
+                                                                    Pasar Dini Retail
+                                                                </a>
+                                                            @else
+                                                                <a href="#" class="stage-button stage-action color-is-default stage-is-done"
+                                                                    style="outline: 0px; cursor: pointer;" stage="1">
+                                                                    Pasar Dini
+                                                                </a>
+                                                            @endif
                                                         @else
-                                                        <a href="#"
-                                                            class="stage-button stage-action color-is-default stage-is-not-active"
-                                                            style="outline: 0px; pointer-events: none" stage="1">
-                                                            Pasar Dini
-                                                        </a>
+                                                                <a href="#"
+                                                                class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                style="outline: 0px; pointer-events: none" stage="1">
+                                                                Pasar Dini
+                                                            </a>
                                                         @endif
+@if ($proyek->tipe_proyek != "R")
                                                         @if ($proyek->stage > 1)
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
@@ -404,6 +412,7 @@
                                                             </ul>
                                                         @endif
 
+@endif
 
                                                         @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
@@ -633,137 +642,138 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
 
-
 <!--begin:::Tabs Navigasi-->
-                                                <ul
-                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                        
                                                     @if ($proyek->stage == 0)
-                                                        <!--begin:::Tab item Pasar Dini-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link"
+                                                    <!--begin:::Tab item Pasar Dini-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link"
                                                                 data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_pasardini"
                                                                 style="font-size:14px;">Proyek Canceled</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Dini-->
-                                                    @endif
-                                                    
+                                                            </li>
+                                                            <!--end:::Tab item Pasar Dini-->
+                                                            @endif
+                                                            
                                                     @if ($proyek->stage > 0)
-                                                        <!--begin:::Tab item Pasar Dini-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4 active"
-                                                                data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_pasardini"
-                                                                style="font-size:14px;">Pasar Dini</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Dini-->
+                                                    <!--begin:::Tab item Pasar Dini-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                        data-bs-toggle="tab"
+                                                        href="#kt_user_view_overview_pasardini"
+                                                        style="font-size:14px;">Pasar Dini</a>
+                                                    </li>
+                                                    <!--end:::Tab item Pasar Dini-->
                                                     @endif
 
+@if ($proyek->tipe_proyek != "R")
+                                                    
                                                     @if ($proyek->stage > 1)
                                                         <!--begin:::Tab item Pasar Potensial-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_potensial"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_potensial"
                                                                 style="font-size:14px;">Pasar Potensial</a>
-                                                        </li>
-                                                        <!--end:::Tab item Pasar Potensial-->
+                                                            </li>
+                                                            <!--end:::Tab item Pasar Potensial-->
                                                     @endif
-
+                                                    
                                                     @if ($proyek->stage > 2)
                                                         <!--begin:::Tab item Prakualifikasi-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_prakualifikasi"
                                                                 style="font-size:14px;">Prakualifikasi</a>
-                                                        </li>
-                                                        <!--end:::Tab item Prakualifikasi-->
+                                                            </li>
+                                                            <!--end:::Tab item Prakualifikasi-->
                                                     @endif
-
+                                                    
                                                     @if ($proyek->stage > 3)
-                                                        <!--begin:::Tab item Tender Diikuti-->
+                                                    <!--begin:::Tab item Tender Diikuti-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_tender"
                                                                 style="font-size:14px;">Tender Diikuti</a>
-                                                        </li>
-                                                        <!--end:::Tab item Tender Diikuti-->
-                                                    @endif
-
-                                                    @if ($proyek->stage > 4)
-                                                        <!--begin:::Tab item Perolehan-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
+                                                            </li>
+                                                            <!--end:::Tab item Tender Diikuti-->
+                                                            @endif
+                                                            
+                                                            @if ($proyek->stage > 4)
+                                                            <!--begin:::Tab item Perolehan-->
+                                                            <li class="nav-item">
+                                                                <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_perolehan"
                                                                 style="font-size:14px;">Perolehan</a>
-                                                        </li>
+                                                            </li>
                                                         <!--end:::Tab item Perolehan-->
-                                                    @endif
-
+                                                        @endif
+                                                        
                                                     @if ($proyek->stage > 5)
                                                         <!--begin:::Tab item Menang-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_menang"
-                                                                style="font-size:14px;">{{ $proyek->stage == 7 ? "Kalah" : "Menang" }}</a>
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            href="#kt_user_view_overview_menang"
+                                                            style="font-size:14px;">{{ $proyek->stage == 7 ? "Kalah" : "Menang" }}</a>
                                                         </li>
                                                         <!--end:::Tab item Menang-->
                                                     @endif
-
+@endif
                                                     @if ($proyek->stage > 7)
                                                         <!--begin:::Tab item Terkontrak-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_terkontrak"
                                                                 style="font-size:14px;">{{ $proyek->stage == 9 ? "Terendah" : "Terkontrak" }}</a>
-                                                        </li>
-                                                        <!--end:::Tab item Terkontrak-->
+                                                            </li>
+                                                            <!--end:::Tab item Terkontrak-->
                                                     @endif
-
+                                                    
                                                     <!--begin:::Tab item Forecast-->
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                        data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
-                                                            style="font-size:14px;">Forecast</a>
+                                                            style="font-size:14px;">Terkontrak Retail</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast-->
 
                                                     <!--begin:::Tab item Approval-->
                                                     {{-- <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                        data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_approval"
                                                             style="font-size:14px;">Approval</a>
-                                                    </li> --}}
-                                                    <!--end:::Tab item Approval-->
-
-                                                    @if ($proyek->stage > 9)
+                                                        </li> --}}
+                                                        <!--end:::Tab item Approval-->
+                                                        
+                                                        @if ($proyek->stage > 9)
                                                         <!--begin:::Tab item Feedback-->
                                                         {{-- <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_Feedback"
                                                                 style="font-size:14px;">Feedback</a>
-                                                        </li> --}}
-                                                        <!--end:::Tab item Feedback-->
-                                                    @endif
+                                                            </li> --}}
+                                                            <!--end:::Tab item Feedback-->
+                                                            @endif
                                                     
                                                     @if ($proyek->stage > 9)
-                                                        <!--begin:::Tab item Feedback-->
-                                                        <li class="nav-item">
+                                                    <!--begin:::Tab item Feedback-->
+                                                    <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 {{-- href="#kt_user_view_overview_Feedback" --}}
                                                                 style="font-size:14px; color:#D9214E">*Gugur Prakualifikasi</a>
-                                                        </li>
-                                                        <!--end:::Tab item Feedback-->
-                                                    @endif
+                                                            </li>
+                                                            <!--end:::Tab item Feedback-->
+                                                            @endif
                                                 </ul>
 <!--end:::Tabs Navigasi-->
 
@@ -916,14 +926,14 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">Tipe Proyek <i class="bi bi-key"></i></span>
+                                                                        <span class="required">Tipe Proyek <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <select id="tipe-proyek" name="tipe-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
-                                                                        data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                        data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="R" {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>Retail</option>
                                                                         <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                                                     </select>
@@ -952,7 +962,7 @@
                                                                     <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
-                                                                    data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                    data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="N" {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>External</option>
                                                                         <option value="J" {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>JO</option>
@@ -985,16 +995,20 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <input type="number"
+                                                                    {{-- @php
+                                                                        $years = $proyek->tahun_perolehan;
+                                                                    @endphp --}}
+                                                                    {{-- @for ($i = 2021; $i < $years + 20; $i++)
+                                                                        <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
+                                                                            {{ $i }}</option>
+                                                                    @endfor --}}
+                                                                    <input type="number"
                                                                         class="form-control form-control-solid"
                                                                         name="tahun-perolehan" min="2021"
-                                                                        max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_perolehan }}" readonly /> --}}
-                                                                    @php
-                                                                        $years = $proyek->tahun_perolehan;
-                                                                    @endphp
+                                                                        max="{{ $proyek->tahun_perolehan + 10 }}" step="1"
+                                                                        value="{{ $proyek->tahun_perolehan }}" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
                                                                     <!--begin::Input-->
-                                                                    <select id="tahun-perolehan" name="tahun-perolehan"
+                                                                    {{-- <select id="tahun-perolehan" name="tahun-perolehan"
                                                                         class="form-select form-select-solid select2-hidden-accessible"
                                                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
@@ -1002,18 +1016,18 @@
                                                                             <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
                                                                                 {{ $i }}</option>
                                                                         @endfor
-                                                                    </select>
+                                                                    </select> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
-                                                            <!--End begin::Col-->
+                                                            <!--End begin::Col-->   
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="required">RA Bulan Perolehan</span>
+                                                                        <span>RA Bulan Perolehan</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--Begin::Input-->
@@ -1236,7 +1250,7 @@
                                                                         <select id="mata-uang-review" name="mata-uang-review"
                                                                             class="form-select form-select-solid"
                                                                             data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Mata Uang" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                            data-placeholder="Pilih Mata Uang" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                             <option></option>
                                                                             <option value="Rupiah" {{ $proyek->mata_uang_review == 'Rupiah' ? 'selected' : '' }}>Rupiah</option>
                                                                             <option value="US Dollar" {{ $proyek->mata_uang_review == 'US Dollar' ? 'selected' : '' }}>US Dollar</option>
@@ -1285,7 +1299,7 @@
                                                                             name="bulan-pelaksanaan-review"
                                                                             class="form-select form-select-solid"
                                                                             data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Bulan Pelaksanaan" {{ auth()->user()->check_administrator ? '' : 'disabled'}}>
+                                                                            data-placeholder="Pilih Bulan Pelaksanaan" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                             <option></option>
                                                                             <option value="1"
                                                                                 {{ $proyek->bulan_review == '1' ? 'selected' : '' }}>
@@ -1484,7 +1498,7 @@
                                                                             name="bulan-pelaksanaan-awal"
                                                                             class="form-select form-select-solid"
                                                                             data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Bulan Pelaksanaan" disabled>
+                                                                            data-placeholder="Bulan Pelaksanaan" readonly>
                                                                             <option></option>
                                                                             <option selected>
                                                                                 @switch($proyek->bulan_pelaksanaan)
@@ -1654,7 +1668,7 @@
                                                                     <!--begin::Input-->
                                                                     <select onchange="getSBU(this)" id="sbu" name="sbu"
                                                                         class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-control="select2" data-hide-search="false"
                                                                         data-placeholder="Pilih SBU">
                                                                         <option></option>
                                                                         @foreach ($sbus as $sbu)
@@ -2046,7 +2060,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS / Pagu (Rupiah)</span>
+                                                                        <span class="required">HPS / Pagu (Rupiah)</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2490,7 +2504,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Penawaran Keseluruhan</span>
+                                                                        <span class="required">Nilai Penawaran Keseluruhan</span>
                                                                     </label>
                                                                     <!--end::Label-->
 
@@ -2790,7 +2804,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai Perolehan</span>
+                                                                        <span class="required">Nilai Perolehan</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2828,6 +2842,7 @@
                                                                         <option value="Peringkat 8" {{ $proyek->peringkat_wika == 'Peringkat 8' ? 'selected' : '' }}>Peringkat 8</option>
                                                                         <option value="Peringkat 9" {{ $proyek->peringkat_wika == 'Peringkat 9' ? 'selected' : '' }}>Peringkat 9</option>
                                                                         <option value="Peringkat 10" {{ $proyek->peringkat_wika == 'Peringkat 10' ? 'selected' : '' }}>Peringkat 10</option>
+                                                                        <option value="Gugur" {{ $proyek->peringkat_wika == 'Gugur' ? 'selected' : '' }}>Gugur</option>
                                                                     </select>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3290,7 +3305,7 @@
                                                                         class="form-control form-control-solid"
                                                                         id="" name="tahun-ri-perolehan"
                                                                         min="2020" max="2099" step="1"
-                                                                        value="{{ $proyek->tahun_ri_perolehan }}"
+                                                                        value="{{ $proyek->tahun_ri_perolehan == (int) '0' ? '' : $proyek->tahun_ri_perolehan }}"
                                                                         placeholder="Tahun Ri Perolehan" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3516,9 +3531,9 @@
                                                             <!--End begin::Col-->
                                                             @php
                                                                 if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
-                                                                    $nilaiPerolehan = (int) str_replace(',', '', $proyek->nilai_perolehan);
+                                                                    $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
                                                                     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                    $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
+                                                                    $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, '.', '.');
                                                                 } else {
                                                                     $nilaiKontrakKeseluruhan = 0;
                                                                 }
@@ -4116,7 +4131,7 @@
 <!--end:::Tab Feedback-->
 
 
-<!--begin:::Tab Forecast-->
+<!--begin:::Tab Forecast Retail-->
                                                     <div class="tab-pane fade" id="kt_user_view_overview_forecast"
                                                         role="tabpanel">
 
@@ -4126,7 +4141,7 @@
                                                             style="font-size:14px;">History Forecast</h3>
                                                         <br>
                                                         <!--End::Title Biru Form: List History-->
-
+                                                        
                                                         {{-- begin::Detail History Forecast --}}
                                                         <div class="d-flex flex-row-reverse mb-5">
                                                             <div>
@@ -4137,6 +4152,11 @@
                                                                 @endphp
                                                                 <b class="mx-4">{{ $periode_prognosa }}</b>
                                                             </div>
+                                                            <!--begin::Button-->
+                                                                <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
+                                                                style="background-color:#008CB4">
+                                                                Save</button>
+                                                            <!--end::Button-->
                                                         </div>
                                                         {{-- end::Detail History Forecast --}}
 
@@ -4148,24 +4168,76 @@
                                                                 <!--begin::Table row-->
                                                                 <tr
                                                                     class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-auto">Nama Proyek</th>
-                                                                    <th class="min-w-auto">Nilai OK</th>
+                                                                    <th class="min-w-auto text-end">Periode</th>
+                                                                    <th class="min-w-auto text-center">Nilai OK</th>
+                                                                    <th class="min-w-auto text-center">Forecast</th>
+                                                                    <th class="min-w-auto text-center">Realisasi</th>
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
                                                             <!--end::Table head-->
                                                             <!--begin::Table body-->
                                                             <tbody class="fw-bold text-gray-600">
-                                                                @for ($i = 0; $i < 12; $i++)
+                                                                @for ($i = 1; $i <= 12; $i++)
                                                                     <tr>
-
                                                                         <!--begin::Name-->
-                                                                        <td>
-                                                                            <h6 class="text-gray-600 fw-light">
-                                                                                {{ $proyek->nama_proyek }}</h6>
+                                                                        <td class="text-end"><b>
+                                                                            @switch($i)
+                                                                                @case('1')
+                                                                                    Januari :
+                                                                                @break
+        
+                                                                                @case('2')
+                                                                                    Februari :
+                                                                                @break
+        
+                                                                                @case('3')
+                                                                                    Maret :
+                                                                                @break
+        
+                                                                                @case('4')
+                                                                                    April :
+                                                                                @break
+        
+                                                                                @case('5')
+                                                                                    Mei :
+                                                                                @break
+        
+                                                                                @case('6')
+                                                                                    Juni :
+                                                                                @break
+        
+                                                                                @case('7')
+                                                                                    Juli :
+                                                                                @break
+        
+                                                                                @case('8')
+                                                                                    Agustus :
+                                                                                @break
+        
+                                                                                @case('9')
+                                                                                    September :
+                                                                                @break
+        
+                                                                                @case('10')
+                                                                                    Oktober :
+                                                                                @break
+        
+                                                                                @case('11')
+                                                                                    November :
+                                                                                @break
+        
+                                                                                @case('12')
+                                                                                    Desember :
+                                                                                @break
+        
+                                                                                @default
+                                                                                    -
+                                                                            @endswitch
+                                                                            </b>
                                                                         </td>
                                                                         <!--end::Name-->
-                                                                        @if (count($historyForecast) > 0)
+                                                                        {{-- @if (count($historyForecast) > 0)
                                                                             @foreach ($historyForecast as $history)
                                                                                 @if ($i + 1 == $history->periode_prognosa)
                                                                                     <!--begin::Nilai OK-->
@@ -4175,30 +4247,53 @@
                                                                                     <!--end::Nilai OK-->
                                                                                 @break
 
-                                                                            @else
-                                                                                <!--begin::Nilai OK-->
-                                                                                <td class="text-dark">
-                                                                                    0
-                                                                                </td>
-                                                                                <!--end::Nilai OK-->
-                                                                            @break
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    <!--begin::Nilai OK-->
-                                                                    <td class="text-dark">
-                                                                        0
-                                                                    </td>
-                                                                    <!--end::Nilai OK-->
-                                                                @endif
-
-                                                            </tr>
-                                                        @endfor
-                                                    </tbody>
-                                                    <!--end::Table body-->
+                                                                                @else
+                                                                                    <!--begin::Nilai OK-->
+                                                                                    <td class="text-dark">
+                                                                                        0
+                                                                                    </td>
+                                                                                    <!--end::Nilai OK-->
+                                                                                @break
+                                                                            @endif
+                                                                            @endforeach
+                                                                        @else
+                                                                            <!--begin::Nilai OK-->
+                                                                            <td class="text-dark">
+                                                                                0
+                                                                            </td>
+                                                                            <!--end::Nilai OK-->
+                                                                        @endif --}}
+                                                                        <!--begin::Nilai OK-->
+                                                                        <td class="text-dark">
+                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
+                                                                                value="{{ $proyek->nilai_perolehan }}"
+                                                                                placeholder="Nilai Perolehan" />
+                                                                        </td>
+                                                                        <!--end::Nilai OK-->
+                                                                        <!--begin::Forecast-->
+                                                                        <td class="text-dark">
+                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
+                                                                                value="{{ $proyek->nilai_perolehan }}"
+                                                                                placeholder="Forecast" />
+                                                                        </td>
+                                                                        <!--end::Forecast-->
+                                                                        <!--begin::Nilai Realisasi-->
+                                                                        <td class="text-dark">
+                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
+                                                                                value="{{ $proyek->nilai_perolehan }}"
+                                                                                placeholder="Nilai Realisasi" />
+                                                                        </td>
+                                                                        <!--end::Nilai Realisasi-->
+                                                                    </tr>
+                                                                @endfor
+                                                            </tbody>
+                                                            <!--end::Table body-->
                                                 </table>
                                                 <!--end::Table-->
-<!--end:::Tab Forecast-->
+<!--end:::Tab Forecast Retail-->
 
 
                                             </div>
