@@ -1897,126 +1897,130 @@
                     `<th class="text-end">Nilai Forecast</th>`
                 '</tr>';
                 
-                filterRes.forEach(filter => {
-                    // console.log(filter);
-                    let stage = "";
-                    totalForecast += Number(filter.nilai_forecast);
-                    switch (Number(filter.stage)) {
-                        case 1:
-                            stage = "Pasar Dini";
-                            break;
-                        case 2:
-                            stage = "Pasar Potensial";
-                            break;
-                        case 3:
-                            stage = "Prakualifikasi";
-                            break;
-                        case 4:
-                            stage = "Tender Diikuti";
-                            break;
-                        case 5:
-                            stage = "Perolehan";
-                            break;
-                        case 6:
-                            stage = "Menang";
-                            break;
-                        case 7:
-                            stage = "Kalah";
-                            break;
-                        case 8:
-                            stage = "Terkontrak";
-                            break;
-                        case 9:
-                            stage = "Terendah";
-                            break;
-                        case 10:
-                            stage = "Approval";
-                            break;
-                        default:
-                            break;
-                    }
+                filterRes.forEach(filtering => {
+                    console.log(filtering);
+                    return;
+                    filtering.forEach(filter => {
+                        // console.log(filter);
+                        let stage = "";
+                        totalForecast += Number(filter.nilai_forecast);
+                        switch (Number(filter.stage)) {
+                            case 1:
+                                stage = "Pasar Dini";
+                                break;
+                            case 2:
+                                stage = "Pasar Potensial";
+                                break;
+                            case 3:
+                                stage = "Prakualifikasi";
+                                break;
+                            case 4:
+                                stage = "Tender Diikuti";
+                                break;
+                            case 5:
+                                stage = "Perolehan";
+                                break;
+                            case 6:
+                                stage = "Menang";
+                                break;
+                            case 7:
+                                stage = "Kalah";
+                                break;
+                            case 8:
+                                stage = "Terkontrak";
+                                break;
+                            case 9:
+                                stage = "Terendah";
+                                break;
+                            case 10:
+                                stage = "Approval";
+                                break;
+                            default:
+                                break;
+                        }
 
-                    let bulan = "";
-                    // console.log(filter.bulan_pelaksanaan);
-                    switch (Number(filter.month_forecast)) {
-                        case 1:
-                            bulan = "Januari";
-                            break;
-                        case 2:
-                            bulan = "Februari";
-                            break;
-                        case 3:
-                            bulan = "Maret";
-                            break;
-                        case 4:
-                            bulan = "April";
-                            break;
-                        case 5:
-                            bulan = "Mei";
-                            break;
-                        case 6:
-                            bulan = "Juni";
-                            break;
-                        case 7:
-                            bulan = "Juli";
-                            break;
-                        case 8:
-                            bulan = "Agustus";
-                            break;
-                        case 9:
-                            bulan = "September";
-                            break;
-                        case 10:
-                            bulan = "Oktober";
-                            break;
-                        case 11:
-                            bulan = "November";
-                            break;
-                        case 12:
-                            bulan = "Desember";
-                            break;
-                        default:
-                            bulan = "Bulan Unknown"
-                            break;
-                    }
+                        let bulan = "";
+                        // console.log(filter.bulan_pelaksanaan);
+                        switch (Number(filter.month_forecast)) {
+                            case 1:
+                                bulan = "Januari";
+                                break;
+                            case 2:
+                                bulan = "Februari";
+                                break;
+                            case 3:
+                                bulan = "Maret";
+                                break;
+                            case 4:
+                                bulan = "April";
+                                break;
+                            case 5:
+                                bulan = "Mei";
+                                break;
+                            case 6:
+                                bulan = "Juni";
+                                break;
+                            case 7:
+                                bulan = "Juli";
+                                break;
+                            case 8:
+                                bulan = "Agustus";
+                                break;
+                            case 9:
+                                bulan = "September";
+                                break;
+                            case 10:
+                                bulan = "Oktober";
+                                break;
+                            case 11:
+                                bulan = "November";
+                                break;
+                            case 12:
+                                bulan = "Desember";
+                                break;
+                            default:
+                                bulan = "Bulan Unknown"
+                                break;
+                        }
 
-                    tbodyHTML += `<tr>
+                        tbodyHTML += `<tr>
 
-                            <!--begin::Email-->
-                            <td>
-                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
-                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
-                            </td>
-                            <!--end::Email-->
-                            <!--begin::Name-->
-                            <td>
-                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin }
-                            </td>
-                            <!--end::Name-->
-                            <!--begin::Stage-->
-                            <td>
-                                ${stage}
-                            </td>
-                            <!--end::Stage-->
+                                <!--begin::Email-->
+                                <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                                </td>
+                                <!--end::Email-->
+                                <!--begin::Name-->
+                                <td>
+                                    ${filter.status_pasdin == null ? "-" : filter.status_pasdin }
+                                </td>
+                                <!--end::Name-->
+                                <!--begin::Stage-->
+                                <td>
+                                    ${stage}
+                                </td>
+                                <!--end::Stage-->
 
-                            <!--begin::Unit Kerja-->
-                            <td>
-                                ${filter.unit_kerja}
-                            </td>
-                            <!--end::Unit Kerja-->
+                                <!--begin::Unit Kerja-->
+                                <td>
+                                    ${filter.unit_kerja}
+                                </td>
+                                <!--end::Unit Kerja-->
 
-                            <!--begin::Bulan-->
-                            <td>
-                                ${bulan}
-                            </td>
-                            <!--end::Bulan-->
+                                <!--begin::Bulan-->
+                                <td>
+                                    ${bulan}
+                                </td>
+                                <!--end::Bulan-->
 
-                            <!--begin::Nilai Forecast-->
-                            <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
-                            </td>
-                            <!--end::Nilai Forecast-->
-                            </tr>`;
+                                <!--begin::Nilai Forecast-->
+                                <td class="text-end">
+                                    ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
+                                </td>
+                                <!--end::Nilai Forecast-->
+                                </tr>`;
+                    })
                 });
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
