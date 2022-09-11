@@ -311,24 +311,53 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
         $data = $request->all();
         // dd($data, $i);
-        $forecast = new Forecast();
-        $forecast->kode_proyek = $data["kode-proyek"];
-
-        $forecast->nilai_forecast = (string) str_replace(".", "", $data["nilaiforecast-".$i]);
-        $forecast->month_forecast = (int) $i;
         
-        $forecast->rkap_forecast = str_replace(".", "", $data["nilaiok-".$i]);
-        $forecast->month_rkap = (int) $i;
+        // dd($data);
         
-        $forecast->realisasi_forecast = (string) str_replace(".", "", $data["nilairealisasi-".$i]);
-        $forecast->month_realisasi = (int) $i;
-
-        $forecast->periode_prognosa = (int) $i;
-
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("month_rkap", "=", (int) $i)->where("month_realisasi", "=", (int) $i)->get()->first();
         
-        if ($forecast->save()) {
+        if (empty($findForecast)) {
             
+            $forecast = new Forecast();
+            $forecast->kode_proyek = $data["kode-proyek"];
+            
+            $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-".$i] ?? 0));
+            $forecast->month_forecast = (int) $i;
+            
+            $forecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-".$i]) ?? 0);
+            $forecast->month_rkap = (int) $i;
+            
+            $forecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-".$i]) ?? 0);
+            $forecast->month_realisasi = (int) $i;
+            
+            $prognosa = (int) date('m');
+            $forecast->periode_prognosa = $prognosa;
+            
+            // dd($forecast);
+
+            $forecast->save();
+
             Alert::success('Success', "Forecast Berhasil Dibuat");
+            return redirect()->back();
+        } else {
+            
+            $findForecast->kode_proyek = $data["kode-proyek"];
+
+            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-".$i] ?? 0));
+            $findForecast->month_forecast = (int) $i;
+            
+            $findForecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-".$i]) ?? 0);
+            $findForecast->month_rkap = (int) $i;
+            
+            $findForecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-".$i]) ?? 0);
+            $findForecast->month_realisasi = (int) $i;
+
+            $prognosa = (int) date('m');
+            $findForecast->periode_prognosa = $prognosa;
+            
+            $findForecast->save();
+
+            Alert::success('Success', "Forecast Berhasil Diubah");
             return redirect()->back();
         }
         
@@ -345,11 +374,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/proyek/forecast/save', function (Request $request) {
         $data = $request->all();
+        $per = 1000000;
         $proyek = Proyek::find($data["kode_proyek"]);
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at")->first();
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            if ($forecast->update(["nilai_forecast" => (string) $data["nilai_forecast"]])) {
+            if ($forecast->update(["nilai_forecast" => (string) $data["nilai_forecast"] * $per ])) {
                 if (!empty($proyek->forecast)) {
                     $totalfc = 0;
                     foreach ($proyek->Forecasts as $proyekfc) {
@@ -367,14 +397,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 ]);
             }
         } else {
-            $nilai_kontrak_keseluruhan = $proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $proyek->nilai_kontrak_keseluruhan);
+            $nilai_kontrak_keseluruhan = $proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(".", "", (int) $proyek->perolehan);
             $forecast = new Forecast();
-            $forecast->nilai_forecast = (string) $data["nilai_forecast"];
+            $forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
             $forecast->month_forecast = (int) $data["forecast_month"];
             $forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
             $forecast->month_realisasi = $proyek->bulan_ri_perolehan;
             $forecast->month_forecast = (int) $data["forecast_month"];
-            $forecast->rkap_forecast = str_replace(",", "", $proyek->nilai_rkap);
+            $forecast->rkap_forecast = str_replace(".", "", (int) $proyek->nilai_rkap);
             $forecast->realisasi_forecast = (string) $nilai_kontrak_keseluruhan;
             $forecast->periode_prognosa = (int) $data["periode_prognosa"];
             $forecast->kode_proyek = $data["kode_proyek"];
@@ -466,6 +496,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/forecast', [ForecastController::class, 'index']);
 
     Route::get('/forecast-internal', [ForecastController::class, 'viewForecastInternal']);
+
+    Route::get('/forecast-kumulatif-eksternal', [ForecastController::class, 'viewForecastKumulatifEksternal']);
+    
+    Route::get('/forecast-kumulatif-eksternal-internal', [ForecastController::class, 'viewForecastKumulatifIncludeInternal']);
 
     // Home Page Forecast with Specific periode
     Route::get('/forecast/{periode}/{year}', [ForecastController::class, 'index']);
