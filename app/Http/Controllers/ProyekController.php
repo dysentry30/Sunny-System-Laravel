@@ -139,7 +139,7 @@ class ProyekController extends Controller
         $newProyek->unit_kerja = $dataProyek["unit-kerja"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
-        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
+        $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         // $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->tahun_perolehan = $dataProyek["tahun-perolehan"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
@@ -151,15 +151,15 @@ class ProyekController extends Controller
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
         
-        $newProyek->nilai_valas_review = $dataProyek["nilai-rkap"];
+        $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilaiok_review = $dataProyek["nilai-rkap"];
+        $newProyek->nilaiok_review = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->kurs_review = 1;
         $newProyek->mata_uang_review = "IDR";
         
         $newProyek->kurs_awal = 1;
         $newProyek->mata_uang_awal = "IDR";
-        $newProyek->nilaiok_awal = $dataProyek["nilai-rkap"];
+        $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         $newProyek->porsi_jo = 100;
         
         //begin::Generate Kode Proyek
@@ -319,19 +319,19 @@ class ProyekController extends Controller
 
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
+        $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
         if (Auth::user()->check_administrator) {
-            $newProyek->nilai_valas_review = $dataProyek["nilai-valas-review"];
+            $newProyek->nilai_valas_review = (int) str_replace('.', '', $dataProyek["nilai-valas-review"]);
             $newProyek->mata_uang_review = $dataProyek["mata-uang-review"];
             $newProyek->kurs_review = $dataProyek["kurs-review"];
             $newProyek->bulan_review = $dataProyek["bulan-pelaksanaan-review"];
-            $newProyek->nilaiok_review = $dataProyek["nilaiok-review"];
+            $newProyek->nilaiok_review = (int) str_replace('.', '', $dataProyek["nilaiok-review"]);
         }
         // $newProyek->nilai_valas_awal = $dataProyek["nilai-rkap"];
         $newProyek->mata_uang_awal = $dataProyek["mata-uang-awal"];
         $newProyek->kurs_awal = $dataProyek["kurs-awal"];
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilaiok_awal = $dataProyek["nilaiok-awal"];
+        $newProyek->nilaiok_awal = (int) str_replace('.', '', $dataProyek["nilaiok-awal"]);
         $newProyek->status_pasdin  = $dataProyek["status-pasardini"];
         $newProyek->info_asal_proyek  = $dataProyek["info-proyek"];
         $newProyek->laporan_kualitatif_pasdin = $dataProyek["laporan-kualitatif-pasdin"];
@@ -351,7 +351,7 @@ class ProyekController extends Controller
         // form PASAR PRAKUALIFIKASI
         $newProyek->jadwal_pq = $dataProyek["jadwal-pq"];
         // $newProyek->jadwal_proyek = $dataProyek["jadwal-proyek"];
-        $newProyek->hps_pagu = $dataProyek["hps-pagu"];
+        $newProyek->hps_pagu = (int) str_replace('.', '', $dataProyek["hps-pagu"]);
         $newProyek->porsi_jo = $dataProyek["porsi-jo"];
         $newProyek->ketua_tender = $dataProyek["ketua-tender"];
         // foreach($allProyek as $proyek) {
@@ -365,14 +365,14 @@ class ProyekController extends Controller
         // form TENDER DIIKUTI
         $newProyek->jadwal_tender = $dataProyek["jadwal-tender"];
         $newProyek->lokasi_tender = $dataProyek["lokasi-tender"];
-        $newProyek->penawaran_tender = $dataProyek["nilai-kontrak-penawaran"];
+        $newProyek->penawaran_tender = (int) str_replace('.', '', $dataProyek["nilai-kontrak-penawaran"]);
         // $newProyek->nilai_kontrak_keseluruhan = $dataProyek["nilai-kontrak-penawaran"];
         // $newProyek->hps_tender = $dataProyek["hps-tender"];
         $newProyek->laporan_tender = $dataProyek["laporan-tender"];
 
         // form PEROLEHAN
         // $newProyek->biaya_praproyek = $dataProyek["biaya-praproyek"];
-        $newProyek->nilai_perolehan = $dataProyek["nilai-perolehan"];
+        $newProyek->nilai_perolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
         // $newProyek->hps_perolehan = $dataProyek["hps-perolehan"];
         $oe_wika = 0;
         if (!empty($dataProyek["nilai-kontrak-penawaran"]) && !empty($dataProyek["hps-pagu"])) {
@@ -404,7 +404,7 @@ class ProyekController extends Controller
         if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
             $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
             $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
-            $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, ',', ',');
+            $nilaiKontrakKeseluruhan = $kontrakKeseluruhan;
 
             $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
         }
