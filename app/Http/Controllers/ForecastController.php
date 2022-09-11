@@ -52,6 +52,12 @@ class ForecastController extends Controller
         } else {
             // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
             $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->join("unit_kerjas", "proyeks.kode_proyek", "=", "unit_kerjas.divcode")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "kode_proyek"]);
+            // $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
+        }
+        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->groupBy(["periode_prognosa"]);
+        } else {
             $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
         }
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
@@ -154,6 +160,7 @@ class ForecastController extends Controller
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
                 "periode" => $periode,
+                "per_sejuta" => 1000000,
                 "year" => $year,
                 "previous_forecast" => $previous_forecast,
                 "column" => $column,
@@ -195,6 +202,11 @@ class ForecastController extends Controller
         } else {
             // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
             $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->join("unit_kerjas", "proyeks.kode_proyek", "=", "unit_kerjas.divcode")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "kode_proyek"]);
+        }
+        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->groupBy(["periode_prognosa"]);
+        } else {
             $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
         }
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
@@ -297,6 +309,305 @@ class ForecastController extends Controller
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
                 "periode" => $periode,
+                "per_sejuta" => 1000000,
+                "year" => $year,
+                "previous_forecast" => $previous_forecast,
+                "column" => $column,
+                "filter" => $filter,
+            ]
+        );
+        // 'unitkerjas' => UnitKerja::all()]);
+    }
+
+    public function viewForecastKumulatifEksternal(Request $request, $periode = "", $year = "")
+    {
+        // $id = Dop::find('id');
+        // $dopProyek = Proyek::find($id);
+        $column = $request->get("column");
+        $filter = $request->get("filter");
+
+        $periode = $periode != "" ? (int) $periode : (int) date("m");
+        $year = $year != "" ? (int) $year : (int) date("Y");
+        $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
+        $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
+        if ($previous_periode_prognosa < 1) {
+            $year_previous_forecast--;
+            $previous_periode_prognosa = 12;
+        }
+
+        if (($periode != "" && $year != "") || Auth::user()->check_administrator) {
+            // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $historyForecast = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->where("history.periode_prognosa", "=", $periode, "or")->whereYear("history.created_at", $year)->get();
+            // $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->get()->groupBy(["periode_prognosa"]);
+            $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get();
+            // $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "unit_kerja", "kode_proyek"]);
+            // $previous_forecast = [0 => $previous_forecast];
+            // $previous_forecast->map(function($data) {
+            //     $data->map(function($d) {
+            //         dd($d);
+            //     });
+            // });
+            // dd($previous_forecast);
+        } else {
+            // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->join("unit_kerjas", "proyeks.kode_proyek", "=", "unit_kerjas.divcode")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "kode_proyek"]);
+        }
+        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->groupBy(["periode_prognosa"]);
+        } else {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
+        }
+        $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
+        if ($periode != "") {
+            $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
+        }
+        if (Auth::user()->check_administrator) {
+            // $proyeks = collect();
+            // $proyeks = Proyek::with(["Forecasts", "HistoryForecasts"])->get();
+            $dops = Dop::all()->sortBy("dop");
+            // dd($proyeks);
+        } else {
+            // $proyeks = collect();
+            // $dops = Dop::all()->sortBy("dop");
+
+            // dd($unit_kerja);
+            $dops = Dop::all();
+            // if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            //     // $proyeks = Proyek::with("Forecasts")->get()->whereIn("unit_kerja", $unit_kerja->toArray());
+            //     // dd($dops);
+            //     // dd($dops);
+            //     // foreach ($dops as $dop_name => $dop) {
+            //     //     $divcodes = $dop->map(function($data) {
+            //     //         return $data->divcode;
+            //     //     });
+            //     //     foreach ($dop as $item_dop) {
+            //     //         dd($item_dop->UnitKerjas->whereIn("divcode", $divcodes->toArray()));
+            //     //     }
+            //     // }
+            // } 
+        }
+
+        if (!empty($column) && !empty($filter)) {
+            // $dops = $dops->where("dop", "=", $filter);
+            $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
+                switch ($column) {
+                    case "dop":
+                        return str_contains(strtolower($data->dop), strtolower($filter));
+                    case "unit_kerja":
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
+                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        });
+                        foreach ($unit_kerjas as $unit_kerja) {
+                            if ($unit_kerja->dop == $data->dop) {
+                                return $data;
+                            }
+                        }
+                    case "nama_proyek":
+                        $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
+                            // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                            // return false !== stripos($data->nama_proyek, $filter);
+                            return preg_match("/$filter/", $data->nama_proyek);
+                        });
+                        // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
+                        //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        // });
+
+                        foreach ($proyeks_arr as $proyek) {
+                            if ($proyek->dop == $data->dop) {
+                                return $data;
+                            }
+                        }
+                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                }
+            });
+
+            $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
+                switch ($column) {
+                    case "dop":
+                        return str_contains(strtolower($data->dop), strtolower($filter));
+                    case "unit_kerja":
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
+                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        });
+                        foreach ($unit_kerjas as $unit_kerja) {
+                            if ($unit_kerja->divcode == $data->unit_kerja) {
+                                return $data;
+                            }
+                        }
+                    case "nama_proyek":
+                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                        return preg_match("/$filter/", $data->nama_proyek);
+                }
+            });
+            // $proyeks_eksternal = $proyeks->filter()
+        }
+
+        // dd($proyeks->groupBy(["dop", "unit_kerja"]));
+
+        return view(
+            'Forecast/viewForecastKumulatifEksternal',
+            [
+                // 'forecast' => Forecast::all(),
+                "historyForecast" => $historyForecast,
+                // 'dops' => Dop::all(),
+                // "historyForecast_all" => $historyForecast_all,
+                'dops' => $dops,
+                // 'proyeks' => $proyeks,
+                "previous_periode_prognosa" => $previous_periode_prognosa,
+                "year_previous_forecast" => $year_previous_forecast,
+                "month_title" => $month_title,
+                "periode" => $periode,
+                "per_sejuta" => 1000000,
+                "year" => $year,
+                "previous_forecast" => $previous_forecast,
+                "column" => $column,
+                "filter" => $filter,
+            ]
+        );
+        // 'unitkerjas' => UnitKerja::all()]);
+    }
+
+    public function viewForecastKumulatifIncludeInternal(Request $request, $periode = "", $year = "")
+    {
+        // $id = Dop::find('id');
+        // $dopProyek = Proyek::find($id);
+        $column = $request->get("column");
+        $filter = $request->get("filter");
+
+        $periode = $periode != "" ? (int) $periode : (int) date("m");
+        $year = $year != "" ? (int) $year : (int) date("Y");
+        $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
+        $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
+        if ($previous_periode_prognosa < 1) {
+            $year_previous_forecast--;
+            $previous_periode_prognosa = 12;
+        }
+
+        if (($periode != "" && $year != "") || Auth::user()->check_administrator) {
+            // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $historyForecast = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->where("history.periode_prognosa", "=", $periode, "or")->whereYear("history.created_at", $year)->get();
+            // $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->get()->groupBy(["periode_prognosa"]);
+            $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get();
+            // $previous_forecast = DB::table("forecasts as f")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "unit_kerja", "kode_proyek"]);
+            // $previous_forecast = [0 => $previous_forecast];
+            // $previous_forecast->map(function($data) {
+            //     $data->map(function($d) {
+            //         dd($d);
+            //     });
+            // });
+            // dd($previous_forecast);
+        } else {
+            // $historyForecast_all = DB::table("history_forecast as history")->select("history.*")->join("proyeks", "proyeks.kode_proyek", "=", "history.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->whereYear("history.created_at", "=", $year_previous_forecast)->where("history.periode_prognosa", '=', $previous_periode_prognosa)->get();
+            $previous_forecast = DB::table("forecasts as f")->select("f.*")->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja)->join("unit_kerjas", "proyeks.kode_proyek", "=", "unit_kerjas.divcode")->whereYear("f.created_at", "=", $year)->where("f.periode_prognosa", '=', $periode)->join("dops", "proyeks.dop", "=", "dops.dop")->get()->sortByDesc("nilai_forecast", SORT_NUMERIC)->groupBy(["dop", "kode_proyek"]);
+        }
+        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->groupBy(["periode_prognosa"]);
+        } else {
+            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
+        }
+        $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
+        if ($periode != "") {
+            $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
+        }
+        if (Auth::user()->check_administrator) {
+            // $proyeks = collect();
+            // $proyeks = Proyek::with(["Forecasts", "HistoryForecasts"])->get();
+            $dops = Dop::all()->sortBy("dop");
+            // dd($proyeks);
+        } else {
+            // $proyeks = collect();
+            // $dops = Dop::all()->sortBy("dop");
+
+            // dd($unit_kerja);
+            $dops = Dop::all();
+            // if ($unit_kerja instanceof \Illuminate\Support\Collection) {
+            //     // $proyeks = Proyek::with("Forecasts")->get()->whereIn("unit_kerja", $unit_kerja->toArray());
+            //     // dd($dops);
+            //     // dd($dops);
+            //     // foreach ($dops as $dop_name => $dop) {
+            //     //     $divcodes = $dop->map(function($data) {
+            //     //         return $data->divcode;
+            //     //     });
+            //     //     foreach ($dop as $item_dop) {
+            //     //         dd($item_dop->UnitKerjas->whereIn("divcode", $divcodes->toArray()));
+            //     //     }
+            //     // }
+            // } 
+        }
+
+        if (!empty($column) && !empty($filter)) {
+            // $dops = $dops->where("dop", "=", $filter);
+            $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
+                switch ($column) {
+                    case "dop":
+                        return str_contains(strtolower($data->dop), strtolower($filter));
+                    case "unit_kerja":
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
+                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        });
+                        foreach ($unit_kerjas as $unit_kerja) {
+                            if ($unit_kerja->dop == $data->dop) {
+                                return $data;
+                            }
+                        }
+                    case "nama_proyek":
+                        $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
+                            // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                            // return false !== stripos($data->nama_proyek, $filter);
+                            return preg_match("/$filter/", $data->nama_proyek);
+                        });
+                        // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
+                        //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        // });
+
+                        foreach ($proyeks_arr as $proyek) {
+                            if ($proyek->dop == $data->dop) {
+                                return $data;
+                            }
+                        }
+                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                }
+            });
+
+            $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
+                switch ($column) {
+                    case "dop":
+                        return str_contains(strtolower($data->dop), strtolower($filter));
+                    case "unit_kerja":
+                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
+                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+                        });
+                        foreach ($unit_kerjas as $unit_kerja) {
+                            if ($unit_kerja->divcode == $data->unit_kerja) {
+                                return $data;
+                            }
+                        }
+                    case "nama_proyek":
+                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+                        return preg_match("/$filter/", $data->nama_proyek);
+                }
+            });
+            // $proyeks_eksternal = $proyeks->filter()
+        }
+
+        // dd($proyeks->groupBy(["dop", "unit_kerja"]));
+
+        return view(
+            'Forecast/viewForecastKumulatifIncludeInternal',
+            [
+                // 'forecast' => Forecast::all(),
+                "historyForecast" => $historyForecast,
+                // 'dops' => Dop::all(),
+                // "historyForecast_all" => $historyForecast_all,
+                'dops' => $dops,
+                // 'proyeks' => $proyeks,
+                "previous_periode_prognosa" => $previous_periode_prognosa,
+                "year_previous_forecast" => $year_previous_forecast,
+                "month_title" => $month_title,
+                "periode" => $periode,
+                "per_sejuta" => 1000000,
                 "year" => $year,
                 "previous_forecast" => $previous_forecast,
                 "column" => $column,

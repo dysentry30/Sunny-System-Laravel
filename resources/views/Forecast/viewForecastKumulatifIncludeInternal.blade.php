@@ -21,10 +21,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
         /* min-height: 1000px;  */
         margin: 0 auto;
     }
-    div.dataTables_scrollBody {
-        min-height: auto !important; 
-        max-height: 500px !important; 
-    }
+
     /* .table>:not(caption)>*>* {
     padding: 0.5rem 0.5rem;
     background-color: var(--bs-table-bg);
@@ -80,15 +77,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                             <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
                                                 <!--begin:::Tab item Forecast Bulanan-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4"
-                                                        href="/forecast"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast"
                                                         style="font-size:14px;">Forecast Eksternal Bulanan</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Bulanan-->
 
                                                 <!--begin:::Tab item Forecast Internal-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 active" href="/forecast-internal"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-internal"
                                                         style="font-size:14px;">Forecast Bulanan Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast Internal-->
@@ -102,7 +98,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                 <!--begin:::Tab item Forecast S/D-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal-internal"
+                                                    <a class="nav-link text-active-primary pb-4 active" href="/forecast-kumulatif-eksternal-internal"
                                                         style="font-size:14px;">Forecast Kumulatif Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast S/D-->
@@ -117,7 +113,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 @if (Auth::user()->check_administrator)
                                                     <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                         onclick="lockMonthForecastBulanan(this)"
-
                                                         class="btn btn-sm btn-active-primary mt-4">
 
                                                         @if (count($historyForecast) > 0 )
@@ -233,22 +228,22 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         <th style="padding: 0px 50px 0px 50px " class="w-auto text-center" rowspan="2">
                                                                             Proyek
                                                                         </th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Januari</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Februari</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Maret</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">April</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Mei</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Juni</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Juli</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Agustus</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">September</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Oktober</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">November</th>
-                                                                        <th class="text-center min-w-auto" colspan="3">Desember</th>
-                                                                        <th class="text-center pinForecast HidePin min-w-auto" colspan="3">Total &nbsp;&nbsp; <i class="text-center bi bi-pin-angle-fill" onclick="hidePin()"></i></th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Januari</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Februari</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Maret</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D April</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Mei</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Juni</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Juli</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Agustus</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D September</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Oktober</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D November</th>
+                                                                        <th class="text-center min-w-auto" colspan="3">S/D Desember</th>
+                                                                        <th class="text-center pinForecast HidePin min-w-auto" colspan="3">S/D Total &nbsp;&nbsp; <i class="text-center bi bi-pin-angle-fill" onclick="hidePin()"></i></th>
                                                                         <th class="text-center pinForecast ShowPin min-w-auto" colspan="3"
                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            Total &nbsp;&nbsp; <i class="bi bi-pin-fill text-primary" onclick="hidePin()"></i>
+                                                                            S/D Total &nbsp;&nbsp; <i class="bi bi-pin-fill text-primary" onclick="hidePin()"></i>
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
@@ -340,6 +335,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         $month_counter = 1;
                                                                         $is_data_found = false;
                                                                         $total_ok = 0;
+                                                                        $total_perolehan = 0;
                                                                         $total_year_ok = 0;
                                                                         $total_forecast = 0;
                                                                         $total_month_forecast = 0;
@@ -393,27 +389,67 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     </button>
                                                                                 </small>
                                                                             </td>
-                                                                            @for ($i = 1; $i <= 12; $i++)
-                                                                                @php
-                                                                                    // $unitKerja->Proyeks->each(function($p) use($total_ok_per_divisi, $per_sejuta, $i) {
-                                                                                    //     if((int) $p->bulan_awal == $i || (int) $p->bulan_pelaksanaan == $i ) $total_ok_per_divisi += (int) $p->nilai_rkap / $per_sejuta;
-                                                                                    // });
-                                                                                    // $total_ok_per_dop = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i) {
-                                                                                    //     return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                    //         return $i == $p->bulan_awal ? 
-                                                                                    //     })
-                                                                                    //     // if( $i == $p->bulan_awal) return (int) str_replace(".", "", (int) $p->nilai_rkap) / $per_sejuta;
-                                                                                    // });
-                                                                                    // $total_realisasi_per_dop = $dop->UnitKerjas->sum(function($p) use($per_sejuta, $i) {
-                                                                                    //     // if( $i == $p->bulan_awal) return (int) str_replace(".", "", (int) $p->nilai_perolehan) / $per_sejuta;
-                                                                                    // });
-                                                                                @endphp 
-                                                                                <!--begin::Januari Coloumn-->
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                                <td></td>
-                                                                                <!--end::Januari Coloumn-->
-                                                                            @endfor
+
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
+                                                                            <!--begin::Januari Coloumn-->
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <td></td>
+                                                                            <!--end::Januari Coloumn-->
                                                                             <!--begin::Total Coloumn-->
                                                                             <td class="pinForecast HidePin"></td>
                                                                             <td class="pinForecast HidePin"></td>
@@ -456,60 +492,82 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </small>
                                                                                         <!--end::Child=-->
                                                                                     </td>
-                                                                                    @for ($i = 1; $i <= 12; $i++)
-                                                                                        @php
-                                                                                            // $unitKerja->Proyeks->each(function($p) use($total_ok_per_divisi, $per_sejuta, $i) {
-                                                                                            //     if((int) $p->bulan_awal == $i || (int) $p->bulan_pelaksanaan == $i ) $total_ok_per_divisi += (int) $p->nilai_rkap / $per_sejuta;
-                                                                                            // });
-                                                                                            $total_ok_per_divisi = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                if( $i == $p->bulan_awal) return (int) str_replace(".", "", (int) $p->nilai_rkap) / $per_sejuta;
-                                                                                            });
-                                                                                            $total_realisasi_per_divisi = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                if( $i == $p->bulan_awal) return (int) str_replace(".", "", (int) $p->nilai_perolehan) / $per_sejuta;
-                                                                                            });
-                                                                                        @endphp 
-                                                                                        <!--begin::Month Coloumn-->
-                                                                                        <td data-total-ok-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">{{number_format($total_ok_per_divisi, 0, ".", ".")}}</td>
-                                                                                        <td data-total-forecast-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">0</td>
-                                                                                        <td data-total-realisasi-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">{{number_format($total_realisasi_per_divisi, 0, ".", ".")}}</td>
-                                                                                        <!--end::Month Coloumn-->
-                                                                                        @php
-                                                                                            $total_ok_per_divisi = 0;
-                                                                                        @endphp
-                                                                                    @endfor
-                                                                                    @php
-                                                                                            // $unitKerja->Proyeks->each(function($p) use($total_ok_per_divisi, $per_sejuta, $i) {
-                                                                                            //     if((int) $p->bulan_awal == $i || (int) $p->bulan_pelaksanaan == $i ) $total_ok_per_divisi += (int) $p->nilai_rkap / $per_sejuta;
-                                                                                            // });
-                                                                                            $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                return (int) str_replace(".", "", (int) $p->nilai_rkap) / $per_sejuta;
-                                                                                            });
-                                                                                            $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                return (int) str_replace(".", "", (int) $p->nilai_perolehan) / $per_sejuta;
-                                                                                            });
-                                                                                    @endphp 
+                                                                                    <!--begin::Januari Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Januari Coloumn-->
+                                                                                    <!--begin::Februari Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Februari Coloumn-->
+                                                                                    <!--begin::Maret Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Maret Coloumn-->
+                                                                                    <!--begin::April Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::April Coloumn-->
+                                                                                    <!--begin::Mei Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Mei Coloumn-->
+                                                                                    <!--begin::Juni Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Juni Coloumn-->
+                                                                                    <!--begin::Juli Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Juli Coloumn-->
+                                                                                    <!--begin::Agustus Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Agustus Coloumn-->
+                                                                                    <!--begin::September Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::September Coloumn-->
+                                                                                    <!--begin::Oktober Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Oktober Coloumn-->
+                                                                                    <!--begin::November Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::November Coloumn-->
+                                                                                    <!--begin::Desember Coloumn-->
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <td></td>
+                                                                                    <!--end::Desember Coloumn-->
                                                                                     <!--begin::Total Coloumn-->
-                                                                                    <td class="pinForecast HidePin">{{number_format($total_ok_per_divisi_tahunan, 0, ".", ".")}}</td>
-                                                                                    <td class="pinForecast HidePin">0</td>
-                                                                                    <td class="pinForecast HidePin">{{number_format($total_realisasi_per_divisi_tahunan, 0, ".", ".")}}</td>
+                                                                                    <td class="pinForecast HidePin"></td>
+                                                                                    <td class="pinForecast HidePin"></td>
+                                                                                    <td class="pinForecast HidePin"></td>
                                                                                     <td class="pinForecast ShowPin"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        {{number_format($total_ok_per_divisi_tahunan, 0, ".", ".")}}
-                                                                                    </td>
+                                                                                        </td>
                                                                                     <td class="pinForecast ShowPin"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        0
-                                                                                    </td>
+                                                                                        </td>
                                                                                     <td class="pinForecast ShowPin"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        {{number_format($total_realisasi_per_divisi_tahunan, 0, ".", ".")}}
-                                                                                    </td>
+                                                                                        </td>
                                                                                     <!--end::Total Coloumn-->
                                                                                 </tr>
                                                                                 {{-- begin:: Foreach Proyek --}}
-                                                                                @php
-                                                                                    $unitKerja->Proyeks = $unitKerja->Proyeks->where("jenis_proyek", "!=", "I");
-                                                                                @endphp
                                                                                 @if ($column != "")
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         <tr id="{{ $unit_kerja_name }}"
@@ -527,10 +585,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 <!--end::Child=-->
                                                                                             </td>
 
+                                                                                            @php
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->each(function($f) use($per_sejuta) {
+                                                                                                    $f->rkap_forecast /= $per_sejuta;
+                                                                                                    $f->nilai_forecast /= $per_sejuta;
+                                                                                                    $f->realisasi_forecast /= $per_sejuta;
+                                                                                                });
+                                                                                            @endphp
                                                                                             @for ($i = 1; $i <= 12; $i++)
-                                                                                                @php
-                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                                @endphp
                                                                                                 @foreach ($proyek->Forecasts as $forecast)
                                                                                                     @if ($forecast->month_forecast == $month_counter)
                                                                                                         @php
@@ -540,15 +602,15 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @endphp
                                                                                                         @if ($month_counter == (int) $forecast->rkap_month)
                                                                                                             @php
-                                                                                                                $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap) / $per_sejuta;                
+                                                                                                                $total_ok += (int) str_replace(',', '', $forecast->rkap_forecast);                
                                                                                                             @endphp
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                {{ number_format($forecast->rkap_forecast, 0, ".", ".") }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                                 
                                                                                                             </td>
                                                                                                         @endif
@@ -558,7 +620,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 data-month="{{ $month_counter }}"
                                                                                                                 data-column-forecast="{{ $month_counter }}"
                                                                                                                 class="form-control border-bottom-1"
-                                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                style="border: 0px; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                 id="nilai-forecast"
                                                                                                                 name="nilai-forecast"
                                                                                                                 onkeyup="reformatNumber(this)"
@@ -568,7 +630,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($month_counter == (int) $forecast->month_realisasi && $month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace('.', '', (int)$forecast->realisasi_forecast) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $forecast->realisasi_forecast) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -588,15 +650,15 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @if (!$is_data_found)
                                                                                                 @if (($month_counter == (int) $proyek->bulan_pelaksanaan && ($proyek->bulan_pelaksanaan != null || $proyek->bulan_pelaksanaan != 0)) || ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null))
                                                                                                     @php
-                                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap) / $per_sejuta;                
+                                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap / $per_sejuta);                
                                                                                                     @endphp
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                        {{ $proyek->nilai_rkap }}
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                        {{ (int) $proyek->nilai_rkap / $per_sejuta}}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                         
                                                                                                     </td>
                                                                                                 @endif
@@ -606,7 +668,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         data-month="{{ $month_counter }}"
                                                                                                         data-column-forecast="{{ $month_counter }}"
                                                                                                         class="form-control border-bottom-1"
-                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        style="border: 0px; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                         id="nilai-forecast"
                                                                                                         name="nilai-forecast"
                                                                                                         onkeyup="reformatNumber(this)"
@@ -615,7 +677,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int) $proyek->nilai_perolehan / $per_sejuta) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -697,9 +759,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </p>
                                                                                                 <!--end::Child=-->
                                                                                             </td>
-
                                                                                             @php
-                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->each(function($f) use($per_sejuta) {
                                                                                                     $f->rkap_forecast /= $per_sejuta;
                                                                                                     $f->nilai_forecast /= $per_sejuta;
                                                                                                     $f->realisasi_forecast /= $per_sejuta;
@@ -708,20 +769,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @endphp
                                                                                             @for ($i = 0; $i < 12; $i++)
                                                                                                 @foreach ($proyek->Forecasts as $forecast)
-                                                                                                    @if ($forecast->month_forecast == $month_counter)
+                                                                                                    @if ($month_counter >= $forecast->month_forecast)
                                                                                                         @php
                                                                                                             $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                             $total_year_forecast += $total_forecast;
                                                                                                             
                                                                                                         @endphp
-                                                                                                        @if ($month_counter == (int) $forecast->rkap_month)
+                                                                                                        @if ($month_counter >= (int) $forecast->rkap_month)
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                {{ $forecast->rkap_forecast / $per }}
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                {{number_format($forecast->rkap_forecast, 0, ".", ".")}}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                                 
                                                                                                             </td>
                                                                                                         @endif
@@ -731,21 +792,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 data-month="{{ $month_counter }}"
                                                                                                                 data-column-forecast="{{ $month_counter }}"
                                                                                                                 class="form-control border-bottom-1"
-                                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                style="border: 0px; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                 id="nilai-forecast"
                                                                                                                 name="nilai-forecast"
                                                                                                                 onkeyup="reformatNumber(this)"
                                                                                                                 value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
-                                                                                                                placeholder="" />
+                                                                                                                placeholder="" disabled/>
                                                                                                         </td>
-                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi))
+                                                                                                        @if ($month_counter >= (int) $forecast->month_realisasi)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace('.', '', (int)$forecast->realisasi_forecast) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $forecast->realisasi_forecast) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                {{ number_format($nilai_terkontrak_formatted / $per_sejuta ?? 0, 0, ',', '.') }}
+                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td
@@ -759,14 +820,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @endif
                                                                                             @endforeach
                                                                                             @if (!$is_data_found)
-                                                                                                @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
+                                                                                                @if ( $month_counter >= $proyek->bulan_awal && $proyek->bulan_awal != null)
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                         {{ number_format((float) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
                                                                                                         
                                                                                                     </td>
                                                                                                 @endif
@@ -776,20 +837,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         data-month="{{ $month_counter }}"
                                                                                                         data-column-forecast="{{ $month_counter }}"
                                                                                                         class="form-control border-bottom-1"
-                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                        style="border: 0px; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                         id="nilai-forecast"
                                                                                                         name="nilai-forecast"
                                                                                                         onkeyup="reformatNumber(this)"
                                                                                                         value=""
-                                                                                                        placeholder="" />
+                                                                                                        placeholder="" disabled/>
                                                                                                 </td>
-                                                                                                @if ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null)
+                                                                                                @if ($month_counter >= (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int) $proyek->nilai_perolehan / $per_sejuta) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                        {{ number_format($nilai_terkontrak_formatted / $per_sejuta ?? 0, 0, ',', '.') }}
+                                                                                                        {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td
@@ -799,7 +860,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @endif
                                                                                             @php
                                                                                                 $is_data_found = false;
-                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
+                                                                                                $total_ok += (int) str_replace('.', '', $proyek->nilai_rkap) / $per_sejuta;
+                                                                                                $total_perolehan += (int) str_replace(".", "", $proyek->nilai_perolehan) / $per_sejuta;
                                                                                                 $month_counter++;
                                                                                             @endphp
                                                                                         @endfor
@@ -807,9 +869,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan / $per_sejuta);
+                                                                                            $nilai_terkontrak_formatted = $total_perolehan;
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
+                                                                                            $total_perolehan = 0;
                                                                                             $month_counter = 1;
                                                                                         @endphp
                                                                                         <td class="pinForecast HidePin">
@@ -1898,19 +1961,6 @@ fill="none">
         //     }
         // });
     })
-
-    // Begin :: Calc Total Row per Divisi
-    // for(let bulan = 1; bulan <= 12; bulan++) {
-    //     const totalOKPerDivisi = document.querySelectorAll(`td[data-total-ok-per-divisi-column="${bulan}"]`)[0];
-    //     // console.log(totalOKPerDivisi);
-    //     const unitKerja = totalOKPerDivisi.getAttribute("data-unit-kerja").replaceAll(/[^\w]/g, "-");
-    //     const totalOKPerDivisiElt = document.querySelectorAll(`td[data-column-ok-bulanan="${bulan}"][data-unit-kerja="${unitKerja}"]`);
-    //     console.log(totalOKPerDivisiElt.innerText);
-    //     // totalOKPerDivisi.forEach(element => {
-            
-    //     // });
-    // }
-    // End :: Calc Total Row per Divisi
 </script>
 {{-- Show Collapse --}}
 @endsection

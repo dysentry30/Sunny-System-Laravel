@@ -92,16 +92,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                 <!--begin:::Tab item Forecast S/D-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal"
                                                         style="font-size:14px;">Forecast Kumulatif Eksternal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast S/D-->
 
                                                 <!--begin:::Tab item Forecast S/D-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
+                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal-internal"
                                                         style="font-size:14px;">Forecast Kumulatif Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast S/D-->
@@ -592,10 +590,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 <!--end::Child=-->
                                                                                             </td>
 
+                                                                                            @php
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->each(function($f) use($per_sejuta) {
+                                                                                                    $f->rkap_forecast /= $per_sejuta;
+                                                                                                    $f->nilai_forecast /= $per_sejuta;
+                                                                                                    $f->realisasi_forecast /= $per_sejuta;
+                                                                                                });
+                                                                                            @endphp
                                                                                             @for ($i = 1; $i <= 12; $i++)
-                                                                                                @php
-                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                                @endphp
                                                                                                 @foreach ($proyek->Forecasts as $forecast)
                                                                                                     @if ($forecast->month_forecast == $month_counter)
                                                                                                         @php
@@ -605,11 +607,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @endphp
                                                                                                         @if ($month_counter == (int) $forecast->rkap_month)
                                                                                                             @php
-                                                                                                                $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);                
+                                                                                                                $total_ok += (int) str_replace(',', '', $forecast->rkap_forecast);                
                                                                                                             @endphp
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                                 data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                                {{ number_format($forecast->rkap_forecast, 0, ".", ".") }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -633,7 +635,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($month_counter == (int) $forecast->month_realisasi && $month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $forecast->realisasi_forecast) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -657,7 +659,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @endphp
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ $proyek->nilai_rkap }}
+                                                                                                        {{ (int) $proyek->nilai_rkap / $per_sejuta}}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -680,7 +682,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int) $proyek->nilai_perolehan / $per_sejuta) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -762,11 +764,15 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </p>
                                                                                                 <!--end::Child=-->
                                                                                             </td>
-
+                                                                                            @php
+                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->each(function($f) use($per_sejuta) {
+                                                                                                    $f->rkap_forecast /= $per_sejuta;
+                                                                                                    $f->nilai_forecast /= $per_sejuta;
+                                                                                                    $f->realisasi_forecast /= $per_sejuta;
+                                                                                                    return $f;
+                                                                                                });
+                                                                                            @endphp
                                                                                             @for ($i = 0; $i < 12; $i++)
-                                                                                                @php
-                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                                @endphp
                                                                                                 @foreach ($proyek->Forecasts as $forecast)
                                                                                                     @if ($forecast->month_forecast == $month_counter)
                                                                                                         @php
@@ -777,7 +783,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if ($month_counter == (int) $forecast->rkap_month)
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                                 data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                                {{ $proyek->nilai_rkap }}
+                                                                                                                {{ $forecast->rkap_forecast }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -801,7 +807,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @if (($month_counter == (int) $forecast->month_realisasi || $month_counter == (int) $proyek->bulan_ri_perolehan) && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $forecast->realisasi_forecast) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -822,7 +828,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ number_format((float) $proyek->nilai_rkap, 0, ",", ".") }}
+                                                                                                        {{ number_format((float) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -845,7 +851,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 </td>
                                                                                                 @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                     @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int) $proyek->nilai_perolehan / $per_sejuta) ?? '-';
                                                                                                     @endphp
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -859,7 +865,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @endif
                                                                                             @php
                                                                                                 $is_data_found = false;
-                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap) / $per_sejuta;
                                                                                                 $month_counter++;
                                                                                             @endphp
                                                                                         @endfor
