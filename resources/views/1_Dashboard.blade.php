@@ -1889,8 +1889,8 @@
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
-                    '<th>Status Pasar</th>' +
                     '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
@@ -1990,7 +1990,7 @@
                             <!--end::Email-->
                             <!--begin::Name-->
                             <td>
-                                ${filter.status_pasdin}
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin }
                             </td>
                             <!--end::Name-->
                             <!--begin::Stage-->
@@ -2131,7 +2131,7 @@
                             <!--end::Email-->
                             <!--begin::Name-->
                             <td>
-                                ${filter.status_pasdin}
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
                             </td>
                             <!--end::Name-->
                             <!--begin::Stage-->
@@ -2273,7 +2273,7 @@
                             <!--end::Email-->
                             <!--begin::Name-->
                             <td>
-                                ${filter.status_pasdin}
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
                             </td>
                             <!--end::Name-->
                             <!--begin::Stage-->
@@ -2409,7 +2409,7 @@
 
                             <!--begin::Name-->
                             <td>
-                                ${filter.status_pasdin}
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
                             </td>
                             <!--end::Name-->
                             <!--begin::Email-->
@@ -2557,7 +2557,7 @@
                             <!--end::Email-->
                             <!--begin::Name-->
                             <td>
-                                ${filter.status_pasdin}
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
                             </td>
                             <!--end::Name-->
                             <!--begin::Stage-->
