@@ -4066,32 +4066,32 @@
                                                                                         
                                                                                         @case('2')
                                                                                             Februari :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('3')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('3')
                                                                                             Maret :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('4')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('4')
                                                                                             April :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('5')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('5')
                                                                                             Mei :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('6')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('6')
                                                                                             Juni :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('7')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('7')
                                                                                             Juli :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('8')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('8')
                                                                                             Agustus :
-                                                                                            @break
-                                                                                            
+                                                                                        @break
+                                                                                        
                                                                                         @case('9')
                                                                                             September :
                                                                                         @break
@@ -4102,71 +4102,64 @@
                 
                                                                                         @case('11')
                                                                                             November :
-                                                                                            @break
-                                                                                            
-                                                                                            @case('12')
+                                                                                        @break
+                                                                                        
+                                                                                        @case('12')
                                                                                             Desember :
-                                                                                            @break
-                                                                                            
-                                                                                            @default
+                                                                                        @break
+                                                                                        
+                                                                                        @default
                                                                                             -
-                                                                                            @endswitch
+                                                                                        @endswitch
                                                                                         </b>
                                                                                     </td>
                                                                                     <!--end::Name-->
-                                                                                    <!--begin::Nilai OK-->
-                                                                                    @foreach ($proyek->Forecasts as $forecast)
-                                                                                        @if ($forecast->periode_prognosa == $i)
-                                                                                            <td class="text-dark">
-                                                                                                <input type="text" class="form-control form-control-solid reformat"
-                                                                                                id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
-                                                                                                value="{{ $forecast->nilai_forecast }}"
-                                                                                                placeholder="Nilai Perolehan" />
-                                                                                            </td>
-                                                                                        @endif
-                                                                                    @endforeach
+                                                                                    <!--begin::input-->
+                                                                                    @php
+                                                                                        $forecasts = $proyek->Forecasts->filter(function ($f) use ($i){
+                                                                                            return $f->month_forecast == $i;
+                                                                                        })
+                                                                                    @endphp
+                                                                                    @if (count($forecasts) > 0)
+                                                                                    @php
+                                                                                        $forecast = $forecasts->first()
+                                                                                    @endphp
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
+                                                                                            value="{{ $forecast->rkap_forecast }}"
                                                                                             placeholder="Nilai Perolehan" />
                                                                                         </td>
-                                                                                    <!--end::Nilai OK-->
-                                                                                    <!--begin::Forecast-->
-                                                                                    @foreach ($proyek->Forecasts as $forecast)
-                                                                                        @if ($forecast->periode_prognosa == $i)
-                                                                                            <td class="text-dark">
-                                                                                                <input type="text" class="form-control form-control-solid reformat"
-                                                                                                id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
-                                                                                                value="{{ $forecast->nilai_forecast }}"
-                                                                                                placeholder="Forecast" />
-                                                                                            </td>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                            <td class="text-dark">
-                                                                                                <input type="text" class="form-control form-control-solid reformat"
-                                                                                                id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
-                                                                                                placeholder="Forecast" />
-                                                                                            </td>
-                                                                                    <!--end::Forecast-->
-                                                                                    <!--begin::Nilai Realisasi-->
-                                                                                    @foreach ($proyek->Forecasts as $forecast)
-                                                                                        @if ($forecast->periode_prognosa == $i)
-                                                                                            <td class="text-dark">
-                                                                                                <input type="text" class="form-control form-control-solid reformat"
-                                                                                                id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
-                                                                                                value="{{ $forecast->realisasi_forecast }}"
-                                                                                                placeholder="Nilai Realisasi" />
-                                                                                            </td>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                            <td class="text-dark">
-                                                                                                <input type="text" class="form-control form-control-solid reformat"
-                                                                                                id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
-                                                                                                value="{{ $forecast->realisasi_forecast }}"
-                                                                                                placeholder="Nilai Realisasi" />
-                                                                                            </td>
-                                                                                    <!--end::Nilai Realisasi-->
-                                                                                    <!--begin::Button-->
+                                                                                        <td class="text-dark">
+                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
+                                                                                            value="{{ $forecast->nilai_forecast }}"
+                                                                                            placeholder="Nilai Forecast" />
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
+                                                                                            value="{{ $forecast->realisasi_forecast }}"
+                                                                                            placeholder="Nilai Realisasi" />
+                                                                                        </td>
+                                                                                    @else
+                                                                                        <td class="text-dark">
+                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
+                                                                                            placeholder="Nilai Perolehan klo blm isi" />
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
+                                                                                            placeholder="Nilai Forecast" />
+                                                                                        </td>
+                                                                                        <td class="text-dark">
+                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
+                                                                                            placeholder="Nilai Realisasi" />
+                                                                                        </td>
+                                                                                    @endif
+                                                                                    <!--begin::input-->
                                                                                     <td>
                                                                                         <button type="submit" class="btn btn-sm btn-light btn-active-primary" id="proyek-save">
                                                                                         Save</button>

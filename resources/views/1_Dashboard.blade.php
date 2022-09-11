@@ -103,8 +103,8 @@
                                     @if (Auth::user()->check_administrator)
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
-                                            class="form-select form-select-solid w-150px"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
+                                            class="form-select form-select-solid w-auto"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
                                             data-placeholder="Direktorat" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$dop_get == "" ? "selected" : ""}}></option>
@@ -113,32 +113,43 @@
                                             @endforeach
                                         </select>
                                         <!-- End :: Select Options Unit Kerja -->
-                                        <!-- Begin :: Select Options Unit Kerja -->
-                                        <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
-                                            class="form-select form-select-solid w-150px ms-2"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
-                                            data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
-                                            aria-hidden="true">
-                                            <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
-                                            @foreach ($unitKerja as $unit_kerja)
-                                                @php
-                                                    $is_unit_kerja_selected = $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '';
-                                                @endphp
-                                                <option value="{{ $unit_kerja->divcode }}" {{ $is_unit_kerja_selected }} >{{ $unit_kerja->unit_kerja }}</option>
-                                            @endforeach
-                                        </select>
                                         <script>
-                                            function selectUnitKerja(e) {
-                                                document.getElementById("dop").value = "";
-                                                e.form.submit();
-                                            }
                                             function selectDOP(e) {
                                                 document.getElementById("unit-kerja").value = "";
                                                 e.form.submit();
                                             }
-                                        </script>
-                                        <!-- End :: Select Options Unit Kerja -->
+                                            </script>
                                     @endif
+                                        <!-- Begin :: Select Options Unit Kerja -->
+                                        <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
+                                            class="form-select form-select-solid w-auto ms-2"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                            data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
+                                            aria-hidden="true">
+                                            <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
+                                            @foreach ($unitKerja as $unit_kerja)
+                                            @php
+                                                    $is_unit_kerja_selected = $unit_kerja_get == $unit_kerja->divcode ? 'selected' : '';
+                                                    @endphp
+                                                <option value="{{ $unit_kerja->divcode }}" {{ $is_unit_kerja_selected }} >{{ $unit_kerja->unit_kerja }}</option>
+                                                @endforeach
+                                            </select>
+                                            @if (Auth::user()->check_user_sales)
+                                            <script>
+                                                function selectUnitKerja(e) {
+                                                e.form.submit();
+                                            }
+                                            </script>
+                                            @endif
+                                            @if (Auth::user()->check_administrator)
+                                            <script>
+                                                function selectUnitKerja(e) {
+                                                document.getElementById("dop").value = "";
+                                                e.form.submit();
+                                            }
+                                            </script>
+                                            @endif
+                                        <!-- End :: Select Options Unit Kerja -->
 
                                     <!--begin::Select Options-->
                                     <select onchange="this.form.submit()" id="periode-prognosa" name="periode-prognosa"
@@ -372,7 +383,7 @@
                                     </div>
                                     <hr>
                                     
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="col py-12" id="sumber-dana-rkap">
                                             <!--begin::INDEX JUMLAH-->
                                             <!--end::INDEX JUMLAH-->
@@ -383,7 +394,7 @@
                                             <!--end::INDEX NILAI-->
                                         </div>
                                     </div>
-                                    <hr>
+                                    <hr> --}}
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
                                         <h1 class="text-center bold pb-8">
@@ -805,9 +816,9 @@
                 series: {
                     dataLabels: {
                         enabled: true,
-                        // format: Intl.NumberFormat({}).format(parseInt('{y}')),
-                        format: '{y}',
-                        // format: typeof ('{y}'),
+                        formatter: function() {
+                            return Intl.NumberFormat(["id"]).format(this.y);
+                        }
                     }
                 // allowPointSelect: true
                 },
@@ -950,7 +961,7 @@
     <!--end::FORECAST 3WULAN-->
 
     <!--begin::NILAI REALISASI-->
-    <script>
+    {{-- <script>
         let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
         let arrayNilaiOk = {!! json_encode($nilaiOkKumulatif) !!};
         let nilaiOkKumulatif = arrayNilaiOk.map(nilaiOKsatuan => nilaiOKsatuan / 1000000);
@@ -1021,7 +1032,7 @@
                 // stack: 'female'
             }]
         });
-    </script>
+    </script> --}}
     <!--end::NILAI REALISASI-->
 
     <!--begin::MONITORING PROYEK-->
@@ -1116,7 +1127,7 @@
     <!--end::MONITORING PROYEK-->
     
     <!--begin::SEBARAN SUMBER DANA-->
-    <script>
+    {{-- <script>
         Highcharts.chart('sumber-dana-rkap', {
             chart: {
                 type: 'pie',
@@ -1178,7 +1189,8 @@
                 colorByPoint: true,
                 data: [
                     {
-                        name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                        // name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
+                        name: "BUMN",
                         y: 10000,
                         x: "BUMN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
                     },
@@ -1223,8 +1235,8 @@
                 enabled: false
             },
         });
-    </script>
-    <script>
+    </script> --}}
+    {{-- <script>
         Highcharts.chart('sumber-dana-realisasi', {
             chart: {
                 type: 'pie',
@@ -1331,7 +1343,7 @@
                 enabled: false
             },
         });
-    </script>
+    </script> --}}
     <!--end::SEBARAN SUMBER DANA-->
 
 

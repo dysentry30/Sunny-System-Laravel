@@ -259,7 +259,7 @@
                         @endif
 
 
-                        @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak || auth()->user()->check_user_sales)
+                        @if (auth()->user()->check_administrator)
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
                             <div class="menu-item" 
