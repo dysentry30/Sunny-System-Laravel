@@ -1127,7 +1127,7 @@
                                                                     <input type="text"
                                                                         class="form-control reformat form-control-solid"
                                                                         id="nilai-rkap" name="nilai-rkap"
-                                                                        value="{{ $proyek->nilai_rkap }}"
+                                                                        value="{{ number_format($proyek->nilai_rkap, 0, '.', '.') }}"
                                                                         placeholder="Nilai OK (Excludde Ppn)"/>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -1226,7 +1226,7 @@
                                                                         <input type="text" onkeyup="hitungReview()"
                                                                             class="form-control form-control-solid reformat"
                                                                             id="nilai-valas-review" name="nilai-valas-review"
-                                                                            value="{{ $proyek->nilai_valas_review }}"
+                                                                            value="{{ number_format($proyek->nilai_valas_review, 0, '.', '.') }}"
                                                                             placeholder="Nilai OK Review (Valas) (Exclude Tax)" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
                                                                         <!--end::Input-->
                                                                     </div>
@@ -1356,7 +1356,7 @@
                                                                         <input type="text"
                                                                             class="form-control form-control-solid reformat"
                                                                             id="nilaiok-review" name="nilaiok-review"
-                                                                            value="{{ $proyek->nilaiok_review }}"
+                                                                            value="{{ number_format($proyek->nilaiok_review, 0, '.', '.') }}"
                                                                             placeholder="Nilai OK (Exclude PPN)" {{ auth()->user()->check_administrator ? '' : 'readonly'}} />
                                                                         <!--end::Input-->
                                                                     </div>
@@ -1372,7 +1372,7 @@
                                                                     // console.log(nilaiOkReview); 
                                                                     let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
                                                                     let hasilOkReview = nilaiOkReview * kursReview;
-                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview);
+                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
                                                                     // console.log(hasilOkReview);
                                                                 }
                                                             </script>
@@ -1417,7 +1417,7 @@
                                                                         <input type="text" onkeyup="hitungAwal()"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
-                                                                        value="{{ $proyek->nilai_rkap }}"
+                                                                        value="{{ number_format($proyek->nilai_rkap, 0, '.', '.') }}"
                                                                         placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
                                                                         readonly />
                                                                         <!--end::Input-->
@@ -1576,7 +1576,7 @@
                                                                             <input type="text"
                                                                             class="form-control form-control-solid reformat"
                                                                             id="nilaiok-awal" name="nilaiok-awal"
-                                                                            value="{{ $proyek->nilaiok_awal == Null ? $proyek->nilai_rkap : $proyek->nilaiok_awal }}"
+                                                                            value="{{ $proyek->nilaiok_awal == Null ? number_format($proyek->nilai_rkap, 0, '.', '.') : number_format($proyek->nilaiok_awal, 0, '.', '.') }}"
                                                                             placeholder="Nilai OK (Exclude PPN)" readonly />
                                                                             <!--end::Input-->
                                                                         </div>
@@ -1589,7 +1589,7 @@
                                                                     let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
                                                                     let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
                                                                     let hasilOkAwal = nilaiOkAwal * kursAwal;
-                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal);
+                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
                                                                 }
                                                                 </script>
                                                             <!--End::Row Kanan+Kiri-->
@@ -2063,7 +2063,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="hps-pagu" name="hps-pagu"
-                                                                        value="{{ $proyek->hps_pagu }}"
+                                                                        value="{{ number_format($proyek->hps_pagu, 0, '.', '.') }}"
                                                                         placeholder="HPS / Pagu (Rupiah)" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2509,7 +2509,7 @@
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-kontrak-penawaran"
                                                                         name="nilai-kontrak-penawaran"
-                                                                        value="{{ $proyek->penawaran_tender }}"
+                                                                        value="{{ number_format($proyek->penawaran_tender, 0, '.', '.') }}"
                                                                         placeholder="Nilai Penawaran Keseluruhan" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2528,7 +2528,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->hps_pagu ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                        value="{{ number_format($proyek->hps_pagu, 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
                                                                         placeholder="HPS / Pagu (Rupiah)" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2782,7 +2782,7 @@
                                                                         class="form-control form-control-solid {{ $proyek->penawaran_tender == null ? 'text-danger' : '' }}"
                                                                         id="penawaran-perolehan"
                                                                         name="penawaran-perolehan"
-                                                                        value="{{ $proyek->penawaran_tender ?? '*Nilai Penawaran Keseluruhan Belum Ditentukan'}}"
+                                                                        value="{{ number_format($proyek->penawaran_tender, 0, '.', '.') ?? '*Nilai Penawaran Keseluruhan Belum Ditentukan'}}"
                                                                         placeholder="Nilai Penawaran Keseluruhan" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -2807,7 +2807,7 @@
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-perolehan" name="nilai-perolehan"
-                                                                        value="{{ $proyek->nilai_perolehan }}"
+                                                                        value="{{ number_format($proyek->nilai_perolehan, 0, '.', '.') }}"
                                                                         placeholder="Nilai Perolehan" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3320,7 +3320,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->nilai_valas_review ?? '*Nilai OK Review Belum Ditentukan' }}"
+                                                                        value="{{ number_format($proyek->nilai_valas_review, 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
                                                                         placeholder="Nilai OK Review (Valas) (Exclude Tax)"
                                                                         readonly />
                                                                     <!--end::Input-->
@@ -3601,7 +3601,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->nilai_perolehan == null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->nilai_perolehan ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                                                                        value="{{ number_format($proyek->nilai_perolehan, 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
                                                                         placeholder="Nilai Kontrak (Porsi WIKA)"
                                                                         readonly />
                                                                     <!--end::Input-->

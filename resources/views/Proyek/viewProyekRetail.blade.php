@@ -1377,7 +1377,7 @@
                                                                     // console.log(nilaiOkReview); 
                                                                     let kursReview = document.getElementById("kurs-review").value.replaceAll(".", "");
                                                                     let hasilOkReview = nilaiOkReview * kursReview;
-                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat({}).format(hasilOkReview);
+                                                                    document.getElementById("nilaiok-review").value = Intl.NumberFormat(["id"]).format(hasilOkReview);
                                                                 }
                                                             </script>
                                                         </div> <!--divRkapReview--> 
@@ -1593,7 +1593,7 @@
                                                                     let nilaiOkAwal = document.getElementById("nilai-valas-awal").value.replaceAll(".", "");
                                                                     let kursAwal = document.getElementById("kurs-awal").value.replaceAll(".", "");
                                                                     let hasilOkAwal = nilaiOkAwal * kursAwal;
-                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat({}).format(hasilOkAwal);
+                                                                    document.getElementById("nilaiok-awal").value = Intl.NumberFormat(["id"]).format(hasilOkAwal);
                                                                 }
                                                                 </script>
                                                             <!--End::Row Kanan+Kiri-->
@@ -4009,25 +4009,21 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">History Forecast</h3>
-                                                        <br>
                                                         <!--End::Title Biru Form: List History-->
                                                         
                                                         {{-- begin::Detail History Forecast --}}
                                                         <div class="d-flex flex-row-reverse mb-5">
                                                             <div>
-                                                                Periode Prognosa
+                                                                Periode Prognosa :
                                                                 @php
                                                                     setlocale(LC_TIME, 'id.UTF-8');
-                                                                    $periode_prognosa = count($historyForecast) > 0 ? strftime('%B', mktime(0, 0, 0, $historyForecast[0]->periode_prognosa)) : 'Belum Dibuat';
+                                                                    $periode_prognosa = strftime('%B');
                                                                 @endphp
                                                                 <b class="mx-4">{{ $periode_prognosa }}</b>
                                                             </div>
-                                                            <!--begin::Button-->
-                                                                {{-- <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
-                                                                style="background-color:#008CB4">
-                                                                Save</button> --}}
-                                                            <!--end::Button-->
                                                         </div>
+                                                        <hr>
+                                                        <br>
                                                         {{-- end::Detail History Forecast --}}
 
                                                         <!--begin::Table-->
