@@ -685,7 +685,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid"
+                                    <select onchange="proyekRetail(this)" id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek">
                                         <option selected></option>
                                         <option value="R" {{ old('tipe-proyek') == 'R' ? 'selected' : '' }}>
@@ -702,12 +702,24 @@
                             </div>
                             <!--End::Col-->
                         </div>
+                        <script>
+                            function proyekRetail(e) {
+                                // console.log(e.value);
+                                if (e.value == "R") {
+                                    document.getElementById('div-rkap').style.visibility = "hidden";
+                                    document.getElementById('nilai-rkap').style.value = null;
+                                } else {
+                                    document.getElementById('div-rkap').style.visibility = "";
+                                }                                
+                            }
+
+                        </script>
                         <!--End::Row Kanan+Kiri-->
 
                         <!--begin::Row Kanan+Kiri-->
                         <div class="row fv-row">
                             <!--begin::Col-->
-                            <div class="col-6">
+                            <div id="div-rkap" class="col-6">
                                 <!--begin::Input group Website-->
                                 <div class="fv-row mb-7">
                                     <!--begin::Label-->

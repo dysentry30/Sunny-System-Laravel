@@ -314,7 +314,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         // dd($data);
 
-        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("month_rkap", "=", (int) $i)->where("month_realisasi", "=", (int) $i)->get()->first();
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->get()->first();
 
         if (empty($findForecast)) {
 
