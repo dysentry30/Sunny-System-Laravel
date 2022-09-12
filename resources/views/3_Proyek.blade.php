@@ -128,6 +128,7 @@
                                         <option value="unit_kerja" {{$column == "unit_kerja" ? "selected" : ""}}>Unit Kerja</option>
                                         <option value="stage" {{$column == "stage" ? "selected" : ""}}>Stage</option>
                                         <option value="jenis_proyek" {{$column == "jenis_proyek" ? "selected" : ""}}>Jenis Proyek</option>
+                                        <option value="tipe_proyek" {{$column == "tipe_proyek" ? "selected" : ""}}>Tipe Proyek</option>
 
                                     </select>
                                     <!--End:: Select Options-->
@@ -165,8 +166,18 @@
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
                                                 <option value="I" {{ $filter == 'I' ? 'selected' : '' }}>Internal</option>
-                                                <option value="E" {{ $filter == 'E' ? 'selected' : '' }}>External</option>
+                                                <option value="N" {{ $filter == 'N' ? 'selected' : '' }}>External</option>
                                                 <option value="J" {{ $filter == 'J' ? 'selected' : '' }}>JO</option>
+                                            </select>
+                                        </div>
+                                        <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
+                                            <select name="filter-tipe"
+                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
+                                                tabindex="-1" aria-hidden="true">
+                                                <option></option>
+                                                <option value="R" {{ $filter == 'R' ? 'selected' : '' }}>Retail</option>
+                                                <option value="P" {{ $filter == 'P' ? 'selected' : '' }}>Non-Retail</option>
                                             </select>
                                         </div>
                                     {{-- @elseif ($column == 'unit_kerja') --}}
@@ -202,15 +213,24 @@
                                                 // window.location.href = "/proyek?column=stage";
                                                 document.getElementById("filterStage").style.display = "";
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
                                             } else if (e.value == "unit_kerja") {
                                                 document.getElementById("filterUnit").style.display = "";
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
                                             } else if (e.value == "jenis_proyek") {
                                                 document.getElementById("filterJenis").style.display = "";
+                                                document.getElementById("filterUnit").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterStage").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").style.setProperty("display", "none", "important");
+                                            } else if (e.value == "tipe_proyek") {
+                                                document.getElementById("filterTipe").style.display = "";
+                                                document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
@@ -219,6 +239,7 @@
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
+                                                document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                             }
                                         }
                                     </script>
@@ -663,7 +684,7 @@
                                         <option selected></option>
                                         <option value="I" {{ old('jenis-proyek') == 'I' ? 'selected' : '' }}>
                                             Internal</option>
-                                        <option value="E" {{ old('jenis-proyek') == 'E' ? 'selected' : '' }}>
+                                        <option value="N" {{ old('jenis-proyek') == 'N' ? 'selected' : '' }}>
                                             External</option>
                                         <option value="J" {{ old('jenis-proyek') == 'J' ? 'selected' : '' }}>
                                             JO</option>

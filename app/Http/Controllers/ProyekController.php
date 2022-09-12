@@ -44,6 +44,7 @@ class ProyekController extends Controller
         $filter = $request->query("filter");
         $filterStage = $request->query("filter-stage");
         $filterJenis = $request->query("filter-jenis");
+        $filterTipe = $request->query("filter-tipe");
         $filterUnit = $request->query("filter-unit");
         // dd($column);
         // $proyekBerjalan = ProyekBerjalans::all();
@@ -82,6 +83,8 @@ class ProyekController extends Controller
                 $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
             } elseif (!empty($filterJenis)) {
                 $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
+            } elseif (!empty($filterTipe)) {
+                $proyeks = $proyeks->where($column, 'like', '%' . $filterTipe . '%')->get();
             } else {
                 // if(!empty($cari)){
                     //     $proyeks = $proyeks->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();

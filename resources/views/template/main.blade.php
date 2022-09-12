@@ -44,6 +44,15 @@
     <link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 
+    {{-- @if (str_contains(Request::Path(), 'forecasts'))
+    <!-- begin::DataTables -->
+    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <!-- end::DataTables -->
+    @endif --}}
+
     {{-- begin:: Disable Native Date Browser --}}
     <style>
         input[type="date"]::-webkit-input-placeholder {

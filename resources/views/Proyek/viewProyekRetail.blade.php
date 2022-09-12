@@ -669,7 +669,7 @@
 
 @if ($proyek->tipe_proyek != "R")
                                                     
-                                                    @if ($proyek->stage > 1)
+                                                    {{-- @if ($proyek->stage > 1)
                                                         <!--begin:::Tab item Pasar Potensial-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
@@ -722,7 +722,7 @@
                                                             style="font-size:14px;">{{ $proyek->stage == 7 ? "Kalah" : "Menang" }}</a>
                                                         </li>
                                                         <!--end:::Tab item Menang-->
-                                                    @endif
+                                                    @endif --}}
 @endif
                                                     @if ($proyek->stage > 7)
                                                         <!--begin:::Tab item Terkontrak-->
@@ -930,18 +930,18 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select id="tipe-proyek" name="tipe-proyek"
+                                                                    {{-- <select id="tipe-proyek" name="tipe-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="R" {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>Retail</option>
                                                                         <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option>
-                                                                    </select>
-                                                                    {{-- <input type="text"
+                                                                    </select> --}}
+                                                                    <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="tipe-proyek" name="tipe-proyek"
                                                                         value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
-                                                                        readonly /> --}}
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -959,20 +959,20 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    <select id="jenis-proyek" name="jenis-proyek"
+                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="N" {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>External</option>
                                                                         <option value="J" {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>JO</option>
-                                                                    </select>
+                                                                    </select> --}}
                                                                     {{-- @endisset --}}
-                                                                    {{-- <input type="text"
+                                                                    <input type="text"
                                                                         class="form-control form-control-solid"
                                                                         id="jenis-proyek" name="jenis-proyek"
                                                                         value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
-                                                                        readonly /> --}}
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -1421,7 +1421,7 @@
                                                                         <input type="text" onkeyup="hitungAwal()"
                                                                         class="form-control form-control-solid reformat"
                                                                         id="nilai-valas-awal" name="nilai-valas-awal"
-                                                                        value="{{ number_format($proyek->nilai_rkap, 0, '.', '.') }}"
+                                                                        value="{{ number_format((int) $proyek->nilai_rkap, 0, '.', '.') }}"
                                                                         placeholder="Nilai OK Awal (Valas) (Exclude Tax)"
                                                                         readonly />
                                                                         <!--end::Input-->
@@ -1580,7 +1580,7 @@
                                                                             <input type="text"
                                                                             class="form-control form-control-solid reformat"
                                                                             id="nilaiok-awal" name="nilaiok-awal"
-                                                                            value="{{ $proyek->nilaiok_awal == Null ? number_format($proyek->nilai_rkap, 0, '.', '.') : number_format($proyek->nilaiok_awal, 0, '.', '.') }}"
+                                                                            value="{{ $proyek->nilaiok_awal == Null ? number_format((int)$proyek->nilai_rkap, 0, '.', '.') : number_format((int) $proyek->nilaiok_awal, 0, '.', '.') }}"
                                                                             placeholder="Nilai OK (Exclude PPN)" readonly />
                                                                             <!--end::Input-->
                                                                         </div>
@@ -3191,7 +3191,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->nilai_valas_review == null ? 'text-danger' : '' }}"
-                                                                        value="{{ number_format($proyek->nilai_valas_review, 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
+                                                                        value="{{ number_format((int)$proyek->nilai_valas_review, 0, '.', '.') ?? '*Nilai OK Review Belum Ditentukan' }}"
                                                                         placeholder="Nilai OK Review (Valas) (Exclude Tax)"
                                                                         readonly />
                                                                     <!--end::Input-->
@@ -3400,7 +3400,7 @@
                                                                 if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
                                                                     $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
                                                                     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                    $nilaiKontrakKeseluruhan = number_format($kontrakKeseluruhan, 0, '.', '.');
+                                                                    $nilaiKontrakKeseluruhan = number_format((int)$kontrakKeseluruhan, 0, '.', '.');
                                                                 } else {
                                                                     $nilaiKontrakKeseluruhan = 0;
                                                                 }
@@ -4123,19 +4123,19 @@
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
-                                                                                            value="{{ number_format($forecast->rkap_forecast, 0, '.', '.') }}"
+                                                                                            value="{{ number_format((int)$forecast->rkap_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Perolehan" />
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
-                                                                                            value="{{ number_format($forecast->nilai_forecast, 0, '.', '.') }}"
+                                                                                            value="{{ number_format((int)$forecast->nilai_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Forecast" />
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
-                                                                                            value="{{ number_format($forecast->realisasi_forecast, 0, '.', '.') }}"
+                                                                                            value="{{ number_format((int)$forecast->realisasi_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Realisasi" />
                                                                                         </td>
                                                                                     @else
