@@ -94,17 +94,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <!--end:::Tab item Forecast Internal-->
 
                                                 <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
+                                                {{-- <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal"
                                                         style="font-size:14px;">Forecast Kumulatif Eksternal</a>
-                                                </li>
+                                                </li> --}}
                                                 <!--end:::Tab item Forecast S/D-->
 
                                                 <!--begin:::Tab item Forecast S/D-->
-                                                <li class="nav-item">
+                                                {{-- <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal-internal"
                                                         style="font-size:14px;">Forecast Kumulatif Include Internal</a>
-                                                </li>
+                                                </li> --}}
                                                 <!--end:::Tab item Forecast S/D-->
                                             </ul>
                                         </div>
