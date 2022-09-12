@@ -90,60 +90,60 @@ class ForecastController extends Controller
             // } 
         }
 
-        if (!empty($column) && !empty($filter)) {
-            // $dops = $dops->where("dop", "=", $filter);
-            $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
-                switch ($column) {
-                    case "dop":
-                        return str_contains(strtolower($data->dop), strtolower($filter));
-                    case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
-                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        });
-                        foreach ($unit_kerjas as $unit_kerja) {
-                            if ($unit_kerja->dop == $data->dop) {
-                                return $data;
-                            }
-                        }
-                    case "nama_proyek":
-                        $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
-                            // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                            // return false !== stripos($data->nama_proyek, $filter);
-                            return preg_match("/$filter/", $data->nama_proyek);
-                        });
-                        // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
-                        //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        // });
+        // if (!empty($column) && !empty($filter)) {
+        //     // $dops = $dops->where("dop", "=", $filter);
+        //     $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
+        //         switch ($column) {
+        //             case "dop":
+        //                 return str_contains(strtolower($data->dop), strtolower($filter));
+        //             case "unit_kerja":
+        //                 $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
+        //                     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 });
+        //                 foreach ($unit_kerjas as $unit_kerja) {
+        //                     if ($unit_kerja->dop == $data->dop) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //             case "nama_proyek":
+        //                 $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
+        //                     // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //                     // return false !== stripos($data->nama_proyek, $filter);
+        //                     return preg_match("/$filter/", $data->nama_proyek);
+        //                 });
+        //                 // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
+        //                 //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 // });
 
-                        foreach ($proyeks_arr as $proyek) {
-                            if ($proyek->dop == $data->dop) {
-                                return $data;
-                            }
-                        }
-                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                }
-            });
+        //                 foreach ($proyeks_arr as $proyek) {
+        //                     if ($proyek->dop == $data->dop) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //                 // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //         }
+        //     });
 
-            $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
-                switch ($column) {
-                    case "dop":
-                        return str_contains(strtolower($data->dop), strtolower($filter));
-                    case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
-                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        });
-                        foreach ($unit_kerjas as $unit_kerja) {
-                            if ($unit_kerja->divcode == $data->unit_kerja) {
-                                return $data;
-                            }
-                        }
-                    case "nama_proyek":
-                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                        return preg_match("/$filter/", $data->nama_proyek);
-                }
-            });
-            // $proyeks_eksternal = $proyeks->filter()
-        }
+        //     $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
+        //         switch ($column) {
+        //             case "dop":
+        //                 return str_contains(strtolower($data->dop), strtolower($filter));
+        //             case "unit_kerja":
+        //                 $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
+        //                     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 });
+        //                 foreach ($unit_kerjas as $unit_kerja) {
+        //                     if ($unit_kerja->divcode == $data->unit_kerja) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //             case "nama_proyek":
+        //                 // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //                 return preg_match("/$filter/", $data->nama_proyek);
+        //         }
+        //     });
+        //     // $proyeks_eksternal = $proyeks->filter()
+        // }
 
         // dd($proyeks->groupBy(["dop", "unit_kerja"]));
 
@@ -537,60 +537,60 @@ class ForecastController extends Controller
             // } 
         }
 
-        if (!empty($column) && !empty($filter)) {
-            // $dops = $dops->where("dop", "=", $filter);
-            $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
-                switch ($column) {
-                    case "dop":
-                        return str_contains(strtolower($data->dop), strtolower($filter));
-                    case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
-                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        });
-                        foreach ($unit_kerjas as $unit_kerja) {
-                            if ($unit_kerja->dop == $data->dop) {
-                                return $data;
-                            }
-                        }
-                    case "nama_proyek":
-                        $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
-                            // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                            // return false !== stripos($data->nama_proyek, $filter);
-                            return preg_match("/$filter/", $data->nama_proyek);
-                        });
-                        // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
-                        //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        // });
+        // if (!empty($column) && !empty($filter)) {
+        //     // $dops = $dops->where("dop", "=", $filter);
+        //     $dops = $dops->filter(function ($data) use ($filter, $column, $proyeks) {
+        //         switch ($column) {
+        //             case "dop":
+        //                 return str_contains(strtolower($data->dop), strtolower($filter));
+        //             case "unit_kerja":
+        //                 $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($filter) {
+        //                     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 });
+        //                 foreach ($unit_kerjas as $unit_kerja) {
+        //                     if ($unit_kerja->dop == $data->dop) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //             case "nama_proyek":
+        //                 $proyeks_arr = $proyeks->filter(function ($data) use ($filter) {
+        //                     // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //                     // return false !== stripos($data->nama_proyek, $filter);
+        //                     return preg_match("/$filter/", $data->nama_proyek);
+        //                 });
+        //                 // $unit_kerjas = UnitKerja::all()->filter(function($unit_kerja) use($filter) {
+        //                 //     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 // });
 
-                        foreach ($proyeks_arr as $proyek) {
-                            if ($proyek->dop == $data->dop) {
-                                return $data;
-                            }
-                        }
-                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                }
-            });
+        //                 foreach ($proyeks_arr as $proyek) {
+        //                     if ($proyek->dop == $data->dop) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //                 // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //         }
+        //     });
 
-            $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
-                switch ($column) {
-                    case "dop":
-                        return str_contains(strtolower($data->dop), strtolower($filter));
-                    case "unit_kerja":
-                        $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
-                            return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
-                        });
-                        foreach ($unit_kerjas as $unit_kerja) {
-                            if ($unit_kerja->divcode == $data->unit_kerja) {
-                                return $data;
-                            }
-                        }
-                    case "nama_proyek":
-                        // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
-                        return preg_match("/$filter/", $data->nama_proyek);
-                }
-            });
-            // $proyeks_eksternal = $proyeks->filter()
-        }
+        //     $proyeks = $proyeks->filter(function ($data) use ($filter, $column) {
+        //         switch ($column) {
+        //             case "dop":
+        //                 return str_contains(strtolower($data->dop), strtolower($filter));
+        //             case "unit_kerja":
+        //                 $unit_kerjas = UnitKerja::all()->filter(function ($unit_kerja) use ($data, $filter) {
+        //                     return str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter));
+        //                 });
+        //                 foreach ($unit_kerjas as $unit_kerja) {
+        //                     if ($unit_kerja->divcode == $data->unit_kerja) {
+        //                         return $data;
+        //                     }
+        //                 }
+        //             case "nama_proyek":
+        //                 // return str_contains(strtolower($data->nama_proyek), strtolower($filter));
+        //                 return preg_match("/$filter/", $data->nama_proyek);
+        //         }
+        //     });
+        //     // $proyeks_eksternal = $proyeks->filter()
+        // }
 
         // dd($proyeks->groupBy(["dop", "unit_kerja"]));
 
