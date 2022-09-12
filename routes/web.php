@@ -312,8 +312,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         // dd($data, $i);
 
-        // dd($data);
-
         $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->get()->first();
 
         if (empty($findForecast)) {
@@ -321,13 +319,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
-            $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+            $forecast->nilai_forecast = (int) (str_replace(".", "", $data["nilaiforecast-" . $i]) ?? 0);
             $forecast->month_forecast = (int) $i;
 
-            $forecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i]) ?? 0);
+            $forecast->rkap_forecast = (int) (str_replace(".", "", $data["nilaiok-" . $i]) ?? 0);
             $forecast->month_rkap = (int) $i;
 
-            $forecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i]) ?? 0);
+            $forecast->realisasi_forecast = (int) (str_replace(".", "", $data["nilairealisasi-" . $i]) ?? 0);
             $forecast->month_realisasi = (int) $i;
 
             $prognosa = (int) date('m');
@@ -343,7 +341,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             $findForecast->kode_proyek = $data["kode-proyek"];
 
-            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
+            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i]) ?? 0);
             $findForecast->month_forecast = (int) $i;
 
             $findForecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i]) ?? 0);
