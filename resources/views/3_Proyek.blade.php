@@ -422,7 +422,7 @@
                                             <!--begin::Pelaksanaan-->
                                             <td class="">
                                                 <small>
-                                                    @switch($proyek->bulan_pelaksanaan)
+                                                    @switch($proyek->bulan_ri_perolehan)
                                                         @case('1')
                                                             Januari
                                                         @break
@@ -472,7 +472,7 @@
                                                         @break
 
                                                         @default
-                                                            Selesai
+                                                            *Belum Ditentukan
                                                     @endswitch
                                                 </small>
                                             </td>
