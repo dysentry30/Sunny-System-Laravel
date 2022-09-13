@@ -15,7 +15,6 @@
         border-radius: 0 !important;
         background-color: transparent !important;
     }
-
     .form-select.form-select-solid {
         border-left: 0px !important;
         border-top: 0px !important;
@@ -28,7 +27,6 @@
     color: #D9214E;
     opacity: 1; /* Firefox */
     }
-
 </style>
 
 <!--begin::Main-->
@@ -550,11 +548,8 @@
                                         //             stage.style.cursor = "not-allowed";
                                         //             stage.style.pointerEvents = "none";
                                         //         }
-
                                         //     }
-
                                         // });
-
                                         function confirmAction(form) {
                                             const formSend = document.createElement("form");
                                             formSend.setAttribute("method", "post");
@@ -570,11 +565,9 @@
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-kalah" value="Kalah"/>`;
                                             }
-
                                             if (form.submitted == "Terkontrak") {
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terkontrak" value="Terkontrak"/>`;
-
                                             } else if (form.submitted == "Terendah") {
                                                 html +=
                                                     `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terendah" value="Terendah"/>`;
@@ -2737,7 +2730,6 @@
                                                                         <span>Total Biaya Pra-Proyek</span>
                                                                     </label>
                                                                     <!--end::Label-->
-
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat"
@@ -4130,7 +4122,6 @@
 <!--begin:::Tab Forecast Retail-->
                                                     {{-- <div class="tab-pane fade" id="kt_user_view_overview_forecast"
                                                         role="tabpanel">
-
                                                         <!--Begin::Title Biru Form: History-->
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
@@ -4302,9 +4293,7 @@
 <!--begin::modal HISTORY ADENDUM-->
 {{-- <form action="/proyek/adendum/add" method="post" enctype="multipart/form-data">
     @csrf
-
     <input type="hidden" name="adendum-kode-proyek" value="{{ $proyek->kode_proyek }}">
-
     <div class="modal fade" id="kt_modal_history_adendum" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -4329,7 +4318,6 @@
     
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
-
                     <!--begin::Row-->
                     <div class="row fv-row">
                         <!--begin::Col-->
@@ -4487,9 +4475,7 @@
 {{-- @foreach ($proyek->AdendumProyek as $adendum)
 <form action="/proyek/adendum/{{ $adendum->id }}/edit" method="post" enctype="multipart/form-data">
     @csrf
-
     <input type="hidden" name="adendum-kode-proyek" value="{{ $proyek->kode_proyek }}">
-
     <div class="modal fade" id="kt_modal_edit_adendum_{{ $adendum->id }}" tabindex="-1" aria-hidden="true">
         <!--begin::Modal dialog-->
         <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -4514,7 +4500,6 @@
     
                 <!--begin::Modal body-->
                 <div class="modal-body py-lg-6 px-lg-6">
-
                     <!--begin::Row-->
                     <div class="row fv-row">
                         <!--begin::Col-->
@@ -4705,7 +4690,6 @@
                     <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
                 </div>
                 <!--end::Input group-->
-
             </div>
             <!--end::Modal body-->
         </div>
@@ -5346,7 +5330,6 @@
 {{-- <form action="/proyek/kriteria-add" method="post" enctype="multipart/form-data">
 @csrf
 <input type="hidden" name="data-kriteria-proyek" value="{{ $proyek->kode_proyek }}">
-
 <div class="modal fade" id="kt_modal_kriteria_pasardini" tabindex="-1" aria-hidden="true">
     <!--begin::Modal dialog-->
     <div class="modal-dialog modal-dialog-centered mw-800px">
@@ -5368,7 +5351,6 @@
                 <!--end::Close-->
             </div>
             <!--end::Modal header-->
-
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
                 <!--begin::Row Kanan+Kiri-->
@@ -5446,7 +5428,6 @@
                         let html = `<option value=""></option>`;
                         formData.append("_token", "{{ csrf_token() }}");
                         formData.append("kategori", kategori);
-
                         const getKriteriaRes = await fetch("/proyek/get-kriteria", {
                             method: "POST",
                             header: {
@@ -5461,7 +5442,6 @@
                         document.querySelector("#kriteria-pasar").innerHTML = html;
                         // document.querySelector("#kriteria-pasar").setAttribute("bobot", data.bobot);
                     }
-
                     function setBobot(e) {
                         let bobot = "";
                         e.options.forEach(option => {
@@ -5474,13 +5454,10 @@
                         document.querySelector("#bobot").value = bobot;
                     }
                 </script>
-
             </div>
             <div class="modal-footer">
-
                 <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
                     id="new_save" style="background-color:#008CB4">Save</button>
-
             </div>
             <!--end::Modal body-->
         </div>
@@ -5596,7 +5573,6 @@
                         let html = `<option></option>`;
                         formData.append("_token", "{{ csrf_token() }}");
                         formData.append("kategori", kategori);
-
                         const getKriteriaRes = await fetch("/proyek/get-kriteria", {
                             method: "POST",
                             header: {
@@ -5611,7 +5587,6 @@
                         // console.log(IDkriteriapasar);
                         document.querySelector("#" + editKriteria).innerHTML = html;
                     }
-
                     function editBobot(e) {
                         let bobot = "";
                         const editBobot = e.getAttribute("data-edit-bobot");
@@ -6232,11 +6207,8 @@
             <!--end::Close-->
         </div>
         <!--end::Modal header-->
-
         <!--begin::Modal body-->
         <div class="modal-body py-lg-6 px-lg-6">
-
-
             <!--begin::Row Kanan+Kiri-->
             <div class="row fv-row">
                 <!--begin::Input-->
@@ -6293,7 +6265,6 @@
             <!--end::Modal header-->
             <!--begin::Modal body-->
             <div class="modal-body py-lg-6 px-lg-6">
-
                 <!--begin::Input group Website-->
                 <div class="fv-row mb-5">
                     <!--begin::Label-->
@@ -6338,7 +6309,6 @@
                         <label class="form-check-label" for="inlineRadio5">5</label>
                     </div>
                     <!--end::Input-->
-
                     <!--begin::Label-->
                     <div>
                         <label class="fs-6 fw-bold form-label mt-3">
@@ -6355,9 +6325,7 @@
                     </div>
                 </div>
                 <!--end::Input group-->
-
                 <button type="submit" class="btn btn-sm btn-primary" id="feedback_new_save">Save</button>
-
             </div>
             <!--end::Modal body-->
         </div>
@@ -6373,7 +6341,6 @@
 <!--begin:: Dokumen File Upload Max Size-->
 <script>
     var inputs = document.getElementsByTagName('input');
-
     for(var i = 0; i < inputs.length; i++) {
         if(inputs[i].type.toLowerCase() == 'file') {
             inputs[i].onchange = function() {
@@ -6444,4 +6411,3 @@
     tabBoots.show();
 </script>
 @endsection
-
