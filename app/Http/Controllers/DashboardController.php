@@ -40,7 +40,7 @@ class DashboardController extends Controller
         if (Auth::user()->check_administrator) {
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=" , "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->get();
-            // dd($nilaiHistoryForecast);
+            // dd($nilaiHistoryForecast, $request->get("periode-prognosa"), (int) date("m"));
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
             $unitKerja = UnitKerja::orderBy('unit_kerja')->get();
             $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
