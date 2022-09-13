@@ -196,29 +196,30 @@
                                                                 Pasar Dini
                                                             </a>
                                                         @endif
-@if ($proyek->tipe_proyek != "R")
+
                                                         @if ($proyek->stage > 1)
-                                                            <a href="#"
+                                                        <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
-                                                                Pasar Potensial
+                                                                Terkontrak
                                                             </a>
                                                         @else
                                                             @if ($proyek->stage == 0)
                                                                 <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; pointer-events: none" stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
+                                                                class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                style="outline: 0px; pointer-events: none" stage="2">
+                                                                Terkontrak
+                                                            </a>
                                                             @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
-                                                            @endif
+                                                            <a href="#"
+                                                            class="stage-button stage-action color-is-default stage-is-not-active"
+                                                            style="outline: 0px; cursor: pointer;" stage="2">
+                                                            Terkontrak
+                                                        </a>
                                                         @endif
-
+                                                        @endif
+                                                        
+@if ($proyek->tipe_proyek != "R")
                                                         @if ($proyek->stage > 2)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
@@ -414,7 +415,7 @@
 
 @endif
 
-                                                        @if ($proyek->stage > 7)
+                                                        {{-- @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
                                                                 <a href="#" data-bs-toggle="dropdown"
                                                                     role="button" id="terkontrak" aria-expanded="false"
@@ -507,7 +508,7 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
-                                                        @endif
+                                                        @endif --}}
 
 
 
@@ -740,7 +741,7 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                         data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
-                                                            style="font-size:14px;">Terkontrak Retail</a>
+                                                            style="font-size:14px;">Forecast Retail</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast-->
 
