@@ -11,6 +11,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use stdClass;
 
 class ForecastController extends Controller
@@ -156,6 +157,7 @@ class ForecastController extends Controller
                 // "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
+                "forecast" => true,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
@@ -297,7 +299,7 @@ class ForecastController extends Controller
         // dd($proyeks->groupBy(["dop", "unit_kerja"]));
 
         return view(
-            'Forecast/viewForecastInternal',
+            'Forecast/viewForecast',
             [
                 // 'forecast' => Forecast::all(),
                 "historyForecast" => $historyForecast,
@@ -305,6 +307,7 @@ class ForecastController extends Controller
                 // "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
+                "forecast_internal" => true,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
