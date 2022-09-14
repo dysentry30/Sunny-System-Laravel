@@ -147,7 +147,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                         <div class="row">
                                             <div class="d-flex {{$periode != (int) date("m") ? "col-6" : "col-6"}}">
                                                 <script>
-                                                    const historyForecast = "{{ count($historyForecast) }}";
+                                                    
                                                 </script>
                                                 @if (Auth::user()->check_administrator)
                                                     <button type="button" style="background-color: #008CB4;" id="lock-forecast"
@@ -1671,9 +1671,9 @@ fill="none">
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
 
-    if (historyForecast > 0) {
-        disabledAllInputs();
-    }
+    // if (historyForecast > 0) {
+    //     disabledAllInputs();
+    // }
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat(["id"], {
