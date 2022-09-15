@@ -304,7 +304,7 @@
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan Perolehan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('bulan_ri_perolehan', 'Bulan Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
