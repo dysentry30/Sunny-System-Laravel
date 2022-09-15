@@ -11,11 +11,16 @@ class Dop extends Model
     use HasFactory;
     use Sortable;
     
-    public $sortable = [
-        'dop'
-    ];
+    // public $sortable = [
+    //     'dops'
+    // ];
+    protected $table = 'dops'; 
 
     public function UnitKerjas() {
         return $this->hasMany(UnitKerja::class, "dop", "dop");
+    }
+
+    public function Proyek() {
+        return $this->belongsTo(Proyek::class, "dop", "dop");
     }
 }

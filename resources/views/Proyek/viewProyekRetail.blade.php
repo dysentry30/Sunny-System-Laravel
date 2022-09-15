@@ -196,30 +196,29 @@
                                                                 Pasar Dini
                                                             </a>
                                                         @endif
-
-                                                        @if ($proyek->stage > 1)
-                                                        <a href="#"
+@if ($proyek->tipe_proyek != "R")
+                                                        {{-- @if ($proyek->stage > 1)
+                                                            <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
-                                                                Terkontrak
+                                                                Pasar Potensial
                                                             </a>
                                                         @else
                                                             @if ($proyek->stage == 0)
                                                                 <a href="#"
-                                                                class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                style="outline: 0px; pointer-events: none" stage="2">
-                                                                Terkontrak
-                                                            </a>
+                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                    style="outline: 0px; pointer-events: none" stage="2">
+                                                                    Pasar Potensial
+                                                                </a>
                                                             @else
-                                                            <a href="#"
-                                                            class="stage-button stage-action color-is-default stage-is-not-active"
-                                                            style="outline: 0px; cursor: pointer;" stage="2">
-                                                            Terkontrak
-                                                        </a>
+                                                                <a href="#"
+                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                    style="outline: 0px; cursor: pointer;" stage="2">
+                                                                    Pasar Potensial
+                                                                </a>
+                                                            @endif
                                                         @endif
-                                                        @endif
-                                                        
-@if ($proyek->tipe_proyek != "R")
+
                                                         @if ($proyek->stage > 2)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
@@ -353,7 +352,6 @@
                                                                             class="bi bi-caret-down-fill text-white"></i></span>
                                                                 </a>
                                                             @else
-                                                                {{-- <div class=""> --}}
                                                                 <a href="#" data-bs-toggle="dropdown"
                                                                     role="button" id="dropdownMenuButton1"
                                                                     aria-expanded="false"
@@ -389,7 +387,6 @@
                                                                         </li>
                                                                     </form>
                                                                 </ul>
-                                                                {{-- </div> --}}
                                                             @endif
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="dropdownMenuButton1">
@@ -411,11 +408,11 @@
                                                                             value="Kalah" /></li>
                                                                 </form>
                                                             </ul>
-                                                        @endif
+                                                        @endif --}}
 
 @endif
 
-                                                        {{-- @if ($proyek->stage > 7)
+                                                        @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
                                                                 <a href="#" data-bs-toggle="dropdown"
                                                                     role="button" id="terkontrak" aria-expanded="false"
@@ -508,7 +505,7 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
-                                                        @endif --}}
+                                                        @endif
 
 
 
@@ -741,7 +738,7 @@
                                                         <a class="nav-link text-active-primary pb-4"
                                                         data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
-                                                            style="font-size:14px;">Forecast Retail</a>
+                                                            style="font-size:14px;">Terkontrak Retail</a>
                                                     </li>
                                                     <!--end:::Tab item Forecast-->
 
@@ -4143,17 +4140,17 @@
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
-                                                                                            placeholder="Nilai Perolehan klo blm isi" />
+                                                                                            placeholder="Isi Nilai Perolehan" />
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
-                                                                                            placeholder="Nilai Forecast" />
+                                                                                            placeholder="Isi Nilai Forecast" />
                                                                                         </td>
                                                                                         <td class="text-dark">
                                                                                             <input type="text" class="form-control form-control-solid reformat"
                                                                                             id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
-                                                                                            placeholder="Nilai Realisasi" />
+                                                                                            placeholder="Isi Nilai Realisasi" />
                                                                                         </td>
                                                                                     @endif
                                                                                     <!--begin::input-->

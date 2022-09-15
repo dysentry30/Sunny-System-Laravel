@@ -723,14 +723,6 @@
                                                             <!--end:::Tab item Terkontrak-->
                                                     @endif
                                                     
-                                                    <!--begin:::Tab item Forecast-->
-                                                    {{-- <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                        data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_forecast"
-                                                            style="font-size:14px;">Terkontrak Retail</a>
-                                                    </li> --}}
-                                                    <!--end:::Tab item Forecast-->
 
                                                     <!--begin:::Tab item Approval-->
                                                     {{-- <li class="nav-item">
@@ -947,14 +939,14 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    <select id="jenis-proyek" name="jenis-proyek"
+                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="N" {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>External</option>
                                                                         <option value="J" {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>JO</option>
-                                                                    </select>
+                                                                    </select> --}}
                                                                     {{-- @endisset --}}
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
@@ -4118,141 +4110,6 @@
                                                     </div>
 <!--end:::Tab Feedback-->
 
-
-<!--begin:::Tab Forecast Retail-->
-                                                    {{-- <div class="tab-pane fade" id="kt_user_view_overview_forecast"
-                                                        role="tabpanel">
-                                                        <!--Begin::Title Biru Form: History-->
-                                                        <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">History Forecast</h3>
-                                                        <br>
-                                                        <!--End::Title Biru Form: List History-->
-                                                        
-                                                        <div class="d-flex flex-row-reverse mb-5">
-                                                            <div>
-                                                                Periode Prognosa
-                                                                @php
-                                                                    setlocale(LC_TIME, 'id.UTF-8');
-                                                                    $periode_prognosa = count($historyForecast) > 0 ? strftime('%B', mktime(0, 0, 0, $historyForecast[0]->periode_prognosa)) : 'Belum Dibuat';
-                                                                @endphp
-                                                                <b class="mx-4">{{ $periode_prognosa }}</b>
-                                                            </div>
-                                                            <!--begin::Button-->
-                                                                <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
-                                                                style="background-color:#008CB4">
-                                                                Save</button>
-                                                            <!--end::Button-->
-                                                    </div> --}}
-
-                                                    <!--begin::Table-->
-                                                    {{-- <table class="table align-middle table-row-dashed fs-6 gy-2"
-                                                        id="kt_customers_table">
-                                                        <!--begin::Table head-->
-                                                        <thead>
-                                                            <!--begin::Table row-->
-                                                            <tr
-                                                                class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                <th class="min-w-auto text-end">Periode</th>
-                                                                <th class="min-w-auto text-center">Nilai OK</th>
-                                                                <th class="min-w-auto text-center">Forecast</th>
-                                                                <th class="min-w-auto text-center">Realisasi</th>
-                                                            </tr>
-                                                            <!--end::Table row-->
-                                                        </thead>
-                                                        <!--end::Table head-->
-                                                        <!--begin::Table body-->
-                                                        <tbody class="fw-bold text-gray-600">
-                                                            @for ($i = 1; $i <= 12; $i++)
-                                                                <tr>
-                                                                    <!--begin::Name-->
-                                                                    <td class="text-end"><b>
-                                                                        @switch($i)
-                                                                            @case('1')
-                                                                                Januari :
-                                                                            @break
-    
-                                                                            @case('2')
-                                                                                Februari :
-                                                                            @break
-    
-                                                                            @case('3')
-                                                                                Maret :
-                                                                            @break
-    
-                                                                            @case('4')
-                                                                                April :
-                                                                            @break
-    
-                                                                            @case('5')
-                                                                                Mei :
-                                                                            @break
-    
-                                                                            @case('6')
-                                                                                Juni :
-                                                                            @break
-    
-                                                                            @case('7')
-                                                                                Juli :
-                                                                            @break
-    
-                                                                            @case('8')
-                                                                                Agustus :
-                                                                            @break
-    
-                                                                            @case('9')
-                                                                                September :
-                                                                            @break
-    
-                                                                            @case('10')
-                                                                                Oktober :
-                                                                            @break
-    
-                                                                            @case('11')
-                                                                                November :
-                                                                            @break
-    
-                                                                            @case('12')
-                                                                                Desember :
-                                                                            @break
-    
-                                                                            @default
-                                                                                -
-                                                                        @endswitch
-                                                                        </b>
-                                                                    </td>
-                                                                    <!--end::Name-->
-                                                                    <!--begin::Nilai OK-->
-                                                                    <td class="text-dark">
-                                                                        <input type="text" class="form-control form-control-solid reformat"
-                                                                            id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
-                                                                            value="{{ $proyek->nilai_perolehan }}"
-                                                                            placeholder="Nilai Perolehan" />
-                                                                    </td>
-                                                                    <!--end::Nilai OK-->
-                                                                    <!--begin::Forecast-->
-                                                                    <td class="text-dark">
-                                                                        <input type="text" class="form-control form-control-solid reformat"
-                                                                            id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
-                                                                            value="{{ $proyek->nilai_perolehan }}"
-                                                                            placeholder="Forecast" />
-                                                                    </td>
-                                                                    <!--end::Forecast-->
-                                                                    <!--begin::Nilai Realisasi-->
-                                                                    <td class="text-dark">
-                                                                        <input type="text" class="form-control form-control-solid reformat"
-                                                                            id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
-                                                                            value="{{ $proyek->nilai_perolehan }}"
-                                                                            placeholder="Nilai Realisasi" />
-                                                                    </td>
-                                                                    <!--end::Nilai Realisasi-->
-                                                                </tr>
-                                                            @endfor
-                                                        </tbody>
-                                                        <!--end::Table body-->
-                                                    </table> --}}
-                                                    <!--end::Table-->
-<!--end:::Tab Forecast Retail-->
 
 
                                             </div>

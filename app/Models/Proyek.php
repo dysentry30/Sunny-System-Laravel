@@ -12,6 +12,7 @@ class Proyek extends Model
     use HasFactory;
     use Sortable;
     protected $primaryKey   = 'kode_proyek';
+    protected $table = 'proyeks'; 
     protected $casts = [
         "kode_proyek" => "string"
     ];
@@ -32,7 +33,7 @@ class Proyek extends Model
 
     public function Dop()
     {
-        return $this->hasMany(Dop::class);
+        return $this->hasOne(Dop::class);
     }
 
     public function Sbu()
