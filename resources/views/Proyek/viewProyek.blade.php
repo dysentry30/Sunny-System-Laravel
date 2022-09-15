@@ -939,14 +939,14 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
+                                                                    <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="N" {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>External</option>
                                                                         <option value="J" {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>JO</option>
-                                                                    </select> --}}
+                                                                    </select>
                                                                     {{-- @endisset --}}
                                                                     {{-- <input type="text"
                                                                         class="form-control form-control-solid"
