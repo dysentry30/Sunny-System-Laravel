@@ -11,24 +11,30 @@
     <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
     <!--begin::Fonts-->
 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
+    <link rel="stylesheet" href="{{ asset('/css/cssFont.css') }}" />
     <!--end::Fonts-->
 
     <!-- begin::Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> --}}
+    <link href="{{ asset('/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"> --}}
+    <link rel="stylesheet" href="{{ asset('/bootstrap/bootstrap-icons.css') }}">
     <!-- end::Bootstrap CSS -->
 
     <!-- begin::Froala CSS -->
-    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
+    {{-- <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
+        type='text/css' /> --}}
+    <link href='{{ asset('/froala/froala_editor.pkgd.min.css') }}' rel='stylesheet'
         type='text/css' />
     <!-- end::Froala CSS -->
     
     <!-- Begin:: Leaflet Map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
     integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-    crossorigin=""/>
+    crossorigin=""/> --}}
     <!-- End:: Leaflet Map -->
 
     <!--begin::Page Vendor Stylesheets(used by this page)-->
@@ -110,7 +116,7 @@
         <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
             data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
             data-kt-drawer-width="{default:'200px', '300px': '250px'}" data-kt-drawer-direction="start"
-            data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9">
+            data-kt-drawer-toggle="#kt_aside_mobile_toggle" style="background-color:#0db0d9; z-index: 300">
             <!--begin::Brand-->
             <div class="aside-logo flex-column-auto" id="kt_aside_logo" style="background-color:#0db0d9;">
                 <!--begin::Logo-->
@@ -206,7 +212,7 @@
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-graph-up-arrow text-white"
+                                            <i class="bi bi-bar-chart text-white"
                                                 style="font-size: 18px; margin-left:7px"></i>
                                         </span>
                                         <!--end::Svg Icon-->
@@ -1195,7 +1201,10 @@
 
 
     {{-- begin::Bootstrap JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    {{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
+    </script> --}}
+    <script src="{{ asset('/bootstrap/popper.min.js') }}"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
     </script>
     {{-- end::Bootstrap JS --}}
@@ -1203,9 +1212,9 @@
     {{-- <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script> --}}
 
     {{-- Begin:: Leaflet JS --}}
-    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    {{-- <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
     integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-    crossorigin=""></script>
+    crossorigin=""></script> --}}
     {{-- End:: Leaflet JS --}}
 
     <!--begin::Global Javascript Bundle(used by all pages)-->
@@ -1214,18 +1223,24 @@
     <!--end::Global Javascript Bundle-->
 
     {{-- begin::html2pdf JS --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"
+        integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="{{ asset('/js/html2pdf.bundle.min.js') }}"
         integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     {{-- end::html2pdf JS --}}
 
     {{-- begin::sweetalert2 JS --}}
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.all.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.20/dist/sweetalert2.all.min.js"></script> --}}
+    <script src="{{ asset('/sweetalert2/sweetalert2.all.min.js') }}"></script>
     {{-- end::sweetalert2 JS --}}
 
 
     {{-- begin::Froala Editor JS --}}
-    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'>
+    {{-- <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'>
+    </script> --}}
+    <script type='text/javascript' src='{{ asset('/froala/froala_editor.pkgd.min.js') }}'>
     </script>
     {{-- end::Froala Editor JS --}}
 
@@ -1244,9 +1259,10 @@
 
 
     {{-- begin::Mammoth Library --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"
         integrity="sha512-bGuEL2NBSooMeQLM6bf6Xdywje4PWKegNTuKpghz2xgFXtRjEs4B3X1ql7nghiCvt8gXBAks5S3KN3Jp3Jgtow=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script> --}}
+    <script src="{{ asset('/froala/mammoth.browser.min.js') }}" referrerpolicy="no-referrer"></script>
     {{-- end::Mammoth Library --}}
     {{-- begin:: docx2html Library --}}
     <script src="https://cdn.jsdelivr.net/npm/docx2html@1.3.2/dist/docx2html.min.js"></script>

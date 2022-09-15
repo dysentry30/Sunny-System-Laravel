@@ -22,6 +22,7 @@ use App\Models\ClaimManagements;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
 use App\Models\DokumenPrakualifikasi;
+use App\Models\Forecast;
 use App\Models\KriteriaPasarProyek;
 use App\Models\ProyekAdendum;
 use App\Models\RiskTenderProyek;
@@ -192,6 +193,9 @@ class ProyekController extends Controller
         
         $newProyek->kode_proyek = $kode_proyek;
         //end::Generate Kode Proyek
+        
+        $newForecast = new Forecast;
+        $newForecast-
         
         
         //end::Generate Kode Proyek

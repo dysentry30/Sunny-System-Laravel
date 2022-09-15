@@ -415,7 +415,7 @@ class DashboardController extends Controller
         $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus', 9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'];
         $data = [];
         // dd($request->all());   
-        // dd($type, $prognosa, $month, $unit_kerja);   
+        // dd($type, $prognosa, $month, $unit_`kerja);   
         if ($type == "Forecast") {
             $month = array_search($month, $arrNamaBulan);
             if (Auth::user()->check_administrator) {
