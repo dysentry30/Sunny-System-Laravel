@@ -194,8 +194,8 @@ class ProyekController extends Controller
         $newProyek->kode_proyek = $kode_proyek;
         //end::Generate Kode Proyek
         
-        $newForecast = new Forecast;
-        $newForecast-
+        // $newForecast = new Forecast;
+        // $newForecast-
         
         
         //end::Generate Kode Proyek
