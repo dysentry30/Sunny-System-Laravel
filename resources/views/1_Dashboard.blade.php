@@ -491,7 +491,7 @@
                                                                         {{ $forecast->nilai_forecast }};
                                                                         @endforeach --}}
                                                                 {{-- {{ number_format($proyek->forecast, 0, '.', ',') }} --}}
-                                                                {{ number_format(str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}
+                                                                {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}
                                                             </td>
                                                             <!--end::Nilai Forecast-->
                                                         </tr>
