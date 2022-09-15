@@ -11,7 +11,8 @@ class Proyek extends Model
 {
     use HasFactory;
     use Sortable;
-    protected $primaryKey   = 'kode_proyek';
+    public $primaryKey   = 'kode_proyek';
+    public $keyType = 'string';
     protected $table = 'proyeks'; 
     protected $casts = [
         "kode_proyek" => "string"

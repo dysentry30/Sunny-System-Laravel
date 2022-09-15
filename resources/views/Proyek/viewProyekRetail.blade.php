@@ -928,18 +928,13 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    {{-- <select id="tipe-proyek" name="tipe-proyek"
+                                                                    <select id="tipe-proyek" name="tipe-proyek"
                                                                         class="form-select form-select-solid"
                                                                         data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Tipe Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="R" {{ $proyek->tipe_proyek == 'R' ? 'selected' : '' }}>Retail</option>
-                                                                        <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option>
-                                                                    </select> --}}
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="tipe-proyek" name="tipe-proyek"
-                                                                        value="{{ $proyek->tipe_proyek == 'R' ? 'Retail' : 'Non-Retail' }}"
-                                                                        readonly />
+                                                                        {{-- <option value="P" {{ $proyek->tipe_proyek == 'P' ? 'selected' : '' }}>Non-Retail</option> --}}
+                                                                    </select>
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -957,20 +952,15 @@
                                                                     <!--begin::Input-->
                                                                     {{-- @isset($proyek->jenis_proyek) --}}
                                                                     {{-- @dump($proyek->jenis_proyek) --}}
-                                                                    {{-- <select id="jenis-proyek" name="jenis-proyek"
+                                                                    <select id="jenis-proyek" name="jenis-proyek"
                                                                     class="form-select form-select-solid"
                                                                     data-control="select2" data-hide-search="true"
                                                                     data-placeholder="Pilih Jenis Proyek" {{ auth()->user()->check_administrator ? '' : 'readonly'}}>
                                                                         <option value="I" {{ $proyek->jenis_proyek == 'I' ? 'selected' : '' }}>Internal</option>
                                                                         <option value="N" {{ $proyek->jenis_proyek == 'N' ? 'selected' : '' }}>External</option>
                                                                         <option value="J" {{ $proyek->jenis_proyek == 'J' ? 'selected' : '' }}>JO</option>
-                                                                    </select> --}}
+                                                                    </select>
                                                                     {{-- @endisset --}}
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="jenis-proyek" name="jenis-proyek"
-                                                                        value="{{ $proyek->jenis_proyek == 'I' ? 'Internal' : 'External' }}"
-                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->

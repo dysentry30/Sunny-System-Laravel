@@ -12,7 +12,7 @@ class ContractManagements extends Model
 
     protected $primaryKey   = "id_contract";
     public $timestamps      = false;
-    protected $keyType = 'string';
+    public $keyType = 'string';
     public $incrementing = false;
     protected $fillable     = ["*"];
     protected $visible      = ["*"];
