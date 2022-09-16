@@ -14,6 +14,7 @@ use App\Models\UnitKerja;
 use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class DashboardController extends Controller
 {
@@ -418,13 +419,25 @@ class DashboardController extends Controller
         $data = [];
         $counter = 2; // buat excel cell
 
+        // Delete existing file if data date is greater than 1 minute
+        $files = File::allFiles(public_path("excel"));
+        foreach($files as $file) {
+            $file = File::lastModified($file);
+            $file_modified = date_create(strtotime($file));
+            $now = date_create("now");
+            if($now->diff($file_modified)->i > 1 ) {
+                File::delete(public_path("excel/$file"));
+            }
+        }
+        
+
 
         $spreadsheet = new Spreadsheet();
-            // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->getStyle("A1:F1")->getFill()
-        ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-        ->getStartColor()->setARGB('0db0d9');
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
         $sheet->setCellValue('A1', 'Nama Proyek');
         $sheet->setCellValue('B1', 'Status Pasar');
         $sheet->setCellValue('C1', 'Stage');
@@ -432,7 +445,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('E1', 'Bulan');
         $sheet->setCellValue('F1', "Nilai $type");
 
-        
+
         // dd($request->all());   
         // dd($type, $prognosa, $month, $unit_`kerja);   
         if ($type == "Forecast") {
@@ -467,12 +480,12 @@ class DashboardController extends Controller
                     if ($f->month_forecast <= $month) {
                         if (!array_key_exists($f->kode_proyek, $data)) {
                             $data[$f->kode_proyek] = $f;
-                            $sheet->setCellValue("A" . $counter, $f->nama_proyek);
                         } else {
                             $data[$f->kode_proyek]->nilai_forecast += $f->nilai_forecast;
                             $data[$f->kode_proyek]->month_forecast = $f->month_forecast;
                         }
                     }
+                    $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
                     $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
                     $stage = $this->getProyekStage($data[$kode_proyek]->stage);
                     $sheet->setCellValue("C" . $counter, $stage);
@@ -504,7 +517,7 @@ class DashboardController extends Controller
                 $history_rkap = $history_rkap->groupBy("kode_proyek");
             }
             // dd($history_rkap);
-            foreach ($history_rkap as $filter) {
+            foreach ($history_rkap as $kode_proyek => $filter) {
                 foreach ($filter as $f) {
                     if ($f->month_rkap <= $month) {
                         if (!array_key_exists($f->kode_proyek, $data)) {
@@ -515,6 +528,13 @@ class DashboardController extends Controller
                         }
                     }
                 }
+                $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
+                $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
+                $stage = $this->getProyekStage($data[$kode_proyek]->stage);
+                $sheet->setCellValue("C" . $counter, $stage);
+                $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
+                $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
+                $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
             }
         } else {
             $month = array_search($month, $arrNamaBulan);
@@ -537,7 +557,7 @@ class DashboardController extends Controller
                 $history_realisasi = $history_realisasi->groupBy("kode_proyek");
             }
             // dd($history_realisasi);
-            foreach ($history_realisasi as $filter) {
+            foreach ($history_realisasi as $kode_proyek => $filter) {
                 foreach ($filter as $f) {
                     if ($f->month_realisasi <= $month) {
                         if (!array_key_exists($f->kode_proyek, $data)) {
@@ -548,6 +568,13 @@ class DashboardController extends Controller
                         }
                     }
                 }
+                $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
+                $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
+                $stage = $this->getProyekStage($data[$kode_proyek]->stage);
+                $sheet->setCellValue("C" . $counter, $stage);
+                $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
+                $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
+                $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
             }
             // foreach ($history_realisasi as $history) {
             //     if ($history->month_realisasi <= $month) {
@@ -555,10 +582,11 @@ class DashboardController extends Controller
             //     }
             // }
         }
-        
+
         $writer = new Xlsx($spreadsheet);
-        $writer->save("$type-$prognosa-$month-". date('dmYHis') .".xlsx");
-        return response()->json($data);
+        $file_name = "$type-$prognosa-$month-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+        return response()->json(["href" => $file_name, "data" => $data]);
     }
 
     public function getDataFilterPointTriwulan($prognosa, $type, $month, $unit_kerja = "")
@@ -598,7 +626,8 @@ class DashboardController extends Controller
         }
     }
 
-    private function getFullMonth($month) {
+    private function getFullMonth($month)
+    {
         switch ($month) {
             case 1:
                 return "Januari";
@@ -639,7 +668,8 @@ class DashboardController extends Controller
         }
     }
 
-    private function getProyekStage($month) {
+    public static function getProyekStage($month)
+    {
         switch ($month) {
             case 0:
                 return "Pasar Dini";

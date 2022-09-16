@@ -43,6 +43,10 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use Illuminate\Support\Facades\File;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -1058,6 +1062,54 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return new UserPasswordEmail(auth()->user(), "test");
     });
     // end email testing
+
+    // Begin Download Files
+    Route::get('/download/{id}', function ($id) {
+        if (File::exists(public_path("excel/$id"))) {
+            return response()->download(public_path("excel/$id"));
+        }
+        return abort(403, "File Not Found");
+    });
+    Route::get('/download-pareto', function () {
+        $paretoProyeks = Proyek::with(['UnitKerja'])->join("unit_kerjas", "unit_kerjas.divcode", "=", "proyeks.unit_kerja")->select(["proyeks.nama_proyek", "proyeks.stage", "proyeks.forecast", "unit_kerjas.unit_kerja"]);
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if (Auth::user()->check_administrator) {
+            $paretoProyeks = $paretoProyeks->get()->sortByDesc("forecast", SORT_NUMERIC)->slice(0, 25);
+        } else if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+            $paretoProyeks = $paretoProyeks->get()->sortByDesc("forecast", SORT_NUMERIC)->slice(0, 25)->whereIn("unit_kerja", $unit_kerja_user->toArray());
+        } else {
+            $paretoProyeks = $paretoProyeks->get()->sortByDesc("forecast", SORT_NUMERIC)->slice(0, 25)->whereIn("unit_kerja", $unit_kerja_user);
+        }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+
+        // Header
+        $sheet->getStyle("A1:D1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', "Stage");
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        $sheet->setCellValue('D1', "Nilai Forecast");
+
+        // Content Excel
+        $counter = 2;
+        $paretoProyeks->each(function ($proyek) use ($sheet, &$counter) {
+            $sheet->setCellValue("A" . $counter, $proyek->nama_proyek);
+            $sheet->setCellValue("B" . $counter, $proyek->unit_kerja);
+            $sheet->setCellValue("C" . $counter, DashboardController::getProyekStage($proyek->stage));
+            $sheet->setCellValue("D" . $counter, $proyek->forecast);
+            $counter++;
+        });
+
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "pareto-proyek-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+        return response()->download(public_path("excel/$file_name"));
+    });
+    // End Download Files
 
     function writeDOCXFile($content)
     {
