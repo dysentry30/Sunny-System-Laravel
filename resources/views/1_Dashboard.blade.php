@@ -252,8 +252,9 @@
                                             </div>
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                    onclick="hideTable('#datatable','#forecast-line')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    onclick="hideTable('#datatable','#forecast-line')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
                                                     Chart</button>
+                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
                                                 <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                                     onclick="toggleFullscreen()" id="exit-fullscreen"><i
                                                         class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
@@ -403,6 +404,9 @@
 
                                         <!--begin::Table pareto proyek  -->
                                         <div class="tab-content" id="myTabContent">
+                                            <div class="d-flex align-items-center justify-content-end">
+                                                <a href="/download-pareto" target="_blank" class="btn btn-sm btn-light btn-active-primary fs-6 mb-5"><i class="bi bi-download"></i> Export Excel</a>
+                                            </div>
                                             <!--begin::Table-->
                                             <table class="table align-middle table-row-dashed fs-6 gy-2">
                                                 <!--begin::Table head-->
@@ -1871,9 +1875,9 @@
         // END :: point trigger nilai realisasi
 
         async function getDataTable(tableElt, chartElt, url, type, prognosa, month = new Date("now")) {
-            let filterRes = await fetch(url).then(res =>res.json());
+            let {href, data: filterRes} = await fetch(url).then(res =>res.json());
             const table = document.querySelector(tableElt);
-            // console.log(tableElt);
+            const exportExcelBtn = table.querySelector("#export-excel-btn");
             const thead = table.querySelector("#table-line-head");
             const tbody = table.querySelector("#table-line-body");
             const titleTable = table.querySelector("#title-table");
@@ -2603,6 +2607,7 @@
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
             }
+            exportExcelBtn.setAttribute("href", `/download/${href}`);
         }
         
         function hideTable(tableElt, chartElt) {
