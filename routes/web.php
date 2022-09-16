@@ -323,13 +323,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
-            $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i]) ?? 0);
+            $forecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
             $forecast->month_forecast = (int) $i;
 
-            $forecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i]) ?? 0);
+            $forecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i] ?? 0));
             $forecast->month_rkap = (int) $i;
 
-            $forecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i]) ?? 0);
+            $forecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
             $forecast->month_realisasi = (int) $i;
 
             $prognosa = (int) date('m');
@@ -345,13 +345,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             $findForecast->kode_proyek = $data["kode-proyek"];
 
-            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i]) ?? 0);
+            $findForecast->nilai_forecast = (string) (str_replace(".", "", $data["nilaiforecast-" . $i] ?? 0));
             $findForecast->month_forecast = (int) $i;
 
-            $findForecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i]) ?? 0);
+            $findForecast->rkap_forecast = (string) (str_replace(".", "", $data["nilaiok-" . $i] ?? 0));
             $findForecast->month_rkap = (int) $i;
 
-            $findForecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i]) ?? 0);
+            $findForecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
             $findForecast->month_realisasi = (int) $i;
 
             $prognosa = (int) date('m');
