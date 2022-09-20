@@ -63,7 +63,7 @@ class ProyekController extends Controller
             if($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $unitkerjas = UnitKerja::all()->whereIn("divcode", $unit_kerja_user->toArray());
             } else{
-                $unitkerjas = UnitKerja::where("divcode", "=", Auth::user())->get();
+                $unitkerjas = UnitKerja::where("divcode", "=", Auth::user()->unit_kerja)->get();
             }
             
             if($unit_kerja_user instanceof \Illuminate\Support\Collection) {
