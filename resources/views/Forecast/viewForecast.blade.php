@@ -190,8 +190,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         <div class="col">
                                                             <!--Begin:: Select Options-->
                                                             <select id="column" name="column" class="form-select form-select-solid" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Pilih filter" data-select2-id="select2-filter-forecast" tabindex="-1" aria-hidden="true">
-                                                                <option value="" {{$column == "" ? "selected": ""}}></option>
                                                                 <option value="nama_proyek" {{$column == "nama_proyek" ? "selected": ""}}>Nama Proyek</option>
+                                                                <option value=""></option>
                                                             </select>
                                                             <!--End:: Select Options-->
                                                         </div>
@@ -850,7 +850,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     <!--end::Total Coloumn-->
                                                                                 </tr>
                                                                                 {{-- begin:: Foreach Proyek --}}
-                                                                                
+                                                                                @php
+                                                                                if (isset($forecast)) {
+                                                                                    $unitKerja->Proyeks = $unitKerja->Proyeks->where("jenis_proyek", "!=", "I");
+                                                                                }
+                                                                                @endphp
                                                                                 @if ($column != "")
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         @php
@@ -870,7 +874,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
                                                                                                 <!--begin::Child=-->
                                                                                                 <p class="ms-12">
-                                                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                                                         class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
                                                                                                 </p>
                                                                                                 <!--end::Child=-->
@@ -880,65 +884,70 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @for ($i = 0; $i < 12; $i++)
                                                                                                 @if ($proyek->tipe_proyek == "R" && $forecasts->count() > 0)
                                                                                                     @foreach ($forecasts as $forecast)
-                                                                                                        @if ($month_counter == (int) $forecast->month_rkap)
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
-                                                                                                            </td>
-                                                                                                        @else
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                
-                                                                                                            </td>
-                                                                                                        @endif
                                                                                                         @if ($forecast->month_forecast == $month_counter)
+                                                                                                            <!--begin::Nilai OK-->
+                                                                                                            @if ($month_counter == (int) $forecast->month_rkap)
+                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                    {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
+                                                                                                                </td>
+                                                                                                                @else
+                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                </td>
+                                                                                                            @endif
+                                                                                                            <!--end::Nilai OK-->
+                                                                                                            <!--begin::Nilai Forecast-->
                                                                                                             @php
                                                                                                                 $total_forecast += (int) $forecast->nilai_forecast;
                                                                                                                 $total_year_forecast += $total_forecast;
                                                                                                                 
                                                                                                             @endphp
-                                                                                                            <td>
-                                                                                                                <input type="text"
-                                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                    data-month="{{ $month_counter }}"
-                                                                                                                    data-column-forecast="{{ $month_counter }}"
-                                                                                                                    class="form-control border-bottom-1"
-                                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                    id="nilai-forecast"
-                                                                                                                    name="nilai-forecast"
-                                                                                                                    onkeyup="reformatNumber(this)"
-                                                                                                                    value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
-                                                                                                                    placeholder="" />
-                                                                                                            </td>
-                                                                                                        @else 
-                                                                                                            <td>
-                                                                                                                <input type="text"
-                                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                    data-month="{{ $month_counter }}"
-                                                                                                                    data-column-forecast="{{ $month_counter }}"
-                                                                                                                    class="form-control border-bottom-1"
-                                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                    id="nilai-forecast"
-                                                                                                                    name="nilai-forecast"
-                                                                                                                    onkeyup="reformatNumber(this)"
-                                                                                                                    value=""
-                                                                                                                    placeholder="" />
-                                                                                                            </td>
-                                                                                                        @endif
-
-                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi))
-                                                                                                            @php
-                                                                                                                // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast ?? '-';
-                                                                                                            @endphp
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
-                                                                                                            </td>
-                                                                                                        @else
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            {{-- @if ($forecast->count() > 0) --}}
+                                                                                                                <td>
+                                                                                                                    <input type="text"
+                                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                                        data-month="{{ $month_counter }}"
+                                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                                        class="form-control border-bottom-1"
+                                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                        id="nilai-forecast"
+                                                                                                                        name="nilai-forecast"
+                                                                                                                        onkeyup="reformatNumber(this)"
+                                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
+                                                                                                                        placeholder="" />
                                                                                                                 </td>
+                                                                                                            {{-- @else
+                                                                                                                <td>
+                                                                                                                    <input type="text"
+                                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                                        data-month="{{ $month_counter }}"
+                                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                                        class="form-control border-bottom-1"
+                                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                        id="nilai-forecast"
+                                                                                                                        name="nilai-forecast"
+                                                                                                                        onkeyup="reformatNumber(this)"
+                                                                                                                        value="0"
+                                                                                                                        placeholder="" />
+                                                                                                                </td>
+                                                                                                            @endif --}}
+                                                                                                            <!--begin::Nilai Forecast-->
+                                                                                                            
+                                                                                                            <!--begin::Nilai Realisasi-->
+                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi))
+                                                                                                                @php
+                                                                                                                    // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                                    $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast ?? '-';
+                                                                                                                @endphp
+                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
+                                                                                                                </td>
+                                                                                                            @else
+                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                </td>
+                                                                                                            @endif
+                                                                                                            <!--begin::Nilai Realisasi-->
                                                                                                         @endif
                                                                                                     @endforeach
                                                                                                 @else
@@ -1117,7 +1126,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
                                                                                                 <!--begin::Child=-->
                                                                                                 <p class="ms-12">
-                                                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}"
                                                                                                         class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
                                                                                                 </p>
                                                                                                 <!--end::Child=-->
