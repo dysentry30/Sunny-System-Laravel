@@ -304,7 +304,8 @@
                                                             <div class="row">
                                                                 <div class="col" id="list-dop">
                                                                     @php
-                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : preg_replace("/[^A-Z]|[^a-z]/i", "", $user->unit_kerja);
+                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : $user->unit_kerja;
+                                                                        // dd($list_unit_kerja);
                                                                     @endphp
                                                                     @foreach ($dops as $dop)
                                                                         <p><b>{{$dop->dop}}</b></p>

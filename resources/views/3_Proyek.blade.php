@@ -647,6 +647,9 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
+                                    @php
+                                        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+                                    @endphp
                                     <select name="unit-kerja" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
                                         <option></option>
