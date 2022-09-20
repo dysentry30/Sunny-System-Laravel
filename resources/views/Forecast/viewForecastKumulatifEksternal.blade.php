@@ -24,7 +24,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
     .content-table {
         position: relative;
-        height: 400px !important;
+        height: 550px !important;
         overflow: scroll;
     }
 
@@ -129,16 +129,16 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                 <!--begin:::Tab item Forecast S/D-->
                                                 <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4 active" href="/forecast-kumulatif-eksternal"
+                                                    <a class="nav-link text-active-primary pb-4 active" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_forecast_bulanan_kumulatif_eksternal"
                                                         style="font-size:14px;">Forecast Kumulatif Eksternal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast S/D-->
 
                                                 <!--begin:::Tab item Forecast S/D-->
-                                                {{-- <li class="nav-item">
-                                                    <a class="nav-link text-active-primary pb-4" href="/forecast-kumulatif-eksternal-internal"
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_forecast_bulanan_kumulatif_interal"
                                                         style="font-size:14px;">Forecast Kumulatif Include Internal</a>
-                                                </li> --}}
+                                                </li>
                                                 <!--end:::Tab item Forecast S/D-->
                                             </ul>
                                         </div>
@@ -153,13 +153,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         onclick="lockMonthForecastBulanan(this)"
                                                         class="btn btn-sm btn-active-primary mt-4">
 
-                                                        {{-- @if (count($historyForecast) > 0 ) --}}
+                                                        @if (count($historyForecast) > 0 )
                                                             <span class="text-white mx-2 fs-6">Unlock Forecast</span>
                                                             <i class="bi bi-lock-fill text-white"></i>
-                                                        {{-- @else --}}
+                                                        @else
                                                             <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                             <i class="bi bi-unlock-fill text-white"></i>
-                                                        {{-- @endif --}}
+                                                        @endif
                                                     </button>
                                                 @endif
                                                 
@@ -250,12 +250,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                             <!--begin::Card body-->
                                             <div class="card-body mt-4" style="background-color: white;">
-                                                {{-- @if ($proyeks->count() > 0) --}}
                                                         
                                                     <div class="tab-content" id="myTabContent">
 
-                                                        {{-- begin::Tab Forecast Bulanan --}}
-                                                        <div class="tab-pane fade show active" style="border-width: 0px !important" id="kt_user_view_overview_forecast_bulanan" role="tabpanel">
+                                                        <!-- begin::Tab Forecast Kumulatif Eksternal -->
+                                                        <div class="tab-pane fade show active" style="border-width: 0px !important" id="kt_user_view_forecast_bulanan_kumulatif_eksternal" role="tabpanel">
 
                                                             <div class="content-table">
                                                                 <!--begin::Table Forecast-->
@@ -367,622 +366,1087 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         
                                                                         <div class="accordion">
                                                                             <div class="accordion-item">
-                                                                                @foreach ($dops as $dop)
+                                                                                {{-- @foreach ($dops as $dop) --}}
+                                                                                @php
+                                                                                    $footOK1 = [];
+                                                                                    $footOK2 = [];
+                                                                                    $footOK3 = [];
+                                                                                    $footOK4 = [];
+                                                                                    $footOK5 = [];
+                                                                                    $footOK6 = [];
+                                                                                    $footOK7 = [];
+                                                                                    $footOK8 = [];
+                                                                                    $footOK9 = [];
+                                                                                    $footOK10 = [];
+                                                                                    $footOK11 = [];
+                                                                                    $footOK12 = [];
+                                                                                    $footFC1 = [];
+                                                                                    $footFC2 = [];
+                                                                                    $footFC3 = [];
+                                                                                    $footFC4 = [];
+                                                                                    $footFC5 = [];
+                                                                                    $footFC6 = [];
+                                                                                    $footFC7 = [];
+                                                                                    $footFC8 = [];
+                                                                                    $footFC9 = [];
+                                                                                    $footFC10 = [];
+                                                                                    $footFC11 = [];
+                                                                                    $footFC12 = [];
+                                                                                    $footReal1 = [];
+                                                                                    $footReal2 = [];
+                                                                                    $footReal3 = [];
+                                                                                    $footReal4 = [];
+                                                                                    $footReal5 = [];
+                                                                                    $footReal6 = [];
+                                                                                    $footReal7 = [];
+                                                                                    $footReal8 = [];
+                                                                                    $footReal9 = [];
+                                                                                    $footReal10 = [];
+                                                                                    $footReal11 = [];
+                                                                                    $footReal12 = [];
+                                                                                    $totalOkAll = [];
+                                                                                    $totalFcAll = [];
+                                                                                    $totalRealAll = [];
+                                                                                    $per = 1000000;
+                                                                                @endphp
+                                                                                @foreach ($forecastKumulatifEksternal as $key => $nilaiDOP)
+                                                                                @php
+                                                                                $keyButtonDOP = str_replace(" ", "", $key);
+                                                                                @endphp
+                                                                                {{-- @dump($keyButtonDOP) --}}
                                                                                     <tr style="text-align: right; ">
-                                                                                        <td
-                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
+                                                                                        <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
                                                                                             <small class="accordion-header">
-                                                                                                <button class="accordion-button btn-sm collapsed button-dop" type="button" data-bs-toggle="collapse" data-bs-target="#" aria-expanded="true" aria-controls="">
-                                                                                                    {{$dop->dop}}
+                                                                                                <button class="accordion-button btn-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $keyButtonDOP }}" aria-expanded="true" aria-controls="">
+                                                                                                    {{$key}}
                                                                                                 </button>
                                                                                             </small>
                                                                                         </td>
-                                                                                        {{-- @foreach ($forecastByUnitKerja as $item) --}}
-                                                                                            {{-- @foreach ($item as $forecastByProyek) --}}
                                                                                             {{-- @dd($forecastByProyek->kode_proyek) --}}
-                                                                                            
+                                                                                            {{-- @dd($forecastByUnitKerja) --}}
+                                                                                            @php 
+                                                                                                $ok1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 1) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 1) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 1) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                
+                                                                                                $ok2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 2) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 2) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 2) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
 
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        @foreach ($forecastByUnitKerja as $key => $item)
-                                                                                                            {{-- @dump($dop, $key) --}}
-                                                                                                            @if ($dop->dop == $key)
-                                                                                                                {{-- @dump($item) --}}
-                                                                                                                @php
-                                                                                                                    $ok1 = $item->sum(function($unitKerja){
-                                                                                                                        return $unitKerja->sum(function($forecast){
-                                                                                                                            if ($forecast->month_rkap <= 1) {
-                                                                                                                                return $forecast->rkap_forecast;
-                                                                                                                            }
-                                                                                                                        });
-                                                                                                                    });
-                                                                                                                @endphp
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                        <td>{{ $ok1 }}</td>
-                                                                                                        <td></td>
-                                                                                                        <td></td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        {{-- <td>{{ $ok2 }}</td>
-                                                                                                        <td>{{ $ok2 }}</td>
-                                                                                                        <td>{{ $ok2 }}</td> --}}
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        {{-- <td>{{ $ok3 }}</td>
-                                                                                                        <td>{{ $ok3 }}</td>
-                                                                                                        <td>{{ $ok3 }}</td> --}}
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    {{-- <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok4 }}</td>
-                                                                                                        <td>{{ $ok4 }}</td>
-                                                                                                        <td>{{ $ok4 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok5 }}</td>
-                                                                                                        <td>{{ $ok5 }}</td>
-                                                                                                        <td>{{ $ok5 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok6 }}</td>
-                                                                                                        <td>{{ $ok6 }}</td>
-                                                                                                        <td>{{ $ok6 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok7 }}</td>
-                                                                                                        <td>{{ $ok7 }}</td>
-                                                                                                        <td>{{ $ok7 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok8 }}</td>
-                                                                                                        <td>{{ $ok8 }}</td>
-                                                                                                        <td>{{ $ok8 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok9 }}</td>
-                                                                                                        <td>{{ $ok9 }}</td>
-                                                                                                        <td>{{ $ok9 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok10 }}</td>
-                                                                                                        <td>{{ $ok10 }}</td>
-                                                                                                        <td>{{ $ok10 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok11 }}</td>
-                                                                                                        <td>{{ $ok11 }}</td>
-                                                                                                        <td>{{ $ok11 }}</td>
-                                                                                                    <!--end::Bulan Coloumn-->
-                                                                                                    <!--begin::Bulan Coloumn-->
-                                                                                                        <td>{{ $ok12 }}</td>
-                                                                                                        <td>{{ $ok12 }}</td>
-                                                                                                        <td>{{ $ok12 }}</td> --}}
-                                                                                                    <!--end::Bulan Coloumn-->
+                                                                                                $ok3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 3) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 3) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 3) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
 
-                                                                                            {{-- @endforeach --}}
-                                                                                        {{-- @endforeach --}}
+                                                                                                $ok4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 4) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 4) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 4) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 5) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 5) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 5) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 6) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 6) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 6) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 7) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 7) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 7) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 8) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 8) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 8) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 9) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 9) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 9) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 10) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 10) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 10) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 11) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 11) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 11) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 12) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 12) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 12) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                            @endphp
+                                                                                            <!--begin::Nilai DOP Bulan Januari-->
+                                                                                            <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Januari-->
+                                                                                            <!--begin::Nilai DOP Bulan Februari-->
+                                                                                            <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Februari-->
+                                                                                            <!--begin::Nilai DOP Bulan Maret-->
+                                                                                            <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Maret-->
+                                                                                            <!--begin::Nilai DOP Bulan April-->
+                                                                                            <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan April-->
+                                                                                            <!--begin::Nilai DOP Bulan Mei-->
+                                                                                            <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Mei-->
+                                                                                            <!--begin::Nilai DOP Bulan Juni-->
+                                                                                            <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Juni-->
+                                                                                            <!--begin::Nilai DOP Bulan Juli-->
+                                                                                            <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Juli-->
+                                                                                            <!--begin::Nilai DOP Bulan Agustus-->
+                                                                                            <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Agustus-->
+                                                                                            <!--begin::Nilai DOP Bulan September-->
+                                                                                            <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan September-->
+                                                                                            <!--begin::Nilai DOP Bulan Oktober-->
+                                                                                            <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Oktober-->
+                                                                                            <!--begin::Nilai DOP Bulan November-->
+                                                                                            <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan November-->
+                                                                                            <!--begin::Nilai DOP Bulan Desember-->
+                                                                                            <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Desember-->
 
                                                                                         <!--begin::Total Coloumn-->
-                                                                                        <td class="pinForecast HidePin text-center fw-bolder">TOTAL 1</td>
-                                                                                        <td class="pinForecast HidePin text-center fw-bolder">TOTAL 2</td>
-                                                                                        <td class="pinForecast HidePin text-center fw-bolder">TOTAL 3</td>
+                                                                                        @php
+                                                                                            $totalOkDOP = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                            $totalFcDOP = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                            $totalRealDOP = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
+
+                                                                                            if (count($nilaiDOP) > 0) {
+                                                                                                array_push($footOK1, $ok1);
+                                                                                                array_push($footOK2, $ok2);
+                                                                                                array_push($footOK3, $ok3);
+                                                                                                array_push($footOK4, $ok4);
+                                                                                                array_push($footOK5, $ok5);
+                                                                                                array_push($footOK6, $ok6);
+                                                                                                array_push($footOK7, $ok7);
+                                                                                                array_push($footOK8, $ok8);
+                                                                                                array_push($footOK9, $ok9);
+                                                                                                array_push($footOK10, $ok10);
+                                                                                                array_push($footOK11, $ok11);
+                                                                                                array_push($footOK12, $ok12);
+
+                                                                                                array_push($footFC1, $fc1);
+                                                                                                array_push($footFC2, $fc2);
+                                                                                                array_push($footFC3, $fc3);
+                                                                                                array_push($footFC4, $fc4);
+                                                                                                array_push($footFC5, $fc5);
+                                                                                                array_push($footFC6, $fc6);
+                                                                                                array_push($footFC7, $fc7);
+                                                                                                array_push($footFC8, $fc8);
+                                                                                                array_push($footFC9, $fc9);
+                                                                                                array_push($footFC10, $fc10);
+                                                                                                array_push($footFC11, $fc11);
+                                                                                                array_push($footFC12, $fc12);
+
+                                                                                                array_push($footReal1, $real1);
+                                                                                                array_push($footReal2, $real2);
+                                                                                                array_push($footReal3, $real3);
+                                                                                                array_push($footReal4, $real4);
+                                                                                                array_push($footReal5, $real5);
+                                                                                                array_push($footReal6, $real6);
+                                                                                                array_push($footReal7, $real7);
+                                                                                                array_push($footReal8, $real8);
+                                                                                                array_push($footReal9, $real9);
+                                                                                                array_push($footReal10, $real10);
+                                                                                                array_push($footReal11, $real11);
+                                                                                                array_push($footReal12, $real12);
+
+                                                                                                array_push($totalOkAll, $totalOkDOP);
+                                                                                                array_push($totalFcAll, $totalFcDOP);
+                                                                                                array_push($totalRealAll, $totalRealDOP);
+                                                                                            }
+                                                                                        @endphp
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalOkDOP, 0 , '.', '.') }}</td>
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalFcDOP, 0 , '.', '.') }}</td>
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalRealDOP, 0 , '.', '.') }}</td>
                                                                                         <td class="pinForecast ShowPin text-center fw-bolder"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                                TOTAL 4
-                                                                                            </td>
+                                                                                            {{ number_format($totalOkDOP, 0, '.', '.') }}
+                                                                                        </td>
                                                                                         <td class="pinForecast ShowPin text-center fw-bolder"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                                TOTAL 5
-                                                                                            </td>
+                                                                                            {{ number_format($totalFcDOP, 0, '.', '.') }}
+                                                                                        </td>
                                                                                         <td class="pinForecast ShowPin text-center fw-bolder"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                                TOTAL 6
-                                                                                            </td>
+                                                                                            {{ number_format($totalRealDOP, 0, '.', '.') }}
+                                                                                        </td>
                                                                                         <!--end::Total Coloumn-->
                                                                                     </tr>
+
                                                                                     <!--begin:: Foreach Unit Kerja-->
-                                                                                    {{-- @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                                    {{-- <div class="accordion-item"> --}}
+                                                                                        @foreach ($nilaiDOP as $keyUnit => $nilaiUnitKerja)
+                                                                                        {{-- @dump( (string) $keyUnit) --}}
                                                                                         @php
-                                                                                            $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);                                                                                
+                                                                                            $ok1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 1) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 1) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 1) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 2) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 2) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 2) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 3) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 3) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 3) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 4) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 4) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 4) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 5) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 5) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 5) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 6) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 6) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 6) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 7) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 7) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 7) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 8) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 8) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 8) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 9) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 9) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 9) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 10) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 10) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 10) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 11) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 11) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 11) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 12) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 12) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 12) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
                                                                                         @endphp
-                                                                                        @if (count($unitKerja->proyeks) > 0)
-                                                                                            <tr class="collapse"
-                                                                                                id="{{ $dop_name }}"
-                                                                                                style="text-align: right;">
-                                                                                                <td
-                                                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 1rem !important; text-align: left">
+                                                                                        
+                                                                                            <tr class="collapse" id="{{ $keyButtonDOP }}" style="text-align: right;">
+                                                                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0.5rem !important; text-align: left">
                                                                                                     <!--begin::Child-->
                                                                                                     <small class="accordion-header">
-                                                                                                        <button class="accordion-button collapsed btn-sm button-unit-kerja" type="button" data-bs-toggle="collapse" data-bs-target="#{{$unit_kerja_name}}" aria-expanded="true" aria-controls="{{$unit_kerja_name}}">
-                                                                                                            {{$unitKerja->unit_kerja}}
+                                                                                                        <button class="accordion-button collapsed btn-sm button-unit-kerja" type="button" data-bs-toggle="collapse" data-bs-target="#unit-{{ (string) $keyUnit }}" aria-expanded="true" aria-controls="">
+                                                                                                            @foreach ($unitKerjas as $unitKerja)
+                                                                                                                @if ($unitKerja->divcode == $keyUnit)
+                                                                                                                    {{ $unitKerja->unit_kerja }}
+                                                                                                                @endif 
+                                                                                                            @endforeach
                                                                                                         </button>
                                                                                                     </small>
                                                                                                     <!--end::Child-->
                                                                                                 </td>
-                                                                                                @for ($i = 1; $i <= 12; $i++)
-                                                                                                    @php
-                                                                                                        // $unitKerja->Proyeks->each(function($p) use($total_ok_per_divisi, $per_sejuta, $i) {
-                                                                                                        //     if((int) $p->bulan_awal == $i || (int) $p->bulan_pelaksanaan == $i ) $total_ok_per_divisi += (int) $p->nilai_rkap / $per_sejuta;
-                                                                                                        // });
-                                                                                                        $total_ok_per_divisi = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
-                                                                                                                if($i == $f->month_rkap && $f->periode_prognosa == (int) date("m")) {
-                                                                                                                    return $f->nilai_rkap;
-                                                                                                                }
-                                                                                                            });
-                                                                                                        });
-                                                                                                        $total_forecast_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
-                                                                                                                if($i == $f->month_forecast && $f->periode_prognosa == (int) date("m")) {
-                                                                                                                    return $f->nilai_forecast;
-                                                                                                                }
-                                                                                                            });
-                                                                                                        });
-                                                                                                        $total_realisasi_per_divisi = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
-                                                                                                                if($i == $f->month_realisasi && $f->periode_prognosa == (int) date("m")) {
-                                                                                                                    return $f->realisasi_forecast;
-                                                                                                                }
-                                                                                                            });
-                                                                                                        });
-                                                                                                    @endphp 
-                                                                                                    <!--begin::Month Coloumn-->
-                                                                                                    <td data-total-ok-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">{{number_format($total_ok_per_divisi / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                    <td data-total-forecast-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                    <td data-total-realisasi-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}">{{number_format($total_realisasi_per_divisi / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                    <!--end::Month Coloumn-->
-                                                                                                    @php
-                                                                                                        $total_ok_per_divisi = 0;
-                                                                                                    @endphp
-                                                                                                @endfor
-                                                                                                @php
-                                                                                                        // $unitKerja->Proyeks->each(function($p) use($total_ok_per_divisi, $per_sejuta, $i) {
-                                                                                                        //     if((int) $p->bulan_awal == $i || (int) $p->bulan_pelaksanaan == $i ) $total_ok_per_divisi += (int) $p->nilai_rkap / $per_sejuta;
-                                                                                                        // });
-                                                                                                        $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return (int) str_replace(".", "", (int) $p->nilai_rkap) / $per_sejuta;
-                                                                                                        });
-                                                                                                        $total_forecast_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return $p->Forecasts->sum(function($f) {
-                                                                                                                return $f->nilai_forecast;
-                                                                                                            });
-                                                                                                        });
-                                                                                                        $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i) {
-                                                                                                            return (int) str_replace(".", "", (int) $p->nilai_perolehan) / $per_sejuta;
-                                                                                                        });
-                                                                                                @endphp 
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                    <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 2-->
+                                                                                                    <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 2-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 3-->
+                                                                                                    <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 3-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 4-->
+                                                                                                    <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 4-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 5-->
+                                                                                                    <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 5-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 6-->
+                                                                                                    <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 6-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 7-->
+                                                                                                    <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 7-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 8-->
+                                                                                                    <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 8-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 9-->
+                                                                                                    <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 9-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 10-->
+                                                                                                    <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 10-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 11-->
+                                                                                                    <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 11-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 12-->
+                                                                                                    <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 12-->
                                                                                                 <!--begin::Total Coloumn-->
-                                                                                                <td class="pinForecast HidePin">{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                <td class="pinForecast HidePin">{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                <td class="pinForecast HidePin">{{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                                <td class="pinForecast ShowPin"
+                                                                                                @php
+                                                                                                    $totalOkUnit = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                                    $totalFcUnit = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                                    $totalRealUnit = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
+                                                                                                @endphp
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalOkUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalFcUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalRealUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
                                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                                    {{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}
+                                                                                                    {{ number_format($totalOkUnit, 0 , '.', '.') }}
                                                                                                 </td>
-                                                                                                <td class="pinForecast ShowPin"
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
                                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                                    {{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}
+                                                                                                    {{ number_format($totalFcUnit, 0 , '.', '.') }}
                                                                                                 </td>
-                                                                                                <td class="pinForecast ShowPin"
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
                                                                                                     style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                                    {{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}
+                                                                                                    {{ number_format($totalRealUnit, 0 , '.', '.') }}
                                                                                                 </td>
                                                                                                 <!--end::Total Coloumn-->
                                                                                             </tr>
-                                                                                            <!--begin:: Foreach Proyek-->
+
+                                                                                            @foreach ($nilaiUnitKerja as $keyProyek => $nilaiProyek)
+                                                                                            {{-- @dump($nilaiProyek) --}}
                                                                                             @php
-                                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks->where("jenis_proyek", "N");
+                                                                                                $ok1 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 1) {
+                                                                                                    $ok1 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc1 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 1) {
+                                                                                                    $fc1 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real1 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 1) {
+                                                                                                    $real1 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok2 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 2) {
+                                                                                                    $ok2 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc2 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 2) {
+                                                                                                    $fc2 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real2 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 2) {
+                                                                                                    $real2 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok3 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 3) {
+                                                                                                    $ok3 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc3 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 3) {
+                                                                                                    $fc3 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real3 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 3) {
+                                                                                                    $real3 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok4 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 4) {
+                                                                                                    $ok4 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc4 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 4) {
+                                                                                                    $fc4 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real4 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 4) {
+                                                                                                    $real4 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok5 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 5) {
+                                                                                                    $ok5 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc5 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 5) {
+                                                                                                    $fc5 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real5 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 5) {
+                                                                                                    $real5 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok6 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 6) {
+                                                                                                    $ok6 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc6 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 6) {
+                                                                                                    $fc6 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real6 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 6) {
+                                                                                                    $real6 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok7 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 7) {
+                                                                                                    $ok7 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc7 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 7) {
+                                                                                                    $fc7 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real7 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 7) {
+                                                                                                    $real7 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok8 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 8) {
+                                                                                                    $ok8 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc8 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 8) {
+                                                                                                    $fc8 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real8 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 8) {
+                                                                                                    $real8 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok9 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 9) {
+                                                                                                    $ok9 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc9 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 9) {
+                                                                                                    $fc9 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real9 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 9) {
+                                                                                                    $real9 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok10 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 10) {
+                                                                                                    $ok10 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc10 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 10) {
+                                                                                                    $fc10 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real10 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 10) {
+                                                                                                    $real10 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok11 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 11) {
+                                                                                                    $ok11 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc11 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 11) {
+                                                                                                    $fc11 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real11 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 11) {
+                                                                                                    $real11 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok12 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 12) {
+                                                                                                    $ok12 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc12 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 12) {
+                                                                                                    $fc12 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real12 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 12) {
+                                                                                                    $real12 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
                                                                                             @endphp
-                                                                                            @if ($column != "")
-                                                                                                @foreach ($unitKerja->Proyeks as $proyek)
-                                                                                                    <tr id="{{ $unit_kerja_name }}"
-                                                                                                        class="accordion-collapse collapse"
-                                                                                                        aria-labelledby="{{ $unit_kerja_name }}"
-                                                                                                        data-bs-parent="#{{ $unit_kerja_name }}"
-                                                                                                        style="text-align: right;">
-                                                                                                        <td
-                                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 4.5rem; text-align: left">
-                                                                                                            <!--begin::Child-->
-                                                                                                            <p class="ms-12">
-                                                                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                                                                    class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
-                                                                                                            </p>
-                                                                                                            <!--end::Child-->
-                                                                                                        </td>
-
-                                                                                                        @for ($i = 1; $i <= 12; $i++)
-                                                                                                            @php
-                                                                                                                $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                                            @endphp
-                                                                                                            @foreach ($proyek->Forecasts as $forecast)
-                                                                                                                @if ($forecast->month_forecast == $month_counter)
-                                                                                                                    @php
-                                                                                                                        $total_forecast += (int) $forecast->nilai_forecast;
-                                                                                                                        $total_year_forecast += $total_forecast;
-                                                                                                                        
-                                                                                                                    @endphp
-                                                                                                                    @if ($month_counter == (int) $forecast->rkap_month)
-                                                                                                                        @php
-                                                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap) / $per_sejuta;                
-                                                                                                                        @endphp
-                                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                            {{ $proyek->nilai_rkap }}
-                                                                                                                        </td>
-                                                                                                                    @else
-                                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                            
-                                                                                                                        </td>
-                                                                                                                    @endif
-                                                                                                                    <td>
-                                                                                                                        <input type="text"
-                                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                            data-month="{{ $month_counter }}"
-                                                                                                                            data-column-forecast="{{ $month_counter }}"
-                                                                                                                            class="form-control border-bottom-1"
-                                                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                            id="nilai-forecast"
-                                                                                                                            name="nilai-forecast"
-                                                                                                                            onkeyup="reformatNumber(this)"
-                                                                                                                            value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
-                                                                                                                            placeholder="" />
-                                                                                                                    </td>
-                                                                                                                    @if ($month_counter == (int) $forecast->month_realisasi && $month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                                        @php
-                                                                                                                            // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                            $nilai_terkontrak_formatted = (int) str_replace('.', '', (int)$forecast->realisasi_forecast) ?? '-';
-                                                                                                                        @endphp
-                                                                                                                        <td
-                                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                            {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
-                                                                                                                        </td>
-                                                                                                                    @else
-                                                                                                                        <td
-                                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                            </td>
-                                                                                                                    @endif
-                                                                                                                    @php
-                                                                                                                        $is_data_found = true;
-                                                                                                                    @endphp
-                                                                                                                @break
-                                                                                                            @endif
-                                                                                                        @endforeach
-                                                                                                        @if (!$is_data_found)
-                                                                                                            @if (($month_counter == (int) $proyek->bulan_pelaksanaan && ($proyek->bulan_pelaksanaan != null || $proyek->bulan_pelaksanaan != 0)) || ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null))
-                                                                                                                @php
-                                                                                                                    $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap) / $per_sejuta;                
-                                                                                                                @endphp
-                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                    {{ $proyek->nilai_rkap }}
-                                                                                                                </td>
-                                                                                                            @else
-                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                    
-                                                                                                                </td>
-                                                                                                            @endif
-                                                                                                            <td>
-                                                                                                                <input type="text"
-                                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                    data-month="{{ $month_counter }}"
-                                                                                                                    data-column-forecast="{{ $month_counter }}"
-                                                                                                                    class="form-control border-bottom-1"
-                                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                    id="nilai-forecast"
-                                                                                                                    name="nilai-forecast"
-                                                                                                                    onkeyup="reformatNumber(this)"
-                                                                                                                    value=""
-                                                                                                                    placeholder="" />
-                                                                                                            </td>
-                                                                                                            @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                                @php
-                                                                                                                    $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
-                                                                                                                @endphp
-                                                                                                                <td
-                                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                    {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
-                                                                                                                </td>
-                                                                                                            @else
-                                                                                                                <td
-                                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                    </td>
-                                                                                                            @endif
-                                                                                                        @endif
-                                                                                                        @php
-                                                                                                            $is_data_found = false;
-                                                                                                            $month_counter++;
-                                                                                                        @endphp
-                                                                                                    @endfor
-                                                                                                    <!--begin::Total Side Coloumn-->
+                                                                                            
+                                                                                                <tr class="collapse" id="unit-{!! (string) $keyUnit !!}" style="text-align: right;">
+                                                                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 1rem !important; text-align: left">
+                                                                                                        <small class="accordion-header">
+                                                                                                            <a target="_blank" href="/proyek/view/{{ $nilaiProyek->kode_proyek }}" class="text-hover-primary text-gray-600">{{ $nilaiProyek->nama_proyek }}</a>
+                                                                                                        </small>
+                                                                                                    </td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                        <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 2-->
+                                                                                                        <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 2-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 3-->
+                                                                                                        <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 3-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 4-->
+                                                                                                        <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 4-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 5-->
+                                                                                                        <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 5-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 6-->
+                                                                                                        <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 6-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 7-->
+                                                                                                        <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 7-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 8-->
+                                                                                                        <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 8-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 9-->
+                                                                                                        <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 9-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 10-->
+                                                                                                        <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 10-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 11-->
+                                                                                                        <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 11-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 12-->
+                                                                                                        <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 12-->
+                                                                                                    <!--begin::Total Coloumn-->
                                                                                                     @php
-                                                                                                        $total_ok_formatted = number_format($total_ok, 0, ',', '.');
-                                                                                                        $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
-                                                                                                        // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
-                                                                                                        $total_forecast = 0;
-                                                                                                        $total_ok = 0;
-                                                                                                        $month_counter = 1;
+                                                                                                        $totalOkProyek = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                                        $totalFcProyek = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                                        $totalRealProyek = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
                                                                                                     @endphp
-                                                                                                    <td class="pinForecast HidePin">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                                        </center>
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalOkProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalFcProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalRealProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                                        {{ number_format($totalOkProyek, 0 , '.', '.') }}
                                                                                                     </td>
-                                                                                                    <td class="pinForecast HidePin"
-                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast HidePin"
-                                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        <center>
-                                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast ShowPin"
-                                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                                        style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
                                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                                        </center>
+                                                                                                        {{ number_format($totalFcProyek, 0 , '.', '.') }}
                                                                                                     </td>
-                                                                                                    <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
                                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
-                                                                                                        </center>
+                                                                                                        {{ number_format($totalRealProyek, 0 , '.', '.') }}
                                                                                                     </td>
-                                                                                                    <!--end::Total Side Coloumn-->
-                                                                                                @endforeach
-                                                                                            @else
-                                                                                                @foreach ($unitKerja->Proyeks as $proyek)
-                                                                                                    <tr id="{{ $unit_kerja_name }}"
-                                                                                                        class="accordion-collapse collapse"
-                                                                                                        aria-labelledby="{{ $unit_kerja_name }}"
-                                                                                                        data-bs-parent="#{{ $unit_kerja_name }}"
-                                                                                                        style="text-align: right;">
-                                                                                                        <td
-                                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
-                                                                                                            <!--begin::Child-->
-                                                                                                            <p class="ms-12">
-                                                                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                                                                    class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
-                                                                                                            </p>
-                                                                                                            <!--end::Child-->
-                                                                                                        </td>
+                                                                                                    <!--end::Total Coloumn-->
+                                                                                                </tr>
+                                                                                            @endforeach
 
-                                                                                                        @php
-                                                                                                            $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
-                                                                                                                $f->rkap_forecast /= $per_sejuta;
-                                                                                                                $f->nilai_forecast /= $per_sejuta;
-                                                                                                                $f->realisasi_forecast /= $per_sejuta;
-                                                                                                                return $f;
-                                                                                                            });
-                                                                                                        @endphp
-                                                                                                        @for ($i = 0; $i < 12; $i++)
-                                                                                                            @foreach ($proyek->Forecasts as $forecast)
-                                                                                                                @if ($forecast->month_forecast == $month_counter)
-                                                                                                                    @php
-                                                                                                                        $total_forecast += (int) $forecast->nilai_forecast;
-                                                                                                                        $total_year_forecast += $total_forecast;
-                                                                                                                        
-                                                                                                                    @endphp
-                                                                                                                    @if ($month_counter == (int) $forecast->rkap_month)
-                                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                            {{ $forecast->rkap_forecast / $per }}
-                                                                                                                        </td>
-                                                                                                                    @else
-                                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                            
-                                                                                                                        </td>
-                                                                                                                    @endif
-                                                                                                                    <td>
-                                                                                                                        <input type="text"
-                                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                            data-month="{{ $month_counter }}"
-                                                                                                                            data-column-forecast="{{ $month_counter }}"
-                                                                                                                            class="form-control border-bottom-1"
-                                                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                            id="nilai-forecast"
-                                                                                                                            name="nilai-forecast"
-                                                                                                                            onkeyup="reformatNumber(this)"
-                                                                                                                            value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
-                                                                                                                            placeholder="" />
-                                                                                                                    </td>
-                                                                                                                    @if (($month_counter == (int) $forecast->month_realisasi))
-                                                                                                                        @php
-                                                                                                                            // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                            $nilai_terkontrak_formatted = (int) str_replace('.', '', (int)$forecast->realisasi_forecast) ?? '-';
-                                                                                                                        @endphp
-                                                                                                                        <td
-                                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                            {{ number_format($nilai_terkontrak_formatted / $per_sejuta ?? 0, 0, ',', '.') }}
-                                                                                                                        </td>
-                                                                                                                    @else
-                                                                                                                        <td
-                                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                            </td>
-                                                                                                                    @endif
-                                                                                                                    @php
-                                                                                                                        $is_data_found = true;
-                                                                                                                    @endphp
-                                                                                                                    @break
-                                                                                                                @endif
-                                                                                                            @endforeach
-                                                                                                            @if (!$is_data_found)
-                                                                                                                @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
-                                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                        {{ number_format((float) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
-                                                                                                                    </td>
-                                                                                                                @else
-                                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                        
-                                                                                                                    </td>
-                                                                                                                @endif
-                                                                                                                <td>
-                                                                                                                    <input type="text"
-                                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                        data-month="{{ $month_counter }}"
-                                                                                                                        data-column-forecast="{{ $month_counter }}"
-                                                                                                                        class="form-control border-bottom-1"
-                                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                        id="nilai-forecast"
-                                                                                                                        name="nilai-forecast"
-                                                                                                                        onkeyup="reformatNumber(this)"
-                                                                                                                        value=""
-                                                                                                                        placeholder="" />
-                                                                                                                </td>
-                                                                                                                @if ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null)
-                                                                                                                    @php
-                                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) ?? '-';
-                                                                                                                    @endphp
-                                                                                                                    <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                        {{ number_format($nilai_terkontrak_formatted / $per_sejuta ?? 0, 0, ',', '.') }}
-                                                                                                                    </td>
-                                                                                                                @else
-                                                                                                                    <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                        </td>
-                                                                                                                @endif
-                                                                                                            @endif
-                                                                                                            @php
-                                                                                                                $is_data_found = false;
-                                                                                                                $total_ok = (int) str_replace(',', '', $proyek->nilai_rkap)/ $per_sejuta;
-                                                                                                                $month_counter++;
-                                                                                                            @endphp
-                                                                                                        @endfor
-                                                                                                    <!--begin::Total Side Coloumn-->
-                                                                                                    @php
-                                                                                                        $total_ok_formatted = number_format($total_ok, 0, ',', '.');
-                                                                                                        $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan / $per_sejuta);
-                                                                                                        $total_forecast = 0;
-                                                                                                        $total_ok = 0;
-                                                                                                        $month_counter = 1;
-                                                                                                    @endphp
-                                                                                                    <td class="pinForecast HidePin">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast HidePin"
-                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast HidePin"
-                                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        <center>
-                                                                                                            <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast ShowPin"
-                                                                                                        data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                                        style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_ok_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ $total_forecast_formatted }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                                        data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
-                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                                        <center>
-                                                                                                            <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
-                                                                                                        </center>
-                                                                                                    </td>
-                                                                                                    <!--end::Total Side Coloumn-->
-                                                                                                    @php
-                                                                                                        $nilai_terkontrak_formatted = 0;
-                                                                                                        @endphp
-                                                                                                @endforeach
-                                                                                                @endif
-                                                                                        <!--end:: Foreach Proyek-->
-                                                                                        @endif
-                                                                                        @php
-                                                                                            $total_forecast = 0;
-                                                                                            $total_ok = 0;
-                                                                                            $month_counter = 1;
-                                                                                            $total_year_forecast += $total_forecast;
-                                                                                        @endphp
-                                                                                    @endforeach --}}
+                                                                                        
+                                                                                        @endforeach
+                                                                                    {{-- </div> --}}
                                                                                     <!--end:: Foreach Unit Kerja-->
+
                                                                                 @endforeach 
                                                                             </div>
                                                                         </div>
                                                                         
                                                                         
-                                                                        <tfoot style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
+                                                                        <tfoot id="footer" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
                                                                             <div class="m-4">
                                                                                 <tr>
-                                                                                    <td style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 0px; text-align: left">
+                                                                                    <td style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 1rem; text-align: left">
                                                                                     <!--begin::Child-->
-                                                                                    Total
+                                                                                    <b>Total</b>
                                                                                     <!--end::Child-->
                                                                                     </td>
-                                                                                    {{-- @for ($i = 1; $i = 12; $i++)
-                                                                                        <td>
-                                                                                                <p class="placeholder-wave text-center">
-                                                                                                    <span class="placeholder col-4">{{ $i }}</span>
-                                                                                                </p>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                                <p class="placeholder-wave text-center">
-                                                                                                    <span class="placeholder col-4">{{ $i }}</span>
-                                                                                                </p>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                                <p class="placeholder-wave text-center">
-                                                                                                    <span class="placeholder col-4">{{ $i }}</span>
-                                                                                                </p>
-                                                                                        </td>
-                                                                                    @endfor --}}
-                                                                                    {{-- begin::Total Year --}}
-                                                                                    <td class="pinForecast HidePin total-year-ok-bulanan text-center">
-                                                                                        {{-- <p class="placeholder-wave text-center">
-                                                                                            <span class="placeholder col-4">TOTAL OK</span>
-                                                                                        </p> --}}
-                                                                                        <b>TOTAL  OK</b>
+                                                                                    @php
+                                                                                        $sumOK = array_sum($totalOkAll);
+                                                                                        $sumFC = array_sum($totalFcAll);
+                                                                                        $sumReal = array_sum($totalRealAll);
+                                                                                    @endphp
+                                                                                    <!--begin::Total Foot 1-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 1-->
+                                                                                    <!--begin::Total Foot 2-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 2-->
+                                                                                    <!--begin::Total Foot 3-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 3-->
+                                                                                    <!--begin::Total Foot 4-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 4-->
+                                                                                    <!--begin::Total Foot 5-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 5-->
+                                                                                    <!--begin::Total Foot 6-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 6-->
+                                                                                    <!--begin::Total Foot 7-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 7-->
+                                                                                    <!--begin::Total Foot 8-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 8-->
+                                                                                    <!--begin::Total Foot 9-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 9-->
+                                                                                    <!--begin::Total Foot 10-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 10-->
+                                                                                    <!--begin::Total Foot 11-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 11-->
+                                                                                    <!--begin::Total Foot 12-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 12-->
+                                                                                    <!--Begin::Total Foot ALL-->
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumOK, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast HidePin total-year-forecast-bulanan text-center">
-                                                                                        <b>TOTAL  F</b>
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumFC, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast HidePin total-year-realisasi-bulanan text-center">
-                                                                                        <b>TOTAL REAL</b>
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumReal, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast ShowPin total-year-ok-bulanan" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        <p class="placeholder-wave text-center">
-                                                                                            <span class="placeholder col-4">TOTAL OK</span>
-                                                                                        </p>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                        <b>{{ number_format($sumOK, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast ShowPin total-year-forecast-bulanan text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        <b>TOTAL  F</b>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                        <b>{{ number_format($sumFC, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast ShowPin total-year-realisasi-bulanan text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        <b>TOTAL REAL</b>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                        <b>{{ number_format($sumReal, 0, '.', '.') }}</b>
                                                                                     </td>
-                                                                                    {{-- end::Total Year --}}
+                                                                                    <!--End::Total Foot ALL-->
                                                                                 </tr>
                                                                             </div>
                                                                         </tfoot>
@@ -991,25 +1455,1225 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                         {{-- @endforeach --}}
                                                                 </table>
-                                                
+                                                                <!--end::Table body-->
                                                             </div>    
                                                         </div>
-                                                            <!--end::Table body-->
-                                                            <!--end:::Tab Forecast Bulanan-->
+                                                        <!--end:::Tab Forecast Bulanan-->
+                                                    
+                                                    {{-- </div>
+                                                    <div class="tab-content" id="myTabContent"> --}}
+
+                                                        <!-- begin::Tab Forecast Kumulatif Eksternal -->
+                                                        <div class="tab-pane fade" style="border-width: 0px !important" id="kt_user_view_forecast_bulanan_kumulatif_interal" role="tabpanel">
+
+                                                            <div class="content-table">
+                                                                <!--begin::Table Forecast-->
+                                                                <table class="table align-middle fs-6"
+                                                                    id="kt_forecast_table" style="border-width: 0px !important">
+                                                                    <!--begin::Table head-->
+                                                                    <thead id="header" style="border-width: 0px !important">
+                                                                        <tr style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
+                                                                            <th style="padding: 0px 50px 0px 50px" id="proyek-title" class="w-auto text-center" rowspan="2">
+                                                                                Proyek
+                                                                            </th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Januari</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Februari</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Maret</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D April</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Mei</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Juni</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Juli</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Agustus</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D September</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Oktober</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D November</th>
+                                                                            <th class="text-center min-w-auto" colspan="3">S/D Desember</th>
+                                                                            <th class="text-center pinForecast HidePin min-w-auto" colspan="3">S/D Total &nbsp;&nbsp; <i class="text-center bi bi-pin-angle-fill" onclick="hidePin()"></i></th>
+                                                                            <th class="text-center pinForecast ShowPin min-w-auto" colspan="3"
+                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                S/D Total &nbsp;&nbsp; <i class="bi bi-pin-fill text-primary" onclick="hidePin()"></i>
+                                                                            </th>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <!--begin::Sub-Judul Januari-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Januari-->
+                                                                            <!--begin::Sub-Judul Februari-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Februari-->
+                                                                            <!--begin::Sub-Judul Maret-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Maret-->
+                                                                            <!--begin::Sub-Judul April-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul April-->
+                                                                            <!--begin::Sub-Judul Mei-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Mei-->
+                                                                            <!--begin::Sub-Judul Juni-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Juni-->
+                                                                            <!--begin::Sub-Judul Juli-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Juli-->
+                                                                            <!--begin::Sub-Judul Agustus-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Agustus-->
+                                                                            <!--begin::Sub-Judul September-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul September-->
+                                                                            <!--begin::Sub-Judul Oktober-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Oktober-->
+                                                                            <!--begin::Sub-Judul November-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul November-->
+                                                                            <!--begin::Sub-Judul Desember-->
+                                                                            <th class="text-center min-w-125px">OK</th>
+                                                                            <th class="text-center min-w-125px">Forecast</th>
+                                                                            <th class="text-center min-w-125px">Realisasi</th>
+                                                                            <!--end::Sub-Judul Desember-->
+                                                                            <!--begin::Sub-Judul Total-->
+                                                                            <th class="text-center pinForecast HidePin min-w-100px">OK</th>
+                                                                            <th class="text-center pinForecast HidePin min-w-100px">Forecast</th>
+                                                                            <th class="text-center pinForecast HidePin min-w-100px">Realisasi</th>
+                                                                            <th class="text-center pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">OK
+                                                                            </th>
+                                                                            <th class="text-center pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">Forecast
+                                                                            </th>
+                                                                            <th class="text-center pinForecast ShowPin min-w-100px" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">Realisasi</th>
+                                                                            <!--end::Sub-Judul Total-->
+                                                                        </tr>
+                                                                        <!--end::Table head-->
+                                                                    </thead>
+
+                                                                    <!--begin::Table body-->
+
+                                                                    <tbody class="fw-bold text-gray-600" id="table-body" style="border-width: 0px !important">
+
+                                                                        
+                                                                        <div class="accordion">
+                                                                            <div class="accordion-item">
+                                                                                {{-- @foreach ($dops as $dop) --}}
+                                                                                @php
+                                                                                    $footOK1 = [];
+                                                                                    $footOK2 = [];
+                                                                                    $footOK3 = [];
+                                                                                    $footOK4 = [];
+                                                                                    $footOK5 = [];
+                                                                                    $footOK6 = [];
+                                                                                    $footOK7 = [];
+                                                                                    $footOK8 = [];
+                                                                                    $footOK9 = [];
+                                                                                    $footOK10 = [];
+                                                                                    $footOK11 = [];
+                                                                                    $footOK12 = [];
+                                                                                    $footFC1 = [];
+                                                                                    $footFC2 = [];
+                                                                                    $footFC3 = [];
+                                                                                    $footFC4 = [];
+                                                                                    $footFC5 = [];
+                                                                                    $footFC6 = [];
+                                                                                    $footFC7 = [];
+                                                                                    $footFC8 = [];
+                                                                                    $footFC9 = [];
+                                                                                    $footFC10 = [];
+                                                                                    $footFC11 = [];
+                                                                                    $footFC12 = [];
+                                                                                    $footReal1 = [];
+                                                                                    $footReal2 = [];
+                                                                                    $footReal3 = [];
+                                                                                    $footReal4 = [];
+                                                                                    $footReal5 = [];
+                                                                                    $footReal6 = [];
+                                                                                    $footReal7 = [];
+                                                                                    $footReal8 = [];
+                                                                                    $footReal9 = [];
+                                                                                    $footReal10 = [];
+                                                                                    $footReal11 = [];
+                                                                                    $footReal12 = [];
+                                                                                    $totalOkAll = [];
+                                                                                    $totalFcAll = [];
+                                                                                    $totalRealAll = [];
+                                                                                    $per = 1000000;
+                                                                                @endphp
+                                                                                @foreach ($forecastKumulatifIncludeInternal as $key => $nilaiDOP)
+                                                                                @php
+                                                                                $keyButtonDOP = str_replace(" ", "", $key);
+                                                                                @endphp
+                                                                                {{-- @dump($keyButtonDOP) --}}
+                                                                                    <tr style="text-align: right; ">
+                                                                                        <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0px; text-align: left">
+                                                                                            <small class="accordion-header">
+                                                                                                <button class="accordion-button btn-sm collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{ $keyButtonDOP }}" aria-expanded="true" aria-controls="">
+                                                                                                    {{$key}}
+                                                                                                </button>
+                                                                                            </small>
+                                                                                        </td>
+                                                                                            {{-- @dd($forecastByProyek->kode_proyek) --}}
+                                                                                            {{-- @dd($forecastByUnitKerja) --}}
+                                                                                            @php 
+                                                                                                $ok1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 1) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 1) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real1 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 1) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                
+                                                                                                $ok2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 2) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 2) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real2 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 2) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 3) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 3) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real3 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 3) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 4) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 4) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real4 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 4) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 5) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 5) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real5 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 5) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 6) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 6) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real6 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 6) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 7) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 7) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real7 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 7) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 8) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 8) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real8 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 8) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 9) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 9) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real9 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 9) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 10) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 10) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real10 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 10) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 11) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 11) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real11 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 11) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+
+                                                                                                $ok12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_rkap <= 12) {
+                                                                                                            return $forecast->rkap_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $fc12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_forecast <= 12) {
+                                                                                                            return $forecast->nilai_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                                $real12 = $nilaiDOP->sum(function($unitKerja){
+                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                        if ($forecast->month_realisasi <= 12) {
+                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                        }
+                                                                                                    });
+                                                                                                });
+                                                                                            @endphp
+                                                                                            <!--begin::Nilai DOP Bulan Januari-->
+                                                                                            <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Januari-->
+                                                                                            <!--begin::Nilai DOP Bulan Februari-->
+                                                                                            <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Februari-->
+                                                                                            <!--begin::Nilai DOP Bulan Maret-->
+                                                                                            <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Maret-->
+                                                                                            <!--begin::Nilai DOP Bulan April-->
+                                                                                            <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan April-->
+                                                                                            <!--begin::Nilai DOP Bulan Mei-->
+                                                                                            <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Mei-->
+                                                                                            <!--begin::Nilai DOP Bulan Juni-->
+                                                                                            <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Juni-->
+                                                                                            <!--begin::Nilai DOP Bulan Juli-->
+                                                                                            <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Juli-->
+                                                                                            <!--begin::Nilai DOP Bulan Agustus-->
+                                                                                            <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Agustus-->
+                                                                                            <!--begin::Nilai DOP Bulan September-->
+                                                                                            <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan September-->
+                                                                                            <!--begin::Nilai DOP Bulan Oktober-->
+                                                                                            <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Oktober-->
+                                                                                            <!--begin::Nilai DOP Bulan November-->
+                                                                                            <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan November-->
+                                                                                            <!--begin::Nilai DOP Bulan Desember-->
+                                                                                            <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                            <!--end::Nilai DOP Bulan Desember-->
+
+                                                                                        <!--begin::Total Coloumn-->
+                                                                                        @php
+                                                                                            $totalOkDOP = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                            $totalFcDOP = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                            $totalRealDOP = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
+
+                                                                                            if (count($nilaiDOP) > 0) {
+                                                                                                array_push($footOK1, $ok1);
+                                                                                                array_push($footOK2, $ok2);
+                                                                                                array_push($footOK3, $ok3);
+                                                                                                array_push($footOK4, $ok4);
+                                                                                                array_push($footOK5, $ok5);
+                                                                                                array_push($footOK6, $ok6);
+                                                                                                array_push($footOK7, $ok7);
+                                                                                                array_push($footOK8, $ok8);
+                                                                                                array_push($footOK9, $ok9);
+                                                                                                array_push($footOK10, $ok10);
+                                                                                                array_push($footOK11, $ok11);
+                                                                                                array_push($footOK12, $ok12);
+
+                                                                                                array_push($footFC1, $fc1);
+                                                                                                array_push($footFC2, $fc2);
+                                                                                                array_push($footFC3, $fc3);
+                                                                                                array_push($footFC4, $fc4);
+                                                                                                array_push($footFC5, $fc5);
+                                                                                                array_push($footFC6, $fc6);
+                                                                                                array_push($footFC7, $fc7);
+                                                                                                array_push($footFC8, $fc8);
+                                                                                                array_push($footFC9, $fc9);
+                                                                                                array_push($footFC10, $fc10);
+                                                                                                array_push($footFC11, $fc11);
+                                                                                                array_push($footFC12, $fc12);
+
+                                                                                                array_push($footReal1, $real1);
+                                                                                                array_push($footReal2, $real2);
+                                                                                                array_push($footReal3, $real3);
+                                                                                                array_push($footReal4, $real4);
+                                                                                                array_push($footReal5, $real5);
+                                                                                                array_push($footReal6, $real6);
+                                                                                                array_push($footReal7, $real7);
+                                                                                                array_push($footReal8, $real8);
+                                                                                                array_push($footReal9, $real9);
+                                                                                                array_push($footReal10, $real10);
+                                                                                                array_push($footReal11, $real11);
+                                                                                                array_push($footReal12, $real12);
+
+                                                                                                array_push($totalOkAll, $totalOkDOP);
+                                                                                                array_push($totalFcAll, $totalFcDOP);
+                                                                                                array_push($totalRealAll, $totalRealDOP);
+                                                                                            }
+                                                                                        @endphp
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalOkDOP, 0 , '.', '.') }}</td>
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalFcDOP, 0 , '.', '.') }}</td>
+                                                                                        <td class="pinForecast HidePin text-center fw-bolder">{{ number_format($totalRealDOP, 0 , '.', '.') }}</td>
+                                                                                        <td class="pinForecast ShowPin text-center fw-bolder"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                            {{ number_format($totalOkDOP, 0, '.', '.') }}
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin text-center fw-bolder"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                            {{ number_format($totalFcDOP, 0, '.', '.') }}
+                                                                                        </td>
+                                                                                        <td class="pinForecast ShowPin text-center fw-bolder"
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                            {{ number_format($totalRealDOP, 0, '.', '.') }}
+                                                                                        </td>
+                                                                                        <!--end::Total Coloumn-->
+                                                                                    </tr>
+
+                                                                                    <!--begin:: Foreach Unit Kerja-->
+                                                                                    {{-- <div class="accordion-item"> --}}
+                                                                                        @foreach ($nilaiDOP as $keyUnit => $nilaiUnitKerja)
+                                                                                        {{-- @dump( (string) $keyUnit) --}}
+                                                                                        @php
+                                                                                            $ok1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 1) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 1) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 1) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 2) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 2) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 2) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 3) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 3) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 3) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 4) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 4) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 4) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 5) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 5) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 5) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 6) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 6) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 6) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 7) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 7) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 7) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 8) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 8) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 8) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 9) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 9) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 9) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 10) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 10) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 10) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 11) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 11) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 11) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $ok12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_rkap <= 12) {
+                                                                                                        return $forecast->rkap_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $fc12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_forecast <= 12) {
+                                                                                                        return $forecast->nilai_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                            $real12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                                    if ($forecast->month_realisasi <= 12) {
+                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                    }
+                                                                                                });
+                                                                                        @endphp
+                                                                                        
+                                                                                            <tr class="collapse" id="{{ $keyButtonDOP }}" style="text-align: right;">
+                                                                                                <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 0.5rem !important; text-align: left">
+                                                                                                    <!--begin::Child-->
+                                                                                                    <small class="accordion-header">
+                                                                                                        <button class="accordion-button collapsed btn-sm button-unit-kerja" type="button" data-bs-toggle="collapse" data-bs-target="#unit-{{ (string) $keyUnit }}" aria-expanded="true" aria-controls="">
+                                                                                                            @foreach ($unitKerjas as $unitKerja)
+                                                                                                                @if ($unitKerja->divcode == $keyUnit)
+                                                                                                                    {{ $unitKerja->unit_kerja }}
+                                                                                                                @endif 
+                                                                                                            @endforeach
+                                                                                                        </button>
+                                                                                                    </small>
+                                                                                                    <!--end::Child-->
+                                                                                                </td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                    <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 2-->
+                                                                                                    <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 2-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 3-->
+                                                                                                    <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 3-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 4-->
+                                                                                                    <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 4-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 5-->
+                                                                                                    <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 5-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 6-->
+                                                                                                    <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 6-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 7-->
+                                                                                                    <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 7-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 8-->
+                                                                                                    <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 8-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 9-->
+                                                                                                    <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 9-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 10-->
+                                                                                                    <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 10-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 11-->
+                                                                                                    <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 11-->
+                                                                                                    <!--begin::Nilai UNIT KERJA Bulan 12-->
+                                                                                                    <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                    <!--end::Nilai UNIT KERJA Bulan 12-->
+                                                                                                <!--begin::Total Coloumn-->
+                                                                                                @php
+                                                                                                    $totalOkUnit = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                                    $totalFcUnit = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                                    $totalRealUnit = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
+                                                                                                @endphp
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalOkUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalFcUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalRealUnit, 0 , '.', '.') }}</td>
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                                    {{ number_format($totalOkUnit, 0 , '.', '.') }}
+                                                                                                </td>
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                                    {{ number_format($totalFcUnit, 0 , '.', '.') }}
+                                                                                                </td>
+                                                                                                <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                                    {{ number_format($totalRealUnit, 0 , '.', '.') }}
+                                                                                                </td>
+                                                                                                <!--end::Total Coloumn-->
+                                                                                            </tr>
+
+                                                                                            @foreach ($nilaiUnitKerja as $keyProyek => $nilaiProyek)
+                                                                                            {{-- @dump($nilaiProyek->where("proyeks.jenis_proyek", "=", "I")->get()) --}}
+                                                                                            @php
+                                                                                                $ok1 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 1) {
+                                                                                                    $ok1 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc1 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 1) {
+                                                                                                    $fc1 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real1 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 1) {
+                                                                                                    $real1 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok2 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 2) {
+                                                                                                    $ok2 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc2 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 2) {
+                                                                                                    $fc2 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real2 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 2) {
+                                                                                                    $real2 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok3 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 3) {
+                                                                                                    $ok3 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc3 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 3) {
+                                                                                                    $fc3 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real3 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 3) {
+                                                                                                    $real3 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok4 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 4) {
+                                                                                                    $ok4 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc4 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 4) {
+                                                                                                    $fc4 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real4 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 4) {
+                                                                                                    $real4 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok5 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 5) {
+                                                                                                    $ok5 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc5 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 5) {
+                                                                                                    $fc5 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real5 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 5) {
+                                                                                                    $real5 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok6 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 6) {
+                                                                                                    $ok6 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc6 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 6) {
+                                                                                                    $fc6 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real6 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 6) {
+                                                                                                    $real6 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok7 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 7) {
+                                                                                                    $ok7 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc7 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 7) {
+                                                                                                    $fc7 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real7 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 7) {
+                                                                                                    $real7 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok8 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 8) {
+                                                                                                    $ok8 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc8 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 8) {
+                                                                                                    $fc8 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real8 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 8) {
+                                                                                                    $real8 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok9 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 9) {
+                                                                                                    $ok9 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc9 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 9) {
+                                                                                                    $fc9 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real9 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 9) {
+                                                                                                    $real9 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok10 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 10) {
+                                                                                                    $ok10 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc10 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 10) {
+                                                                                                    $fc10 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real10 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 10) {
+                                                                                                    $real10 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok11 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 11) {
+                                                                                                    $ok11 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc11 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 11) {
+                                                                                                    $fc11 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real11 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 11) {
+                                                                                                    $real11 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                                $ok12 = 0;
+                                                                                                if ($nilaiProyek->month_rkap <= 12) {
+                                                                                                    $ok12 += $nilaiProyek->rkap_forecast;
+                                                                                                };
+                                                                                                $fc12 = 0;
+                                                                                                if ($nilaiProyek->month_forecast <= 12) {
+                                                                                                    $fc12 += $nilaiProyek->nilai_forecast;
+                                                                                                };
+                                                                                                $real12 = 0;
+                                                                                                if ($nilaiProyek->month_realisasi <= 12) {
+                                                                                                    $real12 += $nilaiProyek->realisasi_forecast;
+                                                                                                };
+                                                                                            @endphp
+                                                                                            
+                                                                                                <tr class="collapse" id="unit-{!! (string) $keyUnit !!}" style="text-align: right;">
+                                                                                                    <td style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 1rem !important; text-align: left">
+                                                                                                        <small class="accordion-header">
+                                                                                                            <a target="_blank" href="/proyek/view/{{ $nilaiProyek->kode_proyek }}" class="text-hover-primary text-gray-600">{{ $nilaiProyek->nama_proyek }}</a>
+                                                                                                        </small>
+                                                                                                    </td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                        <td>{{ number_format((round($ok1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real1 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 1-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 2-->
+                                                                                                        <td>{{ number_format((round($ok2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real2 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 2-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 3-->
+                                                                                                        <td>{{ number_format((round($ok3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real3 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 3-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 4-->
+                                                                                                        <td>{{ number_format((round($ok4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real4 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 4-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 5-->
+                                                                                                        <td>{{ number_format((round($ok5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real5 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 5-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 6-->
+                                                                                                        <td>{{ number_format((round($ok6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real6 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 6-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 7-->
+                                                                                                        <td>{{ number_format((round($ok7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real7 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 7-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 8-->
+                                                                                                        <td>{{ number_format((round($ok8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real8 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 8-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 9-->
+                                                                                                        <td>{{ number_format((round($ok9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real9 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 9-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 10-->
+                                                                                                        <td>{{ number_format((round($ok10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real10 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 10-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 11-->
+                                                                                                        <td>{{ number_format((round($ok11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real11 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 11-->
+                                                                                                        <!--begin::Nilai UNIT KERJA Bulan 12-->
+                                                                                                        <td>{{ number_format((round($ok12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($fc12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <td>{{ number_format((round($real12 / $per)),0 ,'.', '.') }}</td>
+                                                                                                        <!--end::Nilai UNIT KERJA Bulan 12-->
+                                                                                                    <!--begin::Total Coloumn-->
+                                                                                                    @php
+                                                                                                        $totalOkProyek = round(($ok1+$ok2+$ok3+$ok4+$ok5+$ok6+$ok7+$ok8+$ok9+$ok10+$ok11+$ok12)/$per);
+                                                                                                        $totalFcProyek = round(($fc1+$fc2+$fc3+$fc4+$fc5+$fc6+$fc7+$fc8+$fc9+$fc10+$fc11+$fc12)/$per);
+                                                                                                        $totalRealProyek = round(($real1+$real2+$real3+$real4+$real5+$real6+$real7+$real8+$real9+$real10+$real11+$real12)/$per);
+                                                                                                    @endphp
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalOkProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalFcProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast HidePin fw-bolder text-center">{{ number_format($totalRealProyek, 0 , '.', '.') }}</td>
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                                        {{ number_format($totalOkProyek, 0 , '.', '.') }}
+                                                                                                    </td>
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                                        {{ number_format($totalFcProyek, 0 , '.', '.') }}
+                                                                                                    </td>
+                                                                                                    <td class="pinForecast ShowPin fw-bolder text-center"
+                                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                                        {{ number_format($totalRealProyek, 0 , '.', '.') }}
+                                                                                                    </td>
+                                                                                                    <!--end::Total Coloumn-->
+                                                                                                </tr>
+                                                                                            @endforeach
+
+                                                                                        
+                                                                                        @endforeach
+                                                                                    {{-- </div> --}}
+                                                                                    <!--end:: Foreach Unit Kerja-->
+
+                                                                                @endforeach 
+                                                                            </div>
+                                                                        </div>
+                                                                        
+                                                                        
+                                                                        <tfoot id="footer" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
+                                                                            <div class="m-4">
+                                                                                <tr>
+                                                                                    <td style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 1rem; text-align: left">
+                                                                                    <!--begin::Child-->
+                                                                                    <b>Total</b>
+                                                                                    <!--end::Child-->
+                                                                                    </td>
+                                                                                    @php
+                                                                                        $sumOK = array_sum($totalOkAll);
+                                                                                        $sumFC = array_sum($totalFcAll);
+                                                                                        $sumReal = array_sum($totalRealAll);
+                                                                                    @endphp
+                                                                                    <!--begin::Total Foot 1-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal1))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 1-->
+                                                                                    <!--begin::Total Foot 2-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal2))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 2-->
+                                                                                    <!--begin::Total Foot 3-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal3))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 3-->
+                                                                                    <!--begin::Total Foot 4-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal4))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 4-->
+                                                                                    <!--begin::Total Foot 5-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal5))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 5-->
+                                                                                    <!--begin::Total Foot 6-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal6))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 6-->
+                                                                                    <!--begin::Total Foot 7-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal7))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 7-->
+                                                                                    <!--begin::Total Foot 8-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal8))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 8-->
+                                                                                    <!--begin::Total Foot 9-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal9))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 9-->
+                                                                                    <!--begin::Total Foot 10-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal10))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 10-->
+                                                                                    <!--begin::Total Foot 11-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal11))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 11-->
+                                                                                    <!--begin::Total Foot 12-->
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footOK12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footFC12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <td class="text-end"><b>{{ number_format(round((array_sum($footReal12))/$per), 0 , '.', '.') }}</b></td>
+                                                                                    <!--end::Total Foot 12-->
+                                                                                    <!--Begin::Total Foot ALL-->
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumOK, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumFC, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <td class="pinForecast HidePin text-center">
+                                                                                        <b>{{ number_format($sumReal, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                        <b>{{ number_format($sumOK, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                        <b>{{ number_format($sumFC, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <td class="pinForecast ShowPin text-center" style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                        <b>{{ number_format($sumReal, 0, '.', '.') }}</b>
+                                                                                    </td>
+                                                                                    <!--End::Total Foot ALL-->
+                                                                                </tr>
+                                                                            </div>
+                                                                        </tfoot>
+                                                                            
+                                                                    </tbody>
+
+                                                                        {{-- @endforeach --}}
+                                                                </table>
+                                                                <!--end::Table body-->
+                                                            </div>    
                                                         </div>
-                                                        {{-- @else 
-                                                        <div class="tab-content mt-10" id="myTabContent">
-                                                            <div class="col">
-                                                                <div class="d-flex flex-column justify-content-center align-items-center">
-                                                                    <p>Data Proyek tidak ditemukan</p>
-                                                                    <a href="#" class="btn btn-md btn-active-primary text-white" style="background-color: #008CB4">Buat Proyek</a>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        @endif --}}
+                                                        <!--end:::Tab Forecast Bulanan-->
+
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
 
 
                                     </div>
@@ -1107,830 +2771,6 @@ fill="none">
 {{-- begin:: JS script --}}
 @section('js-script')
 
-{{-- <script src="/datatables/jquery-3.5.1.js"></script>
-<script src="/datatables/jquery.dataTables.min.js"></script>
-<script src="/datatables/dataTables.fixedColumns.min.js"></script>
-
-<script>
-    $(document).ready(function() {
-        var table = $('#kt_forecast_table').DataTable( {
-            scrollY:        "300px",
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         false,
-            fixedColumns:   {
-                left: 1,
-                right: 1
-            }
-        } );
-    } );
-</script> --}}
-
-{{-- <script>
-    const toaster = document.querySelector(".toast");
-    const toastBody = document.querySelector(".toast-body")
-    const toastBoots = new bootstrap.Toast(toaster, {});
-
-    if (historyForecast > 0) {
-        disabledAllInputs();
-    }
-
-    function reformatNumber(elt) {
-        const valueFormatted = Intl.NumberFormat(["id"], {
-            maximumFractionDigits: 0,
-        }).format(elt.value.toString().replace(/[^0-9]/gi, ""));
-        elt.value = valueFormatted;
-    }
-
-    function updateData(attribute) {
-        let totalColumnAttribute = "";
-        let dataColumnAttribute = "";
-        let totalYearForecast = "";
-        let totalMonthXForecast = "";
-        if (attribute.includes("internal")) {
-            totalColumnAttribute = "data-total-forecast-internal-column";
-            dataColumnAttribute = "data-column-forecast-internal";
-            totalYearForecast = "total-year-forecast-internal";
-            totalMonthXForecast = "total-month-x-forecast-internal";
-            // dataIdProyekForecast = "data-id-proyek-forecast-internal";
-        } else if (attribute.includes("sd")) {
-            totalColumnAttribute = "data-total-column-forecast-sd";
-            dataColumnAttribute = "data-column-forecast-sd";
-            totalYearForecast = "total-year-forecast-sd";
-            totalMonthXForecast = "total-month-x-forecast-sd";
-            // dataIdProyekForecast = "data-id-proyek-forecast-sd";
-
-        } else if (attribute.includes("eksternal")) {
-            totalColumnAttribute = "data-total-column-forecast-sd-eksternal";
-            dataColumnAttribute = "data-column-forecast-sd-eksternal";
-            totalYearForecast = "total-year-forecast-sd-eksternal";
-            totalMonthXForecast = "total-month-x-forecast-sd-eksternal";
-
-        } else {
-            totalColumnAttribute = "data-total-forecast-column";
-            dataColumnAttribute = "data-column-forecast";
-            totalYearForecast = "total-year-forecast";
-            totalMonthXForecast = "total-month-x-forecast";
-            // dataIdProyekForecast = "data-id-proyek";
-        }
-
-        const inputForecasts = document.querySelectorAll(`input[${attribute}]`);
-        inputForecasts.forEach(input => {
-            input.addEventListener("focusout", async e => {
-                const nilaiForecast = Number(e.target.value.toString().replaceAll(".", ""));
-                // if (nilaiForecast == 0) {
-                //     Toast.fire({
-                //         html: "Inputan tidak boleh 0 atau kosong",
-                //         icon: "error",
-                //     });
-                //     e.target.value = "";
-                //     return; 
-                // }
-                const kodeProyek = input.getAttribute(attribute);
-                const dataMonth = input.getAttribute("data-month");
-                const dataColumn = input.getAttribute(dataColumnAttribute);
-                const columnTotalYearForecast = document.querySelectorAll(`.${totalYearForecast}`);
-                const columnDataYearForecast = document.querySelectorAll(`.${totalMonthXForecast}`);
-                const dataColumnSame = document.querySelectorAll(`input[data-month="${dataMonth}"]`)
-                const columnForecastElt = document.querySelectorAll(
-                    `input[${dataColumnAttribute}="${dataColumn}"]`);
-                const rowForecastElt = document.querySelectorAll(
-                    `input[${attribute}="${kodeProyek}"]`);
-                const rowTotalForecastElt = document.querySelectorAll(
-                    `td[${attribute}="${kodeProyek}"]`);
-
-                // const totalColumn = document.querySelector(
-                //     `td[${totalColumnAttribute}="${dataColumn}"]`);
-                let totalColumnForecast = 0;
-                let totalColumnYearForecast = 0;
-                let totalRowForecast = 0;
-
-
-
-                const formData = new FormData();
-
-                formData.append("_token", "{{ csrf_token() }}");
-                formData.append("nilai_forecast", nilaiForecast);
-                formData.append("forecast_month", dataMonth);
-                formData.append("kode_proyek", kodeProyek);
-                formData.append("periode_prognosa", "{{$periode}}");
-                const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
-                    method: "POST",
-                    header: {
-                        "content-type": "application/json"
-                    },
-                    body: formData
-                }).then(res => res.json());
-                if (saveNilaiForecastRes.status == "success") {
-                    const nilaiFormatted = Intl.NumberFormat(["id"], {
-                        maximumFractionDigits: 0,
-                    }).format(nilaiForecast);
-
-                    dataColumnSame.forEach(dataColumn => {
-                        const getAttributeIdProyek = dataColumn.getAttributeNames()[1];
-                        const getIdProyek = dataColumn.getAttribute(getAttributeIdProyek);
-                        if (getIdProyek == kodeProyek) {
-                            dataColumn.value = nilaiFormatted;
-                        }
-                    });
-
-                    columnForecastElt.forEach(columnForecast => {
-                        if (columnForecast.value != null) {
-                            totalColumnForecast += Number(columnForecast.value.toString()
-                                .replaceAll(".", ""));
-                        }
-                    })
-                    rowForecastElt.forEach(rowForecast => {
-                        if (rowForecast.value != null) {
-                            totalRowForecast += Number(rowForecast.value.toString()
-                                .replaceAll(".", ""));
-                        }
-                    });
-
-                    const rowValueFormatted = Intl.NumberFormat(["id"], {
-                        maximumFractionDigits: 0,
-                    }).format(totalRowForecast);
-                    const columnValueFormatted = Intl.NumberFormat(["id"], {
-                        maximumFractionDigits: 0,
-                    }).format(totalColumnForecast);
-
-                    input.value = nilaiFormatted;
-                    // toaster.classList.add("text-bg-success")
-                    // toaster.classList.remove("text-bg-danger")
-                    // toastBody.innerHTML = saveNilaiForecastRes.msg;
-                    rowTotalForecastElt.forEach(rowForecast => {
-                        rowForecast.innerHTML = `
-                    <center>
-                        <b>${rowValueFormatted}</b>
-                    </center>
-                    `;
-                    });
-
-                    //     totalColumn.innerHTML = `
-                    // <td>
-                    //     <center><b>${columnValueFormatted}</b></center>
-                    // </td>
-                    // `;
-
-                    columnDataYearForecast.forEach(columnDataTotalYear => {
-                        if (columnDataTotalYear.innerText != null || columnDataTotalYear
-                            .innerText != "0") {
-                            totalColumnYearForecast += Number(columnDataTotalYear.innerText
-                                .toString().replaceAll(".", ""));
-                        }
-                    });
-
-                    const columnTotalYearForecastFormatted = Intl.NumberFormat(["id"], {
-                        maximumFractionDigits: 0,
-                    }).format(totalColumnYearForecast);
-
-                    columnTotalYearForecast.forEach(colTotal => {
-                        colTotal.innerHTML = `
-                    <center>
-                        <b>${columnTotalYearForecastFormatted}</b>
-                    </center>
-                    `;
-                    });
-
-                    recalculateColumn();
-                    Toast.fire({
-                        html: saveNilaiForecastRes.msg,
-                        icon: "success",
-                    });
-                    // Swal.fire({
-                    //     html: saveNilaiForecastRes.msg,
-                    //     target: '#custom-toaster',
-                    //     customClass: {
-                    //         container: 'position-absolute'
-                    //     },
-                    //     toast: true,
-                    //     // timer: 3000,
-                    //     confirmButtonColor: "#008cb4",
-                    //     position: 'top-right'
-                    // });
-                } else {
-                    Toast.fire({
-                        html: saveNilaiForecastRes.msg,
-                        icon: "error",
-                    });
-                    // Swal.fire({
-                    //     html: saveNilaiForecastRes.msg,
-                    //     target: '#custom-toaster',
-                    //     customClass: {
-                    //         container: 'position-absolute'
-                    //     },
-                    //     toast: true,
-                    //     confirmButtonColor: "#008cb4",
-                    //     // timer: 3000,
-                    //     position: 'top-right'
-                    // });
-                    // toaster.classList.remove("text-bg-success")
-                    // toaster.classList.add("text-bg-danger")
-                    // toastBody.innerHTML = saveNilaiForecastRes.msg;
-                }
-                // let counterTimer = 3;
-                // let width = 0;
-                // const toasterTimer = document.querySelector("#toaster-timer");
-                // const toasterTimerBefore = window.getComputedStyle(
-                //     document.querySelector('#toaster-timer'), ':before'
-                // ).getPropertyValue("width");
-                // const timerOut = setInterval(() => {
-                //     counterTimer--;
-                //     width = Math.floor(toasterTimer.clientWidth / counterTimer);
-                //     toasterTimerBefore.style.setProperty("width") += `${width}px`;
-                //     toasterTimer.innerHTML =
-                //         `<span style="position:relative;z-index:3;">${counterTimer}</span>`;
-                //     if (counterTimer == 0) {
-                //         clearInterval(timerOut);
-                //     }
-                // }, 1000);
-            });
-        });
-    }
-
-    updateData("data-id-proyek");
-    updateData("data-id-proyek-forecast-internal");
-    updateData("data-id-proyek-forecast-sd");
-    updateData("data-id-proyek-forecast-sd-eksternal");
-
-    function recalculateColumn() {
-        // begin Calculate Total Column Forecast Bulanan 
-        const dataColumnTotalForecast = document.querySelectorAll(`td[data-total-forecast-column]`);
-        let totalForecast = 0;
-        dataColumnTotalForecast.forEach((forecast, i) => {
-            const totalColumnForecast = forecast.getAttribute("data-total-forecast-column");
-            const dataColumnForecast = document.querySelectorAll(
-                `input[data-column-forecast="${totalColumnForecast}"]`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalForecast += isNaN(Number(dataForecast.value.replaceAll(".", ""))) ? 0 : Number(
-                    dataForecast.value.replaceAll(".", ""));
-            });
-            if (totalColumnForecast) {
-                const formattedForecastValue = Intl.NumberFormat(["id"], {
-                    maximumFractionDigits: 0,
-                }).format(totalForecast);
-                forecast.innerHTML = `
-            <td>
-                <center><b>${formattedForecastValue}</b></center>
-            </td>
-            `;
-            }
-            totalForecast = 0;
-        });
-        // end Calculate Total Column Forecast Bulanan
-
-        // begin Calculate Total Column Year Forecast Bulanan 
-        const dataColumnTotalYearForecast = document.querySelectorAll(`.total-year-forecast-bulanan`);
-        let totalForecastYear = 0;
-        const dataColumnForecast = document.querySelectorAll(
-            `.total-month-x-forecast`);
-        dataColumnForecast.forEach(dataForecast => {
-            totalForecastYear += isNaN(Number(dataForecast.innerText.replaceAll(".", ""))) ? 0 : Number(
-                dataForecast.innerText.replaceAll(".", ""));
-        });
-        const formattedForecastValue = Intl.NumberFormat(["id"], {
-            maximumFractionDigits: 0,
-        }).format(totalForecastYear);
-        totalForecastYear = 0;
-
-        dataColumnTotalYearForecast.forEach((forecast, i) => {
-            forecast.innerHTML = `
-        <td>
-            <center><b>${formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-        // end Calculate Total Column Forecast Bulanan
-
-        // begin Calculate Total Column Forecast Internal 
-        const dataColumnTotalForecastInternal = document.querySelectorAll(`td[data-total-forecast-internal-column]`);
-        let totalForecastInternal = 0;
-        dataColumnTotalForecastInternal.forEach((forecast, i) => {
-            const totalColumnForecast = forecast.getAttribute("data-total-forecast-internal-column");
-            const dataColumnForecast = document.querySelectorAll(
-                `input[data-column-forecast-internal="${totalColumnForecast}"]`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalForecastInternal += isNaN(Number(dataForecast.innerText.replaceAll(".", ""))) ? 0 :
-                    Number(dataForecast.innerText.replaceAll(".", ""));
-            });
-            if (totalColumnForecast) {
-                const formattedForecastValue = Intl.NumberFormat(["id"], {
-                    maximumFractionDigits: 0,
-                }).format(totalForecastInternal);
-                forecast.innerHTML = `
-            <td>
-                <center><b>${formattedForecastValue}</b></center>
-            </td>
-            `;
-            }
-            totalForecastInternal = 0;
-        });
-        // end Calculate Total Column Forecast Internal
-
-        // begin Calculate Total Column Forecast S/D 
-        const dataColumnTotalForecastSD = document.querySelectorAll(`td[data-total-column-forecast-sd]`);
-        let totalForecastSD = 0;
-        dataColumnTotalForecastSD.forEach((forecast, i) => {
-            const totalColumnForecast = forecast.getAttribute("data-total-column-forecast-sd");
-            const dataColumnForecast = document.querySelectorAll(
-                `td[data-column-forecast-sd="${totalColumnForecast}"]`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalForecastSD += isNaN(Number(dataForecast.innerText.replaceAll(".", ""))) ? 0 :
-                    Number(dataForecast.innerText.replaceAll(".", ""));
-            });
-            if (totalColumnForecast) {
-                const formattedForecastValue = Intl.NumberFormat(["id"], {
-                    maximumFractionDigits: 0,
-                }).format(totalForecastSD);
-                forecast.innerHTML = `
-            <td>
-                <center><b>${formattedForecastValue}</b></center>
-            </td>
-            `;
-            }
-            totalForecastSD = 0;
-        });
-        // end Calculate Total Column Forecast S/D
-
-        // begin calculate total column OK Bulanan
-        const dataColumnTotalOKBulanan = document.querySelectorAll(`td[data-total-ok-bulanan-column]`);
-        let totalOKBulanan = 0;
-        dataColumnTotalOKBulanan.forEach((forecast, i) => {
-            const totalColumnForecast = forecast.getAttribute("data-total-ok-bulanan-column");
-            const dataColumnForecast = document.querySelectorAll(
-                `td[data-column-ok-bulanan="${totalColumnForecast}"]`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalOKBulanan += isNaN(Number(dataForecast.innerText.replaceAll(".", ""))) ? 0 :
-                    Number(dataForecast.innerText.replaceAll(".", ""));
-            });
-            if (totalColumnForecast) {
-                const formattedForecastValue = Intl.NumberFormat(["id"], {
-                    maximumFractionDigits: 0,
-                }).format(totalOKBulanan);
-                forecast.innerHTML = `
-                <center><b>${formattedForecastValue}</b></center>
-                `;
-            }
-            totalOKBulanan = 0;
-        });
-        // end calculate total column OK Bulanan
-
-        // begin calculate total column Realisasi Bulanan
-        const dataColumnTotalRealisasiBulanan = document.querySelectorAll(`td[data-total-realisasi-bulanan-column]`);
-        let totalRealisasiBulanan = 0;
-        dataColumnTotalRealisasiBulanan.forEach((forecast, i) => {
-            const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
-            const dataColumnForecast = Array.from(document.querySelectorAll(
-            `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
-            if (dataColumnForecast.length > 10) {
-                dataColumnForecast.length = 10;
-            }
-            if (dataColumnForecast.length > 2) {
-                dataColumnForecast.pop();
-            }
-            dataColumnForecast.forEach(dataForecast => {
-                const nilaiRealisasi = Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-                if(nilaiRealisasi) {
-                    totalRealisasiBulanan += nilaiRealisasi;
-                }
-            });
-            if (totalColumnForecast) {
-                const formattedForecastValue = Intl.NumberFormat(["id"], {
-                    maximumFractionDigits: 0,
-                }).format(totalRealisasiBulanan);
-                forecast.innerHTML = `
-            <td>
-                <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-            </td>
-            `;
-            }
-            totalRealisasiBulanan = 0;
-        });
-        // end calculate total column Realisasi Bulanan
-
-        // begin calculate Total Year OK Column
-        // data-id-proyek-ok-bulanan
-        const dataColumnTotalYearOKBulanan = document.querySelectorAll(`.total-year-ok-bulanan`);
-
-        let totalYearOKBulanan = 0;
-        dataColumnTotalYearOKBulanan.forEach((forecast, i) => {
-            const dataColumnForecast = document.querySelectorAll(
-                `td[data-id-proyek-ok-bulanan-total]`);
-            dataColumnForecast.forEach(dataForecast => {
-                if (dataForecast.classList.contains("ShowPin")) {
-                    totalYearOKBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-                }
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearOKBulanan);
-            totalYearOKBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-        // end calculate Total Year OK Column
-
-        // begin calculate Total Year Realisasi Column
-        // total-year-realisasi-bulanan
-        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`.total-year-realisasi-bulanan`);
-
-        let totalYearRealisasiBulanan = 0;
-        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
-            const dataColumnForecast = document.querySelectorAll(
-                `.total-month-x-realisasi-bulanan`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearRealisasiBulanan);
-            totalYearRealisasiBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-        // end calculate Total Year Realisasi Column
-
-        // Begin Forecast Internal Script
-        // begin OK Total
-        sumColumn("td[total-column-y-ok]", "total-column-y-ok", "td[data-column-ok-internal]",
-            "data-column-ok-internal");
-        // end OK Total
-
-        // begin Realisasi
-        sumColumn("td[total-column-y-realisasi]", "total-column-y-realisasi", "td[data-column-realisasi-internal]",
-            "data-column-realisasi-internal");
-        // end Realisasi
-
-        // // begin Total Forecast Column
-        // sumColumnYear(".total-year-forecast", ".total-month-x-forecast");
-        // // end Total Forecast Column
-
-        // begin Total Forecast Column Internal
-        sumColumnYear(".total-year-forecast-interal", ".total-month-x-forecast-internal");
-        // end Total Forecast Column Internal
-
-        // begin Total OK Column Internal
-        sumColumnYear(".total-year-ok-internal", ".total-month-x-ok-internal");
-        // end Total OK Column Internal
-
-        // begin Total OK Column Internal
-        sumColumnYear(".total-year-realisasi-interal", ".total-month-x-realisasi-internal");
-        // end Total OK Column Internal
-
-        // End Forecast Internal Script
-
-        // Begin Forecast S/D Script
-
-        // begin ok
-        sumColumn("td[data-total-column-ok-sd]", "data-total-column-ok-sd", "td[data-column-ok-sd]",
-            "data-column-ok-sd");
-        // end ok
-
-        // begin forecast
-        sumColumn("td[data-total-column-forecast-sd]", "data-total-column-forecast-sd",
-            "input[data-column-forecast-sd]",
-            "data-column-forecast-sd");
-        // end forecast
-
-        // begin forecast
-        sumColumn("td[data-total-column-realisasi-sd]", "data-total-column-realisasi-sd",
-            "td[data-column-realisasi-sd]",
-            "data-column-realisasi-sd");
-        // end forecast
-
-        // begin year ok
-        sumColumnYear(".total-year-ok-sd", ".total-month-x-ok-sd");
-        // end year ok
-
-        // begin year realisasi
-        sumColumnYear(".total-year-realisasi-sd", ".total-month-x-realisasi-sd");
-        // end year realisasi
-
-        // End Forecast S/D Script
-
-        // begin Forecast S/D Eksternal Script
-
-        // begin S/D OK 
-        sumColumn("td[data-total-column-ok-sd-eksternal]", "data-total-column-ok-sd-eksternal",
-            "td[data-column-ok-sd-eksternal]", "data-column-ok-sd-eksternal");
-        // end S/D OK 
-
-        // begin S/D Forecast
-        sumColumn("td[data-total-column-forecast-sd-eksternal]", "data-total-column-forecast-sd-eksternal",
-            "input[data-column-forecast-sd-eksternal]", "data-column-forecast-sd-eksternal");
-        // end S/D Forecast 
-
-        // begin S/D Realisasi
-        sumColumn("td[data-total-column-realisasi-sd-eksternal]", "data-total-column-realisasi-sd-eksternal",
-            "td[data-column-realisasi-sd-eksternal]", "data-column-realisasi-sd-eksternal");
-        // end S/D Realisasi 
-
-        // begin S/D OK Year
-        sumColumnYear("total-year-ok-sd-eksternal", ".total-month-x-ok-sd-eksternal");
-        // end S/D OK Year 
-
-        // begin S/D Forecast Year
-        sumColumnYear("total-year-forecast-sd-eksternal", ".total-month-x-forecast-sd-eksternal");
-        // end S/D Forecast Year 
-
-        // begin S/D Realisasi Year
-        sumColumnYear("total-year-realisasi-sd-eksternal", ".total-month-x-realisasi-sd-eksternal");
-        // end S/D Realisasi Year 
-        // end Forecast S/D Eksternal Script
-
-    }
-
-    recalculateColumn();
-
-    function sumColumn(eltToShow, attributeShow, eltToSum, attributeSum) {
-        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`${eltToShow}`);
-
-        let totalYearRealisasiBulanan = 0;
-        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
-            const getColumnId = forecast.getAttribute(attributeShow);
-            const dataColumnForecast = document.querySelectorAll(
-                `[${attributeSum}="${getColumnId}"]`);
-            dataColumnForecast.forEach(dataForecast => {
-                if (eltToSum.includes("input")) {
-                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9]/gi, ""));
-                } else {
-                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi,
-                        ""));
-                }
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearRealisasiBulanan);
-            totalYearRealisasiBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-    }
-
-    function sumColumnYear(eltToShow, eltToSum) {
-        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`${eltToShow}`);
-
-        let totalYearRealisasiBulanan = 0;
-        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
-            const dataColumnForecast = document.querySelectorAll(
-                `${eltToSum}`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearRealisasiBulanan);
-            totalYearRealisasiBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-    }
-
-    let monthEltBulanan = null;
-    const modalBody = document.querySelector(".modal-body");
-    const modalFooterBtn = document.querySelectorAll(".modal-footer button")[1];
-    const modalBoots = new bootstrap.Modal(".modal", {});
-
-    function lockMonthForecastBulanan(elt) {
-        monthEltBulanan = elt;
-        const getIconElt = monthEltBulanan.querySelector("i");
-        let monthTitle = "{{ $month_title }}";
-        if (getIconElt.classList.contains("bi-lock-fill")) {
-            if (monthTitle) {
-                modalBody.innerHTML = `
-                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ $month_title }}</b>?</p>
-                `;
-            } else {
-                modalBody.innerHTML = `
-                    @php
-                        setlocale(LC_TIME, 'id.UTF-8');
-                    @endphp
-                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
-                `;
-            }
-            modalFooterBtn.innerText = "Request Authorize";
-        } else {
-            if (monthTitle) {
-                modalBody.innerHTML = `
-                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ $month_title }}</b>?</p>
-                `;
-            } else {
-                modalBody.innerHTML = `
-                    @php
-                        setlocale(LC_TIME, 'id.UTF-8');
-                    @endphp
-                    <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ strftime('%B', mktime(0, 0, 0, date('m'))) }}</b>?</p>
-                `;
-            }
-            modalFooterBtn.innerText = "Lanjut";
-        }
-        modalBoots.show();
-    }
-
-    async function confirmedLock() {
-        const getIconElt = monthEltBulanan.querySelector("i");
-        // monthEltBulanan.setAttribute("disabled", "");
-        const formData = new FormData();
-        if (monthEltBulanan) {
-            formData.append("_token", "{{ csrf_token() }}");
-            formData.append("periode_prognosa", "{{$periode == "" ? (int) date('m') : (int) $periode}}" );
-            if (getIconElt.classList.contains("bi-unlock-fill")) {
-                const getLockRes = await fetch("/forecast/set-lock", {
-                    method: "POST",
-                    header: {
-                        "content-type": "application/json",
-                    },
-                    body: formData,
-                }).then(res => res.json());
-                Toast.fire({
-                    html: getLockRes.msg,
-                    icon: getLockRes.status == "failed" ? "error" : "success",
-                });
-                // Swal.fire({
-                //     title: getLockRes.status == "success" ? "Success" : "Failed",
-                //     text: getLockRes.msg,
-                //     icon: getLockRes.status == "failed" ? "error" : "success",
-                //     timer: 3000,
-                //     showConfirmButton: false,
-                // });
-                // getIconElt.classList.remove("bi-unlock-fill");
-                // getIconElt.classList.add("bi-lock-fill");
-                monthEltBulanan.innerHTML = `
-                    <span class="text-white mx-2 fs-6">Unlock Forecast</span>
-                    <i class="bi bi-lock-fill text-white"></i>
-                `;
-                // toaster.classList.add("text-bg-success");
-                // toastBody.innerText = getLockRes.msg;
-            } else {
-                const getLockRes = await fetch("/forecast/set-unlock", {
-                    method: "POST",
-                    header: {
-                        "content-type": "application/json",
-                    },
-                    body: formData,
-                }).then(res => res.json());
-                getIconElt.classList.add("bi-unlock-fill");
-                getIconElt.classList.remove("bi-lock-fill");
-                Toast.fire({
-                    html: getLockRes.msg,
-                    icon: getLockRes.status == "failed" ? "error" : "success",
-                });
-                // Swal.fire({
-                //     title: getLockRes.status == "success" ? "Success" : "Failed",
-                //     text: getLockRes.msg,
-                //     icon: getLockRes.status == "failed" ? "error" : "success",
-                //     timer: 3000,
-                //     showConfirmButton: false,
-                // });
-                monthEltBulanan.innerHTML = `
-                    <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                    <i class="bi bi-unlock-fill text-white"></i>
-                `;
-                // toaster.classList.add("text-bg-success");
-                // toastBody.innerText = getLockRes.msg;
-            }
-            // toastBoots.show();
-            disabledAllInputs();
-            modalBoots.hide();
-        }
-    }
-
-    function cancelLock() {
-        monthEltBulanan = null;
-    }
-
-    function disabledAllInputs() {
-        const allInputsForecast = document.querySelectorAll("input[data-month]");
-        if (allInputsForecast) {
-            allInputsForecast.forEach(input => {
-                if (input.hasAttribute("disabled")) {
-                    input.removeAttribute("disabled");
-                } else {
-                    input.setAttribute("disabled", "");
-                }
-            });
-        }
-    }
-
-    async function unlockPreviousForecast() {
-        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-                            ];
-        // const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
-        // const minMonth = Math.min(...historyForecastObj);
-        // const maxMonth = Math.max(...historyForecastObj);
-        // const date = new Date();
-        // let getAvgMonth = [];
-        // for(var i=minMonth; i <= maxMonth; i++) {
-        //     const objectMonth = Object.keys(historyForecast[i]);
-        //     let avgDate = null;
-        //     for(var j=0; j < objectMonth.length; j++) {
-        //         avgDate += new Date(objectMonth[j]).getTime();
-        //     }
-        //     avgDate /= objectMonth.length;
-        //     getAvgMonth[`${i}`] = `${i}, ${new Date(avgDate)}`;
-        //     // getAvgMonth.push({
-        //     //     i: new Date(avgDate),
-        //     // });
-        //     avgDate = 0;
-        // }
-        
-        // for(var i=minMonth; i <= maxMonth; i++) {
-        //     let date = getAvgMonth[i].split(", ")[1];
-        //     jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
-        // }
-        const jsonVariable = {};
-        for(let i = 0; i < monthNames.length; i++) {
-            jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
-        }
-        const {value: monthForecast} = await Swal.fire({
-            title: 'Pilih Bulan Forecast',
-            input: 'select',
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#7e8299',
-            inputOptions: jsonVariable,
-            inputPlaceholder: 'Tekan di sini untuk memilih bulan',
-            showCancelButton: true,
-            inputValidator: (value) => {
-                return new Promise(resolve => {
-                    if (value == "") {
-                        resolve("Silahkan pilih bulan forecast");
-                    }
-                    else {
-                        resolve();
-                    }
-                })
-            }
-        });
-        if (monthForecast) {
-            Swal.fire({
-                title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast - 1]}?`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#7e8299',
-                confirmButtonText: 'Lanjut'
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        let url = `/forecast/${monthForecast}/${new Date().getFullYear()}`;
-                        location.href = url;
-                    }
-                })
-        }
-    }
-</script> --}}
-
-{{-- Show Collapse --}}
-{{-- <script>
-    let isLoaded = false;
-    const SwalLoading = Swal.mixin({
-                title: 'Mohon Ditunggu!',
-                html: 'Data sedang dimuatkan',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-            });
-    const accordionsDOPElt = document.querySelectorAll(".button-dop");
-    accordionsDOPElt.forEach(accord => {
-        accord.addEventListener('click', event => {
-            const id = event.target.getAttribute("data-bs-target")
-            const items = document.querySelectorAll(`.button-unit-kerja[data-bs-target="${id}"]`);
-            // console.log(items);
-        });
-
-        // accord.addEventListener('show.bs.collapse', event => {
-        //     if(!isLoaded) {
-        //         isLoaded = true;
-        //         SwalLoading.fire({
-        //             didOpen: () => {
-        //                 SwalLoading.showLoading();
-        //             }
-        //         });
-        //         console.log("Loading");
-        //     }
-        // });
-
-        // accord.addEventListener('shown.bs.collapse', event => {
-        //     if(isLoaded) {
-        //         SwalLoading.close();
-        //         isLoaded = false;
-        //         console.log("loaded");
-        //     }
-        // });
-    })
-</script> --}}
 {{-- Show Collapse --}}
 @endsection
 {{-- end:: JS script --}}

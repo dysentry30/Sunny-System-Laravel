@@ -212,7 +212,7 @@
                                     <span class="menu-icon">
                                         <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
                                         <span class="svg-icon svg-icon-2">
-                                            <i class="bi bi-bar-chart text-white"
+                                            <i class="bi bi-bar-chart-fill text-white"
                                                 style="font-size: 18px; margin-left:7px"></i>
                                         </span>
                                         <!--end::Svg Icon-->
