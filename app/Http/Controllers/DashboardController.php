@@ -6,12 +6,10 @@ use App\Models\ClaimManagements;
 use App\Models\ContractManagements;
 use App\Models\Dop;
 use App\Models\Forecast;
-use App\Models\HistoryForecast;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
-use Dflydev\DotAccessData\Data;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -527,14 +525,15 @@ class DashboardController extends Controller
                             $data[$f->kode_proyek]->month_rkap = $f->month_rkap;
                         }
                     }
+                    $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
+                    $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
+                    $stage = $this->getProyekStage($data[$kode_proyek]->stage);
+                    $sheet->setCellValue("C" . $counter, $stage);
+                    $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
+                    $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
+                    $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
                 }
-                $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
-                $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
-                $stage = $this->getProyekStage($data[$kode_proyek]->stage);
-                $sheet->setCellValue("C" . $counter, $stage);
-                $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
-                $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
-                $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
+                $counter++;
             }
         } else {
             $month = array_search($month, $arrNamaBulan);
@@ -567,14 +566,15 @@ class DashboardController extends Controller
                             $data[$f->kode_proyek]->month_realisasi = $f->month_realisasi;
                         }
                     }
+                    $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
+                    $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
+                    $stage = $this->getProyekStage($data[$kode_proyek]->stage);
+                    $sheet->setCellValue("C" . $counter, $stage);
+                    $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
+                    $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
+                    $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
                 }
-                $sheet->setCellValue("A" . $counter, $data[$kode_proyek]->nama_proyek);
-                $sheet->setCellValue("B" . $counter, $data[$kode_proyek]->status_pasdin);
-                $stage = $this->getProyekStage($data[$kode_proyek]->stage);
-                $sheet->setCellValue("C" . $counter, $stage);
-                $sheet->setCellValue("D" . $counter, $data[$kode_proyek]->unit_kerja);
-                $sheet->setCellValue("E" . $counter, $this->getFullMonth($data[$kode_proyek]->month_forecast));
-                $sheet->setCellValue("F" . $counter, $data[$kode_proyek]->nilai_forecast);
+                $counter++;
             }
             // foreach ($history_realisasi as $history) {
             //     if ($history->month_realisasi <= $month) {
