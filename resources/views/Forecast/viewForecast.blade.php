@@ -861,7 +861,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
                                                                                                 $f->rkap_forecast /= $per_sejuta;
                                                                                                 $f->nilai_forecast /= $per_sejuta;
-                                                                                                $f->realisasi_forecast /= $per_sejuta;
+                                                                                                // $f->realisasi_forecast /= $per_sejuta;
                                                                                                 return $f;
                                                                                             });
                                                                                         @endphp
@@ -938,7 +938,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             @if (($month_counter == (int) $forecast->month_realisasi))
                                                                                                                 @php
                                                                                                                     // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                    $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast ?? '-';
+                                                                                                                    $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
                                                                                                                 @endphp
                                                                                                                 <td data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                                 {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
@@ -1021,7 +1021,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             @if (($month_counter == (int) $forecast->month_realisasi))
                                                                                                                     @php
                                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                        $nilai_terkontrak_formatted = (int) str_replace('.', '', $forecast->realisasi_forecast) ?? '-';
+                                                                                                                        $nilai_terkontrak_formatted = (int) str_replace('.', '', $forecast->realisasi_forecast) / $per_sejuta ?? '-';
                                                                                                                     @endphp
                                                                                                                     <td
                                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
@@ -1064,11 +1064,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         </td>
                                                                                                         @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) ?? '-';
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) / $per_sejuta ?? '-';
                                                                                                             @endphp
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                {{ number_format($nilai_terkontrak_formatted / $per_sejuta ?? 0, 0, ',', '.') }}
+                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td
@@ -1167,7 +1167,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                 <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                                     data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                    {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
+                                                                                                                    {{ number_format($forecast->rkap_forecast / $per_sejuta, 0, ".", ".")}}
                                                                                                                 </td>
                                                                                                                 @else
                                                                                                                 <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -1192,7 +1192,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         id="nilai-forecast"
                                                                                                                         name="nilai-forecast"
                                                                                                                         onkeyup="reformatNumber(this)"
-                                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
+                                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast / $per_sejuta, 0, ',', '.') }}"
                                                                                                                         placeholder="" />
                                                                                                                 </td>
                                                                                                             {{-- @else
@@ -1216,7 +1216,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             @if (($month_counter == (int) $forecast->month_realisasi))
                                                                                                                 @php
                                                                                                                     // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                    $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast ?? '-';
+                                                                                                                    $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
                                                                                                                 @endphp
                                                                                                                 <td data-column-realisasi-bulanan="{{ $month_counter }}">
                                                                                                                 {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
@@ -1255,7 +1255,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                        {{ number_format($forecast->rkap_forecast, 0, ".", ".") }}
+                                                                                                                        {{ number_format($forecast->rkap_forecast / $per_sejuta, 0, ".", ".") }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
@@ -1264,7 +1264,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     </td>
                                                                                                                 @endif
                                                                                                                 @php
-                                                                                                                    $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                                    $total_forecast += (int) $forecast->nilai_forecast / $per_sejuta;
                                                                                                                     $total_year_forecast += $total_forecast;
                                                                                                                     
                                                                                                                 @endphp
@@ -1278,7 +1278,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         id="nilai-forecast"
                                                                                                                         name="nilai-forecast"
                                                                                                                         onkeyup="reformatNumber(this)"
-                                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
+                                                                                                                        value="{{ number_format((int) $forecast->nilai_forecast / $per_sejuta, 0, ',', '.') }}"
                                                                                                                         placeholder="" />
                                                                                                                 </td>
                                                                                                             @if (($month_counter == (int) $forecast->month_realisasi))
