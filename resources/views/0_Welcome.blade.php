@@ -66,10 +66,10 @@
                             <!--begin::Input group-->
 							<div class="fv-row mb-10">
 								<!--begin::Label-->
-								<label class="form-label fs-6 fw-bolder @error('email') is-invalid @enderror">Email</label>
+								<label class="form-label fs-6 fw-bolder @error('email') is-invalid @enderror">Username</label>
 								<!--end::Label-->
 								<!--begin::Input-->
-								<input value="{{ old('email') }}" class="form-control form-control-lg form-control-solid" type="email" name="email" autocomplete="off" placeholder="example@Email.com" autofocus required/>
+								<input value="{{ old('email') }}" class="form-control form-control-lg form-control-solid" type="email" name="email" autocomplete="off" placeholder="example@Sunny" autofocus required/>
 								<!--end::Input-->
                                 @error('email')
                                 <h6 class="text-danger invalid-feedback">{{ $message }}</h6>
