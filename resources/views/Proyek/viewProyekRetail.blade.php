@@ -196,223 +196,29 @@
                                                                 Pasar Dini
                                                             </a>
                                                         @endif
-@if ($proyek->tipe_proyek != "R")
-                                                        {{-- @if ($proyek->stage > 1)
+                                                        @if ($proyek->stage > 1)
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
                                                                 style="outline: 0px; cursor: pointer;" stage="2">
-                                                                Pasar Potensial
+                                                                Terkontrak
                                                             </a>
                                                         @else
                                                             @if ($proyek->stage == 0)
                                                                 <a href="#"
                                                                     class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; pointer-events: none" stage="2">
-                                                                    Pasar Potensial
+                                                                    style="outline: 0px; pointer-events: none" stage="8">
+                                                                    Terkontrak
                                                                 </a>
                                                             @else
                                                                 <a href="#"
                                                                     class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
-                                                            @endif
-                                                        @endif
-
-                                                        @if ($proyek->stage > 2)
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="3">
-                                                                Prakualifikasi
-                                                            </a>
-                                                        @else
-                                                            @if (abs($proyek->stage - 3) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="3">
-                                                                    Prakualifikasi
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="3">
-                                                                    Prakualifikasi
-                                                                </a>
-                                                            @endif
-                                                        @endif
-
-                                                        @if ($proyek->stage > 3)
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="4">
-                                                                Tender Diikuti
-                                                            </a>
-                                                        @else
-                                                            @if (abs($proyek->stage - 4) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="4">
-                                                                    Tender Diikuti
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="4">
-                                                                    Tender Diikuti
-                                                                </a>
-                                                            @endif
-                                                        @endif
-
-                                                        @if ($proyek->stage > 4)
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="5">
-                                                                Perolehan
-                                                            </a>
-                                                        @else
-                                                            @if (abs($proyek->stage - 5) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="5">
-                                                                    Perolehan
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="5">
-                                                                    Perolehan
-                                                                </a>
-                                                            @endif
-                                                        @endif
-
-                                                        @if ($proyek->stage > 5)
-                                                            @if ($proyek->stage == 6 || $proyek->stage > 7)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-done color-is-default"
-                                                                    data-bs-toggle="dropdown" role="button"
-                                                                    id="dropdownMenuButton1" aria-expanded="false"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
-                                                                    <div class="d-flex flex-row">
-                                                                        <span class="text-white">Menang</span>&nbsp;&nbsp;
-                                                                        <span class=""
-                                                                            style="position: relative;top: 15%;"
-                                                                            stage="1"><i
-                                                                                class="bi bi-caret-down-fill text-white"></i></span>
-                                                                    </div>
-                                                                </a>
-                                                            @elseif($proyek->stage == 7)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-done color-is-danger"
-                                                                    data-bs-toggle="dropdown" role="button"
-                                                                    id="dropdownMenuButton1" aria-expanded="false"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
-                                                                    <div class="d-flex flex-row">
-                                                                        <span class="text-white">Kalah</span>&nbsp;&nbsp;
-                                                                        <span class=""
-                                                                            style="position: relative;top: 15%;"
-                                                                            stage="1"><i
-                                                                                class="bi bi-caret-down-fill text-white"></i></span>
-                                                                    </div>
-                                                                </a>
-                                                            @endif
-                                                            <ul class="dropdown-menu"
-                                                                aria-labelledby="dropdownMenuButton1">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-menang"
-                                                                            value="Menang" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-kalah"
-                                                                            value="Kalah" /></li>
-                                                                </form>
-                                                            </ul>
-                                                        @else
-                                                            @if (abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2)
-                                                                <a href="#"
-                                                                    class="stage-button stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="8">
-                                                                    Menang
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
-                                                                </a>
-                                                            @else
-                                                                <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="dropdownMenuButton1"
-                                                                    aria-expanded="false"
-                                                                    class="stage-button stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="8">
-                                                                    Menang
-                                                                    &nbsp;&nbsp;
-                                                                    <span class=""
-                                                                        style="position: relative;top: 15%;"
-                                                                        stage="8"><i
-                                                                            class="bi bi-caret-down-fill text-white"></i></span>
+                                                                    Terkontrak
                                                                 </a>
-
-                                                                <ul class="dropdown-menu"
-                                                                    aria-labelledby="dropdownMenuButton1">
-                                                                    <form action="/proyek/stage-save" method="POST">
-                                                                    </form>
-                                                                    <form action="/proyek/stage-save" method="POST"
-                                                                        onsubmit="confirmAction(this); return false;"
-                                                                        stage="8">
-                                                                        @csrf
-                                                                        <input type="hidden" name="kode_proyek"
-                                                                            value="{{ $proyek->kode_proyek }}">
-                                                                        <li><input type="submit"
-                                                                                onclick="this.form.submitted=this.value"
-                                                                                class="dropdown-item" name="stage-menang"
-                                                                                value="Menang" />
-                                                                        </li>
-                                                                        <li><input type="submit"
-                                                                                onclick="this.form.submitted=this.value"
-                                                                                class="dropdown-item" name="stage-kalah"
-                                                                                value="Kalah" />
-                                                                        </li>
-                                                                    </form>
-                                                                </ul>
                                                             @endif
-                                                            <ul class="dropdown-menu"
-                                                                aria-labelledby="dropdownMenuButton1">
-                                                                <form action="/proyek/stage-save" method="POST">
-                                                                </form>
-                                                                <form action="/proyek/stage-save" method="POST"
-                                                                    onsubmit="confirmAction(this); return false;"
-                                                                    stage="1">
-                                                                    @csrf
-                                                                    <input type="hidden" name="kode_proyek"
-                                                                        value="{{ $proyek->kode_proyek }}">
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-menang"
-                                                                            value="Menang" /></li>
-                                                                    <li><input type="submit"
-                                                                            onclick="this.form.submitted=this.value"
-                                                                            class="dropdown-item" name="stage-kalah"
-                                                                            value="Kalah" /></li>
-                                                                </form>
-                                                            </ul>
-                                                        @endif --}}
-
-@endif
-
-                                                        @if ($proyek->stage > 7)
+                                                        @endif
+                                                        
+                                                        {{-- @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
                                                                 <a href="#" data-bs-toggle="dropdown"
                                                                     role="button" id="terkontrak" aria-expanded="false"
@@ -505,32 +311,8 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
-                                                        @endif
-
-
-
-                                                        {{-- @if ($proyek->stage > 9)
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="10">
-                                                                Approval
-                                                            </a>
-                                                        @else
-                                                            @if (abs($proyek->stage - 9) != 1)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;pointer-events: none"
-                                                                    stage="10">
-                                                                    Approval
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="10">
-                                                                    Approval
-                                                                </a>
-                                                            @endif
                                                         @endif --}}
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -657,7 +439,7 @@
                                                     @if ($proyek->stage > 0)
                                                     <!--begin:::Tab item Pasar Dini-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                        <a onclick="showSave()" class="nav-link text-active-primary pb-4 active"
                                                         data-bs-toggle="tab"
                                                         href="#kt_user_view_overview_pasardini"
                                                         style="font-size:14px;">Pasar Dini</a>
@@ -665,67 +447,10 @@
                                                     <!--end:::Tab item Pasar Dini-->
                                                     @endif
 
-@if ($proyek->tipe_proyek != "R")
-                                                    
-                                                    {{-- @if ($proyek->stage > 1)
-                                                        <!--begin:::Tab item Pasar Potensial-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_potensial"
-                                                                style="font-size:14px;">Pasar Potensial</a>
-                                                            </li>
-                                                            <!--end:::Tab item Pasar Potensial-->
-                                                    @endif
-                                                    
-                                                    @if ($proyek->stage > 2)
-                                                        <!--begin:::Tab item Prakualifikasi-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_prakualifikasi"
-                                                                style="font-size:14px;">Prakualifikasi</a>
-                                                            </li>
-                                                            <!--end:::Tab item Prakualifikasi-->
-                                                    @endif
-                                                    
-                                                    @if ($proyek->stage > 3)
-                                                    <!--begin:::Tab item Tender Diikuti-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_tender"
-                                                                style="font-size:14px;">Tender Diikuti</a>
-                                                            </li>
-                                                            <!--end:::Tab item Tender Diikuti-->
-                                                            @endif
-                                                            
-                                                            @if ($proyek->stage > 4)
-                                                            <!--begin:::Tab item Perolehan-->
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-active-primary pb-4"
-                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                                href="#kt_user_view_overview_perolehan"
-                                                                style="font-size:14px;">Perolehan</a>
-                                                            </li>
-                                                        <!--end:::Tab item Perolehan-->
-                                                        @endif
-                                                        
-                                                    @if ($proyek->stage > 5)
-                                                        <!--begin:::Tab item Menang-->
-                                                        <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_menang"
-                                                            style="font-size:14px;">{{ $proyek->stage == 7 ? "Kalah" : "Menang" }}</a>
-                                                        </li>
-                                                        <!--end:::Tab item Menang-->
-                                                    @endif --}}
-@endif
                                                     @if ($proyek->stage > 7)
                                                         <!--begin:::Tab item Terkontrak-->
                                                         <li class="nav-item">
-                                                            <a class="nav-link text-active-primary pb-4"
+                                                            <a onclick="showSave()" class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_terkontrak"
                                                                 style="font-size:14px;">{{ $proyek->stage == 9 ? "Terendah" : "Terkontrak" }}</a>
@@ -735,11 +460,19 @@
                                                     
                                                     <!--begin:::Tab item Forecast-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
+                                                        <a onclick="hideSave()" class="nav-link text-active-primary pb-4"
                                                         data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
-                                                            style="font-size:14px;">Terkontrak Retail</a>
+                                                            style="font-size:14px;">Forecast Retail</a>
                                                     </li>
+                                                    <script>
+                                                        function hideSave() {
+                                                            document.getElementById('proyek-save').style.display = "none";
+                                                        }
+                                                        function showSave() {
+                                                            document.getElementById('proyek-save').style.display = "";
+                                                        }
+                                                    </script>
                                                     <!--end:::Tab item Forecast-->
 
                                                     <!--begin:::Tab item Approval-->
@@ -4145,7 +3878,7 @@
                                                                                     @endif
                                                                                     <!--begin::input-->
                                                                                     <td>
-                                                                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary" id="proyek-save">
+                                                                                        <button type="submit" class="btn btn-sm btn-light btn-active-primary" id="forecast-save">
                                                                                         Save</button>
                                                                                         </button>
                                                                                     </td>
