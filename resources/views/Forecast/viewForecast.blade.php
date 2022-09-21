@@ -2132,11 +2132,11 @@ fill="none">
         dataColumnTotalForecast.forEach((forecast, i) => {
             const totalColumnForecast = forecast.getAttribute("data-total-forecast-column");
             let dataColumnForecast = document.querySelectorAll(
-                `input[data-column-forecast="${totalColumnForecast}"]`);
-            if(dataColumnForecast) {
-                dataColumnForecast = document.querySelectorAll(
-                `div[data-column-forecast="${totalColumnForecast}"]`);
-            }
+                `[data-column-forecast="${totalColumnForecast}"]`);
+            // if(dataColumnForecast) {
+            //     dataColumnForecast = document.querySelectorAll(
+            //     `[data-column-forecast="${totalColumnForecast}"]`);
+            // }
             dataColumnForecast.forEach(dataForecast => {
                 // totalForecast += isNaN(Number(dataForecast.value.replaceAll(".", ""))) ? 0 : Number(
                 //     dataForecast.innerText.replaceAll(".", ""));
