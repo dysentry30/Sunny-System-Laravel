@@ -1178,7 +1178,7 @@
                                                         &nbsp;<br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Nilai RKAP Review &nbsp;
-                                                            <i onclick="hideReview()" id="hide-review" class="bi bi-arrows-collapse"></i><i onclick="showReview()" id="show-review" style="display: none" class="bi bi-arrows-expand"></i> 
+                                                            <i onclick="hideReview()" id="hide-review" style="display: none" class="bi bi-arrows-collapse"></i><i onclick="showReview()" id="show-review" class="bi bi-arrows-expand"></i> 
                                                         </h3>
                                                         <script>
                                                             function hideReview() {
@@ -1193,7 +1193,7 @@
                                                             }
                                                         </script>
                                                         <br>
-                                                        <div id="divRkapReview">
+                                                        <div id="divRkapReview" style="display:none">
                                                         <!--End::Title Biru Form: Nilai RKAP Review-->
 
                                                             <!--begin::Row Kanan+Kiri-->
@@ -1368,7 +1368,7 @@
                                                         <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Nilai RKAP Awal &nbsp;
-                                                            <i onclick="hideColumn()" id="hide-button" class="bi bi-arrows-collapse"></i><i onclick="showColumn()" id="show-button" style="display: none" class="bi bi-arrows-expand"></i> 
+                                                            <i onclick="hideColumn()" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i onclick="showColumn()" id="show-button" class="bi bi-arrows-expand"></i> 
                                                         </h3>
                                                         <script>
                                                             function hideColumn() {
@@ -1383,7 +1383,7 @@
                                                             }
                                                         </script>
                                                         <br>
-                                                        <div id="divRkapAwal">
+                                                        <div id="divRkapAwal" style="display:none">
                                                             <!--End::Title Biru Form: Nilai RKAP Awal-->
                                                             
                                                             <!--begin::Row Kanan+Kiri-->
@@ -1589,7 +1589,7 @@
                                                         <br>
                                                         <div class="form-group">
                                                             <textarea id="laporan-kualitatif-pasdin" name="laporan-kualitatif-pasdin" class="form-control"
-                                                                rows="7">{{ $proyek->laporan_kualitatif_pasdin }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_kualitatif_pasdin !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -1994,7 +1994,7 @@
                                                         &nbsp;<br>
                                                         <div class="form-group">
                                                             <textarea class="form-control" id="laporan-kualitatif-paspot" name="laporan-kualitatif-paspot"
-                                                                rows="7">{{ $proyek->laporan_kualitatif_paspot }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_kualitatif_paspot !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -2411,7 +2411,7 @@
                                                         <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control" id="laporan-prakualifikasi" name="laporan-prakualifikasi"
-                                                                rows="7">{{ $proyek->laporan_prakualifikasi }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_prakualifikasi !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
                                                         
@@ -2697,7 +2697,7 @@
                                                         </h3>
                                                         &nbsp;<br>
                                                         <div class="form-group">
-                                                            <textarea class="form-control" id="laporan-tender" name="laporan-tender" rows="7">{{ $proyek->laporan_tender }}</textarea>
+                                                            <textarea class="form-control" id="laporan-tender" name="laporan-tender" rows="7">{!! $proyek->laporan_tender !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -2958,7 +2958,7 @@
                                                         <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control" id="laporan-perolehan" name="laporan-perolehan"
-                                                                rows="7">{{ $proyek->laporan_perolehan }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_perolehan !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -3157,7 +3157,7 @@
                                                         <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control" id="laporan-menang" name="laporan-menang"
-                                                                rows="7">{{ $proyek->laporan_menang }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_menang !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 
@@ -3885,7 +3885,7 @@
                                                         <br>
                                                         <div class="form-group">
                                                             <textarea class="form-control" id="laporan-terkontrak" name="laporan-terkontrak"
-                                                                rows="7">{{ $proyek->laporan_terkontrak }}</textarea>
+                                                                rows="7">{!! $proyek->laporan_terkontrak !!}</textarea>
                                                         </div>
                                                         <!--End::Title Biru Form: Laporan Kualitatif-->
 

@@ -216,24 +216,28 @@
                                                 document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").value = "";
                                             } else if (e.value == "unit_kerja") {
                                                 document.getElementById("filterUnit").style.display = "";
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").value = "";
                                             } else if (e.value == "jenis_proyek") {
                                                 document.getElementById("filterJenis").style.display = "";
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterTipe").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").value = "";
                                             } else if (e.value == "tipe_proyek") {
                                                 document.getElementById("filterTipe").style.display = "";
                                                 document.getElementById("filterJenis").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
                                                 document.getElementById("filterStage").style.setProperty("display", "none", "important");
                                                 document.getElementById("filter").style.setProperty("display", "none", "important");
+                                                document.getElementById("filter").value = "";
                                             } else {
                                                 document.getElementById("filter").style.display = "";
                                                 document.getElementById("filterUnit").style.setProperty("display", "none", "important");
@@ -304,7 +308,7 @@
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_ri_perolehan', 'Bulan Perolehan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('bulan_ra_perolehan', 'Bulan Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
