@@ -36,8 +36,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
-                                <!--begin::Actions-->
+                            <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
                                         <!--begin::Button-->
@@ -49,6 +48,8 @@
                                         data-bs-target="#kt_modal_create_pelanggan" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
                                         New</button>
+
+                                        @if (auth()->user()->check_administrator)
 
                                         <!--begin::Wrapper-->
                                         <div class="me-4" style="margin-left:10px;">
@@ -83,12 +84,13 @@
                                             <!--end::Menu 1-->
                                             <!--end::Menu-->
                                         </div>
-                                        <!--end::Wrapper--> 	
-
+                                        <!--end::Wrapper--> 
+                                        
+                                         @endif
 
                                 </div>
                                 <!--end::Actions-->
-                            @endif
+                           
                         </div>
                         <!--end::Container-->
                     </div>

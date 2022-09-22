@@ -75,30 +75,36 @@ class ProyekController extends Controller
 
         // Begin::FILTER
         // if (!empty($column)) {
-            if (!empty($filter)) {
-                // $proyeks = Proyek::sortable()->where($column, '=', $filter);
-                $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
-            } elseif (!empty($filterUnit)) {
-                $proyeks = $proyeks->where($column, 'like', '%' . $filterUnit . '%')->get();
-            } elseif (!empty($filterStage)) {
-                $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
-            } elseif (!empty($filterJenis)) {
-                $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
-            } elseif (!empty($filterTipe)) {
-                $proyeks = $proyeks->where($column, 'like', '%' . $filterTipe . '%')->get();
-            } else {
-                // if(!empty($cari)){
-                    //     $proyeks = $proyeks->where('nama_proyek', 'like', '%'.$cari.'%')->orWhere('kode_proyek', 'like', '%'.$cari.'%')->orWhere('tahun_perolehan', 'like', '%'.$cari.'%')->get();
-                    // }else{
-                        $proyeks = $proyeks->get();
-                        // }
-                    }
-        // } else {
-            // $column = "nama_proyek";
+        if (!empty($filter)) {
             // $proyeks = $proyeks->where($column, 'like', '%' . $filter . '%')->get();
-        // }
-
-        // $proyeks = Proyek::sortable()->get();
+            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filter) {
+                return preg_match("/$filter/i", $p[$column]);
+            });
+        } elseif (!empty($filterUnit)) {
+            // $proyeks = $proyeks->where($column, 'like', '%' . $filterUnit . '%')->get();
+            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterUnit) {
+                return preg_match("/$filterUnit/i", $p[$column]);
+            });
+        } elseif (!empty($filterStage)) {
+            // $proyeks = $proyeks->where($column, 'like', '%' . $filterStage . '%')->get();
+            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterStage) {
+                return preg_match("/$filterStage/i", $p[$column]);
+            });
+        } elseif (!empty($filterJenis)) {
+            // $proyeks = $proyeks->where($column, 'like', '%' . $filterJenis . '%')->get();
+            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterJenis) {
+                return preg_match("/$filterJenis/i", $p[$column]);
+            });
+        } elseif (!empty($filterTipe)) {
+            // $proyeks = $proyeks->where($column, 'like', '%' . $filterTipe . '%')->get();
+            $proyeks = $proyeks->get()->filter(function ($p) use ($column, $filterTipe) {
+                return preg_match("/$filterTipe/i", $p[$column]);
+            });
+        } else {
+            $proyeks = $proyeks->get();
+        }
+        $filter = null;
+        // dd($filter);
 
         return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
     }

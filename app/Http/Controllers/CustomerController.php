@@ -31,7 +31,10 @@ class CustomerController extends Controller
         // dd($request->all());
 
         if (!empty($column)) {
-            $results = Customer::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            // $results = Customer::sortable()->where($column, 'like', '%'.$filter.'%')->get();
+            $results = Customer::sortable()->get()->filter(function ($cust) use ($column, $filter) {
+                return preg_match("/$filter/i", $cust[$column]);
+            });
             $all_customer = Customer::all(); //untuk delete modal
         }else{
             if(!empty($sort)){
