@@ -1,20 +1,15 @@
 <?php
 
-use App\Models\faqs;
 use App\Models\User;
 use App\Models\Proyek;
 use App\Models\Forecast;
 use App\Models\UnitKerja;
-use App\Models\SumberDana;
 use App\Models\Opportunity;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 use App\Mail\UserPasswordEmail;
 use App\Models\HistoryForecast;
-use App\Models\ProyekBerjalans;
 use Illuminate\Http\UploadedFile;
-use App\Events\LockForeacastEvent;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
@@ -25,11 +20,9 @@ use App\Http\Controllers\FaqsController;
 use App\Http\Controllers\UserController;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Http\Controllers\ClaimController;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PasalController;
 use App\Http\Controllers\StageController;
 use App\Http\Controllers\ProyekController;
-use function PHPUnit\Framework\returnSelf;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DocumentController;
@@ -46,7 +39,6 @@ use App\Http\Controllers\ContractManagementsController;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -95,6 +87,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/dashboard/realisasi/{prognosa}/{type}/{unitKerja}', [DashboardController::class, 'getDataFilterPointRealisasi']);
 
     Route::get('/dashboard/realisasi/{prognosa}/{type}/{unitKerja}/{divcode}', [DashboardController::class, 'getDataFilterPointRealisasi']);
+
+    Route::get('/dashboard/monitoring-proyek/{tipe}', [DashboardController::class, "getDataMonitoringProyek"]);
+
+    Route::get('/dashboard/monitoring-proyek/{tipe}/{filter}', [DashboardController::class, "getDataMonitoringProyek"]);
+    
+    Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
@@ -411,10 +409,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->kode_proyek = $data["kode_proyek"];
             if ($forecast->save()) {
                 if ($proyek->kode_proyek == $data["kode_proyek"]) {
-                    $proyek->forecast += (int) $data["nilai_forecast"];
+                    $proyek->forecast += (int) $data["nilai_forecast"] * $per;
                     $proyek->save();
                 } else {
-                    $proyek->forecast = (int) $data["nilai_forecast"];
+                    $proyek->forecast = (int) $data["nilai_forecast"] * $per;
                     $proyek->save();
                 }
                 return response()->json([
