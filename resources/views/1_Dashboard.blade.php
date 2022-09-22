@@ -244,7 +244,7 @@
                                         <div id="forecast-line" style="display:">
                                         </div>
                                         <!--begin::Table Proyek-->
-                                        <div class="" id="datatable" style="display:none;">
+                                        <div class="" id="datatable" style="display: none">
                                             <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
@@ -261,18 +261,20 @@
                                                 {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
                                             </div>
                                             <br>
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                <!--begin::Table head-->
-                                                <thead id="table-line-head">
-                                                    {{-- THead Here --}}
-                                                </thead>
-                                                <!--end::Table head-->
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold" id="table-line-body">
-                                                    {{-- Data Here --}}
-                                                </tbody>
-                                                <!--end::Table body-->
-                                            </table>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead class="bg-white" id="table-line-head" style="position: sticky; top: 0">
+                                                        {{-- THead Here --}}
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold" id="table-line-body">
+                                                        {{-- Data Here --}}
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
                                             <!--end::Table Proyek-->
                                         </div>
                                     </figure>
@@ -326,7 +328,7 @@
                                             <!--end::NILAI REALISASI-->
             
                                         </div>
-                                        <div class="" id="datatable-realisasi" style="display:none;">
+                                        <div class="" id="datatable-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
                                             <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
@@ -342,27 +344,64 @@
                                                 {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
                                             </div>
                                             <br>
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                <!--begin::Table head-->
-                                                <thead id="table-line-head">
-                                                    {{-- THead Here --}}
-                                                </thead>
-                                                <!--end::Table head-->
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold" id="table-line-body">
-                                                    {{-- Data Here --}}
-                                                </tbody>
-                                                <!--end::Table body-->
-                                            </table>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead id="table-line-head" style="position: sticky; top: 0">
+                                                        {{-- THead Here --}}
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold" id="table-line-body">
+                                                        {{-- Data Here --}}
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
                                             <!--end::Table Proyek-->
                                         </div>
                                     </figure>
                                     {{-- <hr> --}}
 
-                                    <div class="py-12" id="monitoring-proyek">
-                                        <!--begin::MONITORING PROYEK-->
-                                        <!--end::MONITORING PROYEK-->
-                                    </div>
+                                    <figure class="highcharts-figure py-12">
+                                        <div class="py-12" id="monitoring-proyek">
+                                            <!--begin::MONITORING PROYEK-->
+                                            <!--end::MONITORING PROYEK-->
+                                        </div>
+                                        <div class="" id="datatable-monitoring-proyek" style="display: none;">
+                                            <hr>
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable-monitoring-proyek','#monitoring-proyek')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                    Chart</button>
+                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                            </div>
+                                            <br>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                        {{-- THead Here --}}
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold" id="table-line-body">
+                                                        {{-- Data Here --}}
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                    </figure>
                                     <hr>
                                     
                                     <div class="py-12" id="terendah-terkontrak">
@@ -408,102 +447,104 @@
                                                 <a href="/download-pareto" target="_blank" class="btn btn-sm btn-light btn-active-primary fs-6 mb-5"><i class="bi bi-download"></i> Export Excel</a>
                                             </div>
                                             <!--begin::Table-->
-                                            <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                <!--begin::Table head-->
-                                                <thead>
-                                                    <!--begin::Table row-->
-                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                        <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
-                                                        <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
-                                                        <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
-                                                        <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
-                                                    </tr>
-                                                    <!--end::Table row-->
-                                                </thead>
-                                                <!--begin::Table body-->
-                                                <tbody class="fw-bold">
-                                                    @foreach ($paretoProyek as $proyek)
-                                                        {{-- @foreach ($proyek as $proyek) --}}
-                                                        <tr>
-                                                            <!--begin::Name-->
-                                                            <td>
-                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                            </td>
-                                                            <!--end::Name-->
-                                                            <!--begin::Unit Kerja-->
-                                                            <td>
-                                                                <a href="#" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja ?? "-" }}</a>
-                                                            </td>
-                                                            <!--end::Unit Kerja-->
-
-                                                            <!--end::Stage-->
-                                                            <td>
-                                                                @switch($proyek->stage)
-                                                                    @case('1')
-                                                                        Pasar Dini
-                                                                    @break
-
-                                                                    @case('2')
-                                                                        Pasar Potensial
-                                                                    @break
-
-                                                                    @case('3')
-                                                                        Prakualifikasi
-                                                                    @break
-
-                                                                    @case('4')
-                                                                        Tender Diikuti
-                                                                    @break
-
-                                                                    @case('5')
-                                                                        Perolehan
-                                                                    @break
-
-                                                                    @case('6')
-                                                                        Menang
-                                                                    @break
-
-                                                                    @case('7')
-                                                                        Kalah
-                                                                    @break
-
-                                                                    @case('8')
-                                                                        Terkontrak
-                                                                    @break
-
-                                                                    @case('9')
-                                                                        Terendah
-                                                                    @break
-
-                                                                    @default
-                                                                        Selesai
-                                                                @endswitch
-                                                            </td>
-                                                            <!--end::Stage-->
-
-                                                            <!--begin::Nilai Forecast-->
-                                                            <td class="text-end">
-                                                                {{-- @php
-                                                                    $nilaiForecast = 0;
-                                                                    foreach ($proyek->Forecasts as $forecast)
-                                                                    if ($forecast->nilai_forecast != "") {
-                                                                        $nilaiForecast += $forecast->nilai_forecast;
-                                                                    }
-                                                                @endphp --}}
-                                                                {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
-                                                                {{-- @foreach ($proyek->Forecasts as $forecast)
-                                                                        {{ $forecast->nilai_forecast }};
-                                                                        @endforeach --}}
-                                                                {{-- {{ number_format($proyek->forecast, 0, '.', ',') }} --}}
-                                                                {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}
-                                                            </td>
-                                                            <!--end::Nilai Forecast-->
+                                            <div class="" style="max-height: 750px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead class="bg-white" style="position: sticky; top:0">
+                                                        <!--begin::Table row-->
+                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                            <th class="min-w-auto">@sortablelink('nama_proyek', 'Nama Proyek')</th>
+                                                            <th class="min-w-auto">@sortablelink('unit_kerja', 'Unit Kerja')</th>
+                                                            <th class="min-w-auto">@sortablelink('stage', 'Stage')</th>
+                                                            <th class="min-w-auto text-end">@sortablelink('forecast', 'Nilai Forecast')</th>
                                                         </tr>
-                                                        {{-- @endforeach --}}
-                                                    @endforeach
-                                                </tbody>
-                                                <!--end::Table body-->
-                                            </table>
+                                                        <!--end::Table row-->
+                                                    </thead>
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold">
+                                                        @foreach ($paretoProyek as $proyek)
+                                                            {{-- @foreach ($proyek as $proyek) --}}
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td>
+                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::Unit Kerja-->
+                                                                <td>
+                                                                    <a href="#" id="" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->UnitKerja->unit_kerja ?? "-" }}</a>
+                                                                </td>
+                                                                <!--end::Unit Kerja-->
+    
+                                                                <!--end::Stage-->
+                                                                <td>
+                                                                    @switch($proyek->stage)
+                                                                        @case('1')
+                                                                            Pasar Dini
+                                                                        @break
+    
+                                                                        @case('2')
+                                                                            Pasar Potensial
+                                                                        @break
+    
+                                                                        @case('3')
+                                                                            Prakualifikasi
+                                                                        @break
+    
+                                                                        @case('4')
+                                                                            Tender Diikuti
+                                                                        @break
+    
+                                                                        @case('5')
+                                                                            Perolehan
+                                                                        @break
+    
+                                                                        @case('6')
+                                                                            Menang
+                                                                        @break
+    
+                                                                        @case('7')
+                                                                            Kalah
+                                                                        @break
+    
+                                                                        @case('8')
+                                                                            Terkontrak
+                                                                        @break
+    
+                                                                        @case('9')
+                                                                            Terendah
+                                                                        @break
+    
+                                                                        @default
+                                                                            Selesai
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::Stage-->
+    
+                                                                <!--begin::Nilai Forecast-->
+                                                                <td class="text-end">
+                                                                    {{-- @php
+                                                                        $nilaiForecast = 0;
+                                                                        foreach ($proyek->Forecasts as $forecast)
+                                                                        if ($forecast->nilai_forecast != "") {
+                                                                            $nilaiForecast += $forecast->nilai_forecast;
+                                                                        }
+                                                                    @endphp --}}
+                                                                    {{-- {{ number_format($nilaiForecast, 0, '.', ',') }} --}}
+                                                                    {{-- @foreach ($proyek->Forecasts as $forecast)
+                                                                            {{ $forecast->nilai_forecast }};
+                                                                            @endforeach --}}
+                                                                    {{-- {{ number_format($proyek->forecast, 0, '.', ',') }} --}}
+                                                                    {{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}
+                                                                </td>
+                                                                <!--end::Nilai Forecast-->
+                                                            </tr>
+                                                            {{-- @endforeach --}}
+                                                        @endforeach
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
                                             <!--end::Table -->
                                             {{-- {{ $paretoClaim->links() }} --}}
                                             {{-- {!! $paretoClaim->append(Request::except('page'))->render() !!} --}}
@@ -1762,6 +1803,12 @@
 
     <!--Begin::Trigger Point Chart Forecast-->
     <script>
+        // Begin :: Checking is filter active
+        const isFilterActive = !Boolean("{{empty($unit_kerja_get)}}");
+        const filterGet = "{{$unit_kerja_get}}";
+        console.log(isFilterActive, filterGet);
+        // End :: Checking is filter active
+
         function getFullscreenElement() {
             return document.fullscreenElement ||
                 document.webkitFullscreenElement ||
@@ -2472,14 +2519,14 @@
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
                     '<th>Bulan</th>' +
-                    `<th class="text-end">Nilai Realisasi</th>`
+                    `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
 
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiRealisasi += Number(filter.realisasi_forecast);
+                    totalNilaiRealisasi += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan);
                     switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
@@ -2517,7 +2564,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (Number(filter.month_realisasi)) {
+                    switch (Number(filter.month_realisasi ?? filter.bulan_awal ?? filter.bulan_ri_perolehan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2558,7 +2605,7 @@
                             bulan = "Bulan Unknown"
                             break;
                     }
-
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
                     tbodyHTML += `<tr>
 
                             <!--begin::Email-->
@@ -2580,7 +2627,7 @@
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${filter.unit_kerja}
+                                ${unitKerja}
                             </td>
                             <!--end::Unit Kerja-->
 
@@ -2592,7 +2639,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
+                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan ?? filter.nilai_rkap)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2601,10 +2648,10 @@
 
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
-                titleTable.innerHTML = `Nilai Realisasi - ${month}`;
-                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
+                titleTable.innerHTML = `Nilai ${type} - ${month}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
                 table.style.display = "";
-                const chartLine = document.querySelector("#forecast-line");
+                const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
             }
             exportExcelBtn.setAttribute("href", `/download/${href}`);
@@ -2633,5 +2680,39 @@
         }
     </script>
     <!--End::Trigger Point Chart Forecast-->
+    
+    <!--Begin::Clickable Monitoring Proyek-->
+    <script>
+        const monitoringProyekPie = document.querySelectorAll("#monitoring-proyek .highcharts-point");
+        monitoringProyekPie.forEach(point => {
+            point.addEventListener("click", async e => {
+                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                let url = `/dashboard/monitoring-proyek/${tipe}`;
+                if(isFilterActive) {
+                    url = `/dashboard/monitoring-proyek/${tipe}/${filterGet}`;
+                }
+                getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", url, tipe, 9);
+                
+            })
+        })
+
+    </script>
+    <!--End::Clickable Monitoring Proyek-->
+
+    <!--Begin::Clickable Terendah-Terkontrak -->
+    <script>
+        const terendahTerkontrakPie = document.querySelectorAll("#terendah-terkontrak .highcharts-point");
+        terendahTerkontrakPie.forEach(point => {
+            point.addEventListener("click", async e => {
+                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                // console.log(tipe);
+                getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", `/dashboard/monitoring-proyek/${tipe}`, tipe, 9);
+                
+            })
+        })
+
+    </script>
+    <!--End::Clickable Terendah-Terkontrak -->
+    
 
 @endsection
