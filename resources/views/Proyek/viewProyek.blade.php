@@ -3007,11 +3007,13 @@
                                                                         <!--end::Label-->
 
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
+                                                                        <textarea class="form-control" id="aspek-pesaing" name="aspek-pesaing"
+                                                                        rows="3">{{ $proyek->aspek_pesaing }}</textarea>
+                                                                        {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="aspek-pesaing" name="aspek-pesaing"
                                                                             value="{{ $proyek->aspek_pesaing }}"
-                                                                            placeholder="Aspek Pesaing" />
+                                                                            placeholder="Aspek Pesaing" /> --}}
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -3026,11 +3028,13 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
+                                                                        <textarea class="form-control" id="aspek-non-pesaing" name="aspek-non-pesaing"
+                                                                        rows="3">{{ $proyek->aspek_non_pesaing }}</textarea>
+                                                                        {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="aspek-non-pesaing" name="aspek-non-pesaing"
                                                                             value="{{ $proyek->aspek_non_pesaing }}"
-                                                                            placeholder="Aspek Non Pesaing" />
+                                                                            placeholder="Aspek Non Pesaing" /> --}}
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -3052,11 +3056,13 @@
                                                                         <!--end::Label-->
 
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
+                                                                        <textarea class="form-control" id="saran-perbaikan" name="saran-perbaikan"
+                                                                        rows="3">{{ $proyek->saran_perbaikan }}</textarea>
+                                                                        {{-- <input type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="saran-perbaikan" name="saran-perbaikan"
                                                                             value="{{ $proyek->saran_perbaikan }}"
-                                                                            placeholder="Saran Perbaikan" />
+                                                                            placeholder="Saran Perbaikan" /> --}}
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
