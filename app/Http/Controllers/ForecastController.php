@@ -157,7 +157,7 @@ class ForecastController extends Controller
                 // "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
-                "forecast" => true,
+                "is_forecast" => true,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
