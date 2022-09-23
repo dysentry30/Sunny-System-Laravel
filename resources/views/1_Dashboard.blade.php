@@ -404,10 +404,45 @@
                                     </figure>
                                     <hr>
                                     
-                                    <div class="py-12" id="terendah-terkontrak">
-                                        <!--begin::TERENDAH - TERKONTRAK-->
-                                        <!--end::TERENDAH - TERKONTRAK-->
-                                    </div>
+                                    <figure class="highcharts-figure py-12">
+                                        <div class="py-12" id="terendah-terkontrak">
+                                            <!--begin::TERENDAH - TERKONTRAK-->
+                                            <!--end::TERENDAH - TERKONTRAK-->
+                                        </div>
+                                        <div class="" id="datatable-terendah-terkontrak" style="display: none;">
+                                            <hr>
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable-terendah-terkontrak','#terendah-terkontrak')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                    Chart</button>
+                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                            </div>
+                                            <br>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                        {{-- THead Here --}}
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold" id="table-line-body">
+                                                        {{-- Data Here --}}
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                    </figure>
                                     <hr>
 
                                     <div class="row">
@@ -2682,7 +2717,7 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan);
+                    totalNilaiLainnya += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan ?? filter.nilai_perolehan);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -2865,7 +2900,7 @@
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
                 // console.log(tipe);
-                getDataTable("#datatable-monitoring-proyek", "#monitoring-proyek", `/dashboard/monitoring-proyek/${tipe}`, tipe, 9);
+                getDataTable("#datatable-terendah-terkontrak", "#terendah-terkontrak", `/dashboard/terendah-terkontrak/${tipe}`, tipe, 9);
                 
             })
         })
