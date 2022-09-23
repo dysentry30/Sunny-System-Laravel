@@ -1929,6 +1929,7 @@
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
             const unitKerja = url.split("/");
+            console.log(type);
             
             if (type == "Forecast") {
                 if (tableElt.includes("triwulan")) {
@@ -2225,6 +2226,153 @@
                 table.style.display = "";
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
+            } else if (type == "NilaiRealisasi") {
+                let tbodyHTML = ``;
+                let totalNilaiRealisasi = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Realisasi</th>`
+                '</tr>';
+
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    totalNilaiRealisasi += Number(filter.realisasi_forecast);
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    // console.log(filter.bulan_pelaksanaan);
+                    switch (Number(filter.month_realisasi)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "Bulan Unknown"
+                            break;
+                    }
+
+                    tbodyHTML += `<tr>
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin)}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Bulan-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                
+                    }
+                });   
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai Realisasi - ${month}`;
+                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector("#forecast-line");
+                chartLine.style.display = "none";
             } else if(type == "Nilai-OK-Kumulatif") {
                 filterRes = filterRes.sort((a, b) => Number(b.nilai_rkap.replaceAll(",", "")) - Number(a.nilai_rkap.replaceAll(",", "")))
                 let tbodyHTML = ``;
@@ -2518,7 +2666,7 @@
             }
             else {
                 let tbodyHTML = ``;
-                let totalNilaiRealisasi = 0;
+                let totalNilaiLainnya = 0;
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
@@ -2534,7 +2682,7 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiRealisasi += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan);
+                    totalNilaiLainnya += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -2660,7 +2808,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type} - ${month}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
