@@ -315,6 +315,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // dd($data, $i);
 
         $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->get()->first();
+        // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
 
@@ -333,12 +334,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $prognosa = (int) date('m');
             $forecast->periode_prognosa = $prognosa;
 
-            // dd($forecast);
+            // dd($tabPane);
 
             $forecast->save();
 
             Alert::success('Success', "Forecast Berhasil Dibuat");
             return redirect()->back();
+
         } else {
 
             $findForecast->kode_proyek = $data["kode-proyek"];
@@ -356,6 +358,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $findForecast->periode_prognosa = $prognosa;
 
             $findForecast->save();
+            
+            // dd($tabPane);
 
             Alert::success('Success', "Forecast Berhasil Diubah");
             return redirect()->back();

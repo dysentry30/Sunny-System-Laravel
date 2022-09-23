@@ -285,7 +285,8 @@ class ProyekController extends Controller
                 //     ]
             );
         } else {
-            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara']));
+            $tabPane = "";
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane']));
             // return redirect()->back();
         }
     }
@@ -605,7 +606,7 @@ class ProyekController extends Controller
 
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
-        $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
+        // $newProyek->nilai_rkap = $dataProyek["nilai-rkap"];
         if (Auth::user()->check_administrator) {
             $newProyek->nilai_valas_review = $dataProyek["nilai-valas-review"];
             $newProyek->mata_uang_review = $dataProyek["mata-uang-review"];

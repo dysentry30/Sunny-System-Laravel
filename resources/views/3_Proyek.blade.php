@@ -307,8 +307,8 @@
                                         <th class="min-w-auto"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_ra_perolehan', 'Bulan Perolehan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun RA Perolehan')</small></th>
+                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan RA Perolehan')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
@@ -426,7 +426,7 @@
                                             <!--begin::Pelaksanaan-->
                                             <td class="">
                                                 <small>
-                                                    @switch($proyek->bulan_ri_perolehan)
+                                                    @switch($proyek->bulan_pelaksanaan)
                                                         @case('1')
                                                             Januari
                                                         @break
