@@ -145,9 +145,15 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                    <a href="{{ URL::previous() }}" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        id="proyek-back">
+                                        Back</a>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
+                                    {{-- <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
                                         id="proyek-close">
-                                        Close</a>
+                                        Close</a> --}}
                                     <!--end::Button-->
 
 
@@ -439,7 +445,7 @@
                                                     @if ($proyek->stage > 0)
                                                     <!--begin:::Tab item Pasar Dini-->
                                                     <li class="nav-item">
-                                                        <a onclick="showSave()" class="nav-link text-active-primary pb-4 active"
+                                                        <a onclick="showSave()" class="nav-link text-active-primary pb-4 {{ $tabPane == "kt_user_view_overview_forecast" ? "" : "active" }}"
                                                         data-bs-toggle="tab"
                                                         href="#kt_user_view_overview_pasardini"
                                                         style="font-size:14px;">Pasar Dini</a>
@@ -453,14 +459,14 @@
                                                             <a onclick="showSave()" class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_terkontrak"
-                                                                style="font-size:14px;">{{ $proyek->stage == 9 ? "Terendah" : "Terkontrak" }}</a>
+                                                                style="font-size:14px;">Terkontrak</a>
                                                             </li>
                                                             <!--end:::Tab item Terkontrak-->
                                                     @endif
                                                     
                                                     <!--begin:::Tab item Forecast-->
                                                     <li class="nav-item">
-                                                        <a onclick="hideSave()" class="nav-link text-active-primary pb-4"
+                                                        <a onclick="hideSave()" class="nav-link text-active-primary pb-4 {{ $tabPane == "kt_user_view_overview_forecast" ? "active" : "" }}"
                                                         data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_overview_forecast"
                                                             style="font-size:14px;">Forecast Retail</a>
@@ -2847,7 +2853,7 @@
                                                                 <!--end::Input group-->
                                                             </div>
                                                             <!--End begin::Col-->
-                                                            <div class="col-3">
+                                                            {{-- <div class="col-3">
                                                                 <!--begin::Input group Website-->
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
@@ -2872,7 +2878,7 @@
                                                                 <p class="mt-12"><i
                                                                         class="bi bi-percent text-dark"></i></p>
                                                                 <!--end::Label-->
-                                                            </div>
+                                                            </div> --}}
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
@@ -3019,45 +3025,44 @@
                                                                     <!--begin::Input-->
                                                                     <div class="d-flex align-items-center position-relative">
                                                                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                                                                        <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
-                                                                            {{-- <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ urldecode(urldecode($proyek->nomor_terkontrak)) }}</a> --}}
+                                                                        {{-- <span id="view-kontrak" class="svg-icon svg-icon-1 position-absolute ms-4">
                                                                             <a href="/contract-management/view/{{ $proyek->nomor_terkontrak }}" class="text-gray-800 text-hover-primary mb-1">{{ $proyek->nomor_terkontrak }}</a>
                                                                         </span>
                                                                         <input onclick="viewKontrak(this)" type="text" id="fake-terkontrak"
                                                                             class="form-control form-control-solid"
-                                                                            value="" readonly/>
+                                                                            value="" readonly/> --}}
                                                                         <!--end::Svg Icon-->
                                                                         <input onfocusout="displayKontrak(this)" type="text"
                                                                             class="form-control form-control-solid"
                                                                             id="nomor-terkontrak" name="nomor-terkontrak"
                                                                             value="{{ $proyek->nomor_terkontrak }}"
-                                                                            placeholder="" style="display: none" onpaste="return false"/>
+                                                                            placeholder="" onpaste="return false"/>
                                                                     </div>
                                                                     <p style="display: none" id="char-error" class="text-danger fw-normal">*Not Allowed : / \ ? #;</p>
                                                                     <script>
-                                                                        document.getElementById("nomor-terkontrak").onkeypress = function(e) {
-                                                                            var chr = String.fromCharCode(e.which);
-                                                                            if (`/ \ ? #`.indexOf(chr) >= 0){
-                                                                            // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
-                                                                                document.getElementById('char-error').style.display = "";
-                                                                            // showError(chr)
-                                                                            return false;
-                                                                            }
-                                                                            return true
-                                                                        };
-                                                                        function viewKontrak(e) {
-                                                                            document.getElementById('fake-terkontrak').style.display = "none";
-                                                                            document.getElementById('view-kontrak').style.display = "none";
-                                                                            document.getElementById('nomor-terkontrak').style.display = "";
-                                                                            // e.value = "{{ $proyek->nomor_terkontrak }}";
-                                                                        }
-                                                                        function displayKontrak(e) {
-                                                                            document.getElementById('view-kontrak').style.display = "";
-                                                                            document.getElementById('view-kontrak').innerHTML = e.value;
-                                                                            document.getElementById('fake-terkontrak').style.display = "";
-                                                                            document.getElementById('nomor-terkontrak').style.display = "none";
-                                                                            // console.log(e);
-                                                                        }
+                                                                        // document.getElementById("nomor-terkontrak").onkeypress = function(e) {
+                                                                        //     var chr = String.fromCharCode(e.which);
+                                                                        //     if (`/ \ ? #`.indexOf(chr) >= 0){
+                                                                        //     // if (`!?"'#%&()*/@[\]^_{|}><~;`.indexOf(chr) >= 0){
+                                                                        //         document.getElementById('char-error').style.display = "";
+                                                                        //     // showError(chr)
+                                                                        //     return false;
+                                                                        //     }
+                                                                        //     return true
+                                                                        // };
+                                                                        // function viewKontrak(e) {
+                                                                        //     document.getElementById('fake-terkontrak').style.display = "none";
+                                                                        //     document.getElementById('view-kontrak').style.display = "none";
+                                                                        //     document.getElementById('nomor-terkontrak').style.display = "";
+                                                                        //     // e.value = "{{ $proyek->nomor_terkontrak }}";
+                                                                        // }
+                                                                        // function displayKontrak(e) {
+                                                                        //     document.getElementById('view-kontrak').style.display = "";
+                                                                        //     document.getElementById('view-kontrak').innerHTML = e.value;
+                                                                        //     document.getElementById('fake-terkontrak').style.display = "";
+                                                                        //     document.getElementById('nomor-terkontrak').style.display = "none";
+                                                                        //     // console.log(e);
+                                                                        // }
                                                                     </script>
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3498,7 +3503,7 @@
 
 
 <!--begin:::Tab Approval-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_approval"
+                                                    {{-- <div class="tab-pane fade" id="kt_user_view_overview_approval"
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: Approval-->
@@ -3596,7 +3601,6 @@
                                                                     <th class="min-w-auto">Unit Kerja</th>
                                                                     <th class="min-w-auto">Nilai RKAP</th>
                                                                     <th class="min-w-auto text-center">Action</th>
-                                                                    {{-- <th class="min-w-auto">Action</th> --}}
                                                                 </tr>
                                                                 <!--end::Table row-->
                                                             </thead>
@@ -3644,22 +3648,17 @@
                                                                         </div>
                                                                     </td>
                                                                     <!--end::Action-->
-                                                                    {{-- <!--begin::Action-->
-                                                            <td>
-                                                                null
-                                                            </td>
-                                                            <!--end::Action--> --}}
                                                                 </tr>
                                                             </tbody>
                                                             <!--end::Table body-->
                                                         </table>
                                                         <!--end::Table-->
 
-                                                    </div>
+                                                    </div> --}}
 <!--end:::Tab Approval-->
 
 <!--begin:::Tab Feedback-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_feedback"
+                                                    {{-- <div class="tab-pane fade" id="kt_user_view_overview_feedback"
                                                         role="tabpanel">
 
                                                         <!--Begin::Title Biru Form: Feed back-->
@@ -3715,7 +3714,7 @@
                                                         </table>
                                                         <!--end::Table-->
                                                         
-                                                    </div>
+                                                    </div> --}}
 
 <!--end:::Tab Feedback-->
 </form>
@@ -3842,36 +3841,36 @@
                                                                                         $forecast = $forecasts->first()
                                                                                     @endphp
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
                                                                                             value="{{ number_format((int)$forecast->rkap_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Perolehan" />
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
                                                                                             value="{{ number_format((int)$forecast->nilai_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Forecast" />
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
                                                                                             value="{{ number_format((int)$forecast->realisasi_forecast, 0, '.', '.') }}"
                                                                                             placeholder="Nilai Realisasi" />
                                                                                         </td>
                                                                                     @else
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilaiok-{{ $i }}" name="nilaiok-{{ $i }}"
                                                                                             placeholder="Isi Nilai Perolehan" />
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilaiforecast-{{ $i }}" name="nilaiforecast-{{ $i }}"
                                                                                             placeholder="Isi Nilai Forecast" />
                                                                                         </td>
                                                                                         <td class="text-dark">
-                                                                                            <input type="text" class="form-control form-control-solid reformat"
+                                                                                            <input type="text" class="text-end form-control form-control-solid reformat"
                                                                                             id="nilairealisasi-{{ $i }}" name="nilairealisasi-{{ $i }}"
                                                                                             placeholder="Isi Nilai Realisasi" />
                                                                                         </td>
