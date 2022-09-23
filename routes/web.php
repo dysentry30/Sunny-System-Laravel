@@ -92,6 +92,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/monitoring-proyek/{tipe}/{filter}', [DashboardController::class, "getDataMonitoringProyek"]);
     
+    Route::get('/dashboard/terendah-terkontrak/{tipe}', [DashboardController::class, "getDataTerendahTerkontrak"]);
+    
     Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
     // begin :: contract management
