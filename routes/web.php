@@ -314,7 +314,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         // dd($data, $i);
 
-        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i, "or", "month_rkap", "=", (int) $i, "or","month_realisasi", "=", (int) $i )->get()->first();
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->get()->first();
         // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
