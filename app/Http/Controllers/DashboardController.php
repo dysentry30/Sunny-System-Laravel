@@ -766,7 +766,7 @@ class DashboardController extends Controller
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
 
-    private function getFullMonth($month)
+    public function getFullMonth($month)
     {
         switch ($month) {
             case 1:
@@ -808,7 +808,7 @@ class DashboardController extends Controller
         }
     }
 
-    private static function getProyekStage($month)
+    public static function getProyekStage($month)
     {
         switch ($month) {
             case 0:
@@ -841,7 +841,7 @@ class DashboardController extends Controller
         }
     }
 
-    private static function getUnitKerjaProyek($divcode) {
+    public static function getUnitKerjaProyek($divcode) {
         return UnitKerja::find($divcode)->unit_kerja;
     }
 }
