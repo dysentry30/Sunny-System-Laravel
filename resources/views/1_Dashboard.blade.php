@@ -1806,7 +1806,6 @@
         // Begin :: Checking is filter active
         const isFilterActive = !Boolean("{{empty($unit_kerja_get)}}");
         const filterGet = "{{$unit_kerja_get}}";
-        console.log(isFilterActive, filterGet);
         // End :: Checking is filter active
 
         function getFullscreenElement() {
@@ -1947,7 +1946,7 @@
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai Forecast</th>`
                 '</tr>';
-                
+
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
@@ -2099,6 +2098,9 @@
                     let stage = "";
                     totalNilaiOk += Number(filter.rkap_forecast);
                     switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -2242,6 +2244,9 @@
                     let stage = "";
                     totalNilaiOk += Number(filter.nilai_rkap.replaceAll(",", ""));
                     switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
                         case 1:
                             stage = "Pasar Dini";
                             break;
@@ -2279,6 +2284,9 @@
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
                     switch (Number(filter.bulan_pelaksanaan)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2528,6 +2536,9 @@
                     let stage = "";
                     totalNilaiRealisasi += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan);
                     switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
                         case 1:
                             stage = "Pasar Dini";
                             break;
