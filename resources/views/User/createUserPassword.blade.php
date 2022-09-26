@@ -11,7 +11,7 @@
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
         {{-- begin::header --}}
-        @extends('template.header')
+        @include('template.header')
         {{-- end::header --}}
 
 

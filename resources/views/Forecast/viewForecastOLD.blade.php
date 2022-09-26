@@ -26,7 +26,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
                 <!--begin::Header-->
-                @extends('template.header')
+                @include('template.header')
                 <!--end::Header-->
 
 
@@ -52,52 +52,54 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 row">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast {{"| " . $month_title}}
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast {{ '| ' . $month_title }}
                                     </h1>
                                     <div class="row">
                                         <div class="col">
 
                                             {{-- begin::Tabs Forecast --}}
                                             {{-- @if ($proyeks->count() > 0) --}}
-                                                <ul
-                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
-                                                    <!--begin:::Tab item Forecast Bulanan-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_forecast_bulanan"
-                                                            style="font-size:14px;">Forecast Eksternal Bulanan</a>
-                                                    </li>
-                                                    <!--end:::Tab item Forecast Bulanan-->
-    
-                                                    <!--begin:::Tab item Forecast Internal-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
-                                                            style="font-size:14px;">Forecast Bulanan Include Internal</a>
-                                                    </li>
-                                                    <!--end:::Tab item Forecast Internal-->
-    
-                                                    <!--begin:::Tab item Forecast S/D-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
-                                                            style="font-size:14px;">Forecast Kumulatif Eksternal</a>
-                                                    </li>
-                                                    <!--end:::Tab item Forecast S/D-->
-    
-                                                    <!--begin:::Tab item Forecast S/D-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
-                                                            data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd_eksternal"
-                                                            style="font-size:14px;">Forecast Kumulatif Include Internal</a>
-                                                    </li>
-                                                    <!--end:::Tab item Forecast S/D-->
-                                                </ul>
+                                            <ul
+                                                class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold">
+                                                <!--begin:::Tab item Forecast Bulanan-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                        href="#kt_user_view_overview_forecast_bulanan"
+                                                        style="font-size:14px;">Forecast Eksternal Bulanan</a>
+                                                </li>
+                                                <!--end:::Tab item Forecast Bulanan-->
+
+                                                <!--begin:::Tab item Forecast Internal-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_internal"
+                                                        style="font-size:14px;">Forecast Bulanan Include Internal</a>
+                                                </li>
+                                                <!--end:::Tab item Forecast Internal-->
+
+                                                <!--begin:::Tab item Forecast S/D-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                        data-bs-toggle="tab" href="#kt_user_view_overview_forecast_sd"
+                                                        style="font-size:14px;">Forecast Kumulatif Eksternal</a>
+                                                </li>
+                                                <!--end:::Tab item Forecast S/D-->
+
+                                                <!--begin:::Tab item Forecast S/D-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                        data-bs-toggle="tab"
+                                                        href="#kt_user_view_overview_forecast_sd_eksternal"
+                                                        style="font-size:14px;">Forecast Kumulatif Include Internal</a>
+                                                </li>
+                                                <!--end:::Tab item Forecast S/D-->
+                                            </ul>
                                             {{-- @endif --}}
                                         </div>
 
                                         <div class="row">
-                                            <div class="d-flex {{$periode != (int) date("m") ? "col-8" : "col-6"}} align-items-center justify-content-between">
+                                            <div
+                                                class="d-flex {{ $periode != (int) date('m') ? 'col-8' : 'col-6' }} align-items-center justify-content-between">
                                                 <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                     onclick="lockMonthForecastBulanan(this)"
                                                     class="btn btn-sm btn-active-primary mt-4">
@@ -114,28 +116,32 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     @endif
                                                 </button>
                                                 {{-- @if ($previous_forecast->count() > 0) --}}
-                                                    {{-- <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
+                                                {{-- <a href="/forecast/{{$previous_periode_prognosa}}/{{$year_previous_forecast}}" id="view-previous-forecast"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
                                                         <span class="mx-2 fs-6">View Forecast Sebelumnya</span>
                                                         <i class="bi bi-lock-fill"></i>
                                                     </a>                                                     --}}
-                                                    <button type="button" id="unlock-previous-forecast"
+                                                <button type="button" id="unlock-previous-forecast"
                                                     onclick="unlockPreviousForecast()"
                                                     class="btn btn-sm btn-light btn-active-primary mt-4">
-                                                            <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
-                                                    </button>
+                                                    <span class="mx-2 fs-6">Pilih Bulan Forecast</span>
+                                                </button>
 
                                                 {{-- @endif --}}
-                                                
-                                                @if ($periode != (int) date("m") && isset($periode))
-                                                    <div class="d-flex flex-row col-5 align-items-center justify-content-center">
-                                                        <button type="button" onClick="window.location.href='/forecast';" id="unlock-previous-forecast"
+
+                                                @if ($periode != (int) date('m') && isset($periode))
+                                                    <div
+                                                        class="d-flex flex-row col-5 align-items-center justify-content-center">
+                                                        <button type="button" onClick="window.location.href='/forecast';"
+                                                            id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
-                                                                <span class="mx-2 fs-6">Pindah Forecast ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
+                                                            <span class="mx-2 fs-6">Pindah Forecast ke
+                                                                {{ Carbon\Carbon::parse(new DateTime('now'))->translatedFormat('F') }}</span>
                                                         </button>
-                                                        <i class="bi bi-info-circle-fill text-hover-primary mt-4" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="right"
-                                                        data-bs-custom-class="custom-tooltip"
-                                                        data-bs-title="Jika Tombol <b>Pindah Forecast Bulan Ini</b> di klik, maka halaman Forecast ini akan pindah ke halaman Forecast bulan sekarang"></i>
+                                                        <i class="bi bi-info-circle-fill text-hover-primary mt-4"
+                                                            data-bs-toggle="tooltip" data-bs-html="true"
+                                                            data-bs-placement="right" data-bs-custom-class="custom-tooltip"
+                                                            data-bs-title="Jika Tombol <b>Pindah Forecast Bulan Ini</b> di klik, maka halaman Forecast ini akan pindah ke halaman Forecast bulan sekarang"></i>
                                                     </div>
                                                 @endif
                                             </div>
@@ -159,8 +165,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                         <!--begin::Post-->
                         <div class="post d-flex flex-column-fluid mt-15" id="kt_post">
                             <!--begin::Container-->
-                            <div id="kt_content_container"
-                                class="w-100"
+                            <div id="kt_content_container" class="w-100"
                                 style="overflow: auto; background-color:white; white-space: nowrap;">
                                 <!--begin::Contacts App- Edit Contact-->
                                 <div class="">
@@ -177,11 +182,22 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     <form action="/forecast" class="row w-700px" method="GET">
                                                         <div class="col">
                                                             <!--Begin:: Select Options-->
-                                                            <select id="column" name="column" class="form-select form-select-solid" style="margin-right: 2rem" data-control="select2" data-hide-search="true" data-placeholder="Pilih filter" data-select2-id="select2-filter-forecast" tabindex="-1" aria-hidden="true">
-                                                                <option value="" {{$column == "" ? "selected": ""}}></option>
-                                                                <option value="dop" {{$column == "dop" ? "selected": ""}}>DOP</option>
-                                                                <option value="unit_kerja" {{$column == "unit_kerja" ? "selected": ""}}>Unit Kerja</option>
-                                                                <option value="nama_proyek" {{$column == "nama_proyek" ? "selected": ""}}>Nama Proyek</option>
+                                                            <select id="column" name="column"
+                                                                class="form-select form-select-solid"
+                                                                style="margin-right: 2rem" data-control="select2"
+                                                                data-hide-search="true" data-placeholder="Pilih filter"
+                                                                data-select2-id="select2-filter-forecast" tabindex="-1"
+                                                                aria-hidden="true">
+                                                                <option value=""
+                                                                    {{ $column == '' ? 'selected' : '' }}></option>
+                                                                <option value="dop"
+                                                                    {{ $column == 'dop' ? 'selected' : '' }}>DOP</option>
+                                                                <option value="unit_kerja"
+                                                                    {{ $column == 'unit_kerja' ? 'selected' : '' }}>Unit
+                                                                    Kerja</option>
+                                                                <option value="nama_proyek"
+                                                                    {{ $column == 'nama_proyek' ? 'selected' : '' }}>Nama
+                                                                    Proyek</option>
                                                                 {{-- <option {{$column == "" ? "selected": ""}}></option>
                                                                 <option value="id_contract" {{$column == "id_contract" ? "selected" : ""}}>ID Contract</option>
                                                                 <option value="kode_proyek" {{$column ==    "kode_proyek" ? "selected" : ""}}>Kode Proyek</option> --}}
@@ -190,7 +206,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                             <!--End:: Select Options-->
                                                         </div>
                                                         <div class="col">
-                                                            <input type="text" name="filter" class="form-control form-control-solid" value="{{ $filter ?? "" }}" placeholder="Apa yang ingin anda cari?">
+                                                            <input type="text" name="filter"
+                                                                class="form-control form-control-solid"
+                                                                value="{{ $filter ?? '' }}"
+                                                                placeholder="Apa yang ingin anda cari?">
                                                         </div>
 
                                                         <div class="col-4">
@@ -198,14 +217,16 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                 <div class="col">
                                                                     <button type="submit" id="button-filter"
                                                                         class="btn btn-sm btn-light btn-active-primary mt-1">
-                                                                            <span class="mx-2 fs-6">Search</span>
+                                                                        <span class="mx-2 fs-6">Search</span>
                                                                     </button>
                                                                 </div>
-        
+
                                                                 <div class="col">
-                                                                    <button type="button" onclick="window.location.href = '/forecast';" id="button-reset"
+                                                                    <button type="button"
+                                                                        onclick="window.location.href = '/forecast';"
+                                                                        id="button-reset"
                                                                         class="btn btn-sm btn-light btn-active-danger mt-1">
-                                                                            <span class="mx-2 fs-6">Reset</span>
+                                                                        <span class="mx-2 fs-6">Reset</span>
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -219,689 +240,712 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                             <!--begin::Card body-->
                                             <div class="card-body" style="background-color: white;">
                                                 {{-- @if ($proyeks->count() > 0) --}}
-                                                        
-                                                    <div class="tab-content" id="myTabContent">
 
-                                                        {{-- begin::Tab Forecast Bulanan --}}
-                                                        <div class="tab-pane fade show active"
-                                                            id="kt_user_view_overview_forecast_bulanan" role="tabpanel">
-                                                            <!--begin::Table Forecast-->
-                                                            <table class="table align-middle table-row-dashed fs-6"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <tr
-                                                                        style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
-                                                                        <th class="min-w-250px text-center" rowspan="2"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
-                                                                            Proyek
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Januari
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Februari
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Maret
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                April
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Mei
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Juni
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Juli
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Agustus
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                September
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Oktober
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                November
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="min-w-auto" colspan="3">
-                                                                            <center>
-                                                                                Desember
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="pinForecast HidePin min-w-auto"
-                                                                            colspan="3">
-                                                                            <center>Total &nbsp;&nbsp; <i
-                                                                                    class="bi bi-pin-angle-fill"
-                                                                                    onclick="hidePin()"></i></center>
-                                                                        </th>
-                                                                        <th class="pinForecast ShowPin min-w-auto"
-                                                                            colspan="3"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            <center>Total &nbsp;&nbsp; <i
-                                                                                    class="bi bi-pin-fill text-primary"
-                                                                                    onclick="hidePin()"></i></center>
-                                                                        </th>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <!--begin::Sub-Judul Januari-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Januari-->
-                                                                        <!--begin::Sub-Judul Februari-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Februari-->
-                                                                        <!--begin::Sub-Judul Maret-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Maret-->
-                                                                        <!--begin::Sub-Judul April-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul April-->
-                                                                        <!--begin::Sub-Judul Mei-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Mei-->
-                                                                        <!--begin::Sub-Judul Juni-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Juni-->
-                                                                        <!--begin::Sub-Judul Juli-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Juli-->
-                                                                        <!--begin::Sub-Judul Agustus-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Agustus-->
-                                                                        <!--begin::Sub-Judul September-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul September-->
-                                                                        <!--begin::Sub-Judul Oktober-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Oktober-->
-                                                                        <!--begin::Sub-Judul November-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul November-->
-                                                                        <!--begin::Sub-Judul Desember-->
-                                                                        <th class="min-w-125px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="min-w-125px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Desember-->
-                                                                        <!--begin::Sub-Judul Total-->
-                                                                        <th class="pinForecast HidePin min-w-100px">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="pinForecast HidePin min-w-100px">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="pinForecast HidePin min-w-100px">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <th class="pinForecast ShowPin min-w-100px"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            <center>OK</center>
-                                                                        </th>
-                                                                        <th class="pinForecast ShowPin min-w-100px"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            <center>Forecast</center>
-                                                                        </th>
-                                                                        <th class="pinForecast ShowPin min-w-100px"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            <center>Realisasi <a href="#" Id="Plus"
-                                                                                    data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_modal_create_namemodal">+</a>
-                                                                            </center>
-                                                                        </th>
-                                                                        <!--end::Sub-Judul Total-->
-                                                                    </tr>
-                                                                    <!--end::Table head-->
-                                                                </thead>
+                                                <div class="tab-content" id="myTabContent">
 
-                                                                <!--begin::Table body-->
+                                                    {{-- begin::Tab Forecast Bulanan --}}
+                                                    <div class="tab-pane fade show active"
+                                                        id="kt_user_view_overview_forecast_bulanan" role="tabpanel">
+                                                        <!--begin::Table Forecast-->
+                                                        <table class="table align-middle table-row-dashed fs-6"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <tr
+                                                                    style="border-bottom: 1px #f2f4f7 solid; border-right: 1px #f2f4f7 solid">
+                                                                    <th class="min-w-250px text-center" rowspan="2"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px;">
+                                                                        Proyek
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Januari
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Februari
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Maret
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            April
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Mei
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Juni
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Juli
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Agustus
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            September
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Oktober
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            November
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="min-w-auto" colspan="3">
+                                                                        <center>
+                                                                            Desember
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="pinForecast HidePin min-w-auto"
+                                                                        colspan="3">
+                                                                        <center>Total &nbsp;&nbsp; <i
+                                                                                class="bi bi-pin-angle-fill"
+                                                                                onclick="hidePin()"></i></center>
+                                                                    </th>
+                                                                    <th class="pinForecast ShowPin min-w-auto"
+                                                                        colspan="3"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                        <center>Total &nbsp;&nbsp; <i
+                                                                                class="bi bi-pin-fill text-primary"
+                                                                                onclick="hidePin()"></i></center>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <!--begin::Sub-Judul Januari-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Januari-->
+                                                                    <!--begin::Sub-Judul Februari-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Februari-->
+                                                                    <!--begin::Sub-Judul Maret-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Maret-->
+                                                                    <!--begin::Sub-Judul April-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul April-->
+                                                                    <!--begin::Sub-Judul Mei-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Mei-->
+                                                                    <!--begin::Sub-Judul Juni-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Juni-->
+                                                                    <!--begin::Sub-Judul Juli-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Juli-->
+                                                                    <!--begin::Sub-Judul Agustus-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Agustus-->
+                                                                    <!--begin::Sub-Judul September-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul September-->
+                                                                    <!--begin::Sub-Judul Oktober-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Oktober-->
+                                                                    <!--begin::Sub-Judul November-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul November-->
+                                                                    <!--begin::Sub-Judul Desember-->
+                                                                    <th class="min-w-125px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="min-w-125px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Desember-->
+                                                                    <!--begin::Sub-Judul Total-->
+                                                                    <th class="pinForecast HidePin min-w-100px">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="pinForecast HidePin min-w-100px">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="pinForecast HidePin min-w-100px">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <th class="pinForecast ShowPin min-w-100px"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                        <center>OK</center>
+                                                                    </th>
+                                                                    <th class="pinForecast ShowPin min-w-100px"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                        <center>Forecast</center>
+                                                                    </th>
+                                                                    <th class="pinForecast ShowPin min-w-100px"
+                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                        <center>Realisasi <a href="#" Id="Plus"
+                                                                                data-bs-toggle="modal"
+                                                                                data-bs-target="#kt_modal_create_namemodal">+</a>
+                                                                        </center>
+                                                                    </th>
+                                                                    <!--end::Sub-Judul Total-->
+                                                                </tr>
+                                                                <!--end::Table head-->
+                                                            </thead>
 
-                                                                <tbody class="fw-bold text-gray-600" id="table-body">
+                                                            <!--begin::Table body-->
 
-                                                                    @php
-                                                                        $month_counter = 1;
-                                                                        $is_data_found = false;
-                                                                        $total_ok = 0;
-                                                                        $total_year_ok = 0;
-                                                                        $total_forecast = 0;
-                                                                        $total_month_forecast = 0;
-                                                                        $total_year_forecast = 0;
-                                                                        $index = 1;
-                                                                        if ($column == "unit_kerja") {
-                                                                            $dops = $dops->filter(function($data) use($filter) {
-                                                                                $is_unit_kerjas_exist = $data->UnitKerjas->contains(function($data) use($filter) {
-                                                                                    return str_contains(strtolower($data->unit_kerja), strtolower($filter)) && $data->Proyeks->count() > 0;
-                                                                                });
-                                                                                if ($data->UnitKerjas->count() > 0 && $is_unit_kerjas_exist) {
-                                                                                    return $data;
-                                                                                    // return $data->UnitKerjas->filter(function($unit_kerja) use($filter, $data) {
-                                                                                        
-                                                                                    //     if ($unit_kerja->Proyeks->count() > 0 && str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter))) {
-                                                                                    //     }
-                                                                                    // });
-                                                                                }
+                                                            <tbody class="fw-bold text-gray-600" id="table-body">
+
+                                                                @php
+                                                                    $month_counter = 1;
+                                                                    $is_data_found = false;
+                                                                    $total_ok = 0;
+                                                                    $total_year_ok = 0;
+                                                                    $total_forecast = 0;
+                                                                    $total_month_forecast = 0;
+                                                                    $total_year_forecast = 0;
+                                                                    $index = 1;
+                                                                    if ($column == 'unit_kerja') {
+                                                                        $dops = $dops->filter(function ($data) use ($filter) {
+                                                                            $is_unit_kerjas_exist = $data->UnitKerjas->contains(function ($data) use ($filter) {
+                                                                                return str_contains(strtolower($data->unit_kerja), strtolower($filter)) && $data->Proyeks->count() > 0;
                                                                             });
-                                                                        }
-                                                                    @endphp
-                                                                    <div class="accordion">
-                                                                        <div class="accordion-item">
-                                                                            @foreach ($dops as $dop)
-                                                                        {{-- @if (count($dop->UnitKerjas) > 0) --}}
-                                                                        {{-- @foreach ($proyeks as $proyek) --}}
+                                                                            if ($data->UnitKerjas->count() > 0 && $is_unit_kerjas_exist) {
+                                                                                return $data;
+                                                                                // return $data->UnitKerjas->filter(function($unit_kerja) use($filter, $data) {
+                                                                    
+                                                                                //     if ($unit_kerja->Proyeks->count() > 0 && str_contains(strtolower($unit_kerja->unit_kerja), strtolower($filter))) {
+                                                                                //     }
+                                                                                // });
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                @endphp
+                                                                <div class="accordion">
+                                                                    <div class="accordion-item">
+                                                                        @foreach ($dops as $dop)
+                                                                            {{-- @if (count($dop->UnitKerjas) > 0) --}}
+                                                                            {{-- @foreach ($proyeks as $proyek) --}}
 
-                                                                        <tr style="text-align: right; ">
+                                                                            <tr style="text-align: right; ">
 
-                                                                            @php
-                                                                                $dop_name = str_replace(' ', '-', $dop->dop);
-                                                                            @endphp
-                                                                            <td
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
-                                                                                <small class="accordion-header">
-                                                                                    <button class="accordion-button btn-sm collapsed button-dop" type="button" data-bs-toggle="collapse" data-bs-target="#{{$dop_name}}" aria-expanded="true" aria-controls="{{$dop_name}}">
-                                                                                      {{$dop->dop}}
-                                                                                    </button>
-                                                                                </small>
-                                                                            </td>
-
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Januari Coloumn-->
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <td></td>
-                                                                            <!--end::Januari Coloumn-->
-                                                                            <!--begin::Total Coloumn-->
-                                                                            <td class="pinForecast HidePin"></td>
-                                                                            <td class="pinForecast HidePin"></td>
-                                                                            <td class="pinForecast HidePin"></td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                @php
+                                                                                    $dop_name = str_replace(' ', '-', $dop->dop);
+                                                                                @endphp
+                                                                                <td
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 20px; text-align: left">
+                                                                                    <small class="accordion-header">
+                                                                                        <button
+                                                                                            class="accordion-button btn-sm collapsed button-dop"
+                                                                                            type="button"
+                                                                                            data-bs-toggle="collapse"
+                                                                                            data-bs-target="#{{ $dop_name }}"
+                                                                                            aria-expanded="true"
+                                                                                            aria-controls="{{ $dop_name }}">
+                                                                                            {{ $dop->dop }}
+                                                                                        </button>
+                                                                                    </small>
                                                                                 </td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                </td>
-                                                                            <td class="pinForecast ShowPin"
-                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                </td>
-                                                                            <!--end::Total Coloumn-->
 
-                                                                        </tr>
-                                                                        {{-- begin:: Foreach Unit Kerja --}}
-                                                                        @foreach ($dop->UnitKerjas as $unitKerja)
-                                                                            @php
-                                                                                $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);
-                                                                            @endphp
-                                                                            @if (count($unitKerja->proyeks) > 0)
-                                                                                <tr class="collapse"
-                                                                                    id="{{ $dop_name }}"
-                                                                                    style="text-align: right;">
-                                                                                    <td
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 3rem !important; text-align: left">
-                                                                                        <!--begin::Child=-->
-                                                                                        <small class="accordion-header">
-                                                                                            <button class="accordion-button collapsed btn-sm button-unit-kerja" type="button" data-bs-toggle="collapse" data-bs-target="#{{$unit_kerja_name}}" aria-expanded="true" aria-controls="{{$unit_kerja_name}}">
-                                                                                              {{$unitKerja->unit_kerja}}
-                                                                                            </button>
-                                                                                        </small>
-                                                                                        <!--end::Child=-->
-                                                                                    </td>
-                                                                                    <!--begin::Januari Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Januari Coloumn-->
-                                                                                    <!--begin::Februari Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Februari Coloumn-->
-                                                                                    <!--begin::Maret Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Maret Coloumn-->
-                                                                                    <!--begin::April Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::April Coloumn-->
-                                                                                    <!--begin::Mei Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Mei Coloumn-->
-                                                                                    <!--begin::Juni Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Juni Coloumn-->
-                                                                                    <!--begin::Juli Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Juli Coloumn-->
-                                                                                    <!--begin::Agustus Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Agustus Coloumn-->
-                                                                                    <!--begin::September Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::September Coloumn-->
-                                                                                    <!--begin::Oktober Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Oktober Coloumn-->
-                                                                                    <!--begin::November Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::November Coloumn-->
-                                                                                    <!--begin::Desember Coloumn-->
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <td></td>
-                                                                                    <!--end::Desember Coloumn-->
-                                                                                    <!--begin::Total Coloumn-->
-                                                                                    <td class="pinForecast HidePin"></td>
-                                                                                    <td class="pinForecast HidePin"></td>
-                                                                                    <td class="pinForecast HidePin"></td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        </td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        </td>
-                                                                                    <td class="pinForecast ShowPin"
-                                                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        </td>
-                                                                                    <!--end::Total Coloumn-->
-                                                                                </tr>
-                                                                                {{-- begin:: Foreach Proyek --}}
-                                                                                @if ($column != "")
-                                                                                    @foreach ($unitKerja->Proyeks as $proyek)
-                                                                                        <tr id="{{ $unit_kerja_name }}"
-                                                                                            class="accordion-collapse collapse"
-                                                                                            aria-labelledby="{{ $unit_kerja_name }}"
-                                                                                            data-bs-parent="#{{ $unit_kerja_name }}"
-                                                                                            style="text-align: right;">
-                                                                                            <td
-                                                                                                style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 4.5rem; text-align: left">
-                                                                                                <!--begin::Child=-->
-                                                                                                <p class="ms-12">
-                                                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
-                                                                                                        class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
-                                                                                                </p>
-                                                                                                <!--end::Child=-->
-                                                                                            </td>
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Januari Coloumn-->
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                                <!--end::Januari Coloumn-->
+                                                                                <!--begin::Total Coloumn-->
+                                                                                <td class="pinForecast HidePin"></td>
+                                                                                <td class="pinForecast HidePin"></td>
+                                                                                <td class="pinForecast HidePin"></td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                </td>
+                                                                                <td class="pinForecast ShowPin"
+                                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                </td>
+                                                                                <!--end::Total Coloumn-->
 
-                                                                                            @for ($i = 1; $i <= 12; $i++)
-                                                                                                @php
-                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
-                                                                                                @endphp
-                                                                                                @foreach ($proyek->Forecasts as $forecast)
-                                                                                                    @if ($forecast->month_forecast == $month_counter)
-                                                                                                        @php
-                                                                                                            $total_forecast += (int) $forecast->nilai_forecast;
-                                                                                                            $total_year_forecast += $total_forecast;
-                                                                                                            
-                                                                                                        @endphp
-                                                                                                        @if ($month_counter == (int) $forecast->rkap_month)
-                                                                                                            @php
-                                                                                                                $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);                
-                                                                                                            @endphp
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                                {{ $proyek->nilai_rkap }}
-                                                                                                            </td>
-                                                                                                        @else
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                                
-                                                                                                            </td>
-                                                                                                        @endif
-                                                                                                        <td>
-                                                                                                            <input type="text"
-                                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                                data-month="{{ $month_counter }}"
-                                                                                                                data-column-forecast="{{ $month_counter }}"
-                                                                                                                class="form-control border-bottom-1"
-                                                                                                                style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                                id="nilai-forecast"
-                                                                                                                name="nilai-forecast"
-                                                                                                                onkeyup="reformatNumber(this)"
-                                                                                                                value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
-                                                                                                                placeholder="" />
-                                                                                                        </td>
-                                                                                                        @if ($month_counter == (int) $forecast->month_realisasi && $month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                            @php
-                                                                                                                // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
-                                                                                                            @endphp
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
-                                                                                                            </td>
-                                                                                                        @else
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                </td>
-                                                                                                        @endif
-                                                                                                        @php
-                                                                                                            $is_data_found = true;
-                                                                                                        @endphp
-                                                                                                    @break
-                                                                                                @endif
-                                                                                            @endforeach
-                                                                                            @if (!$is_data_found)
-                                                                                                @if (($month_counter == (int) $proyek->bulan_pelaksanaan && ($proyek->bulan_pelaksanaan != null || $proyek->bulan_pelaksanaan != 0)) || ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null))
-                                                                                                    @php
-                                                                                                        $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);                
-                                                                                                    @endphp
-                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ $proyek->nilai_rkap }}
-                                                                                                    </td>
-                                                                                                @else
-                                                                                                    <td data-column-ok-bulanan="{{ $month_counter }}"
-                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        
-                                                                                                    </td>
-                                                                                                @endif
-                                                                                                <td>
-                                                                                                    <input type="text"
-                                                                                                        data-id-proyek="{{ $proyek->kode_proyek }}"
-                                                                                                        data-month="{{ $month_counter }}"
-                                                                                                        data-column-forecast="{{ $month_counter }}"
-                                                                                                        class="form-control border-bottom-1"
-                                                                                                        style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
-                                                                                                        id="nilai-forecast"
-                                                                                                        name="nilai-forecast"
-                                                                                                        onkeyup="reformatNumber(this)"
-                                                                                                        value=""
-                                                                                                        placeholder="" />
-                                                                                                </td>
-                                                                                                @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
-                                                                                                    @php
-                                                                                                        $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
-                                                                                                    @endphp
-                                                                                                    <td
-                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                        {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
-                                                                                                    </td>
-                                                                                                @else
-                                                                                                    <td
-                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                        </td>
-                                                                                                @endif
-                                                                                            @endif
-                                                                                            @php
-                                                                                                $is_data_found = false;
-                                                                                                $month_counter++;
-                                                                                            @endphp
-                                                                                        @endfor
-                                                                                        <!--begin::Total Side Coloumn-->
-                                                                                        @php
-                                                                                            $total_ok_formatted = number_format($total_ok, 0, ',', '.');
-                                                                                            $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
-                                                                                            // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
-                                                                                            $total_forecast = 0;
-                                                                                            $total_ok = 0;
-                                                                                            $month_counter = 1;
-                                                                                        @endphp
+                                                                            </tr>
+                                                                            {{-- begin:: Foreach Unit Kerja --}}
+                                                                            @foreach ($dop->UnitKerjas as $unitKerja)
+                                                                                @php
+                                                                                    $unit_kerja_name = preg_replace('/[^\w]/', '-', $unitKerja->unit_kerja);
+                                                                                @endphp
+                                                                                @if (count($unitKerja->proyeks) > 0)
+                                                                                    <tr class="collapse"
+                                                                                        id="{{ $dop_name }}"
+                                                                                        style="text-align: right;">
+                                                                                        <td
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 3rem !important; text-align: left">
+                                                                                            <!--begin::Child=-->
+                                                                                            <small
+                                                                                                class="accordion-header">
+                                                                                                <button
+                                                                                                    class="accordion-button collapsed btn-sm button-unit-kerja"
+                                                                                                    type="button"
+                                                                                                    data-bs-toggle="collapse"
+                                                                                                    data-bs-target="#{{ $unit_kerja_name }}"
+                                                                                                    aria-expanded="true"
+                                                                                                    aria-controls="{{ $unit_kerja_name }}">
+                                                                                                    {{ $unitKerja->unit_kerja }}
+                                                                                                </button>
+                                                                                            </small>
+                                                                                            <!--end::Child=-->
+                                                                                        </td>
+                                                                                        <!--begin::Januari Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Januari Coloumn-->
+                                                                                        <!--begin::Februari Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Februari Coloumn-->
+                                                                                        <!--begin::Maret Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Maret Coloumn-->
+                                                                                        <!--begin::April Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::April Coloumn-->
+                                                                                        <!--begin::Mei Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Mei Coloumn-->
+                                                                                        <!--begin::Juni Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Juni Coloumn-->
+                                                                                        <!--begin::Juli Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Juli Coloumn-->
+                                                                                        <!--begin::Agustus Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Agustus Coloumn-->
+                                                                                        <!--begin::September Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::September Coloumn-->
+                                                                                        <!--begin::Oktober Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Oktober Coloumn-->
+                                                                                        <!--begin::November Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::November Coloumn-->
+                                                                                        <!--begin::Desember Coloumn-->
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <td></td>
+                                                                                        <!--end::Desember Coloumn-->
+                                                                                        <!--begin::Total Coloumn-->
                                                                                         <td class="pinForecast HidePin">
-                                                                                            <center>
-                                                                                                <b>{{ $total_ok_formatted }}</b>
-                                                                                            </center>
                                                                                         </td>
-                                                                                        <td class="pinForecast HidePin"
-                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}">
-                                                                                            <center>
-                                                                                                <b>{{ $total_forecast_formatted }}</b>
-                                                                                            </center>
+                                                                                        <td class="pinForecast HidePin">
                                                                                         </td>
-                                                                                        <td class="pinForecast HidePin"
-                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
-                                                                                            </center>
+                                                                                        <td class="pinForecast HidePin">
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin"
-                                                                                            data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
-                                                                                            style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                            <center>
-                                                                                                <b>{{ $total_ok_formatted }}</b>
-                                                                                            </center>
+                                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                                         </td>
-                                                                                        <td class="pinForecast ShowPin total-month-x-forecast"
-                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                        <td class="pinForecast ShowPin"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                            <center>
-                                                                                                <b>{{ $total_forecast_formatted }}</b>
-                                                                                            </center>
                                                                                         </td>
-                                                                                        <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
-                                                                                            data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                        <td class="pinForecast ShowPin"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
-                                                                                            </center>
                                                                                         </td>
-                                                                                        <!--end::Total Side Coloumn-->
+                                                                                        <!--end::Total Coloumn-->
+                                                                                    </tr>
+                                                                                    {{-- begin:: Foreach Proyek --}}
+                                                                                    @if ($column != '')
+                                                                                        @foreach ($unitKerja->Proyeks as $proyek)
+                                                                                            <tr id="{{ $unit_kerja_name }}"
+                                                                                                class="accordion-collapse collapse"
+                                                                                                aria-labelledby="{{ $unit_kerja_name }}"
+                                                                                                data-bs-parent="#{{ $unit_kerja_name }}"
+                                                                                                style="text-align: right;">
+                                                                                                <td
+                                                                                                    style="position: -webkit-sticky; position: sticky; background-color: white; left: 0px; padding-left: 4.5rem; text-align: left">
+                                                                                                    <!--begin::Child=-->
+                                                                                                    <p class="ms-12">
+                                                                                                        <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                                                            class="text-hover-primary text-gray-600">{{ $proyek->nama_proyek }}</a>
+                                                                                                    </p>
+                                                                                                    <!--end::Child=-->
+                                                                                                </td>
+
+                                                                                                @for ($i = 1; $i <= 12; $i++)
+                                                                                                    @php
+                                                                                                        $proyek->Forecasts = $proyek->Forecasts->where('periode_prognosa', '=', $periode == '' ? (int) date('m') : $periode);
+                                                                                                    @endphp
+                                                                                                    @foreach ($proyek->Forecasts as $forecast)
+                                                                                                        @if ($forecast->month_forecast == $month_counter)
+                                                                                                            @php
+                                                                                                                $total_forecast += (int) $forecast->nilai_forecast;
+                                                                                                                $total_year_forecast += $total_forecast;
+                                                                                                                
+                                                                                                            @endphp
+                                                                                                            @if ($month_counter == (int) $forecast->rkap_month)
+                                                                                                                @php
+                                                                                                                    $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                                @endphp
+                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                                    {{ $proyek->nilai_rkap }}
+                                                                                                                </td>
+                                                                                                            @else
+                                                                                                                <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+
+                                                                                                                </td>
+                                                                                                            @endif
+                                                                                                            <td>
+                                                                                                                <input
+                                                                                                                    type="text"
+                                                                                                                    data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                                    data-month="{{ $month_counter }}"
+                                                                                                                    data-column-forecast="{{ $month_counter }}"
+                                                                                                                    class="form-control border-bottom-1"
+                                                                                                                    style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                                    id="nilai-forecast"
+                                                                                                                    name="nilai-forecast"
+                                                                                                                    onkeyup="reformatNumber(this)"
+                                                                                                                    value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
+                                                                                                                    placeholder="" />
+                                                                                                            </td>
+                                                                                                            @if ($month_counter == (int) $forecast->month_realisasi &&
+                                                                                                                $month_counter == (int) $proyek->bulan_ri_perolehan &&
+                                                                                                                $proyek->bulan_ri_perolehan != null)
+                                                                                                                @php
+                                                                                                                    // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
+                                                                                                                    $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                                @endphp
+                                                                                                                <td
+                                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                    {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
+                                                                                                                </td>
+                                                                                                            @else
+                                                                                                                <td
+                                                                                                                    data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                </td>
+                                                                                                            @endif
+                                                                                                            @php
+                                                                                                                $is_data_found = true;
+                                                                                                            @endphp
+                                                                                                        @break
+                                                                                                    @endif
+                                                                                                @endforeach
+                                                                                                @if (!$is_data_found)
+                                                                                                    @if (($month_counter == (int) $proyek->bulan_pelaksanaan &&
+                                                                                                        ($proyek->bulan_pelaksanaan != null || $proyek->bulan_pelaksanaan != 0)) ||
+                                                                                                        ($month_counter == (int) $proyek->bulan_awal && $proyek->bulan_awal != null))
+                                                                                                        @php
+                                                                                                            $total_ok += (int) str_replace(',', '', $proyek->nilai_rkap);
+                                                                                                        @endphp
+                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                            {{ $proyek->nilai_rkap }}
+                                                                                                        </td>
+                                                                                                    @else
+                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}"
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
+
+                                                                                                        </td>
+                                                                                                    @endif
+                                                                                                    <td>
+                                                                                                        <input
+                                                                                                            type="text"
+                                                                                                            data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                            data-month="{{ $month_counter }}"
+                                                                                                            data-column-forecast="{{ $month_counter }}"
+                                                                                                            class="form-control border-bottom-1"
+                                                                                                            style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
+                                                                                                            id="nilai-forecast"
+                                                                                                            name="nilai-forecast"
+                                                                                                            onkeyup="reformatNumber(this)"
+                                                                                                            value=""
+                                                                                                            placeholder="" />
+                                                                                                    </td>
+                                                                                                    @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                                        @php
+                                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                        @endphp
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                            {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
+                                                                                                        </td>
+                                                                                                    @else
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                        </td>
+                                                                                                    @endif
+                                                                                                @endif
+                                                                                                @php
+                                                                                                    $is_data_found = false;
+                                                                                                    $month_counter++;
+                                                                                                @endphp
+                                                                                            @endfor
+                                                                                            <!--begin::Total Side Coloumn-->
+                                                                                            @php
+                                                                                                $total_ok_formatted = number_format($total_ok, 0, ',', '.');
+                                                                                                $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
+                                                                                                // $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan);
+                                                                                                $total_forecast = 0;
+                                                                                                $total_ok = 0;
+                                                                                                $month_counter = 1;
+                                                                                            @endphp
+                                                                                            <td
+                                                                                                class="pinForecast HidePin">
+                                                                                                <center>
+                                                                                                    <b>{{ $total_ok_formatted }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <td class="pinForecast HidePin"
+                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}">
+                                                                                                <center>
+                                                                                                    <b>{{ $total_forecast_formatted }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <td class="pinForecast HidePin"
+                                                                                                data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <td class="pinForecast ShowPin"
+                                                                                                data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
+                                                                                                style="position: -wekit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                                                <center>
+                                                                                                    <b>{{ $total_ok_formatted }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <td class="pinForecast ShowPin total-month-x-forecast"
+                                                                                                data-id-proyek="{{ $proyek->kode_proyek }}"
+                                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                                                <center>
+                                                                                                    <b>{{ $total_forecast_formatted }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
+                                                                                                data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
+                                                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($nilai_terkontrak_formatted, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            </td>
+                                                                                            <!--end::Total Side Coloumn-->
                                                                                     @endforeach
                                                                                 @else
                                                                                     @foreach ($unitKerja->proyeks as $proyek)
@@ -922,7 +966,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             @for ($i = 0; $i < 12; $i++)
                                                                                                 @php
-                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode);
+                                                                                                    $proyek->Forecasts = $proyek->Forecasts->where('periode_prognosa', '=', $periode == '' ? (int) date('m') : $periode);
                                                                                                 @endphp
                                                                                                 @foreach ($proyek->Forecasts as $forecast)
                                                                                                     @if ($forecast->month_forecast == $month_counter)
@@ -939,11 +983,12 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                                 data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                                
+
                                                                                                             </td>
                                                                                                         @endif
                                                                                                         <td>
-                                                                                                            <input type="text"
+                                                                                                            <input
+                                                                                                                type="text"
                                                                                                                 data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                                 data-month="{{ $month_counter }}"
                                                                                                                 data-column-forecast="{{ $month_counter }}"
@@ -955,7 +1000,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi || $month_counter == (int) $proyek->bulan_ri_perolehan) && $proyek->bulan_ri_perolehan != null)
+                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi ||
+                                                                                                            $month_counter == (int) $proyek->bulan_ri_perolehan) &&
+                                                                                                            $proyek->bulan_ri_perolehan != null)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
@@ -967,7 +1014,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @else
                                                                                                             <td
                                                                                                                 data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                                </td>
+                                                                                                            </td>
                                                                                                         @endif
                                                                                                         @php
                                                                                                             $is_data_found = true;
@@ -979,16 +1026,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        {{ number_format((float) $proyek->nilai_rkap, 0, ",", ".") }}
+                                                                                                        {{ number_format((float) $proyek->nilai_rkap, 0, ',', '.') }}
                                                                                                     </td>
                                                                                                 @else
                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}"
                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                                        
+
                                                                                                     </td>
                                                                                                 @endif
                                                                                                 <td>
-                                                                                                    <input type="text"
+                                                                                                    <input
+                                                                                                        type="text"
                                                                                                         data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                         data-month="{{ $month_counter }}"
                                                                                                         data-column-forecast="{{ $month_counter }}"
@@ -1011,7 +1059,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 @else
                                                                                                     <td
                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
-                                                                                                        </td>
+                                                                                                    </td>
                                                                                                 @endif
                                                                                             @endif
                                                                                             @php
@@ -1029,7 +1077,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
                                                                                         @endphp
-                                                                                        <td class="pinForecast HidePin">
+                                                                                        <td
+                                                                                            class="pinForecast HidePin">
                                                                                             <center>
                                                                                                 <b>{{ $total_ok_formatted }}</b>
                                                                                             </center>
@@ -1071,8 +1120,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $nilai_terkontrak_formatted = 0;
                                                                                         @endphp
-                                                                                    @endforeach
-                                                                                @endif
+                                                                                @endforeach
+                                                                            @endif
                                                                             {{-- end:: Foreach Proyek --}}
                                                                         @endif
                                                                         @php
@@ -1085,103 +1134,103 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                     {{-- end:: Foreach Unit Kerja --}}
                                                                     {{-- @endif --}}
                                                                 @endforeach
-                                                                        </div>
-                                                                    </div>
-
-                                                            <tfoot
-                                                                style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
-                                                                <div class="m-4">
-                                                                    <tr>
-                                                                        <td
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 20px; text-align: left">
-                                                                            <!--begin::Child=-->
-                                                                            Total
-                                                                            <!--end::Child=-->
-                                                                        </td>
-                                                                        @for ($i = 0; $i < 12; $i++)
-                                                                            <td
-                                                                                data-total-ok-bulanan-column={{ $i + 1 }}>
-                                                                                <center>
-                                                                                    <p class="placeholder-wave">
-                                                                                        <span
-                                                                                            class="placeholder col-4"></span>
-                                                                                    </p>
-                                                                                </center>
-                                                                            </td>
-                                                                            <td
-                                                                                data-total-forecast-column={{ $i + 1 }}>
-                                                                                <center>
-                                                                                    <p class="placeholder-wave">
-                                                                                        <span
-                                                                                            class="placeholder col-4"></span>
-                                                                                    </p>
-                                                                                </center>
-                                                                            </td>
-                                                                            <td
-                                                                                data-total-realisasi-bulanan-column={{ $i + 1 }}>
-                                                                                <center>
-                                                                                    <p class="placeholder-wave">
-                                                                                        <span
-                                                                                            class="placeholder col-4"></span>
-                                                                                    </p>
-                                                                                </center>
-                                                                            </td>
-                                                                        @endfor
-                                                                        {{-- begin::Total Year --}}
-                                                                        <td
-                                                                            class="pinForecast HidePin total-year-ok-bulanan">
-                                                                            <center>
-                                                                                <p class="placeholder-wave">
-                                                                                    <span class="placeholder col-4"></span>
-                                                                                </p>
-                                                                            </center>
-                                                                        </td>
-                                                                        <td
-                                                                            class="pinForecast HidePin total-year-forecast-bulanan">
-                                                                            <center>
-                                                                                <b>{{ number_format((int) $total_year_forecast, 0, ',', '.') }}</b>
-                                                                            </center>
-                                                                        </td>
-                                                                        <td
-                                                                            class="pinForecast HidePin total-year-realisasi-bulanan">
-                                                                            <center>
-                                                                                <b>{{ $proyek->nilai_perolehan }}</b>
-                                                                            </center>
-                                                                        </td>
-                                                                        <td class="pinForecast ShowPin total-year-ok-bulanan"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                            <center>
-                                                                                <p class="placeholder-wave">
-                                                                                    <span class="placeholder col-4"></span>
-                                                                                </p>
-                                                                            </center>
-                                                                        </td>
-                                                                        <td class="pinForecast ShowPin total-year-forecast-bulanan"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                            <center>
-                                                                                <b>{{ number_format((int) $total_year_forecast, 0, ',', '.') }}</b>
-                                                                            </center>
-                                                                        </td>
-                                                                        <td class="pinForecast ShowPin total-year-realisasi-bulanan"
-                                                                            style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                            <center>
-                                                                                <b>{{ $proyek->nilai_perolehan }}</b>
-                                                                            </center>
-                                                                        </td>
-                                                                        {{-- end::Total Year --}}
-                                                                    </tr>
-                                                                </div>
-                                                            </tfoot>
-
-                                                            </tbody>
-
-                                                            {{-- @endforeach --}}
-                                                            </table>
+                                                            </div>
                                                         </div>
-                                                        <!--end::Table body-->
-                                                        <!--end:::Tab Forecast Bulanan-->
-                                                    </div>
-                                                {{-- @else 
+
+                                                    <tfoot
+                                                        style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0; z-index:99">
+                                                        <div class="m-4">
+                                                            <tr>
+                                                                <td
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; left: 0px; padding-left: 20px; text-align: left">
+                                                                    <!--begin::Child=-->
+                                                                    Total
+                                                                    <!--end::Child=-->
+                                                                </td>
+                                                                @for ($i = 0; $i < 12; $i++)
+                                                                    <td
+                                                                        data-total-ok-bulanan-column={{ $i + 1 }}>
+                                                                        <center>
+                                                                            <p class="placeholder-wave">
+                                                                                <span
+                                                                                    class="placeholder col-4"></span>
+                                                                            </p>
+                                                                        </center>
+                                                                    </td>
+                                                                    <td
+                                                                        data-total-forecast-column={{ $i + 1 }}>
+                                                                        <center>
+                                                                            <p class="placeholder-wave">
+                                                                                <span
+                                                                                    class="placeholder col-4"></span>
+                                                                            </p>
+                                                                        </center>
+                                                                    </td>
+                                                                    <td
+                                                                        data-total-realisasi-bulanan-column={{ $i + 1 }}>
+                                                                        <center>
+                                                                            <p class="placeholder-wave">
+                                                                                <span
+                                                                                    class="placeholder col-4"></span>
+                                                                            </p>
+                                                                        </center>
+                                                                    </td>
+                                                                @endfor
+                                                                {{-- begin::Total Year --}}
+                                                                <td
+                                                                    class="pinForecast HidePin total-year-ok-bulanan">
+                                                                    <center>
+                                                                        <p class="placeholder-wave">
+                                                                            <span class="placeholder col-4"></span>
+                                                                        </p>
+                                                                    </center>
+                                                                </td>
+                                                                <td
+                                                                    class="pinForecast HidePin total-year-forecast-bulanan">
+                                                                    <center>
+                                                                        <b>{{ number_format((int) $total_year_forecast, 0, ',', '.') }}</b>
+                                                                    </center>
+                                                                </td>
+                                                                <td
+                                                                    class="pinForecast HidePin total-year-realisasi-bulanan">
+                                                                    <center>
+                                                                        <b>{{ $proyek->nilai_perolehan }}</b>
+                                                                    </center>
+                                                                </td>
+                                                                <td class="pinForecast ShowPin total-year-ok-bulanan"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
+                                                                    <center>
+                                                                        <p class="placeholder-wave">
+                                                                            <span class="placeholder col-4"></span>
+                                                                        </p>
+                                                                    </center>
+                                                                </td>
+                                                                <td class="pinForecast ShowPin total-year-forecast-bulanan"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
+                                                                    <center>
+                                                                        <b>{{ number_format((int) $total_year_forecast, 0, ',', '.') }}</b>
+                                                                    </center>
+                                                                </td>
+                                                                <td class="pinForecast ShowPin total-year-realisasi-bulanan"
+                                                                    style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
+                                                                    <center>
+                                                                        <b>{{ $proyek->nilai_perolehan }}</b>
+                                                                    </center>
+                                                                </td>
+                                                                {{-- end::Total Year --}}
+                                                            </tr>
+                                                        </div>
+                                                    </tfoot>
+
+                                                    </tbody>
+
+                                                    {{-- @endforeach --}}
+                                                </table>
+                                            </div>
+                                            <!--end::Table body-->
+                                            <!--end:::Tab Forecast Bulanan-->
+                                        </div>
+                                        {{-- @else 
                                                 <div class="tab-content mt-10" id="myTabContent">
                                                     <div class="col">
                                                         <div class="d-flex flex-column justify-content-center align-items-center">
@@ -1191,46 +1240,46 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     </div>
                                                 </div>
                                                 @endif --}}
-                                        </div>
                                     </div>
                                 </div>
-
-
                             </div>
 
-                            <script>
-                                function hidePin() {
-                                    var hide = document.getElementsByClassName('pinForecast');
-                                    hide.forEach(element => {
-                                        if (element.classList.contains("HidePin")) {
-                                            element.classList.add("ShowPin");
-                                            element.classList.remove("HidePin");
-                                        } else {
-                                            element.classList.add("HidePin");
-                                            element.classList.remove("ShowPin");
-                                        }
-                                    });
-                                }
-                            </script>
-                            <!--end::Table Forecast-->
 
                         </div>
+
+                        <script>
+                            function hidePin() {
+                                var hide = document.getElementsByClassName('pinForecast');
+                                hide.forEach(element => {
+                                    if (element.classList.contains("HidePin")) {
+                                        element.classList.add("ShowPin");
+                                        element.classList.remove("HidePin");
+                                    } else {
+                                        element.classList.add("HidePin");
+                                        element.classList.remove("ShowPin");
+                                    }
+                                });
+                            }
+                        </script>
+                        <!--end::Table Forecast-->
+
                     </div>
-
-
-
                 </div>
-                <!--end:::Tab isi content-->
+
+
 
             </div>
-            <!--end::Card body-->
-
-
-        </div>
-        <!--end::Contacts App- Edit Contact-->
+            <!--end:::Tab isi content-->
 
     </div>
-    <!--end::Container-->
+    <!--end::Card body-->
+
+
+</div>
+<!--end::Contacts App- Edit Contact-->
+
+</div>
+<!--end::Container-->
 </div>
 <!--end::Post-->
 
@@ -1249,20 +1298,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 {{-- begin::modal --}}
 <div class="modal fade" tabindex="-1">
 <div class="modal-dialog modal-dialog-centered">
-<div class="modal-content">
-<div class="modal-header">
-    <h5 class="modal-title">Konfirmasi Kunci Forecast</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-</div>
-<div class="modal-body">
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-secondary" onclick="cancelLock()"
-        data-bs-dismiss="modal">Cancel</button>
-    <button type="button" class="btn btn-primary" onclick="confirmedLock()"
-        style="background-color: #008CB4;">Lanjut</button>
-</div>
-</div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Konfirmasi Kunci Forecast</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="cancelLock()"
+                data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" onclick="confirmedLock()"
+                style="background-color: #008CB4;">Lanjut</button>
+        </div>
+    </div>
 </div>
 </div>
 {{-- end::modal --}}
@@ -1272,14 +1321,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
 <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
 <span class="svg-icon">
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-fill="none">
-<rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
-    transform="rotate(90 13 6)" fill="black" />
-<path
-    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
-    fill="black" />
-</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
+            transform="rotate(90 13 6)" fill="black" />
+        <path
+            d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
+            fill="black" />
+    </svg>
 </span>
 <!--end::Svg Icon-->
 </div>
@@ -1294,12 +1342,12 @@ fill="none">
 <script src="/datatables/dataTables.fixedColumns.min.js"></script>
 
 <script>
-    var table = $('#kt_customers_table').DataTable( {
-            scrollY:        "300px",
-            scrollX:        true,
-            scrollCollapse: true,
-            paging:         false,
-        });
+    var table = $('#kt_customers_table').DataTable({
+        scrollY: "300px",
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+    });
 
     const toaster = document.querySelector(".toast");
     const toastBody = document.querySelector(".toast-body")
@@ -1387,7 +1435,7 @@ fill="none">
                 formData.append("nilai_forecast", nilaiForecast);
                 formData.append("forecast_month", dataMonth);
                 formData.append("kode_proyek", kodeProyek);
-                formData.append("periode_prognosa", "{{$periode}}");
+                formData.append("periode_prognosa", "{{ $periode }}");
                 const saveNilaiForecastRes = await fetch("/proyek/forecast/save", {
                     method: "POST",
                     header: {
@@ -1655,7 +1703,7 @@ fill="none">
         dataColumnTotalRealisasiBulanan.forEach((forecast, i) => {
             const totalColumnForecast = forecast.getAttribute("data-total-realisasi-bulanan-column");
             const dataColumnForecast = Array.from(document.querySelectorAll(
-            `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
+                `td[data-column-realisasi-bulanan="${totalColumnForecast}"]`));
             if (dataColumnForecast.length > 10) {
                 dataColumnForecast.length = 10;
             }
@@ -1664,7 +1712,7 @@ fill="none">
             }
             dataColumnForecast.forEach(dataForecast => {
                 const nilaiRealisasi = Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-                if(nilaiRealisasi) {
+                if (nilaiRealisasi) {
                     totalRealisasiBulanan += nilaiRealisasi;
                 }
             });
@@ -1919,7 +1967,7 @@ fill="none">
         const formData = new FormData();
         if (monthEltBulanan) {
             formData.append("_token", "{{ csrf_token() }}");
-            formData.append("periode_prognosa", "{{$periode == "" ? (int) date('m') : (int) $periode}}" );
+            formData.append("periode_prognosa", "{{ $periode == '' ? (int) date('m') : (int) $periode }}");
             if (getIconElt.classList.contains("bi-unlock-fill")) {
                 const getLockRes = await fetch("/forecast/set-lock", {
                     method: "POST",
@@ -2000,8 +2048,8 @@ fill="none">
 
     async function unlockPreviousForecast() {
         const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-                            ];
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
         // const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
         // const minMonth = Math.min(...historyForecastObj);
         // const maxMonth = Math.max(...historyForecastObj);
@@ -2020,16 +2068,18 @@ fill="none">
         //     // });
         //     avgDate = 0;
         // }
-        
+
         // for(var i=minMonth; i <= maxMonth; i++) {
         //     let date = getAvgMonth[i].split(", ")[1];
         //     jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
         // }
         const jsonVariable = {};
-        for(let i = 0; i < monthNames.length; i++) {
-            jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
+        for (let i = 0; i < monthNames.length; i++) {
+            jsonVariable[`${i + 1}`] = `${monthNames[i]}`;
         }
-        const {value: monthForecast} = await Swal.fire({
+        const {
+            value: monthForecast
+        } = await Swal.fire({
             title: 'Pilih Bulan Forecast',
             input: 'select',
             confirmButtonColor: '#3085d6',
@@ -2041,8 +2091,7 @@ fill="none">
                 return new Promise(resolve => {
                     if (value == "") {
                         resolve("Silahkan pilih bulan forecast");
-                    }
-                    else {
+                    } else {
                         resolve();
                     }
                 })
@@ -2056,12 +2105,12 @@ fill="none">
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#7e8299',
                 confirmButtonText: 'Lanjut'
-                }).then(async (result) => {
-                    if (result.isConfirmed) {
-                        let url = `/forecast/${monthForecast}/${new Date().getFullYear()}`;
-                        location.href = url;
-                    }
-                })
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    let url = `/forecast/${monthForecast}/${new Date().getFullYear()}`;
+                    location.href = url;
+                }
+            })
         }
     }
 </script>
@@ -2070,12 +2119,12 @@ fill="none">
 <script>
     let isLoaded = false;
     const SwalLoading = Swal.mixin({
-                title: 'Mohon Ditunggu!',
-                html: 'Data sedang dimuatkan',
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-            });
+        title: 'Mohon Ditunggu!',
+        html: 'Data sedang dimuatkan',
+        showConfirmButton: false,
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+    });
     const accordionsDOPElt = document.querySelectorAll(".button-dop");
     accordionsDOPElt.forEach(accord => {
         accord.addEventListener('click', event => {

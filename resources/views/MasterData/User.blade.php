@@ -18,7 +18,7 @@ a{{-- Begin::Extend Header --}}
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
                 <!--begin::Header-->
-                @extends('template.header')
+                @include('template.header')
                 <!--end::Header-->
 
 
@@ -123,8 +123,7 @@ a{{-- Begin::Extend Header --}}
                                     </span>
                                     <!--end::Svg Icon-->
                                     <input type="text" data-kt-customer-table-filter="search"
-                                        class="form-control form-control-solid w-250px ps-15"
-                                        placeholder="Search User" />
+                                        class="form-control form-control-solid w-250px ps-15" placeholder="Search User" />
                                 </div>
                                 <!--end::Search-->
                             </div>
@@ -205,7 +204,10 @@ a{{-- Begin::Extend Header --}}
 
                                             <!--begin::Role=-->
                                             <td>
-                                                @if (!$user->check_administrator && !$user->check_admin_kontrak && !$user->check_user_sales && !$user->check_team_proyek)
+                                                @if (!$user->check_administrator &&
+                                                    !$user->check_admin_kontrak &&
+                                                    !$user->check_user_sales &&
+                                                    !$user->check_team_proyek)
                                                     <span class="text-danger">Belum ditentukan</span>
                                                 @endif
                                                 @if ($user->check_administrator)
@@ -225,13 +227,13 @@ a{{-- Begin::Extend Header --}}
 
                                             <!--begin::Created at=-->
                                             <td class="text-center">
-                                                {{ $user->is_active == 1 ? "yes" : "No" }}
+                                                {{ $user->is_active == 1 ? 'yes' : 'No' }}
                                             </td>
                                             <!--end::Created at=-->
 
                                             <!--begin::Email-->
                                             <td class="text-end">
-                                                {{ $user->no_hp ?? "-"}}
+                                                {{ $user->no_hp ?? '-' }}
                                             </td>
                                             <!--end::Email-->
 
