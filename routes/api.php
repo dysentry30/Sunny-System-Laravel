@@ -89,6 +89,7 @@ Route::middleware(["web"])->group(function () {
                     $p->jenis_proyek = "JO";
                     break;
             }
+            $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
             $p->pemberi_kerja = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "";
             return $p;
         });
@@ -106,7 +107,7 @@ Route::middleware(["web"])->group(function () {
         $prognosa = (int) $periode[1];
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        $proyeks = Proyek::all(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage"]);
+        $proyeks = Proyek::with(["Forecasts"])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage"]);
         $proyeks = $proyeks->map(function($p) use($tahun, $prognosa) {
             switch ($p->stage) {
                 case 0:
@@ -149,7 +150,9 @@ Route::middleware(["web"])->group(function () {
                     $p->jenis_proyek = "JO";
                     break;
             }
-            $p->forecasts = $p->Forecasts->where("periode_prognosa", '=', $prognosa);
+            $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
+            $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
+            $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
             return $p;
         });
         $data = [
