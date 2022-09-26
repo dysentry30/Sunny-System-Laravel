@@ -1,3 +1,8 @@
+{{-- Begin::Extend Header --}}
+{{-- @extends('template.main') --}}
+{{-- End::Extend Header --}}
+
+{{-- @section('header') --}}
 <!--begin::Header-->
 <div id="kt_header" class="header align-items-stretch">
     <!--begin::Container-->
@@ -390,3 +395,4 @@
     <!--end::Container-->
 </div>
 <!--end::Header-->
+{{-- @endsection --}}

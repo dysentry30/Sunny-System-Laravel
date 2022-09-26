@@ -4,7 +4,7 @@
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
         <!--begin::Header-->
-        @extends('template.header')
+        @include('template.header')
         <!--end::Header-->
 
         <!--begin::Content-->
@@ -29,18 +29,20 @@
                         <div class="d-flex align-items-center py-1">
 
                             <!--begin::Button-->
-                                <a class="btn btn-sm btn-primary w-80px" 
-                                data-bs-toggle="modal" data-bs-target="#kt_modal_tambah_pasal"  id="kt_toolbar_primary_button"
+                            <a class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_tambah_pasal" id="kt_toolbar_primary_button"
                                 style="background-color:#008CB4; padding: 6px">
                                 New</a>
                             <!--end::Button-->
                             <!--begin::Wrapper-->
                             <div class="me-4" style="margin-left:10px;">
                                 <!--begin::Menu-->
-                                <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+                                <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                                    data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                     <i class="bi bi-folder2-open"></i>Action</a>
                                 <!--begin::Menu 1-->
-                                <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true" id="kt_menu_6155ac804a1c2">
+                                <div class="menu menu-sub menu-sub-dropdown w-250px w-md-300px" data-kt-menu="true"
+                                    id="kt_menu_6155ac804a1c2">
                                     <!--begin::Header-->
                                     <div class="px-7 py-5">
                                         <div class="fs-5 text-dark fw-bolder">Choose actions:</div>
@@ -52,12 +54,14 @@
                                     <!--begin::Form-->
                                     <div class="">
                                         <!--begin::Item-->
-                                        <button type="submit" class="btn btn-active-primary dropdown-item rounded-0 rounded-0"
-                                            data-bs-toggle="modal" data-bs-target="#kt_modal_import"  id="kt_toolbar_import">
+                                        <button type="submit"
+                                            class="btn btn-active-primary dropdown-item rounded-0 rounded-0"
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_import" id="kt_toolbar_import">
                                             <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
                                         </button>
                                         <button type="submit" class="btn btn-active-primary dropdown-item rounded-0"
-                                            data-bs-toggle="modal" data-bs-target="#kt_modal_export"  id="kt_toolbar_export" disabled>
+                                            data-bs-toggle="modal" data-bs-target="#kt_modal_export" id="kt_toolbar_export"
+                                            disabled>
                                             <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                         </button>
                                         <!--end::Item-->
@@ -67,7 +71,7 @@
                                 <!--end::Menu 1-->
                                 <!--end::Menu-->
                             </div>
-                            <!--end::Wrapper--> 
+                            <!--end::Wrapper-->
                         </div>
                         <!--end::Actions-->
                     @endif
@@ -138,14 +142,15 @@
                                     <!--begin::Pasal=-->
                                     <td>
                                         <a type="button" data-bs-toggle="modal" onclick="editPasal(this)"
-                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal" class="text-hover-primary mb-1 w-35%">{{ $pasal->tipe_pasal }}</a>
+                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal"
+                                            class="text-hover-primary mb-1 w-35%">{{ $pasal->tipe_pasal }}</a>
                                     </td>
                                     <!--end::Pasal=-->
 
                                     <!--begin::Pasal=-->
                                     <td>
-                                        <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)"
-                                            data-id="{{ $pasal->id_pasal }}" data-bs-target="#kt_modal_edit_pasal" class="text-hover-primary mb-1 w-35%" 
+                                        <pre type="button" data-bs-toggle="modal" onclick="editPasal(this)" data-id="{{ $pasal->id_pasal }}"
+                                            data-bs-target="#kt_modal_edit_pasal" class="text-hover-primary mb-1 w-35%"
                                             style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $pasal->pasal }}</pre>
                                     </td>
                                     <!--end::Pasal=-->
@@ -158,7 +163,7 @@
 
                                     <!--begin::Keterangan=-->
                                     <td>
-                                        <pre type="button" data-bs-toggle="modal" class="text-hover-primary mb-1 w-40%" 
+                                        <pre type="button" data-bs-toggle="modal" class="text-hover-primary mb-1 w-40%"
                                             style="font-family: Poppins;white-space: pre-wrap;word-wrap: break-word;">{{ $pasal->keterangan }}</pre>
                                     </td>
                                     <!--end::Keterangan=-->
@@ -168,7 +173,8 @@
                                         <td>
                                             {{-- <a href="/pasal/delete/{{ $pasal->id_pasal }}"
                                             class="btn btn-sm btn-light btn-active-primary" aria-label="Close">Delete </a> --}}
-                                            <a data-bs-toggle="modal" data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
+                                            <a data-bs-toggle="modal"
+                                                data-bs-target="#kt_modal_delete{{ $pasal->id_pasal }}" id="modal-delete"
                                                 class="btn btn-sm btn-light btn-active-primary">Delete</a>
                                         </td>
                                         <!--end::Close Btn=-->
@@ -234,8 +240,8 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            id="tipe-pasal" name="tipe-pasal" placeholder="Input kategori Pasal" />
+                                        <input type="text" class="form-control form-control-solid" id="tipe-pasal"
+                                            name="tipe-pasal" placeholder="Input kategori Pasal" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -251,7 +257,8 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <select name="prioritas" id="prioritas" class="form-select form-select-solid"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
+                                            data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilih Prioritas Pasal">
                                             <option value=""></option>
                                             <option value="Penting">Penting</option>
                                             <option value="Wajib">Wajib</option>
@@ -270,8 +277,8 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <textarea class="form-control form-control-solid" name="pasal" id="pasal"
-                                style="font-weight: normal" rows="6" value="" placeholder="Ketikan pasal disini."></textarea>
+                            <textarea class="form-control form-control-solid" name="pasal" id="pasal" style="font-weight: normal"
+                                rows="6" value="" placeholder="Ketikan pasal disini."></textarea>
                             <!--end::Input-->
 
                             <!--begin::Label-->
@@ -280,8 +287,8 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <textarea class="form-control form-control-solid" name="keterangan" id="keterangan"
-                                style="font-weight: normal" rows="2" value="" placeholder="Ketikan keterangan disini."></textarea>
+                            <textarea class="form-control form-control-solid" name="keterangan" id="keterangan" style="font-weight: normal"
+                                rows="2" value="" placeholder="Ketikan keterangan disini."></textarea>
                             <!--end::Input-->
 
 
@@ -296,7 +303,7 @@
                         <div class="d-flex justify-content-center align-items-center">
                             <span class="text-white">Save</span>
                             <span class="spinner-border spinner-border-sm" style="display: none; margin: 0 0 0 1rem;"
-                            aria-hidden="true" role="status"></span>
+                                aria-hidden="true" role="status"></span>
                         </div>
                     </button>
                 </div>
@@ -362,9 +369,9 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="tipe-pasal-edit"
-                                            id="tipe-pasal-edit" style="font-weight: normal" value=""
-                                            placeholder="Ketikan pasal disini..." />
+                                        <input type="text" class="form-control form-control-solid"
+                                            name="tipe-pasal-edit" id="tipe-pasal-edit" style="font-weight: normal"
+                                            value="" placeholder="Ketikan pasal disini..." />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -379,8 +386,9 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <select name="prioritas-update" id="prioritas-update" class="form-select form-select-solid"
-                                            data-control="select2" data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
+                                        <select name="prioritas-update" id="prioritas-update"
+                                            class="form-select form-select-solid" data-control="select2"
+                                            data-hide-search="true" data-placeholder="Pilih Prioritas Pasal">
                                             <option value=""></option>
                                             <option value="Penting">Penting</option>
                                             <option value="Wajib">Wajib</option>
@@ -400,9 +408,8 @@
                             <!--end::Label-->
 
                             <!--begin::Input-->
-                            <textarea type="text" class="form-control form-control-solid" name="pasal-edit"
-                                id="pasal-edit" style="font-weight: normal" rows="6" value=""
-                                placeholder="Ketikan pasal disini..."></textarea>
+                            <textarea type="text" class="form-control form-control-solid" name="pasal-edit" id="pasal-edit"
+                                style="font-weight: normal" rows="6" value="" placeholder="Ketikan pasal disini..."></textarea>
                             <!--end::Input-->
                             <br>
                             <!--begin::Label-->
@@ -491,7 +498,7 @@
     <!--end::modal DELETE-->
 
     <!--begin::Modal IMPORT-->
-	<form action="/pasal/import" method="post" enctype="multipart/form-data"> 
+    <form action="/pasal/import" method="post" enctype="multipart/form-data">
         @csrf
         <div class="modal fade" id="kt_modal_import" tabindex="-1" aria-hidden="true">
             <!--begin::Modal dialog-->
@@ -516,27 +523,29 @@
                     <!--end::Modal header-->
                     <!--begin::Modal body-->
                     <div class="modal-body py-lg-6 px-lg-6">
-    
+
                         <!--begin::Input group Website-->
                         <div class="fv-row">
                             <div class="fv-row">
-                                    
+
                                 <!--begin::Input-->
                                 <div>
                                     <label for="import-pasal" class="form-label">Import Pasal :</label>
-                                    <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file">
+                                    <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid"
+                                        id="doc-attachment" name="import-file" type="file">
                                 </div>
                                 <!--end::Input-->
-    
-    
+
+
                             </div><br>
 
                         </div>
-                        
+
                     </div>
-                    
+
                     <div class="modal-footer">
-                        <button type="submit" name="file-submit" class="btn btn-sm btn-primary" id="proyek_new_save" style="background-color:#008CB4" >Import File</button>
+                        <button type="submit" name="file-submit" class="btn btn-sm btn-primary" id="proyek_new_save"
+                            style="background-color:#008CB4">Import File</button>
                     </div>
                     <!--end::Input group-->
                     <!--end::Modal body-->
@@ -547,8 +556,8 @@
         </div>
     </form>
     <!--end::Modal IMPORT-->
-    
-{{-- end::modal --}}
+
+    {{-- end::modal --}}
 @endsection
 
 @section('js-script')
@@ -668,7 +677,10 @@
                 document.getElementById("id-pasal").value = getResponse.pasal.id;
                 document.getElementById("keterangan-update").value = getResponse.pasal.keterangan;
                 document.getElementById("prioritas-update").value = getResponse.pasal.prioritas;
-                $("#prioritas-update").select2("data", {id: "1", text: getResponse.pasal.prioritas});
+                $("#prioritas-update").select2("data", {
+                    id: "1",
+                    text: getResponse.pasal.prioritas
+                });
                 $("#prioritas-update").select2({
                     minimumInputLength: -1,
                     minimumResultsForSearch: -1,

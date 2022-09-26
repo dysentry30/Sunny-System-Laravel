@@ -48,6 +48,7 @@ class UserController extends Controller
             if (str_contains($request->url(), "api")) {
                 $user = auth()->user();
                 $token_user = $user->createToken($user->name)->plainTextToken;
+                // dd($token_user);
                 auth()->user()->forceFill([
                     "remember_token" => $token_user,
                 ])->save();

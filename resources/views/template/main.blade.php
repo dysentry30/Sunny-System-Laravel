@@ -585,6 +585,9 @@
 
 
 
+    <!--begin:: HEADER-->
+    {{-- @yield('header') --}}
+    <!--end:: HEADER-->
     <!--begin:: CONTENT-->
     @yield('content')
     <!--end :: CONTENT-->

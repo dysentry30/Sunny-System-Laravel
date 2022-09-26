@@ -6,14 +6,14 @@
 @section('title', 'Claim Managements')
 {{-- end:: title --}}
 @php
-    // Session::forget("pasals")
+// Session::forget("pasals")
 @endphp
 {{-- begin::content --}}
 @section('content')
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
         <!--begin::Header-->
-        @extends('template.header')
+        @include('template.header')
         <!--end::Header-->
 
         <!--begin::Content-->
@@ -35,7 +35,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">{{$claimContract->jenis_claim ?? "Claim"}}
+                                <h1 class="d-flex align-items-center fs-3 my-1">{{ $claimContract->jenis_claim ?? 'Claim' }}
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -78,54 +78,54 @@
                                             <div class="card-body pt-5"
                                                 style="background-color:#f1f1f1; border:1px solid #e6e6e6;">
 
-                                                    <div class="form-group">
-                                                        <div id="stage-button" class="stage-list">
+                                                <div class="form-group">
+                                                    <div id="stage-button" class="stage-list">
+                                                        <a href="#" role="link"
+                                                            class="stage-button color-is-default stage-is-done"
+                                                            style="outline: 0px; cursor: pointer;" stage="1">
+                                                            Draft
+                                                        </a>
+                                                        @if ($claimContract->stages > 1)
                                                             <a href="#" role="link"
                                                                 class="stage-button color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;" stage="1">
-                                                                Draft
+                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                Diajukan
                                                             </a>
-                                                            @if ($claimContract->stages > 1)
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-done"
-                                                                    style="outline: 0px; cursor: pointer;" stage="2">
-                                                                    Diajukan
-                                                                </a>
-                                                            @else
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="2">
-                                                                    Diajukan
-                                                                </a>
-                                                            @endif
-                                                            
-                                                            @if ($claimContract->stages > 2)
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-done"
-                                                                    style="outline: 0px; cursor: pointer;" stage="3">
-                                                                    Negoisasi
-                                                                </a>
-                                                            @else
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="3">
-                                                                    Negoisasi
-                                                                </a>
-                                                            @endif
+                                                        @else
+                                                            <a href="#" role="link"
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                Diajukan
+                                                            </a>
+                                                        @endif
 
-                                                            @if ($claimContract->stages > 3)
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-done"
-                                                                    style="outline: 0px; cursor: pointer;" stage="4">
-                                                                    Disetujui
-                                                                </a>
-                                                            @else
-                                                                <a href="#" role="link"
-                                                                    class="stage-button color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="4">
-                                                                    Disetujui
-                                                                </a>
-                                                            @endif
+                                                        @if ($claimContract->stages > 2)
+                                                            <a href="#" role="link"
+                                                                class="stage-button color-is-default stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                Negoisasi
+                                                            </a>
+                                                        @else
+                                                            <a href="#" role="link"
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                Negoisasi
+                                                            </a>
+                                                        @endif
+
+                                                        @if ($claimContract->stages > 3)
+                                                            <a href="#" role="link"
+                                                                class="stage-button color-is-default stage-is-done"
+                                                                style="outline: 0px; cursor: pointer;" stage="4">
+                                                                Disetujui
+                                                            </a>
+                                                        @else
+                                                            <a href="#" role="link"
+                                                                class="stage-button color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="4">
+                                                                Disetujui
+                                                            </a>
+                                                        @endif
                                                         {{-- <form action=""></form>
                                                         <form action="/claim/stage/save" class="d-flex" style="position: relative;width: 100%;" method="POST" onsubmit="confirmAction(this); return false;">
                                                             @csrf
@@ -138,664 +138,694 @@
                                             </div>
                                         </div>
                                     </div>
-                            @endisset
+                                @endisset
 
-                            <!--begin::Header Contract-->
-                            <div class="col-xl-15">
-                                <div class="card card-flush h-lg-100" id="kt_contacts_main">
-                                    <form action="/claim-management/save" method="POST">
-                                        @csrf
-                                        <div class="card-body pt-5">
+                                <!--begin::Header Contract-->
+                                <div class="col-xl-15">
+                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+                                        <form action="/claim-management/save" method="POST">
+                                            @csrf
+                                            <div class="card-body pt-5">
 
-                                            <!--begin::Row-->
-                                            <div class="row fv-row">
-                                                <!--begin::Col-->
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
+                                                <!--begin::Row-->
+                                                <div class="row fv-row">
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
 
-                                                    <!--begin::Input group Name-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span class="required">No. {{$claimContract->jenis_claim ?? "Claim"}}</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid"
-                                                            id="number-claim" name="number-claim"
-                                                            value="{{ $kode_claim ?? ($claimContract->id_claim ?? '') }}"
-                                                            placeholder="No. {{$claimContract->jenis_claim ?? "Claim"}}" readonly>
-                                                        <!--end::Input-->
+                                                        <!--begin::Input group Name-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span class="required">No.
+                                                                    {{ $claimContract->jenis_claim ?? 'Claim' }}</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <input type="text" class="form-control form-control-solid"
+                                                                id="number-claim" name="number-claim"
+                                                                value="{{ $kode_claim ?? ($claimContract->id_claim ?? '') }}"
+                                                                placeholder="No. {{ $claimContract->jenis_claim ?? 'Claim' }}"
+                                                                readonly>
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <!--end::Input group Name-->
                                                     </div>
-                                                    <!--end::Input group Name-->
+
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Tanggal Pengajuan</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+
+                                                            <a href="#" class="btn btn-sm mx-3"
+                                                                style="background: transparent;width:1rem;height:2.3rem;"
+                                                                data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_calendar_start"><i
+                                                                    class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                                                    style="color: #008cb4"></i></a>
+                                                            <input type="Date"
+                                                                class="form-control form-control-solid ps-12"
+                                                                placeholder="Select a date"
+                                                                value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
+                                                                name="approve-date" id="approve-date">
+
+                                                            {{-- begin::erorr message --}}
+                                                            @error('approve-date')
+                                                                <h6 class="text-danger">{{ $message }}</h6>
+                                                            @enderror
+                                                            {{-- end::erorr message --}}
+
+                                                            <!--end::Input-->
+                                                        </div>
+                                                        <!--end::Input group-->
+                                                    </div>
+                                                    <!--End begin::Col-->
                                                 </div>
 
-                                                <!--begin::Col-->
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Tanggal Pengajuan</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
+                                                <!--End begin::Row-->
+                                                {{-- @dd($proyek); --}}
 
-                                                        <a href="#" class="btn btn-sm mx-3"
-                                                            style="background: transparent;width:1rem;height:2.3rem;"
-                                                            data-bs-toggle="modal" data-bs-target="#kt_modal_calendar_start"><i
-                                                                class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
-                                                                style="color: #008cb4"></i></a>
-                                                        <input type="Date"
-                                                            class="form-control form-control-solid ps-12"
-                                                            placeholder="Select a date"
-                                                            value="{{ date_format(date_create(old('approve-date') ?? ($claimContract->tanggal_claim ?? '')), 'Y-m-d') }}"
-                                                            name="approve-date" id="approve-date">
+                                                <div class="row fv-row">
 
-                                                        {{-- begin::erorr message --}}
-                                                        @error('approve-date')
-                                                            <h6 class="text-danger">{{ $message }}</h6>
-                                                        @enderror
-                                                        {{-- end::erorr message --}}
-
-                                                        <!--end::Input-->
-                                                    </div>
-                                                    <!--end::Input group-->
-                                                </div>
-                                                <!--End begin::Col-->
-                                            </div>
-
-                                            <!--End begin::Row-->
-                                            {{-- @dd($proyek); --}}
-
-                                            <div class="row fv-row">
-
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Proyek</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <select name="project-id" id="project-id"
-                                                            class="form-select form-select-solid select2-hidden-accessible"
-                                                            data-control="select2" data-hide-search="true"
-                                                            data-placeholder="Pilih Proyek"
-                                                            data-select2-id="select2-data-project-id" tabindex="-1"
-                                                            aria-hidden="true">
-                                                            <option value="{{ $proyek->kode_proyek }}" selected>
-                                                                {{ $proyek->nama_proyek }}</option>
-                                                            {{-- @foreach ($projects as $projectAll)
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Proyek</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <select name="project-id" id="project-id"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="true"
+                                                                data-placeholder="Pilih Proyek"
+                                                                data-select2-id="select2-data-project-id" tabindex="-1"
+                                                                aria-hidden="true">
+                                                                <option value="{{ $proyek->kode_proyek }}" selected>
+                                                                    {{ $proyek->nama_proyek }}</option>
+                                                                {{-- @foreach ($projects as $projectAll)
                                                                     <option value="{{ $projectAll->kode_proyek }}"
                                                                         {{ $projectAll->kode_proyek == (old('project-id') ?? ($claimContract->project->kode_proyek ?? $proyek->kode_proyek)) ? 'selected' : '' }}>
                                                                         {{ $projectAll->nama_proyek }}</option>
                                                                 @endforeach --}}
-                                                            {{-- <option selected data-select2-id="select2-data-2-3jce">Pilih
+                                                                {{-- <option selected data-select2-id="select2-data-2-3jce">Pilih
                                                                 Proyek...</option> --}}
-                                                        </select>
-                                                        <!--end::Input-->
+                                                            </select>
+                                                            <!--end::Input-->
 
-                                                        {{-- begin::erorr message --}}
-                                                        {{-- @error('project-id')
+                                                            {{-- begin::erorr message --}}
+                                                            {{-- @error('project-id')
                                                                 <h6 class="text-danger">{{ $message }}</h6>
                                                             @enderror --}}
-                                                        {{-- end::erorr message --}}
+                                                            {{-- end::erorr message --}}
+                                                        </div>
+                                                        <!--end::Input group-->
                                                     </div>
-                                                    <!--end::Input group-->
-                                                </div>
 
-                                                <!--End begin::Col-->
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Contract</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <select
-                                                            class="form-select form-select-solid select2-hidden-accessible"
-                                                            name="id-contract" id="id-contract" value=""
-                                                            data-control="select2" data-hide-search="true"
-                                                            data-select2-id="select2-data-contract-id"
-                                                            data-placeholder="Pilih Contract">
-                                                            <option value="{{ $currentContract->id_contract }}" sel>
-                                                                {{ $currentContract->id_contract }}</option>
-                                                            {{-- @foreach ($contractManagements as $contract)
+                                                    <!--End begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Contract</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <select
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                name="id-contract" id="id-contract" value=""
+                                                                data-control="select2" data-hide-search="true"
+                                                                data-select2-id="select2-data-contract-id"
+                                                                data-placeholder="Pilih Contract">
+                                                                <option value="{{ $currentContract->id_contract }}" sel>
+                                                                    {{ $currentContract->id_contract }}</option>
+                                                                {{-- @foreach ($contractManagements as $contract)
                                                                     <option value="{{ $contract->id_contract }}"
                                                                         {{ $contract->id_contract == (old('id-contract') ?? ($claimContract->id_contract ?? $currentContract->id_contract)) ? 'selected' : '' }}>
                                                                         {{ $contract->id_contract }}</option>
                                                                 @endforeach --}}
-                                                        </select>
-                                                        <!--end::Input-->
-                                                        {{-- begin::erorr message --}}
-                                                        {{-- @error('id-contract')
+                                                            </select>
+                                                            <!--end::Input-->
+                                                            {{-- begin::erorr message --}}
+                                                            {{-- @error('id-contract')
                                                                 <h6 class="text-danger">{{ $message }}</h6>
                                                             @enderror --}}
-                                                        {{-- end::erorr message --}}
+                                                            {{-- end::erorr message --}}
+                                                        </div>
+                                                        <!--end::Input group-->
                                                     </div>
-                                                    <!--end::Input group-->
+                                                    <!--End begin::Col-->
+
                                                 </div>
-                                                <!--End begin::Col-->
-
-                                            </div>
-                                            <h6 id="status-msg" style="display: none"></h6>
+                                                <h6 id="status-msg" style="display: none"></h6>
 
 
-                                            <!--End begin::Row-->
+                                                <!--End begin::Row-->
 
-                                            <div class="row fv-row">
+                                                <div class="row fv-row">
 
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>PIC</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid"
-                                                            placeholder="Who is responsible for this contract?"
-                                                            id="pic" name="pic" {{-- value="{{ old('pic') ?? ($claimContract->pic ?? '') ?? auth()->user()->name }}"> --}}
-                                                            value="{{ auth()->user()->name }}" readonly>
-                                                        <!--end::Input-->
-
-                                                        {{-- begin::erorr message --}}
-                                                        @error('pic')
-                                                            <h6 class="text-danger">{{ $message }}</h6>
-                                                        @enderror
-                                                        {{-- end::erorr message --}}
-                                                    </div>
-                                                    <!--end::Input group-->
-                                                </div>
-                                                <!--End begin::Col-->
-
-                                                <!--begin::Col-->
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Total Claim</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        @if (!empty($claimContract->nilai_claim))
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>PIC</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
                                                             <input type="text" class="form-control form-control-solid"
-                                                                name="total-claim" id="total-claim"
-                                                                onkeyup="reformatNumber(this)"
-                                                                value="{{ old("total-claim") ?? number_format($claimContract->nilai_claim, 0, ",", ",") }}"
-                                                                placeholder="Type number here...">
-                                                        @else
-                                                            <input type="text" class="form-control form-control-solid"
-                                                                name="total-claim" id="total-claim"
-                                                                onkeyup="reformatNumber(this)"
-                                                                value="{{ old("total-claim") ?? 0 }}"
-                                                                placeholder="Type number here...">
-                                                        @endif
-                                                        <!--end::Input-->
+                                                                placeholder="Who is responsible for this contract?"
+                                                                id="pic" name="pic" {{-- value="{{ old('pic') ?? ($claimContract->pic ?? '') ?? auth()->user()->name }}"> --}}
+                                                                value="{{ auth()->user()->name }}" readonly>
+                                                            <!--end::Input-->
 
-                                                        {{-- begin::erorr message --}}
-                                                        @error('total-claim')
-                                                            <h6 class="text-danger">{{ $message }}</h6>
-                                                        @enderror
-                                                        {{-- end::erorr message --}}
+                                                            {{-- begin::erorr message --}}
+                                                            @error('pic')
+                                                                <h6 class="text-danger">{{ $message }}</h6>
+                                                            @enderror
+                                                            {{-- end::erorr message --}}
+                                                        </div>
+                                                        <!--end::Input group-->
                                                     </div>
-                                                    <!--end::Input group-->
-                                                </div>
-                                                <!--End begin::Col-->
-                                            </div>
+                                                    <!--End begin::Col-->
 
-                                            <!--End begin::Row-->
-
-                                            <div class="row fv-row">
-
-                                                <div class="col-6">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-7">
-                                                        <!--begin::Label-->
-                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                            <span>Jenis Claim</span>
-                                                        </label>
-                                                        <!--end::Label-->
-                                                        <!--begin::Input-->
-                                                        <select name="jenis-claim" id="jenis-claim"
-                                                            class="form-select form-select-solid select2-hidden-accessible"
-                                                            data-control="select2" data-hide-search="true"
-                                                            data-placeholder="Pilih Jenis Claim"
-                                                            data-select2-id="select2-data-jenis-claim" tabindex="-1"
-                                                            aria-hidden="true">
-                                                            @isset($claimContract)
-                                                                <option value="{{ $claimContract->jenis_claim ?? "Claim" }}" selected>
-                                                                    {{ $claimContract->jenis_claim ?? "Claim" }}</option>
+                                                    <!--begin::Col-->
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Total Claim</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            @if (!empty($claimContract->nilai_claim))
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    name="total-claim" id="total-claim"
+                                                                    onkeyup="reformatNumber(this)"
+                                                                    value="{{ old('total-claim') ?? number_format($claimContract->nilai_claim, 0, ',', ',') }}"
+                                                                    placeholder="Type number here...">
                                                             @else
-                                                                <option value="Claim">Claim</option>
-                                                                <option value="Anti Claim">Anti Claim</option>
-                                                                <option value="Claim Asuransi">Claim Asuransi</option>
-                                                            @endisset
-                                                        </select>
-                                                        <!--end::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid"
+                                                                    name="total-claim" id="total-claim"
+                                                                    onkeyup="reformatNumber(this)"
+                                                                    value="{{ old('total-claim') ?? 0 }}"
+                                                                    placeholder="Type number here...">
+                                                            @endif
+                                                            <!--end::Input-->
 
-                                                        {{-- begin::erorr message --}}
-                                                        @error('project-id')
-                                                            <h6 class="text-danger">{{ $message }}</h6>
-                                                        @enderror
-                                                        {{-- end::erorr message --}}
+                                                            {{-- begin::erorr message --}}
+                                                            @error('total-claim')
+                                                                <h6 class="text-danger">{{ $message }}</h6>
+                                                            @enderror
+                                                            {{-- end::erorr message --}}
+                                                        </div>
+                                                        <!--end::Input group-->
                                                     </div>
-                                                    <!--end::Input group-->
+                                                    <!--End begin::Col-->
                                                 </div>
 
-                                            </div>
+                                                <!--End begin::Row-->
 
-                                            <!--End begin::Row-->
+                                                <div class="row fv-row">
 
+                                                    <div class="col-6">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-7">
+                                                            <!--begin::Label-->
+                                                            <label class="fs-6 fw-bold form-label mt-3">
+                                                                <span>Jenis Claim</span>
+                                                            </label>
+                                                            <!--end::Label-->
+                                                            <!--begin::Input-->
+                                                            <select name="jenis-claim" id="jenis-claim"
+                                                                class="form-select form-select-solid select2-hidden-accessible"
+                                                                data-control="select2" data-hide-search="true"
+                                                                data-placeholder="Pilih Jenis Claim"
+                                                                data-select2-id="select2-data-jenis-claim" tabindex="-1"
+                                                                aria-hidden="true">
+                                                                @isset($claimContract)
+                                                                    <option
+                                                                        value="{{ $claimContract->jenis_claim ?? 'Claim' }}"
+                                                                        selected>
+                                                                        {{ $claimContract->jenis_claim ?? 'Claim' }}</option>
+                                                                @else
+                                                                    <option value="Claim">Claim</option>
+                                                                    <option value="Anti Claim">Anti Claim</option>
+                                                                    <option value="Claim Asuransi">Claim Asuransi</option>
+                                                                @endisset
+                                                            </select>
+                                                            <!--end::Input-->
 
-
-
-                                    </form>
-
-                                </div>
-
-
-                            </div>
-                        </div>
-                        <!--end::Header Contract-->
-
-                        @isset($claimContract)
-                            {{-- begin:: Footer --}}
-                            <div class="col-xl-15">
-                                <!--begin::Contacts-->
-                                <div class="card card-flush h-lg-100" id="kt_contacts_main">
-
-                                    <!--begin::Card body-->
-                                    <div class="card-body pt-5">
-                                        <!--begin:::Tabs-->
-                                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8"
-                                            id="tab-list"
-                                            role="tablist">
-
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link text-active-primary pb-4 active"
-                                                    data-bs-toggle="tab"
-                                                    href="#kt_user_view_overview_attachment"
-                                                    style="font-size:14px;" aria-selected="false"
-                                                    role="tab" stage="1">Draft</a>
-                                            </li>
-
-                                            @if ($claimContract->stages > 1)
-                                                <li class="nav-item" role="presentation">
-                                                    <a class="nav-link text-active-primary pb-4"
-                                                        data-bs-toggle="tab"
-                                                        href="#kt_user_diajukan"
-                                                        style="font-size:14px;" aria-selected="false"
-                                                        stage="2"
-                                                        role="tab">Diajukan</a>
-                                                </li>
-                                            @endif
-
-                                            @if ($claimContract->stages > 2)
-                                                <li class="nav-item" role="presentation">
-                                                    <a class="nav-link text-active-primary pb-4"
-                                                        data-bs-toggle="tab"
-                                                        href="#kt_user_negoisasi"
-                                                        style="font-size:14px;" aria-selected="false"
-                                                        stage="3"
-                                                        role="tab">Negoisasi</a>
-                                                </li>
-                                            @endif
-
-                                            @if ($claimContract->stages > 3)
-                                                <li class="nav-item" role="presentation">
-                                                    <a class="nav-link text-active-primary pb-4"
-                                                        data-bs-toggle="tab"
-                                                        href="#kt_user_disetujui"
-                                                        style="font-size:14px;" aria-selected="false"
-                                                        stage="4"
-                                                        role="tab">Disetujui</a>
-                                                </li>
-                                            @endif
-
-                                        </ul>
-                                        <!--end:::Tabs-->
-
-                                        <!--begin:::Tab content -->
-                                        <!--begin:::Tab content -->
-                                        <div class="tab-content" id="myTabContent">
-                                            <!--begin::Attachment-->
-                                            <div class="tab-pane fade show active"
-                                                id="kt_user_view_overview_attachment" role="tabpanel">
-
-
-                                                <!--begin::Card title-->
-                                                <div class="card-title m-0">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-5">
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            Klaim Kontrak Draft
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_draft"
-                                                                id="Plus">+</a>
-                                                        </h3>
-
-                                                        <table
-                                                            class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">No. Claim Draft
-                                                                    </th>
-                                                                    <th class="min-w-125px">Uraian Perubahan
-                                                                    </th>
-                                                                    <th class="min-w-125px">Dokumen Surat / Instruksi
-                                                                    </th>
-                                                                    <th class="min-w-125px">Pasal</th>
-                                                                    <th class="min-w-125px">Pengajuan Biaya </th>
-                                                                    <th class="min-w-125px">Pengajuan Waktu / EOT</th>
-                                                                    <th class="min-w-125px">Dokumen Draft Proposal Claim</th>
-                                                                    <th class="min-w-125px">Rekomendasi</th>
-                                                                    <th class="min-w-125px">Uraian Rekomendasi</th>
-                                                                    <th class="min-w-125px">List Dokumen Pendukng</th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($claimContract->claimContractDrafts as $key => $claim_contrat_draft)
-                                                                    <tr>
-                                                                        <td class="text-gray-600">{{$claim_contrat_draft->no_claim_draft}}</td>
-                                                                        <td class="text-gray-600">{{$claim_contrat_draft->uraian_claim_draft}}</td>
-                                                                        <td class="text-gray-600">
-                                                                            <a target="_blank" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_surat_instruksi}}">{{$claim_contrat_draft->id_document_surat_instruksi}}</a>
-                                                                        </td>
-                                                                        @php
-                                                                            $pasals_claim_draft = explode(",", $claim_contrat_draft->pasals);
-                                                                        @endphp
-                                                                        <td class="text-gray-600">
-                                                                            @foreach ($pasals_claim_draft as $pasal)
-                                                                                @php
-                                                                                    $pasal_model = App\Models\Pasals::find($pasal);
-                                                                                @endphp
-                                                                                @if (!empty($pasal_model))
-                                                                                    - {{$pasal_model->pasal}} <br>
-                                                                                @else 
-                                                                                    - {{$pasal}} <br>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        </td>
-                                                                        <td class="text-gray-600">{{number_format($claim_contrat_draft->pengajuan_biaya, 0, ",", ",")}}</td>
-                                                                        <td class="text-gray-600">{{Carbon\Carbon::parse($claim_contrat_draft->pengajuan_waktu_eot)->translatedFormat("d F Y")}}</td>
-                                                                        <td class="text-gray-600">
-                                                                            <a href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$claim_contrat_draft->id_document_proposal_claim}}">{{$claim_contrat_draft->id_document_proposal_claim}}</a>
-                                                                        </td>
-                                                                        <td class="text-gray-600">{{$claim_contrat_draft->rekomendasi ? "Yes" : "No"}}</td>
-                                                                        <td class="text-gray-600">{{$claim_contrat_draft->uraian_rekomendasi}}</td>
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            @php
-                                                                                $list_dokumen = collect(explode(",", $claim_contrat_draft->dokumen_pendukung))->filter(function($data) {
-                                                                                    return !empty($data);
-                                                                                });
-                                                                            @endphp
-                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a target="_blank" class="text-hover-primary" href="/document/view/{{$claim_contrat_draft->id_draft}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @empty
-                                                                                <p class="text-danger">Kosong</p>
-                                                                            @endforelse
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
+                                                            {{-- begin::erorr message --}}
+                                                            @error('project-id')
+                                                                <h6 class="text-danger">{{ $message }}</h6>
+                                                            @enderror
+                                                            {{-- end::erorr message --}}
+                                                        </div>
+                                                        <!--end::Input group-->
                                                     </div>
-                                                    <!--end::Input group-->
 
                                                 </div>
-                                            </div>
-                                            <!--end:::Tab pane Attachment-->
-                                            
-                                            <!--begin::Tab Pane Diajukan-->
-                                            <div class="tab-pane fade"
-                                                id="kt_user_diajukan" role="tabpanel">
+
+                                                <!--End begin::Row-->
 
 
-                                                <!--begin::Card title-->
-                                                <div class="card-title m-0">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-5">
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            Addendum Kontrak Diajukan
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_diajukan"
-                                                                id="Plus">+</a>
-                                                        </h3>
-
-                                                        <table
-                                                            class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Dokumen Proposal Addendum
-                                                                    </th>
-                                                                    <th class="min-w-125px">Tanggal Diajukan</th>
-                                                                    <th class="min-w-125px">Rekomendasi</th>
-                                                                    <th class="min-w-125px">Uraian Rekomendasi</th>
-                                                                    <th class="min-w-125px">List Dokumen Pendukng</th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($claimContract->claimContractDiajukan as $key => $draft_addendum)
-                                                                    <tr>
-                                                                        <td class="text-gray-600">
-                                                                            <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_diajukans }}/{{$draft_addendum->id_document_proposal_claim}}">{{$draft_addendum->id_document_proposal_claim}}</a>
-                                                                        </td>
-
-                                                                        <td class="text-gray-600">
-                                                                            {{  Carbon\Carbon::parse($draft_addendum->tanggal_diajukan)->translatedFormat('d F Y');}}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600">
-                                                                            {{ $draft_addendum->rekomendasi ? "Yes" : "No" }}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            {{ $draft_addendum->uraian_rekomendasi }}
-                                                                        </td>
-
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            @php
-                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
-                                                                                    return !empty($data);
-                                                                                });
-                                                                            @endphp
-                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_diajukans }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @empty
-                                                                                <p class="text-danger">Kosong</p>
-                                                                            @endforelse
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-                                                    </div>
-                                                    <!--end::Input group-->
-
-                                                </div>
-                                            </div>
-                                            <!--end:::Tab pane Diajukan-->
-                                            <!--begin::Tab Pane Negoisasi-->
-                                            <div class="tab-pane fade"
-                                                id="kt_user_negoisasi" role="tabpanel">
 
 
-                                                <!--begin::Card title-->
-                                                <div class="card-title m-0">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-5">
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            {{$claimContract->jenis_claim ?? "Claim"}} Kontrak Negoisasi
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_Negoisasi"
-                                                                id="Plus">+</a>
-                                                        </h3>
-
-                                                        <table
-                                                            class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Uraian Activity
-                                                                    </th>
-                                                                    <th class="min-w-125px">Tanggal Activity</th>
-                                                                    <th class="min-w-125px">Keterangan</th>
-                                                                    <th class="min-w-125px">List Dokumen Pendukung</th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($claimContract->claimContractNegoisasi as $key => $draft_addendum)
-                                                                    <tr>
-                                                                        <td>
-                                                                            <p class="text-gray-600">{{$draft_addendum->uraian_activity}}</p>
-                                                                        </td>
-
-                                                                        <td>
-                                                                            <p class="text-gray-600">{{ Carbon\Carbon::parse($draft_addendum->tanggal_activity)->translatedFormat("d F Y")}}</p>
-                                                                        </td>
-
-                                                                        <td>
-                                                                            <p class="text-gray-600">{{$draft_addendum->keterangan}}</p>
-                                                                        </td>
-
-                                                                        <td class="text-gray-600 min-w-100px text-break">
-                                                                            @php
-                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
-                                                                                return !empty($data);});
-                                                                            @endphp
-                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a class="text-gray-600 text-hover-primary" target="_blank" href="/document/view/{{$draft_addendum->id_negosiasi
-                                                                            }}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @empty
-                                                                                <p class="text-danger">Kosong</p>
-                                                                            @endforelse
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-                                                    </div>
-                                                    <!--end::Input group-->
-
-                                                </div>
-                                            </div>
-                                            <!--end:::Tab pane Negoisasi-->
-                                            <!--begin::Tab Pane Disetujui-->
-                                            <div class="tab-pane fade"
-                                                id="kt_user_disetujui" role="tabpanel">
-                                                <!--begin::Card title-->
-                                                <div class="card-title m-0">
-                                                    <!--begin::Input group Website-->
-                                                    <div class="fv-row mb-5">
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
-                                                            Klaim Kontrak Disetujui
-                                                            <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_disetujui"
-                                                                id="Plus">+</a>
-                                                        </h3>
-
-                                                        <table
-                                                            class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_table">
-                                                            <!--begin::Table head-->
-                                                            <thead>
-                                                                <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                    <th class="min-w-125px">Dokumen Surat Disetujui</th>
-                                                                    <th class="min-w-125px">Tanggal Disetujui</th>
-                                                                    <th class="min-w-125px">Biaya Disetujui</th>
-                                                                    <th class="min-w-125px">Waktu / EOT Disetujui</th>
-                                                                    <th class="min-w-125px">Keterangan</th>
-                                                                    <th class="min-w-125px">List Dokumen Pendukng</th>
-                                                                </tr>
-                                                                <!--end::Table row-->
-                                                            </thead>
-                                                            <!--end::Table head-->
-                                                            <!--begin::Table body-->
-                                                            <tbody class="fw-bold text-gray-600">
-                                                                @foreach ($claimContract->claimContractDisetujui as $key => $draft_addendum)
-                                                                    <tr>
-                                                                        <td class="text-gray-600 text-hover-primary">
-                                                                            <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_addendum_contract_disetujui}}/{{$draft_addendum->id_document_surat_disetujui}}">{{$draft_addendum->id_document_surat_disetujui}}</a>
-                                                                        </td>
-
-                                                                        <td class="text-gray-600">{{Carbon\Carbon::parse($draft_addendum->tanggal_disetujui)->translatedFormat("d F Y")}}</td>
-                                                                        
-                                                                        <td class="text-gray-600">{{ number_format($draft_addendum->biaya_disetujui, 0, ",", ",") }}</td>
-
-                                                                        <td class="text-gray-600">{{ Carbon\Carbon::parse($draft_addendum->waktu_eot_disetujui)->translatedFormat("d F Y") }}</td>
-
-                                                                        <td class="text-gray-600">{{ $draft_addendum->waktu_eot_disetujui }}</td>
-
-                                                                        <td class="min-w-100px text-break">
-                                                                            @php
-                                                                                $list_dokumen = collect(explode(",", $draft_addendum->dokumen_pendukung))->filter(function($data) {
-                                                                                return !empty($data);});
-                                                                            @endphp
-                                                                            @forelse ($list_dokumen as $key => $dokumen_pendukung)
-                                                                               - <a target="_blank" class="text-gray-600 text-hover-primary" href="/document/view/{{$draft_addendum->id_disetujui}}/{{$dokumen_pendukung}}">Dokumen {{$key + 1}}</a> <br>
-                                                                            @empty
-                                                                                <p class="text-danger">Kosong</p>
-                                                                            @endforelse
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                            <!--end::Table body-->
-                                                        </table>
-                                                    </div>
-                                                    <!--end::Input group-->
-
-                                                </div>
-                                            </div>
-                                            <!--end:::Tab pane Disetujui -->
-                                        </div>
-                                        <!--end:::Tab content-->
+                                        </form>
 
                                     </div>
-                                    <!--end::Card body-->
-                                </div>
-                                <!--end::Contacts-->
-                            </div>
-                            {{-- end:: Footer --}}
-                        </div>
-                    @endisset
 
+
+                                </div>
+                            </div>
+                            <!--end::Header Contract-->
+
+                            @isset($claimContract)
+                                {{-- begin:: Footer --}}
+                                <div class="col-xl-15">
+                                    <!--begin::Contacts-->
+                                    <div class="card card-flush h-lg-100" id="kt_contacts_main">
+
+                                        <!--begin::Card body-->
+                                        <div class="card-body pt-5">
+                                            <!--begin:::Tabs-->
+                                            <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8"
+                                                id="tab-list" role="tablist">
+
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab"
+                                                        href="#kt_user_view_overview_attachment" style="font-size:14px;"
+                                                        aria-selected="false" role="tab" stage="1">Draft</a>
+                                                </li>
+
+                                                @if ($claimContract->stages > 1)
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                            href="#kt_user_diajukan" style="font-size:14px;"
+                                                            aria-selected="false" stage="2" role="tab">Diajukan</a>
+                                                    </li>
+                                                @endif
+
+                                                @if ($claimContract->stages > 2)
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                            href="#kt_user_negoisasi" style="font-size:14px;"
+                                                            aria-selected="false" stage="3" role="tab">Negoisasi</a>
+                                                    </li>
+                                                @endif
+
+                                                @if ($claimContract->stages > 3)
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                            href="#kt_user_disetujui" style="font-size:14px;"
+                                                            aria-selected="false" stage="4" role="tab">Disetujui</a>
+                                                    </li>
+                                                @endif
+
+                                            </ul>
+                                            <!--end:::Tabs-->
+
+                                            <!--begin:::Tab content -->
+                                            <!--begin:::Tab content -->
+                                            <div class="tab-content" id="myTabContent">
+                                                <!--begin::Attachment-->
+                                                <div class="tab-pane fade show active" id="kt_user_view_overview_attachment"
+                                                    role="tabpanel">
+
+
+                                                    <!--begin::Card title-->
+                                                    <div class="card-title m-0">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-5">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                Klaim Kontrak Draft
+                                                                <a href="#" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_draft" id="Plus">+</a>
+                                                            </h3>
+
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-125px">No. Claim Draft
+                                                                        </th>
+                                                                        <th class="min-w-125px">Uraian Perubahan
+                                                                        </th>
+                                                                        <th class="min-w-125px">Dokumen Surat / Instruksi
+                                                                        </th>
+                                                                        <th class="min-w-125px">Pasal</th>
+                                                                        <th class="min-w-125px">Pengajuan Biaya </th>
+                                                                        <th class="min-w-125px">Pengajuan Waktu / EOT</th>
+                                                                        <th class="min-w-125px">Dokumen Draft Proposal Claim
+                                                                        </th>
+                                                                        <th class="min-w-125px">Rekomendasi</th>
+                                                                        <th class="min-w-125px">Uraian Rekomendasi</th>
+                                                                        <th class="min-w-125px">List Dokumen Pendukng</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($claimContract->claimContractDrafts as $key => $claim_contrat_draft)
+                                                                        <tr>
+                                                                            <td class="text-gray-600">
+                                                                                {{ $claim_contrat_draft->no_claim_draft }}</td>
+                                                                            <td class="text-gray-600">
+                                                                                {{ $claim_contrat_draft->uraian_claim_draft }}
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                <a target="_blank"
+                                                                                    href="/document/view/{{ $claim_contrat_draft->id_draft }}/{{ $claim_contrat_draft->id_document_surat_instruksi }}">{{ $claim_contrat_draft->id_document_surat_instruksi }}</a>
+                                                                            </td>
+                                                                            @php
+                                                                                $pasals_claim_draft = explode(',', $claim_contrat_draft->pasals);
+                                                                            @endphp
+                                                                            <td class="text-gray-600">
+                                                                                @foreach ($pasals_claim_draft as $pasal)
+                                                                                    @php
+                                                                                        $pasal_model = App\Models\Pasals::find($pasal);
+                                                                                    @endphp
+                                                                                    @if (!empty($pasal_model))
+                                                                                        - {{ $pasal_model->pasal }} <br>
+                                                                                    @else
+                                                                                        - {{ $pasal }} <br>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                {{ number_format($claim_contrat_draft->pengajuan_biaya, 0, ',', ',') }}
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                {{ Carbon\Carbon::parse($claim_contrat_draft->pengajuan_waktu_eot)->translatedFormat('d F Y') }}
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                <a
+                                                                                    href="/document/view/{{ $claim_contrat_draft->id_draft }}/{{ $claim_contrat_draft->id_document_proposal_claim }}">{{ $claim_contrat_draft->id_document_proposal_claim }}</a>
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                {{ $claim_contrat_draft->rekomendasi ? 'Yes' : 'No' }}
+                                                                            </td>
+                                                                            <td class="text-gray-600">
+                                                                                {{ $claim_contrat_draft->uraian_rekomendasi }}
+                                                                            </td>
+                                                                            <td class="text-gray-600 min-w-100px text-break">
+                                                                                @php
+                                                                                    $list_dokumen = collect(explode(',', $claim_contrat_draft->dokumen_pendukung))->filter(function ($data) {
+                                                                                        return !empty($data);
+                                                                                    });
+                                                                                @endphp
+                                                                                @forelse ($list_dokumen as $key => $dokumen_pendukung)
+                                                                                    - <a target="_blank"
+                                                                                        class="text-hover-primary"
+                                                                                        href="/document/view/{{ $claim_contrat_draft->id_draft }}/{{ $dokumen_pendukung }}">Dokumen
+                                                                                        {{ $key + 1 }}</a> <br>
+                                                                                @empty
+                                                                                    <p class="text-danger">Kosong</p>
+                                                                                @endforelse
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                    </div>
+                                                </div>
+                                                <!--end:::Tab pane Attachment-->
+
+                                                <!--begin::Tab Pane Diajukan-->
+                                                <div class="tab-pane fade" id="kt_user_diajukan" role="tabpanel">
+
+
+                                                    <!--begin::Card title-->
+                                                    <div class="card-title m-0">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-5">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                Addendum Kontrak Diajukan
+                                                                <a href="#" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_diajukan" id="Plus">+</a>
+                                                            </h3>
+
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-125px">Dokumen Proposal Addendum
+                                                                        </th>
+                                                                        <th class="min-w-125px">Tanggal Diajukan</th>
+                                                                        <th class="min-w-125px">Rekomendasi</th>
+                                                                        <th class="min-w-125px">Uraian Rekomendasi</th>
+                                                                        <th class="min-w-125px">List Dokumen Pendukng</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($claimContract->claimContractDiajukan as $key => $draft_addendum)
+                                                                        <tr>
+                                                                            <td class="text-gray-600">
+                                                                                <a class="text-gray-600 text-hover-primary"
+                                                                                    target="_blank"
+                                                                                    href="/document/view/{{ $draft_addendum->id_diajukans }}/{{ $draft_addendum->id_document_proposal_claim }}">{{ $draft_addendum->id_document_proposal_claim }}</a>
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ Carbon\Carbon::parse($draft_addendum->tanggal_diajukan)->translatedFormat('d F Y') }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ $draft_addendum->rekomendasi ? 'Yes' : 'No' }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600 min-w-100px text-break">
+                                                                                {{ $draft_addendum->uraian_rekomendasi }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600 min-w-100px text-break">
+                                                                                @php
+                                                                                    $list_dokumen = collect(explode(',', $draft_addendum->dokumen_pendukung))->filter(function ($data) {
+                                                                                        return !empty($data);
+                                                                                    });
+                                                                                @endphp
+                                                                                @forelse ($list_dokumen as $key => $dokumen_pendukung)
+                                                                                    - <a class="text-gray-600 text-hover-primary"
+                                                                                        target="_blank"
+                                                                                        href="/document/view/{{ $draft_addendum->id_diajukans }}/{{ $dokumen_pendukung }}">Dokumen
+                                                                                        {{ $key + 1 }}</a> <br>
+                                                                                @empty
+                                                                                    <p class="text-danger">Kosong</p>
+                                                                                @endforelse
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                    </div>
+                                                </div>
+                                                <!--end:::Tab pane Diajukan-->
+                                                <!--begin::Tab Pane Negoisasi-->
+                                                <div class="tab-pane fade" id="kt_user_negoisasi" role="tabpanel">
+
+
+                                                    <!--begin::Card title-->
+                                                    <div class="card-title m-0">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-5">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                {{ $claimContract->jenis_claim ?? 'Claim' }} Kontrak Negoisasi
+                                                                <a href="#" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_Negoisasi" id="Plus">+</a>
+                                                            </h3>
+
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-125px">Uraian Activity
+                                                                        </th>
+                                                                        <th class="min-w-125px">Tanggal Activity</th>
+                                                                        <th class="min-w-125px">Keterangan</th>
+                                                                        <th class="min-w-125px">List Dokumen Pendukung</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($claimContract->claimContractNegoisasi as $key => $draft_addendum)
+                                                                        <tr>
+                                                                            <td>
+                                                                                <p class="text-gray-600">
+                                                                                    {{ $draft_addendum->uraian_activity }}</p>
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <p class="text-gray-600">
+                                                                                    {{ Carbon\Carbon::parse($draft_addendum->tanggal_activity)->translatedFormat('d F Y') }}
+                                                                                </p>
+                                                                            </td>
+
+                                                                            <td>
+                                                                                <p class="text-gray-600">
+                                                                                    {{ $draft_addendum->keterangan }}</p>
+                                                                            </td>
+
+                                                                            <td class="text-gray-600 min-w-100px text-break">
+                                                                                @php
+                                                                                    $list_dokumen = collect(explode(',', $draft_addendum->dokumen_pendukung))->filter(function ($data) {
+                                                                                        return !empty($data);
+                                                                                    });
+                                                                                @endphp
+                                                                                @forelse ($list_dokumen as $key => $dokumen_pendukung)
+                                                                                    - <a class="text-gray-600 text-hover-primary"
+                                                                                        target="_blank"
+                                                                                        href="/document/view/{{ $draft_addendum->id_negosiasi }}/{{ $dokumen_pendukung }}">Dokumen
+                                                                                        {{ $key + 1 }}</a> <br>
+                                                                                @empty
+                                                                                    <p class="text-danger">Kosong</p>
+                                                                                @endforelse
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                    </div>
+                                                </div>
+                                                <!--end:::Tab pane Negoisasi-->
+                                                <!--begin::Tab Pane Disetujui-->
+                                                <div class="tab-pane fade" id="kt_user_disetujui" role="tabpanel">
+                                                    <!--begin::Card title-->
+                                                    <div class="card-title m-0">
+                                                        <!--begin::Input group Website-->
+                                                        <div class="fv-row mb-5">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                                style="font-size:14px;">
+                                                                Klaim Kontrak Disetujui
+                                                                <a href="#" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_disetujui" id="Plus">+</a>
+                                                            </h3>
+
+                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                        <th class="min-w-125px">Dokumen Surat Disetujui</th>
+                                                                        <th class="min-w-125px">Tanggal Disetujui</th>
+                                                                        <th class="min-w-125px">Biaya Disetujui</th>
+                                                                        <th class="min-w-125px">Waktu / EOT Disetujui</th>
+                                                                        <th class="min-w-125px">Keterangan</th>
+                                                                        <th class="min-w-125px">List Dokumen Pendukng</th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                    @foreach ($claimContract->claimContractDisetujui as $key => $draft_addendum)
+                                                                        <tr>
+                                                                            <td class="text-gray-600 text-hover-primary">
+                                                                                <a target="_blank"
+                                                                                    class="text-gray-600 text-hover-primary"
+                                                                                    href="/document/view/{{ $draft_addendum->id_addendum_contract_disetujui }}/{{ $draft_addendum->id_document_surat_disetujui }}">{{ $draft_addendum->id_document_surat_disetujui }}</a>
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ Carbon\Carbon::parse($draft_addendum->tanggal_disetujui)->translatedFormat('d F Y') }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ number_format($draft_addendum->biaya_disetujui, 0, ',', ',') }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ Carbon\Carbon::parse($draft_addendum->waktu_eot_disetujui)->translatedFormat('d F Y') }}
+                                                                            </td>
+
+                                                                            <td class="text-gray-600">
+                                                                                {{ $draft_addendum->waktu_eot_disetujui }}</td>
+
+                                                                            <td class="min-w-100px text-break">
+                                                                                @php
+                                                                                    $list_dokumen = collect(explode(',', $draft_addendum->dokumen_pendukung))->filter(function ($data) {
+                                                                                        return !empty($data);
+                                                                                    });
+                                                                                @endphp
+                                                                                @forelse ($list_dokumen as $key => $dokumen_pendukung)
+                                                                                    - <a target="_blank"
+                                                                                        class="text-gray-600 text-hover-primary"
+                                                                                        href="/document/view/{{ $draft_addendum->id_disetujui }}/{{ $dokumen_pendukung }}">Dokumen
+                                                                                        {{ $key + 1 }}</a> <br>
+                                                                                @empty
+                                                                                    <p class="text-danger">Kosong</p>
+                                                                                @endforelse
+                                                                            </td>
+                                                                        </tr>
+                                                                    @endforeach
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <!--end::Input group-->
+
+                                                    </div>
+                                                </div>
+                                                <!--end:::Tab pane Disetujui -->
+                                            </div>
+                                            <!--end:::Tab content-->
+
+                                        </div>
+                                        <!--end::Card body-->
+                                    </div>
+                                    <!--end::Contacts-->
+                                </div>
+                                {{-- end:: Footer --}}
+                            </div>
+                        @endisset
+
+                    </div>
         </div>
-    </div>
-    </form>
-    <!--end::Card body-->
+        </form>
+        <!--end::Card body-->
     </div>
     <!--end::Contacts-->
     </div>
@@ -820,11 +850,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -835,152 +866,182 @@
                 <!--begin::Modal body-->
                 <form action="/claim-contract/draft/upload" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
-                    <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
+                    <input type="hidden" name="id-contract" value="{{ $claimContract->id_contract ?? 0 }}">
                     <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
                             {{-- <form action=""></form> --}}
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="no-draft-claim" class="form-label fs-6 fw-normal"><span class="required">No Klaim Draft</span></label>
-                                        <input type="text" placeholder="No Draft Klaim" value="{{ old("no-draft-claim") ?? ""}}" name="no-draft-claim" class="form-control form-control-solid fw-normal">
-                                        @error('no-draft-claim')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col">
-                                        <label for="uraian-claim" class="form-label fs-6 fw-normal"><span class="required">Uraian {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
-                                        <input type="text" name="uraian-claim" value="{{ old("uraian-claim") ?? ""}}" placeholder="Uraian Klaim" class="form-control form-control-solid">
-                                        @error('uraian-claim')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="no-draft-claim" class="form-label fs-6 fw-normal"><span
+                                            class="required">No Klaim Draft</span></label>
+                                    <input type="text" placeholder="No Draft Klaim"
+                                        value="{{ old('no-draft-claim') ?? '' }}" name="no-draft-claim"
+                                        class="form-control form-control-solid fw-normal">
+                                    @error('no-draft-claim')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="d-flex flex-row">
-                                            <button type="button" onclick="showModalPasal()" role="button" class="btn btn-sm btn-link text-dark fs-6 fw-normal"><span class="required">Pasal-pasal</span><i class="mx-2 bi bi-plus text-primary"></i></button>
+                                <div class="col">
+                                    <label for="uraian-claim" class="form-label fs-6 fw-normal"><span
+                                            class="required">Uraian
+                                            {{ $claimContract->jenis_claim ?? 'Claim' }}</span></label>
+                                    <input type="text" name="uraian-claim" value="{{ old('uraian-claim') ?? '' }}"
+                                        placeholder="Uraian Klaim" class="form-control form-control-solid">
+                                    @error('uraian-claim')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="d-flex flex-row">
+                                        <button type="button" onclick="showModalPasal()" role="button"
+                                            class="btn btn-sm btn-link text-dark fs-6 fw-normal"><span
+                                                class="required">Pasal-pasal</span><i
+                                                class="mx-2 bi bi-plus text-primary"></i></button>
+                                        @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
+                                            <a name="clear-pasal" id="clear-pasal" class="btn btn-sm btn-danger">Clear
+                                                Pasal</a>
+                                        @else
+                                            <a name="clear-pasal" id="clear-pasal" style="visibility: hidden"
+                                                class="btn btn-sm btn-danger">Clear
+                                                Pasal</a>
+                                        @endif
+                                    </div>
+                                    <table class="table align-middle table-row-dashed fs-6" id="kt_pasal_table">
+                                        <!--begin::Table head-->
+                                        <thead>
+                                            <!--begin::Table row-->
+                                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">#</th>
+                                                <th class="min-w-125px">Pasal
+                                                </th>
+                                            </tr>
+                                            <!--end::Table row-->
+                                        </thead>
+                                        <!--end::Table head-->
+                                        <!--begin::Table body-->
+                                        <tbody class="fw-bold text-gray-600">
                                             @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
-                                                <a name="clear-pasal" id="clear-pasal"
-                                                    class="btn btn-sm btn-danger">Clear
-                                                    Pasal</a>
-                                            @else
-                                                <a name="clear-pasal" id="clear-pasal"
-                                                    style="visibility: hidden"
-                                                    class="btn btn-sm btn-danger">Clear
-                                                    Pasal</a>
-                                            @endif
-                                        </div>
-                                        <table
-                                            class="table align-middle table-row-dashed fs-6"
-                                            id="kt_pasal_table">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr
-                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-125px">#</th>
-                                                    <th class="min-w-125px">Pasal
-                                                    </th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--end::Table head-->
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold text-gray-600">
-                                                @if (Session::has('pasals') && count(Session::get('pasals')) > 1)
-                                                    @foreach (Session::get('pasals') as $i => $pasalSession)
-                                                        <tr>
-                                                            <td>
-                                                                <span class="fw-normal fs-8">{{ ++$i }}</span>
-                                                            </td>
-                                                            <td>
-                                                                <span class="fw-normal fs-8">{{ $pasalSession->pasal }}</span>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                @else
+                                                @foreach (Session::get('pasals') as $i => $pasalSession)
                                                     <tr>
-                                                        <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum terpilih</b></td>
+                                                        <td>
+                                                            <span class="fw-normal fs-8">{{ ++$i }}</span>
+                                                        </td>
+                                                        <td>
+                                                            <span class="fw-normal fs-8">{{ $pasalSession->pasal }}</span>
+                                                        </td>
                                                     </tr>
-                                                @endif
-                                            </tbody>
-                                            <!--end::Table body-->
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="2" class="text-center bg-gray-100"><b>Pasal belum
+                                                            terpilih</b></td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                        <!--end::Table body-->
                                     </table>
 
-                                    @if (Session::has("pasal-error"))
+                                    @if (Session::has('pasal-error'))
                                         <span class="text-danger">Field ini mandatory</span>
                                     @endif
 
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="pengajuan-biaya" class="form-label fs-6 fw-normal"><span class="required">Pengajuan Biaya</span></label>
-                                        <input type="text" name="pengajuan-biaya" value="0" value="{{ old("pengajuan-biaya") ?? ""}}" onkeyup="reformatNumber(this)" class="form-control form-control-solid">
-                                        @error('pengajuan-biaya')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="pengajuan-waktu" class="form-label fs-6 fw-normal"><span class="required">Pengajuan Waktu / EOT</span></label>
-                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" value="{{ date_format(date_create(old("pengajuan-waktu")),"Y-m-d")}}" name="pengajuan-waktu" class="form-control form-control-solid">
-                                        @error('pengajuan-waktu')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal"><span class="required">Draft Proposal {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
-                                        <input type="file" name="proposal-claim" accept=".docx" class="form-control form-control-solid fw-normal">
-                                        @error('proposal-claim')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                                <div class="col-6">
+                                    <label for="pengajuan-biaya" class="form-label fs-6 fw-normal"><span
+                                            class="required">Pengajuan Biaya</span></label>
+                                    <input type="text" name="pengajuan-biaya" value="0"
+                                        value="{{ old('pengajuan-biaya') ?? '' }}" onkeyup="reformatNumber(this)"
+                                        class="form-control form-control-solid">
+                                    @error('pengajuan-biaya')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Rekomendasi</span></label>
-                                        <select name="rekomendasi" id="rekomendasi" style="z-index: 9999999;" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Apakah draft ini direkomendasi?" data-select2-id="select2-data-claim-rekomendasi" aria-hidden="true">
-                                            <option value=""></option>
-                                            <option value="1" {{ old("pengajuan-biaya") == "1" ? "selected": ""}}>Yes</option>
-                                            <option value="0" {{ old("pengajuan-biaya") == "0" ? "selected": ""}}>No</option>
-                                        </select>
-                                        @error('rekomendasi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Uraian Rekomendasi</span></label>
-                                        <textarea name="uraian-rekomendasi" placeholder="Uraian Rekomendasi" rows="1" class="form-control form-control-solid fw-normal">{!! old("uraian-rekomendasi") ?? "" !!}</textarea>
-                                        @error('uraian-rekomendasi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
-                                    </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="pengajuan-waktu" class="form-label fs-6 fw-normal"><span
+                                            class="required">Pengajuan Waktu / EOT</span></label>
+                                    <a href="#" class="btn btn-sm mx-3"
+                                        style="background: transparent;width:.5rem;height:2.3rem;"
+                                        onclick="showCalendarModal(this)" data-target="EOT"><i
+                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008cb4"></i></a>
+                                    <input type="date"
+                                        value="{{ date_format(date_create(old('pengajuan-waktu')), 'Y-m-d') }}"
+                                        name="pengajuan-waktu" class="form-control form-control-solid">
+                                    @error('pengajuan-waktu')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="surat-instruksi" class="form-label fs-6 fw-normal"><span class="required">Surat / Instruksi (Dari Owner)</span></label>
-                                        <input type="file" accept=".docx" name="surat-instruksi" class="form-control form-control-solid fw-normal">
-                                        @error('surat-instruksi')
-                                            <span class="text-danger">{{ $message }}</span>
-                                        @enderror
+                                <div class="col-6">
+                                    <label for="proposal-claim" class="form-label fs-6 fw-normal"><span
+                                            class="required">Draft Proposal
+                                            {{ $claimContract->jenis_claim ?? 'Claim' }}</span></label>
+                                    <input type="file" name="proposal-claim" accept=".docx"
+                                        class="form-control form-control-solid fw-normal">
+                                    @error('proposal-claim')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="rekomendasi" class="form-label fs-6 fw-normal"><span
+                                            class="required">Rekomendasi</span></label>
+                                    <select name="rekomendasi" id="rekomendasi" style="z-index: 9999999;"
+                                        class="form-select form-select-solid" data-control="select2"
+                                        data-hide-search="true" data-placeholder="Apakah draft ini direkomendasi?"
+                                        data-select2-id="select2-data-claim-rekomendasi" aria-hidden="true">
+                                        <option value=""></option>
+                                        <option value="1" {{ old('pengajuan-biaya') == '1' ? 'selected' : '' }}>Yes
+                                        </option>
+                                        <option value="0" {{ old('pengajuan-biaya') == '0' ? 'selected' : '' }}>No
+                                        </option>
+                                    </select>
+                                    @error('rekomendasi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                                <div class="col-6">
+                                    <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span
+                                            class="required">Uraian Rekomendasi</span></label>
+                                    <textarea name="uraian-rekomendasi" placeholder="Uraian Rekomendasi" rows="1"
+                                        class="form-control form-control-solid fw-normal">{!! old('uraian-rekomendasi') ?? '' !!}</textarea>
+                                    @error('uraian-rekomendasi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="surat-instruksi" class="form-label fs-6 fw-normal"><span
+                                            class="required">Surat / Instruksi (Dari Owner)</span></label>
+                                    <input type="file" accept=".docx" name="surat-instruksi"
+                                        class="form-control form-control-solid fw-normal">
+                                    @error('surat-instruksi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
 
-                                    </div>
-                                    <div class="col">
-                                        <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
-                                        <small>* Support multiple files upload</small>
-                                        
-                                    </div>
                                 </div>
+                                <div class="col">
+                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen
+                                        Pendukung</label>
+                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls"
+                                        class="form-control form-control-solid fw-normal">
+                                    <small>* Support multiple files upload</small>
+
+                                </div>
+                            </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
@@ -1002,7 +1063,7 @@
         <!--end::Modal dialog-->
     </div>
     <!--end::Modal - Input Draft -->
-    
+
     <!--begin::Modal - Input Diajukan -->
     <div class="modal fade" id="kt_modal_diajukan" aria-labelledby="kt_modal_diajukan" aria-hidden="true">
         <!--begin::Modal dialog-->
@@ -1018,11 +1079,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -1033,57 +1095,73 @@
                 <!--begin::Modal body-->
                 <form action="/claim-contract/diajukan/upload" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
-                    <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
+                    <input type="hidden" name="id-contract" value="{{ $claimContract->id_contract ?? 0 }}">
                     <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
                             {{-- <form action=""></form> --}}
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="proposal-claim" class="form-label fs-6 fw-normal"><span class="required">Proposal {{$claimContract->jenis_claim ?? "Claim"}}</span></label>
-                                        <input type="file" accept=".docx" name="proposal-claim" class="form-control form-control-solid fw-normal">
-                                        @error('proposal-claim')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="tanggal-diajukan" class="form-label fs-6 fw-normal"><span class="required">Tanggal Diajukan</span></label>
-                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="tanggal-diajukan" class="form-control form-control-solid">
-                                        @error('tanggal-diajukan')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="proposal-claim" class="form-label fs-6 fw-normal"><span
+                                            class="required">Proposal
+                                            {{ $claimContract->jenis_claim ?? 'Claim' }}</span></label>
+                                    <input type="file" accept=".docx" name="proposal-claim"
+                                        class="form-control form-control-solid fw-normal">
+                                    @error('proposal-claim')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="diajukan-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Rekomendasi</span></label>
-                                        <select name="diajukan-rekomendasi" id="diajukan-rekomendasi" style="z-index: 9999999;" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Apakah draft ini direkomendasi?" data-select2-id="select2-data-draft-rekomendasi" aria-hidden="true">
-                                            <option value=""></option>
-                                            <option value="1">Yes</option>
-                                            <option value="0">No</option>
-                                        </select>
-                                        @error('diajukan-rekomendasi')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span class="required">Uraian Rekomendasi</span></label>
-                                        <textarea name="uraian-rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
-                                        @error('uraian-rekomendasi')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
+                                <div class="col-6">
+                                    <label for="tanggal-diajukan" class="form-label fs-6 fw-normal"><span
+                                            class="required">Tanggal Diajukan</span></label>
+                                    <a href="#" class="btn btn-sm mx-3"
+                                        style="background: transparent;width:.5rem;height:2.3rem;"
+                                        onclick="showCalendarModal(this)" data-target="EOT"><i
+                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008cb4"></i></a>
+                                    <input type="date" name="tanggal-diajukan"
+                                        class="form-control form-control-solid">
+                                    @error('tanggal-diajukan')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="col">
-                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="diajukan-rekomendasi" class="form-label fs-6 fw-normal"><span
+                                            class="required">Rekomendasi</span></label>
+                                    <select name="diajukan-rekomendasi" id="diajukan-rekomendasi"
+                                        style="z-index: 9999999;" class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Apakah draft ini direkomendasi?"
+                                        data-select2-id="select2-data-draft-rekomendasi" aria-hidden="true">
+                                        <option value=""></option>
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                    </select>
+                                    @error('diajukan-rekomendasi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
+                                <div class="col-6">
+                                    <label for="uraian-rekomendasi" class="form-label fs-6 fw-normal"><span
+                                            class="required">Uraian Rekomendasi</span></label>
+                                    <textarea name="uraian-rekomendasi" rows="1" class="form-control form-control-solid fw-normal"></textarea>
+                                    @error('uraian-rekomendasi')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <br>
+                            <div class="col">
+                                <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
+                                <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls"
+                                    class="form-control form-control-solid fw-normal">
+                            </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
@@ -1121,11 +1199,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -1136,45 +1215,58 @@
                 <!--begin::Modal body-->
                 <form action="/claim-contract/negosiasi/upload" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
-                    <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
+                    <input type="hidden" name="id-contract" value="{{ $claimContract->id_contract ?? 0 }}">
                     <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
                         <!--begin::Input group Website-->
                         <div class="fv-row mb-5">
                             {{-- <form action=""></form> --}}
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="uraian-activity" class="form-label fs-6 fw-normal"><span class="required">Uraian Activity</span></label>
-                                        <input type="text" name="uraian-activity" value="{{ old("uraian-activity") ?? "" }}" class="form-control form-control-solid fw-normal">
-                                        @error('uraian-activity')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="tanggal-activity" class="form-label fs-6 fw-normal"><span class="required">Tanggal Activity</span></label>
-                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="tanggal-activity" value="{{ date_format(date_create(old("tanggal-activity")), "Y-m-d") ?? "" }}" class="form-control form-control-solid">
-                                        @error('tanggal-activity')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="uraian-activity" class="form-label fs-6 fw-normal"><span
+                                            class="required">Uraian Activity</span></label>
+                                    <input type="text" name="uraian-activity"
+                                        value="{{ old('uraian-activity') ?? '' }}"
+                                        class="form-control form-control-solid fw-normal">
+                                    @error('uraian-activity')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
-                                <br>
-                                <div class="row">
-                                    <div class="col-6">
-                                        <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                        <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls" class="form-control form-control-solid fw-normal">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="keterangan" class="form-label fs-6 fw-normal"><span class="required">Keterangan</span></label>
-                                        <textarea name="keterangan" rows="1" class="form-control form-control-solid fw-normal">{{old("tanggal-activity") ?? ""}}</textarea>
-                                        @error('keterangan')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
-                                    </div>
+                                <div class="col-6">
+                                    <label for="tanggal-activity" class="form-label fs-6 fw-normal"><span
+                                            class="required">Tanggal Activity</span></label>
+                                    <a href="#" class="btn btn-sm mx-3"
+                                        style="background: transparent;width:.5rem;height:2.3rem;"
+                                        onclick="showCalendarModal(this)" data-target="EOT"><i
+                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008cb4"></i></a>
+                                    <input type="date" name="tanggal-activity"
+                                        value="{{ date_format(date_create(old('tanggal-activity')), 'Y-m-d') ?? '' }}"
+                                        class="form-control form-control-solid">
+                                    @error('tanggal-activity')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen
+                                        Pendukung</label>
+                                    <input type="file" name="dokumen-pendukung[]" multiple accept=".docx,.xsls"
+                                        class="form-control form-control-solid fw-normal">
+                                </div>
+                                <div class="col-6">
+                                    <label for="keterangan" class="form-label fs-6 fw-normal"><span
+                                            class="required">Keterangan</span></label>
+                                    <textarea name="keterangan" rows="1" class="form-control form-control-solid fw-normal">{{ old('tanggal-activity') ?? '' }}</textarea>
+                                    @error('keterangan')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                             {{-- <button type="button" id="save-pasal" data-bs-dismiss="modal" class="btn btn-lg mt-5 btn-primary">
                                 <span>Save</span>
                                 <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
@@ -1212,11 +1304,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -1227,8 +1320,8 @@
                 <!--begin::Modal body-->
                 <form action="/claim-contract/disetujui/upload" method="POST" enctype="multipart/form-data">
                     @csrf
-                    <input type="hidden" name="id-claim" value="{{$claimContract->id_claim ?? 0}}">
-                    <input type="hidden" name="id-contract" value="{{$claimContract->id_contract ?? 0}}">
+                    <input type="hidden" name="id-claim" value="{{ $claimContract->id_claim ?? 0 }}">
+                    <input type="hidden" name="id-contract" value="{{ $claimContract->id_contract ?? 0 }}">
                     <input type="hidden" name="modal-name" class="modal-name">
                     <div class="modal-body py-lg-6 px-lg-6">
 
@@ -1237,51 +1330,73 @@
                             {{-- <form action=""></form> --}}
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal"><span class="required">Surat Disetujui Dari Owner</span></label>
-                                    <input type="file" accept=".docx" name="surat-disetujui" class="form-control form-control-solid fw-normal">
+                                    <label for="surat-disetujui" class="form-label fs-6 fw-normal"><span
+                                            class="required">Surat Disetujui Dari Owner</span></label>
+                                    <input type="file" accept=".docx" name="surat-disetujui"
+                                        class="form-control form-control-solid fw-normal">
                                     @error('surat-disetujui')
-                                        <span class="text-danger">{{$message}}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal"><span class="required">Tanggal Disetujui</span></label>
-                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="tanggal-disetujui" value="{{date_format(date_create(old("surat-disetujui")), "Y-m-d") ?? ""}}" class="form-control form-control-solid">
-                                        @error('tanggal-disetujui')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                    <label for="tanggal-disetujui" class="form-label fs-6 fw-normal"><span
+                                            class="required">Tanggal Disetujui</span></label>
+                                    <a href="#" class="btn btn-sm mx-3"
+                                        style="background: transparent;width:.5rem;height:2.3rem;"
+                                        onclick="showCalendarModal(this)" data-target="EOT"><i
+                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008cb4"></i></a>
+                                    <input type="date" name="tanggal-disetujui"
+                                        value="{{ date_format(date_create(old('surat-disetujui')), 'Y-m-d') ?? '' }}"
+                                        class="form-control form-control-solid">
+                                    @error('tanggal-disetujui')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal"><span class="required">Biaya Disetujui</span></label>
-                                    <input type="text" name="biaya-disetujui" onkeyup="reformatNumber(this)" value="{{old("biaya-disetujui") ?? ""}}" class="form-control form-control-solid fw-normal">
+                                    <label for="biaya-disetujui" class="form-label fs-6 fw-normal"><span
+                                            class="required">Biaya Disetujui</span></label>
+                                    <input type="text" name="biaya-disetujui" onkeyup="reformatNumber(this)"
+                                        value="{{ old('biaya-disetujui') ?? '' }}"
+                                        class="form-control form-control-solid fw-normal">
                                     @error('biaya-disetujui')
-                                        <span class="text-danger">{{$message}}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal"><span class="required">Waktu / EOT Disetujui</span></label>
-                                        <a href="#" class="btn btn-sm mx-3" style="background: transparent;width:.5rem;height:2.3rem;" onclick="showCalendarModal(this)" data-target="EOT"><i class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center" style="color: #008cb4"></i></a>
-                                        <input type="date" name="waktu-eot-disetujui" value="{{date_format(date_create(old("waktu-eot-disetujui")), "Y-m-d") ?? ""}}" class="form-control form-control-solid">
-                                        @error('waktu-eot-disetujui')
-                                            <span class="text-danger">{{$message}}</span>
-                                        @enderror
+                                    <label for="waktu-eot-disetujui" class="form-label fs-6 fw-normal"><span
+                                            class="required">Waktu / EOT Disetujui</span></label>
+                                    <a href="#" class="btn btn-sm mx-3"
+                                        style="background: transparent;width:.5rem;height:2.3rem;"
+                                        onclick="showCalendarModal(this)" data-target="EOT"><i
+                                            class="bi bi-calendar2-plus-fill d-flex justify-content-center align-items-center"
+                                            style="color: #008cb4"></i></a>
+                                    <input type="date" name="waktu-eot-disetujui"
+                                        value="{{ date_format(date_create(old('waktu-eot-disetujui')), 'Y-m-d') ?? '' }}"
+                                        class="form-control form-control-solid">
+                                    @error('waktu-eot-disetujui')
+                                        <span class="text-danger">{{ $message }}</span>
+                                    @enderror
                                 </div>
                             </div>
                             <br>
                             <div class="row">
                                 <div class="col-6">
-                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal"><span class="required">Keterangan</span></label>
-                                    <textarea rows="1" name="keterangan-disetujui" class="form-control form-control-solid fw-normal">{{old("keterangan-disetujui") ?? ""}}</textarea>
+                                    <label for="keterangan-disetujui" class="form-label fs-6 fw-normal"><span
+                                            class="required">Keterangan</span></label>
+                                    <textarea rows="1" name="keterangan-disetujui" class="form-control form-control-solid fw-normal">{{ old('keterangan-disetujui') ?? '' }}</textarea>
                                     @error('keterangan-disetujui')
-                                        <span class="text-danger">{{$message}}</span>
+                                        <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
                                 <div class="col-6">
-                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen Pendukung</label>
-                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx" multiple class="form-control form-control-solid">
+                                    <label for="dokumen-pendukung" class="form-label fs-6 fw-normal">Dokumen
+                                        Pendukung</label>
+                                    <input type="file" name="dokumen-pendukung[]" accept=".docx,.xlsx" multiple
+                                        class="form-control form-control-solid">
                                 </div>
                             </div>
                         </div>
@@ -1316,11 +1431,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -1390,19 +1506,25 @@
                         @endisset
                         <div class="d-flex flex-row align-items-center justify-content-between">
                             <div class="d-flex col-3 justify-content-between">
-                                <button type="button" id="back-pasal" onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
+                                <button type="button" id="back-pasal"
+                                    onclick="$('#draft-rekomendasi').select2('destroy');$('#draft-rekomendasi').select2({
                                     dropdownParent: $('#kt_modal_draft'),
                                     minimumResultsForSearch: Infinity,
-                                });" data-bs-target="#kt_modal_draft" data-bs-toggle="modal" class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i> Back</button>
-                                <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary" style="background-color: #008cb4">
+                                });"
+                                    data-bs-target="#kt_modal_draft" data-bs-toggle="modal"
+                                    class="btn btn-sm mt-5 btn-secondary text-dark"><i class="bi bi-arrow-left"></i>
+                                    Back</button>
+                                <button type="button" id="save-pasal" class="btn btn-sm mt-5 d-flex btn-primary"
+                                    style="background-color: #008cb4">
                                     <span>Save</span>
-                                    <span class="spinner-border spinner-border-sm" style="display: none;" aria-hidden="true"
-                                    role="status"></span>
+                                    <span class="spinner-border spinner-border-sm" style="display: none;"
+                                        aria-hidden="true" role="status"></span>
                                 </button>
                             </div>
                             <div class="vr"></div>
                             <div class="">
-                                <a href="#" onclick="showModalPasalImport()" class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
+                                <a href="#" onclick="showModalPasalImport()"
+                                    class="btn btn-lg mt-5 btn-secondary">Import Pasal</a>
                             </div>
                         </div>
                     </div>
@@ -1537,11 +1659,13 @@
                             </div>
 
                             <div class="calendar__buttons">
-                                <button class="btn btn-sm fw-normal btn-primary" style="background: #f3f6f9;color:black;"
-                                    data-bs-dismiss="modal" id="cancel-date-btn-start">Back</button>
+                                <button class="btn btn-sm fw-normal btn-primary"
+                                    style="background: #f3f6f9;color:black;" data-bs-dismiss="modal"
+                                    id="cancel-date-btn-start">Back</button>
 
                                 <button class="btn btn-sm fw-normal btn-primary" data-bs-dismiss="modal"
-                                    style="background-color: #008cb4;color: white;" id="set-calendar-start">Apply</button>
+                                    style="background-color: #008cb4;color: white;"
+                                    id="set-calendar-start">Apply</button>
 
                             </div>
                         </div>
@@ -1572,11 +1696,12 @@
                     <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
                         <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
                         <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2"
+                                    rx="1" transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1"
+                                    transform="rotate(45 7.41422 6)" fill="black" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
@@ -1592,15 +1717,17 @@
                         <div class="row">
                             <div class="col">
                                 <label for="import-file-upload" class="label">Upload File Pasal di bawah ini</label>
-                                <input type="file" accept=".xlsx" class="form-control form-control-solid" name="import-file-upload" id="import-file-upload">
+                                <input type="file" accept=".xlsx" class="form-control form-control-solid"
+                                    name="import-file-upload" id="import-file-upload">
                                 <small>* Support file <b>.xlsx</b> only</small>
                             </div>
                         </div>
                     </div>
                     <!--end::Input group-->
-                    
+
                     <div class="modal-footer">
-                        <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008CB4;">Import</button>
+                        <button class="btn btn-sm btn-active-primary text-white"
+                            style="background-color: #008CB4;">Import</button>
                     </div>
                 </form>
             </div>
@@ -1868,27 +1995,27 @@
         //     formSend.setAttribute("method", "post");
         //     formSend.setAttribute("action", form.action);
         //     let html = `
-        //                                             @csrf
-        //                                             <input type="hidden" name="id_claim" value="{{ $claimContract->id_claim ?? 0 }}">
-        //                                         `;
+    //                                             @csrf
+    //                                             <input type="hidden" name="id_claim" value="{{ $claimContract->id_claim ?? 0 }}">
+    //                                         `;
         //     if (form.submitted == "Disetujui") {
         //         html +=
         //             `<input type="hidden"
-        //                 onclick="this.form.submitted=this.value"
-        //                 class="dropdown-item" name="stage-disetujui"
-        //                 value="Disetujui">`;
+    //                 onclick="this.form.submitted=this.value"
+    //                 class="dropdown-item" name="stage-disetujui"
+    //                 value="Disetujui">`;
         //     } else if (form.submitted == "Ditolak") {
         //         html +=
         //             `<input type="hidden"
-        //                 onclick="this.form.submitted=this.value"
-        //                 class="dropdown-item" name="stage-ditolak"
-        //                 value="Ditolak">`;
+    //                 onclick="this.form.submitted=this.value"
+    //                 class="dropdown-item" name="stage-ditolak"
+    //                 value="Ditolak">`;
         //     } else if (form.submitted == "Cancel") {
         //         html +=
         //             `<input type="hidden"
-        //                 onclick="this.form.submitted=this.value"
-        //                 class="dropdown-item" name="stage-cancel"
-        //                 value="cancel">`;
+    //                 onclick="this.form.submitted=this.value"
+    //                 class="dropdown-item" name="stage-cancel"
+    //                 value="cancel">`;
         //     }
         //     formSend.innerHTML = html;
         //     document.body.appendChild(formSend);
@@ -2005,14 +2132,14 @@
                     }
                 })
             }
-            
+
             document.querySelector("#clear-pasal").style.visibility = "hidden";
         });
 
         // end::Script adding pasal
 
         const stageActions = document.querySelectorAll(".stage-button");
-        let prevStage = "{{$claimContract->stages ?? 0}}";
+        let prevStage = "{{ $claimContract->stages ?? 0 }}";
         stageActions.forEach((stageAction, i) => {
             stageAction.addEventListener("click", async e => {
                 Swal.fire({
@@ -2029,20 +2156,22 @@
                         const formData = new FormData();
                         formData.append("_token", "{{ csrf_token() }}");
                         formData.append("stage", stage);
-                        formData.append("id_claim", "{{$claimContract->id_claim ?? 0}}");
+                        formData.append("id_claim",
+                        "{{ $claimContract->id_claim ?? 0 }}");
                         formData.append("kode_proyek", "{{ $proyek->kode_proyek ?? 0 }}");
                         const setStage = await fetch("/claim/stage/save", {
                             method: "POST",
                             body: formData
                         }).then(res => res.json());
                         if (setStage.status == "success") {
-                            if(stage < prevStage) {
+                            if (stage < prevStage) {
                                 // Close Tabs based on stages
-                                for(let i = stage ; i < stageActions.length; i++) {
+                                for (let i = stage; i < stageActions.length; i++) {
                                     stageActions[i].classList.remove("stage-is-done");
-                                    stageActions[i].classList.add("stage-is-not-active"); 
-                                    const tabListEltRemove = document.querySelector(`#tab-list > .nav-item > a[stage="${i + 1}"]`);
-                                    if(tabListEltRemove) {
+                                    stageActions[i].classList.add("stage-is-not-active");
+                                    const tabListEltRemove = document.querySelector(
+                                        `#tab-list > .nav-item > a[stage="${i + 1}"]`);
+                                    if (tabListEltRemove) {
                                         tabListEltRemove.parentElement.remove();
                                     }
                                 }
@@ -2059,22 +2188,22 @@
                                         title = "Draft"
                                         hrefModal = "kt_user_view_overview_attachment"
                                         break;
-                                        
+
                                     case 2:
                                         title = "Diajukan"
                                         hrefModal = "kt_user_diajukan"
-                                    break;
-                                
+                                        break;
+
                                     case 3:
                                         title = "Negoisasi"
                                         hrefModal = "kt_user_negoisasi"
                                         break;
-                                
+
                                     case 4:
                                         title = "Disetujui"
                                         hrefModal = "kt_user_disetujui"
                                         break;
-                                
+
                                     case 5:
                                         title = "Amandemen"
                                         hrefModal = "kt_user_amandemen"
@@ -2091,8 +2220,9 @@
                                 `;
 
 
-                                const isTabExist = tabListElt.querySelector(`.nav-item > a[stage="${stage}"]`);
-                                if(isTabExist) {
+                                const isTabExist = tabListElt.querySelector(
+                                    `.nav-item > a[stage="${stage}"]`);
+                                if (isTabExist) {
                                     htmltabList = `
                                         <a class="nav-link text-active-primary pb-4"
                                             data-bs-toggle="tab"
@@ -2120,6 +2250,7 @@
             // pasalModalBoots.show();
             modalPasalBoots.show();
         }
+
         function showModalPasalImport() {
             // pasalModalBoots.show();
             pasalModalImportBoots.show();
@@ -2131,9 +2262,9 @@
     <script>
         const tabsElt = document.querySelectorAll(".nav-link[data-bs-toggle='tab']");
         if (tabsElt) {
-            const stage = "{{$claimContract->stages ?? 0}}";
+            const stage = "{{ $claimContract->stages ?? 0 }}";
             tabsElt.forEach((elt, i) => {
-                if(i == stage) {
+                if (i == stage) {
                     const tabPaneBoots = new bootstrap.Tab(elt);
                     tabPaneBoots.show();
                 }

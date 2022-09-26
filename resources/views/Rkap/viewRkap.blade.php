@@ -18,7 +18,7 @@
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 
                 <!--begin::Header-->
-                @extends('template.header')
+                @include('template.header')
                 <!--end::Header-->
 
 
@@ -43,7 +43,8 @@
                                 <!--end::Title-->
 
                                 {{-- Begin :: Close Button --}}
-                                <a href="/rkap" class="btn btn-sm btn-active-primary" style="background-color: #f5f8fa;">Close</a>
+                                <a href="/rkap" class="btn btn-sm btn-active-primary"
+                                    style="background-color: #f5f8fa;">Close</a>
                                 {{-- End :: Close Button --}}
                             </div>
                             <!--end::Page title-->
@@ -80,8 +81,8 @@
                                 </div>
 
                                 @php
-                                    $total_ok_review = $rkaps->proyeks->where("tahun_perolehan", "=" ,$rkaps->proyeks->first()->tahun_perolehan)->map(function($data) {
-                                        return (int) str_replace(",", "", $data->nilaiok_review);
+                                    $total_ok_review = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                        return (int) str_replace(',', '', $data->nilaiok_review);
                                     });
                                     $total_ok_review = $total_ok_review->sum();
                                 @endphp
@@ -93,7 +94,7 @@
                                             <span class="">Total OK Review: </span>
                                         </div>
                                         <div class="text-dark text-start">
-                                            <b>{{ number_format($total_ok_review, 0, ",", ",") ?? '' }}</b>
+                                            <b>{{ number_format($total_ok_review, 0, ',', ',') ?? '' }}</b>
                                         </div>
                                     </div>
                                     <!--begin::Input group Website-->
@@ -123,8 +124,8 @@
                                     </div>
 
                                     @php
-                                        $total_ok_awal = $rkaps->proyeks->where("tahun_perolehan", "=" ,$rkaps->proyeks->first()->tahun_perolehan)->map(function($data) {
-                                            return (int) str_replace(",", "", $data->nilaiok_awal);
+                                        $total_ok_awal = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                            return (int) str_replace(',', '', $data->nilaiok_awal);
                                         });
                                         $total_ok_awal = $total_ok_awal->sum();
                                     @endphp
@@ -135,7 +136,7 @@
                                                 <span class="">Total OK Awal: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_ok_awal, 0, ",", ",") }}</b>
+                                                <b>{{ number_format($total_ok_awal, 0, ',', ',') }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -150,17 +151,17 @@
                                 <div class="d-flex align-items-center">
 
                                     @php
-                                        $total_forecast = $rkaps->proyeks->where("tahun_perolehan", "=" ,$rkaps->proyeks->first()->tahun_perolehan)->map(function($data) {
+                                        $total_forecast = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
                                             return $data->forecast;
                                         });
                                         $total_forecast = $total_forecast->sum();
-
-                                        $total_realisasi = $rkaps->proyeks->where("tahun_perolehan", "=" ,$rkaps->proyeks->first()->tahun_perolehan)->map(function($data) {
-                                            return (int) str_replace(",", "", $data->nilai_kontrak_keseluruhan);
+                                        
+                                        $total_realisasi = $rkaps->proyeks->where('tahun_perolehan', '=', $rkaps->proyeks->first()->tahun_perolehan)->map(function ($data) {
+                                            return (int) str_replace(',', '', $data->nilai_kontrak_keseluruhan);
                                         });
                                         $total_realisasi = $total_realisasi->sum();
                                     @endphp
-                                    
+
                                     <!--begin::Col-->
                                     <div class="col">
                                         <!--begin::Input group Website-->
@@ -171,7 +172,7 @@
                                                 <span class="">Total Forecast: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_forecast, 0, ",", ",") ?? 0 }}</b>
+                                                <b>{{ number_format($total_forecast, 0, ',', ',') ?? 0 }}</b>
                                             </div>
                                         </div>
                                         <!--end::Input group Name-->
@@ -183,7 +184,7 @@
                                                 <span class="">Total Realisasi: </span>
                                             </div>
                                             <div class="text-dark text-start">
-                                                <b>{{ number_format($total_realisasi, 0, ",", ",") }}</b>
+                                                <b>{{ number_format($total_realisasi, 0, ',', ',') }}</b>
                                             </div>
                                         </div>
                                         <!--begin::Input group Website-->
@@ -199,7 +200,7 @@
 
                         <!--begin::Card Tittle-->
                         <div class="card-body py-10">
-                         <!--begin::Content-->
+                            <!--begin::Content-->
                             <div class="col-xl-15">
                                 <!--begin::Contacts-->
                                 <div class="card card-flush h-lg-100" id="kt_contacts_main">
@@ -207,134 +208,140 @@
                                     <!--begin::Card body-->
                                     <div class="card-body" style="padding: 1rem;">
                                         @if (auth()->user()->check_administrator)
-                                        <!--begin::Table-->
-                                        <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
-                                            <!--begin::Table head-->
-                                            <thead>
-                                                <!--begin::Table row-->
-                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                    <th class="min-w-auto">Kode Proyek</th>
-                                                    <th class="min-w-auto">Proyek</th>
-                                                    <th class="min-w-auto text-center">Jenis Proyek</th>
-                                                    <th class="min-w-auto text-center">Retail ?</th>
-                                                    <th class="min-w-auto text-end">Total OK Awal</th>
-                                                    <th class="min-w-auto text-end">Total OK Review</th>
-                                                    <th class="min-w-auto text-center">Bulan Pelaksanaan</th>
-                                                </tr>
-                                                <!--end::Table row-->
-                                            </thead>
-                                            <!--end::Table head-->
-                                            <!--begin::Table body-->
-                                            <tbody class="fw-bold text-gray-600">
-                                                @php
-                                                    $is_data_found = false;
-                                                @endphp
-                                                @foreach ($proyeks as $proyek)
-                                                    @if ($proyek->tahun_perolehan == $tahun_pelaksanaan)
-                                                        @php
-                                                            $is_data_found = true;
-                                                        @endphp
-                                                        <tr>
-                                                            <!--begin::Name-->
-                                                            <td class="">
-                                                                {{-- <a href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
+                                            <!--begin::Table-->
+                                            <table class="table align-middle table-row-dashed fs-6 gy-2"
+                                                id="kt_customers_table">
+                                                <!--begin::Table head-->
+                                                <thead>
+                                                    <!--begin::Table row-->
+                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                        <th class="min-w-auto">Kode Proyek</th>
+                                                        <th class="min-w-auto">Proyek</th>
+                                                        <th class="min-w-auto text-center">Jenis Proyek</th>
+                                                        <th class="min-w-auto text-center">Retail ?</th>
+                                                        <th class="min-w-auto text-end">Total OK Awal</th>
+                                                        <th class="min-w-auto text-end">Total OK Review</th>
+                                                        <th class="min-w-auto text-center">Bulan Pelaksanaan</th>
+                                                    </tr>
+                                                    <!--end::Table row-->
+                                                </thead>
+                                                <!--end::Table head-->
+                                                <!--begin::Table body-->
+                                                <tbody class="fw-bold text-gray-600">
+                                                    @php
+                                                        $is_data_found = false;
+                                                    @endphp
+                                                    @foreach ($proyeks as $proyek)
+                                                        @if ($proyek->tahun_perolehan == $tahun_pelaksanaan)
+                                                            @php
+                                                                $is_data_found = true;
+                                                            @endphp
+                                                            <tr>
+                                                                <!--begin::Name-->
+                                                                <td class="">
+                                                                    {{-- <a href="/rkap/{{ $proyek->first()->UnitKerja->divcode }}/{{ $proyek->first()->tahun_perolehan }}" id="click-name"
                                                                     class="text-gray-600 text-hover-primary mb-1">{{ $proyek->first()->UnitKerja->unit_kerja }}</a> --}}
-                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                                    class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
-                                                            </td>
-                                                            <!--end::Name-->
-                                                            <!--begin::Pelaksanaan-->
-                                                            <td class="">
-                                                                <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
-                                                                    class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
-                                                            </td>
-                                                            <!--end::Pelaksanaan-->
-                                                            
-                                                            <!--begin::Pelaksanaan-->
-                                                            <td class="text-center">
-                                                                @switch($proyek->jenis_proyek)
-                                                                    @case("I")
-                                                                        Internal
-                                                                        @break
-                                                                    @case("N")
-                                                                        Eksternal
-                                                                        @break
-                                                                    @case("J")
-                                                                        JO
-                                                                        @break
-                                                                    @default
-                                                                        
-                                                                @endswitch
-                                                            </td>
-                                                            <!--end::Pelaksanaan-->
+                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                        id="click-name"
+                                                                        class="text-hover-primary mb-1">{{ $proyek->kode_proyek }}</a>
+                                                                </td>
+                                                                <!--end::Name-->
+                                                                <!--begin::Pelaksanaan-->
+                                                                <td class="">
+                                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}"
+                                                                        id="click-name"
+                                                                        class="text-hover-primary mb-1">{{ $proyek->nama_proyek }}</a>
+                                                                </td>
+                                                                <!--end::Pelaksanaan-->
 
-                                                            <!--begin::Coloumn-->
-                                                            <td class="text-center">
-                                                                @switch($proyek->tipe_proyek)
-                                                                    @case("R")
-                                                                        Retail
+                                                                <!--begin::Pelaksanaan-->
+                                                                <td class="text-center">
+                                                                    @switch($proyek->jenis_proyek)
+                                                                        @case('I')
+                                                                            Internal
                                                                         @break
-                                                                    @case("P")
-                                                                        Non-Retail
+
+                                                                        @case('N')
+                                                                            Eksternal
                                                                         @break
-                                                                    @default
-                                                                        
-                                                                @endswitch
-                                                            </td>
-                                                            <!--end::Coloumn-->
 
-                                                            <!--begin::Coloumn-->
-                                                            <td class="text-end">
-                                                                {{ $proyek->nilaiok_awal ?? 0 }}
-                                                            </td>
-                                                            <!--end::Coloumn-->
-                                                            <!--begin::Coloumn-->
-                                                            <td class="text-end">
-                                                                {{ $proyek->nilaiok_review ?? 0 }}
-                                                            </td>
-                                                            <!--end::Coloumn-->
-                                                            <!--begin::Coloumn-->
-                                                            <td class="text-center">
-                                                                {{Carbon\Carbon::create()->month($proyek->bulan_pelaksanaan)->translatedFormat("F")}}
-                                                            </td>
-                                                            <!--end::Coloumn-->
+                                                                        @case('J')
+                                                                            JO
+                                                                        @break
 
+                                                                        @default
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::Pelaksanaan-->
+
+                                                                <!--begin::Coloumn-->
+                                                                <td class="text-center">
+                                                                    @switch($proyek->tipe_proyek)
+                                                                        @case('R')
+                                                                            Retail
+                                                                        @break
+
+                                                                        @case('P')
+                                                                            Non-Retail
+                                                                        @break
+
+                                                                        @default
+                                                                    @endswitch
+                                                                </td>
+                                                                <!--end::Coloumn-->
+
+                                                                <!--begin::Coloumn-->
+                                                                <td class="text-end">
+                                                                    {{ $proyek->nilaiok_awal ?? 0 }}
+                                                                </td>
+                                                                <!--end::Coloumn-->
+                                                                <!--begin::Coloumn-->
+                                                                <td class="text-end">
+                                                                    {{ $proyek->nilaiok_review ?? 0 }}
+                                                                </td>
+                                                                <!--end::Coloumn-->
+                                                                <!--begin::Coloumn-->
+                                                                <td class="text-center">
+                                                                    {{ Carbon\Carbon::create()->month($proyek->bulan_pelaksanaan)->translatedFormat('F') }}
+                                                                </td>
+                                                                <!--end::Coloumn-->
+
+                                                            </tr>
+                                                        @endif
+                                                    @endforeach
+                                                    @if (!$is_data_found)
+                                                        <tr>
+                                                            <td colspan="7" class="text-center bg-gray-100">Data tidak
+                                                                ditemukan</td>
                                                         </tr>
                                                     @endif
-                                                @endforeach
-                                                @if (!$is_data_found)
-                                                <tr>
-                                                    <td colspan="7" class="text-center bg-gray-100">Data tidak ditemukan</td>
-                                                </tr>
-                                                @endif
-                                            </tbody>
-                                            <!--end::Table body-->
-                                        </table>
-                                        <!--end::Table-->
+                                                </tbody>
+                                                <!--end::Table body-->
+                                            </table>
+                                            <!--end::Table-->
                                         @endif
                                     </div>
                                     <!--end::Card body-->
                                 </div>
-                                    <!--begin::Content-->
+                                <!--begin::Content-->
                             </div>
-                        <!--begin::Contacts-->
+                            <!--begin::Contacts-->
+                        </div>
+                        <!--end::Card-->
+                        <!--end::Container-->
+                        <!--end::Post-->
+
+
                     </div>
-                    <!--end::Card-->
-                    <!--end::Container-->
-                    <!--end::Post-->
+                    <!--end::Content-->
 
+                    <!--begin::Footer-->
 
+                    <!--end::Footer-->
                 </div>
-                <!--end::Content-->
-                
-                <!--begin::Footer-->
-
-                <!--end::Footer-->
+                <!--end::Wrapper-->
             </div>
-            <!--end::Wrapper-->
+            <!--end::Page-->
         </div>
-        <!--end::Page-->
-    </div>
-    <!--end::Root-->
-@endsection
-
+        <!--end::Root-->
+    @endsection

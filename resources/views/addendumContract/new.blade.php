@@ -1,9 +1,9 @@
 @extends('template.main')
 @section('content')
     <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-        
+
         <!--begin::Header-->
-        @extends('template.header')
+        @include('template.header')
         <!--end::Header-->
 
         <!--begin::Content-->
@@ -139,8 +139,7 @@
                                                     {{-- end::Froala Editor --}}
                                                     {{-- begin::Read File --}}
                                                     {{-- Begin::input textarea --}}
-                                                    <textarea hidden name="content-word-attachment" class="form-control form-control-solid"
-                                                        id="content-word-attachment"></textarea>
+                                                    <textarea hidden name="content-word-attachment" class="form-control form-control-solid" id="content-word-attachment"></textarea>
                                                     {{-- Begin::input textarea --}}
                                                     {{-- end::Read File --}}
                                                 </div>
@@ -286,8 +285,7 @@
                                                 {{-- end::Froala Editor --}}
                                                 {{-- begin::Read File --}}
                                                 {{-- Begin::input textarea --}}
-                                                <textarea hidden name="content-word-attachment" class="form-control form-control-solid"
-                                                    id="content-word-attachment"></textarea>
+                                                <textarea hidden name="content-word-attachment" class="form-control form-control-solid" id="content-word-attachment"></textarea>
                                                 {{-- Begin::input textarea --}}
                                                 {{-- end::Read File --}}
                                             </div>

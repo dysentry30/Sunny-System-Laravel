@@ -15,527 +15,569 @@
         <div class="page d-flex flex-row flex-column-fluid">
             <!--begin::Wrapper-->
             <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
-                
+
                 <!--begin::Header-->
-                @extends('template.header')
+                @include('template.header')
                 <!--end::Header-->
- 
 
-					<!--begin::Content-->
-					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
-                        <!--begin::form-->
-                        <!--begin::Toolbar-->
-                        <form action="/customer/save" method="post" enctype="multipart/form-data"> 
-                            @csrf
-                            <div class="toolbar" id="kt_toolbar">
-                                <!--begin::Container-->
-                                <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
-                                    <!--begin::Page title-->
-                                    <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
-                                        <!--begin::Title-->
-                                        <h1 class="d-flex align-items-center fs-3 my-1">Account
-                                        </h1>
-                                        <!--end::Title-->
-                                    </div>
-                                    <!--end::Page title-->
-                                    <!--begin::Actions-->
-                                    <div class="d-flex align-items-center py-1">
-                                        
-                                        <!--begin::Button-->
-                                        <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
-                                            style="background-color:#008CB4;">
-                                            Save</button>
-                                        <!--end::Button-->
 
-										<!--begin::Button-->
-										<button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
-											Cancel</button>
-										<!--end::Button-->
-
-                                        <!--begin::Button-->
-                                        <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3" id="">
-                                            Close</a>
-                                        <!--end::Button-->
-                                        
-                                        
-                                    </div>
-                                    <!--end::Actions-->
+                <!--begin::Content-->
+                <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+                    <!--begin::form-->
+                    <!--begin::Toolbar-->
+                    <form action="/customer/save" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <div class="toolbar" id="kt_toolbar">
+                            <!--begin::Container-->
+                            <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+                                <!--begin::Page title-->
+                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
+                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                    class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
+                                    <!--begin::Title-->
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Account
+                                    </h1>
+                                    <!--end::Title-->
                                 </div>
-                                <!--end::Container-->
+                                <!--end::Page title-->
+                                <!--begin::Actions-->
+                                <div class="d-flex align-items-center py-1">
+
+                                    <!--begin::Button-->
+                                    <button type="submit" class="btn btn-sm btn-primary" id="customer_new_save"
+                                        style="background-color:#008CB4;">
+                                        Save</button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3"
+                                        onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                        Cancel</button>
+                                    <!--end::Button-->
+
+                                    <!--begin::Button-->
+                                    <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3" id="">
+                                        Close</a>
+                                    <!--end::Button-->
+
+
+                                </div>
+                                <!--end::Actions-->
                             </div>
-                            <!--end::Toolbar-->
-                            
-                            <!--begin::Post-->
-                            <div class="post d-flex flex-column-fluid" id="kt_post">
-                                <!--begin::Container-->
-                                <div id="kt_content_container" class="container-fluid">
-                                    <!--begin::Contacts App- Edit Contact-->
-                                    <div class="row g-7">
-                                        <!--begin::Contact groups-->
-                                        <div class="col-lg-6 col-xl-3">
-                                            <!--begin::Contact group wrapper-->
-                                            <div class="card card-flush">
-                                                
-                                                <!--begin::Card body-->
-                                                <div class="card-body pt-5">
-                                                    
-                                                    <form id="kt_ecommerce_settings_general_form" class="form" action="#">
-                                                        <!--begin::Input group Name-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">Name</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <input type="text" id="name-customer" name="name-customer" class="form-control form-control-solid" 
+                            <!--end::Container-->
+                        </div>
+                        <!--end::Toolbar-->
+
+                        <!--begin::Post-->
+                        <div class="post d-flex flex-column-fluid" id="kt_post">
+                            <!--begin::Container-->
+                            <div id="kt_content_container" class="container-fluid">
+                                <!--begin::Contacts App- Edit Contact-->
+                                <div class="row g-7">
+                                    <!--begin::Contact groups-->
+                                    <div class="col-lg-6 col-xl-3">
+                                        <!--begin::Contact group wrapper-->
+                                        <div class="card card-flush">
+
+                                            <!--begin::Card body-->
+                                            <div class="card-body pt-5">
+
+                                                <form id="kt_ecommerce_settings_general_form" class="form" action="#">
+                                                    <!--begin::Input group Name-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Name</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" id="name-customer" name="name-customer"
+                                                            class="form-control form-control-solid"
                                                             value="{{ old('name-customer') }}" placeholder="Name" />
-                                                            @error('name-customer')
+                                                        @error('name-customer')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
-                                                            @enderror
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group Name-->
-                                                        
-                                                        <!--begin::Input group Email-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">Email</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="email" class="form-control form-control-solid" 
-															id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
-                                                            @error('email')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
-                                                            @enderror
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
-                                                        
-														<!--begin::Input group Phone-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span class="required">Phone Number</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="text" class="form-control form-control-solid" 
-															id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
-                                                            @error('phone-number')
-                                                            <h6 class="text-danger">{{ $message }}eror</h6>
-                                                            @enderror
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
-
-														<!--begin::Options-->
-														<div class="d-flex" style="flex-direction: column;">
-                                                            <!--begin::Options-->
-                                                            <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                                <input class="form-check-input" type="checkbox" value="" id="check-customer" name="check-customer" />
-                                                                <span class="form-check-label">Customer</span>
-                                                            </label>
-                                                            <!--end::Options-->
-                                                            <!--begin::Options-->
-                                                            <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                                <input class="form-check-input" type="checkbox" value="" id="check-partner" name="check-partner" />
-                                                                <span class="form-check-label">Partner</span>
-                                                            </label>
-                                                            <!--end::Options-->
-                                                            <!--begin::Options-->
-                                                            <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                                <input class="form-check-input" type="checkbox" value="" id="check-competitor" name="check-competitor" />
-                                                                <span class="form-check-label">Competitor</span>
-                                                            </label>
-                                                            <!--end::Options-->
-                                                        </div>
-                                                        <!--end::Options-->
-                                                        
-														<!--begin::Input group Website-->
-														<div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-															<label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Website</span>
-															</label>
-															<!--end::Label-->
-															<!--begin::Input-->
-															<input type="text" class="form-control form-control-solid" 
-															id="website" name="website" value="" placeholder="Website" />
-															<!--end::Input-->
-														</div>
-														<!--end::Input group-->
-
-                                                        <!--begin::Input group Address 2-->
-                                                        <div class="fv-row mb-7" style="margin-top:10px;">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Address Line 1</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <textarea class="form-control form-control-solid" name="AddressLine1"></textarea>
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-                                                        
-                                                        <!--begin::Input group Address 1-->
-                                                        <div class="fv-row mb-7">
-                                                            <!--begin::Label-->
-                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                <span>Address Line 2</span>
-                                                            </label>
-                                                            <!--end::Label-->
-                                                            <!--begin::Input-->
-                                                            <textarea class="form-control form-control-solid" name="AddressLine2"></textarea>
-                                                            <!--end::Input-->
-                                                        </div>
-                                                        <!--end::Input group-->
-
+                                                        @enderror
+                                                        <!--end::Input-->
                                                     </div>
-                                                    <!--end::Card body-->
-                                                </div>
-                                                <!--end::Contact group wrapper-->
+                                                    <!--end::Input group Name-->
+
+                                                    <!--begin::Input group Email-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Email</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="email" class="form-control form-control-solid"
+                                                            id="email" name="email" value="{{ old('email') }}"
+                                                            placeholder="Email" />
+                                                        @error('email')
+                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Input group Phone-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span class="required">Phone Number</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid"
+                                                            id="phone-number" name="phone-number"
+                                                            value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                                        @error('phone-number')
+                                                            <h6 class="text-danger">{{ $message }}eror</h6>
+                                                        @enderror
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Options-->
+                                                    <div class="d-flex" style="flex-direction: column;">
+                                                        <!--begin::Options-->
+                                                        <label
+                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                id="check-customer" name="check-customer" />
+                                                            <span class="form-check-label">Customer</span>
+                                                        </label>
+                                                        <!--end::Options-->
+                                                        <!--begin::Options-->
+                                                        <label
+                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                id="check-partner" name="check-partner" />
+                                                            <span class="form-check-label">Partner</span>
+                                                        </label>
+                                                        <!--end::Options-->
+                                                        <!--begin::Options-->
+                                                        <label
+                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value=""
+                                                                id="check-competitor" name="check-competitor" />
+                                                            <span class="form-check-label">Competitor</span>
+                                                        </label>
+                                                        <!--end::Options-->
+                                                    </div>
+                                                    <!--end::Options-->
+
+                                                    <!--begin::Input group Website-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Website</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <input type="text" class="form-control form-control-solid"
+                                                            id="website" name="website" value=""
+                                                            placeholder="Website" />
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Input group Address 2-->
+                                                    <div class="fv-row mb-7" style="margin-top:10px;">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Address Line 1</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <textarea class="form-control form-control-solid" name="AddressLine1"></textarea>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
+                                                    <!--begin::Input group Address 1-->
+                                                    <div class="fv-row mb-7">
+                                                        <!--begin::Label-->
+                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                            <span>Address Line 2</span>
+                                                        </label>
+                                                        <!--end::Label-->
+                                                        <!--begin::Input-->
+                                                        <textarea class="form-control form-control-solid" name="AddressLine2"></textarea>
+                                                        <!--end::Input-->
+                                                    </div>
+                                                    <!--end::Input group-->
+
                                             </div>
-                                            <!--end::Contact groups-->
-                                            
-                                            <!--begin::Content-->
-                                            <div class="col-xl-9">
-                                                <!--begin::Contacts-->
-                                                <div class="card card-flush h-lg-100" id="kt_contacts_main">
-                                                    
-                                                    <!--begin::Card body-->
-                                                    <div class="card-body pt-5">
-                                                        <!--begin:::Tabs-->
-                                                        <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                            <!--begin:::Tab item Informasi Perusahaan-->
-                                                            <li class="nav-item">
-                                                                <a class="nav-link text-active-primary pb-4 active" data-bs-toggle="tab" 
-                                                                href="#kt_user_view_overview_tab" style="font-size:14px;">COMPANY INFORMATION</a>
-                                                            </li>
-                                                            <!--end:::Tab item Informasi Perusahaan-->
-                                                                                                                        
-														</ul>
-														<!--end:::Tabs-->
-                                                        
-														<!--begin:::Tab content -->
-														<div class="tab-content" id="myTabContent">
-                                                            
-                                                            <!--begin:::Tab pane Informasi Perusahaan-->
-															<div class="tab-pane fade show active" id="kt_user_view_overview_tab" role="tabpanel">
-                                                                
-                                                                <!--begin::Row-->
-                                                                <div class="row fv-row">
-                                                                    <!--begin::Col-->
-                                                                    <div class="col-6">
-                                                                        <!--begin::Input group Website-->
-                                                                        <div class="fv-row mb-7">
-                                                                            <!--begin::Label-->
-                                                                            <label class="fs-6 fw-bold form-label mt-3">
-                                                                                <span class="required">Instansi</span>
-                                                                            </label>
-                                                                            <!--end::Label-->
-                                                                            <!--begin::Input-->
-                                                                            <select name="jenis-instansi" 
-																				class="form-select form-select-solid" 
-																				data-control="select2" data-hide-search="true" 
-																				data-placeholder="Instansi">
-																				<option></option>
-																				<option value="BUMN">BUMN</option>
-																				<option value="BUMND">BUMND</option>
-																				<option value="APBN">APBN</option>
-																				<option value="Swasta">Swasta</option>
-																				<option value="Investasi">Investasi</option>
-																			</select>
-																			<!--end::Input-->
-																		</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																	<div class="col-6">
-																		<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="required">Kode Proyek Owner</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="kodepelanggan-company" value="" placeholder="Kode Proyek Owner" />
-																			<!--end::Input-->
-																		</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																</div>
-																<!--End begin::Row-->
-																
-																<!--begin::Row-->
-																<div class="row fv-row">
-																	<!--begin::Col-->
-																	<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="required">NPWP</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="npwp-company" value="" placeholder="NPWP" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
-																<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="required">Kode Nasabah</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="kodenasabah-company" value="" placeholder="Kode Nasabah" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
+                                            <!--end::Card body-->
+                                        </div>
+                                        <!--end::Contact group wrapper-->
+                                    </div>
+                                    <!--end::Contact groups-->
 
-																<!--begin::Row-->
-																<div class="row fv-row">
-																	<!--begin::Col-->
-																	<div class="col-6">
-																		<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="">Negara</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<select name="negara" id="negara" class="form-select form-select-solid"
-																				data-control="select2" data-hide-search="false" 
-																				onchange="selectNegara(this)"
-																				data-placeholder="Pilih Negara">
-																				<option value=""></option>
-																				@foreach ($data_negara as $negara)
-																					<option value="{{$negara->country}}">{{$negara->country}}</option>
-																				@endforeach
-																			</select>
-																			<!--end::Input-->
-																		</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																</div>
-																<!--End begin::Row-->
-																	
-																	<!--Begin::Col-->
-																	<div class="col-6">
-																		<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="">Provinsi</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text"
-																				class="form-control form-control-solid"
-																				id="input-provinsi" name="provinsi"
-																				value=""
-																				placeholder="Provinsi" style="display: none"/>
-																			<div id="div-provinsi">
-																				<select name="provinsi" id="provinsi" class="form-select form-select-solid"
-																					data-control="select2" data-hide-search="false" 
-																					onchange="selectProvinsi(this)"
-																					data-placeholder="Pilih Customer Provinsi">
-																					<option value=""></option>
-																					@foreach ($data_provinsi as $provinsi)
-																							<option value="{{$provinsi->id}}">{{ucwords(strtolower($provinsi->name))}}</option>
-																					@endforeach
-																				</select>
-																			</div>
-																			<!--end::Input-->
-																		</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																	<!--end::Row-->
-		
-																	<!--begin::Row-->
-																	<div class="col-6">
-																		<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span class="">Kota / Kabupaten</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text"
-																				class="form-control form-control-solid"
-																				id="input-kabupaten" name="kabupaten"
-																				value=""
-																				placeholder="Kabupaten" style="display: none"/>
-																			<div  id="div-kabupaten">
-																				<select name="kabupaten" id="kabupaten" class="form-select form-select-solid"
-																					data-control="select2" data-hide-search="false" 
-																					{{-- onchange="selectKabupaten(this)" --}}
-																					data-placeholder="Pilih Customer Kabupaten">
-																					<option value=""></option>
-																					@if (isset($data_kabupaten))
-																						@foreach ($data_kabupaten as $kabupaten)
-																								<option value="{{$kabupaten->id}}">{{ucwords(strtolower($kabupaten->name))}}</option>
-																						@endforeach
-																					@endif
-																				</select>
-																			</div>
-																			<!--end::Input-->
-																		</div>
-																		<!--end::Input group-->
-																	</div>
-																	<!--End begin::Col-->
-																	
-																	<!--begin::Fungsi Select Provinsi-->
-																		<script>
-																			function selectNegara(e) {
-																				// console.log(e.value);
-		
-																				if (e.value != "Indonesia") {
-																					document.querySelector("#input-provinsi").style.display = "";
-																					document.querySelector("#input-provinsi").value = "";
-																					document.querySelector("#provinsi").disabled = true;
-																					document.querySelector("#div-provinsi").style.display = "none";
-		
-																					document.querySelector("#input-kabupaten").style.display = "";
-																					document.querySelector("#input-kabupaten").value = "";
-																					document.querySelector("#kabupaten").disabled = true;
-																					document.querySelector("#div-kabupaten").style.display = "none";
-																				} else {
-																					document.querySelector("#input-provinsi").style.display = "none";
-																					document.querySelector("#div-provinsi").style.display = "";
-																					document.querySelector("#provinsi").disabled = false;
-																					document.querySelector("#input-kabupaten").style.display = "none";
-																					document.querySelector("#div-kabupaten").style.display = "";
-																					document.querySelector("#kabupaten").disabled = false;
-		
-																				}
-																			}
-																			async function selectProvinsi(elt) {
-																				const idProvinsi = elt.value;
-																				// console.log(elt.value);
-																				let html = ``;
-																				const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
-																				getKabupaten.forEach(kabupaten => {
-																					html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
-																				});
-																				document.querySelector("#kabupaten").innerHTML = html;
-																			}
-																		</script>
-																	<!--end::Fungsi Select Provinsi-->
+                                    <!--begin::Content-->
+                                    <div class="col-xl-9">
+                                        <!--begin::Contacts-->
+                                        <div class="card card-flush h-lg-100" id="kt_contacts_main">
 
-																&nbsp;<br>
-																&nbsp;<br>
-																&nbsp;<br>
-																<!--begin::Card title-->
-																<div class="card-title m-0">
-																	<h3 class="fw-bolder m-0" style="font-size:14px;">Contact / PIC</h3>
-																</div>
-																<!--end::Card title-->
-																<!--begin::Menu separator-->
-																<div class="separator border-gray-200" style="margin-top: 10px;"></div>
-																<!--end::Menu separator-->
+                                            <!--begin::Card body-->
+                                            <div class="card-body pt-5">
+                                                <!--begin:::Tabs-->
+                                                <ul
+                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                    <!--begin:::Tab item Informasi Perusahaan-->
+                                                    <li class="nav-item">
+                                                        <a class="nav-link text-active-primary pb-4 active"
+                                                            data-bs-toggle="tab" href="#kt_user_view_overview_tab"
+                                                            style="font-size:14px;">COMPANY INFORMATION</a>
+                                                    </li>
+                                                    <!--end:::Tab item Informasi Perusahaan-->
 
-																<!--begin::Row-->
-																<div class="row fv-row">
-																	<!--begin::Col-->
-																	<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span>Name</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="name-pic" value="" placeholder="Name" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
-																<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span>Jabatan</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="kode-pic" value="" placeholder="Jabatan" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
-																</div>
-																<!--End begin::Row-->
+                                                </ul>
+                                                <!--end:::Tabs-->
 
-																<!--begin::Row-->
-																<div class="row fv-row">
-																	<!--begin::Col-->
-																	<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span>Email</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="email-pic" value="" placeholder="Email" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
-																<div class="col-6">
-																	<!--begin::Input group Website-->
-																		<div class="fv-row mb-7">
-																			<!--begin::Label-->
-																			<label class="fs-6 fw-bold form-label mt-3">
-																				<span>Phone Number</span>
-																			</label>
-																			<!--end::Label-->
-																			<!--begin::Input-->
-																			<input type="text" class="form-control form-control-solid" 
-																			name="phone-number-pic" value="" placeholder="Phone Number" />
-																			<!--end::Input-->
-																		</div>
-																	<!--end::Input group-->
-																</div>
-																<!--End begin::Col-->
-																</div>
-																<!--End begin::Row-->
+                                                <!--begin:::Tab content -->
+                                                <div class="tab-content" id="myTabContent">
 
-															</div>
-															<!--end:::Tab pane Informasi Perusahaan-->
+                                                    <!--begin:::Tab pane Informasi Perusahaan-->
+                                                    <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
+                                                        role="tabpanel">
 
-															<!--begin:::Tab pane History-->
-															{{-- <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Instansi</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <select name="jenis-instansi"
+                                                                        class="form-select form-select-solid"
+                                                                        data-control="select2" data-hide-search="true"
+                                                                        data-placeholder="Instansi">
+                                                                        <option></option>
+                                                                        <option value="BUMN">BUMN</option>
+                                                                        <option value="BUMND">BUMND</option>
+                                                                        <option value="APBN">APBN</option>
+                                                                        <option value="Swasta">Swasta</option>
+                                                                        <option value="Investasi">Investasi</option>
+                                                                    </select>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Kode Proyek Owner</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        name="kodepelanggan-company" value=""
+                                                                        placeholder="Kode Proyek Owner" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                        </div>
+                                                        <!--End begin::Row-->
+
+                                                        <!--begin::Row-->
+                                                        <div class="row fv-row">
+                                                            <!--begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">NPWP</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        name="npwp-company" value=""
+                                                                        placeholder="NPWP" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="required">Kode Nasabah</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        name="kodenasabah-company" value=""
+                                                                        placeholder="Kode Nasabah" />
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span class="">Negara</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <select name="negara" id="negara"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2"
+                                                                            data-hide-search="false"
+                                                                            onchange="selectNegara(this)"
+                                                                            data-placeholder="Pilih Negara">
+                                                                            <option value=""></option>
+                                                                            @foreach ($data_negara as $negara)
+                                                                                <option value="{{ $negara->country }}">
+                                                                                    {{ $negara->country }}</option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+
+                                                            <!--Begin::Col-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Provinsi</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="input-provinsi" name="provinsi"
+                                                                        value="" placeholder="Provinsi"
+                                                                        style="display: none" />
+                                                                    <div id="div-provinsi">
+                                                                        <select name="provinsi" id="provinsi"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2"
+                                                                            data-hide-search="false"
+                                                                            onchange="selectProvinsi(this)"
+                                                                            data-placeholder="Pilih Customer Provinsi">
+                                                                            <option value=""></option>
+                                                                            @foreach ($data_provinsi as $provinsi)
+                                                                                <option value="{{ $provinsi->id }}">
+                                                                                    {{ ucwords(strtolower($provinsi->name)) }}
+                                                                                </option>
+                                                                            @endforeach
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            <!--end::Row-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Kota / Kabupaten</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text"
+                                                                        class="form-control form-control-solid"
+                                                                        id="input-kabupaten" name="kabupaten"
+                                                                        value="" placeholder="Kabupaten"
+                                                                        style="display: none" />
+                                                                    <div id="div-kabupaten">
+                                                                        <select name="kabupaten" id="kabupaten"
+                                                                            class="form-select form-select-solid"
+                                                                            data-control="select2"
+                                                                            data-hide-search="false" {{-- onchange="selectKabupaten(this)" --}}
+                                                                            data-placeholder="Pilih Customer Kabupaten">
+                                                                            <option value=""></option>
+                                                                            @if (isset($data_kabupaten))
+                                                                                @foreach ($data_kabupaten as $kabupaten)
+                                                                                    <option value="{{ $kabupaten->id }}">
+                                                                                        {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            @endif
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+
+                                                            <!--begin::Fungsi Select Provinsi-->
+                                                            <script>
+                                                                function selectNegara(e) {
+                                                                    // console.log(e.value);
+
+                                                                    if (e.value != "Indonesia") {
+                                                                        document.querySelector("#input-provinsi").style.display = "";
+                                                                        document.querySelector("#input-provinsi").value = "";
+                                                                        document.querySelector("#provinsi").disabled = true;
+                                                                        document.querySelector("#div-provinsi").style.display = "none";
+
+                                                                        document.querySelector("#input-kabupaten").style.display = "";
+                                                                        document.querySelector("#input-kabupaten").value = "";
+                                                                        document.querySelector("#kabupaten").disabled = true;
+                                                                        document.querySelector("#div-kabupaten").style.display = "none";
+                                                                    } else {
+                                                                        document.querySelector("#input-provinsi").style.display = "none";
+                                                                        document.querySelector("#div-provinsi").style.display = "";
+                                                                        document.querySelector("#provinsi").disabled = false;
+                                                                        document.querySelector("#input-kabupaten").style.display = "none";
+                                                                        document.querySelector("#div-kabupaten").style.display = "";
+                                                                        document.querySelector("#kabupaten").disabled = false;
+
+                                                                    }
+                                                                }
+                                                                async function selectProvinsi(elt) {
+                                                                    const idProvinsi = elt.value;
+                                                                    // console.log(elt.value);
+                                                                    let html = ``;
+                                                                    const getKabupaten = await fetch(`/get-kabupaten/${idProvinsi}`).then(res => res.json());
+                                                                    getKabupaten.forEach(kabupaten => {
+                                                                        html += `<option value="${kabupaten.id}">${kabupaten.name}</option>`;
+                                                                    });
+                                                                    document.querySelector("#kabupaten").innerHTML = html;
+                                                                }
+                                                            </script>
+                                                            <!--end::Fungsi Select Provinsi-->
+
+                                                            &nbsp;<br>
+                                                            &nbsp;<br>
+                                                            &nbsp;<br>
+                                                            <!--begin::Card title-->
+                                                            <div class="card-title m-0">
+                                                                <h3 class="fw-bolder m-0" style="font-size:14px;">Contact
+                                                                    / PIC</h3>
+                                                            </div>
+                                                            <!--end::Card title-->
+                                                            <!--begin::Menu separator-->
+                                                            <div class="separator border-gray-200"
+                                                                style="margin-top: 10px;"></div>
+                                                            <!--end::Menu separator-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Name</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            name="name-pic" value=""
+                                                                            placeholder="Name" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Jabatan</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            name="kode-pic" value=""
+                                                                            placeholder="Jabatan" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Email</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            name="email-pic" value=""
+                                                                            placeholder="Email" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Phone Number</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid"
+                                                                            name="phone-number-pic" value=""
+                                                                            placeholder="Phone Number" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+
+                                                        </div>
+                                                        <!--end:::Tab pane Informasi Perusahaan-->
+
+                                                        <!--begin:::Tab pane History-->
+                                                        {{-- <div class="tab-pane fade" id="kt_user_view_overview_history" role="tabpanel">
 																<!--begin::Card title-->
 																<div class="card-title m-0">
 																<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -733,10 +775,10 @@
 																<!-- <div class="separator border-gray-200" style="margin-top: 10px;"></div> -->
 																<!--end::Menu separator-->
 															</div> --}}
-															<!--end:::Tab pane History-->
+                                                        <!--end:::Tab pane History-->
 
-															<!--begin:::Tab pane Atachment & Notes-->
-															{{-- <div class="tab-pane fade" id="kt_user_view_overview_AttNotes" role="tabpanel">
+                                                        <!--begin:::Tab pane Atachment & Notes-->
+                                                        {{-- <div class="tab-pane fade" id="kt_user_view_overview_AttNotes" role="tabpanel">
 																	<input type="file" id="file" class="file" hidden>
 																	<!--begin::Attachment-->
 																	<h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
@@ -859,36 +901,36 @@
                                                                         <!--End begin::Row-->
                                                                     </div>
 															</div> --}}
-															<!--end:::Tab pane Performance-->
-															
-														</div>
-														<!--end:::Tab content-->
-													</form>
-											</div>
-											<!--end::Card body-->
-										</div>
-										<!--end::Contacts-->
-									</div>
-									<!--end::Content-->
-								</div>
-								<!--end::Contacts App- Edit Contact-->
-							</div>
-							<!--end::Container-->
-						</div>
-						<!--end::Post-->
-                        </form>
-					    <!--end::Form-->                
-                    
-                    </div>
-					<!--end::Content-->                
+                                                        <!--end:::Tab pane Performance-->
 
-                <!--begin::Footer-->
-
-                <!--end::Footer-->
+                                                    </div>
+                                                    <!--end:::Tab content-->
+                    </form>
+                </div>
+                <!--end::Card body-->
             </div>
-            <!--end::Wrapper-->
+            <!--end::Contacts-->
         </div>
-        <!--end::Page-->
+        <!--end::Content-->
+    </div>
+    <!--end::Contacts App- Edit Contact-->
+    </div>
+    <!--end::Container-->
+    </div>
+    <!--end::Post-->
+    </form>
+    <!--end::Form-->
+
+    </div>
+    <!--end::Content-->
+
+    <!--begin::Footer-->
+
+    <!--end::Footer-->
+    </div>
+    <!--end::Wrapper-->
+    </div>
+    <!--end::Page-->
     </div>
     <!--end::Root-->
 
