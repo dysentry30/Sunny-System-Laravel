@@ -663,7 +663,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -700,7 +700,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -729,9 +729,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
-                                                                                                        return $f->realisasi_forecast;
-                                                                                                    });
+                                                                                                    if($p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null)) {
+                                                                                                        return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
+                                                                                                            return $f->realisasi_forecast;
+                                                                                                        });
+                                                                                                    }
                                                                                                 });
                                                                                             });
                                                                                         } else {
@@ -753,9 +755,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
-                                                                                                        return $f->realisasi_forecast;
-                                                                                                    });
+                                                                                                    if($p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
+                                                                                                        return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
+                                                                                                            return $f->realisasi_forecast;
+                                                                                                        });
+                                                                                                    }
                                                                                                 });
                                                                                             });
                                                                                         }
@@ -851,7 +855,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             });
                                                                                                         }
                                                                                                     } else {
-                                                                                                        if($i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                        if($p->stage == 8 && $i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                             // dd($p);
                                                                                                             return (int) $p->nilai_perolehan;
                                                                                                         }
@@ -891,7 +895,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             }
                                                                                                         });
                                                                                                     } else {
-                                                                                                        if($i == $p->bulan_ri_perolehan) {
+                                                                                                        if($p->stage == 8 && $i == $p->bulan_ri_perolehan) {
                                                                                                             // dd($p);
                                                                                                             return (int) $p->nilai_perolehan;
                                                                                                         }
@@ -935,14 +939,14 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             }
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column) {
-                                                                                            if($p->tipe_proyek == "R") {
+                                                                                            if($p->tipe_proyek == "R" && preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                 return $p->Forecasts->sum(function($f) {
                                                                                                     if((int) date("m") == $f->periode_prognosa) {
                                                                                                         return $f->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             } else {
-                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                if($p->stage == 8 && $i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     return (int) $p->nilai_perolehan;
                                                                                                 }
                                                                                             }
@@ -974,7 +978,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     }
                                                                                                 });
                                                                                             } else {
-                                                                                                return (int) $p->nilai_perolehan;
+                                                                                                if($p->stage == 8 && $i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                    return (int) $p->nilai_perolehan;
+                                                                                                }
                                                                                             }
                                                                                         });
                                                                                     }
@@ -1233,7 +1239,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
-                                                                                            $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan / $per_sejuta);
+                                                                                            if(!empty($proyek->bulan_ri_perolehan)) {
+                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan / $per_sejuta);
+                                                                                            } else {
+                                                                                                $nilai_terkontrak_formatted = 0;
+                                                                                            }
                                                                                             $total_forecast = 0;
                                                                                             $total_ok = 0;
                                                                                             $month_counter = 1;
