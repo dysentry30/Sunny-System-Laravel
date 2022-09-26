@@ -1825,6 +1825,7 @@ fill="none">
     const toaster = document.querySelector(".toast");
     const toastBody = document.querySelector(".toast-body")
     const toastBoots = new bootstrap.Toast(toaster, {});
+    const perSejuta = Number("{{$per_sejuta}}");
 
     if (historyForecast > 0) {
         disabledAllInputs();
@@ -1873,6 +1874,17 @@ fill="none">
         inputForecasts.forEach(input => {
             input.addEventListener("focusout", async e => {
                 const nilaiForecast = Number(e.target.value.toString().replaceAll(".", ""));
+                const kodeProyek = input.getAttribute(attribute);
+                Swal.fire({
+                    title: 'Yakin Update Forecast menjadi Rp. ' + Intl.NumberFormat(["id"]).format(nilaiForecast * perSejuta) + "?",
+                    text: "Proyek Non-Retail tidak dapat menginput multi bulan.",
+                    icon: false,
+                    showCancelButton: true,
+                    confirmButtonColor: '#008CB4',
+                    cancelButtonColor: '#BABABA',
+                    confirmButtonText: 'Ya'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
                 // if (nilaiForecast == 0) {
                 //     Toast.fire({
                 //         html: "Inputan tidak boleh 0 atau kosong",
@@ -1881,7 +1893,6 @@ fill="none">
                 //     e.target.value = "";
                 //     return; 
                 // }
-                const kodeProyek = input.getAttribute(attribute);
                 const dataMonth = input.getAttribute("data-month");
                 const dataColumn = input.getAttribute(dataColumnAttribute);
                 const columnTotalYearForecast = document.querySelectorAll(`.${totalYearForecast}`);
@@ -2039,6 +2050,9 @@ fill="none">
                 //         clearInterval(timerOut);
                 //     }
                 // }, 1000);
+                    }
+                    return false;
+                });
             });
         });
     }
