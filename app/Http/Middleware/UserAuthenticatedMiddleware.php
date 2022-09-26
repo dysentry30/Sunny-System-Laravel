@@ -20,9 +20,11 @@ class UserAuthenticatedMiddleware
             if(auth()->user() != null) {
                 return $next($request);
             }
-            return response()->json([
-                "status" => "Login terlebih dahulu",
-            ]);
+            $resp = [
+                "status_code" => 401,
+                "msg" => "Tidak terautentikasi"
+            ];
+            return response($resp, 401);
         }
 
         if(auth()->user() != null) {

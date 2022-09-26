@@ -92,9 +92,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/dashboard/monitoring-proyek/{tipe}', [DashboardController::class, "getDataMonitoringProyek"]);
 
     Route::get('/dashboard/monitoring-proyek/{tipe}/{filter}', [DashboardController::class, "getDataMonitoringProyek"]);
-    
+
     Route::get('/dashboard/terendah-terkontrak/{tipe}', [DashboardController::class, "getDataTerendahTerkontrak"]);
-    
+
     Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
     // begin :: contract management
@@ -321,7 +321,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
-
+            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->get()->first();
+            $nullForecast->delete();
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
@@ -343,7 +344,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
             Alert::success('Success', "Forecast Berhasil Dibuat");
             return redirect()->back();
-
         } else {
 
             $findForecast->kode_proyek = $data["kode-proyek"];
@@ -361,7 +361,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $findForecast->periode_prognosa = $prognosa;
 
             $findForecast->save();
-            
+
             // dd($tabPane);
 
             Alert::success('Success', "Forecast Berhasil Diubah");
@@ -382,10 +382,23 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         $per = 1000000;
         $proyek = Proyek::find($data["kode_proyek"]);
-        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("month_forecast", "=", $data["forecast_month"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at")->first();
+        $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at");
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            if ($forecast->update(["nilai_forecast" => (string) $data["nilai_forecast"] * $per])) {
+            $forecast->each(function($f) {
+                $f->delete();
+            });
+            $new_forecast = new Forecast();
+            $new_forecast->kode_proyek = (string) $proyek->kode_proyek;
+            $new_forecast->rkap_forecast = (string) $proyek->nilai_rkap;
+            $new_forecast->month_rkap = (int) $proyek->bulan_pelaksanaan;
+            $new_forecast->realisasi_forecast = (string) $proyek->nilai_perolehan ?? 0;
+            $new_forecast->month_realisasi = (int) $proyek->bulan_ri_perolehan ?? null;
+            $new_forecast->month_forecast = (int) $data["forecast_month"];
+            $new_forecast->periode_prognosa = (int) $data["periode_prognosa"];
+            $new_forecast->nilai_forecast = (string) $data["nilai_forecast"] * $per;
+
+            if ($new_forecast->save()) {
                 if (!empty($proyek->forecast)) {
                     $totalfc = 0;
                     foreach ($proyek->Forecasts as $proyekfc) {

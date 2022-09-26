@@ -411,6 +411,11 @@ class ProyekController extends Controller
         $newProyek->tahun_ri_perolehan = $dataProyek["tahun-ri-perolehan"];
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
+        if (isset($newProyek->bulan_ri_perolehan)) {
+            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->first();
+            $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+            $newForecast->save();
+        };
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
         // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
