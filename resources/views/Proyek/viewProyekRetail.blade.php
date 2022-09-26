@@ -3803,7 +3803,7 @@
                 <!--end::Form-->
 
 
-                <!--begin:::Tab Forecast Retail-->
+<!--begin:::Tab Forecast Retail-->
                 <div class="tab-pane fade" id="kt_user_view_overview_forecast" role="tabpanel">
 
                     <!--Begin::Title Biru Form: History-->
@@ -3843,9 +3843,6 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
-                            {{-- @php
-                                                                    $i = 1;
-                                                                    @endphp --}}
                             @for ($i = 1; $i <= 12; $i++)
                                 <form action="/proyek/forecast/{{ $i }}/retail" method="post">
                                     @csrf
@@ -3981,7 +3978,7 @@
                         <!--end::Table body-->
                     </table>
                     <!--end::Table-->
-                    <!--end:::Tab Forecast Retail-->
+<!--end:::Tab Forecast Retail-->
 
 
                 </div>
