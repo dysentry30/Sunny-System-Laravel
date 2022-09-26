@@ -484,7 +484,8 @@ class ForecastController extends Controller
 
         // $year = $year != "" ? (int) $year : (int) date("Y");
         $unitKerjas = UnitKerja::all();
-        $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->whereYear("created_at", $year)->get();
+        $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->get();
+        // $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode)->get();
 
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
@@ -531,7 +532,7 @@ class ForecastController extends Controller
 
         // $year = $year != "" ? (int) $year : (int) date("Y");
         $unitKerjas = UnitKerja::all();
-        $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->whereYear("created_at", $year)->get();
+        $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->get();
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
 

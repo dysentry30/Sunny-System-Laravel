@@ -39,6 +39,7 @@ use App\Http\Controllers\ContractManagementsController;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -1103,7 +1104,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $paretoProyeks->each(function ($proyek) use ($sheet, &$counter) {
             $sheet->setCellValue("A" . $counter, $proyek->nama_proyek);
             $sheet->setCellValue("B" . $counter, $proyek->unit_kerja);
-            $sheet->setCellValue("C" . $counter, DashboardController::getProyekStage($proyek->stage));
+            $sheet->setCellValue("C" . $counter, Dashboard::getProyekStage($proyek->stage));
             $sheet->setCellValue("D" . $counter, $proyek->forecast);
             $counter++;
         });
