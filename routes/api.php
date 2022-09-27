@@ -46,7 +46,11 @@ Route::middleware(["web"])->group(function () {
         $periode = explode("-", $request->periode);
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        $proyeks = Proyek::all(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+        if(isset($request->unit_kerja)) {
+            $proyeks = Proyek::where("unit_kerja", "=", $request->unit_kerja)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+        } else {
+            $proyeks = Proyek::all(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+        }
         $proyeks = $proyeks->map(function ($p) use ($request) {
             $p->kode_crm = $p->kode_proyek;
             switch ($p->stage) {
@@ -112,12 +116,12 @@ Route::middleware(["web"])->group(function () {
 
     Route::post('/detail-nilai-proyek', function (Request $request) {
         $periode = explode("-", $request->periode);
-        // $tahun = $periode[0];
-        // $prognosa = (int) $periode[1];
+        $tahun = $periode[0];
+        $prognosa = (int) $periode[1];
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        $proyeks = Proyek::all(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "bulan_ri_perolehan", "nilai_perolehan"]);
-        $proyeks = $proyeks->map(function ($p) {
+        $proyeks = Proyek::where("unit_kerja", "=", $request->unit_kerja)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "bulan_ri_perolehan", "nilai_perolehan"]);
+        $proyeks = $proyeks->map(function ($p) use($prognosa, $tahun) {
             switch ($p->stage) {
                 case 0:
                     $p->stage = "Pasar Dini";
@@ -161,10 +165,18 @@ Route::middleware(["web"])->group(function () {
             }
             $data_ok = collect();
             for ($i = 1; $i <= 12; $i++) {
-                $data_ok->push([
-                    "month" => $i,
-                    "data_ok" => $i >= (int) $p->bulan_ri_perolehan ? (int) $p->nilai_perolehan ?? 0 : 0
-                ]);
+                $f = Forecast::where("periode_prognosa", '=', (int) $prognosa)->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->whereYear("created_at", "=", $tahun)->first();
+                if(!empty($f) && $i == $f->month_rkap) {
+                    $data_ok->push([
+                        "month" => $i,
+                        "data_ok" => $f->rkap_forecast
+                    ]);
+                } else {
+                    $data_ok->push([
+                        "month" => $i,
+                        "data_ok" => 0
+                    ]);
+                }
             }
             $p->data_ok = $data_ok;
             // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
