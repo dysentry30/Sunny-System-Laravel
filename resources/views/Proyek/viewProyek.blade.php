@@ -4069,7 +4069,7 @@
                                                     </div>
                                                     <!--end:::Tab Pasar Terkontrak New-->
 
-<!--begin:::Tab Forecast Retail-->
+<!--begin:::Tab Forecast Non Retail-->
                 <div class="tab-pane fade" id="kt_user_view_overview_forecast" role="tabpanel">
 
                     <!--Begin::Title Biru Form: History-->
@@ -4108,7 +4108,6 @@
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
-                        {{-- <form action="/proyek/forecast/non-retail" method="post"> --}}
                             <!--begin::NILAI OK-->
                             <tr>
                                 <!--begin::Name-->
@@ -4194,49 +4193,64 @@
                                 <!--end::Name-->
                                 <!--begin::input-->
                                 <td class="text-start ps-8">
-                                    <select id="bulan-pelaksanaan"
-                                        name="bulan-pelaksanaan"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true"
-                                        data-placeholder="Pilih Bulan Perolehan">
-                                        <option></option>
-                                        <option value="1"
-                                            {{ $proyek->month_forecast == '1' ? 'selected' : '' }}>
-                                            Januari</option>
-                                        <option value="2"
-                                            {{ $proyek->month_forecast == '2' ? 'selected' : '' }}>
-                                            Februari</option>
-                                        <option value="3"
-                                            {{ $proyek->month_forecast == '3' ? 'selected' : '' }}>
-                                            Maret</option>
-                                        <option value="4"
-                                            {{ $proyek->month_forecast == '4' ? 'selected' : '' }}>
-                                            April</option>
-                                        <option value="5"
-                                            {{ $proyek->month_forecast == '5' ? 'selected' : '' }}>
-                                            Mei</option>
-                                        <option value="6"
-                                            {{ $proyek->month_forecast == '6' ? 'selected' : '' }}>
-                                            Juni</option>
-                                        <option value="7"
-                                            {{ $proyek->month_forecast == '7' ? 'selected' : '' }}>
-                                            Juli</option>
-                                        <option value="8"
-                                            {{ $proyek->month_forecast == '8' ? 'selected' : '' }}>
-                                            Agustus</option>
-                                        <option value="9"
-                                            {{ $proyek->month_forecast == '9' ? 'selected' : '' }}>
-                                            September</option>
-                                        <option value="10"
-                                            {{ $proyek->month_forecast == '10' ? 'selected' : '' }}>
-                                            Oktober</option>
-                                        <option value="11"
-                                            {{ $proyek->month_forecast == '11' ? 'selected' : '' }}>
-                                            November</option>
-                                        <option value="12"
-                                            {{ $proyek->month_forecast == '12' ? 'selected' : '' }}>
-                                            Desember</option>
-                                    </select>
+                                    @php
+                                        $bulans = (int) date('m');
+                                        $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $bulans);
+                                    @endphp
+                                    @foreach ($proyek->Forecasts as $forecast)
+                                    @endforeach
+                                        @switch($forecast->month_forecast)
+                                            @case('1')
+                                                Januari
+                                            @break
+
+                                            @case('2')
+                                                Februari
+                                            @break
+
+                                            @case('3')
+                                                Maret
+                                            @break
+
+                                            @case('4')
+                                                April
+                                            @break
+
+                                            @case('5')
+                                                Mei
+                                            @break
+
+                                            @case('6')
+                                                Juni
+                                            @break
+
+                                            @case('7')
+                                                Juli
+                                            @break
+
+                                            @case('8')
+                                                Agustus
+                                            @break
+
+                                            @case('9')
+                                                September
+                                            @break
+
+                                            @case('10')
+                                                Oktober
+                                            @break
+
+                                            @case('11')
+                                                November
+                                            @break
+
+                                            @case('12')
+                                                Desember
+                                            @break
+
+                                            @default
+                                                *Belum Ditentukan
+                                        @endswitch
                                 </td>
                                 <!--end::input-->
                                 <!--begin::input-->
@@ -4245,11 +4259,14 @@
                                     <input type="text"
                                         class="form-control reformat form-control-solid"
                                         id="nilai-forecast" name="nilai-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $proyek->forecast), 0, '.', '.') }}"
-                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Excludde Ppn)" readonly/>
                                     <!--end::Input-->
                                 </td>
-                                <td></td>
+                                {{-- @dump(count($proyek->Forecasts)) --}}
+                                @if (count($proyek->Forecasts) > 1 )
+                                <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
+                                @endif
                                 <!--end::input-->
                             </tr>
                             <!--end::FORECAST-->
@@ -4330,13 +4347,245 @@
                                 <!--end::input-->
                             </tr>
                             <!--end::Realisasi-->
+                        </tbody>
+                        <!--end::Table body-->
+                    </table>
+                    <!--end::Table-->
+
+                    <br><hr><br>
+                    
+                    <!--begin::Table-->
+                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                        <!--begin::Table head-->
+                        <thead>
+                            <!--begin::Table row-->
+                            <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                <th class="w-auto min-w-100px text-end"></th>
+                                <th class="w-auto text-center">Bulan</th>
+                                <th class="w-auto text-center">Nilai</th>
+                                <th class="w-auto min-w-100px text-center"></th>
+                            </tr>
+                            <!--end::Table row-->
+                        </thead>
+                        <!--end::Table head-->
+                        <!--begin::Table body-->
+                        <tbody class="fw-bold text-gray-600">
+                        {{-- <form action="/proyek/forecast/non-retail" method="post"> --}}
+                            <!--begin::NILAI OK-->
+                            <tr>
+                                <!--begin::Name-->
+                                <td class="text-end">
+                                    <b>OK :</b>
+                                </td>
+                                <!--end::Name-->
+                                <!--begin::input-->
+                                <td class="text-start ps-8">
+                                    <select id="month-rkap"
+                                    name="month-rkap"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Bulan OK">
+                                    <option></option>
+                                    <option value="1"
+                                        {{ $proyek->bulan_pelaksanaan == '1' ? 'selected' : '' }}>
+                                        Januari</option>
+                                    <option value="2"
+                                        {{ $proyek->bulan_pelaksanaan == '2' ? 'selected' : '' }}>
+                                        Februari</option>
+                                    <option value="3"
+                                        {{ $proyek->bulan_pelaksanaan == '3' ? 'selected' : '' }}>
+                                        Maret</option>
+                                    <option value="4"
+                                        {{ $proyek->bulan_pelaksanaan == '4' ? 'selected' : '' }}>
+                                        April</option>
+                                    <option value="5"
+                                        {{ $proyek->bulan_pelaksanaan == '5' ? 'selected' : '' }}>
+                                        Mei</option>
+                                    <option value="6"
+                                        {{ $proyek->bulan_pelaksanaan == '6' ? 'selected' : '' }}>
+                                        Juni</option>
+                                    <option value="7"
+                                        {{ $proyek->bulan_pelaksanaan == '7' ? 'selected' : '' }}>
+                                        Juli</option>
+                                    <option value="8"
+                                        {{ $proyek->bulan_pelaksanaan == '8' ? 'selected' : '' }}>
+                                        Agustus</option>
+                                    <option value="9"
+                                        {{ $proyek->bulan_pelaksanaan == '9' ? 'selected' : '' }}>
+                                        September</option>
+                                    <option value="10"
+                                        {{ $proyek->bulan_pelaksanaan == '10' ? 'selected' : '' }}>
+                                        Oktober</option>
+                                    <option value="11"
+                                        {{ $proyek->bulan_pelaksanaan == '11' ? 'selected' : '' }}>
+                                        November</option>
+                                    <option value="12"
+                                        {{ $proyek->bulan_pelaksanaan == '12' ? 'selected' : '' }}>
+                                        Desember</option>
+                                </select>
+                                </td>
+                                <!--end::input-->
+                                <!--begin::input-->
+                                <td>
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control reformat form-control-solid"
+                                        id="rkap-forecast" name="rkap-forecast"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Excludde Ppn)"/>
+                                    <!--end::Input-->
+                                </td>
+                                <td></td>
+                            </tr>
+                            <!--end::NILAI OK-->
+                            <!--begin::FORECAST-->
+                            <tr>    
+                                <!--begin::Name-->
+                                <td class="text-end">
+                                    <b>Forecast :</b>
+                                </td>
+                                <!--end::Name-->
+                                <!--begin::input-->
+                                <td class="text-start ps-8">
+                                    @foreach ($proyek->Forecasts as $forecast)
+                                    @endforeach
+                                    <select id="month-forecast"
+                                        name="month-forecast"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Bulan Forecast">
+                                        <option></option>
+                                        <option value="1"
+                                            {{ $forecast->month_forecast == '1' ? 'selected' : '' }}>
+                                            Januari</option>
+                                        <option value="2"
+                                            {{ $forecast->month_forecast == '2' ? 'selected' : '' }}>
+                                            Februari</option>
+                                        <option value="3"
+                                            {{ $forecast->month_forecast == '3' ? 'selected' : '' }}>
+                                            Maret</option>
+                                        <option value="4"
+                                            {{ $forecast->month_forecast == '4' ? 'selected' : '' }}>
+                                            April</option>
+                                        <option value="5"
+                                            {{ $forecast->month_forecast == '5' ? 'selected' : '' }}>
+                                            Mei</option>
+                                        <option value="6"
+                                            {{ $forecast->month_forecast == '6' ? 'selected' : '' }}>
+                                            Juni</option>
+                                        <option value="7"
+                                            {{ $forecast->month_forecast == '7' ? 'selected' : '' }}>
+                                            Juli</option>
+                                        <option value="8"
+                                            {{ $forecast->month_forecast == '8' ? 'selected' : '' }}>
+                                            Agustus</option>
+                                        <option value="9"
+                                            {{ $forecast->month_forecast == '9' ? 'selected' : '' }}>
+                                            September</option>
+                                        <option value="10"
+                                            {{ $forecast->month_forecast == '10' ? 'selected' : '' }}>
+                                            Oktober</option>
+                                        <option value="11"
+                                            {{ $forecast->month_forecast == '11' ? 'selected' : '' }}>
+                                            November</option>
+                                        <option value="12"
+                                            {{ $forecast->month_forecast == '12' ? 'selected' : '' }}>
+                                            Desember</option>
+                                    </select>
+                                </td>
+                                <!--end::input-->
+                                <!--begin::input-->
+                                <td>
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control reformat form-control-solid"
+                                        id="nilai-forecast" name="nilai-forecast"
+                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                    <!--end::Input-->
+                                </td>
+                                {{-- @dump(count($proyek->Forecasts)) --}}
+                                @if (count($proyek->Forecasts) > 1 )
+                                <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
+                                @endif
+                                <!--end::input-->
+                            </tr>
+                            <!--end::FORECAST-->
+                            <!--begin::Realisasi-->
+                            <tr>
+                                <!--begin::Name-->
+                                <td class="text-end">
+                                    <b>Realisasi :</b>
+                                </td>
+                                <!--end::Name-->
+                                <!--begin::input-->
+                                <td class="text-start ps-8">
+                                    <select id="month_realisasi"
+                                        name="month_realisasi"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Bulan Realisasi">
+                                        <option></option>
+                                        <option value="1"
+                                            {{ $proyek->bulan_ri_perolehan == '1' ? 'selected' : '' }}>
+                                            Januari</option>
+                                        <option value="2"
+                                            {{ $proyek->bulan_ri_perolehan == '2' ? 'selected' : '' }}>
+                                            Februari</option>
+                                        <option value="3"
+                                            {{ $proyek->bulan_ri_perolehan == '3' ? 'selected' : '' }}>
+                                            Maret</option>
+                                        <option value="4"
+                                            {{ $proyek->bulan_ri_perolehan == '4' ? 'selected' : '' }}>
+                                            April</option>
+                                        <option value="5"
+                                            {{ $proyek->bulan_ri_perolehan == '5' ? 'selected' : '' }}>
+                                            Mei</option>
+                                        <option value="6"
+                                            {{ $proyek->bulan_ri_perolehan == '6' ? 'selected' : '' }}>
+                                            Juni</option>
+                                        <option value="7"
+                                            {{ $proyek->bulan_ri_perolehan == '7' ? 'selected' : '' }}>
+                                            Juli</option>
+                                        <option value="8"
+                                            {{ $proyek->bulan_ri_perolehan == '8' ? 'selected' : '' }}>
+                                            Agustus</option>
+                                        <option value="9"
+                                            {{ $proyek->bulan_ri_perolehan == '9' ? 'selected' : '' }}>
+                                            September</option>
+                                        <option value="10"
+                                            {{ $proyek->bulan_ri_perolehan == '10' ? 'selected' : '' }}>
+                                            Oktober</option>
+                                        <option value="11"
+                                            {{ $proyek->bulan_ri_perolehan == '11' ? 'selected' : '' }}>
+                                            November</option>
+                                        <option value="12"
+                                            {{ $proyek->bulan_ri_perolehan == '12' ? 'selected' : '' }}>
+                                            Desember</option>
+                                    </select>
+                                </td>
+                                <!--end::input-->
+                                <!--begin::input-->
+                                <td>
+                                    <!--begin::Input-->
+                                    <input type="text"
+                                        class="form-control reformat form-control-solid"
+                                        id="realisasi-forecast" name="realisasi-forecast"
+                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_perolehan), 0, '.', '.') }}"
+                                        placeholder="Nilai OK (Excludde Ppn)"/>
+                                    <!--end::Input-->
+                                </td>
+                                <td></td>
+                                <!--end::input-->
+                            </tr>
+                            <!--end::Realisasi-->
                         {{-- </form> --}}
                         </tbody>
                         <!--end::Table body-->
                     </table>
                     <!--end::Table-->
 
-<!--end:::Tab Forecast Retail-->
+<!--end:::Tab Forecast Non Retail-->
 
 
 <!--begin:::Tab Approval    -->

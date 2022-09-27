@@ -412,7 +412,8 @@ class ProyekController extends Controller
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         if (isset($newProyek->bulan_ri_perolehan)) {
-            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->first();
+            $bulans = (int) date('m');
+            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
             $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
             $newForecast->save();
         };
@@ -513,6 +514,14 @@ class ProyekController extends Controller
                 $contractManagements->value_review = 0;
                 $contractManagements->save();
             }
+        }
+
+        if (isset($dataProyek["month-forecast"]) || isset($dataProyek["nilai-forecast"])) {
+            $bulans = (int) date('m');
+            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
+            $newForecast->month_forecast = $dataProyek["month-forecast"];
+            $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+            $newForecast->save();
         }
 
         if ($idCustomer != null) {
@@ -923,24 +932,36 @@ class ProyekController extends Controller
         $proyekBerjalan = ProyekBerjalans::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get()->first();
         $contractManagement = ContractManagements::where('project_id', "=", $deleteProyek->kode_proyek)->get()->first();
         $claimManagement = ClaimManagements::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
+        $forecasts = Forecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
+        $historyForecasts = HistoryForecast::where('kode_proyek', "=", $deleteProyek->kode_proyek)->get();
         $claimManagement->each(function ($claim) {
             $claim->delete();
         });
 
         Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
 
-        if ($proyekBerjalan == null && $contractManagement == null) {
+        if ($proyekBerjalan == null && $contractManagement == null && $forecasts == null) {
             $deleteProyek->delete();
         } elseif ($proyekBerjalan == null) {
             $deleteProyek->delete();
             $contractManagement->delete();
+            foreach ($forecasts as $f) {$f->delete();}
+            foreach ($historyForecasts as $hf) {$hf->delete();}
         } elseif ($contractManagement ==  null) {
             $deleteProyek->delete();
             $proyekBerjalan->delete();
+            foreach ($forecasts as $f) {$f->delete();}
+            foreach ($historyForecasts as $hf) {$hf->delete();}
+        } elseif ($forecasts ==  null) {
+            $deleteProyek->delete();
+            $proyekBerjalan->delete();
+            $contractManagement->delete();
         } else {
             $deleteProyek->delete();
             $proyekBerjalan->delete();
             $contractManagement->delete();
+            foreach ($forecasts as $f) {$f->delete();}
+            foreach ($historyForecasts as $hf) {$hf->delete();}
         }
 
         // dd($proyekBerjalan); 
