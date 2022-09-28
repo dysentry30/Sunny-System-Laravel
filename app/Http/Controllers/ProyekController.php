@@ -418,9 +418,9 @@ class ProyekController extends Controller
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         // dd($dataProyek);
+        $bulans = (int) date('m');
+        $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
         if ($newProyek->bulan_ri_perolehan != null) {
-            $bulans = (int) date('m');
-            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
             $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
             $newForecast->save();
         };
