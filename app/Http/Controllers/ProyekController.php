@@ -2,39 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AttachmentMenang;
 use App\Models\Dop;
 use App\Models\Sbu;
 use App\Models\User;
+use Faker\Core\Uuid;
 use App\Models\Proyek;
 use App\Models\Company;
 use App\Models\PorsiJO;
 use App\Models\Customer;
+use App\Models\Forecast;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use App\Models\TeamProyek;
 use Illuminate\Http\Request;
 use App\Models\KriteriaPasar;
 use App\Models\PesertaTender;
+use App\Models\ProyekAdendum;
 use App\Models\HistoryForecast;
 use App\Models\ProyekBerjalans;
+use App\Models\AttachmentMenang;
 use App\Models\ClaimManagements;
+use App\Models\RiskTenderProyek;
+use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\ContractManagements;
-use App\Models\DokumenPrakualifikasi;
-use App\Models\Forecast;
 use App\Models\KriteriaPasarProyek;
-use App\Models\ProyekAdendum;
-use App\Models\RiskTenderProyek;
-use Faker\Core\Uuid;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
+use App\Models\DokumenPrakualifikasi;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Google\Service\FactCheckTools\Resource\Claims;
-use Illuminate\Http\UploadedFile;
 
 class ProyekController extends Controller
 {
@@ -982,6 +985,70 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    public function exportProyek(Request $request)
+    {
+        // dd($request);
+        $counter = 2;
+
+        $spreadsheet = new Spreadsheet();
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:L1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Kode Proyek');
+        $sheet->setCellValue('C1', 'Tipe Proyek');
+        $sheet->setCellValue('D1', 'Jenis Proyek');
+        $sheet->setCellValue('E1', 'Unit Kerja');
+        $sheet->setCellValue('F1', 'Stage');
+        $sheet->setCellValue('G1', 'Status Pasar');
+        $sheet->setCellValue('H1', 'Tahun RA Perolehan');
+        $sheet->setCellValue('I1', 'Bulan RA Perolehan');
+        $sheet->setCellValue('J1', 'Nilai RKAP');
+        $sheet->setCellValue('K1', 'Nilai Forecast');
+        $sheet->setCellValue('L1', 'Nilai Realisasi');
+        
+        if (Auth::user()->check_administrator) {
+            $proyek = Proyek::all();
+        } else {
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            if($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $proyek = Proyek::whereIn("unit_kerja", $unit_kerja_user->toArray())->get();
+            } else {
+                $proyek = Proyek::where("unit_kerja", "=", $unit_kerja_user)->get();
+            }
+        }
+        
+        // dd($proyek);
+        foreach ($proyek as $p) {
+            $sheet->setCellValue("A" . $counter, $p->nama_proyek);
+            $sheet->setCellValue("B" . $counter, $p->kode_proyek);
+            $sheet->setCellValue("C" . $counter, $p->tipe_proyek);
+            $sheet->setCellValue("D" . $counter, $p->jenis_proyek);
+            $sheet->setCellValue("E" . $counter, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue("F" . $counter, $this->getProyekStage($p->stage));
+            $sheet->setCellValue("G" . $counter, $p->status_pasdin);
+            $sheet->setCellValue("H" . $counter, $p->tahun_perolehan);
+            $sheet->setCellValue("I" . $counter, $this->getFullMonth($p->bulan_pelaksanaan));
+            $sheet->setCellValue("J" . $counter, $p->nilai_rkap);
+            $sheet->setCellValue("K" . $counter, $p->forecast);
+            $sheet->setCellValue("L" . $counter, $p->nilai_perolehan);
+            // $stage = $this->getProyekStage($p->stage);
+            $counter++;
+        }
+
+
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "Detail_Proyek_" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        // Session::flash('excel/'.$file_name, $file_name);
+        // return Response::download($writer, $file_name);
+        return redirect('excel/'.$file_name); 
+    }
+
     public function stage(Request $request)
     {
         $kodeProyek = $request->kode_proyek;
@@ -1437,6 +1504,91 @@ class ProyekController extends Controller
         $delete->delete();
         Alert::success("Success", "History Adendum Berhasil Dihapus");
         return redirect()->back();
+    }
+
+    public static function getProyekStage($stage)
+    {
+        switch ($stage) {
+            case 0:
+                return "Pasar Dini";
+                break;
+            case 1:
+                return "Pasar Dini";
+                break;
+            case 2:
+                return "Pasar Potensial";
+                break;
+            case 3:
+                return "Prakualifikasi";
+                break;
+            case 4:
+                return "Tender Diikuti";
+                break;
+            case 5:
+                return "Perolehan";
+                break;
+            case 6:
+                return "Menang";
+                break;
+            case 7:
+                return "Terendah";
+                break;
+            case 8:
+                return "Terkontrak";
+                break;
+        }
+    }
+
+    public function getFullMonth($month)
+    {
+        switch ($month) {
+            case 1:
+                return "Januari";
+                break;
+            case 2:
+                return "Februari";
+                break;
+            case 3:
+                return "Maret";
+                break;
+            case 4:
+                return "April";
+                break;
+            case 5:
+                return "Mei";
+                break;
+            case 6:
+                return "Juni";
+                break;
+            case 7:
+                return "Juli";
+                break;
+            case 8:
+                return "Agustus";
+                break;
+            case 9:
+                return "September";
+                break;
+            case 10:
+                return "Oktober";
+                break;
+            case 11:
+                return "November";
+                break;
+            case 12:
+                return "Desember";
+                break;
+        }
+    }
+
+    public static function getUnitKerjaProyek($unit_kerja) {
+        $nama_unit = UnitKerja::where("divcode", "=", $unit_kerja)->first();
+        return $nama_unit->unit_kerja;
+        // dd($nama_unit, $unit_kerja);
+        // if (condition) {
+        //     # code...
+        // }
+        // return UnitKerja::find($divcode)->unit_kerja;
     }
 
 
