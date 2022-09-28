@@ -4195,62 +4195,62 @@
                                 <td class="text-start ps-8">
                                     @php
                                         $bulans = (int) date('m');
-                                        $proyek->Forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $bulans);
+                                        $forecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->last();
                                     @endphp
-                                    @foreach ($proyek->Forecasts as $forecast)
-                                    @endforeach
-                                        @switch($forecast->month_forecast)
-                                            @case('1')
-                                                Januari
-                                            @break
+                                    {{-- @foreach ($proyek->Forecasts as $forecast)
+                                    @endforeach --}}
+                                    @switch($forecast->month_forecast)
+                                        @case('1')
+                                            Januari
+                                        @break
 
-                                            @case('2')
-                                                Februari
-                                            @break
+                                        @case('2')
+                                            Februari
+                                        @break
 
-                                            @case('3')
-                                                Maret
-                                            @break
+                                        @case('3')
+                                            Maret
+                                        @break
 
-                                            @case('4')
-                                                April
-                                            @break
+                                        @case('4')
+                                            April
+                                        @break
 
-                                            @case('5')
-                                                Mei
-                                            @break
+                                        @case('5')
+                                            Mei
+                                        @break
 
-                                            @case('6')
-                                                Juni
-                                            @break
+                                        @case('6')
+                                            Juni
+                                        @break
 
-                                            @case('7')
-                                                Juli
-                                            @break
+                                        @case('7')
+                                            Juli
+                                        @break
 
-                                            @case('8')
-                                                Agustus
-                                            @break
+                                        @case('8')
+                                            Agustus
+                                        @break
 
-                                            @case('9')
-                                                September
-                                            @break
+                                        @case('9')
+                                            September
+                                        @break
 
-                                            @case('10')
-                                                Oktober
-                                            @break
+                                        @case('10')
+                                            Oktober
+                                        @break
 
-                                            @case('11')
-                                                November
-                                            @break
+                                        @case('11')
+                                            November
+                                        @break
 
-                                            @case('12')
-                                                Desember
-                                            @break
+                                        @case('12')
+                                            Desember
+                                        @break
 
-                                            @default
-                                                *Belum Ditentukan
-                                        @endswitch
+                                        @default
+                                            *Belum Ditentukan
+                                    @endswitch
                                 </td>
                                 <!--end::input-->
                                 <!--begin::input-->
@@ -4447,8 +4447,6 @@
                                 <!--end::Name-->
                                 <!--begin::input-->
                                 <td class="text-start ps-8">
-                                    @foreach ($proyek->Forecasts as $forecast)
-                                    @endforeach
                                     <select id="month-forecast"
                                         name="month-forecast"
                                         class="form-select form-select-solid"
