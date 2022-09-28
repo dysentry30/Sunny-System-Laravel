@@ -310,7 +310,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-
+    
+    Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
+    
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
 
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
