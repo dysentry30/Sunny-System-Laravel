@@ -522,13 +522,13 @@ class ProyekController extends Controller
             }
         }
 
-        if (isset($dataProyek["month-forecast"]) && isset($dataProyek["nilai-forecast"])) {
-            $bulans = (int) date('m');
-            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
-            $newForecast->month_forecast = $dataProyek["month-forecast"];
-            $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
-            $newForecast->save();
-        }
+        // if (isset($dataProyek["month-forecast"]) && isset($dataProyek["nilai-forecast"])) {
+        //     $bulans = (int) date('m');
+        //     $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
+        //     $newForecast->month_forecast = $dataProyek["month-forecast"];
+        //     $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+        //     $newForecast->save();
+        // }
 
         if ($idCustomer != null) {
             // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
