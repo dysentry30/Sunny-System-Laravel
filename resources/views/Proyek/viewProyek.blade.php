@@ -4196,11 +4196,10 @@
                                     @php
                                         $bulans = (int) date('m');
                                         $forecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->last();
-                                        $forecast->month_forecast = $forecast->month_forecast ?? 0;
                                     @endphp
                                     {{-- @foreach ($proyek->Forecasts as $forecast)
                                     @endforeach --}}
-                                    @switch($forecast->month_forecast)
+                                    @switch($forecast->month_forecast ?? 0)
                                         @case('1')
                                             Januari
                                         @break
@@ -4455,25 +4454,25 @@
                                         data-placeholder="Pilih Bulan Forecast">
                                         <option></option>
                                         <option value="1"
-                                            {{ $forecast->month_forecast == '1' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '1' ? 'selected' : '' }}>
                                             Januari</option>
                                         <option value="2"
-                                            {{ $forecast->month_forecast == '2' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '2' ? 'selected' : '' }}>
                                             Februari</option>
                                         <option value="3"
-                                            {{ $forecast->month_forecast == '3' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '3' ? 'selected' : '' }}>
                                             Maret</option>
                                         <option value="4"
-                                            {{ $forecast->month_forecast == '4' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '4' ? 'selected' : '' }}>
                                             April</option>
                                         <option value="5"
-                                            {{ $forecast->month_forecast == '5' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '5' ? 'selected' : '' }}>
                                             Mei</option>
                                         <option value="6"
-                                            {{ $forecast->month_forecast == '6' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '6' ? 'selected' : '' }}>
                                             Juni</option>
                                         <option value="7"
-                                            {{ $forecast->month_forecast == '7' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '7' ? 'selected' : '' }}>
                                             Juli</option>
                                         <option value="8"
                                             {{ $forecast->month_forecast == '8' ? 'selected' : '' }}>
