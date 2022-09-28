@@ -539,6 +539,7 @@ class ProyekController extends Controller
                 $newForecast->month_forecast = $dataProyek["month-forecast"];
                 $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 $newForecast->periode_prognosa = $bulans;
+                $newForecast->save();
             }
         }
 
