@@ -529,9 +529,17 @@ class ProyekController extends Controller
         if ($dataProyek["month-forecast"] != null && $dataProyek["nilai-forecast"] != null ){
             $bulans = (int) date('m');
             $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
-            $newForecast->month_forecast = $dataProyek["month-forecast"];
-            $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
-            $newForecast->save();
+            if (isset($newForecast)) {
+                $newForecast->month_forecast = $dataProyek["month-forecast"];
+                $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                $newForecast->save();
+            } else {
+                $newForecast = new Forecast();
+                $newForecast->kode_proyek = $newProyek->kode_proyek;
+                $newForecast->month_forecast = $dataProyek["month-forecast"];
+                $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                $newForecast->periode_prognosa = $bulans;
+            }
         }
 
         if ($idCustomer != null) {
