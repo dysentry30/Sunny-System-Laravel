@@ -420,10 +420,12 @@ class ProyekController extends Controller
         // dd($dataProyek);
         $bulans = (int) date('m');
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
-        if ($newProyek->bulan_ri_perolehan != null) {
-            $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
-            $newForecast->save();
-        };
+        if (isset($newForecast)) {
+            if ($newProyek->bulan_ri_perolehan != null ) {
+                $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+                $newForecast->save();
+            };
+        }
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
         // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
