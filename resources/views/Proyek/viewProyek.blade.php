@@ -4518,8 +4518,8 @@
                                 <!--end::Name-->
                                 <!--begin::input-->
                                 <td class="text-start ps-8">
-                                    <select id="month_realisasi"
-                                        name="month_realisasi"
+                                    <select id="month-realisasi"
+                                        name="month-realisasi"
                                         class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true"
                                         data-placeholder="Pilih Bulan Realisasi">

@@ -417,7 +417,8 @@ class ProyekController extends Controller
         $newProyek->tahun_ri_perolehan = $dataProyek["tahun-ri-perolehan"];
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
-        if (isset($newProyek->bulan_ri_perolehan)) {
+        // dd($dataProyek);
+        if ($newProyek->bulan_ri_perolehan != null) {
             $bulans = (int) date('m');
             $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
             $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
@@ -522,13 +523,14 @@ class ProyekController extends Controller
             }
         }
 
-        // if (isset($dataProyek["month-forecast"]) && isset($dataProyek["nilai-forecast"])) {
-        //     $bulans = (int) date('m');
-        //     $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
-        //     $newForecast->month_forecast = $dataProyek["month-forecast"];
-        //     $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
-        //     $newForecast->save();
-        // }
+        // dd($dataProyek);
+        if ($dataProyek["month-forecast"] != null && $dataProyek["nilai-forecast"] != null ){
+            $bulans = (int) date('m');
+            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
+            $newForecast->month_forecast = $dataProyek["month-forecast"];
+            $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+            $newForecast->save();
+        }
 
         if ($idCustomer != null) {
             // $customer = Customer::where('name', "=", $dataProyek["customer"])->get()->first();
