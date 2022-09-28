@@ -4199,7 +4199,7 @@
                                     @endphp
                                     {{-- @foreach ($proyek->Forecasts as $forecast)
                                     @endforeach --}}
-                                    @switch($forecast->month_forecast)
+                                    @switch($forecast->month_forecast ?? 0)
                                         @case('1')
                                             Januari
                                         @break
@@ -4259,7 +4259,7 @@
                                     <input type="text"
                                         class="form-control reformat form-control-solid"
                                         id="nilai-forecast" name="nilai-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast), 0, '.', '.') }}"
+                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
                                         placeholder="Nilai OK (Excludde Ppn)" readonly/>
                                     <!--end::Input-->
                                 </td>
@@ -4498,12 +4498,12 @@
                                     <input type="text"
                                         class="form-control reformat form-control-solid"
                                         id="nilai-forecast" name="nilai-forecast"
-                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast), 0, '.', '.') }}"
+                                        value="{{ number_format((int) str_replace('.', '', $forecast->nilai_forecast ?? 0), 0, '.', '.') }}"
                                         placeholder="Nilai OK (Excludde Ppn)" />
                                     <!--end::Input-->
                                 </td>
                                 {{-- @dump(count($proyek->Forecasts)) --}}
-                                @if (count($proyek->Forecasts) > 1 )
+                                @if (count($proyek->Forecasts) > 1)
                                 <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
                                 @endif
                                 <!--end::input-->

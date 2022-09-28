@@ -3914,7 +3914,8 @@
                                         @endphp
                                         @if (count($forecasts) > 0)
                                             @php
-                                                $forecast = $forecasts->first();
+                                                $bulans = (int) date('m');
+                                                $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
                                             @endphp
                                             <td class="text-dark">
                                                 <input type="text"
