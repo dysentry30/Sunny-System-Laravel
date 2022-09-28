@@ -5258,6 +5258,7 @@
     <!--begin::modal ADD PESERTA TENDER-->
     <form action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
         @csrf
+        <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
         <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
         <input type="hidden" name="stage-proyek" value="{{ $proyek->stage }}">
         <div class="modal fade" id="kt_modal_peserta_tender" tabindex="-1" aria-hidden="true">
@@ -5309,7 +5310,7 @@
                                 </div>
                                 <!--end::Input group-->
                             </div>
-                            @if ($proyek->stage == 5)
+                            @if ($proyek->stage >= 5)
                                 <!--End begin::Col-->
                                 <div class="col-6">
                                     <!--begin::Input group Website-->
@@ -5331,7 +5332,7 @@
                         </div>
                         <!--End begin::Row-->
 
-                        @if ($proyek->stage == 5)
+                        @if ($proyek->stage >= 5)
                             <!--begin::Row-->
                             <div class="row fv-row">
                                 <!--begin::Col-->
@@ -5450,7 +5451,7 @@
                                     </div>
                                     <!--end::Input group-->
                                 </div>
-                                @if ($proyek->stage == 5)
+                                @if ($proyek->stage >= 5)
                                     <!--End begin::Col-->
                                     <div class="col-6">
                                         <!--begin::Input group Website-->
@@ -5474,7 +5475,7 @@
                             </div>
                             <!--End begin::Row-->
 
-                            @if ($proyek->stage == 5)
+                            @if ($proyek->stage >= 5)
                                 <!--begin::Row-->
                                 <div class="row fv-row">
                                     <!--begin::Col-->
