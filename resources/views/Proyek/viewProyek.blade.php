@@ -4475,19 +4475,19 @@
                                             {{ ($forecast->month_forecast ?? 0) == '7' ? 'selected' : '' }}>
                                             Juli</option>
                                         <option value="8"
-                                            {{ $forecast->month_forecast == '8' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '8' ? 'selected' : '' }}>
                                             Agustus</option>
                                         <option value="9"
-                                            {{ $forecast->month_forecast == '9' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '9' ? 'selected' : '' }}>
                                             September</option>
                                         <option value="10"
-                                            {{ $forecast->month_forecast == '10' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '10' ? 'selected' : '' }}>
                                             Oktober</option>
                                         <option value="11"
-                                            {{ $forecast->month_forecast == '11' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '11' ? 'selected' : '' }}>
                                             November</option>
                                         <option value="12"
-                                            {{ $forecast->month_forecast == '12' ? 'selected' : '' }}>
+                                            {{ ($forecast->month_forecast ?? 0) == '12' ? 'selected' : '' }}>
                                             Desember</option>
                                     </select>
                                 </td>
