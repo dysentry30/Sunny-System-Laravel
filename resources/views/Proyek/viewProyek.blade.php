@@ -4196,10 +4196,11 @@
                                     @php
                                         $bulans = (int) date('m');
                                         $forecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->last();
+                                        $forecast->month_forecast = $forecast->month_forecast ?? 0;
                                     @endphp
                                     {{-- @foreach ($proyek->Forecasts as $forecast)
                                     @endforeach --}}
-                                    @switch($forecast->month_forecast ?? 0)
+                                    @switch($forecast->month_forecast)
                                         @case('1')
                                             Januari
                                         @break
