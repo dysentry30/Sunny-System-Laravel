@@ -562,7 +562,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     return $p->nilai_forecast != 0;
             // });
             if(empty($current_proyek->tipe_proyek)) {
-                dd($current_proyek, $kode_proyek);
+                dump($current_proyek, $kode_proyek);
             }
             if ($current_proyek->tipe_proyek == "R") {
                 $history_forecast = new HistoryForecast();
@@ -623,6 +623,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $total_rkap = 0;
             }
         }
+        dd();
         return response()->json([
             "status" => "success",
             "msg" => "Forecast berhasil dikunci",
