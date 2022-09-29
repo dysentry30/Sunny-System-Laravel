@@ -2616,8 +2616,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>HPS / Pagu (Rupiah) <i
-                                                                                class="bi bi-lock"></i></span>
+                                                                        <span>HPS / Pagu (Rupiah) <i class="bi bi-lock"></i></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -2861,7 +2860,7 @@
                                                                     <!--begin::Input-->
                                                                     <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->hps_pagu == null ? 'text-danger' : '' }}"
-                                                                        value="{{ $proyek->hps_pagu ?? '*HPS/Pagu Belum Ditentukan' }}"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->hps_pagu), 0, '.', '.') ?? '*HPS/Pagu Belum Ditentukan' }}"
                                                                         placeholder="HPS / Pagu (Rupiah)" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -3671,13 +3670,16 @@
                                                             </div>
                                                             <!--End begin::Col-->
                                                             @php
-                                                                if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
-                                                                    $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                                                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                    $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', $kontrakKeseluruhan), 0, '.', '.');
-                                                                } else {
-                                                                    $nilaiKontrakKeseluruhan = 0;
-                                                                }
+                                                                // if ($proyek->stage == 8 || $proyek->stage == 9){
+                                                                //     if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
+                                                                //         $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                                                                //         $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
+                                                                //         $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', $kontrakKeseluruhan), 0, '.', '.');
+                                                                //     }
+
+                                                                // } else {
+                                                                    // $nilaiKontrakKeseluruhan = 0;
+                                                                // }
                                                             @endphp
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -3690,12 +3692,19 @@
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
                                                                     <input type="text"
+                                                                        class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
+                                                                        value="{{ number_format((int) str_replace('.', '', $proyek->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
+                                                                        id="nilai-kontrak-keseluruhan"
+                                                                        name="nilai-kontrak-keseluruhan"
+                                                                        placeholder="*Nilai Perolehan Belum Ditentukan"
+                                                                        readonly />
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
                                                                         value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
                                                                         id="nilai-kontrak-keseluruhan"
                                                                         name="nilai-kontrak-keseluruhan"
                                                                         placeholder="*Nilai Perolehan Belum Ditentukan"
-                                                                        readonly />
+                                                                        readonly /> --}}
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
