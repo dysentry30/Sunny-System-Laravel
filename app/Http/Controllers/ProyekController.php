@@ -419,10 +419,12 @@ class ProyekController extends Controller
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         // dd($dataProyek);
         $bulans = (int) date('m');
-        $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
+        $years = (int) date('Y');
+        $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
         if (isset($newForecast)) {
-            if ($newProyek->bulan_ri_perolehan != null ) {
+            if ($newProyek->bulan_ri_perolehan != null && $newProyek->nilai_perolehan != null ) {
                 $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+                // dd($newProyek->nilai_perolehan);
                 $newForecast->save();
             };
         }
@@ -529,10 +531,14 @@ class ProyekController extends Controller
         // dd($dataProyek);
         if ($dataProyek["month-forecast"] != null && $dataProyek["nilai-forecast"] != null ){
             $bulans = (int) date('m');
-            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->first();
+            $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
             if (isset($newForecast)) {
                 $newForecast->month_forecast = $dataProyek["month-forecast"];
-                $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                if ($newProyek->bulan_ri_perolehan != null && $newProyek->nilai_perolehan != null){
+                    $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                } else {
+                    $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                }
                 $newForecast->save();
             } else {
                 $newForecast = new Forecast();
@@ -1092,8 +1098,12 @@ class ProyekController extends Controller
             $data = $request->all();
             // Check kalo variable di bawah ini ada
             if (!empty($data["stage-menang"]) && $data["stage-menang"] == "Menang") {
-                // dd($request->all());
-                $request->stage = 6;
+                if ($proyekStage->nilai_perolehan == 0) {
+                    Alert::error("Error", "Nilai Perolehan Belum Diisi !");
+                    return redirect()->back();
+                } else {
+                    $request->stage = 6;
+                }
             } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
                 $proyekStage->nilai_perolehan = 0;
                 $proyekStage->save();
