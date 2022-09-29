@@ -1085,21 +1085,7 @@ class ProyekController extends Controller
         $proyekAttach = $proyekStage->AttachmentMenang;
         $periode = (int) date('m');
         $years = (int) date('Y');
-        $forecasts = $proyekStage->Forecast->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
-
-        // if ($request->stage == 2) {
-        //     // dd($proyekStage->status_pasdin);
-        //     if ($proyekStage->laporan_kualitatif_pasdin == null) {
-        //         Alert::error("Error", "Pastikan (*) Kolom Ini Harus Diisi !");
-        //         // return redirect()->back();
-        //     } else {
-        //         $request->stage = 2;
-        //     }
-        // } else if ($request->stage == 3){
-        //     # code...
-        // } else {
-        //     # code...
-        // }
+        $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
 
         if (!$request->is_ajax) {
             $data = $request->all();

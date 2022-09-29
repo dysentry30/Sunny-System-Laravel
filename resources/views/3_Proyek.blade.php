@@ -985,11 +985,15 @@
                 }).then((result) => {
                 if (result.isConfirmed) {
                     $(e).val(selectedYear);
-                    $(e).select2();
+                    $(e).select2({
+                        minimumResultsForSearch: -1
+                    });
                     isYearValidated = true;
                 } else {
                     $(e).val("2022");
-                    $(e).select2();
+                    $(e).select2({
+                        minimumResultsForSearch: -1
+                    });
                 }
                 return isYearValidated;
             });

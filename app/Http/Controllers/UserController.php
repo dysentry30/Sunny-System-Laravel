@@ -26,26 +26,29 @@ class UserController extends Controller
         return view('0_Welcome');
     }
 
-    public function delete ($id) 
-    { 
+    public function delete($id)
+    {
         $id = User::find($id);
         $id->delete();
-        Alert::success('Delete', $id->name.", Berhasil Dihapus");
-        return redirect("/user")->with('status', 'User Deleted');   
+        Alert::success('Delete', $id->name . ", Berhasil Dihapus");
+        return redirect("/user")->with('status', 'User Deleted');
     }
 
 
     public function authen(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-        if (Auth::attempt($credentials) && Auth::check()) {
-            $request->session()->regenerate();
-
-            // if request from API
-            if (str_contains($request->url(), "api")) {
+        if (str_contains($request->url(), "api")) {
+            // $request->email = $request->UserName;
+            // $request->password = $request->UserPassword;
+            $credentials = $request->validate([
+                'UserName' => ["required", "email"],
+                'UserPassword' => ["required"]
+            ]);
+            $data = [
+                'email' => $request->UserName,
+                'password' => $request->UserPassword
+            ];
+            if (Auth::attempt($data)) {
                 $user = auth()->user();
                 $token_user = $user->createToken($user->name)->plainTextToken;
                 // dd($token_user);
@@ -57,9 +60,17 @@ class UserController extends Controller
                     "user" => $user,
                 ]);
             }
-
-            return redirect()->intended("/dashboard");
+        } else {
+            $credentials = $request->validate([
+                'email' => ["required", "email"],
+                'password' => ["required", "password"]
+            ]);
+            if (Auth::attempt($credentials) && Auth::check()) {
+                $request->session()->regenerate();
+                return redirect()->intended("/dashboard");
+            }
         }
+
         Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
         // dd("gagal login");
         return back();
@@ -105,44 +116,44 @@ class UserController extends Controller
             "phone-number" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
-        
+
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
-        
-        
-        if($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false){
+
+
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["team-proyek"] = "accepted";
-            
+
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
             $request->old("name-user");
             $request->old("email");
             $request->old("phone-number");
             // dd("tes");
-            
+
             if ($validation->fails()) {
                 $request->old("nip");
                 $request->old("name-user");
                 $request->old("email");
                 $request->old("phone-number");
                 // return redirect()->back();
-    
+
                 Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
                 $validation->validate();
-                
+
                 // return redirect()->back();
             }
-            
-            $validation = Validator::make($data, $rules, $messages);   
+
+            $validation = Validator::make($data, $rules, $messages);
             $validation->validate();
         }
-        
-        
+
+
         // dd($is_administrator, $is_admin_kontrak, $is_user_sales, $is_team_proyek);
         $password = Str::random(20);
         $user->nip = $data["nip"];
@@ -189,13 +200,13 @@ class UserController extends Controller
             "phone-number" => "required",
         ];
         $validation = Validator::make($data, $rules, $messages);
-        
+
         $is_administrator = $request->has("administrator") ?? false;
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
-        
-        
+
+
         if ($validation->fails()) {
             $request->old("nip");
             $request->old("name-user");
@@ -209,20 +220,20 @@ class UserController extends Controller
             // return redirect()->back();
         }
 
-        if($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false){
+        if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["team-proyek"] = "accepted";
-            
+
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
             $request->old("name-user");
             $request->old("email");
             $request->old("phone-number");
             // dd("tes");
-            
-            $validation = Validator::make($data, $rules, $messages);   
+
+            $validation = Validator::make($data, $rules, $messages);
             $validation->validate();
         }
 
@@ -256,7 +267,7 @@ class UserController extends Controller
             // $socket_id_from_user = $data["socket-id"];
             $to_user = User::find($current_notif->from_id_user);
             $all_notif_related_to_user = NotificationsModel::where("from_id_user", "=", $current_notif->from_id_user)->get();
-            $all_notif_related_to_user->each(function($notif) use($request, $to_user, $current_notif) {
+            $all_notif_related_to_user->each(function ($notif) use ($request, $to_user, $current_notif) {
                 $user = User::find($notif->to_user);
                 if ($request->is_rejected) {
                     $notif->is_rejected = true;
@@ -292,7 +303,7 @@ class UserController extends Controller
             }
         } else {
             $to_user = User::where("check_administrator", "=", "1")->get();
-            $to_user->each(function($admin_user) use($uuid, $user) {
+            $to_user->each(function ($admin_user) use ($uuid, $user) {
                 $id_notif = $uuid->uuid3();
                 NotificationPasswordReset::dispatch($user, "Request ganti password untuk <b>$user->name</b>", $id_notif, $admin_user, false);
             });
@@ -334,9 +345,10 @@ class UserController extends Controller
         }
     }
 
-    public function requestLockAnswer(Request $request) {
+    public function requestLockAnswer(Request $request)
+    {
         $data = $request->all();
-        if(Str::length($data["next_user"]) < 2) {
+        if (Str::length($data["next_user"]) < 2) {
             $to_user = $data["next_user"];
         } else {
             $next_user = explode(",", $data["next_user"]);
@@ -347,19 +359,19 @@ class UserController extends Controller
         $to_user = User::find((int) $to_user);
         $from_user = User::find($data["from_user"]);
 
-        if(isset($data["is_approved"])) {
+        if (isset($data["is_approved"])) {
             $is_approved = true;
         } else {
             $is_rejected = true;
         }
-        if(isset($data["is_rejected"]) && $data["is_rejected"]) {
+        if (isset($data["is_rejected"]) && $data["is_rejected"]) {
             $to_user = User::find($data["from_user"]);
             $from_user = User::find($data["next_user"]);
             $unit_kerja = $from_user->UnitKerja;
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast tidak disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], false, $is_rejected);
             return;
         }
-        if($to_user->check_administrator == 1 && $is_approved) {
+        if ($to_user->check_administrator == 1 && $is_approved) {
             $unit_kerja = $from_user->UnitKerja;
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Lock Forecast sudah disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], $is_approved ?? false, $is_rejected ?? false);
             return;
@@ -368,9 +380,10 @@ class UserController extends Controller
         // $from_user = 
     }
 
-    public function requestUnlockAnswer(Request $request) {
+    public function requestUnlockAnswer(Request $request)
+    {
         $data = $request->all();
-        if(Str::length($data["next_user"]) < 2) {
+        if (Str::length($data["next_user"]) < 2) {
             $to_user = $data["next_user"];
         } else {
             $next_user = explode(",", $data["next_user"]);
@@ -381,19 +394,19 @@ class UserController extends Controller
         $to_user = User::find((int) $to_user);
         $from_user = User::find($data["from_user"]);
 
-        if(isset($data["is_approved"])) {
+        if (isset($data["is_approved"])) {
             $is_approved = true;
         } else {
             $is_rejected = true;
         }
-        if(isset($data["is_rejected"]) && $data["is_rejected"]) {
+        if (isset($data["is_rejected"]) && $data["is_rejected"]) {
             $to_user = User::find($data["from_user"]);
             $from_user = User::find($data["next_user"]);
             $unit_kerja = $from_user->UnitKerja;
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast tidak disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], false, $is_rejected);
             return;
         }
-        if($to_user->check_administrator == 1 && $is_approved) {
+        if ($to_user->check_administrator == 1 && $is_approved) {
             $unit_kerja = $from_user->UnitKerja;
             LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast sudah disetujui oleh unit <b>" . $unit_kerja->unit_kerja . "</b>", [], $is_approved ?? false, $is_rejected ?? false);
             return;
