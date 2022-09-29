@@ -1080,7 +1080,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         <!--begin::Nilai Forecast-->
                                                                                                         
                                                                                                         <!--begin::Nilai Realisasi-->
-                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null)
+                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
@@ -1171,7 +1171,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         placeholder="" />
                                                                                                                 </td>
                                                                                                             @endif
-                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null)
+                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                                     @php
                                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                         $nilai_terkontrak_formatted = (int) str_replace('.', '', $forecast->realisasi_forecast) / $per_sejuta ?? '-';
@@ -1216,7 +1216,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value=""
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                             @php
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) / $per_sejuta ?? '-';
                                                                                                             @endphp
@@ -1263,7 +1263,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                 @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
@@ -1301,7 +1301,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                 @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
@@ -1401,7 +1401,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             <!--begin::Nilai Forecast-->
                                                                                                             
                                                                                                             <!--begin::Nilai Realisasi-->
-                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null)
+                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                                 @php
                                                                                                                     // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                     $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
@@ -1477,7 +1477,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
                                                                                                                         placeholder="" />
                                                                                                                 </td>
-                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null)
+                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                                     @php
                                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                     @endphp
@@ -1522,7 +1522,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value=""
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null)
+                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                             @php
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                             @endphp
@@ -1569,7 +1569,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                 @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
@@ -1607,7 +1607,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                 @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
