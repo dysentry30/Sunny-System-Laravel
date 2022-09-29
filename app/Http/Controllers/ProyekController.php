@@ -1085,7 +1085,7 @@ class ProyekController extends Controller
         $proyekAttach = $proyekStage->AttachmentMenang;
         $periode = (int) date('m');
         $years = (int) date('Y');
-        $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("tipe_proyek", "=", "P")->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        $forecasts = $proyekStage->Forecast->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
 
         // if ($request->stage == 2) {
         //     // dd($proyekStage->status_pasdin);
