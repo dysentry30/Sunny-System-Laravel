@@ -1085,7 +1085,8 @@ class ProyekController extends Controller
         $proyekAttach = $proyekStage->AttachmentMenang;
         $periode = (int) date('m');
         $years = (int) date('Y');
-        $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
 
         if (!$request->is_ajax) {
             $data = $request->all();
