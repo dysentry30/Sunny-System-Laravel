@@ -324,7 +324,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
         if (empty($findForecast)) {
             $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->get()->first();
-            $nullForecast->delete();
+            if (isset($nullForecast)) {
+                $nullForecast->delete();
+            }
             $forecast = new Forecast();
             $forecast->kode_proyek = $data["kode-proyek"];
 
