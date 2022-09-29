@@ -1090,6 +1090,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                0
                                                                                                             </td>
                                                                                                         @endif
                                                                                                         @php
@@ -1182,6 +1183,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 @else
                                                                                                                     <td
                                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                        0
                                                                                                                         </td>
                                                                                                                 @endif
                                                                                                                 @php
@@ -1397,6 +1399,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 </td>
                                                                                                             @else
                                                                                                                 <td data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                    0
                                                                                                                 </td>
                                                                                                             @endif
                                                                                                             @php
@@ -1473,6 +1476,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 @else
                                                                                                                     <td
                                                                                                                         data-column-realisasi-bulanan="{{ $month_counter }}">
+                                                                                                                        0
                                                                                                                         </td>
                                                                                                                 @endif
                                                                                                                 @php
@@ -1570,9 +1574,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            <center>
-                                                                                                <b>{{ number_format( ($nilai_terkontrak_formatted / $per_sejuta), 0, ',', '.')  }}</b>
-                                                                                            </center>
+                                                                                            @if ($proyek->tipe_proyek == "R")
+                                                                                                @php
+                                                                                                    $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        return $f->realisasi_forecast;
+                                                                                                    }) / $per_sejuta;
+                                                                                                @endphp
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @else
+                                                                                                <center>
+                                                                                                    <b>{{ number_format(($nilai_terkontrak_formatted), 0, ',', '.')  }}</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <!--end::Total Side Coloumn-->
                                                                                         @php
