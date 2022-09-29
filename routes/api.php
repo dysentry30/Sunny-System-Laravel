@@ -43,16 +43,40 @@ Route::middleware(["web"])->group(function () {
 
     // Begin Detail Proyek yang ada forecast
     Route::post('/detail-proyek', function (Request $request) {
-        $periode = explode("-", $request->periode);
+        $periode = getPeriode($request->periode);
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        if(isset($request->unit_kerja)) {
-            $proyeks = Proyek::where("unit_kerja", "=", $request->unit_kerja)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+        if(isset($request->unitkerjaid)) {
+            // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"])->filter(function($p) use($periode) {
+                $is_forecast_exist = $p->Forecasts->where("periode_prognosa", $periode[1])->count() > 0;
+                unset($p->Forecasts);
+                return $is_forecast_exist;
+            });
         } else {
-            $proyeks = Proyek::all(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+            return response()->json([
+                "status" => 400,
+                "msg" => "Unit Kerja Not Found"
+            ], 400);
         }
         $proyeks = $proyeks->map(function ($p) use ($request) {
             $p->kode_crm = $p->kode_proyek;
+            $p->nama_proyek = $p->nama_proyek;
+            $p->departemen_id = $p->unit_kerja;
+            $p->ap_id = "";
+            switch ($p->jenis_proyek) {
+                case "I":
+                    $p->jenis = "Internal";
+                    break;
+                case "N":
+                    $p->jenis = "Eksternal";
+                    break;
+                case "J":
+                    $p->jenis = "JO";
+                    break;
+            }
+            $p->kategori = "PROYEK";
+
             switch ($p->stage) {
                 case 0:
                     $p->tahap = "Pasar Dini";
@@ -82,90 +106,49 @@ Route::middleware(["web"])->group(function () {
                     $p->tahap = "Terkontrak";
                     break;
             }
-
-            switch ($p->jenis_proyek) {
-                case "I":
-                    $p->jenis = "Internal";
-                    break;
-                case "N":
-                    $p->jenis = "Eksternal";
-                    break;
-                case "J":
-                    $p->jenis = "JO";
-                    break;
-            }
-            $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
             // dd($p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
             $p->pemberi_kerja = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "";
-            $p->departemen_id = $p->unit_kerja;
-            $p->kategori = "PROYEK";
             $p->rencana_perolehan = null;
-            $p->ap_id = "";
+            $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
             $p->periode = $request->periode;
             unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
 
             return $p;
         });
         $data = [
-            "total_data" => $proyeks->count(),
-            "periode" => $request->periode,
-            "proyeks" => $proyeks
+            "GetDetailProyekResult" => [
+                "Success" => true,
+                "Message" => null,
+                "TotalData" => $proyeks->count(),
+                "Data" => $proyeks,
+            ],
+            
         ];
         return response()->json($data);
     })->middleware("userAuth");
 
     Route::post('/detail-nilai-proyek', function (Request $request) {
-        $periode = explode("-", $request->periode);
-        $tahun = $periode[0];
-        $prognosa = (int) $periode[1];
+        $periode = getPeriode($request->periode);
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        $proyeks = Proyek::where("unit_kerja", "=", $request->unit_kerja)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "bulan_ri_perolehan", "nilai_perolehan"]);
-        $proyeks = $proyeks->map(function ($p) use($prognosa, $tahun) {
-            switch ($p->stage) {
-                case 0:
-                    $p->stage = "Pasar Dini";
-                    break;
-                case 1:
-                    $p->stage = "Pasar Dini";
-                    break;
-                case 2:
-                    $p->stage = "Pasar Potensial";
-                    break;
-                case 3:
-                    $p->stage = "Prakualifikasi";
-                    break;
-                case 4:
-                    $p->stage = "Tender Diikuti";
-                    break;
-                case 5:
-                    $p->stage = "Perolehan";
-                    break;
-                case 6:
-                    $p->stage = "Menang";
-                    break;
-                case 7:
-                    $p->stage = "Terendah";
-                    break;
-                case 8:
-                    $p->stage = "Terkontrak";
-                    break;
-            }
-
+        $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek"]);
+        $proyeks = $proyeks->map(function ($p) use($periode) {
+            $p->spk_code = $p->kode_proyek;
+            $p->proyek_name = $p->nama_proyek;
             switch ($p->jenis_proyek) {
                 case "I":
-                    $p->jenis_proyek = "Internal";
+                    $p->type_code = "Internal";
                     break;
                 case "N":
-                    $p->jenis_proyek = "Eksternal";
+                    $p->type_code = "Eksternal";
                     break;
                 case "J":
-                    $p->jenis_proyek = "JO";
+                    $p->type_code = "JO";
                     break;
             }
             $data_ok = collect();
             for ($i = 1; $i <= 12; $i++) {
-                $f = Forecast::where("periode_prognosa", '=', (int) $prognosa)->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->whereYear("created_at", "=", $tahun)->first();
+                $f = Forecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->spk_code)->where("month_rkap", "=", $i)->first();
                 if(!empty($f) && $i == $f->month_rkap) {
                     $data_ok->push([
                         "month" => $i,
@@ -179,18 +162,23 @@ Route::middleware(["web"])->group(function () {
                 }
             }
             $p->data_ok = $data_ok;
+            $p->component_id = 0;
+            $p->header_id = 0;
+            unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja);
             // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
             // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
             // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
             return $p;
         });
         $data = [
-            "total_data" => $proyeks->count(),
-            "total_forecast" => $proyeks->sum("nilai_forecast"),
-            "total_rkap" => $proyeks->sum("rkap_forecast"),
-            "total_realisasi" => $proyeks->sum("realisasi_forecast"),
-            "periode" => $request->periode,
-            "proyeks" => $proyeks
+            "GetDetailProyekResult" => [
+                "Success" => true,
+                "Message" => null,
+                "TotalData" => $proyeks->count(),
+                "TotalRealisasi" => $proyeks->sum("realisasi_forecast"),
+                "Data" => $proyeks,
+            ],
+            
         ];
         return response()->json($data);
     })->middleware("userAuth");
@@ -274,4 +262,8 @@ Route::middleware(["web"])->group(function () {
     })->middleware("userAuth");
     // End RKAP
 
+    // get periode year and month
+    function getPeriode($periode) {
+        return [(int) substr($periode,0, 4), (int) substr($periode, 4,2)];
+    }
 });
