@@ -310,9 +310,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-    
+
     Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
-    
+
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
 
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
@@ -389,7 +389,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at");
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            $forecast->each(function($f) {
+            $forecast->each(function ($f) {
                 $f->delete();
             });
             $new_forecast = new Forecast();
@@ -560,60 +560,60 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
-            $forecasts = $proyek;
-            if ($current_proyek->tipe_proyek == "R") {
-                $history_forecast = new HistoryForecast();
+            // if ($current_proyek->tipe_proyek == "R") {
+            //     $history_forecast = new HistoryForecast();
 
-                foreach ($forecasts as $forecast) {
-                    $history_forecast->kode_proyek = $kode_proyek;
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
-                    $history_forecast->month_forecast = $forecast->month_forecast;
-                    // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
-                    $history_forecast->rkap_forecast = $forecast->rkap_forecast;
-                    // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
-                    $history_forecast->month_rkap = $forecast->month_rkap;
-                    // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast;
-                    // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
-                    $history_forecast->month_realisasi = $forecast->month_realisasi;
-                    $history_forecast->periode_prognosa = $request->periode_prognosa;
-                    // if ($forecast->month_forecast > $farestMonth) {
-                    //     $farestMonth = $forecast->month_forecast;
-                    // }
-                    // $total_forecast += $forecast->nilai_forecast;
-                    // $total_realisasi += $forecast->realisasi_forecast;
-                    // $total_rkap += $forecast->rkap_forecast;
+            //     foreach ($forecasts as $forecast) {
+            //         $history_forecast->kode_proyek = $kode_proyek;
+            //         $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
+            //         $history_forecast->month_forecast = $forecast->month_forecast;
+            //         // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
+            //         $history_forecast->rkap_forecast = $forecast->rkap_forecast;
+            //         // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+            //         $history_forecast->month_rkap = $forecast->month_rkap;
+            //         // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            //         $history_forecast->realisasi_forecast = $forecast->realisasi_forecast;
+            //         // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
+            //         $history_forecast->month_realisasi = $forecast->month_realisasi;
+            //         $history_forecast->periode_prognosa = $request->periode_prognosa;
+            //         // if ($forecast->month_forecast > $farestMonth) {
+            //         //     $farestMonth = $forecast->month_forecast;
+            //         // }
+            //         // $total_forecast += $forecast->nilai_forecast;
+            //         // $total_realisasi += $forecast->realisasi_forecast;
+            //         // $total_rkap += $forecast->rkap_forecast;
+            //     }
+            //     $history_forecast->save();
+            // } else {
+
+            // }
+            $history_forecast = new HistoryForecast();
+
+            foreach ($forecasts as $forecast) {
+
+                if ($forecast->month_forecast > $farestMonth) {
+                    $farestMonth = $forecast->month_forecast;
                 }
-                $history_forecast->save();
-            } else {
-                $history_forecast = new HistoryForecast();
-
-                foreach ($forecasts as $forecast) {
-
-                    if ($forecast->month_forecast > $farestMonth) {
-                        $farestMonth = $forecast->month_forecast;
-                    }
-                    $total_forecast += $forecast->nilai_forecast ?? 0;
-                    $total_realisasi += $forecast->realisasi_forecast;
-                    $total_rkap += $forecast->rkap_forecast;
-                }
-                // RKAP, REALISASI
-                $history_forecast->kode_proyek = $kode_proyek;
-                $history_forecast->nilai_forecast = (string) $total_forecast;
-                $history_forecast->month_forecast = $farestMonth;
-                // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
-                $history_forecast->rkap_forecast = $total_rkap;
-                // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
-                $history_forecast->month_rkap = $current_proyek->bulan_awal;
-                // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                $history_forecast->realisasi_forecast = $current_proyek->nilai_perolehan == null ? 0 : str_replace(",", "", (int) $current_proyek->nilai_perolehan ?? 0) ?? 0;
-                // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
-                $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
-                $history_forecast->periode_prognosa = $request->periode_prognosa;
-                $history_forecast->save();
-                // if ($index == $forecasts->count() - 1) {
-                // }
+                $total_forecast += $forecast->nilai_forecast ?? 0;
+                $total_realisasi += $forecast->realisasi_forecast;
+                $total_rkap += $forecast->rkap_forecast;
             }
+            // RKAP, REALISASI
+            $history_forecast->kode_proyek = $kode_proyek;
+            $history_forecast->nilai_forecast = (string) $total_forecast;
+            $history_forecast->month_forecast = $farestMonth;
+            // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
+            $history_forecast->rkap_forecast = $total_rkap;
+            // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+            $history_forecast->month_rkap = $current_proyek->bulan_awal;
+            // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
+            $history_forecast->realisasi_forecast = $current_proyek->nilai_perolehan == null ? 0 : str_replace(",", "", (int) $current_proyek->nilai_perolehan ?? 0) ?? 0;
+            // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
+            $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
+            $history_forecast->periode_prognosa = $request->periode_prognosa;
+            $history_forecast->save();
+            // if ($index == $forecasts->count() - 1) {
+            // }
             $farestMonth = 0;
             $total_forecast = 0;
             $total_realisasi = 0;
