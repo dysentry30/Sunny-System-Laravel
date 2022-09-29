@@ -566,7 +566,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
                 foreach ($forecasts as $forecast) {
                     $history_forecast->kode_proyek = $kode_proyek;
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast;
+                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
                     $history_forecast->rkap_forecast = $forecast->rkap_forecast;
@@ -593,7 +593,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
-                    $total_forecast += $forecast->nilai_forecast;
+                    $total_forecast += $forecast->nilai_forecast ?? 0;
                     $total_realisasi += $forecast->realisasi_forecast;
                     $total_rkap += $forecast->rkap_forecast;
                 }
