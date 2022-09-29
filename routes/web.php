@@ -561,7 +561,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
-            if(!empty($current_proyek->tipe_proyek)) {
+            if(empty($current_proyek->tipe_proyek)) {
                 dd($current_proyek);
             }
             if ($current_proyek->tipe_proyek == "R") {
