@@ -1569,8 +1569,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
-                                                                                                @if ($proyek->tipe_proyek == "R")
+                                                                                            @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
                                                                                                             return $f->realisasi_forecast;
@@ -1579,15 +1578,16 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     <center>
                                                                                                         <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
                                                                                                     </center>
-                                                                                                @else
+                                                                                            @else 
+                                                                                                @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                     <center>
                                                                                                         <b>{{ number_format(($nilai_terkontrak_formatted), 0, ',', '.')  }}</b>
                                                                                                     </center>
+                                                                                                @else
+                                                                                                    <center>
+                                                                                                        <b>0</b>
+                                                                                                    </center>
                                                                                                 @endif
-                                                                                            @else
-                                                                                                <center>
-                                                                                                    <b>0</b>
-                                                                                                </center>
                                                                                             @endif
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin"
@@ -1607,8 +1607,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
-                                                                                                @if ($proyek->tipe_proyek == "R")
+                                                                                            @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
                                                                                                         $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
                                                                                                             return $f->realisasi_forecast;
@@ -1617,15 +1616,16 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     <center>
                                                                                                         <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
                                                                                                     </center>
-                                                                                                @else
+                                                                                            @else 
+                                                                                                @if ($proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                     <center>
                                                                                                         <b>{{ number_format(($nilai_terkontrak_formatted), 0, ',', '.')  }}</b>
                                                                                                     </center>
+                                                                                                @else
+                                                                                                    <center>
+                                                                                                        <b>0</b>
+                                                                                                    </center>
                                                                                                 @endif
-                                                                                            @else
-                                                                                                <center>
-                                                                                                    <b>0</b>
-                                                                                                </center>
                                                                                             @endif
                                                                                         </td>
                                                                                         <!--end::Total Side Coloumn-->
