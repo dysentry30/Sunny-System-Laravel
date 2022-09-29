@@ -397,7 +397,7 @@ class ProyekController extends Controller
         $oe_wika = 0;
         if (!empty($dataProyek["nilai-kontrak-penawaran"]) && !empty($dataProyek["hps-pagu"])) {
             $oe_wika = ((int) $dataProyek["nilai-kontrak-penawaran"] / (int) $dataProyek["hps-pagu"]) * 100;
-            $newProyek->oe_wika = $oe_wika;
+            $newProyek->oe_wika = number_format( $oe_wika, 2, '.', '.');
         };
         $newProyek->peringkat_wika = $dataProyek["peringkat-wika"];
         $newProyek->laporan_perolehan = $dataProyek["laporan-perolehan"];
@@ -430,13 +430,14 @@ class ProyekController extends Controller
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
         // $newProyek->nomor_terkontrak = urlencode(urlencode($dataProyek["nomor-terkontrak"]));
         $newProyek->tanggal_terkontrak = $dataProyek["tanggal-terkontrak"];
-        if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null) {
-            $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
-            $nilaiKontrakKeseluruhan = $kontrakKeseluruhan;
+        // if ($dataProyek["nilai-perolehan"] != null && $dataProyek["porsi-jo"] != null && $newProyek->stage == 8 || $newProyek->stage == 9) {
+        //     // dd($newProyek->stage);
+        //     $nilaiPerolehan = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+        //     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $dataProyek["porsi-jo"];
+        //     $nilaiKontrakKeseluruhan = $kontrakKeseluruhan;
 
-            $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
-        }
+        //     $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
+        // }
         // $newProyek->nilai_kontrak_keseluruhan = $dataProyek["nilai-kontrak-keseluruhan"];
         $newProyek->tanggal_mulai_terkontrak = $dataProyek["tanggal-mulai-kontrak"];
         // $newProyek->nilai_wika_terkontrak = $dataProyek["nilai-wika-terkontrak"];
@@ -1082,6 +1083,10 @@ class ProyekController extends Controller
         $kodeProyek = $request->kode_proyek;
         $proyekStage = Proyek::find($kodeProyek);
         $proyekAttach = $proyekStage->AttachmentMenang;
+        $periode = (int) date('m');
+        $years = (int) date('Y');
+        $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("tipe_proyek", "=", "P")->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years);
+
         // if ($request->stage == 2) {
         //     // dd($proyekStage->status_pasdin);
         //     if ($proyekStage->laporan_kualitatif_pasdin == null) {
@@ -1103,9 +1108,22 @@ class ProyekController extends Controller
                 // dd($request->all());
                 $request->stage = 6;
             } elseif (!empty($data["stage-kalah"]) && $data["stage-kalah"] == "Kalah") {
+                $proyekStage->nilai_perolehan = 0;
+                $proyekStage->save();
+
+                $forecasts->realisasi_forecast = 0;
+                $forecasts->save();
+                
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {
-                // dd($proyekAttach->count() > 0);
+                // dd($proyekStage->nilai_perolehan, $proyekStage->porsi_jo, $proyekStage->nilai_kontrak_keseluruhan);
+                if ($proyekStage->nilai_perolehan != null && $proyekStage->porsi_jo != null) {
+                    $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
+                    $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyekStage->porsi_jo;
+
+                    $proyekStage->nilai_kontrak_keseluruhan = $kontrakKeseluruhan;
+                    $proyekStage->save();
+                }
                 if ($proyekAttach->count() == 0) {
                     Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
                     return redirect()->back();
