@@ -663,7 +663,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
+                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -700,7 +700,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
+                                                                                                    if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -729,7 +729,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if($p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null)) {
+                                                                                                    if($p->stage == 8) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -755,7 +755,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
                                                                                                 return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter) {
-                                                                                                    if($p->stage == 8 && ($p->bulan_ri_perolehan != 0 || $p->bulan_ri_perolehan != null )) {
+                                                                                                    if($p->stage == 8) {
                                                                                                         return $p->Forecasts->sum(function($f) use($per_sejuta, $i) {
                                                                                                             return $f->realisasi_forecast;
                                                                                                         });
@@ -1261,9 +1261,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
-                                                                                            </center>
+                                                                                            @if ($proyek->tipe_proyek == "R")
+                                                                                                @php
+                                                                                                    $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        return $f->realisasi_forecast;
+                                                                                                    }) / $per_sejuta;
+                                                                                                @endphp
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @else
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin"
                                                                                             data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
@@ -1282,9 +1293,20 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <td class="pinForecast ShowPin total-month-x-realisasi-bulanan"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}"
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
-                                                                                            </center>
+                                                                                            @if ($proyek->tipe_proyek == "R")
+                                                                                                @php
+                                                                                                    $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        return $f->realisasi_forecast;
+                                                                                                    }) / $per_sejuta;
+                                                                                                @endphp
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @else
+                                                                                                <center>
+                                                                                                    <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <!--end::Total Side Coloumn-->
                                                                                         @php
