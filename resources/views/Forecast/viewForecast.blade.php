@@ -1080,7 +1080,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         <!--begin::Nilai Forecast-->
                                                                                                         
                                                                                                         <!--begin::Nilai Realisasi-->
-                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
+                                                                                                        @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->stage == 8)
                                                                                                             @php
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
@@ -1401,7 +1401,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             <!--begin::Nilai Forecast-->
                                                                                                             
                                                                                                             <!--begin::Nilai Realisasi-->
-                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
+                                                                                                            @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->stage == 8)
                                                                                                                 @php
                                                                                                                     // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                     $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
