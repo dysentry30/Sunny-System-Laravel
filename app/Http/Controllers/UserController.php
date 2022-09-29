@@ -63,7 +63,7 @@ class UserController extends Controller
         } else {
             $credentials = $request->validate([
                 'email' => ["required", "email"],
-                'password' => ["required", "password"]
+                'password' => ["required"]
             ]);
             if (Auth::attempt($credentials) && Auth::check()) {
                 $request->session()->regenerate();
