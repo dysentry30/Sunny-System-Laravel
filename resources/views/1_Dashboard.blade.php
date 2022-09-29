@@ -1964,7 +1964,6 @@
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
             const unitKerja = url.split("/");
-            console.log(type);
             
             if (type == "Forecast") {
                 if (tableElt.includes("triwulan")) {
@@ -2698,8 +2697,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            }
-            else {
+            } else {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -2712,12 +2710,12 @@
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
-
+                
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_rkap ?? filter.nilai_kontrak_keseluruhan ?? filter.nilai_perolehan);
+                    totalNilaiLainnya += Number(filter.nilai_perolehan);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -2758,7 +2756,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (Number(filter.month_realisasi ?? filter.bulan_awal ?? filter.bulan_ri_perolehan)) {
+                    switch (Number(filter.bulan_pelaksanaan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2833,7 +2831,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan ?? filter.nilai_rkap)}
+                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;

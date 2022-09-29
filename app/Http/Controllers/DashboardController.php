@@ -727,35 +727,37 @@ class DashboardController extends Controller
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (!Auth::user()->check_administrator) {
             if ($filter != false) {
-                $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+                $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
             } else {
                 if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with("UnitKerja")->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                    $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 } else {
-                    $proyeks = Proyek::with("UnitKerja")->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
+                    $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
                 }
             }
         } else {
-            $proyeks = Proyek::with("UnitKerja")->get(["nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_kontrak_keseluruhan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+            $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
         }
         $stage = null;
         switch ($tipe) {
             case "Terendah":
-                $stage = 9;
+                $proyeks = $proyeks->whereIn("stage", [5, 6])->filter(function($p) {
+                    return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6;
+                })->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
                 break;
             case "Terkontrak":
                 $stage = 8;
+                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
                 break;
         }
-
-        $proyeks = $proyeks->where("stage", $stage)->sortBy("bulan_ri_perolehan");
+        // dd($proyeks);
         $row = 2;
         $proyeks->each(function($p) use(&$row, $sheet) {
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $p->status_pasdin);
             $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
-            $sheet->setCellValue('E' . $row, $p->bulan_ri_perolehan);
+            $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
             $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
             $row++;
         });
@@ -842,6 +844,6 @@ class DashboardController extends Controller
     }
 
     public static function getUnitKerjaProyek($divcode) {
-        return UnitKerja::find($divcode)->unit_kerja;
+        return UnitKerja::where("divcode", "=", $divcode)->first()->unit_kerja;
     }
 }
