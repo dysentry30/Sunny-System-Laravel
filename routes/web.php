@@ -310,9 +310,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-    
+
     Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
-    
+
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
 
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
@@ -389,7 +389,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at");
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            $forecast->each(function($f) {
+            $forecast->each(function ($f) {
                 $f->delete();
             });
             $new_forecast = new Forecast();
@@ -554,12 +554,16 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             // dump();
             // $total_realisasi += $proyek->sum("realisasi_forecast");
             $current_proyek = Proyek::find($kode_proyek);
+            // dd($proyek);
             $forecasts = $proyek;
             // $forecasts = $proyek->filter(function ($p) {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
+            if(!empty($current_proyek->tipe_proyek)) {
+                dd($current_proyek);
+            }
             if ($current_proyek->tipe_proyek == "R") {
                 $history_forecast = new HistoryForecast();
 
@@ -585,9 +589,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 }
                 $history_forecast->save();
             } else {
-                
-            }
-            $history_forecast = new HistoryForecast();
+
+                $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
 
@@ -614,10 +617,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
-            $farestMonth = 0;
-            $total_forecast = 0;
-            $total_realisasi = 0;
-            $total_rkap = 0;
+                $farestMonth = 0;
+                $total_forecast = 0;
+                $total_realisasi = 0;
+                $total_rkap = 0;
+            }
         }
         return response()->json([
             "status" => "success",
