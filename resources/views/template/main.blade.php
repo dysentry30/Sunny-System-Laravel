@@ -681,8 +681,11 @@
                                 <div class="calendar__date {{ $day == 28 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>28</span></div>
                                 <div class="calendar__date {{ $day == 29 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>29</span></div>
                                 @if (str_contains($mytime, 'Feb'))
+                                <div id="tgl-30" style="display: none" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
+                                <div id="tgl-31" style="display: none" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
                                 @elseif (str_contains($mytime, 'Apr') || str_contains($mytime, 'Jun') || str_contains($mytime, 'Sep') || str_contains($mytime, 'Nov'))
                                 <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
+                                <div id="tgl-31" style="display: none" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>
                                 @else
                                 <div id="tgl-30" class="calendar__date {{ $day == 30 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>30</span></div>
                                 <div id="tgl-31" class="calendar__date {{ $day == 31 ? 'calendar__date--selected calendar__date--range-end calendar__date--first-date' : '' }}"><span>31</span></div>

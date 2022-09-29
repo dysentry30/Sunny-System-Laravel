@@ -187,11 +187,16 @@ Route::middleware(["web"])->group(function () {
     // Begin RKAP
     Route::post('/rkap/save', function (Request $request) {
         $data = collect($request->list_proyek);
-        $unit_kerja = $request->unit_kerja;
-        $periode = collect(explode("-", $request->periode_prognosa));
-        $tahun = (int) $periode[0];
-        $bulan = (int) $periode[1];
+        $unit_kerja = $request->UsrUnitKerja;
+        $tahun = $request->UsrTahunPelaksanaan;
+        $bulan = (int) date('m');
         $is_data_inserted = false;
+        // $data = collect($request->list_proyek);
+        // $unit_kerja = $request->unit_kerja;
+        // $periode = collect(explode("-", $request->periode_prognosa));
+        // $tahun = (int) $periode[0];
+        // $bulan = (int) $periode[1];
+        // $is_data_inserted = false;
         $data->each(function ($proyek) use ($data, $bulan, $tahun, $unit_kerja, &$is_data_inserted) {
             $p = new Proyek();
             $p->kode_proyek = $proyek["kode_proyek"];
