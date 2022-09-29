@@ -814,7 +814,7 @@
                                     @endphp
                                     <!--begin::Input-->
                                     <select id="tahun-perolehan" name="tahun-perolehan"
-                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        class="form-select form-select-solid select2-hidden-accessible" onchange="validationRAPerolehan(this)"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tahun"
                                         data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
                                         @for ($i = 2021; $i < $years + 10; $i++)
@@ -970,6 +970,34 @@
             dropdownParent: $("#kt_modal_create_proyek")
         });
     });
+    let isYearValidated = false;
+    async function validationRAPerolehan(e) {
+        const selectedYear = e.options[e.selectedIndex].text;
+        const currentYear = new Date().getFullYear();
+        if(selectedYear < currentYear && !isYearValidated) {
+            const resultDialog = await Swal.fire({
+                title: 'Anda yakin ingin memilih tahun sebelum tahun sekarang?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya'
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    $(e).val(selectedYear);
+                    $(e).select2();
+                    isYearValidated = true;
+                } else {
+                    $(e).val("2022");
+                    $(e).select2();
+                }
+                return isYearValidated;
+            });
+            isYearValidated = resultDialog;
+        } else {
+            isYearValidated = false;
+        }
+    }
 </script>
 @endsection
 
