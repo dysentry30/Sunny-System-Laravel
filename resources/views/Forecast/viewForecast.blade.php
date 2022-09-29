@@ -1263,18 +1263,24 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            @if ($proyek->tipe_proyek == "R")
-                                                                                                @php
-                                                                                                    $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
-                                                                                                        return $f->realisasi_forecast;
-                                                                                                    }) / $per_sejuta;
-                                                                                                @endphp
-                                                                                                <center>
-                                                                                                    <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
-                                                                                                </center>
+                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                                @if ($proyek->tipe_proyek == "R")
+                                                                                                    @php
+                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                            return $f->realisasi_forecast;
+                                                                                                        }) / $per_sejuta;
+                                                                                                    @endphp
+                                                                                                    <center>
+                                                                                                        <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
+                                                                                                    </center>
+                                                                                                @else
+                                                                                                    <center>
+                                                                                                        <b>{{ number_format(($nilai_terkontrak_formatted), 0, ',', '.')  }}</b>
+                                                                                                    </center>
+                                                                                                @endif
                                                                                             @else
                                                                                                 <center>
-                                                                                                    <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
+                                                                                                    <b>0</b>
                                                                                                 </center>
                                                                                             @endif
                                                                                         </td>
@@ -1563,9 +1569,26 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         </td>
                                                                                         <td class="pinForecast HidePin"
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
-                                                                                            <center>
-                                                                                                <b>{{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}</b>
-                                                                                            </center>
+                                                                                            @if ($proyek->bulan_ri_perolehan != null)
+                                                                                                @if ($proyek->tipe_proyek == "R")
+                                                                                                    @php
+                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                            return $f->realisasi_forecast;
+                                                                                                        }) / $per_sejuta;
+                                                                                                    @endphp
+                                                                                                    <center>
+                                                                                                        <b>{{ number_format($total_realisasi_tahunan ?? 0, 0, ',', '.') }}</b>
+                                                                                                    </center>
+                                                                                                @else
+                                                                                                    <center>
+                                                                                                        <b>{{ number_format(($nilai_terkontrak_formatted), 0, ',', '.')  }}</b>
+                                                                                                    </center>
+                                                                                                @endif
+                                                                                            @else
+                                                                                                <center>
+                                                                                                    <b>0</b>
+                                                                                                </center>
+                                                                                            @endif
                                                                                         </td>
                                                                                         <td class="pinForecast ShowPin"
                                                                                             data-id-proyek-ok-bulanan-total="{{ $proyek->kode_proyek }}"
