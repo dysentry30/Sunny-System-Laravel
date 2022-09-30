@@ -2715,7 +2715,7 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -2755,8 +2755,8 @@
                     }
 
                     let bulan = "";
-                    // console.log(filter.bulan_pelaksanaan);
-                    switch (Number(filter.bulan_pelaksanaan)) {
+                    // console.log(filter.bulan_pelaksanaan, filter);
+                    switch (Number(filter.bulan_pelaksanaan || filter.bulan_awal)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2831,7 +2831,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan)}
+                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan || filter.nilai_rkap)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
