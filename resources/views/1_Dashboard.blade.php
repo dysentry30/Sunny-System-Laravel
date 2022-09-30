@@ -2840,7 +2840,7 @@
 
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
-                titleTable.innerHTML = `Nilai ${type} - ${month}`;
+                titleTable.innerHTML = `Nilai ${type}`;
                 total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
