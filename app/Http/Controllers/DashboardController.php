@@ -768,6 +768,138 @@ class DashboardController extends Controller
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
 
+
+    public function getDataCompetitive($tipe, $filter = false)
+    {
+
+        $spreadsheet = new Spreadsheet();
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Status Pasar');
+        $sheet->setCellValue('C1', 'Stage');
+        $sheet->setCellValue('D1', 'Unit Kerja');
+        $sheet->setCellValue('E1', 'Bulan');
+        $sheet->setCellValue('F1', "Nilai Penawaran");
+
+        // dd($tipe);
+
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if (!Auth::user()->check_administrator) {
+            if ($filter != false) {
+                $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+            } else {
+                if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                    $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                } else {
+                    $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
+                }
+            }
+        } else {
+            $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        }
+        $stage = null;
+        switch ($tipe) {
+            case "Proyek Menang":
+                if($stage == 8 || $stage == 6 ){
+                    $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+                }
+                // $proyeks = $proyeks->whereIn("stage", [5, 6])->filter(function($p) {
+                //     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6;
+                // })->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+                break;
+            case "Proyek kalah":
+                $stage = 7;
+                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+                break;
+        }
+        // dd($proyeks);
+        $row = 2;
+        $proyeks->each(function($p) use(&$row, $sheet) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $p->status_pasdin);
+            $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
+            $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+        // dd($proyeks);
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+    // public function getDataCompetitiveNilai($tipe, $filter = false)
+    // {
+
+    //     $spreadsheet = new Spreadsheet();
+    //     // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+    //     $sheet = $spreadsheet->getActiveSheet();
+    //     $sheet->getStyle("A1:F1")->getFill()
+    //         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //         ->getStartColor()->setARGB('0db0d9');
+    //     $sheet->setCellValue('A1', 'Nama Proyek');
+    //     $sheet->setCellValue('B1', 'Status Pasar');
+    //     $sheet->setCellValue('C1', 'Stage');
+    //     $sheet->setCellValue('D1', 'Unit Kerja');
+    //     $sheet->setCellValue('E1', 'Bulan');
+    //     $sheet->setCellValue('F1', "Nilai Penawaran");
+
+    //     // dd($tipe);    
+
+    //     $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+    //     if (!Auth::user()->check_administrator) {
+    //         if ($filter != false) {
+    //             $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+    //         } else {
+    //             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+    //                 $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+    //             } else {
+    //                 $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
+    //             }
+    //         }
+    //     } else {
+    //         $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+    //     }
+    //     $stage = null;
+    //     switch ($tipe) {
+    //         case "Nilai Menang":
+    //             if($stage == 8 || $stage == 6 ){
+    //                 $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+    //             }
+    //             // $proyeks = $proyeks->whereIn("stage", [5, 6])->filter(function($p) {
+    //             //     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6;
+    //             // })->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+    //             break;
+    //         case "Nilai kalah":
+    //             $stage = 7;
+    //             $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+    //             break;
+    //     }
+    //     // dd($proyeks);
+    //     $row = 2;
+    //     $proyeks->each(function($p) use(&$row, $sheet) {
+    //         $sheet->setCellValue('A' . $row, $p->nama_proyek);
+    //         $sheet->setCellValue('B' . $row, $p->status_pasdin);
+    //         $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
+    //         $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+    //         $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
+    //         $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
+    //         $row++;
+    //     });
+    //     $writer = new Xlsx($spreadsheet);
+    //     $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
+    //     $writer->save(public_path("excel/$file_name"));
+
+    //     return response()->json(["href" => $file_name, "data" => $proyeks]);
+    // }
+
     public function getFullMonth($month)
     {
         switch ($month) {

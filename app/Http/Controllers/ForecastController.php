@@ -332,7 +332,7 @@ class ForecastController extends Controller
             $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
         }
 
-        // $year = $year != "" ? (int) $year : (int) date("Y");
+        $year = $year != "" ? (int) $year : (int) date("Y");
         $unitKerjas = UnitKerja::all();
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->get();
         // $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode)->get();
@@ -340,9 +340,9 @@ class ForecastController extends Controller
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
 
-        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->where("proyeks.jenis_proyek", "!=", "I");
+        // $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->where("proyeks.jenis_proyek", "!=", "I");
         // $selectForecastInternal = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or");
-        // $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->whereYear("forecasts.created_at", $year)->where("proyeks.jenis_proyek", "!=", "I");
+        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", $year)->where("proyeks.jenis_proyek", "!=", "I");
         // $selectForecastInternal = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or")->whereYear("forecasts.created_at", $year);
         if (Auth::user()->check_administrator) {
             // $dops = Dop::with(["Proyek"])->get()->sortBy("dop");
@@ -380,13 +380,13 @@ class ForecastController extends Controller
             $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
         }
 
-        // $year = $year != "" ? (int) $year : (int) date("Y");
+        $year = $year != "" ? (int) $year : (int) date("Y");
         $unitKerjas = UnitKerja::all();
         $historyForecast = HistoryForecast::where("periode_prognosa", "=", $periode, "or")->get();
 
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
 
-        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode, "or");
+        $selectForecast = Forecast::with(['Proyek'])->join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->select(["proyeks.nama_proyek", "proyeks.kode_proyek", "proyeks.unit_kerja", "proyeks.jenis_proyek", "proyeks.tipe_proyek", "proyeks.dop", "forecasts.month_forecast", "forecasts.nilai_forecast", "forecasts.month_rkap", "forecasts.rkap_forecast", "forecasts.month_realisasi", "forecasts.realisasi_forecast", "forecasts.periode_prognosa", "forecasts.created_at"])->where("forecasts.periode_prognosa", "=", $periode)->whereYear("forecasts.created_at", $year);
         if (Auth::user()->check_administrator) {
 
             $forecastKumulatifEksternal = $selectForecast->get()->sortBy("dop")->groupBy(["dop", "unit_kerja"]);
