@@ -245,7 +245,6 @@
                                         </div>
                                         <!--begin::Table Proyek-->
                                         <div class="" id="datatable" style="display: none">
-                                            <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
                                                 <h4 id="total"></h4>
@@ -329,7 +328,6 @@
             
                                         </div>
                                         <div class="" id="datatable-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
-                                            <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
                                                 <h4 id="total"></h4>
@@ -369,7 +367,6 @@
                                             <!--end::MONITORING PROYEK-->
                                         </div>
                                         <div class="" id="datatable-monitoring-proyek" style="display: none;">
-                                            <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
                                                 <h4 id="total"></h4>
@@ -410,7 +407,6 @@
                                             <!--end::TERENDAH - TERKONTRAK-->
                                         </div>
                                         <div class="" id="datatable-terendah-terkontrak" style="display: none;">
-                                            <hr>
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
                                                 <h4 id="total"></h4>
@@ -446,11 +442,47 @@
                                     <hr>
 
                                     <div class="row">
-                                        <div class="col py-12" id="index-jumlah">
-                                            <!--begin::INDEX JUMLAH-->
-                                            <!--end::INDEX JUMLAH-->
-                                        </div>
+                                        <figure class="highcharts-figure col py-12">
+                                            <div class="py-12" id="index-jumlah">
+                                                <!--begin::INDEX JUMLAH-->
+                                                <!--end::INDEX JUMLAH-->
+                                            </div>
+                                            <div class="" id="datatable-index-jumlah" style="display: none;">
+                                                <div class="text-center">
+                                                    <h2 id="title-table"></h2>
+                                                    <h4 id="total"></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                        onclick="hideTable('#datatable-index-jumlah','#index-jumlah')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                        Chart</button>
+                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                </div>
+                                                <br>
+                                                <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                        <!--begin::Table head-->
+                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                            {{-- THead Here --}}
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold" id="table-line-body">
+                                                            {{-- Data Here --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                </div>
+                                                <!--end::Table Proyek-->
+                                            </div>
+                                        </figure>
+                                        
                                         <span class="vr" style="padding: 0.5px"></span>
+
                                         <div class="col py-12" id="index-nilai">
                                             <!--begin::INDEX NILAI-->
                                             <!--end::INDEX NILAI-->
@@ -2894,6 +2926,7 @@
     <!--Begin::Clickable Terendah-Terkontrak -->
     <script>
         const terendahTerkontrakPie = document.querySelectorAll("#terendah-terkontrak .highcharts-point");
+        // console.log(terendahTerkontrakPie);
         terendahTerkontrakPie.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
@@ -2905,6 +2938,36 @@
 
     </script>
     <!--End::Clickable Terendah-Terkontrak -->
+    
+    <!--Begin::Clickable Competitive Index -->
+    <script>
+        const competitiveIndex = document.querySelectorAll("#index-jumlah .highcharts-point");
+        // console.log(competitiveIndex);
+        competitiveIndex.forEach(point => {
+            point.addEventListener("click", async e => {
+                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                console.log(tipe);
+                getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Competitive Index -->
+
+    <!--Begin::Clickable Competitive Index -->
+    <script>
+        const competitiveIndexNilai = document.querySelectorAll("#index-nilai .highcharts-point");
+        // console.log(competitiveIndexNilai);
+        competitiveIndexNilai.forEach(point => {
+            point.addEventListener("click", async e => {
+                const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                console.log(tipe);
+                getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Competitive Index -->
     
 
 @endsection

@@ -415,7 +415,7 @@
                                             </td>
                                             <!--end::Stage-->
                                             <!--begin::Pelaksanaan-->
-                                            <td class="text-center">
+                                            <td class="text-center {{ $proyek->tahun_perolehan >= 2021 ? '' : 'text-danger' }}">
                                                 <small>
                                                     {{ $proyek->tahun_perolehan }}
                                                 </small>

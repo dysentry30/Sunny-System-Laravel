@@ -97,6 +97,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/terendah-terkontrak/{tipe}/{filter}', [DashboardController::class, "getDataTerendahTerkontrak"]);
 
+    Route::get('/dashboard/index-jumlah/{tipe}', [DashboardController::class, "getDataCompetitive"]);
+
+    Route::get('/dashboard/index-jumlah/{tipe}/{filter}', [DashboardController::class, "getDataCompetitive"]);
+
+    Route::get('/dashboard/index-nilai/{tipe}', [DashboardController::class, "getDataCompetitiveNilai"]);
+
+    Route::get('/dashboard/index-nilai/{tipe}/{filter}', [DashboardController::class, "getDataCompetitiveNilai"]);
+
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 
@@ -526,6 +534,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Home Page Forecast with Specific periode
     Route::get('/forecast/{periode}/{year}', [ForecastController::class, 'index']);
+    
+    // Home Page Forecast with Specific periode "KUMULATIF"
+    Route::get('/forecast-kumulatif-eksternal/{periode}/{year}', [ForecastController::class, 'viewForecastKumulatifEksternal']);
 
     // Get all data from database
     Route::post('/forecast', [ForecastController::class, 'getAllData']);

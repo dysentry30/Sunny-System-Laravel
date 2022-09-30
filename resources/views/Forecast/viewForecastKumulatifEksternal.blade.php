@@ -1569,6 +1569,75 @@ fill="none">
 {{-- begin:: JS script --}}
 @section('js-script')
 
+<script>
+    async function unlockPreviousForecast() {
+        const monthNames = ["Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+                            ];
+        // const historyForecastObj = Object.keys(historyForecast).map(data => Number(data));
+        // const minMonth = Math.min(...historyForecastObj);
+        // const maxMonth = Math.max(...historyForecastObj);
+        // const date = new Date();
+        // let getAvgMonth = [];
+        // for(var i=minMonth; i <= maxMonth; i++) {
+        //     const objectMonth = Object.keys(historyForecast[i]);
+        //     let avgDate = null;
+        //     for(var j=0; j < objectMonth.length; j++) {
+        //         avgDate += new Date(objectMonth[j]).getTime();
+        //     }
+        //     avgDate /= objectMonth.length;
+        //     getAvgMonth[`${i}`] = `${i}, ${new Date(avgDate)}`;
+        //     // getAvgMonth.push({
+        //     //     i: new Date(avgDate),
+        //     // });
+        //     avgDate = 0;
+        // }
+        
+        // for(var i=minMonth; i <= maxMonth; i++) {
+        //     let date = getAvgMonth[i].split(", ")[1];
+        //     jsonVariable[`${i}, ${new Date(date).getFullYear()}`] = `${monthNames[i - 1]}, ${new Date(date).getFullYear()}`;        
+        // }
+        const jsonVariable = {};
+        for(let i = 0; i < monthNames.length; i++) {
+            jsonVariable[`${i + 1}`] = `${monthNames[i]}`;        
+        }
+        const {value: monthForecast} = await Swal.fire({
+            title: 'Pilih Bulan Forecast',
+            input: 'select',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#7e8299',
+            inputOptions: jsonVariable,
+            inputPlaceholder: 'Tekan di sini untuk memilih bulan',
+            showCancelButton: true,
+            inputValidator: (value) => {
+                return new Promise(resolve => {
+                    if (value == "") {
+                        resolve("Silahkan pilih bulan forecast");
+                    }
+                    else {
+                        resolve();
+                    }
+                })
+            }
+        });
+        if (monthForecast) {
+            Swal.fire({
+                title: `Apakah anda yakin ingin melihat History Forecast pada bulan ${monthNames[monthForecast - 1]}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#7e8299',
+                confirmButtonText: 'Lanjut'
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        let url = `/forecast-kumulatif-eksternal/${monthForecast}/${new Date().getFullYear()}`;
+                        location.href = url;
+                    }
+                })
+        }
+    }
+</script>
+
 {{-- Show Collapse --}}
 @endsection
 {{-- end:: JS script --}}

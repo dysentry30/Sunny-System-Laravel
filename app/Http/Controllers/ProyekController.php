@@ -1091,9 +1091,25 @@ class ProyekController extends Controller
         $proyekAttach = $proyekStage->AttachmentMenang;
         $periode = (int) date('m');
         $years = (int) date('Y');
-        // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
+        // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
 
+        if($request->stage == 4){
+            if ($proyekStage->hps_pagu == 0) {
+                Alert::error("Error", "HPS Pagu Belum Diisi !");
+                $request->stage = 3;
+            } else {
+                $request->stage = 4;
+            }
+        }else if($request->stage == 5){
+            if ($proyekStage->penawaran_tender == 0) {
+                Alert::error("Error", "Nilai Penawaran Belum Diisi !");
+                $request->stage = 4;
+            } else {
+                $request->stage = 5;
+            }
+        };
+        
         if (!$request->is_ajax) {
             $data = $request->all();
             // Check kalo variable di bawah ini ada
@@ -1108,8 +1124,10 @@ class ProyekController extends Controller
                 $proyekStage->nilai_perolehan = 0;
                 $proyekStage->save();
 
-                $forecasts->realisasi_forecast = 0;
-                $forecasts->save();
+                if (!empty($forecasts)) {
+                    $forecasts->realisasi_forecast = 0;
+                    $forecasts->save();
+                }
                 
                 $request->stage = 7;
             } elseif (!empty($data["stage-terkontrak"]) && $data["stage-terkontrak"] == "Terkontrak") {

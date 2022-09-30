@@ -188,19 +188,11 @@
                                                 <div class="form-group">
                                                     <div id="stage-button" class="stage-list">
                                                         @if ($proyek->stage >= 1)
-                                                            @if ($proyek->tipe_proyek == 'R')
-                                                                <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-done"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
-                                                                    Pasar Dini Retail
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-done"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
-                                                                    Pasar Dini
-                                                                </a>
-                                                            @endif
+                                                            <a href="#"
+                                                                class="stage-button stage-action color-is-default stage-is-done"
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="1">
+                                                                Pasar Dini
+                                                            </a>
                                                         @else
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-not-active"
@@ -212,7 +204,7 @@
                                                         @if ($proyek->stage > 1)
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
-                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="2">
                                                                 Pasar Potensial
                                                             </a>
                                                         @else
@@ -235,7 +227,7 @@
                                                         @if ($proyek->stage > 2)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="3">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="3">
                                                                 Prakualifikasi
                                                             </a>
                                                         @else
@@ -258,7 +250,7 @@
                                                         @if ($proyek->stage > 3)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="4">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="4">
                                                                 Tender Diikuti
                                                             </a>
                                                         @else
@@ -281,7 +273,7 @@
                                                         @if ($proyek->stage > 4)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer;" stage="5">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="5">
                                                                 Perolehan
                                                             </a>
                                                         @else
@@ -307,7 +299,7 @@
                                                                     class="stage-button stage-is-done color-is-default"
                                                                     data-bs-toggle="dropdown" role="button"
                                                                     id="dropdownMenuButton1" aria-expanded="false"
-                                                                    style="outline: 0px; cursor: pointer;" stage="1">
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator ? '' : 'pointer-events: none;' }}" stage="1">
                                                                     <div class="d-flex flex-row">
                                                                         <span class="text-white">Menang</span>&nbsp;&nbsp;
                                                                         <span class=""
@@ -637,7 +629,7 @@
                                             });
                                         });
                                     </script>
-<!--end::       -->
+<!--end::-->
 
 
                                     <!--begin::All Content-->

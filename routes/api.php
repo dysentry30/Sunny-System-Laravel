@@ -224,6 +224,7 @@ Route::middleware(["web"])->group(function () {
             $p->tahun_perolehan = $tahun;
             $p->dop = $p->UnitKerja->dop;
             $p->stage = 1;
+            $p->porsi_jo = 100;
 
             $customer = Customer::where('name', "=", $proyek["UsrCustomer"])->get()->first();
             // dd($customerHistory);
