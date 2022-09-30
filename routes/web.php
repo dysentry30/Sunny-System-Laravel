@@ -310,9 +310,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-    
+
     Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
-    
+
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
 
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
@@ -389,7 +389,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $forecast = Forecast::where("kode_proyek", "=", $data["kode_proyek"])->where("periode_prognosa", "=", $data["periode_prognosa"] ?? (int) date("m"))->orderByDesc("created_at");
         // $forecast = DB::select("SELECT * FROM forecasts WHERE kode_proyek='" . $data["kode_proyek"] . "' AND (" . "YEAR(created_at)=" . date("Y") . " OR YEAR(updated_at)=" . date("Y"). ");");
         if (!empty($forecast)) {
-            $forecast->each(function($f) {
+            $forecast->each(function ($f) {
                 $f->delete();
             });
             $new_forecast = new Forecast();
@@ -554,19 +554,22 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             // dump();
             // $total_realisasi += $proyek->sum("realisasi_forecast");
             $current_proyek = Proyek::find($kode_proyek);
+            // dd($proyek);
             $forecasts = $proyek;
             // $forecasts = $proyek->filter(function ($p) {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0 && $p->unit_kerja == Auth::user()->unit_kerja;
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
-            $forecasts = $proyek;
+            if(empty($current_proyek->tipe_proyek)) {
+                dd($current_proyek, $kode_proyek);
+            }
             if ($current_proyek->tipe_proyek == "R") {
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
                     $history_forecast->kode_proyek = $kode_proyek;
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast;
+                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
                     $history_forecast->rkap_forecast = $forecast->rkap_forecast;
@@ -586,6 +589,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 }
                 $history_forecast->save();
             } else {
+
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
@@ -593,7 +597,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
-                    $total_forecast += $forecast->nilai_forecast;
+                    $total_forecast += $forecast->nilai_forecast ?? 0;
                     $total_realisasi += $forecast->realisasi_forecast;
                     $total_rkap += $forecast->rkap_forecast;
                 }
@@ -603,8 +607,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->month_forecast = $farestMonth;
                 // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
                 $history_forecast->rkap_forecast = $total_rkap;
-                // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
-                $history_forecast->month_rkap = $current_proyek->bulan_awal;
+                $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
+                // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
                 $history_forecast->realisasi_forecast = $current_proyek->nilai_perolehan == null ? 0 : str_replace(",", "", (int) $current_proyek->nilai_perolehan ?? 0) ?? 0;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
@@ -613,11 +617,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
+                $farestMonth = 0;
+                $total_forecast = 0;
+                $total_realisasi = 0;
+                $total_rkap = 0;
             }
-            $farestMonth = 0;
-            $total_forecast = 0;
-            $total_realisasi = 0;
-            $total_rkap = 0;
         }
         return response()->json([
             "status" => "success",
