@@ -1117,147 +1117,147 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @php
                                                                                                 $ok1 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 1) {
-                                                                                                    $ok1 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok1 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc1 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 1) {
-                                                                                                    $fc1 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc1 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real1 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 1) {
-                                                                                                    $real1 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real1 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok2 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 2) {
-                                                                                                    $ok2 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok2 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc2 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 2) {
-                                                                                                    $fc2 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc2 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real2 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 2) {
-                                                                                                    $real2 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real2 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok3 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 3) {
-                                                                                                    $ok3 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok3 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc3 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 3) {
-                                                                                                    $fc3 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc3 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real3 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 3) {
-                                                                                                    $real3 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real3 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok4 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 4) {
-                                                                                                    $ok4 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok4 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc4 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 4) {
-                                                                                                    $fc4 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc4 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real4 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 4) {
-                                                                                                    $real4 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real4 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok5 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 5) {
-                                                                                                    $ok5 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok5 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc5 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 5) {
-                                                                                                    $fc5 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc5 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real5 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 5) {
-                                                                                                    $real5 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real5 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok6 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 6) {
-                                                                                                    $ok6 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok6 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc6 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 6) {
-                                                                                                    $fc6 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc6 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real6 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 6) {
-                                                                                                    $real6 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real6 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok7 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 7) {
-                                                                                                    $ok7 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok7 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc7 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 7) {
-                                                                                                    $fc7 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc7 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real7 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 7) {
-                                                                                                    $real7 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real7 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok8 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 8) {
-                                                                                                    $ok8 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok8 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc8 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 8) {
-                                                                                                    $fc8 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc8 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real8 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 8) {
-                                                                                                    $real8 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real8 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok9 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 9) {
-                                                                                                    $ok9 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok9 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc9 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 9) {
-                                                                                                    $fc9 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc9 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real9 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 9) {
-                                                                                                    $real9 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real9 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok10 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 10) {
-                                                                                                    $ok10 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok10 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc10 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 10) {
-                                                                                                    $fc10 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc10 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real10 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 10) {
-                                                                                                    $real10 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real10 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok11 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 11) {
-                                                                                                    $ok11 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok11 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc11 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 11) {
-                                                                                                    $fc11 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc11 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real11 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 11) {
-                                                                                                    $real11 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real11 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok12 = 0;
                                                                                                 if ($nilaiProyek->month_rkap <= 12) {
-                                                                                                    $ok12 += $nilaiProyek->rkap_forecast;
+                                                                                                    $ok12 += (int) $nilaiProyek->rkap_forecast;
                                                                                                 };
                                                                                                 $fc12 = 0;
                                                                                                 if ($nilaiProyek->month_forecast <= 12) {
-                                                                                                    $fc12 += $nilaiProyek->nilai_forecast;
+                                                                                                    $fc12 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real12 = 0;
                                                                                                 if ($nilaiProyek->month_realisasi <= 12) {
-                                                                                                    $real12 += $nilaiProyek->realisasi_forecast;
+                                                                                                    $real12 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                             @endphp
                                                                                             
