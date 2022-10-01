@@ -132,7 +132,7 @@ class DashboardController extends Controller
 
             foreach ($historyRkap as $rkap) {
                 if ($rkap->month_rkap == $i) {
-                    $nilaiRkap += $rkap->rkap_forecast / $per;
+                    $nilaiRkap += (int) $rkap->rkap_forecast / $per;
                 } else {
                     // dump($rkap->month_rkap, $rkap->rkap_forecast);
                     $nilaiRkap == 0;
@@ -143,7 +143,7 @@ class DashboardController extends Controller
             foreach ($historyRealisasi as $realisasi) {
                 if ($realisasi->month_realisasi == $i) {
                     // dump($realisasi->realisasi_forecast);
-                    $nilaiRealisasi += $realisasi->realisasi_forecast / $per;
+                    $nilaiRealisasi += (int) $realisasi->realisasi_forecast / $per;
                 } else {
                     $nilaiRealisasi == 0;
                 }
