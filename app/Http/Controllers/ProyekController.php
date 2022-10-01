@@ -422,12 +422,12 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
         if (isset($newForecast)) {
-            if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) ) {
-                $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
-                // dump($newForecast, "bulan ri");
-                // dd($newProyek->nilai_perolehan);
-                $newForecast->save();
-            };
+            // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
+            //     $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+            //     // dump($newForecast, "bulan ri");
+            //     // dd($newProyek);
+            //     $newForecast->save();
+            // };
             if (isset($newProyek->bulan_pelaksanaan) && isset($newProyek->nilai_rkap) ) {
                 $newForecast->rkap_forecast = $newProyek->nilai_rkap;
                 $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
@@ -541,9 +541,10 @@ class ProyekController extends Controller
             $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
             if (isset($editForecast)) {
                 $editForecast->month_forecast = $dataProyek["month-forecast"];
-                if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan)){
+                if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
                     $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                     $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                    $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
                 } else {
                     $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 }
