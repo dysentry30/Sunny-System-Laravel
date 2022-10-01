@@ -422,14 +422,15 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
         if (isset($newForecast)) {
-            dd($newForecast);
             if ($newProyek->bulan_ri_perolehan != null && $newProyek->nilai_perolehan != null ) {
                 $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
+                dump($newForecast, "bulan ri");
                 // dd($newProyek->nilai_perolehan);
             };
             if ($newProyek->bulan_pelaksanaan != null && $newProyek->nilai_rkap != null ) {
                 $newForecast->rkap_forecast = $newProyek->nilai_rkap;
                 $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
+                dd($newForecast, "bulan rkap");
             };
             $newForecast->save();
         }
