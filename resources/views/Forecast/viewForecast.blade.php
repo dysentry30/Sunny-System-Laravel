@@ -1008,10 +1008,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         @php
                                                                                             $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
-                                                                                                (int) $f->rkap_forecast /= $per_sejuta;
-                                                                                                (int) $f->nilai_forecast /= $per_sejuta;
+                                                                                                $f->rkap_forecast /= $per_sejuta;
+                                                                                                $f->nilai_forecast /= $per_sejuta;
                                                                                                 // (int) $f->realisasi_forecast /= $per_sejuta;
-                                                                                                return (int) $f;
+                                                                                                return $f;
                                                                                             });
                                                                                         @endphp
                                                                                         <tr id="{{ $unit_kerja_name }}"
@@ -1346,9 +1346,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             </td>
                                                                                             @php
                                                                                                 $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
-                                                                                                    (int) $f->rkap_forecast /= $per_sejuta;
-                                                                                                    (int) $f->nilai_forecast /= $per_sejuta;
-                                                                                                    return (int) $f;
+                                                                                                    $f->rkap_forecast /= $per_sejuta;
+                                                                                                    $f->nilai_forecast /= $per_sejuta;
+                                                                                                    return $f;
                                                                                                 });
                                                                                             @endphp
                                                                                             @for ($i = 0; $i < 12; $i++)
