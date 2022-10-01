@@ -4353,10 +4353,10 @@
                     </table>
                     <!--end::Table-->
 
-                    <br><hr><br>
+                    {{-- <br><hr><br> --}}
                     
                     <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                    <table style="visibility: hidden" class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
