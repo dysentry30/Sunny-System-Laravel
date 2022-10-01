@@ -959,7 +959,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     }
                                                                                                 });
                                                                                             } else {
-                                                                                                if($p->stage == 8 && $i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     return (int) $p->nilai_perolehan;
                                                                                                 }
                                                                                             }
@@ -991,7 +991,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     }
                                                                                                 });
                                                                                             } else {
-                                                                                                if($p->stage == 8 && $i == $p->bulan_ri_perolehan && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                     return (int) $p->nilai_perolehan;
                                                                                                 }
                                                                                             }
