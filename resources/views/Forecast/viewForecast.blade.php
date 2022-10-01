@@ -2440,7 +2440,7 @@ fill="none">
 
         // Begin SUM TOTAL DOP PER MONTH
         sumColumnDOPMonth("td[data-total-ok-per-dop-bulanan]", "data-total-ok-per-dop-bulanan", "td[data-column-ok-bulanan]", "data-column-ok-bulanan");
-        sumColumnDOPMonth("td[data-total-forecast-per-dop-bulanan]", "data-total-forecast-per-dop-bulanan", "td[data-column-forecast]", "data-column-forecast");
+        sumColumnDOPMonth("td[data-total-forecast-per-dop-bulanan]", "data-total-forecast-per-dop-bulanan", "input[data-column-forecast]", "data-column-forecast");
         sumColumnDOPMonth("td[data-total-realisasi-per-dop-bulanan]", "data-total-realisasi-per-dop-bulanan", "td[data-column-realisasi-bulanan]", "data-column-realisasi-bulanan");
         // END SUM TOTAL DOP PER MONTH
 
@@ -2535,6 +2535,7 @@ fill="none">
                     totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
                         ""));
                 }
+
             });
             const formattedForecastValue = Intl.NumberFormat(["id"], {
                 maximumFractionDigits: 0,
