@@ -991,7 +991,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     }
                                                                                                 });
                                                                                             } else {
-                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                if($p->stage == 8) {
                                                                                                     return (int) $p->nilai_perolehan;
                                                                                                 }
                                                                                             }
@@ -2440,7 +2440,7 @@ fill="none">
 
         // Begin SUM TOTAL DOP PER MONTH
         sumColumnDOPMonth("td[data-total-ok-per-dop-bulanan]", "data-total-ok-per-dop-bulanan", "td[data-column-ok-bulanan]", "data-column-ok-bulanan");
-        sumColumnDOPMonth("td[data-total-forecast-per-dop-bulanan]", "data-total-forecast-per-dop-bulanan", "input[data-column-forecast]", "data-column-forecast");
+        sumColumnDOPMonth("td[data-total-forecast-per-dop-bulanan]", "data-total-forecast-per-dop-bulanan", "data-column-forecast", "data-column-forecast");
         sumColumnDOPMonth("td[data-total-realisasi-per-dop-bulanan]", "data-total-realisasi-per-dop-bulanan", "td[data-column-realisasi-bulanan]", "data-column-realisasi-bulanan");
         // END SUM TOTAL DOP PER MONTH
 
@@ -2529,16 +2529,12 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `[${attributeSum}="${getColumnId}"][data-dop="${getDOP}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                let valueForecast = dataForecast.value.replaceAll(/[^0-9|^\-]/gi, "");
-                if(valueForecast) {
-                    valueForecast = dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi, "");
+                if (dataForecast.tagName == "INPUT") {
+                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
+                } else {
+                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
+                        ""));
                 }
-                // if (eltToSum.includes("input")) {
-                //     totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
-                // } else {
-                //     totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
-                //         ""));
-                // }
 
             });
             const formattedForecastValue = Intl.NumberFormat(["id"], {
