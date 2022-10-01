@@ -180,7 +180,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 
                                                 @if ($periode != (int) date("m") && isset($periode))
                                                     <div class="d-flex flex-row col-5 align-items-center justify-content-center">
-                                                        <button type="button" onClick="window.location.href='/forecast';" id="unlock-previous-forecast"
+                                                        <button type="button" onClick="window.location.href='/{{Request::segment(1)}}';" id="unlock-previous-forecast"
                                                             class="btn btn-sm btn-light btn-active-danger mt-4 me-3">
                                                                 <span class="mx-2 fs-6">Pindah Forecast ke {{Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F")}}</span>
                                                         </button>
@@ -1630,7 +1630,7 @@ fill="none">
                 confirmButtonText: 'Lanjut'
                 }).then(async (result) => {
                     if (result.isConfirmed) {
-                        let url = `/forecast-kumulatif-eksternal/${monthForecast}/${new Date().getFullYear()}`;
+                        let url = `{{Request::segment(1)}}/${monthForecast}/${new Date().getFullYear()}`;
                         location.href = url;
                     }
                 })
