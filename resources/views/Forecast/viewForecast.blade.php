@@ -647,7 +647,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 <!--end::Januari Coloumn-->
                                                                             @endfor
 
-                                                                            @php
+                                                                            {{-- @php
                                                                                     if($column != "") {
                                                                                         if(isset($is_forecast)) {
                                                                                             $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $filter) {
@@ -777,22 +777,22 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         }
                                                                                     }
-                                                                                @endphp 
+                                                                                @endphp  --}}
                                                                             <!--begin::Total Coloumn-->
-                                                                            <td class="pinForecast HidePin">{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                            <td class="pinForecast HidePin">{{number_format($total_forecast_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                            <td class="pinForecast HidePin">{{number_format($total_realisasi_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                            <td class="pinForecast ShowPin text-center"
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast total-ok-dop-tahunan HidePin">0</td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast total-forecast-dop-tahunan HidePin">0</td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast total-realisasi-dop-tahunan HidePin">0</td>
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast total-ok-dop-tahunan ShowPin text-center"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                    <b>{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                    <b>0</b>
                                                                                 </td>
-                                                                            <td class="pinForecast ShowPin text-center"
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast total-forecast-dop-tahunan ShowPin text-center"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                    <b>{{number_format($total_forecast_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                    <b>0</b>
                                                                                 </td>
-                                                                            <td class="pinForecast ShowPin text-center"
+                                                                            <td data-dop="{{$dop->dop}}" class="pinForecast ShowPin total-realisasi-dop-tahunan text-center"
                                                                                 style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                    <b>{{number_format($total_realisasi_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                    <b>0</b>
                                                                                 </td>
                                                                             <!--end::Total Coloumn-->
                                                                         </tr>
@@ -827,7 +827,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <!--end::Child=-->
                                                                                     </td>
                                                                                     @for ($i = 1; $i <= 12; $i++)
-                                                                                        @php
+                                                                                        {{-- @php
                                                                                             if ($column != "") {
                                                                                                 $total_ok_per_divisi = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $column, $filter) {
                                                                                                     // return ($i == $p->bulan_awal || $i == $p->bulan_pelaksanaan) ? (int) $p->nilai_rkap : 0;
@@ -915,17 +915,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     }
                                                                                                 });
                                                                                             }
-                                                                                        @endphp 
+                                                                                        @endphp  --}}
                                                                                         <!--begin::Month Coloumn-->
-                                                                                        <td data-total-ok-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">{{number_format($total_ok_per_divisi / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                        <td data-total-forecast-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">{{number_format($total_forecast_per_divisi / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                        <td data-total-realisasi-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">{{number_format($total_realisasi_per_divisi / $per_sejuta, 0, ".", ".")}}</td>
+                                                                                        <td data-total-ok-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">0</td>
+                                                                                        <td data-total-forecast-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">0</td>
+                                                                                        <td data-total-realisasi-per-divisi-column="{{$i}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">0</td>
                                                                                         <!--end::Month Coloumn-->
                                                                                         @php
                                                                                             $total_ok_per_divisi = 0;
                                                                                         @endphp
                                                                                     @endfor
-                                                                                    @php
+                                                                                    {{-- @php
                                                                                     if ($column != "") {
                                                                                         $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column) {
                                                                                             if($p->tipe_proyek == "R") {
@@ -997,22 +997,22 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             }
                                                                                         });
                                                                                     }
-                                                                                    @endphp 
+                                                                                    @endphp  --}}
                                                                                     <!--begin::Total Coloumn-->
-                                                                                    <td class="pinForecast HidePin">{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                    <td class="pinForecast HidePin">{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                    <td class="pinForecast HidePin">{{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</td>
-                                                                                    <td class="pinForecast ShowPin text-center"
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-ok-per-divisi-tahunan HidePin">0</td>
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-forecast-per-divisi-tahunan HidePin">0</td>
+                                                                                    <td data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-realisasi-per-divisi-tahunan HidePin">0</td>
+                                                                                    <td data-dop="{{$dop->dop}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-ok-per-divisi-tahunan ShowPin text-center"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
-                                                                                        <b>{{number_format($total_ok_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                        <b>0</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast ShowPin text-center"
+                                                                                    <td data-dop="{{$dop->dop}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-forecast-per-divisi-tahunan ShowPin text-center"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 100px;">
-                                                                                        <b>{{number_format($total_forecast_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                        <b>0</b>
                                                                                     </td>
-                                                                                    <td class="pinForecast ShowPin text-center"
+                                                                                    <td data-dop="{{$dop->dop}}" data-unit-kerja="{{$unitKerja->unit_kerja}}" class="pinForecast total-realisasi-per-divisi-tahunan ShowPin text-center"
                                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
-                                                                                        <b>{{number_format($total_realisasi_per_divisi_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                        <b>0</b>
                                                                                     </td>
                                                                                     <!--end::Total Coloumn-->
                                                                                 </tr>
@@ -1020,7 +1020,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 @if ($column != "")
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         @php
-                                                                                            $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
+                                                                                            $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode)->map(function($f) use($per_sejuta) {
                                                                                                 $f->rkap_forecast = (int) $f->rkap_forecast / $per_sejuta;
                                                                                                 $f->nilai_forecast = (int) $f->nilai_forecast / $per_sejuta;
                                                                                                 // (int) $f->realisasi_forecast /= $per_sejuta;
@@ -1050,12 +1050,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         <!--begin::Nilai OK-->
                                                                                                         @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                 {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
                                                                                                             </td>
                                                                                                             @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                0
                                                                                                             </td>
                                                                                                         @endif
                                                                                                         <!--end::Nilai OK-->
@@ -1071,7 +1072,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     <div class="w-100" style="border-bottom: solid 1px gray" data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                                         data-month="{{ $month_counter }}"
                                                                                                                         data-dop="{{$dop->dop}}"
-                                                                                                                        data-column-forecast="{{ $month_counter }}">
+                                                                                                                        data-column-forecast="{{ $month_counter }}"
+                                                                                                                        data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                         {{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}
                                                                                                                     </div>
                                                                                                                 </a>
@@ -1083,6 +1085,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     data-month="{{ $month_counter }}"
                                                                                                                     data-dop="{{$dop->dop}}"
                                                                                                                     data-column-forecast="{{ $month_counter }}"
+                                                                                                                    data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                     class="form-control border-bottom-1"
                                                                                                                     style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                     id="nilai-forecast"
@@ -1100,11 +1103,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                 $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
                                                                                                             @endphp
-                                                                                                            <td data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                            <td data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                             {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
                                                                                                             </td>
                                                                                                         @else
-                                                                                                            <td data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                            <td data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                 0
                                                                                                             </td>
                                                                                                         @endif
@@ -1119,7 +1122,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             $is_data_found = false;
                                                                                                         @endphp
                                                                                                         <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                             0
                                                                                                         </td>
 
@@ -1129,14 +1132,15 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 <div class="w-100" style="border-bottom: solid 1px gray" data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                                     data-month="{{ $month_counter }}"
                                                                                                                     data-dop="{{$dop->dop}}"
-                                                                                                                    data-column-forecast="{{ $month_counter }}">
+                                                                                                                    data-column-forecast="{{ $month_counter }}"
+                                                                                                                    data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                     0
                                                                                                                 </div>
                                                                                                             </a>
                                                                                                         </td>
                                                                                                         
                                                                                                         <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                             0
                                                                                                         </td>
                                                                                                     @endif
@@ -1144,13 +1148,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @foreach ($forecasts as $forecast)
                                                                                                                 @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                         {{ number_format($forecast->rkap_forecast, 0, ".", ".") }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                        
+                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                        0
                                                                                                                     </td>
                                                                                                                 @endif
                                                                                                             @if ($forecast->month_forecast == $month_counter)
@@ -1165,6 +1169,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         data-month="{{ $month_counter }}"
                                                                                                                         data-dop="{{$dop->dop}}"
                                                                                                                         data-column-forecast="{{ $month_counter }}"
+                                                                                                                        data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                         class="form-control border-bottom-1"
                                                                                                                         style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                         id="nilai-forecast"
@@ -1180,6 +1185,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         data-month="{{ $month_counter }}"
                                                                                                                         data-dop="{{$dop->dop}}"
                                                                                                                         data-column-forecast="{{ $month_counter }}"
+                                                                                                                        data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                         class="form-control border-bottom-1"
                                                                                                                         style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                         id="nilai-forecast"
@@ -1195,12 +1201,12 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         $nilai_terkontrak_formatted = (int) str_replace('.', '', $forecast->realisasi_forecast) / $per_sejuta ?? '-';
                                                                                                                     @endphp
                                                                                                                     <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                         {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                         0
                                                                                                                         </td>
                                                                                                                 @endif
@@ -1210,23 +1216,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             @break
                                                                                                     @endforeach
                                                                                                     @if (!$is_data_found)
-                                                                                                        @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                {{ number_format((int) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
-                                                                                                            </td>
-                                                                                                        @else
-                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                
-                                                                                                            </td>
-                                                                                                        @endif
+                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
+                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                            0
+                                                                                                        </td>
                                                                                                         <td>
                                                                                                             <input type="text"
                                                                                                                 data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                                 data-month="{{ $month_counter }}"
                                                                                                                 data-dop="{{$dop->dop}}"
                                                                                                                 data-column-forecast="{{ $month_counter }}"
+                                                                                                                data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                 class="form-control border-bottom-1"
                                                                                                                 style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                 id="nilai-forecast"
@@ -1235,19 +1235,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 value=""
                                                                                                                 placeholder="" />
                                                                                                         </td>
-                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
-                                                                                                            @php
-                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', (int)$proyek->nilai_perolehan) / $per_sejuta ?? '-';
-                                                                                                            @endphp
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
-                                                                                                                {{ number_format($nilai_terkontrak_formatted ?? 0, 0, ',', '.') }}
+                                                                                                        <td
+                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
+                                                                                                            0
                                                                                                             </td>
-                                                                                                        @else
-                                                                                                            <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
-                                                                                                                </td>
-                                                                                                        @endif
                                                                                                     @endif
                                                                                                 @endif
                                                                                             @php
@@ -1284,7 +1275,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
                                                                                             @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
-                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        $total_realisasi_tahunan = $forecasts->sum(function($f) {
                                                                                                             return (int) $f->realisasi_forecast;
                                                                                                         }) / $per_sejuta;
                                                                                                     @endphp
@@ -1322,7 +1313,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                             @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
-                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        $total_realisasi_tahunan = $forecasts->sum(function($f) {
                                                                                                             return (int) $f->realisasi_forecast;
                                                                                                         }) / $per_sejuta;
                                                                                                     @endphp
@@ -1364,7 +1355,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 <!--end::Child=-->
                                                                                             </td>
                                                                                             @php
-                                                                                                $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode == "" ? (int) date("m") : $periode)->map(function($f) use($per_sejuta) {
+                                                                                                $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode)->map(function($f) use($per_sejuta) {
                                                                                                     $f->rkap_forecast = (int) $f->rkap_forecast /$per_sejuta;
                                                                                                     $f->nilai_forecast = (int) $f->nilai_forecast / $per_sejuta;
                                                                                                     return $f;
@@ -1377,12 +1368,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                             <!--begin::Nilai OK-->
                                                                                                             @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                 <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                     {{ number_format($forecast->rkap_forecast, 0, ".", ".")}}
                                                                                                                 </td>
                                                                                                                 @else
                                                                                                                 <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                    data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                    0
                                                                                                                 </td>
                                                                                                             @endif
                                                                                                             <!--end::Nilai OK-->
@@ -1398,7 +1390,8 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         <div class="w-100" style="border-bottom: solid 1px gray" data-id-proyek="{{ $proyek->kode_proyek }}"
                                                                                                                             data-month="{{ $month_counter }}"
                                                                                                                             data-dop="{{$dop->dop}}"
-                                                                                                                            data-column-forecast="{{ $month_counter }}">
+                                                                                                                            data-column-forecast="{{ $month_counter }}"
+                                                                                                                            data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                             {{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}
                                                                                                                         </div>
                                                                                                                     </a>
@@ -1410,6 +1403,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         data-month="{{ $month_counter }}"
                                                                                                                         data-dop="{{$dop->dop}}"
                                                                                                                         data-column-forecast="{{ $month_counter }}"
+                                                                                                                        data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                         class="form-control border-bottom-1"
                                                                                                                         style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                         id="nilai-forecast"
@@ -1427,11 +1421,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                     $nilai_terkontrak_formatted = (int) $forecast->realisasi_forecast / $per_sejuta ?? '-';
                                                                                                                 @endphp
-                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                 {{ number_format($nilai_terkontrak_formatted ?? 0, 0, '.', '.') }}
                                                                                                                 </td>
                                                                                                             @else
-                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                <td data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                     0
                                                                                                                 </td>
                                                                                                             @endif
@@ -1445,10 +1439,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @php
                                                                                                             $is_data_found = false;
                                                                                                         @endphp
-                                                                                                        <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                            data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                            0
-                                                                                                        </td>
+                                                                                                        @if ($proyek->bulan_pelaksanaan == $month_counter && $proyek->bulan_pelaksanaan != null)
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                {{ number_format((int) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                0
+                                                                                                            </td>
+                                                                                                        @endif
 
                                                                                                         <td >
                                                                                                             <a href="/proyek/view/{{$proyek->kode_proyek}}" target="_blank" class="text-hover-primary">
@@ -1456,29 +1457,40 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     data-month="{{ $month_counter }}"
                                                                                                                     data-dop="{{$dop->dop}}"
                                                                                                                     data-column-forecast="{{ $month_counter }}"
+                                                                                                                    data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                     class="">
                                                                                                                     0
                                                                                                                 </div>
                                                                                                             </a>
                                                                                                         </td>
                                                                                                         
-                                                                                                        <td
-                                                                                                            data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
-                                                                                                            0
-                                                                                                        </td>
+                                                                                                        @if ($month_counter == (int) $proyek->bulan_ri_perolehan && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
+                                                                                                            @php
+                                                                                                                $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
+                                                                                                            @endphp
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
+                                                                                                                {{ number_format($nilai_terkontrak_formatted / $per_sejuta, 0, ',', '.') }}
+                                                                                                            </td>
+                                                                                                        @else
+                                                                                                            <td
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
+                                                                                                                0
+                                                                                                                </td>
+                                                                                                        @endif
                                                                                                     @endif
                                                                                                 @else
                                                                                                     @foreach ($forecasts as $forecast)
                                                                                                             @if ($forecast->month_forecast == $month_counter)
                                                                                                                 @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                         {{ number_format($forecast->rkap_forecast / $per_sejuta, 0, ".", ".") }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                        
+                                                                                                                        data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                        0
                                                                                                                     </td>
                                                                                                                 @endif
                                                                                                                 @php
@@ -1492,6 +1504,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         data-month="{{ $month_counter }}"
                                                                                                                         data-dop="{{$dop->dop}}"
                                                                                                                         data-column-forecast="{{ $month_counter }}"
+                                                                                                                        data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                         class="form-control border-bottom-1"
                                                                                                                         style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                         id="nilai-forecast"
@@ -1505,12 +1518,12 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
                                                                                                                     @endphp
                                                                                                                     <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                         {{ number_format((int) str_replace(".", "", $forecast->realisasi_forecast) / $per_sejuta, 0, ',', '.') }}
                                                                                                                     </td>
                                                                                                                 @else
                                                                                                                     <td
-                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                        data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                         0
                                                                                                                         </td>
                                                                                                                 @endif
@@ -1521,15 +1534,15 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         @endif
                                                                                                     @endforeach
                                                                                                     @if (!$is_data_found)
-                                                                                                        @if ($proyek->bulan_awal == $month_counter && $proyek->bulan_awal != null)
+                                                                                                        @if ($proyek->bulan_pelaksanaan == $month_counter && $proyek->bulan_pelaksanaan != null)
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
                                                                                                                 {{ number_format((int) $proyek->nilai_rkap / $per_sejuta, 0, ",", ".") }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
-                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unit_kerja_name}}">
-                                                                                                                
+                                                                                                                data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
+                                                                                                                0
                                                                                                             </td>
                                                                                                         @endif
                                                                                                         <td>
@@ -1538,6 +1551,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 data-month="{{ $month_counter }}"
                                                                                                                 data-dop="{{$dop->dop}}"
                                                                                                                 data-column-forecast="{{ $month_counter }}"
+                                                                                                                data-unit-kerja="{{$unitKerja->unit_kerja}}"
                                                                                                                 class="form-control border-bottom-1"
                                                                                                                 style="border: 0px;border-bottom: 1px solid #b5b5c3; border-radius: 0px; text-align: right; padding: 0px; margin: 0px"
                                                                                                                 id="nilai-forecast"
@@ -1551,12 +1565,13 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                 $nilai_terkontrak_formatted = (int) str_replace(',', '', $proyek->nilai_perolehan) ?? '-';
                                                                                                             @endphp
                                                                                                             <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
                                                                                                                 {{ number_format($nilai_terkontrak_formatted / $per_sejuta, 0, ',', '.') }}
                                                                                                             </td>
                                                                                                         @else
                                                                                                             <td
-                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}">
+                                                                                                                data-column-realisasi-bulanan="{{ $month_counter }}" data-unit-kerja="{{$unitKerja->unit_kerja}}" data-dop="{{$dop->dop}}">
+                                                                                                                0
                                                                                                                 </td>
                                                                                                         @endif
                                                                                                     @endif
@@ -1595,7 +1610,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             data-id-proyek-realisasi-bulanan="{{ $proyek->kode_proyek }}">
                                                                                             @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
-                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        $total_realisasi_tahunan = $forecasts->sum(function($f) {
                                                                                                             return (int) $f->realisasi_forecast;
                                                                                                         }) / $per_sejuta;
                                                                                                     @endphp
@@ -1633,7 +1648,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 0px;">
                                                                                             @if ($proyek->tipe_proyek == "R")
                                                                                                     @php
-                                                                                                        $total_realisasi_tahunan = $proyek->Forecasts->sum(function($f) {
+                                                                                                        $total_realisasi_tahunan = $forecasts->sum(function($f) {
                                                                                                             return (int) $f->realisasi_forecast;
                                                                                                         }) / $per_sejuta;
                                                                                                     @endphp
@@ -2193,30 +2208,6 @@ fill="none">
         });
         // end Calculate Total Column Forecast Bulanan
 
-        // begin Calculate Total Column Year Forecast Bulanan 
-        sumColumnYear(".total-year-forecast-bulanan", ".total-month-x-forecast");
-        // const dataColumnTotalYearForecast = document.querySelectorAll(`.total-year-forecast-bulanan`);
-        // let totalForecastYear = 0;
-        // const dataColumnForecast = document.querySelectorAll(
-        //     `.total-month-x-forecast`);
-        // dataColumnForecast.forEach(dataForecast => {
-        //     totalForecastYear += isNaN(Number(dataForecast.innerText.replaceAll(".", ""))) ? 0 : Number(
-        //         dataForecast.innerText.replaceAll(".", ""));
-        // });
-        // const formattedForecastValue = Intl.NumberFormat(["id"], {
-        //     maximumFractionDigits: 0,
-        // }).format(totalForecastYear);
-        // totalForecastYear = 0;
-
-        // dataColumnTotalYearForecast.forEach((forecast, i) => {
-        //     forecast.innerHTML = `
-        // <td>
-        //     <center><b>${formattedForecastValue}</b></center>
-        // </td>
-        // `;
-        // });
-        // end Calculate Total Column Forecast Bulanan
-
         // begin Calculate Total Column Forecast Internal 
         const dataColumnTotalForecastInternal = document.querySelectorAll(`td[data-total-forecast-internal-column]`);
         let totalForecastInternal = 0;
@@ -2315,54 +2306,6 @@ fill="none">
         });
         // end calculate total column Realisasi Bulanan
 
-        // begin calculate Total Year OK Column
-        // data-id-proyek-ok-bulanan
-        const dataColumnTotalYearOKBulanan = document.querySelectorAll(`.total-year-ok-bulanan`);
-
-        let totalYearOKBulanan = 0;
-        dataColumnTotalYearOKBulanan.forEach((forecast, i) => {
-            const dataColumnForecast = document.querySelectorAll(
-                `td[data-id-proyek-ok-bulanan-total]`);
-            dataColumnForecast.forEach(dataForecast => {
-                if (dataForecast.classList.contains("ShowPin")) {
-                    totalYearOKBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-                }
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearOKBulanan);
-            totalYearOKBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-        // end calculate Total Year OK Column
-
-        // begin calculate Total Year Realisasi Column
-        // total-year-realisasi-bulanan
-        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`.total-year-realisasi-bulanan`);
-
-        let totalYearRealisasiBulanan = 0;
-        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
-            const dataColumnForecast = document.querySelectorAll(
-                `.total-month-x-realisasi-bulanan`);
-            dataColumnForecast.forEach(dataForecast => {
-                totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
-            });
-            const formattedForecastValue = Intl.NumberFormat(["id"], {
-                maximumFractionDigits: 0,
-            }).format(totalYearRealisasiBulanan);
-            totalYearRealisasiBulanan = 0;
-            forecast.innerHTML = `
-        <td>
-            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
-        </td>
-        `;
-        });
-        // end calculate Total Year Realisasi Column
-
         // Begin Forecast Internal Script
         // begin OK Total
         sumColumn("td[total-column-y-ok]", "total-column-y-ok", "td[data-column-ok-internal]",
@@ -2457,7 +2400,73 @@ fill="none">
         // end S/D Realisasi Year 
         // end Forecast S/D Eksternal Script
 
-        
+        // Begin SUM TOTAL DOP PER YEAR
+        sumColumnDOPYear(".total-ok-dop-tahunan", "data-total-ok-per-dop-bulanan");
+        sumColumnDOPYear(".total-forecast-dop-tahunan", "data-total-forecast-per-dop-bulanan");
+        sumColumnDOPYear(".total-realisasi-dop-tahunan", "data-total-realisasi-per-dop-bulanan");
+        // End SUM TOTAL DOP PER YEAR
+
+        // Begin SUM TOTAL Unit Kerja PER MONTH
+        sumColumnUnitKerjaMonth("td[data-total-ok-per-divisi-column]", "data-total-ok-per-divisi-column", "data-column-ok-bulanan");
+        sumColumnUnitKerjaMonth("td[data-total-forecast-per-divisi-column]", "data-total-forecast-per-divisi-column" , "data-column-forecast");
+        sumColumnUnitKerjaMonth("td[data-total-realisasi-per-divisi-column]", "data-total-realisasi-per-divisi-column", "data-column-realisasi-bulanan");
+        // End SUM TOTAL Unit Kerja PER MONTH
+
+        // Begin SUM TOTAL Unit Kerja PER Year
+        sumColumnUnitKerjaYear(".total-ok-per-divisi-tahunan", "data-total-ok-per-divisi-column");
+        sumColumnUnitKerjaYear(".total-forecast-per-divisi-tahunan", "data-total-forecast-per-divisi-column");
+        sumColumnUnitKerjaYear(".total-realisasi-per-divisi-tahunan", "data-total-realisasi-per-divisi-column");
+        // End SUM TOTAL Unit Kerja PER Year
+
+        // begin calculate Total Year OK Column
+        // data-id-proyek-ok-bulanan
+        const dataColumnTotalYearOKBulanan = document.querySelectorAll(`.total-year-ok-bulanan`);
+
+        let totalYearOKBulanan = 0;
+        dataColumnTotalYearOKBulanan.forEach((forecast, i) => {
+            const dataColumnForecast = document.querySelectorAll(`.total-ok-dop-tahunan.ShowPin`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalYearOKBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
+            });
+            const formattedForecastValue = Intl.NumberFormat(["id"], {
+                maximumFractionDigits: 0,
+            }).format(totalYearOKBulanan);
+            totalYearOKBulanan = 0;
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+        // end calculate Total Year OK Column
+
+        // begin Calculate Total Column Year Forecast Bulanan 
+        sumColumnYear(".total-year-forecast-bulanan", ".total-forecast-dop-tahunan");
+        // end Calculate Total Column Forecast Bulanan
+
+        // begin calculate Total Year Realisasi Column
+        // total-year-realisasi-bulanan
+        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`.total-year-realisasi-bulanan`);
+
+        let totalYearRealisasiBulanan = 0;
+        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
+            const dataColumnForecast = document.querySelectorAll(
+                `.total-realisasi-dop-tahunan.ShowPin`);
+            dataColumnForecast.forEach(dataForecast => {
+                totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
+            });
+            const formattedForecastValue = Intl.NumberFormat(["id"], {
+                maximumFractionDigits: 0,
+            }).format(totalYearRealisasiBulanan);
+            totalYearRealisasiBulanan = 0;
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+        // end calculate Total Year Realisasi Column
+
 
     }
 
@@ -2503,7 +2512,7 @@ fill="none">
         let totalYearRealisasiBulanan = 0;
         dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
             const dataColumnForecast = document.querySelectorAll(
-                `${eltToSum}`);
+                `${eltToSum}.ShowPin`);
             dataColumnForecast.forEach(dataForecast => {
                 totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9]/gi, ""));
             });
@@ -2528,6 +2537,93 @@ fill="none">
             const getDOP = forecast.getAttribute("data-dop");
             const dataColumnForecast = document.querySelectorAll(
                 `[${attributeSum}="${getColumnId}"][data-dop="${getDOP}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                if (dataForecast.tagName == "INPUT") {
+                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
+                } else {
+                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
+                        ""));
+                }
+
+            });
+            const formattedForecastValue = Intl.NumberFormat(["id"], {
+                maximumFractionDigits: 0,
+            }).format(totalYearRealisasiBulanan);
+            totalYearRealisasiBulanan = 0;
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+    }
+
+    function sumColumnUnitKerjaMonth(eltToShow, attributeShow, attributeSum) {
+        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`${eltToShow}`);
+
+        let totalYearRealisasiBulanan = 0;
+        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
+            const getColumnId = forecast.getAttribute(attributeShow);
+            const getUnitKerja = forecast.getAttribute("data-unit-kerja");
+            const dataColumnForecast = document.querySelectorAll(
+                `[${attributeSum}="${getColumnId}"][data-unit-kerja="${getUnitKerja}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                if (dataForecast.tagName == "INPUT") {
+                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
+                } else {
+                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
+                        ""));
+                }
+
+            });
+            const formattedForecastValue = Intl.NumberFormat(["id"], {
+                maximumFractionDigits: 0,
+            }).format(totalYearRealisasiBulanan);
+            totalYearRealisasiBulanan = 0;
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+    }
+
+    function sumColumnUnitKerjaYear(eltToShow, attributeSum) {
+        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`${eltToShow}`);
+
+        let totalYearRealisasiBulanan = 0;
+        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
+            const getUnitKerja = forecast.getAttribute("data-unit-kerja");
+            const dataColumnForecast = document.querySelectorAll(
+                `[${attributeSum}][data-unit-kerja="${getUnitKerja}"]`);
+            dataColumnForecast.forEach(dataForecast => {
+                if (dataForecast.tagName == "INPUT") {
+                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
+                } else {
+                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
+                        ""));
+                }
+
+            });
+            const formattedForecastValue = Intl.NumberFormat(["id"], {
+                maximumFractionDigits: 0,
+            }).format(totalYearRealisasiBulanan);
+            totalYearRealisasiBulanan = 0;
+            forecast.innerHTML = `
+        <td>
+            <center><b>${Number.isNaN(formattedForecastValue) ? "0" : formattedForecastValue}</b></center>
+        </td>
+        `;
+        });
+    }
+    function sumColumnDOPYear(eltToShow, attributeSum) {
+        const dataColumnTotalYearRealisasiBulanan = document.querySelectorAll(`${eltToShow}`);
+
+        let totalYearRealisasiBulanan = 0;
+        dataColumnTotalYearRealisasiBulanan.forEach((forecast, i) => {
+            const getDOP = forecast.getAttribute("data-dop");
+            const dataColumnForecast = document.querySelectorAll(
+                `[${attributeSum}][data-dop="${getDOP}"]`);
             dataColumnForecast.forEach(dataForecast => {
                 if (dataForecast.tagName == "INPUT") {
                     totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
