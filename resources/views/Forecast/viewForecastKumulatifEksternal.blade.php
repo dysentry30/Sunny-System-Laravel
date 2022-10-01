@@ -436,21 +436,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok1 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 1) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc1 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 1) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real1 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 1) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -458,21 +458,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok2 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 2) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc2 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 2) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real2 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 2) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -480,21 +480,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok3 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 3) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc3 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 3) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real3 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 3) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -502,21 +502,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok4 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 4) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc4 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 4) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real4 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 4) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -524,21 +524,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok5 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 5) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc5 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 5) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real5 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 5) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -546,21 +546,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok6 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 6) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc6 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 6) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real6 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 6) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -568,21 +568,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok7 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 7) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc7 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 7) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real7 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 7) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -590,21 +590,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok8 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 8) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc8 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 8) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real8 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 8) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -612,21 +612,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok9 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 9) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc9 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 9) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real9 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 9) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -634,21 +634,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok10 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 10) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc10 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 10) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real10 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 10) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -656,21 +656,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok11 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 11) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc11 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 11) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real11 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 11) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -678,21 +678,21 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                 $ok12 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_rkap <= 12) {
-                                                                                                            return $forecast->rkap_forecast;
+                                                                                                            return (int) $forecast->rkap_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $fc12 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_forecast <= 12) {
-                                                                                                            return $forecast->nilai_forecast;
+                                                                                                            return (int) $forecast->nilai_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
                                                                                                 $real12 = $nilaiDOP->sum(function($unitKerja){
                                                                                                     return $unitKerja->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 12) {
-                                                                                                            return $forecast->realisasi_forecast;
+                                                                                                            return (int) $forecast->realisasi_forecast;
                                                                                                         }
                                                                                                     });
                                                                                                 });
@@ -834,182 +834,182 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $ok1 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 1) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc1 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 1) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real1 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 1) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok2 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 2) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc2 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 2) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real2 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 2) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok3 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 3) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc3 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 3) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real3 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 3) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok4 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 4) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc4 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 4) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real4 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 4) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok5 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 5) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc5 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 5) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real5 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 5) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok6 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 6) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc6 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 6) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real6 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 6) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok7 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 7) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc7 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 7) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real7 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 7) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok8 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 8) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc8 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 8) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real8 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 8) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok9 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 9) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc9 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 9) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real9 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 9) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok10 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 10) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc10 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 10) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real10 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 10) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok11 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 11) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc11 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 11) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real11 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 11) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $ok12 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_rkap <= 12) {
-                                                                                                        return $forecast->rkap_forecast;
+                                                                                                        return (int) $forecast->rkap_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $fc12 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_forecast <= 12) {
-                                                                                                        return $forecast->nilai_forecast;
+                                                                                                        return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
                                                                                             $real12 = $nilaiUnitKerja->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 12) {
-                                                                                                        return $forecast->realisasi_forecast;
+                                                                                                        return (int) $forecast->realisasi_forecast;
                                                                                                     }
                                                                                                 });
                                                                                         @endphp
