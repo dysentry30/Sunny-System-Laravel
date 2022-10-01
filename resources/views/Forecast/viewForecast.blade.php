@@ -2529,12 +2529,16 @@ fill="none">
             const dataColumnForecast = document.querySelectorAll(
                 `[${attributeSum}="${getColumnId}"][data-dop="${getDOP}"]`);
             dataColumnForecast.forEach(dataForecast => {
-                if (eltToSum.includes("input")) {
-                    totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
-                } else {
-                    totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
-                        ""));
+                let valueForecast = dataForecast.value.replaceAll(/[^0-9|^\-]/gi, "");
+                if(valueForecast) {
+                    valueForecast = dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi, "");
                 }
+                // if (eltToSum.includes("input")) {
+                //     totalYearRealisasiBulanan += Number(dataForecast.value.replaceAll(/[^0-9|^\-]/gi, ""));
+                // } else {
+                //     totalYearRealisasiBulanan += Number(dataForecast.innerText.replaceAll(/[^0-9|^\-]/gi,
+                //         ""));
+                // }
 
             });
             const formattedForecastValue = Intl.NumberFormat(["id"], {
