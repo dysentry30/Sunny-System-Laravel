@@ -424,15 +424,16 @@ class ProyekController extends Controller
         if (isset($newForecast)) {
             if ($newProyek->bulan_ri_perolehan != null && $newProyek->nilai_perolehan != null ) {
                 $newForecast->month_realisasi = $newProyek->bulan_ri_perolehan;
-                dump($newForecast, "bulan ri");
+                // dump($newForecast, "bulan ri");
                 // dd($newProyek->nilai_perolehan);
+                $newForecast->save();
             };
             if ($newProyek->bulan_pelaksanaan != null && $newProyek->nilai_rkap != null ) {
                 $newForecast->rkap_forecast = $newProyek->nilai_rkap;
                 $newForecast->month_rkap = $newProyek->bulan_pelaksanaan;
-                dd($newForecast, "bulan rkap");
+                // dd($newForecast, "bulan rkap");
+                $newForecast->save();
             };
-            $newForecast->save();
         }
         // $newProyek->kursreview_terkontrak = $dataProyek["kurs-review-terkontrak"];
         $newProyek->nomor_terkontrak = $dataProyek["nomor-terkontrak"];
