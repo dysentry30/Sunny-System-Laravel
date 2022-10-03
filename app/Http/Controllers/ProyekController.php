@@ -447,7 +447,7 @@ class ProyekController extends Controller
 
         //     $newProyek->nilai_kontrak_keseluruhan = $nilaiKontrakKeseluruhan;
         // }
-        $newProyek->nilai_kontrak_keseluruhan = $dataProyek["nilai-kontrak-keseluruhan"];
+        $newProyek->nilai_kontrak_keseluruhan = str_replace('.', '', $dataProyek["nilai-kontrak-keseluruhan"]);
         $newProyek->tanggal_mulai_terkontrak = $dataProyek["tanggal-mulai-kontrak"];
         // $newProyek->nilai_wika_terkontrak = $dataProyek["nilai-wika-terkontrak"];
         $newProyek->tanggal_akhir_terkontrak = $dataProyek["tanggal-akhir-kontrak"];
