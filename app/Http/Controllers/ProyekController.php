@@ -1021,7 +1021,12 @@ class ProyekController extends Controller
     public function cancelProyek($kode_proyek)
     {
         $cancelProyek = Proyek::find($kode_proyek);
-        $cancelProyek->stage = 0;
+        // $bulans = (int) date('m');
+        // $years = (int) date('Y');
+        // $cancelForecast = Forecast::where("kode_Forecast", "=", $kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->get();
+        // $cancelForecast->delete();
+        // dd($cancelProyek);
+        $cancelProyek->is_cancel = true;
         $cancelProyek->save();
 
         Alert::warning('Cancel', $cancelProyek->nama_proyek . ", Telah ter-Cancel");

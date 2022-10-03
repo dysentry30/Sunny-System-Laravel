@@ -48,8 +48,10 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
+                @if ($proyek->is_cancel == false)
+                    <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
                     @csrf
+                @endif
 
 
                     <!--begin:: id_customer selected-->
@@ -69,8 +71,8 @@
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
                                     <h1
-                                        class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->stage == 0 ? 'text-danger' : '' }}">
-                                        @if ($proyek->stage == 0)
+                                        class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->is_cancel == true ? 'text-danger' : '' }}">
+                                        @if ($proyek->is_cancel == true)
                                             Proyek Canceled - &nbsp;
                                         @else
                                             Proyek - &nbsp;
@@ -93,9 +95,11 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    @if ($proyek->is_cancel == false)
                                     <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
-                                        style="background-color:#008CB4">
+                                    style="background-color:#008CB4">
                                         Save</button>
+                                    @endif
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -208,20 +212,11 @@
                                                                 Pasar Potensial
                                                             </a>
                                                         @else
-                                                            @if ($proyek->stage == 0)
-                                                                <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; pointer-events: none"
-                                                                    stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
-                                                            @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action color-is-default stage-is-not-active"
-                                                                    style="outline: 0px; cursor: pointer;" stage="2">
-                                                                    Pasar Potensial
-                                                                </a>
-                                                            @endif
+                                                            <a href="#"
+                                                                class="stage-button stage-action color-is-default stage-is-not-active"
+                                                                style="outline: 0px; cursor: pointer;" stage="2">
+                                                                Pasar Potensial
+                                                            </a>
                                                         @endif
 
                                                         @if ($proyek->stage > 2)
@@ -323,6 +318,7 @@
                                                                     </div>
                                                                 </a>
                                                             @endif
+                                                            @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="dropdownMenuButton1">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -343,6 +339,7 @@
                                                                             value="Kalah" /></li>
                                                                 </form>
                                                             </ul>
+                                                            @endif
                                                         @else
                                                             @if (abs($proyek->stage - 6) != 1 || abs($proyek->stage - 7) != 2)
                                                                 <a href="#"
@@ -370,7 +367,7 @@
                                                                         stage="8"><i
                                                                             class="bi bi-caret-down-fill text-white"></i></span>
                                                                 </a>
-
+                                                                @if ($proyek->is_cancel == false)
                                                                 <ul class="dropdown-menu"
                                                                     aria-labelledby="dropdownMenuButton1">
                                                                     <form action="/proyek/stage-save" method="POST">
@@ -393,8 +390,10 @@
                                                                         </li>
                                                                     </form>
                                                                 </ul>
+                                                                @endif
                                                                 {{-- </div> --}}
                                                             @endif
+                                                            @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="dropdownMenuButton1">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -415,6 +414,7 @@
                                                                             value="Kalah" /></li>
                                                                 </form>
                                                             </ul>
+                                                            @endif
                                                         @endif
                                                         {{-- @endif --}}
                                                         @if ($proyek->stage > 7)
@@ -445,6 +445,7 @@
                                                                             class="bi bi-caret-down-fill text-white"></i></span>
                                                                 </a>
                                                             @endif
+                                                            @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -465,6 +466,7 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
+                                                            @endif
                                                         @else
                                                             @php
                                                                 $selisih = abs($proyek->stage - 8);
@@ -490,6 +492,7 @@
                                                                     Terkontrak
                                                                 </a>
                                                             @endif
+                                                            @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -510,6 +513,7 @@
                                                                             value="Terendah" /></li>
                                                                 </form>
                                                             </ul>
+                                                            @endif
                                                         @endif
 
 
@@ -541,6 +545,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($proyek->is_cancel == false)
                                     <script>
                                         // const stages = document.querySelectorAll(".stage-button");
                                         // stages.forEach((stage, i) => {
@@ -629,6 +634,7 @@
                                             });
                                         });
                                     </script>
+                                    @endif
 <!--end::-->
 
 
@@ -6738,7 +6744,7 @@
                     </div>
                     <!--end::Modal header-->
                     <!--begin::Modal body-->
-                    @if ($proyek->stage == 0)
+                    @if ($proyek->is_cancel == true)
                         <div class="modal-body py-lg-6 px-lg-6">
                             Proyek sudah ter-Cancel !
                             <br>
