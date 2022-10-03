@@ -1481,6 +1481,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     @endif
                                                                                                 @else
                                                                                                     @foreach ($forecasts as $forecast)
+                                                                                                            @if ($forecast->month_forecast == $month_counter)
                                                                                                                 @if ($month_counter == (int) $forecast->month_rkap)
                                                                                                                     <td data-column-ok-bulanan="{{ $month_counter }}" data-dop="{{$dop->dop}}"
                                                                                                                         data-id-proyek-ok-bulanan="{{ $proyek->kode_proyek }}" data-unit-kerja="{{$unitKerja->unit_kerja}}">
@@ -1497,7 +1498,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     $total_year_forecast += $total_forecast;
                                                                                                                     
                                                                                                                 @endphp
-                                                                                                            @if ($forecast->month_forecast == $month_counter)
                                                                                                                 <td>
                                                                                                                     <input type="text"
                                                                                                                         data-id-proyek="{{ $proyek->kode_proyek }}"
@@ -1513,7 +1513,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                         value="{{ number_format((int) $forecast->nilai_forecast, 0, ',', '.') }}"
                                                                                                                         placeholder="" />
                                                                                                                 </td>
-                                                                                                            @endif
                                                                                                             @if (($month_counter == (int) $forecast->month_realisasi) && $proyek->bulan_ri_perolehan != null && $proyek->stage == 8)
                                                                                                                     @php
                                                                                                                         // $getBulanRIPerolehanNumberOfMonth = array_search( $proyek->bulan_ri_perolehan, $arrNamaBulan);
@@ -1532,6 +1531,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                                     $is_data_found = true;
                                                                                                                 @endphp
                                                                                                             @break
+                                                                                                        @endif
                                                                                                     @endforeach
                                                                                                     @if (!$is_data_found)
                                                                                                         @if ($proyek->bulan_pelaksanaan == $month_counter && $proyek->bulan_pelaksanaan != null)
