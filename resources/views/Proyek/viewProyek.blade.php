@@ -3662,16 +3662,16 @@
                                                             </div>
                                                             <!--End begin::Col-->
                                                             @php
-                                                                // if ($proyek->stage == 8 || $proyek->stage == 9){
-                                                                //     if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
-                                                                //         $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
-                                                                //         $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                //         $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', $kontrakKeseluruhan), 0, '.', '.');
-                                                                //     }
+                                                                if ($proyek->stage == 8 || $proyek->stage == 9){
+                                                                    if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
+                                                                        $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+                                                                        $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
+                                                                        $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', $kontrakKeseluruhan), 0, '.', '.');
+                                                                    }
 
-                                                                // } else {
-                                                                    // $nilaiKontrakKeseluruhan = 0;
-                                                                // }
+                                                                } else {
+                                                                    $nilaiKontrakKeseluruhan = 0;
+                                                                }
                                                             @endphp
                                                             <div class="col-6">
                                                                 <!--begin::Input group Website-->
@@ -3683,20 +3683,20 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
+                                                                    {{-- <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $proyek->nilai_kontrak_keseluruhan == null ? 'text-danger' : '' }}"
                                                                         value="{{ number_format((int) str_replace('.', '', $proyek->nilai_kontrak_keseluruhan), 0, '.', '.') ?? '*Nilai Perolehan Belum Ditentukan' }}"
                                                                         id="nilai-kontrak-keseluruhan"
                                                                         name="nilai-kontrak-keseluruhan"
                                                                         placeholder="*Nilai Perolehan Belum Ditentukan"
-                                                                        readonly />
-                                                                    {{-- <input type="text"
+                                                                        readonly /> --}}
+                                                                    <input type="text"
                                                                         class="form-control form-control-solid reformat {{ $nilaiKontrakKeseluruhan == 0 ? 'text-danger' : '' }}"
                                                                         value="{{ $nilaiKontrakKeseluruhan == 0 ? '' : $nilaiKontrakKeseluruhan }}"
                                                                         id="nilai-kontrak-keseluruhan"
                                                                         name="nilai-kontrak-keseluruhan"
                                                                         placeholder="*Nilai Perolehan Belum Ditentukan"
-                                                                        readonly /> --}}
+                                                                        readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
