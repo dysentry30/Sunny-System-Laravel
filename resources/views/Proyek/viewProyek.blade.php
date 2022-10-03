@@ -1135,7 +1135,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span>Nilai OK (Excludde Ppn)</span>
+                                                                        <span>Nilai OK (Excludde Ppn) <i class="bi bi-lock"></span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -1143,7 +1143,7 @@
                                                                         class="form-control reformat form-control-solid"
                                                                         id="nilai-rkap" name="nilai-rkap"
                                                                         value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
-                                                                        placeholder="Nilai OK (Excludde Ppn)" />
+                                                                        placeholder="Nilai OK (Excludde Ppn)" readonly />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
