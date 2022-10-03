@@ -48,8 +48,10 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                <form action={{ url('/proyek/update/retail') }} method="post" enctype="multipart/form-data">
+                @if ($proyek->is_cancel == false)
+                    <form action={{ url('/proyek/update/retail') }} method="post" enctype="multipart/form-data">
                     @csrf
+                @endif
 
 
                     <!--begin:: id_customer selected-->
@@ -69,8 +71,8 @@
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
                                     <h1
-                                        class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->stage == 0 ? 'text-danger' : '' }}">
-                                        @if ($proyek->stage == 0)
+                                        class="d-flex align-items-center fs-1 my-1 fw-bolder {{ $proyek->is_cancel == true ? 'text-danger' : '' }}">
+                                        @if ($proyek->is_cancel == true)
                                             Proyek Canceled - &nbsp;
                                         @else
                                             Proyek - &nbsp;
@@ -93,9 +95,11 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
+                                    @if ($proyek->is_cancel == false)
                                     <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                         style="background-color:#008CB4">
                                         Save</button>
+                                    @endif
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
@@ -215,7 +219,7 @@
                                                                 Terkontrak
                                                             </a>
                                                         @else
-                                                            @if ($proyek->stage == 0)
+                                                            @if ($proyek->is_cancel == true)
                                                                 <a href="#"
                                                                     class="stage-button stage-action color-is-default stage-is-not-active"
                                                                     style="outline: 0px; pointer-events: none"
@@ -331,25 +335,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @if ($proyek->is_cancel == false)
                                     <script>
-                                        // const stages = document.querySelectorAll(".stage-button");
-                                        // stages.forEach((stage, i) => {
-                                        //     stage.setAttribute("stage", i + 1);
-                                        //     if (i + 1 <= Number("{{ $proyek->stage }}")) {
-                                        //         stage.classList.add("stage-is-done");
-                                        //         stage.style.cursor = "cursor";
-                                        //     } else {
-                                        //         stage.classList.add("stage-is-not-active");
-                                        //         stage.style.cursor = "cursor";
-                                        //         if (i > Number("{{ $proyek->stage }}")) {
-                                        //             stage.style.cursor = "not-allowed";
-                                        //             stage.style.pointerEvents = "none";
-                                        //         }
-
-                                        //     }
-
-                                        // });
-
                                         function confirmAction(form) {
                                             const formSend = document.createElement("form");
                                             formSend.setAttribute("method", "post");
@@ -424,6 +411,7 @@
                                             });
                                         });
                                     </script>
+                                    @endif
                                     <!--end::Header Orange-->
 
 
@@ -3966,10 +3954,12 @@
                                         @endif
                                         <!--begin::input-->
                                         <td>
+                                            @if ($proyek->is_cancel == false)
                                             <button type="submit" class="btn btn-sm btn-light btn-active-primary"
                                                 id="forecast-save">
                                                 Save</button>
                                             </button>
+                                            @endif
                                         </td>
                                         <!--end::Button-->
                                     </tr>
@@ -5352,7 +5342,7 @@
                     </div>
                     <!--end::Modal header-->
                     <!--begin::Modal body-->
-                    @if ($proyek->stage == 0)
+                    @if ($proyek->is_cancel )
                         <div class="modal-body py-lg-6 px-lg-6">
                             Proyek sudah ter-Cancel !
                             <br>
