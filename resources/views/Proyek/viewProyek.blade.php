@@ -1245,8 +1245,7 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai OK Review (Valas) (Exclude Tax) <i
-                                                                                    class="bi bi-key"></i></span>
+                                                                            <span>Nilai OK Review (Valas) (Exclude Tax)</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
