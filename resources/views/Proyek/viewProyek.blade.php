@@ -1234,7 +1234,7 @@
                                                             }
                                                         </script>
                                                         <br>
-                                                        <div id="divRkapReview" style="display:none">
+                                                        <div id="divRkapReview">
                                                             <!--End::Title Biru Form: Nilai RKAP Review-->
 
                                                             <!--begin::Row Kanan+Kiri-->
