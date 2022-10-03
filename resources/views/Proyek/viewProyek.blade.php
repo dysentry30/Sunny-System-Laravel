@@ -1255,8 +1255,7 @@
                                                                             id="nilai-valas-review"
                                                                             name="nilai-valas-review"
                                                                             value="{{ number_format((int) str_replace('.', '', $proyek->nilai_valas_review), 0, '.', '.') }}"
-                                                                            placeholder="Nilai OK Review (Valas) (Exclude Tax)"
-                                                                            {{ auth()->user()->check_administrator ? '' : 'readonly' }} />
+                                                                            placeholder="Nilai OK Review (Valas) (Exclude Tax)" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
