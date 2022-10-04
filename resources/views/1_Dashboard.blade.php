@@ -451,7 +451,7 @@
                                                     <!--begin::INDEX JUMLAH-->
                                                     <!--end::INDEX JUMLAH-->
                                                 </div>
-                                                <div class="py-12" id="datatable-index-jumlah" style="display: none;">
+                                                <div class="" id="datatable-index-jumlah" style="display: none;">
                                                     <div class="text-center">
                                                         <h2 id="title-table"></h2>
                                                         <h4 id="total"></h4>
@@ -532,7 +532,7 @@
                                     </div>
                                     <hr>
                                     
-                                    <div class="row">
+                                    {{-- <div class="row">
                                         <div class="col py-12" id="sumber-dana-rkap">
                                             <!--begin::INDEX JUMLAH-->
                                             <!--end::INDEX JUMLAH-->
@@ -542,7 +542,7 @@
                                             <!--begin::INDEX NILAI-->
                                             <!--end::INDEX NILAI-->
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <hr>
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
@@ -2784,7 +2784,7 @@
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
-                console.log(filterRes);
+                // console.log(filterRes);
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
