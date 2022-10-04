@@ -442,55 +442,94 @@
                                     <hr>
 
                                     <div class="row">
-                                        <figure class="highcharts-figure col py-12">
-                                            <div class="py-12" id="index-jumlah">
-                                                <!--begin::INDEX JUMLAH-->
-                                                <!--end::INDEX JUMLAH-->
-                                            </div>
-                                            <div class="" id="datatable-index-jumlah" style="display: none;">
-                                                <div class="text-center">
-                                                    <h2 id="title-table"></h2>
-                                                    <h4 id="total"></h4>
+                                        <div class="col-6">
+                                            <figure class="col highcharts-figure py-12">
+                                                <div class="py-12" id="index-jumlah">
+                                                    <!--begin::INDEX JUMLAH-->
+                                                    <!--end::INDEX JUMLAH-->
                                                 </div>
-                                                <div class="d-flex justify-content-end">
-                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                        onclick="hideTable('#datatable-index-jumlah','#index-jumlah')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
-                                                        Chart</button>
-                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
-                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                <div class="py-12" id="datatable-index-jumlah" style="display: none;">
+                                                    <div class="text-center">
+                                                        <h2 id="title-table"></h2>
+                                                        <h4 id="total"></h4>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                            onclick="hideTable('#datatable-index-jumlah','#index-jumlah')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                            Chart</button>
+                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                    </div>
+                                                    <br>
+                                                    <div class="py-12" style="max-height: 500px; overflow-y:scroll">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                            <!--begin::Table head-->
+                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                {{-- THead Here --}}
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                {{-- Data Here --}}
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    </div>
+                                                    <!--end::Table Proyek-->
                                                 </div>
-                                                <br>
-                                                <div class="" style="max-height: 500px; overflow-y:scroll">
-                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                        <!--begin::Table head-->
-                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
-                                                            {{-- THead Here --}}
-                                                        </thead>
-                                                        <!--end::Table head-->
-                                                        <!--begin::Table body-->
-                                                        <tbody class="fw-bold" id="table-line-body">
-                                                            {{-- Data Here --}}
-                                                        </tbody>
-                                                        <!--end::Table body-->
-                                                    </table>
-                                                </div>
-                                                <!--end::Table Proyek-->
-                                            </div>
-                                        </figure>
-                                        
-                                        <span class="vr" style="padding: 0.5px"></span>
-
-                                        <div class="col py-12" id="index-nilai">
-                                            <!--begin::INDEX NILAI-->
-                                            <!--end::INDEX NILAI-->
+                                            </figure>
                                         </div>
+                                        
+                                        {{-- <span class="vr" style="padding: 0.5px"></span> --}}
+                                        
+                                        <div class="col-6">
+                                            <figure class="col highcharts-figure py-12">
+                                                <div class="py-12" id="index-nilai">
+                                                    <!--begin::INDEX NILAI-->
+                                                    <!--end::INDEX NILAI-->
+                                                </div>
+                                                <div class="" id="datatable-index-nilai" style="display: none;">
+                                                    <div class="text-center">
+                                                        <h2 id="title-table"></h2>
+                                                        <h4 id="total"></h4>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                            onclick="hideTable('#datatable-index-nilai','#index-nilai')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                            Chart</button>
+                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                    </div>
+                                                    <br>
+                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                            <!--begin::Table head-->
+                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                {{-- THead Here --}}
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                {{-- Data Here --}}
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    </div>
+                                                    <!--end::Table Proyek-->
+                                                </div>
+                                            </figure>
+                                        </div>
+                                        
                                     </div>
                                     <hr>
                                     
-                                    {{-- <div class="row">
+                                    <div class="row">
                                         <div class="col py-12" id="sumber-dana-rkap">
                                             <!--begin::INDEX JUMLAH-->
                                             <!--end::INDEX JUMLAH-->
@@ -501,7 +540,7 @@
                                             <!--end::INDEX NILAI-->
                                         </div>
                                     </div>
-                                    <hr> --}}
+                                    <hr>
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
                                         <h1 class="text-center bold pb-8">
@@ -1239,7 +1278,7 @@
     <!--end::MONITORING PROYEK-->
     
     <!--begin::SEBARAN SUMBER DANA-->
-    {{-- <script>
+    <script>
         Highcharts.chart('sumber-dana-rkap', {
             chart: {
                 type: 'pie',
@@ -1347,8 +1386,8 @@
                 enabled: false
             },
         });
-    </script> --}}
-    {{-- <script>
+    </script>
+    <script>
         Highcharts.chart('sumber-dana-realisasi', {
             chart: {
                 type: 'pie',
@@ -1455,7 +1494,7 @@
                 enabled: false
             },
         });
-    </script> --}}
+    </script>
     <!--end::SEBARAN SUMBER DANA-->
 
 
@@ -2729,7 +2768,7 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else {
+            } else if(type == "Proyek Menang" || type == "Proyek Kalah" ) {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
@@ -2742,7 +2781,312 @@
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
-                
+                console.log(filterRes);
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+                    let getMonth = filter.bulan_pelaksanaan;
+                    let bulan = "";
+                    if(filter.bulan_ri_perolehan) {
+                        getMonth = filter.bulan_ri_perolehan;
+                    } else {
+                        getMonth = filter.bulan_pelaksanaan;
+                    }
+                    // console.log(filter.bulan_pelaksanaan, filter);
+                    switch (Number(getMonth)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Bulan-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat(["id"]).format(filter.penawaran_tender ?? 0)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if(type == "Nilai Menang" || type == "Nilai Kalah" ) {
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai ${type}</th>`
+                '</tr>';
+                console.log(filterRes);
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+                    let getMonth = filter.bulan_pelaksanaan;
+                    let bulan = "";
+                    if(filter.bulan_ri_perolehan) {
+                        getMonth = filter.bulan_ri_perolehan;
+                    } else {
+                        getMonth = filter.bulan_pelaksanaan;
+                    }
+                    // console.log(filter.bulan_pelaksanaan, filter);
+                    switch (Number(getMonth)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Bulan-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat(["id"]).format(filter.penawaran_tender ?? 0)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if(type.trim() == "Terendah" || type.trim() == "Terkontrak" ) {
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai ${type}</th>`
+                '</tr>';
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
@@ -2788,7 +3132,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan, filter);
-                    switch (Number(filter.bulan_pelaksanaan || filter.bulan_awal)) {
+                    switch (Number(filter.forecasts[0]?.month_realisasi)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -2826,7 +3170,7 @@
                             bulan = "Desember";
                             break;
                         default:
-                            bulan = "Bulan Unknown"
+                            bulan = "-"
                             break;
                     }
                     const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
@@ -2863,7 +3207,175 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.nilai_perolehan || filter.nilai_rkap)}
+                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].periode_prognosa == new Date().getMonth() ? filter.forecasts[0].realisasi_forecast: 0)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat(["id"]).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if(type.trim() == "Prakualifikasi" || type.trim() == "Menang" || type.trim() == "Proses" || type.trim() == "Kalah dan Cancel") {
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai ${type}</th>`
+                '</tr>';
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    let getBulanColumn = filter.bulan_pelaksanaan;
+                    let nilai = 0;
+                    switch (type.trim()) {
+                        case "Proses":
+                            nilai = filter.penawaran_tender ?? 0;
+                            break;
+                        case "Prakualifikasi":
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        case "Kalah dan Cancel":
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        case "Menang":
+                            if(filter.forecasts[0]?.month_realisasi) {
+                                nilai = filter.forecasts[0].realisasi_forecast ?? 0;
+                                getBulanColumn = filter.forecasts[0]?.month_realisasi;
+                            }
+                            break;
+                        default:
+                            nilai = 0;
+                            break;
+                    }
+                    switch (Number(getBulanColumn)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Bulan-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat({}).format(nilai)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2946,7 +3458,6 @@
         competitiveIndex.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
-                console.log(tipe);
                 getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
                 
             })
@@ -2961,7 +3472,6 @@
         competitiveIndexNilai.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
-                console.log(tipe);
                 getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
                 
             })

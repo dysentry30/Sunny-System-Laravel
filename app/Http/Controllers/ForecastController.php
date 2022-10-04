@@ -23,10 +23,39 @@ class ForecastController extends Controller
      */
     public function index(Request $request, $periode = "", $year = "")
     {
+
         // $id = Dop::find('id');
         // $dopProyek = Proyek::find($id);
         $column = $request->get("column");
         $filter = $request->get("filter");
+        if (Auth::user()->check_administrator) {
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get();
+        } else {
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            } else {
+                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
+            }
+        }
+
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum("rkap_forecast");
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum("nilai_forecast");
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum("realisasi_forecast");
+        // dd($nilaiForecast);
+        // $nilaiForecastArray = [];
+        // $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
+
+        // for ($i = 1; $i <= 12; $i++) {
+        //     foreach ($historyForecast as $forecast) {
+        //         if ($forecast->month_forecast == $i) {
+        //             $nilaiForecast += $forecast->nilai_forecast / 1000000;
+        //         } else {
+        //             $nilaiForecast == 0;
+        //         }
+        //         array_push($nilaiForecastArray, round($nilaiForecast));
+        //     }
+        // }
 
         $periode = $periode != "" ? (int) $periode : (int) date("m");
         $year = $year != "" ? (int) $year : (int) date("Y");
@@ -156,6 +185,9 @@ class ForecastController extends Controller
                 // "historyForecast_all" => $historyForecast_all,
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
+                "nilaiTotalRKAPTahun" => $nilaiTotalRKAPTahun,
+                "nilaiTotalForecastTahun" => $nilaiTotalForecastTahun,
+                "nilaiTotalRealisasiTahun" => $nilaiTotalRealisasiTahun,
                 "is_forecast" => true,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
@@ -177,6 +209,20 @@ class ForecastController extends Controller
         // $dopProyek = Proyek::find($id);
         $column = $request->get("column");
         $filter = $request->get("filter");
+
+        if (Auth::user()->check_administrator) {
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get();
+        } else {
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+            if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            } else {
+                $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
+            }
+        }
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum("rkap_forecast");
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum("nilai_forecast");
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum("realisasi_forecast");
 
         $periode = $periode != "" ? (int) $periode : (int) date("m");
         $year = $year != "" ? (int) $year : (int) date("Y");
@@ -308,6 +354,9 @@ class ForecastController extends Controller
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
                 // "forecast" => true,
+                "nilaiTotalRKAPTahun" => $nilaiTotalRKAPTahun,
+                "nilaiTotalForecastTahun" => $nilaiTotalForecastTahun,
+                "nilaiTotalRealisasiTahun" => $nilaiTotalRealisasiTahun,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
                 "year_previous_forecast" => $year_previous_forecast,
                 "month_title" => $month_title,
@@ -550,7 +599,7 @@ class ForecastController extends Controller
     //     // 'unitkerjas' => UnitKerja::all()]);
     // }
 
-    
+
 
     /**
      * Store a newly created resource in storage.
