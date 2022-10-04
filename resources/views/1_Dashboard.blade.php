@@ -126,7 +126,7 @@
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectUnitKerja(this)" id="unit-kerja" name="unit-kerja"
                                             class="form-select form-select-solid w-auto ms-2"
-                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="true"
+                                            style="margin-right: 2rem;" data-control="select2" data-hide-search="false"
                                             data-placeholder="Unit Kerja" data-select2-id="select2-data-unit-kerja" tabindex="-1"
                                             aria-hidden="true">
                                             <option value="" {{$unit_kerja_get == "" ? "selected" : ""}}></option>
