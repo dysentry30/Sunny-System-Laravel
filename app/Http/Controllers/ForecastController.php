@@ -31,7 +31,7 @@ class ForecastController extends Controller
         
         $periode = $periode != "" ? (int) $periode : (int) date("m");
         $year = $year != "" ? (int) $year : (int) date("Y");
-        
+
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get();
         } else {
@@ -43,9 +43,9 @@ class ForecastController extends Controller
             }
         }
 
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum("rkap_forecast");
-        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum("nilai_forecast");
-        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum("realisasi_forecast");
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum((int) "rkap_forecast");
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum( (int) "nilai_forecast");
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum( (int) "realisasi_forecast");
         // dd($nilaiForecast);
         // $nilaiForecastArray = [];
         // $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
@@ -225,9 +225,9 @@ class ForecastController extends Controller
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
             }
         }
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum("rkap_forecast");
-        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum("nilai_forecast");
-        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum("realisasi_forecast");
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum( (int) "rkap_forecast");
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum( (int) "nilai_forecast");
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum( (int) "realisasi_forecast");
 
         $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
         $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
