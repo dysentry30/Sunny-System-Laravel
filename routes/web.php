@@ -528,6 +528,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/forecast-internal', [ForecastController::class, 'viewForecastInternal']);
 
+    Route::get('/forecast-internal/{periode}/{year}', [ForecastController::class, 'viewForecastInternal']);
+
+
     Route::get('/forecast-kumulatif-eksternal', [ForecastController::class, 'viewForecastKumulatifEksternal']);
 
     Route::get('/forecast-kumulatif-eksternal-internal', [ForecastController::class, 'viewForecastKumulatifIncludeInternal']);
