@@ -30,6 +30,7 @@ use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
+use App\Models\DokumenTender;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -591,6 +592,9 @@ class ProyekController extends Controller
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
                 }
+                if (isset($dataProyek["dokumen-tender"])) {
+                    self::uploadDokumenTender($dataProyek["dokumen-tender"], $kode_proyek);
+                }
                 if (isset($dataProyek["risk-tender"])) {
                     self::riskTender($dataProyek["risk-tender"], $kode_proyek);
                 }
@@ -604,6 +608,9 @@ class ProyekController extends Controller
             if ($newProyek->save()) {
                 if (isset($dataProyek["dokumen-prakualifikasi"])) {
                     self::uploadDokumenPrakualifikasi($dataProyek["dokumen-prakualifikasi"], $kode_proyek);
+                }
+                if (isset($dataProyek["dokumen-tender"])) {
+                    self::uploadDokumenTender($dataProyek["dokumen-tender"], $kode_proyek);
                 }
                 if (isset($dataProyek["risk-tender"])) {
                     self::riskTender($dataProyek["risk-tender"], $kode_proyek);
@@ -963,6 +970,32 @@ class ProyekController extends Controller
         return redirect()->back();
     }
 
+    private function uploadDokumenTender(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        $dokumen_tender = new DokumenTender();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        // $nama_document = date("His_") . substr($uploadedFile->getClientOriginalName(), 0, strlen($uploadedFile->getClientOriginalName()) - 5);
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen_tender->nama_dokumen = $nama_document;
+        $dokumen_tender->id_document = $id_document;
+        $dokumen_tender->kode_proyek = $kode_proyek;
+        $dokumen_tender->created_by = Auth::user()->name;
+        // dd($dokumen_tender);
+        $dokumen_tender->save();
+    }
+
+    public function deleteDokumenTender($id)
+    {
+        $deleteDokumenPrakualifikasi = DokumenTender::find($id);
+        // dd($deleteDokumenPrakualifikasi);
+        $deleteDokumenPrakualifikasi->delete();
+        Alert::success("Success", "Dokumen Tender Berhasil Dihapus");
+        return redirect()->back();
+    }
+
     public function delete($kode_proyek)
     {
         $deleteProyek = Proyek::find($kode_proyek);
@@ -1106,6 +1139,7 @@ class ProyekController extends Controller
         $kodeProyek = $request->kode_proyek;
         $proyekStage = Proyek::find($kodeProyek);
         $proyekAttach = $proyekStage->AttachmentMenang;
+        $dokumenTender = $proyekStage->DokumenTender;
         $periode = (int) date('m');
         $years = (int) date('Y');
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
@@ -1119,8 +1153,21 @@ class ProyekController extends Controller
                 $request->stage = 4;
             }
         }else if($request->stage == 5){
-            if ($proyekStage->penawaran_tender == 0) {
-                Alert::error("Error", "Nilai Penawaran Belum Diisi !");
+            // if ($dokumenTender->count() == 0) {
+            //     // dd($dokumenTender);
+            //     Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
+            //     // return redirect()->back();
+            // } else {
+            //     $request->stage = 5;
+            // }
+            if ($proyekStage->penawaran_tender == 0 && $dokumenTender->count() == 0) {
+                Alert::error("Error", "Silahkan Isi Nilai Penawaran dan Dokumen Tender Terlebih Dahulu !");
+                $request->stage = 4;
+            } else if ( $proyekStage->penawaran_tender == 0 ) {
+                Alert::error("Error", "Silahkan Isi Nilai Penawaran Terlebih Dahulu !");
+                $request->stage = 4;
+            } else if ( $dokumenTender->count() == 0 ) {
+                Alert::error("Error", "Silahkan Isi Dokumen Tender Terlebih Dahulu !");
                 $request->stage = 4;
             } else {
                 $request->stage = 5;
@@ -1157,7 +1204,7 @@ class ProyekController extends Controller
                     $proyekStage->save();
                 }
                 if ($proyekAttach->count() == 0) {
-                    Alert::error("Error", "Silahkan Isi Attachment Menang Lebih Dahulu !");
+                    Alert::error("Error", "Silahkan Isi Attachment Menang Terlebih Dahulu !");
                     return redirect()->back();
                 } else {
                     $request->stage = 8;

@@ -503,7 +503,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // DELETE Dokumen Prakualifikasi
     Route::delete('proyek/dokumen-prakualifikasi/{id}/delete', [ProyekController::class, 'deleteDokumenPrakualifikasi']);
 
-    // DELETE Dokumen Prakualifikasi
+    // DELETE Dokumen Tender
+    Route::delete('proyek/dokumen-tender/{id}/delete', [ProyekController::class, 'deleteDokumenTender']);
+
+    // DELETE Dokumen Risk
     Route::delete('proyek/risk-tender/{id}/delete', [ProyekController::class, 'deleteRiskTender']);
 
     // DELETE Attachment Menang

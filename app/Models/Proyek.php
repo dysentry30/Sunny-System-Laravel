@@ -97,6 +97,11 @@ class Proyek extends Model
         return $this->hasMany(DokumenPrakualifikasi::class, "kode_proyek");
     }
 
+    public function DokumenTender()
+    {
+        return $this->hasMany(DokumenTender::class, "kode_proyek");
+    }
+
     public function AttachmentMenang()
     {
         return $this->hasMany(AttachmentMenang::class, "kode_proyek");

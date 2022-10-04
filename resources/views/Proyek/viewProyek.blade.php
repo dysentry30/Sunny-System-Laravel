@@ -2302,7 +2302,6 @@
 
 
                                                         <!--Begin::Title Biru Form: Document Prakualifikasi-->
-                                                        <br>
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Document Prakualifikasi
                                                         </h3>
@@ -2627,6 +2626,88 @@
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
+
+                                                        
+                                                        <!--Begin::Title Biru Form: Document Tender-->
+                                                        <br>
+                                                        <h3 class="fw-bolder m-0 required" id="HeadDetail"
+                                                            style="font-size:14px;">Document Tender
+                                                        </h3>
+                                                        <br>
+                                                        <div class="w-50">
+                                                            <input type="file"
+                                                                class="form-control form-control-sm form-input-solid"
+                                                                name="dokumen-tender" accept=".pdf">
+                                                        </div>
+                                                        <h6 id="error-dokumen-tender"
+                                                            class="text-danger fw-normal" style="display: none">*File
+                                                            terlalu besar ! Max Size 50Mb</h6>
+                                                        <br>
+                                                        <!--begin::Table-->
+                                                        <table class="table align-middle table-row-dashed w-50 fs-6 gy-2"
+                                                            id="kt_customers_table">
+                                                            <!--begin::Table head-->
+                                                            <thead>
+                                                                <!--begin::Table row-->
+                                                                <tr
+                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                    <th class="w-50px text-center">No.</th>
+                                                                    <th class="w-auto">Nama Document</th>
+                                                                    <th class="w-auto">Modified On</th>
+                                                                    <th class="w-auto text-center"></th>
+                                                                </tr>
+                                                                <!--end::Table row-->
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            @php
+                                                                $no = 1;
+                                                            @endphp
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold text-gray-600">
+                                                                @foreach ($proyek->DokumenTender as $dokumen)
+                                                                    <tr>
+                                                                        <!--begin::Nomor-->
+                                                                        <td class="text-center">
+                                                                            {{ $no++ }}
+                                                                        </td>
+                                                                        <!--end::Nomor-->
+                                                                        <!--begin::Name-->
+                                                                        <td>
+                                                                            @if (str_contains("$dokumen->nama_dokumen", '.doc'))
+                                                                                <a href="/document/view/{{ $dokumen->id_dokumen_tender }}/{{ $dokumen->id_document }}"
+                                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                            @else
+                                                                                <a target="_blank"
+                                                                                    href="{{ asset('words/' . $dokumen->id_document . '.pdf') }}"
+                                                                                    class="text-hover-primary">{{ $dokumen->nama_dokumen }}</a>
+                                                                            @endif
+                                                                        </td>
+                                                                        <!--end::Name-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ Carbon\Carbon::parse($dokumen->created_at)->translatedFormat('d F Y') }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Action-->
+                                                                        <td class="text-center">
+                                                                            <small>
+                                                                                <p data-bs-toggle="modal"
+                                                                                    data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
+                                                                                    id="modal-delete"
+                                                                                    class="btn btn-sm btn-light btn-active-primary">
+                                                                                    Delete
+                                                                                </p>
+                                                                            </small>
+                                                                        </td>
+                                                                        <!--end::Action-->
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+
+                                                        <!--end::Table-->
+                                                        <!--End::Title Biru Form: Document Tender-->
 
                                                         <!--Begin::Title Biru Form: List Peserta Tender-->
                                                         <br>
@@ -6619,6 +6700,56 @@
         </form>
     @endforeach
     <!--end::DELETE DOKUMEN PRAKUALIFIKASI-->
+
+    <!--begin::DELETE DOKUMEN TENDER-->
+    @foreach ($proyek->DokumenTender as $dokumen)
+        <form action="/proyek/dokumen-tender/{{ $dokumen->id_dokumen_tender }}/delete"
+            method="post" enctype="multipart/form-data">
+            @method('delete')
+            @csrf
+            <div class="modal fade"
+                id="kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
+                tabindex="-1" aria-hidden="true">
+                <!--begin::Modal dialog-->
+                <div class="modal-dialog modal-dialog-centered mw-800px">
+                    <!--begin::Modal content-->
+                    <div class="modal-content">
+                        <!--begin::Modal header-->
+                        <div class="modal-header">
+                            <!--begin::Modal title-->
+                            <h2>Hapus : {{ $dokumen->nama_dokumen }}</h2>
+                            <!--end::Modal title-->
+                            <!--begin::Close-->
+                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                                <span class="svg-icon svg-icon-1">
+                                    <i class="bi bi-x-lg"></i>
+                                </span>
+                                <!--end::Svg Icon-->
+                            </div>
+                            <!--end::Close-->
+                        </div>
+                        <!--end::Modal header-->
+                        <!--begin::Modal body-->
+                        <div class="modal-body py-lg-6 px-lg-6">
+                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
+                            <br>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
+                        </div>
+                        <!--end::Input group-->
+
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+            </div>
+        </form>
+    @endforeach
+    <!--end::DELETE DOKUMEN TENDER-->
 
     <!--begin::DELETE RISK TENDER PROYEK-->
     @foreach ($proyek->RiskTenderProyek as $riskTender)
