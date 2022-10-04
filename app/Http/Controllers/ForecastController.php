@@ -34,23 +34,28 @@ class ForecastController extends Controller
 
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get();
+            $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get();
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $periode)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.jenis_proyek", "!=", "I")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
+                $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get()->whereIn("unit_kerja", Auth::user()->unit_kerja);
             }
         }
 
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function($n) {
-            return (int) $n->rkap_forecast;
+        $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function($n) {
+            return (int) $n->nilai_rkap;
         });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function($n) {
             return (int) $n->nilai_forecast;
         });
         $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum(function($n) {
-            return (int) $n->realisasi_forecast;
+            if($n->stage == 8) {
+                return (int) $n->realisasi_forecast;
+            }
         });
         // dd($nilaiForecast);
         // $nilaiForecastArray = [];
@@ -223,24 +228,30 @@ class ForecastController extends Controller
 
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get();
+            $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get();
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
+                $nilaiRKAP = Proyek::select(["kode_proyek", "nilai_rkap", "bulan_pelaksanaan"])->get()->whereIn("unit_kerja", Auth::user()->unit_kerja);
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
             }
         }
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function($n) {
-            return (int) $n->rkap_forecast;
+
+        $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function($n) {
+            return (int) $n->nilai_rkap;
         });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function($n) {
             return (int) $n->nilai_forecast;
         });
         $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum(function($n) {
-            return (int) $n->realisasi_forecast;
+            if($n->stage == 8) {
+                return (int) $n->realisasi_forecast;
+            }
         });
-        
+
         $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
         $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
         if ($previous_periode_prognosa < 1) {
