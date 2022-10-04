@@ -104,7 +104,7 @@ class DashboardController extends Controller
                 // dd($nilaiHistoryForecast, Auth::user());
             }
             $unit_kerjas = "";
-            $dops = Dop::all();
+            $dops = Dop::orderBy('dop')->get();
         }
 
 
