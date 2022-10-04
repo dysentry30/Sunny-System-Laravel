@@ -43,9 +43,15 @@ class ForecastController extends Controller
             }
         }
 
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum((int) "rkap_forecast");
-        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum( (int) "nilai_forecast");
-        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum( (int) "realisasi_forecast");
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->rkap_forecast;
+        });
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->nilai_forecast;
+        });
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->realisasi_forecast;
+        });
         // dd($nilaiForecast);
         // $nilaiForecastArray = [];
         // $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
@@ -225,10 +231,16 @@ class ForecastController extends Controller
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
             }
         }
-        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum( (int) "rkap_forecast");
-        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum( (int) "nilai_forecast");
-        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum( (int) "realisasi_forecast");
-
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->rkap_forecast;
+        });
+        $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->nilai_forecast;
+        });
+        $nilaiTotalRealisasiTahun = $nilaiHistoryForecast->sum(function($n) {
+            return (int) $n->realisasi_forecast;
+        });
+        
         $previous_periode_prognosa = $periode != "" ? (int) $periode - 1 : (int) date("m") - 1;
         $year_previous_forecast = $year != "" ? (int) $year : (int) date("Y");
         if ($previous_periode_prognosa < 1) {
