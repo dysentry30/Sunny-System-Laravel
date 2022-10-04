@@ -170,6 +170,12 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         @endif
                                                     </button>
                                                 @endif
+
+                                                    {{-- <button type="button" style="background-color: #008CB4;" id="lock-forecast"
+                                                        class="btn btn-sm btn-active-primary mt-4">
+                                                        <span class="text-white mx-2 fs-6">Check Authorize</span>
+                                                        <i class="bi bi-lock-fill text-white"></i>
+                                                    </button> --}}
                                                 
                                                 <button type="button" id="unlock-previous-forecast"
                                                 onclick="unlockPreviousForecast()"

@@ -41,7 +41,7 @@ use Google\Service\FactCheckTools\Resource\Claims;
 
 class ProyekController extends Controller
 {
-    public function view(Request $request)
+    public function view(Request $request, $datatables = "")
     {
         $cari = $request->query("cari");
         $column = $request->get("column");
@@ -109,7 +109,10 @@ class ProyekController extends Controller
         $filter = null;
         // dd($filter);
 
-        return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
+        if (empty($datatables)) {
+            return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
+        }
+        return view('3_ProyekNew', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
     }
 
     public function save(Request $request, Proyek $newProyek)

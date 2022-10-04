@@ -85,6 +85,14 @@ class DashboardController extends Controller
                     $proyeks = $proyeks->where("unit_kerja", $request->get("unit-kerja"));
                     $contracts = $contracts->where("unit_kerja", $request->get("unit-kerja"));
                 }
+                if (!empty($request->get("dop"))) {
+                    $nilaiHistoryForecast = $nilaiHistoryForecast->where("dop", $request->get("dop"));
+                    $claims = $claims->where("dop", $request->get("dop"));
+                    $proyeks = $proyeks->where("dop", $request->get("dop"));
+                    $contracts = $contracts->where("dop", $request->get("dop"));
+                    // dd($proyeks);
+                    // dd($nilaiHistoryForecast, $claims, $proyeks, $contracts);
+                }
             } else {
                 $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
                 $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
