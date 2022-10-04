@@ -58,7 +58,7 @@ class UserController extends Controller
                 return response()->json([
                     "token" => $token_user,
                     "user" => $user,
-                ]);
+                ])->header("BPMCSRF", STR::random(50));
             }
         } else {
             $credentials = $request->validate([
