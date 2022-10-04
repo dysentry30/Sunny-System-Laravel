@@ -94,13 +94,16 @@
                     <!--begin::Card "style edited"-->
                     <div class="card" Id="List-vv" style="position: relative; overflow: hidden;">
 
+                        @php
+                            $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                        @endphp
 
                         <!--begin::Card header-->
                         <div class="card-header py-1">
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
-                                    @if (Auth::user()->check_administrator || (str_contains(auth()->user()->name, "(PIC)")) )                                        
+                                    @if (Auth::user()->check_administrator || $adminPIC )                                        
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-auto"
@@ -141,7 +144,7 @@
                                             }
                                             </script>
                                             @endif
-                                            @if (Auth::user()->check_administrator)
+                                            @if (Auth::user()->check_administrator || $adminPIC)
                                             <script>
                                                 function selectUnitKerja(e) {
                                                 document.getElementById("dop").value = "";
