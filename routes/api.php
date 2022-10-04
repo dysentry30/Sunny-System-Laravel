@@ -132,7 +132,7 @@ Route::middleware(["web"])->group(function () {
         $periode = getPeriode($request->periode);
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan"]);
+        $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan"])->where("stage", "=", 8);
         $total_realisasi = $proyeks->sum("nilai_perolehan");
         $proyeks = $proyeks->map(function ($p) use ($periode) {
             $p->spk_code = $p->kode_proyek;
@@ -154,7 +154,7 @@ Route::middleware(["web"])->group(function () {
                 if (!empty($f) && $i == $f->month_rkap) {
                     $data_ok->push([
                         "month" => $i,
-                        "data_ok" => $f->rkap_forecast
+                        "data_ok" => (int) $f->rkap_forecast
                     ]);
                 } else {
                     $data_ok->push([
