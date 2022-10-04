@@ -3670,7 +3670,7 @@
                                                                     if ($proyek->nilai_perolehan != null && $proyek->porsi_jo != null) {
                                                                         $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
                                                                         $kontrakKeseluruhan = ($nilaiPerolehan * 100) / (int) $proyek->porsi_jo;
-                                                                        $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', $kontrakKeseluruhan), 0, '.', '.');
+                                                                        $nilaiKontrakKeseluruhan = number_format((int) str_replace('.', '', round($kontrakKeseluruhan)), 0, '.', '.');
                                                                     }
 
                                                                 } else {
