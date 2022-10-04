@@ -542,8 +542,8 @@
                                             <!--begin::INDEX NILAI-->
                                             <!--end::INDEX NILAI-->
                                         </div>
-                                    </div> --}}
-                                    <hr>
+                                    </div>
+                                    <hr> --}}
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
                                         <h1 class="text-center bold pb-8">
@@ -3079,6 +3079,7 @@
                 chartLine.style.display = "none";
             } else if(type.trim() == "Terendah" || type.trim() == "Terkontrak" ) {
                 let tbodyHTML = ``;
+                // console.log(type);
                 let totalNilaiLainnya = 0;
 
                 let theadHTML =
@@ -3210,7 +3211,8 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].periode_prognosa == new Date().getMonth() ? filter.forecasts[0].realisasi_forecast: 0)}
+                                // ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].periode_prognosa == new Date().getMonth() ? filter.forecasts[0].realisasi_forecast: 0)}
+                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast: 0)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
