@@ -541,7 +541,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Home Page Forecast with Specific periode
     Route::get('/forecast/{periode}/{year}', [ForecastController::class, 'index']);
-    
+
     // Home Page Forecast with Specific periode "KUMULATIF"
     Route::get('/forecast-kumulatif-eksternal/{periode}/{year}', [ForecastController::class, 'viewForecastKumulatifEksternal']);
 
@@ -556,7 +556,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         $from_user = Auth::user();
 
-
         // $history_forecast = HistoryForecast::where("periode_prognosa", "=", $request->periode_prognosa);
         // if (!empty($history_forecast->get()->all())) {
         //     $history_forecast->delete();
@@ -566,8 +565,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $total_forecast = 0;
         $total_realisasi = 0;
         $total_rkap = 0;
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user->toArray())->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
+        } else {
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
+        }
         // $proyeks = Proyek::where("unit_kerja", $from_user->unit_kerja)->get()->sortBy("kode_proyek");
-        $proyeks = Forecast::where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
         foreach ($proyeks as $kode_proyek => $proyek) {
             // dump();
             // $total_realisasi += $proyek->sum("realisasi_forecast");
@@ -579,7 +583,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
-            if(empty($current_proyek->tipe_proyek)) {
+            if (empty($current_proyek->tipe_proyek)) {
                 dd($current_proyek, $kode_proyek);
             }
             if ($current_proyek->tipe_proyek == "R") {

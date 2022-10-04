@@ -100,7 +100,7 @@
                             <!--begin::Card title-->
                             <div class="card-title">
                                 <form action="/dashboard" class="d-flex flex-row " method="get">
-                                    @if (Auth::user()->check_administrator)
+                                    @if (Auth::user()->check_administrator || (str_contains(auth()->user()->name, "(PIC)")) )                                        
                                         <!-- Begin :: Select Options Unit Kerja -->
                                         <select onchange="selectDOP(this)" id="dop" name="dop"
                                             class="form-select form-select-solid w-auto"
