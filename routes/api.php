@@ -8,6 +8,7 @@ use App\Models\Proyek;
 use App\Models\ProyekBerjalans;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
@@ -63,7 +64,11 @@ Route::middleware(["web"])->group(function () {
                 ], 400);
             }
             $proyeks = $proyeks->map(function ($p) use ($request) {
-                $p->kode_crm = $p->kode_proyek;
+                if(str_contains($p->kode_proyek, "KD")) {
+                    $p->kode_crm = DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                } else {
+                    $p->kode_crm = $p->kode_proyek;
+                }
                 $p->nama_proyek = $p->nama_proyek;
                 $p->departemen_id = $p->unit_kerja;
                 $p->ap_id = "";
@@ -146,7 +151,11 @@ Route::middleware(["web"])->group(function () {
             $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("stage", "=", 8)->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan"]);
             $total_realisasi = $proyeks->sum("nilai_perolehan");
             $proyeks = $proyeks->map(function ($p) use ($periode) {
-                $p->spk_code = $p->kode_proyek;
+                if(str_contains($p->kode_proyek, "KD")) {
+                    $p->spk_code = DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                } else {
+                    $p->spk_code = $p->kode_proyek;
+                }
                 $p->proyek_name = $p->nama_proyek;
                 switch ($p->jenis_proyek) {
                     case "I":
@@ -176,7 +185,7 @@ Route::middleware(["web"])->group(function () {
                 }
                 $p->component_id = 0;
                 $p->header_id = 0;
-                $p->data_ok = $data_ok;
+                $p->total_ok = $data_ok;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
                 // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
