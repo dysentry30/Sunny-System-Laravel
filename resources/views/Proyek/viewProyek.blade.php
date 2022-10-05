@@ -2689,16 +2689,17 @@
                                                                         </td>
                                                                         <!--end::Column-->
                                                                         <!--begin::Action-->
+                                                                        @if ($proyek->stage < 5)
                                                                         <td class="text-center">
                                                                             <small>
                                                                                 <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
-                                                                                    id="modal-delete"
-                                                                                    class="btn btn-sm btn-light btn-active-primary">
-                                                                                    Delete
-                                                                                </p>
+                                                                                data-bs-target="#kt_dokumen_tender_delete_{{ $dokumen->id_dokumen_tender }}"
+                                                                                id="modal-delete"
+                                                                                class="btn btn-sm btn-light btn-active-primary">
+                                                                                Delete</p>
                                                                             </small>
                                                                         </td>
+                                                                        @endif
                                                                         <!--end::Action-->
                                                                     </tr>
                                                                 @endforeach
