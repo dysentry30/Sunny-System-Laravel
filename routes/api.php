@@ -175,12 +175,12 @@ Route::middleware(["web"])->group(function () {
                     if (!empty($f) && $i == $f->month_rkap) {
                         $data_ok->push([
                             "month" => $i,
-                            "total_ok" => (int) $f->rkap_forecast
+                            "total" => (int) $f->rkap_forecast
                         ]);
                     } else {
                         $data_ok->push([
                             "month" => $i,
-                            "total_ok" => 0
+                            "total" => 0
                         ]);
                     }
                 }
