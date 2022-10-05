@@ -50,14 +50,16 @@
     <link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 
-    {{-- @if (str_contains(Request::Path(), 'forecasts'))
+    @if (str_contains(Request::Path(), 'proyek-datatables'))
     <!-- begin::DataTables -->
-    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    {{-- <link rel="stylesheet" href="datatables/jquery.dataTables.min.css"> --}}
+    {{-- <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"> --}}
     <!-- end::DataTables -->
-    @endif --}}
+    @endif
 
     {{-- begin:: Disable Native Date Browser --}}
     <style>
@@ -406,6 +408,21 @@
                                                     <!--end::Svg Icon-->
                                                 </span>
                                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Users</span>
+                                            </a>
+                                        </div>
+                                        <!--end::Menu Colapse-->
+                                    @endif
+                                    @if (!auth()->user()->check_user_sales)
+                                        <!--begin::Menu Colapse-->
+                                        <div id="#kt_aside_menu" data-kt-menu="true"
+                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'mata-uang' ? 'background-color:#008CB4' : '' }}">
+                                            <a class="menu-link " href="/mata-uang" style="color:white; padding-left:20px;">
+                                                <span class="menu-icon">
+                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                    <i class="bi bi-people-fill text-white"></i>
+                                                    <!--end::Svg Icon-->
+                                                </span>
+                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Mata Uang</span>
                                             </a>
                                         </div>
                                         <!--end::Menu Colapse-->

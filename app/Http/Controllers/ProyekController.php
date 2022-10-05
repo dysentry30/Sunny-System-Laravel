@@ -11,10 +11,12 @@ use App\Models\Company;
 use App\Models\PorsiJO;
 use App\Models\Customer;
 use App\Models\Forecast;
+use App\Models\MataUang;
 use App\Models\UnitKerja;
 use App\Models\SumberDana;
 use App\Models\TeamProyek;
 use Illuminate\Http\Request;
+use App\Models\DokumenTender;
 use App\Models\KriteriaPasar;
 use App\Models\PesertaTender;
 use App\Models\ProyekAdendum;
@@ -30,7 +32,6 @@ use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
-use App\Models\DokumenTender;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -242,6 +243,7 @@ class ProyekController extends Controller
     public function edit($kode_proyek)
     {
         $proyek = Proyek::find($kode_proyek);
+        $mataUang = MataUang::all();
         // dd($proyek);
         if (empty($proyek)) {
             Alert::warning('Warning', "Proyek Tidak Ditemukan");
@@ -274,7 +276,7 @@ class ProyekController extends Controller
             return view(
                 'Proyek/viewProyek',
                 ["proyek" => $proyek, "proyeks" => Proyek::all()],
-                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara'])
+                compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'mataUang'])
                 // [
                 //     'companies' => Company::all(),
                 //     'sumberdanas' => SumberDana::all(),

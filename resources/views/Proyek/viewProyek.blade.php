@@ -1280,18 +1280,22 @@
                                                                             name="mata-uang-review"
                                                                             class="form-select form-select-solid"
                                                                             data-control="select2" data-hide-search="true"
-                                                                            data-placeholder="Pilih Mata Uang"
-                                                                            {{ auth()->user()->check_administrator ? '' : 'readonly' }}>
+                                                                            data-placeholder="Pilih Mata Uang">
                                                                             <option></option>
-                                                                            <option value="Rupiah"
-                                                                                {{ $proyek->mata_uang_review == 'Rupiah' ? 'selected' : '' }}>
-                                                                                Rupiah</option>
-                                                                            <option value="US Dollar"
-                                                                                {{ $proyek->mata_uang_review == 'US Dollar' ? 'selected' : '' }}>
-                                                                                US Dollar</option>
-                                                                            <option value="Chinese Yuan"
-                                                                                {{ $proyek->mata_uang_review == 'Chinese Yuan' ? 'selected' : '' }}>
-                                                                                Chinese Yuan</option>
+                                                                            @foreach ($mataUang as $uang)
+                                                                                @if ($uang->mata_uang == $proyek->mata_uang_review)
+                                                                                    <option
+                                                                                        value="{{ $uang->mata_uang }}"
+                                                                                        selected>
+                                                                                        {{ $uang->mata_uang }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option
+                                                                                        value="{{ $uang->mata_uang }}">
+                                                                                        {{ $uang->mata_uang }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
                                                                         </select>
                                                                         <!--end::Input-->
                                                                     </div>
@@ -1492,7 +1496,21 @@
                                                                             data-control="select2" data-hide-search="true"
                                                                             data-placeholder="Pilih Mata Uang">
                                                                             <option></option>
-                                                                            <option value="Rupiah"
+                                                                            @foreach ($mataUang as $uang)
+                                                                                @if ($uang->mata_uang == $proyek->mata_uang_awal)
+                                                                                    <option
+                                                                                        value="{{ $uang->mata_uang }}"
+                                                                                        selected>
+                                                                                        {{ $uang->mata_uang }}
+                                                                                    </option>
+                                                                                @else
+                                                                                    <option
+                                                                                        value="{{ $uang->mata_uang }}">
+                                                                                        {{ $uang->mata_uang }}
+                                                                                    </option>
+                                                                                @endif
+                                                                            @endforeach
+                                                                            {{-- <option value="Rupiah"
                                                                                 {{ $proyek->mata_uang_awal == 'Rupiah' ? 'selected' : '' }}>
                                                                                 Rupiah</option>
                                                                             <option value="US Dollar"
@@ -1500,7 +1518,7 @@
                                                                                 US Dollar</option>
                                                                             <option value="Chinese Yuan"
                                                                                 {{ $proyek->mata_uang_awal == 'Chinese Yuan' ? 'selected' : '' }}>
-                                                                                Chinese Yuan</option>
+                                                                                Chinese Yuan</option> --}}
                                                                         </select>
                                                                         <!--end::Input-->
                                                                     </div>
