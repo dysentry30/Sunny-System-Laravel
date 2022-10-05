@@ -36,6 +36,8 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\MataUangController;
+use App\Models\MataUang;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -313,6 +315,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Home Page Proyek
     Route::get('/proyek', [ProyekController::class, 'view']);
+
+    Route::get('/proyek-datatables/{datatables}', [ProyekController::class, 'view']);
 
     // direct to proyek after SAVE page 
     Route::post('/proyek/save', [ProyekController::class, 'save']);
@@ -906,6 +910,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Home Delete
     Route::delete('/kriteria-pasar/delete/{id}', [KriteriaPasarController::class, 'delete']);
+
+    // Home Mata Uang
+    Route::get('/mata-uang', [MataUangController::class, 'index']);
+
+    // NEW DOP after SAVE
+    Route::post('/mata-uang/save', [MataUangController::class, 'store']);
+
+    // NEW DOP after SAVE
+    Route::delete('/mata-uang/delete/{id}', [MataUangController::class, 'delete']);
     //End :: Master Data
 
 

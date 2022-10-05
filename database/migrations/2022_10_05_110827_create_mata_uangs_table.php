@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('mata_uangs', function (Blueprint $table) {
             $table->id();
-            $table->mata_uang();
-            $table->kurs()->nullable();
+            $table->string("mata_uang");
+            $table->integer("kurs")->nullable();
             $table->timestamps();
         });
     }
