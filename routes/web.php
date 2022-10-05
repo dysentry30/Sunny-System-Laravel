@@ -105,6 +105,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::get('/dashboard/index-nilai/{tipe}/{filter}', [DashboardController::class, "getDataCompetitiveNilai"]);
 
+    Route::get('/dashboard/sumber-dana-rkap/{tipe}', [DashboardController::class, "getDataSumberDanaRKAP"]);
+
+    Route::get('/dashboard/sumber-dana-rkap/{tipe}/{filter}', [DashboardController::class, "getDataSumberDanaRKAP"]);
+
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 

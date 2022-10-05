@@ -489,7 +489,7 @@
                                         {{-- <span class="vr" style="padding: 0.5px"></span> --}}
                                         
                                         <div class="col-6">
-                                            <figure class="col highcharts-figure py-12">
+                                            <figure class="col highcharts-figure">
                                                 <div class="py-12" id="index-nilai">
                                                     <!--begin::INDEX NILAI-->
                                                     <!--end::INDEX NILAI-->
@@ -532,18 +532,86 @@
                                     </div>
                                     <hr>
                                     
-                                    {{-- <div class="row">
-                                        <div class="col py-12" id="sumber-dana-rkap">
-                                            <!--begin::INDEX JUMLAH-->
-                                            <!--end::INDEX JUMLAH-->
-                                        </div>
+                                    <div class="row">
+                                        <figure class="col highcharts-figure">
+                                            <div class="" id="sumber-dana-rkap">
+                                                <!--begin::INDEX NILAI-->
+                                                <!--end::INDEX NILAI-->
+                                            </div>
+                                            <div class="" id="datatable-sumber-dana-rkap" style="display: none;">
+                                                <div class="text-center">
+                                                    <h2 id="title-table"></h2>
+                                                    <h4 id="total"></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                        onclick="hideTable('#datatable-sumber-dana-rkap','#sumber-dana-rkap')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                        Chart</button>
+                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                </div>
+                                                <br>
+                                                <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                        <!--begin::Table head-->
+                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                            {{-- THead Here --}}
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold" id="table-line-body">
+                                                            {{-- Data Here --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                </div>
+                                                <!--end::Table Proyek-->
+                                            </div>
+                                        </figure>
                                         <span class="vr" style="padding: 0.5px"></span>
-                                        <div class="col py-12" id="sumber-dana-realisasi">
-                                            <!--begin::INDEX NILAI-->
-                                            <!--end::INDEX NILAI-->
-                                        </div>
+                                        <figure class="col highcharts-figure">
+                                            <div class="" id="sumber-dana-realisasi">
+                                                <!--begin::INDEX NILAI-->
+                                                <!--end::INDEX NILAI-->
+                                            </div>
+                                            <div class="" id="datatable-sumber-dana-realisasi" style="display: none;">
+                                                <div class="text-center">
+                                                    <h2 id="title-table"></h2>
+                                                    <h4 id="total"></h4>
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                        onclick="hideTable('#datatable-sumber-dana-realisasi','#sumber-dana-realisasi')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                        Chart</button>
+                                                    <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                    <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                        onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                            class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                </div>
+                                                <br>
+                                                <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                    <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                        <!--begin::Table head-->
+                                                        <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                            {{-- THead Here --}}
+                                                        </thead>
+                                                        <!--end::Table head-->
+                                                        <!--begin::Table body-->
+                                                        <tbody class="fw-bold" id="table-line-body">
+                                                            {{-- Data Here --}}
+                                                        </tbody>
+                                                        <!--end::Table body-->
+                                                    </table>
+                                                </div>
+                                                <!--end::Table Proyek-->
+                                            </div>
+                                        </figure>
                                     </div>
-                                    <hr> --}}
+                                    <hr>
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
                                         <h1 class="text-center bold pb-8">
@@ -1282,6 +1350,7 @@
     
     <!--begin::SEBARAN SUMBER DANA-->
     <script>
+        const sebaranSumberDanaRKAP = JSON.parse('{!! $totalRKAPSumberDana->toJson() !!}');
         Highcharts.chart('sumber-dana-rkap', {
             chart: {
                 type: 'pie',
@@ -1312,7 +1381,7 @@
                 }
                 
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -1341,49 +1410,7 @@
             series: [{
                 name: "",
                 colorByPoint: true,
-                data: [
-                    {
-                        // name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
-                        name: "BUMN",
-                        y: 10000,
-                        x: "BUMN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                    {
-                        name: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "Swasta Nasional: " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "Swasta Nasional : " + Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
-                    },
-                    {
-                        name: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                    {
-                        name: "APBD:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "APBD : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
-                        y: 100,
-                        x: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
-                    },
-                    {
-                        name: "Loan:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "Loan : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                ]
+                data: sebaranSumberDanaRKAP,
             }],
             credits: {
                 enabled: false
@@ -1391,6 +1418,7 @@
         });
     </script>
     <script>
+        const sebaranSumberDanaRealisasi = JSON.parse('{!! $totalRealisasiSumberDana->toJson() !!}');
         Highcharts.chart('sumber-dana-realisasi', {
             chart: {
                 type: 'pie',
@@ -1421,7 +1449,7 @@
                 }
                 
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 pie: {
                     innerSize: 75,
@@ -1450,48 +1478,7 @@
             series: [{
                 name: "",
                 colorByPoint: true,
-                data: [
-                    {
-                        name: "BUMN: " + Intl.NumberFormat(["id"], { style: 'currency', currency: 'IDR', maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
-                        y: 10000,
-                        x: "BUMN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                    {
-                        name: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "Swasta Asing : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "Swasta Nasional: " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "Swasta Nasional : " + Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000)),
-                    },
-                    {
-                        name: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "APBN : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                    {
-                        name: "APBD:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "APBD : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
-                        y: 100,
-                        x: "PASG : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 100))}`,
-                    },
-                    {
-                        name: "Loan:" + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                        y: 1000,
-                        x: "Loan : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 1000))}`,
-                    },
-                    {
-                        name: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                        y: 10000,
-                        x: "INVS : " + `${Intl.NumberFormat(["id"], { maximumSignificantDigits: 2 }).format(Math.floor(Math.random() * 10000))}`,
-                    },
-                ]
+                data: sebaranSumberDanaRealisasi,
             }],
             credits: {
                 enabled: false
@@ -2038,6 +2025,7 @@
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
             const unitKerja = url.split("/");
+            console.log(type);
             
             if (type == "Forecast") {
                 if (tableElt.includes("triwulan")) {
@@ -3212,7 +3200,7 @@
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
                                 // ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].periode_prognosa == new Date().getMonth() ? filter.forecasts[0].realisasi_forecast: 0)}
-                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast: 0)}
+                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast) ?? 0}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3394,6 +3382,174 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
+            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah Asing" || type.trim() == "Swasta Asing" || type.trim() == "Swasta Nasional" || type.trim() == "APBD" || type.trim() == "APBN" || type.trim() == "INVS" || type.trim() == "BUMN-BUMD") {
+                let tbodyHTML = ``;
+                let totalNilaiLainnya = 0;
+
+                let theadHTML =
+                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai ${type}</th>`
+                '</tr>';
+                [filterRes].forEach(filtering => {
+                    for(let filter in filtering) {
+                    filter = filtering[filter];
+                    let stage = "";
+                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    switch (Number(filter.stage)) {
+                        case 0:
+                            stage = "Cancel";
+                            break;
+                        case 1:
+                            stage = "Pasar Dini";
+                            break;
+                        case 2:
+                            stage = "Pasar Potensial";
+                            break;
+                        case 3:
+                            stage = "Prakualifikasi";
+                            break;
+                        case 4:
+                            stage = "Tender Diikuti";
+                            break;
+                        case 5:
+                            stage = "Perolehan";
+                            break;
+                        case 6:
+                            stage = "Menang";
+                            break;
+                        case 7:
+                            stage = "Kalah";
+                            break;
+                        case 8:
+                            stage = "Terkontrak";
+                            break;
+                        case 9:
+                            stage = "Terendah";
+                            break;
+                        case 10:
+                            stage = "Approval";
+                            break;
+                        default:
+                            break;
+                    }
+
+                    let bulan = "";
+                    let getBulanColumn = filter.bulan_pelaksanaan;
+                    let nilai = 0;
+                    switch (type.trim()) {
+                        case "Proses":
+                            nilai = filter.penawaran_tender ?? 0;
+                            break;
+                        case "Prakualifikasi":
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        case "Kalah dan Cancel":
+                            nilai = filter.hps_pagu ?? 0;
+                            break;
+                        case "Menang":
+                            if(filter.forecasts[0]?.month_realisasi) {
+                                nilai = filter.forecasts[0].realisasi_forecast ?? 0;
+                                getBulanColumn = filter.forecasts[0]?.month_realisasi;
+                            }
+                            break;
+                        default:
+                            nilai = 0;
+                            break;
+                    }
+                    switch (Number(getBulanColumn)) {
+                        case 1:
+                            bulan = "Januari";
+                            break;
+                        case 2:
+                            bulan = "Februari";
+                            break;
+                        case 3:
+                            bulan = "Maret";
+                            break;
+                        case 4:
+                            bulan = "April";
+                            break;
+                        case 5:
+                            bulan = "Mei";
+                            break;
+                        case 6:
+                            bulan = "Juni";
+                            break;
+                        case 7:
+                            bulan = "Juli";
+                            break;
+                        case 8:
+                            bulan = "Agustus";
+                            break;
+                        case 9:
+                            bulan = "September";
+                            break;
+                        case 10:
+                            bulan = "Oktober";
+                            break;
+                        case 11:
+                            bulan = "November";
+                            break;
+                        case 12:
+                            bulan = "Desember";
+                            break;
+                        default:
+                            bulan = "-"
+                            break;
+                    }
+                    const unitKerja = typeof filter.unit_kerja == "object" ? filter.unit_kerja.unit_kerja : filter.unit_kerja 
+                    tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                                <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                                    class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${unitKerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Bulan-->
+                            <td>
+                                ${bulan}
+                            </td>
+                            <!--end::Bulan-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat(["id"]).format(nilai)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `Nilai ${type}`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
             }
             exportExcelBtn.setAttribute("href", `/download/${href}`);
         }
@@ -3483,6 +3639,41 @@
         })
     </script>
     <!--End::Clickable Competitive Index -->
+
+    {{-- sumber-dana-rkap --}}
+    <!--Begin::Clickable Sumber Dana RKAP -->
+    <script>
+        const sumberDanaRKAP = document.querySelectorAll("#sumber-dana-rkap .highcharts-point");
+        // console.log(sumberDanaRKAP);
+        sumberDanaRKAP.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                if(tipe.includes(" ")) {
+                    tipe = tipe.replaceAll(" ", "-");
+                }
+                getDataTable("#datatable-sumber-dana-rkap", "#sumber-dana-rkap", `/dashboard/sumber-dana-rkap/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Sumber Dana RKAP -->
+
+    <!--Begin::Clickable Sumber Dana Realisasi -->
+    <script>
+        const sumberDanaRealisasi = document.querySelectorAll("#sumber-dana-realisasi .highcharts-point");
+        // console.log(sumberDanaRealisasi);
+        sumberDanaRealisasi.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
+                if(tipe.includes(" ")) {
+                    tipe = tipe.replaceAll(" ", "-");
+                }
+                getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Sumber Dana Realisasi -->
     
 
 @endsection
