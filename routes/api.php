@@ -65,7 +65,7 @@ Route::middleware(["web"])->group(function () {
             }
             $proyeks = $proyeks->map(function ($p) use ($request) {
                 if(str_contains($p->kode_proyek, "KD")) {
-                    $p->kode_crm = DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                    $p->kode_crm = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                 } else {
                     $p->kode_crm = $p->kode_proyek;
                 }
@@ -152,7 +152,7 @@ Route::middleware(["web"])->group(function () {
             $total_realisasi = $proyeks->sum("nilai_perolehan");
             $proyeks = $proyeks->map(function ($p) use ($periode) {
                 if(str_contains($p->kode_proyek, "KD")) {
-                    $p->spk_code = DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                    $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                 } else {
                     $p->spk_code = $p->kode_proyek;
                 }
