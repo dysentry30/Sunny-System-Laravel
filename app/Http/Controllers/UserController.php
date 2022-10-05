@@ -44,6 +44,7 @@ class UserController extends Controller
                 'UserName' => ["required", "email"],
                 'UserPassword' => ["required"]
             ]);
+            $token = STR::random(50);
             $data = [
                 'email' => $request->UserName,
                 'password' => $request->UserPassword
@@ -58,7 +59,7 @@ class UserController extends Controller
                 return response()->json([
                     "token" => $token_user,
                     "user" => $user,
-                ])->header("BPMCSRF", STR::random(50));
+                ])->cookie("BPMCSRF", $token, 60);
             }
         } else {
             $credentials = $request->validate([
@@ -75,7 +76,7 @@ class UserController extends Controller
         // dd("gagal login");
         return back();
     }
-
+    
     public function logout(Request $request)
     {
         auth()->user()->forceFill([

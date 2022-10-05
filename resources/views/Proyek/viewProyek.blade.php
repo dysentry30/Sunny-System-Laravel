@@ -204,7 +204,7 @@
                                                                 Pasar Dini
                                                             </a>
                                                         @endif
-                                                        {{-- @if ($proyek->tipe_proyek != 'R') --}}
+
                                                         @if ($proyek->stage > 1)
                                                             <a href="#"
                                                                 class="stage-button stage-action color-is-default stage-is-done"
@@ -416,7 +416,7 @@
                                                             </ul>
                                                             @endif
                                                         @endif
-                                                        {{-- @endif --}}
+
                                                         @if ($proyek->stage > 7)
                                                             @if ($proyek->stage == 8 || $proyek->stage > 9)
                                                                 <a href="#" data-bs-toggle="dropdown"
