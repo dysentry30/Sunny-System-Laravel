@@ -363,8 +363,39 @@ class DashboardController extends Controller
         // $paretoAsuransi = ClaimManagements::sortable()->where("jenis_claim", "=", "Claim Asuransi")->get()->groupBy("kode_proyek");
         //end::Pareto
 
+        // Begin :: SUMBER DANA RKAP
+        $totalRKAPSumberDana = collect();
+        $proyeksGroupBySumberDana = $proyeks->where("sumber_dana", "!=", "")->sortBy("sumber_dana")->groupBy("sumber_dana");
+        foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks) {
+            $total_rkap = 0;
+            foreach ($proyeks as $proyek) {
+                $total_rkap += (int) $proyek->nilai_rkap / $per;
+            }
+            $totalRKAPSumberDana->push([
+                "name" => $sumber_dana . ": " . number_format($total_rkap, 0, ".", "."),
+                "y" => $total_rkap,
+                "x" => $sumber_dana . ": " . number_format($total_rkap, 0, ".", "."),
+            ]);
+        }
+        // End :: SUMBER DANA RKAP
 
-        return view('1_Dashboard', compact(["claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
+        // Begin :: SUMBER DANA REALISASI
+        $totalRealisasiSumberDana = collect();
+        foreach ($proyeksGroupBySumberDana as $sumber_dana => $proyeks) {
+            $total_realisasi = 0;
+            foreach ($proyeks as $proyek) {
+                $total_realisasi += (int) $proyek->nilai_perolehan / $per;
+            }
+            $totalRealisasiSumberDana->push([
+                "name" => $sumber_dana . ": " . number_format($total_realisasi, 0, ".", "."),
+                "y" => $total_realisasi,
+                "x" => $sumber_dana . ": " . number_format($total_realisasi, 0, ".", "."),
+            ]);
+        }
+        // End :: SUMBER DANA REALISASI
+
+
+        return view('1_Dashboard', compact(["totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
     }
 
     /**
@@ -886,7 +917,7 @@ class DashboardController extends Controller
                 }
             }
         } else {
-            $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+            $proyeks = Proyek::with("UnitKerja")->get(["peringkat_wika", "nama_proyek", "nilai_kontrak_keseluruhan", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
         }
         $stage = null;
         switch ($tipe) {
@@ -912,6 +943,110 @@ class DashboardController extends Controller
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
             $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+    
+    public function getDataSumberDanaRKAP($tipe, $filter = "") {
+        $spreadsheet = new Spreadsheet();
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Status Pasar');
+        $sheet->setCellValue('C1', 'Stage');
+        $sheet->setCellValue('D1', 'Unit Kerja');
+        $sheet->setCellValue('E1', 'Bulan');
+        $sheet->setCellValue('F1', "Nilai RKAP");
+
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        $tipe_real = "";
+        if(str_contains($tipe, "BUMN")) {
+            $tipe_real = str_replace("-", " / ", $tipe);
+        } else {
+            $tipe_real = str_replace("-", " ", $tipe);
+        }
+        if (!Auth::user()->check_administrator) {
+            if ($filter != "") {
+                $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+            } else {
+                if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                    $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                } else {
+                    $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
+                }
+            }
+        } else {
+            $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        }
+
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $p->status_pasdin);
+            $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
+            $sheet->setCellValue('F' . $row, $p->nilai_rkap);
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "$tipe-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+    public function getDataSumberDanaRealisasi($tipe, $filter = "") {
+        $spreadsheet = new Spreadsheet();
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Status Pasar');
+        $sheet->setCellValue('C1', 'Stage');
+        $sheet->setCellValue('D1', 'Unit Kerja');
+        $sheet->setCellValue('E1', 'Bulan');
+        $sheet->setCellValue('F1', "Nilai Realisasi");
+
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        $tipe_real = "";
+        if(str_contains($tipe, "BUMN")) {
+            $tipe_real = str_replace("-", " / ", $tipe);
+        } else {
+            $tipe_real = str_replace("-", " ", $tipe);
+        }
+        if (!Auth::user()->check_administrator) {
+            if ($filter != "") {
+                $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+            } else {
+                if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                    $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                } else {
+                    $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
+                }
+            }
+        } else {
+            $proyeks = Proyek::with("UnitKerja")->where("sumber_dana", "=", $tipe_real)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        }
+
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $p->status_pasdin);
+            $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
+            $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
