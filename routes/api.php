@@ -175,18 +175,18 @@ Route::middleware(["web"])->group(function () {
                     if (!empty($f) && $i == $f->month_rkap) {
                         $data_ok->push([
                             "month" => $i,
-                            "data_ok" => (int) $f->rkap_forecast
+                            "total_ok" => (int) $f->rkap_forecast
                         ]);
                     } else {
                         $data_ok->push([
                             "month" => $i,
-                            "data_ok" => 0
+                            "total_ok" => 0
                         ]);
                     }
                 }
                 $p->component_id = 0;
                 $p->header_id = 0;
-                $p->total_ok = $data_ok;
+                $p->data_ok = $data_ok;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
                 // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
