@@ -153,7 +153,7 @@ Route::middleware(["web"])->group(function () {
             $proyeks = $proyeks->map(function ($p) use ($periode) {
                 if(str_contains($p->kode_proyek, "KD")) {
                     // $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                    Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dd();
+                    Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
                 } else {
                     $p->spk_code = $p->kode_proyek;
                 }
