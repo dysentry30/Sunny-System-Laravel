@@ -1679,15 +1679,39 @@
                                                                 document.getElementById("show-csi").style.display = "none";
                                                             }
                                                         </script>
-                                                        <div id="scoreCSI">
-                                                            <figure class="highcharts-figure">
-                                                                {{-- <div id="container-speed" class="chart-container"></div> --}}
-                                                                <div id="score-csi" class="chart-container"></div>
-                                                            </figure>
-                                                            <hr>
 
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div id="scoreCLR">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-clr" class="chart-container"></div>
+                                                                    </figure>
+                                                                    <hr>
+        
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div id="scoreNPS">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-nps" class="chart-container"></div>
+                                                                    </figure>
+                                                                    <hr>
+        
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div id="scoreCSI">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-csi" class="chart-container"></div>
+                                                                    </figure>
+                                                                    <hr>
+        
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <!--scoreCSI-->
 
                                                         {{-- <br>
                                                         <div class="col">
@@ -2658,7 +2682,76 @@
     <!--end::Piutang Pelanggan-->
 
     <!--begin::Laba Rugi Pelanggan-->
-    @php
+    <script>
+        let namaUnit = {!! json_encode($namaUnit) !!};
+        let labaProyek = {!! json_encode($labaProyek) !!};
+        let rugiProyek = {!! json_encode($rugiProyek) !!};
+        Highcharts.chart('labarugi-pelanggan', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '<b class="h3">Laba / Rugi</b>',
+                align: 'center'
+            },
+            xAxis: {
+                categories: namaUnit,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray',
+                        textOutline: 'none'
+                    }
+                }
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                // x: 70,
+                // y: 70,
+                // floating: true,
+                // backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
+                // borderColor: '#CCC',
+                // borderWidth: 1,
+                shadow: false
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Laba',
+                data: labaProyek
+            }, {
+                name: 'Rugi',
+                data: rugiProyek
+            }]
+        });
+    </script>
+    {{-- @php
         $nilaiLaba = (int) str_replace(',', '', $customer->laba);
         $nilaiRugi = (int) str_replace(',', '', $customer->rugi);
     @endphp
@@ -2750,13 +2843,26 @@
             //     // stack: 'male'
             // }]
         });
-    </script>
+    </script> --}}
     <!--end::Laba Rugi Pelanggan-->
 
-    <!--begin::Score CSI-->
+    <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiCsi = 20;
-        Highcharts.chart('score-csi', {
+        let nilaiClr = 3;
+        let bgColorClr = "";
+        // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
+        if(nilaiClr >= 1 && nilaiClr < 1.8) {
+            bgColorClr = "#a9b8eb";
+        } else if(nilaiClr >= 1.8 && nilaiClr < 2.6) {
+            bgColorClr = "#8092cf";
+        } else if(nilaiClr >= 2.6 && nilaiClr < 3.4) {
+            bgColorClr = "#8092cf";
+        } else if(nilaiClr >= 3.4 && nilaiClr < 4.2) {
+            bgColorClr = "#2f448a";
+        } else if(nilaiClr >= 4.2 && nilaiClr <= 5) {
+            bgColorClr = "#152866";
+        }
+        Highcharts.chart('score-clr', {
 
             chart: {
                 type: 'gauge',
@@ -2767,7 +2873,7 @@
             },
 
             title: {
-                text: '<b class="h3">Gauge CSI</b>'
+                text: '<b class="h3">Customer Loyalty Rate</b>'
             },
 
             pane: {
@@ -2795,8 +2901,8 @@
 
             // the value axis
             yAxis: {
-                min: 0,
-                max: 100,
+                min: 1,
+                max: 5,
 
                 minorTickInterval: 'auto',
                 minorTickWidth: 1,
@@ -2805,7 +2911,7 @@
                 // minorTickColor: '#ffffff00',
 
                 // tickPixelInterval: 5,
-                tickPositions: [0, 25, 50, 100],
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
                 tickWidth: 0,
                 tickPosition: 'inside',
                 // tickLength: 5,
@@ -2820,21 +2926,32 @@
                     // text: '<span style="font-size:11px">{series.data}</span><br>'
                 },
                 plotBands: [{
-                    from: 0,
-                    to: 25,
+                    from: 1,
+                    to: 1.8,
                     thickness: 20,
-                    color: '#ED6D3F' // red
+                    color: '#a9b8eb' // white blue
                 }, {
-                    from: 25,
-                    to: 50,
+                    from: 1.8,
+                    to: 2.6,
                     thickness: 20,
-                    color: '#F7C13E' // yellow
+                    color: '#8092cf' // darker white blue
                 }, {
-                    from: 50,
-                    to: 100,
+                    from: 2.6,
+                    to: 3.4,
                     thickness: 20,
-                    color: '#61CB65' // green
-                }]
+                    color: '#495c9c' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#2f448a' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#152866' // dark blue
+                },
+            ]
             },
             tooltip: {
                 enabled: false
@@ -2852,8 +2969,359 @@
                     },
                     dial: {
                         radius: '60%',
-                        backgroundColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
-                        borderColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
+                        backgroundColor: bgColorClr,
+                        borderColor: bgColorClr,
+                        borderWidth: 1,
+                        baseWidth: 0,
+                        topWidth: 18,
+                        baseLength: '120%', // of radius
+                        rearLength: '-100%'
+                    },
+                    pivot: {
+                        radius: 0
+                    }
+                }
+            },
+
+            // series: [{
+            //     name: 'Score Customer Loyalty Rate',
+            //     data: [75,50],
+            //     dataLabels: {
+            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //     },
+            // }]
+            series: [{
+                name: "Score Customer Loyalty Rate",
+                colorByPoint: true,
+                data: [{
+                    y: nilaiClr,
+                    dataLabels: {
+                        format: `<span style="font-size:70px; color:${bgColorClr}">{y}</span><br/>`,
+                    },
+                }]
+            }],
+            // },
+            // // Add some life
+            // function (chart) {
+            // if (!chart.renderer.forExport) {
+            //     setInterval(function () {
+            //         var point = chart.series[0].points[0],
+            //             newVal,
+            //             inc = Math.round((Math.random() - 0.5) * 20);
+
+            //         newVal = point.y + inc;
+            //         if (newVal < 0 || newVal > 200) {
+            //             newVal = point.y - inc;
+            //         }
+
+            //         point.update(newVal);
+
+            //     }, 3000);
+            // }
+        });
+    </script>
+    <!--end::Score Customer Loyalty Rate-->
+
+    <!--begin::Score Net Promoter Score-->
+    <script>
+        let nilaiNps = 4;
+        let bgColorNps = "";
+        // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
+        if(nilaiNps >= 1 && nilaiNps < 1.8) {
+            bgColorNps = "#Cff9b2";
+        } else if(nilaiNps >= 1.8 && nilaiNps < 2.6) {
+            bgColorNps = "#A5DA81";
+        } else if(nilaiNps >= 2.6 && nilaiNps < 3.4) {
+            bgColorNps = "#8ED260";
+        } else if(nilaiNps >= 3.4 && nilaiNps < 4.2) {
+            bgColorNps = "#6FB73D";
+        } else if(nilaiNps >= 4.2 && nilaiNps <= 5) {
+            bgColorNps = "#46831C";
+        }
+        Highcharts.chart('score-nps', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+
+            title: {
+                text: '<b class="h3">Net Promoter Score</b>'
+            },
+
+            pane: {
+                center: ['50%', '70%'],
+                size: '100%',
+                startAngle: -100,
+                endAngle: 100,
+                background: [{
+                    backgroundColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, '#ffffff00'],
+                            [1, '#ffffff00']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '10%'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+                min: 1,
+                max: 5,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 1,
+                // minorTickPosition: 'inside',
+                // minorTickColor: '#ffffff00',
+
+                // tickPixelInterval: 5,
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
+                tickWidth: 0,
+                tickPosition: 'inside',
+                // tickLength: 5,
+                // tickColor: '#666',
+                labels: {
+                    distance: -35,
+                    step: 1,
+                    rotation: 'auto'
+                },
+                title: {
+                    // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                    // text: '<span style="font-size:11px">{series.data}</span><br>'
+                },
+                plotBands: [{
+                    from: 1,
+                    to: 1.8,
+                    thickness: 20,
+                    color: '#Cff9b2' // white blue
+                }, {
+                    from: 1.8,
+                    to: 2.6,
+                    thickness: 20,
+                    color: '#A5DA81' // darker white blue
+                }, {
+                    from: 2.6,
+                    to: 3.4,
+                    thickness: 20,
+                    color: '#8ED260' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#6FB73D' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#46831C' // dark blue
+                },
+            ]
+            },
+            tooltip: {
+                enabled: false
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        enabled: true,
+                        borderColor: false,
+                    },
+                    dial: {
+                        radius: '60%',
+                        backgroundColor: bgColorNps,
+                        borderColor: bgColorNps,
+                        borderWidth: 1,
+                        baseWidth: 0,
+                        topWidth: 18,
+                        baseLength: '120%', // of radius
+                        rearLength: '-100%'
+                    },
+                    pivot: {
+                        radius: 0
+                    }
+                }
+            },
+
+            // series: [{
+            //     name: 'Score Net Promoter Score',
+            //     data: [75,50],
+            //     dataLabels: {
+            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //     },
+            // }]
+            series: [{
+                name: "Score Net Promoter Score",
+                colorByPoint: true,
+                data: [{
+                    y: nilaiNps,
+                    dataLabels: {
+                        format: `<span style="font-size:70px; color:${bgColorNps}">{y}</span><br/>`,
+                    },
+                }]
+            }],
+            // },
+            // // Add some life
+            // function (chart) {
+            // if (!chart.renderer.forExport) {
+            //     setInterval(function () {
+            //         var point = chart.series[0].points[0],
+            //             newVal,
+            //             inc = Math.round((Math.random() - 0.5) * 20);
+
+            //         newVal = point.y + inc;
+            //         if (newVal < 0 || newVal > 200) {
+            //             newVal = point.y - inc;
+            //         }
+
+            //         point.update(newVal);
+
+            //     }, 3000);
+            // }
+        });
+    </script>
+    <!--end::Score Net Promoter Score-->
+    
+    <!--begin::Score CSI-->
+    <script>
+        let nilaiCsi = 4;
+        let bgColorCsi = "";
+        if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
+            bgColorCsi = "#F1E4A9";
+        } else if(nilaiCsi >= 1.8 && nilaiCsi < 2.6) {
+            bgColorCsi = "#E8D373";
+        } else if(nilaiCsi >= 2.6 && nilaiCsi < 3.4) {
+            bgColorCsi = "#CEB543";
+        } else if(nilaiCsi >= 3.4 && nilaiCsi < 4.2) {
+            bgColorCsi = "#B79D25";
+        } else if(nilaiCsi >= 4.2 && nilaiCsi <= 5) {
+            bgColorCsi = "#967D0B";
+        }
+        Highcharts.chart('score-csi', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+
+            title: {
+                text: '<b class="h3">Customer Satisfaction Index</b>'
+            },
+
+            pane: {
+                center: ['50%', '70%'],
+                size: '100%',
+                startAngle: -100,
+                endAngle: 100,
+                background: [{
+                    backgroundColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, '#ffffff00'],
+                            [1, '#ffffff00']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '10%'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+                min: 1,
+                max: 5,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 1,
+                // minorTickPosition: 'inside',
+                // minorTickColor: '#ffffff00',
+
+                // tickPixelInterval: 5,
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
+                tickWidth: 0,
+                tickPosition: 'inside',
+                // tickLength: 5,
+                // tickColor: '#666',
+                labels: {
+                    distance: -35,
+                    step: 1,
+                    rotation: 'auto'
+                },
+                title: {
+                    // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                    // text: '<span style="font-size:11px">{series.data}</span><br>'
+                },
+                plotBands: [{
+                    from: 1,
+                    to: 1.8,
+                    thickness: 20,
+                    color: '#F1E4A9' // white blue
+                }, {
+                    from: 1.8,
+                    to: 2.6,
+                    thickness: 20,
+                    color: '#E8D373' // darker white blue
+                }, {
+                    from: 2.6,
+                    to: 3.4,
+                    thickness: 20,
+                    color: '#CEB543' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#B79D25' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#967D0B' // dark blue
+                },
+            ]
+            },
+            tooltip: {
+                enabled: false
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        enabled: true,
+                        borderColor: false,
+                    },
+                    dial: {
+                        radius: '60%',
+                        backgroundColor: bgColorCsi,
+                        borderColor: bgColorCsi,
                         borderWidth: 1,
                         baseWidth: 0,
                         topWidth: 18,
@@ -2879,7 +3347,7 @@
                 data: [{
                     y: nilaiCsi,
                     dataLabels: {
-                        format: `<span style="font-size:70px; ${nilaiCsi > 50 ? 'color:#61CB65' : nilaiCsi > 25 ? 'color:#F7C13E' : 'color:#ED6D3F' }">{y}</span><br/>`,
+                        format: `<span style="font-size:70px; color:${bgColorCsi}">{y}</span><br/>`,
                     },
                 }]
             }],
