@@ -250,6 +250,27 @@ class CustomerController extends Controller
         // dump($kategori->proyek);
         // end::chart Performance Pelanggan
         
+        // begin::chart Laba / Rugi
+        $namaUnit = [];
+        $labaProyek = [];
+        $rugiProyek = [];
+        $proyekOngoing = 0;
+        $proyekClosed = 0;
+        foreach ($kategoriProyek as $proyekBerjalan) {
+            $unitKerja = UnitKerja::where("divcode", "=", $proyekBerjalan->unit_kerja)->first();
+            array_push($namaUnit, $unitKerja->unit_kerja);
+
+            $proyekPiutang = $proyekBerjalan->proyek;
+            $nilaiLaba = (int) str_replace(",", "", $proyekPiutang->laba);
+            array_push($labaProyek, $nilaiLaba);
+
+            $proyekPiutang = $proyekBerjalan->proyek;
+            $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi);
+            array_push($rugiProyek, $nilaiRugi);
+        } 
+        // dump($labaProyek, $rugiProyek );
+        // end::chart Laba / Rugi
+
         return view('Customer/viewCustomer', [
             "customer" => $customer, 
             "attachment" => $customer->customerAttachments->all(),   
@@ -270,7 +291,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-        ]);
+        ], compact("namaUnit", "labaProyek", "rugiProyek"));
     }
 
     public function saveEdit(
