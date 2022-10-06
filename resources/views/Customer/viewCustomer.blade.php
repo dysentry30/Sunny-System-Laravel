@@ -283,12 +283,12 @@
                                                     <!--end:::Tab item Informasi Perusahaan-->
 
                                                     <!--begin:::Tab item Atachment & Notes-->
-                                                    <li class="nav-item">
+                                                    {{-- <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_performance"
                                                             style="font-size:12px;">PERFORMANCE</a>
-                                                    </li>
+                                                    </li> --}}
                                                     <!--end:::Tab item Atachment & Notes-->
 
                                                     <!--begin:::Tab item History-->
@@ -789,74 +789,6 @@
                                                             <!--End begin::Row-->
 
                                                             <br>
-
-                                                            <!--begin::Data CSI-->
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
-                                                                CSI
-                                                            </h3>
-                                                            <!--end::Data CSI-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RA</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            value="" placeholder="Nilai RA" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Presentase</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Presentase" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RI</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Nilai RI" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
                                                         </div>
                                                     </div>
                                                     <!--end:::Tab pane Performance-->
@@ -865,6 +797,22 @@
                                                     <!--begin:::Tab pane Struktur Organisasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_organisasi"
                                                         role="tabpanel">
+
+                                                        <!--begin::Attachment-->
+                                                        <h3 class="fw-bolder    m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                            Upload Struktur Organisasi
+                                                        </h3>
+
+                                                        <div>
+                                                            <label for="struktur-attachment" class="form-label"></label>
+                                                            <input onchange="this.form.submit()"
+                                                                class="form-control form-control-sm" id="struktur-attachment"
+                                                                name="struktur-attachment" type="file"
+                                                                accept=".pdf">
+                                                        </div>
+
+                                                        <br>
                                                         <!--begin::Input-->
                                                         {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Import Struktur :
@@ -1003,13 +951,13 @@
                                                                                     <td>
                                                                                         <a href="#"
                                                                                             class="text-gray-600 text-hover-primary mb-1">
-                                                                                            {{ $proyekberjalan0->proyek->nospk_external }}
+                                                                                            {{ $proyekberjalan0->proyek->nospk_external ?? "" }}
                                                                                         </a>
                                                                                     </td>
                                                                                     <!--end::Kode-->
                                                                                     <!--begin::Unit-->
                                                                                     <td>
-                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja }}
+                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja ?? "" }}
                                                                                     </td>
                                                                                     <!--end::Unit-->
                                                                                     <!--begin::Nilai OK-->
@@ -1019,8 +967,8 @@
                                                                                     <!--begin::Durasi-->
                                                                                     <td>
                                                                                         @php
-                                                                                            $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
-                                                                                            $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
+                                                                                            $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date("now"));
+                                                                                            $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date("now"));
                                                                                             $durasi = $tglakhir->diff($tglawal);
                                                                                         @endphp
                                                                                         {{ $durasi->y }} Tahun,
@@ -1267,63 +1215,65 @@
                                                                                 <!--end::Stage-->
                                                                                 <!--begin::Nilai Forecast-->
                                                                                 <td>
-                                                                                    @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
-                                                                                        @switch($forecast->month_forecast)
-                                                                                            @case('1')
-                                                                                                Januari
-                                                                                            @break
+                                                                                    @isset($proyekberforecast->proyek->Forecasts)
+                                                                                        @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
+                                                                                            @switch($forecast->month_forecast)
+                                                                                                @case('1')
+                                                                                                    Januari
+                                                                                                @break
 
-                                                                                            @case('2')
-                                                                                                Februari
-                                                                                            @break
+                                                                                                @case('2')
+                                                                                                    Februari
+                                                                                                @break
 
-                                                                                            @case('3')
-                                                                                                Maret
-                                                                                            @break
+                                                                                                @case('3')
+                                                                                                    Maret
+                                                                                                @break
 
-                                                                                            @case('4')
-                                                                                                April
-                                                                                            @break
+                                                                                                @case('4')
+                                                                                                    April
+                                                                                                @break
 
-                                                                                            @case('5')
-                                                                                                Mei
-                                                                                            @break
+                                                                                                @case('5')
+                                                                                                    Mei
+                                                                                                @break
 
-                                                                                            @case('6')
-                                                                                                Juni
-                                                                                            @break
+                                                                                                @case('6')
+                                                                                                    Juni
+                                                                                                @break
 
-                                                                                            @case('7')
-                                                                                                Juli
-                                                                                            @break
+                                                                                                @case('7')
+                                                                                                    Juli
+                                                                                                @break
 
-                                                                                            @case('8')
-                                                                                                Agustus
-                                                                                            @break
+                                                                                                @case('8')
+                                                                                                    Agustus
+                                                                                                @break
 
-                                                                                            @case('9')
-                                                                                                September
-                                                                                            @break
+                                                                                                @case('9')
+                                                                                                    September
+                                                                                                @break
 
-                                                                                            @case('10')
-                                                                                                Oktober
-                                                                                            @break
+                                                                                                @case('10')
+                                                                                                    Oktober
+                                                                                                @break
 
-                                                                                            @case('11')
-                                                                                                November
-                                                                                            @break
+                                                                                                @case('11')
+                                                                                                    November
+                                                                                                @break
 
-                                                                                            @case('12')
-                                                                                                Desember
-                                                                                            @break
+                                                                                                @case('12')
+                                                                                                    Desember
+                                                                                                @break
 
-                                                                                            @default
-                                                                                                Selesai
-                                                                                        @endswitch
+                                                                                                @default
+                                                                                                    Selesai
+                                                                                            @endswitch
 
-                                                                                        :
-                                                                                        {{ $forecast->nilai_forecast }};<br>
-                                                                                    @endforeach
+                                                                                            :
+                                                                                            {{ $forecast->nilai_forecast }};<br>
+                                                                                        @endforeach
+                                                                                    @endisset
                                                                                 </td>
                                                                                 <!--end::Nilai Forecast-->
                                                                             </tr>
@@ -1533,6 +1483,73 @@
                                                             <!--end::Input Note-->
 
                                                         </div>
+                                                        <!--begin::Data CSI-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                        style="font-size:14px;">
+                                                        CSI
+                                                    </h3>
+                                                    <!--end::Data CSI-->
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai RA</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    value="" placeholder="Nilai RA" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Presentase</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    placeholder="Presentase" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
+                                                    <!--begin::Row-->
+                                                    <div class="row fv-row">
+                                                        <!--begin::Col-->
+                                                        <div class="col-6">
+                                                            <!--begin::Input group Website-->
+                                                            <div class="fv-row mb-7">
+                                                                <!--begin::Label-->
+                                                                <label class="fs-6 fw-bold form-label mt-3">
+                                                                    <span>Nilai RI</span>
+                                                                </label>
+                                                                <!--end::Label-->
+                                                                <!--begin::Input-->
+                                                                <input type="text"
+                                                                    class="form-control form-control-solid reformat"
+                                                                    placeholder="Nilai RI" />
+                                                                <!--end::Input-->
+                                                            </div>
+                                                            <!--end::Input group-->
+                                                        </div>
+                                                        <!--End begin::Col-->
+                                                    </div>
+                                                    <!--End begin::Row-->
                                                     </div>
                                                     <!--end:::Tab pane Atachment & Notes-->
 
@@ -2510,6 +2527,7 @@
 
     <!--begin::Performance Pelanggan-->
     <script>
+        let namaUnit = {!! json_encode($namaUnit) !!};
         let namaProyek = {!! json_encode($namaProyek) !!};
         let nilaiOK = {!! json_encode($nilaiOK) !!};
         if (namaProyek.length == 0) {
@@ -2609,10 +2627,11 @@
         $nilaiPiutang = (int) str_replace(',', '', $customer->piutang);
     @endphp
     <script>
-        let nilaiPiutang = {!! $nilaiPiutang !!};
+        let nilaiPiutang = {!! json_encode($piutangProyek) !!};
+        console.log(nilaiPiutang);
         Highcharts.chart('piutang-pelanggan', {
             chart: {
-                type: 'column',
+                type: 'pie',
                 options3d: {
                     enabled: true,
                     alpha: 5,
@@ -2637,22 +2656,16 @@
             // xAxis: {
             //     type: 'category'
             // },
-            xAxis: {
-                categories: [''],
-                labels: {
-                    skew3d: true,
-                    style: {
-                        fontSize: '16px'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
+            // xAxis: {
+            //     categories: namaUnit,
+            // },
+            // yAxis: {
+            //     title: {
+            //         text: ''
+            //     }
 
-            },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            // },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 series: {
                     dataLabels: {
@@ -2663,19 +2676,16 @@
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name} {point.y}</span></b><br/>'
             },
 
             credits: {
                 enabled: false
             },
             series: [{
-                name: "Piutang : " + "{{ number_format($nilaiPiutang, 0, ',', ',') }}",
+                name: "Piutang",
                 colorByPoint: true,
-                data: [{
-                    name: 'Nilai Piutang',
-                    y: nilaiPiutang,
-                }]
+                data: nilaiPiutang
             }],
         });
     </script>
@@ -2683,7 +2693,6 @@
 
     <!--begin::Laba Rugi Pelanggan-->
     <script>
-        let namaUnit = {!! json_encode($namaUnit) !!};
         let labaProyek = {!! json_encode($labaProyek) !!};
         let rugiProyek = {!! json_encode($rugiProyek) !!};
         Highcharts.chart('labarugi-pelanggan', {
