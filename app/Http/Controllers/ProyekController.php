@@ -181,7 +181,7 @@ class ProyekController extends Controller
         $newProyek->porsi_jo = 100;
 
         //begin::Generate Kode Proyek
-        $generateProyek = Proyek::all();
+        $generateProyek = Proyek::all()->sortBy("kode_proyek");
         if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
             $no_urut = (int) substr($generateProyek->last()->kode_proyek, 2, 3) + 1;
         } else {
