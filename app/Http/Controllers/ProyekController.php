@@ -188,7 +188,7 @@ class ProyekController extends Controller
             // $no_urut = count($generateProyek)+1;
             $no_urut = (int) substr($generateProyek->last()->kode_proyek, 4, 3) + 1;
         }
-        // dd($generateProyek->last());
+        dd($no_urut);
 
 
         $unit_kerja = $dataProyek["unit-kerja"];
