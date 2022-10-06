@@ -571,7 +571,7 @@
                                                 <!--end::Table Proyek-->
                                             </div>
                                         </figure>
-                                        <span class="vr" style="padding: 0.5px"></span>
+                                        {{-- <span class="vr" style="padding: 0.5px"></span> --}}
                                         <figure class="col highcharts-figure">
                                             <div class="" id="sumber-dana-realisasi">
                                                 <!--begin::INDEX NILAI-->
