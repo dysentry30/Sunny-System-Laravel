@@ -3382,24 +3382,27 @@
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
-            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah Asing" || type.trim() == "Swasta Asing" || type.trim() == "Swasta Nasional" || type.trim() == "APBD" || type.trim() == "APBN" || type.trim() == "INVS" || type.trim() == "BUMN-BUMD") {
+            } else if(type.trim() == "Loan" || type.trim() == "Pemerintah-Asing" || type.trim() == "Swasta-Asing" || type.trim() == "Swasta-Nasional" || type.trim() == "APBD" || type.trim() == "APBN" || type.trim() == "INVS" || type.trim() == "BUMN-BUMD") {
                 let tbodyHTML = ``;
                 let totalNilaiLainnya = 0;
 
                 let theadHTML =
                 '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
-                    '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
                     '<th>Unit Kerja</th>' +
-                    '<th>Bulan</th>' +
-                    `<th class="text-end">Nilai ${type}</th>`
+                    `<th class="text-end">Nilai</th>`
                 '</tr>';
+                
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    if(filter.nilai_perolehan) {
+                        totalNilaiLainnya += Number(filter.nilai_perolehan ?? 0);
+                    } else {
+                        totalNilaiLainnya += Number(filter.nilai_rkap ?? 0);
+                    }
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -3440,27 +3443,7 @@
 
                     let bulan = "";
                     let getBulanColumn = filter.bulan_pelaksanaan;
-                    let nilai = 0;
-                    switch (type.trim()) {
-                        case "Proses":
-                            nilai = filter.penawaran_tender ?? 0;
-                            break;
-                        case "Prakualifikasi":
-                            nilai = filter.hps_pagu ?? 0;
-                            break;
-                        case "Kalah dan Cancel":
-                            nilai = filter.hps_pagu ?? 0;
-                            break;
-                        case "Menang":
-                            if(filter.forecasts[0]?.month_realisasi) {
-                                nilai = filter.forecasts[0].realisasi_forecast ?? 0;
-                                getBulanColumn = filter.forecasts[0]?.month_realisasi;
-                            }
-                            break;
-                        default:
-                            nilai = 0;
-                            break;
-                    }
+                    let nilai = filter.nilai_perolehan ?? filter.nilai_rkap;
                     switch (Number(getBulanColumn)) {
                         case 1:
                             bulan = "Januari";
@@ -3511,11 +3494,6 @@
                                     class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
                             </td>
                             <!--end::Email-->
-                            <!--begin::Name-->
-                            <td>
-                                ${filter.status_pasdin == null ? "-" : filter.status_pasdin}
-                            </td>
-                            <!--end::Name-->
                             <!--begin::Stage-->
                             <td>
                                 ${stage}
@@ -3527,12 +3505,6 @@
                                 ${unitKerja}
                             </td>
                             <!--end::Unit Kerja-->
-
-                            <!--begin::Bulan-->
-                            <td>
-                                ${bulan}
-                            </td>
-                            <!--end::Bulan-->
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
