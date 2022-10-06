@@ -182,6 +182,7 @@
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">No.</th>
                                         <th class="min-w-auto">@sortablelink('mata_uang', 'Mata Uang ')</th>
+                                        <th class="min-w-auto text-center">Kurs</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">
                                                 Action
@@ -200,23 +201,29 @@
                                     @foreach ($mataUang as $uang)
                                         <tr>
 
-                                            <!--begin::No=-->
+                                            <!--begin::No-->
                                             <td>
                                                 {{ $no++ }}
                                             </td>
-                                            <!--end::No=-->
-
-                                            <!--begin::Nama Company=-->
+                                            <!--end::No-->
+                                            
+                                            <!--begin::Nama Company-->
                                             <td>
                                                 <a type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#kt_edit_{{ $uang->id }}"
-                                                    class="text-gray-600 text-gray text-hover-primary">{{ $uang->mata_uang }}</a>
+                                                data-bs-target="#kt_edit_{{ $uang->id }}"
+                                                class="text-gray-600 text-gray text-hover-primary">{{ $uang->mata_uang }}</a>
                                                 </a>
                                             </td>
-                                            <!--end::Nama Company=-->
+                                            <!--end::Nama Company-->
+                                            
+                                            <!--begin::No-->
+                                            <td class="text-center">
+                                                {{ number_format((int) str_replace('.', '', $uang->kurs ), 0, '.', '.') ?? "-" }}
+                                            </td>
+                                            <!--end::No-->
 
                                             @if (auth()->user()->check_administrator)
-                                                <!--begin::Action=-->
+                                                <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
@@ -226,7 +233,7 @@
                                                     </button>
                                                     <!--end::Button-->
                                                 </td>
-                                                <!--end::Action=-->
+                                                <!--end::Action-->
                                             @endif
                                         </tr>
                                     @endforeach
@@ -304,6 +311,22 @@
                                     <!--begin::Input-->
                                     <input type="text" class="form-control form-control-solid" id="mata-uang"
                                         name="mata-uang" value="" placeholder="Mata Uang" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="">Kurs</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" id="mata-uang"
+                                        name="kurs" value="" placeholder="Kurs" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
