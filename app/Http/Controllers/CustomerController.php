@@ -205,30 +205,30 @@ class CustomerController extends Controller
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
         
-        foreach($proyeks as $p) {
-            $p = Proyek::find($p->kode_proyek);
-            // $coord_kabupaten = json_decode(Storage::get("/public/data/$p->kabupaten.json"));
-            $coord_provinsi = collect(json_decode(Storage::get("/public/data/provinsi.json")))->filter(function($data) use($p) {
-                $data = (array) $data;
-                return $data["id"] == $p->provinsi;
-            })->first();
-            // $coord_provinsi = array_filter(, function($data) use($p) {
-            //     return $data["province_id"] == $p->provinsi;
-            // });
-            // dd($p->negara);
-            // dd($coord_provinsi);
-            if (!empty($coord_provinsi)) {
-                $location = $p->negara . " " . $coord_provinsi->name;
-                $getCoordCountry = Http::get("https://nominatim.openstreetmap.org/search.php?q=$location&polygon_geojson=1&format=json")->json();
-                if (empty($area_proyeks->keys()->get($p->provinsi))) {
-                    $area_proyeks->push(["$p->provinsi" => $getCoordCountry[0]]);
-                }
-            }
-        }
+        // foreach($proyeks as $p) {
+        //     $p = Proyek::find($p->kode_proyek);
+        //     // $coord_kabupaten = json_decode(Storage::get("/public/data/$p->kabupaten.json"));
+        //     $coord_provinsi = collect(json_decode(Storage::get("/public/data/provinsi.json")))->filter(function($data) use($p) {
+        //         $data = (array) $data;
+        //         return $data["id"] == $p->provinsi;
+        //     })->first();
+        //     // $coord_provinsi = array_filter(, function($data) use($p) {
+        //     //     return $data["province_id"] == $p->provinsi;
+        //     // });
+        //     // dd($p->negara);
+        //     // dd($coord_provinsi);
+        //     if (!empty($coord_provinsi)) {
+        //         $location = $p->negara . " " . $coord_provinsi->name;
+        //         $getCoordCountry = Http::get("https://nominatim.openstreetmap.org/search.php?q=$location&polygon_geojson=1&format=json")->json();
+        //         if (empty($area_proyeks->keys()->get($p->provinsi))) {
+        //             $area_proyeks->push(["$p->provinsi" => $getCoordCountry[0]]);
+        //         }
+        //     }
+        // }
         // begin::chart Performance Pelanggan
         // $kategoriProyek = [];
-        $proyekBerjalan = ProyekBerjalans::all();
-        $kategoriProyek = $proyekBerjalan->where("id_customer", "=", $id_customer);
+        // $proyekBerjalan = ProyekBerjalans::all();
+        $kategoriProyek = $proyeks;
         $namaProyek = [];
         $nilaiOK = [];
         $nilaiForecast = 0;
@@ -238,11 +238,17 @@ class CustomerController extends Controller
             array_push($namaProyek, $kategori->nama_proyek);
             $nilai = (int) str_replace(",", "", $kategori->nilaiok_proyek);
             array_push($nilaiOK, $nilai);
-            $nilaiForecast += $kategori->proyek->forecast;
-            if ($kategori->proyek->stage <= 7) {
+            if(!empty($kategori->proyek->forecasts)) {
+                $nilaiForecast = $kategori->proyek->forecasts->sum(function($f) {
+                    if($f->periode_prognosa == (int) date("m")) {
+                        return $f->nilai_forecast;
+                    }
+                });
+            }
+            if ($kategori->stage <= 7) {
                 $proyekOngoing ++;
             }
-            if ($kategori->proyek->stage > 7) {
+            if ($kategori->stage > 7) {
                 $proyekClosed ++;
             }
             // dump($kategori->proyek->forecast);
@@ -254,21 +260,46 @@ class CustomerController extends Controller
         $namaUnit = [];
         $labaProyek = [];
         $rugiProyek = [];
-        $proyekOngoing = 0;
-        $proyekClosed = 0;
-        foreach ($kategoriProyek as $proyekBerjalan) {
-            $unitKerja = UnitKerja::where("divcode", "=", $proyekBerjalan->unit_kerja)->first();
-            array_push($namaUnit, $unitKerja->unit_kerja);
+        $piutangProyek = [];
+        $nilaiTotalLaba = 0;
+        $nilaiTotalRugi = 0;
+        $nilaiTotalPiutang = 0;
+        $kategoriProyek = $kategoriProyek->where("unit_kerja", "!=", "")->groupBy("unit_kerja");
+        foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
+            foreach($proyekBerjalans as $proyekBerjalan) {
+                $nilaiTotalLaba += $proyekBerjalan->proyek->laba ?? 0;
+                $nilaiTotalRugi += $proyekBerjalan->proyek->rugi ?? 0;
+                $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang ?? 0;
+            }
+            $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
+            if(!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
+                array_push($namaUnit, $unitKerja->unit_kerja);
+            }
+            array_push($labaProyek, $nilaiTotalLaba);
+            array_push($rugiProyek, $nilaiTotalRugi);
+            array_push($piutangProyek, ["name" => $unitKerja->unit_kerja, "y" => $nilaiTotalPiutang]);
+            $nilaiTotalRugi = 0;
+            $nilaiTotalLaba = 0;
+            $nilaiTotalPiutang = 0;
 
-            $proyekPiutang = $proyekBerjalan->proyek;
-            $nilaiLaba = (int) str_replace(",", "", $proyekPiutang->laba);
-            array_push($labaProyek, $nilaiLaba);
 
-            $proyekPiutang = $proyekBerjalan->proyek;
-            $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi);
-            array_push($rugiProyek, $nilaiRugi);
+            // $proyekPiutang = $proyekBerjalan->proyek;
+            // // $namaUnitIndex = array_search($proyekBerjalan->unit_kerja, $namaUnit);
+            // // if($namaUnitIndex != false) {
+            // //     dd($namaUnitIndex, $namaUnit);
+            // // }
+            // $nilaiLaba = (int) str_replace(",", "", $proyekPiutang->laba ?? 0);
+            // if($nilaiLaba != 0) {
+            //     array_push($labaProyek, $nilaiLaba);
+            // }
+            
+            // $proyekPiutang = $proyekBerjalan->proyek;
+            // $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi ?? 0);
+            // if($nilaiRugi != 0) {
+            //     array_push($rugiProyek, $nilaiRugi);
+            // }
         } 
-        // dump($labaProyek, $rugiProyek );
+        // dd($namaUnit, $labaProyek, $rugiProyek );
         // end::chart Laba / Rugi
 
         return view('Customer/viewCustomer', [
@@ -291,7 +322,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-        ], compact("namaUnit", "labaProyek", "rugiProyek"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek"));
     }
 
     public function saveEdit(
@@ -366,8 +397,14 @@ class CustomerController extends Controller
         {   
             Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
             // file is empty (and not an error)
+            if (isset($data["struktur-attachment"])) {
+                self::uploadStrukturOrganisasi($data["struktur-attachment"], $editCustomer->id_customer);
+            }
             $editCustomer->save();
         }else{
+            if (isset($data["struktur-attachment"])) {
+                self::uploadStrukturOrganisasi($data["struktur-attachment"], $editCustomer->id_customer);
+            }
             $editCustomer->save();
             // dd($data);
             $faker = new Uuid();
@@ -572,7 +609,20 @@ class CustomerController extends Controller
     }
 
 
-
+    private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $kode_proyek)
+    {
+        $faker = new Uuid();
+        // $dokumen_prakualifikasi = new DokumenPrakualifikasi();
+        // $id_document = $faker->uuid3();
+        // $file_name = $uploadedFile->getClientOriginalName();
+        // $nama_document = date("His_") . $file_name;
+        // moveFileTemp($uploadedFile, $id_document);
+        // $dokumen_prakualifikasi->nama_dokumen = $nama_document;
+        // $dokumen_prakualifikasi->id_document = $id_document;
+        // $dokumen_prakualifikasi->kode_proyek = $kode_proyek;
+        // // dd($dokumen_prakualifikasi);
+        // $dokumen_prakualifikasi->save();
+    }
 
     
 }
