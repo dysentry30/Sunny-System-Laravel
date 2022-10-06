@@ -181,15 +181,13 @@ class ProyekController extends Controller
         $newProyek->porsi_jo = 100;
 
         //begin::Generate Kode Proyek
-        $generateProyek = Proyek::all()->sortBy("kode_proyek");
+        $generateProyek = Proyek::all()->sortBy("id");
         if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
-            $no_urut = (int) substr($generateProyek->last()->kode_proyek, 2, 3) + 1;
+            $no_urut = (int) $generateProyek->last()->id+ 1;
         } else {
             // $no_urut = count($generateProyek)+1;
-            $no_urut = (int) substr($generateProyek->last()->kode_proyek, 4, 3) + 1;
+            $no_urut = (int) $generateProyek->last()->id + 1;
         }
-        dd($no_urut, substr($generateProyek->last()->kode_proyek, 2, 3));
-
 
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
