@@ -182,11 +182,11 @@ class ProyekController extends Controller
 
         //begin::Generate Kode Proyek
         $generateProyek = Proyek::all();
-        if ($generateProyek->last() == null) {
-            $no_urut = 1;
+        if (str_contains($generateProyek->last()->kode_proyek, "KD")) {
+            $no_urut = (int) substr($generateProyek->last()->kode_proyek, 2, 3) + 1;
         } else {
             // $no_urut = count($generateProyek)+1;
-            $no_urut = (int) preg_replace("/[^0-9]/i", "", $generateProyek->last()->kode_proyek) + 1;
+            $no_urut = (int) substr($generateProyek->last()->kode_proyek, 4, 3) + 1;
         }
         // dd($generateProyek->last());
 
@@ -1013,19 +1013,9 @@ class ProyekController extends Controller
 
         Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
 
-        if ($proyekBerjalan == null && $contractManagement == null && $forecasts == null) {
-            $deleteProyek->delete();
-        } elseif ($proyekBerjalan == null) {
+        if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
             $deleteProyek->delete();
             $contractManagement->delete();
-            foreach ($forecasts as $f) {
-                $f->delete();
-            }
-            foreach ($historyForecasts as $hf) {
-                $hf->delete();
-            }
-        } elseif ($contractManagement ==  null) {
-            $deleteProyek->delete();
             $proyekBerjalan->delete();
             foreach ($forecasts as $f) {
                 $f->delete();
@@ -1033,20 +1023,23 @@ class ProyekController extends Controller
             foreach ($historyForecasts as $hf) {
                 $hf->delete();
             }
-        } elseif ($forecasts ==  null) {
+        } elseif ($proyekBerjalan != null && $contractManagement != null) {
             $deleteProyek->delete();
-            $proyekBerjalan->delete();
             $contractManagement->delete();
+            $proyekBerjalan->delete();
+        } elseif ($contractManagement !=  null) {
+            $deleteProyek->delete();
+            $contractManagement->delete();
+        } elseif ($forecasts !=  null) {
+            $deleteProyek->delete();
+            foreach ($forecasts as $f) {
+                $f->delete();
+            }
+            foreach ($historyForecasts as $hf) {
+                $hf->delete();
+            }
         } else {
             $deleteProyek->delete();
-            $proyekBerjalan->delete();
-            $contractManagement->delete();
-            foreach ($forecasts as $f) {
-                $f->delete();
-            }
-            foreach ($historyForecasts as $hf) {
-                $hf->delete();
-            }
         }
 
         // dd($proyekBerjalan); 
