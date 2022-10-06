@@ -419,7 +419,7 @@
                                             <a class="menu-link " href="/mata-uang" style="color:white; padding-left:20px;">
                                                 <span class="menu-icon">
                                                     <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    <i class="bi bi-people-fill text-white"></i>
+                                                    <i class="bi bi-cash-stack text-white"></i>
                                                     <!--end::Svg Icon-->
                                                 </span>
                                                 <span class="menu-title" style="font-size: 16px; padding-left: 10px">Mata Uang</span>
