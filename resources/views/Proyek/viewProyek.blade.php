@@ -1222,9 +1222,9 @@
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">Nilai RKAP Review &nbsp;
                                                             <i onclick="hideReview()" id="hide-review"
-                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                class="bi bi-arrows-collapse"></i><i
                                                                 onclick="showReview()" id="show-review"
-                                                                class="bi bi-arrows-expand"></i>
+                                                                style="display: none" class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         <script>
                                                             function hideReview() {
@@ -4155,9 +4155,118 @@
                                                         </table> --}}
                                                         <!--End::Title Biru Form: History Adendum-->
 
-                                                        {{-- <br> --}}
-
                                                         <br>
+
+                                                        <!--begin::Data Performance-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                            Proyek Performance 
+                                                            <i onclick="hideperformance()" id="hide-performance" class="bi bi-arrows-collapse"></i>
+                                                            <i onclick="showperformance()" id="show-performance" style="display: none" class="bi bi-arrows-expand"></i>
+                                                        </h3>
+
+                                                        <script>
+                                                            function hideperformance() {
+                                                                document.getElementById("divProyekPerformance").style.display = "none";
+                                                                document.getElementById("hide-performance").style.display = "none";
+                                                                document.getElementById("show-performance").style.display = "";
+                                                            }
+
+                                                            function showperformance() {
+                                                                document.getElementById("divProyekPerformance").style.display = "";
+                                                                document.getElementById("hide-performance").style.display = "";
+                                                                document.getElementById("show-performance").style.display = "none";
+                                                            }
+                                                        </script>
+                                                        <br>
+                                                        <div id="divProyekPerformance">
+                                                        <!--end::Data Performance-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai OK (Excludde Ppn)&nbsp;<i class="bi bi-lock"></i></span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->nilai_rkap), 0, '.', '.') }}"
+                                                                            placeholder="Nilai OK" readonly/>
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Piutang</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            name="piutang-performance"
+                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->piutang), 0, '.', '.') }}"
+                                                                            placeholder="Piutang" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Laba</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            name="laba-performance"
+                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->laba), 0, '.', '.') }}"
+                                                                            placeholder="Laba" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Rugi</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            name="rugi-performance"
+                                                                            value="{{ number_format((int) str_replace('.', '', $proyek->rugi), 0, '.', '.') }}"
+                                                                            placeholder="Rugi" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                        <!--End begin::Row-->
+                                                        </div>
 
                                                         <!--Begin::Title Biru Form: Laporan Kualitatif-->
                                                         <br>
