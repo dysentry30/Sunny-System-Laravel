@@ -339,12 +339,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $data = $request->all();
         // dd($data, $i);
 
-        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->get()->first();
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("periode_prognosa", "=", (int) date("m"))->get()->first();
         // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
-            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->get()->first();
-            if (isset($nullForecast)) {
+            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->where("periode_prognosa", "=", (int) date("m"))->get()->first();
+            if (!empty($nullForecast)) {
                 $nullForecast->delete();
             }
             $forecast = new Forecast();
