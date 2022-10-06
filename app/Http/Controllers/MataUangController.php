@@ -50,6 +50,7 @@ class MataUangController extends Controller
 
         $validation->validate();
         $mataUang->mata_uang = $dataUang["mata-uang"];
+        $mataUang->kurs = $dataUang["kurs"];
 
         Alert::success('Success', $dataUang["mata-uang"] . ", Berhasil Ditambahkan");
 
