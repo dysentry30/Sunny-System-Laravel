@@ -14,6 +14,7 @@ use App\Models\StrukturCustomer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -305,6 +306,7 @@ class CustomerController extends Controller
         return view('Customer/viewCustomer', [
             "customer" => $customer, 
             "attachment" => $customer->customerAttachments->all(),   
+            "strukturAtttachment" => $customer->strukturAttachments->all(),   
             "proyekberjalan" => $customer->proyekBerjalans->all(),
             'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
@@ -391,19 +393,19 @@ class CustomerController extends Controller
         $customerAttachments->id_customer=$data["id-customer"];
         // $customerAttachments->name_customer=$data["name-customer"];
         
-        
+        $id_customer = $data["id-customer"];
         
         if ($_FILES['doc-attachment']['size'] == 0)
         {   
             Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
             // file is empty (and not an error)
             if (isset($data["struktur-attachment"])) {
-                self::uploadStrukturOrganisasi($data["struktur-attachment"], $editCustomer->id_customer);
+                self::uploadStrukturOrganisasi($data["struktur-attachment"], $id_customer);
             }
             $editCustomer->save();
         }else{
             if (isset($data["struktur-attachment"])) {
-                self::uploadStrukturOrganisasi($data["struktur-attachment"], $editCustomer->id_customer);
+                self::uploadStrukturOrganisasi($data["struktur-attachment"], $id_customer);
             }
             $editCustomer->save();
             // dd($data);
@@ -531,6 +533,9 @@ class CustomerController extends Controller
         $newStruktur->jabatan_struktur = $data["jabatan-struktur"];
         $newStruktur->email_struktur = $data["email-struktur"];
         $newStruktur->phone_struktur = $data["phone-struktur"];
+        $newStruktur->ultah_struktur = $data["ultah-struktur"];
+        $newStruktur->proyek_struktur = $data["proyek-struktur"];
+        $newStruktur->role_struktur = $data["role-struktur"];
 
         Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
 
@@ -564,6 +569,9 @@ class CustomerController extends Controller
         $editStruktur->jabatan_struktur = $data["jabatan-struktur"];
         $editStruktur->email_struktur = $data["email-struktur"];
         $editStruktur->phone_struktur = $data["phone-struktur"];
+        $editStruktur->ultah_struktur = $data["ultah-struktur"];
+        $editStruktur->proyek_struktur = $data["proyek-struktur"];
+        $editStruktur->role_struktur = $data["role-struktur"];
 
         Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
 
@@ -609,19 +617,19 @@ class CustomerController extends Controller
     }
 
 
-    private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $kode_proyek)
+    private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $id_customer)
     {
         $faker = new Uuid();
-        // $dokumen_prakualifikasi = new DokumenPrakualifikasi();
-        // $id_document = $faker->uuid3();
-        // $file_name = $uploadedFile->getClientOriginalName();
-        // $nama_document = date("His_") . $file_name;
-        // moveFileTemp($uploadedFile, $id_document);
-        // $dokumen_prakualifikasi->nama_dokumen = $nama_document;
-        // $dokumen_prakualifikasi->id_document = $id_document;
-        // $dokumen_prakualifikasi->kode_proyek = $kode_proyek;
-        // // dd($dokumen_prakualifikasi);
-        // $dokumen_prakualifikasi->save();
+        $dokumen = new StrukturAttachment();
+        $id_document = $faker->uuid3();
+        $file_name = $uploadedFile->getClientOriginalName();
+        $nama_document = date("His_") . $file_name;
+        moveFileTemp($uploadedFile, $id_document);
+        $dokumen->nama_dokumen = $nama_document;
+        $dokumen->id_document = $id_document;
+        $dokumen->id_customer = $id_customer;
+        // dd($dokumen);
+        $dokumen->save();
     }
 
     

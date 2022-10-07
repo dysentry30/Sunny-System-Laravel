@@ -813,6 +813,68 @@
                                                         </div>
 
                                                         <br>
+                                                        <div class="ms-3 col-6">
+                                                            <table class="table align-middle table-row-dashed fs-6"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
+                                                                        <th class="min-w-auto">Struktur Organisasi Attachment</th>
+                                                                        <th class="min-w-auto">Modified On</th>
+                                                                        {{-- <th class="min-w-auto">Modified By</th> --}}
+                                                                        <th class="w-100px"></th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                        @foreach ($strukturAtttachment as $strAttachments)
+                                                                            <tr>
+                                                                                <!--begin::Name-->
+                                                                                <td>
+                                                                                    @if (str_contains("$strAttachments->name_attachment", '.doc'))
+                                                                                        <a href="/document/view/{{ $strAttachments->id_struktur_attachment }}/{{ $strAttachments->id_document }}"
+                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                    @else
+                                                                                        <a target="_blank"
+                                                                                            href="{{ asset('words/' . $strAttachments->id_document . '.pdf') }}"
+                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <!--end::Name-->
+                                                                                <!--begin::Time-->
+                                                                                <td>
+                                                                                    <a>{{ $strAttachments->created_at }}</a>
+                                                                                </td>
+                                                                                <!--end::Time-->
+                                                                                <!--begin::Kode-->
+                                                                                {{-- <td>
+                                                                                    <a>{{ $strAttachments->created_by }}</a>
+                                                                                </td> --}}
+                                                                                <!--end::Kode-->
+                                                                                <!--begin::Action-->
+                                                                                <td class="text-center">
+                                                                                    <small>
+                                                                                        <p data-bs-toggle="modal"
+                                                                                            data-bs-target="#kt_attachment_delete_{{ $strAttachments->id }}"
+                                                                                            id="modal-delete"
+                                                                                            class="btn btn-sm btn-light btn-active-primary">
+                                                                                            Delete
+                                                                                        </p>
+                                                                                    </small>
+                                                                                </td>
+                                                                                <!--end::Action-->
+                                                                            </tr>
+                                                                        @endforeach
+
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <br>
                                                         <!--begin::Input-->
                                                         {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Import Struktur :
@@ -839,6 +901,9 @@
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
+                                                                    <th class="min-w-auto">Tgl Ulang Tahun</th>
+                                                                    <th class="min-w-auto">Proyek Terkait</th>
+                                                                    <th class="min-w-auto">Role</th>
                                                                     <th class="min-w-auto"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -879,6 +944,27 @@
                                                                             {{ $struktur->phone_struktur ?? '-' }}
                                                                         </td>
                                                                         <!--end::Phone-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $struktur->ultah_struktur ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            @foreach ($proyeks as $proyek)
+                                                                            @if ($struktur->proyek_struktur == $proyek->kode_proyek)
+                                                                            {{ $proyek->nama_proyek ?? "-"}}
+                                                                            @else
+                                                                            -
+                                                                            @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $struktur->role_struktur ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
                                                                             <small>
@@ -1394,6 +1480,7 @@
                                                         </div>
 
                                                         <br>
+                                                        <br>
                                                         {{-- <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button> --}}
 
                                                         <!--End::Attachment-->
@@ -1485,71 +1572,90 @@
                                                         </div>
                                                         <!--begin::Data CSI-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                        style="font-size:14px;">
-                                                        CSI
-                                                    </h3>
-                                                    <!--end::Data CSI-->
-                                                    <!--begin::Row-->
-                                                    <div class="row fv-row">
-                                                        <!--begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai RA</span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid reformat"
-                                                                    value="" placeholder="Nilai RA" />
-                                                                <!--end::Input-->
+                                                            style="font-size:14px;">CSI
+                                                            <i onclick="hideColumn()" id="hide-button"
+                                                            style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                            onclick="showColumn()" id="show-button"
+                                                            class="bi bi-arrows-expand"></i>
+                                                        </h3>
+                                                        <script>
+                                                            function hideColumn() {
+                                                                document.getElementById("divCSI").style.display = "none";
+                                                                document.getElementById("hide-button").style.display = "none";
+                                                                document.getElementById("show-button").style.display = "";
+                                                            }
+
+                                                            function showColumn() {
+                                                                document.getElementById("divCSI").style.display = "";
+                                                                document.getElementById("hide-button").style.display = "";
+                                                                document.getElementById("show-button").style.display = "none";
+                                                            }
+                                                        </script>
+                                                        <br>
+                                                        <div id="divCSI" style="display:none">
+                                                        <!--end::Data CSI-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai RA</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            value="" placeholder="Nilai RA" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Presentase</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            placeholder="Presentase" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
                                                             </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Presentase</span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid reformat"
-                                                                    placeholder="Presentase" />
-                                                                <!--end::Input-->
+                                                            <!--End begin::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Nilai RI</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            class="form-control form-control-solid reformat"
+                                                                            placeholder="Nilai RI" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
                                                             </div>
-                                                            <!--end::Input group-->
+                                                            <!--End begin::Row-->
                                                         </div>
-                                                        <!--End begin::Col-->
-                                                    </div>
-                                                    <!--End begin::Row-->
-                                                    <!--begin::Row-->
-                                                    <div class="row fv-row">
-                                                        <!--begin::Col-->
-                                                        <div class="col-6">
-                                                            <!--begin::Input group Website-->
-                                                            <div class="fv-row mb-7">
-                                                                <!--begin::Label-->
-                                                                <label class="fs-6 fw-bold form-label mt-3">
-                                                                    <span>Nilai RI</span>
-                                                                </label>
-                                                                <!--end::Label-->
-                                                                <!--begin::Input-->
-                                                                <input type="text"
-                                                                    class="form-control form-control-solid reformat"
-                                                                    placeholder="Nilai RI" />
-                                                                <!--end::Input-->
-                                                            </div>
-                                                            <!--end::Input group-->
-                                                        </div>
-                                                        <!--End begin::Col-->
-                                                    </div>
-                                                    <!--End begin::Row-->
                                                     </div>
                                                     <!--end:::Tab pane Atachment & Notes-->
 
@@ -2258,6 +2364,97 @@
                         </div>
                         <!--End begin::Row-->
 
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tanggal Ulang Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <a href="#" class="btn"
+                                        style="background: transparent;"
+                                        id="start-date-modal"
+                                        onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
+                                        value="" placeholder="Tanggal Ulang Tahun" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                        <span>Proyek Tekait</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="proyek-struktur"
+                                        name="proyek-struktur"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="false"
+                                        data-placeholder="Proyek Terkait">
+                                        <option></option>
+                                        @foreach ($proyeks as $pBerjalan)
+                                            <option
+                                                value="{{ $pBerjalan->kode_proyek }}">
+                                                {{ $pBerjalan->nama_proyek }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <!--Begin::Input-->
+                                    <select id="role-struktur"
+                                    name="role-struktur"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Role">
+                                    <option></option>
+                                    <option value="Decision Maker">Decision Maker</option>
+                                    <option value="Influencer">Influencer</option>
+                                    <option value="Gatekeeper">Gatekeeper</option>
+                                    <option value="Buyer">Buyer</option>
+                                    <option value="User" >User</option>
+                                </select>
+                                <!--end::Input-->
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
                     </div>
                     <div class="modal-footer">
 
@@ -2388,6 +2585,115 @@
                                 <!--End begin::Col-->
                             </div>
                             <!--End begin::Row-->
+
+                            <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tanggal Ulang Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <a href="#" class="btn"
+                                        style="background: transparent;"
+                                        id="start-date-modal"
+                                        onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
+                                        value="{{ $struktur->ultah_struktur }}" placeholder="Tanggal Ulang Tahun" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Proyek Tekait</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="proyek-struktur"
+                                        name="proyek-struktur"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="false"
+                                        data-placeholder="Proyek Terkait">
+                                        <option></option>
+                                        @foreach ($proyeks as $pBerjalan)
+                                            @if ($pBerjalan->kode_proyek == $struktur->proyek_struktur)
+                                                <option
+                                                    value="{{ $pBerjalan->kode_proyek }}"
+                                                    selected>
+                                                    {{ $pBerjalan->nama_proyek }}
+                                                </option>
+                                            @else
+                                                <option
+                                                    value="{{ $pBerjalan->kode_proyek }}">
+                                                    {{ $pBerjalan->nama_proyek }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <!--Begin::Input-->
+                                    <select id="role-struktur"
+                                    name="role-struktur"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Role">
+                                    <option></option>
+                                    <option value="Decision Maker"
+                                        {{ $struktur->role_struktur == 'Decision Maker' ? 'selected' : '' }}>
+                                        Decision Maker</option>
+                                    <option value="Influencer"
+                                        {{ $struktur->role_struktur == 'Influencer' ? 'selected' : '' }}>
+                                        Influencer</option>
+                                    <option value="Gatekeeper"
+                                        {{ $struktur->role_struktur == 'Gatekeeper' ? 'selected' : '' }}>
+                                        Gatekeeper</option>
+                                    <option value="Buyer"
+                                        {{ $struktur->role_struktur == 'Buyer' ? 'selected' : '' }}>
+                                        Buyer</option>
+                                    <option value="User"
+                                        {{ $struktur->role_struktur == 'User' ? 'selected' : '' }}>
+                                        User</option>
+                                </select>
+                                <!--end::Input-->
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
 
                         </div>
                         <div class="modal-footer">
