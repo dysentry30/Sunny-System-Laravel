@@ -1001,7 +1001,14 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Proyek Berjalan
+                                                                <i onclick="hideColumn(this, '#divProyekBerjalan')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divProyekBerjalan')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            
+                                                            <br>
+                                                            <div id="divProyekBerjalan" style="display:none">
 
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
@@ -1078,6 +1085,7 @@
                                                             </table>
                                                             <!--end::Table-->
                                                         </div>
+                                                        </div>
                                                         <!--end::Proyek Berjalan-->
 
                                                         <br><br>
@@ -1087,7 +1095,26 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Proyek Selesai
+                                                                <i onclick="hideColumn(this, '#divProyekSelesai')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divProyekSelesai')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            {{-- <script>
+                                                                function hideColumn() {
+                                                                    document.getElementById("divProyekSelesai").style.display = "none";
+                                                                    document.getElementById("hide-button").style.display = "none";
+                                                                    document.getElementById("show-button").style.display = "";
+                                                                }
+    
+                                                                function showColumn() {
+                                                                    document.getElementById("divProyekSelesai").style.display = "";
+                                                                    document.getElementById("hide-button").style.display = "";
+                                                                    document.getElementById("show-button").style.display = "none";
+                                                                }
+                                                            </script> --}}
+                                                            <br>
+                                                            <div id="divProyekSelesai" style="display:none">
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
                                                                 id="kt_customers_table">
@@ -1209,6 +1236,7 @@
                                                             </table>
                                                             <!--end::Table-->
                                                         </div>
+                                                        </div>
                                                         <!--end::Card title-->
 
                                                         <br><br>
@@ -1218,7 +1246,26 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Forecast Proyek
+                                                                <i onclick="hideColumn(this, '#divForecastProyek')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divForecastProyek')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            {{-- <script>
+                                                                function hideColumn() {
+                                                                    document.getElementById("divForecastProyek").style.display = "none";
+                                                                    document.getElementById("hide-button").style.display = "none";
+                                                                    document.getElementById("show-button").style.display = "";
+                                                                }
+    
+                                                                function showColumn() {
+                                                                    document.getElementById("divForecastProyek").style.display = "";
+                                                                    document.getElementById("hide-button").style.display = "";
+                                                                    document.getElementById("show-button").style.display = "none";
+                                                                }
+                                                            </script> --}}
+                                                            <br>
+                                                            <div id="divForecastProyek" style="display:none">
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
                                                                 id="kt_customers_table">
@@ -1372,6 +1419,7 @@
                                                                 <!--end::Table body-->
                                                             </table>
                                                             <!--end::Table-->
+                                                        </div>
                                                         </div>
                                                         <!--end::Card title-->
 
@@ -1575,12 +1623,12 @@
                                                         <!--begin::Data CSI-->
                                                         <h3 class="fw-bolder m-0" id="HeadDetail"
                                                             style="font-size:14px;">CSI
-                                                            <i onclick="hideColumn()" id="hide-button"
+                                                            <i onclick="hideColumn(this, '#divCSI')" id="hide-button"
                                                             style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                            onclick="showColumn()" id="show-button"
+                                                            onclick="showColumn(this, '#divCSI')" id="show-button"
                                                             class="bi bi-arrows-expand"></i>
                                                         </h3>
-                                                        <script>
+                                                        {{-- <script>
                                                             function hideColumn() {
                                                                 document.getElementById("divCSI").style.display = "none";
                                                                 document.getElementById("hide-button").style.display = "none";
@@ -1592,7 +1640,7 @@
                                                                 document.getElementById("hide-button").style.display = "";
                                                                 document.getElementById("show-button").style.display = "none";
                                                             }
-                                                        </script>
+                                                        </script> --}}
                                                         <br>
                                                         <div id="divCSI" style="display:none">
                                                         <!--end::Data CSI-->
@@ -1696,45 +1744,21 @@
                                                         <div id="overViewProject">
                                                             <br>
                                                             <div class="row">
-                                                                <div class="row">
-                                                                    <div class="col py-3  text-center">
-                                                                        <b class="h3">Proyek Forecast</b>
-                                                                    </div>
-                                                                    <div class="col py-3 text-center">
-                                                                        <b class="h3">Proyek Berjalan</b>
-                                                                    </div>
-                                                                    <div class="col py-3 text-center">
-                                                                        <b class="h3">Proyek Selesai</b>
-                                                                    </div>
+                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
+                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Forecast</span>
+                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$nilaiForecast[0]}} / Rp. {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
                                                                 </div>
-
-                                                                <br>
-
-                                                                <div class="col py-6 text-center" id="proyek-forecast">
-                                                                    <!--begin::proyek forecast-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ number_format($nilaiForecast, 0, '.', ',') }}
-                                                                    </h3>
-                                                                    <!--end::proyek forecast-->
+                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
+                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Opportunity</span>
+                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekOpportunity[0]}} / Rp. {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <span class="vr" style="padding: 0.5px"></span>
-                                                                <div class="col py-6 text-center" id="proyek-ongoing">
-                                                                    <!--begin::proyek ongoing-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ $proyekOngoing }}
-                                                                    </h3>
-                                                                    <!--end::proyek ongoing-->
+                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
+                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Closed</span>
+                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekClosed[0]}} / Rp. {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <span class="vr" style="padding: 0.5px"></span>
-                                                                <div class="col py-6 text-center" id="proyek-close">
-                                                                    <!--begin::proyek close-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ $proyekClosed }}
-                                                                    </h3>
-                                                                    <!--end::proyek close-->
+                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
+                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Ongoing</span>
+                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekOngoing[0]}} / Rp. {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                             </div>
                                                             <br>
@@ -1815,30 +1839,24 @@
                                                                 <div id="scoreCLR">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
-                                                                        <div id="score-clr" class="chart-container"></div>
+                                                                        <div id="score-clr" style="height: 300px" class="chart-container"></div>
                                                                     </figure>
-                                                                    <hr>
-        
                                                                 </div>
                                                             </div>
                                                             <div class="col">
                                                                 <div id="scoreNPS">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
-                                                                        <div id="score-nps" class="chart-container"></div>
+                                                                        <div id="score-nps" style="height: 300px" class="chart-container"></div>
                                                                     </figure>
-                                                                    <hr>
-        
                                                                 </div>
                                                             </div>
                                                             <div class="col">
                                                                 <div id="scoreCSI">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
-                                                                        <div id="score-csi" class="chart-container"></div>
+                                                                        <div id="score-csi" style="height: 300px" class="chart-container"></div>
                                                                     </figure>
-                                                                    <hr>
-        
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -2840,8 +2858,8 @@
 
     <!--begin::Performance Pelanggan-->
     <script>
-        // let namaUnit = {!! json_encode($namaUnit) !!};
-        // let namaProyek = {!! json_encode($namaProyek) !!};
+        let namaUnit = {!! json_encode($namaUnit) !!};
+        let namaProyek = {!! json_encode($namaProyek) !!};
         let nilaiOK = {!! json_encode($nilaiOK) !!};
         // if (namaProyek.length == 0) {
         //     namaProyek = ["..."];
@@ -2892,6 +2910,16 @@
             //     }
 
             // },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'20px',
+                    // color: '#A0A0A0'
+                },
+            },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 series: {
@@ -2904,7 +2932,7 @@
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.y}<br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
             },
 
             // series: [{
@@ -2979,6 +3007,16 @@
             //     }
 
             // },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'20px',
+                    // color: '#A0A0A0'
+                },
+            },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 series: {
@@ -3045,13 +3083,11 @@
                 layout: 'horizontal',
                 align: 'center',
                 verticalAlign: 'bottom',
-                // x: 70,
-                // y: 70,
-                // floating: true,
-                // backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || 'white',
-                // borderColor: '#CCC',
-                // borderWidth: 1,
-                shadow: false
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'20px',
+                    // color: '#A0A0A0'
+                },
             },
             tooltip: {
                 headerFormat: '<b>{point.x}</b><br/>',
@@ -3171,7 +3207,7 @@
 
     <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiClr = Number("{{$customer->customer_loyalty_rate ?? 0}}");
+        let nilaiClr = Number("{{$customer->customer_loyalty_rate ?? 1}}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiClr >= 1 && nilaiClr < 1.8) {
@@ -3184,6 +3220,8 @@
             bgColorClr = "#2f448a";
         } else if(nilaiClr >= 4.2 && nilaiClr <= 5) {
             bgColorClr = "#152866";
+        } else {
+            bgColorClr = "#8A0000";
         }
         Highcharts.chart('score-clr', {
 
@@ -3319,7 +3357,7 @@
                 data: [{
                     y: nilaiClr,
                     dataLabels: {
-                        format: `<span style="font-size:65px; color:${bgColorClr}">{y}</span><br/>`,
+                        format: `<span style="font-size:45px; color:${bgColorClr}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3347,7 +3385,7 @@
 
     <!--begin::Score Net Promoter Score-->
     <script>
-        let nilaiNps = Number("{{$customer->net_promoter_score ?? 0}}");
+        let nilaiNps = Number("{{$customer->net_promoter_score ?? 1}}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiNps >= 1 && nilaiNps < 1.8) {
@@ -3360,6 +3398,8 @@
             bgColorNps = "#6FB73D";
         } else if(nilaiNps >= 4.2 && nilaiNps <= 5) {
             bgColorNps = "#46831C";
+        } else {
+            bgColorNps = "#8A0000";
         }
         Highcharts.chart('score-nps', {
 
@@ -3486,7 +3526,7 @@
             //     name: 'Score Net Promoter Score',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:45px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -3495,7 +3535,7 @@
                 data: [{
                     y: nilaiNps,
                     dataLabels: {
-                        format: `<span style="font-size:65px; color:${bgColorNps}">{y}</span><br/>`,
+                        format: `<span style="font-size:45px; color:${bgColorNps}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3523,7 +3563,7 @@
     
     <!--begin::Score CSI-->
     <script>
-        let nilaiCsi = Number("{{$customer->customer_satisfaction_index ?? 0}}");
+        let nilaiCsi = Number("{{$customer->customer_satisfaction_index ?? 1}}");
         let bgColorCsi = "";
         if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
             bgColorCsi = "#F1E4A9";
@@ -3535,6 +3575,8 @@
             bgColorCsi = "#B79D25";
         } else if(nilaiCsi >= 4.2 && nilaiCsi <= 5) {
             bgColorCsi = "#967D0B";
+        } else {
+            bgColorCsi = "#8A0000";
         }
         Highcharts.chart('score-csi', {
 
@@ -3661,7 +3703,7 @@
             //     name: 'Score CSI',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:45px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -3670,7 +3712,7 @@
                 data: [{
                     y: nilaiCsi,
                     dataLabels: {
-                        format: `<span style="font-size:65px; color:${bgColorCsi}">{y}</span><br/>`,
+                        format: `<span style="font-size:45px; color:${bgColorCsi}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3730,6 +3772,22 @@
         }
     </script>
     <!--end::Score CSI-->
+    
+    <!--Begin:: show / hide element-->
+    <script>
+        function hideColumn(e, elt) {
+            e.parentElement.parentElement.querySelector(elt).style.display = "none";
+            e.parentElement.querySelector("#hide-button").style.display = "none";
+            e.parentElement.querySelector("#show-button").style.display = "";
+        }
+
+        function showColumn(e, elt) {
+            e.parentElement.parentElement.querySelector(elt).style.display = "";
+            e.parentElement.querySelector("#hide-button").style.display = "";
+            e.parentElement.querySelector("#show-button").style.display = "none";
+        }
+    </script>
+    <!--End:: show / hide element-->
     
 
 
