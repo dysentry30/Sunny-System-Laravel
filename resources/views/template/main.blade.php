@@ -50,16 +50,6 @@
     <link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 
-    @if (str_contains(Request::Path(), 'proyek-datatables'))
-    <!-- begin::DataTables -->
-    {{-- <link rel="stylesheet" href="datatables/jquery.dataTables.min.css"> --}}
-    {{-- <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css"> --}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
-    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css"> --}}
-    <!-- end::DataTables -->
-    @endif
 
     {{-- begin:: Disable Native Date Browser --}}
     <style>
