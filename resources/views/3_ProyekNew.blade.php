@@ -6,6 +6,15 @@
 @section('title', 'Proyek')
 {{-- End::Title --}}
 
+    <!-- begin::DataTables -->
+    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <!-- end::DataTables -->
+
 <!--begin::Main-->
 @section('content')
 
@@ -113,7 +122,7 @@
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
                                     <select id="column" name="column" onchange="changes(this)"
-                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        class="form-select form-select-solid"
                                         style="margin-right: 2rem" data-control="select2" data-hide-search="true"
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
@@ -136,7 +145,7 @@
                                     {{-- @if ($column == 'stage') --}}
                                         <div style="display: none !important" id="filterStage" class="d-flex align-items-center position-relative">
                                             <select name="filter-stage"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -160,7 +169,7 @@
                                     {{-- @elseif ($column == 'jenis_proyek') --}}
                                         <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
                                             <select name="filter-jenis"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -171,7 +180,7 @@
                                         </div>
                                         <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
                                             <select name="filter-tipe"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -964,44 +973,48 @@
 
 @endsection
 @section('js-script')
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
 
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
-<script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
-
-<script>
-    $(document).ready(function() {
-    $('#example').DataTable( {
-        dom: 'Bfrtip',
-        buttons: [
-            {
-                extend: 'copyHtml5',
-                exportOptions: {
-                    columns: [ 0, ':visible' ]
-                }
-            },
-            {
-                extend: 'excelHtml5',
-                exportOptions: {
-                    columns: ':visible'
-                }
-            },
-            {
-                extend: 'pdfHtml5',
-                exportOptions: {
-                    columns: [ 0, 1, 2, 5 ]
-                }
-            },
-            'colvis'
-        ]
+    <script>
+        $(document).ready(function() {
+        $('#example').DataTable( {
+            dom: 'Bfrtip',
+            stateSave : true,
+            // iDisplayLength : 25,
+            // pageLength : 500,
+            // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [ 0, ':visible' ]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 5 ]
+                    }
+                },
+                'colvis'
+            ]
+        } );
     } );
-} );
-</script>
+    </script>
+
 <script>
     $('#kt_modal_create_proyek').on('show.bs.modal', function() {
         $("#customer").select2({
