@@ -207,6 +207,7 @@ class CustomerController extends Controller
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
+        $per = 1000000;
 
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
@@ -235,25 +236,48 @@ class CustomerController extends Controller
         $namaProyek = [];
         $nilaiOK = [];
         $totalNilaiOKPerUnit = 0;
-        $nilaiForecast = 0;
-        $proyekOngoing = 0;
-        $proyekClosed = 0;
+        $totalProyekOngoing = 0;
+        $totalProyekForecast = 0;
+        $totalProyekClosed = 0;
+        $totalProyekOpportunity = 0;
+        $totalAmountProyekOngoing = 0;
+        $totalAmountProyekForecast = 0;
+        $totalAmountProyekClosed = 0;
+        $totalAmountProyekOpportunity = 0;
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
-                $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
-                if ($proyekBerjalan->proyek->stage <= 7) {
-                    $proyekOngoing++;
+                $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap / $per ?? 0;
+                $proyek = $proyekBerjalan->proyek;
+                if ($proyek->stage <= 3) {
+                    $totalProyekOpportunity++;
+                    $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
                 }
-                if ($proyekBerjalan->proyek->stage > 7) {
-                    $proyekClosed++;
+                if ($proyek->stage <= 5) {
+                    $totalProyekOngoing++;
+                    $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                }
+                if ($proyek->stage == 6 || $proyek->stage > 7) {
+                    $totalProyekClosed++;
+                    $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                }
+                if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                    $totalProyekForecast++;
+                    $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
                 }
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
             if (!empty($unitKerja)) {
-                array_push($nilaiOK, ["name" => $unitKerja->unit_kerja, "y" => $totalNilaiOKPerUnit]);
+                $totalOkLegend = number_format($totalNilaiOKPerUnit, 0, '.', '.');
+                array_push($nilaiOK, ["name" => $unitKerja->unit_kerja." : $totalOkLegend", "y" => $totalNilaiOKPerUnit]);
             }
             $totalNilaiOKPerUnit = 0;
         }
+        $nilaiForecast = collect([$totalProyekForecast, $totalAmountProyekForecast]);
+        $proyekOngoing = collect([$totalProyekOngoing, $totalAmountProyekOngoing]);
+        $proyekClosed = collect([$totalProyekClosed, $totalAmountProyekClosed]);
+        $proyekOpportunity = collect([$totalProyekOpportunity, $totalAmountProyekOpportunity]);
+        // dd($nilaiForecast, $proyekOngoing, $proyekClosed, $proyekOpportunity);
+
         // foreach ($kategoriProyek as $kategori){
         //     // array_push($namaProyek, $kategori->nama_proyek);
         //     $nilai = (int) str_replace(",", "", $kategori->nilaiok_proyek);
@@ -281,9 +305,9 @@ class CustomerController extends Controller
         $nilaiTotalPiutang = 0;
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
-                $nilaiTotalLaba += $proyekBerjalan->proyek->laba ?? 0;
-                $nilaiTotalRugi += $proyekBerjalan->proyek->rugi ?? 0;
-                $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang ?? 0;
+                $nilaiTotalLaba += $proyekBerjalan->proyek->laba / $per ?? 0;
+                $nilaiTotalRugi += $proyekBerjalan->proyek->rugi / $per ?? 0;
+                $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang / $per ?? 0;
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
             if (!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
@@ -291,7 +315,8 @@ class CustomerController extends Controller
             }
             array_push($labaProyek, $nilaiTotalLaba);
             array_push($rugiProyek, $nilaiTotalRugi);
-            array_push($piutangProyek, ["name" => $unitKerja->unit_kerja, "y" => $nilaiTotalPiutang]);
+            $totalPiutangLegend = number_format($nilaiTotalPiutang, 0, '.', '.');
+            array_push($piutangProyek, ["name" => $unitKerja->unit_kerja." : $totalPiutangLegend", "y" => $nilaiTotalPiutang, "x" => "$totalPiutangLegend"]);
             $nilaiTotalRugi = 0;
             $nilaiTotalLaba = 0;
             $nilaiTotalPiutang = 0;
@@ -337,7 +362,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity"));
     }
 
     public function saveEdit(
