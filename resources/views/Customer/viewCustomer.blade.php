@@ -858,12 +858,14 @@
                                                                                 <!--begin::Action-->
                                                                                 <td class="text-center">
                                                                                     <small>
-                                                                                        <p data-bs-toggle="modal"
-                                                                                            data-bs-target="#kt_attachment_delete_{{ $strAttachments->id }}"
-                                                                                            id="modal-delete"
-                                                                                            class="btn btn-sm btn-light btn-active-primary">
-                                                                                            Delete
-                                                                                        </p>
+                                                                                        <button 
+                                                                                            type="button"
+                                                                                            onclick="deleteStrukturAttach(this)"
+                                                                                            data-id-attach="{{$strAttachments->id_struktur_attachment}}"
+                                                                                            class="btn d-flex flex-row btn-sm btn-light btn-active-primary align-items-center">
+                                                                                            <span>Delete</span>
+                                                                                            <div class="spinner-border spinner-border-sm ms-3"style="display: none;" role="status"></div>
+                                                                                        </button>
                                                                                     </small>
                                                                                 </td>
                                                                                 <!--end::Action-->
@@ -1508,7 +1510,7 @@
                                                                             <tr>
                                                                                 <!--begin::Name-->
                                                                                 <td>
-                                                                                    @if (str_contains("$attachments->name_attachment", '.doc'))
+                                                                                    @if (str_contains("$attachments->name_attachment", '.docx'))
                                                                                         <a href="/document/view/{{ $attachments->id_customer }}/{{ $attachments->id_document }}"
                                                                                             class="text-hover-primary">{{ $attachments->name_attachment }}</a>
                                                                                     @else
@@ -1602,13 +1604,14 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RA</span>
+                                                                            <span>Customer Loyalty Rate</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
                                                                         <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            value="" placeholder="Nilai RA" />
+                                                                            name="customer-loyalty-rate"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->customer_loyalty_rate ?? 0}}" placeholder="Customer Loyalty Rate" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1619,13 +1622,15 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Presentase</span>
+                                                                            <span>Net Promoter Score</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
                                                                         <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Presentase" />
+                                                                            name="net-promoter-score"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->net_promoter_score ?? 0}}"
+                                                                            placeholder="Net Promoter Score" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1641,13 +1646,15 @@
                                                                     <div class="fv-row mb-7">
                                                                         <!--begin::Label-->
                                                                         <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RI</span>
+                                                                            <span>Customer Satisfaction Index</span>
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
                                                                         <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Nilai RI" />
+                                                                            name="customer-satisfaction-index"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->customer_satisfaction_index ?? 0}}"
+                                                                            placeholder="Customer Satisfaction Index" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -2833,19 +2840,19 @@
 
     <!--begin::Performance Pelanggan-->
     <script>
-        let namaUnit = {!! json_encode($namaUnit) !!};
-        let namaProyek = {!! json_encode($namaProyek) !!};
+        // let namaUnit = {!! json_encode($namaUnit) !!};
+        // let namaProyek = {!! json_encode($namaProyek) !!};
         let nilaiOK = {!! json_encode($nilaiOK) !!};
-        if (namaProyek.length == 0) {
-            namaProyek = ["..."];
-            nilaiOK = [0];
-        }
-        // console.log(namaProyek.length);
+        // if (namaProyek.length == 0) {
+        //     namaProyek = ["..."];
+        //     nilaiOK = [0];
+        // }
         // console.log(nilaiOK);
+        // console.log(namaProyek.length);
 
         Highcharts.chart('performance-pelanggan', {
             chart: {
-                type: 'column',
+                type: 'pie',
                 options3d: {
                     enabled: true,
                     alpha: 5,
@@ -2856,7 +2863,7 @@
             },
             title: {
                 align: 'center',
-                text: '<b class="h3">Nilai OK Proyek</b>'
+                text: '<b class="h3">Nilai OK</b>'
             },
             subtitle: {
                 align: 'center',
@@ -2870,33 +2877,34 @@
             // xAxis: {
             //     type: 'category'
             // },
-            xAxis: {
-                categories: namaProyek,
-                labels: {
-                    skew3d: true,
-                    style: {
-                        fontSize: '16px'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
+            // xAxis: {
+            //     categories: namaProyek,
+            //     labels: {
+            //         skew3d: true,
+            //         style: {
+            //             fontSize: '16px'
+            //         }
+            //     }
+            // },
+            // yAxis: {
+            //     title: {
+            //         text: ''
+            //     }
 
-            },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            // },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 series: {
                     dataLabels: {
                         enabled: true
                     },
-                    showInLegend: false
+                    showInLegend: true
                 },
             },
             tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.y}<br/>'
             },
 
             // series: [{
@@ -2921,6 +2929,7 @@
             },
             series: [{
                 name: 'Nilai OK',
+                colorByPoint: true,
                 data: nilaiOK,
                 // stack: 'male'
             }]
@@ -2934,7 +2943,6 @@
     @endphp
     <script>
         let nilaiPiutang = {!! json_encode($piutangProyek) !!};
-        console.log(nilaiPiutang);
         Highcharts.chart('piutang-pelanggan', {
             chart: {
                 type: 'pie',
@@ -3163,7 +3171,7 @@
 
     <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiClr = 3;
+        let nilaiClr = Number("{{$customer->customer_loyalty_rate ?? 0}}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiClr >= 1 && nilaiClr < 1.8) {
@@ -3302,7 +3310,7 @@
             //     name: 'Score Customer Loyalty Rate',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -3311,7 +3319,7 @@
                 data: [{
                     y: nilaiClr,
                     dataLabels: {
-                        format: `<span style="font-size:70px; color:${bgColorClr}">{y}</span><br/>`,
+                        format: `<span style="font-size:65px; color:${bgColorClr}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3339,7 +3347,7 @@
 
     <!--begin::Score Net Promoter Score-->
     <script>
-        let nilaiNps = 4;
+        let nilaiNps = Number("{{$customer->net_promoter_score ?? 0}}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiNps >= 1 && nilaiNps < 1.8) {
@@ -3478,7 +3486,7 @@
             //     name: 'Score Net Promoter Score',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -3487,7 +3495,7 @@
                 data: [{
                     y: nilaiNps,
                     dataLabels: {
-                        format: `<span style="font-size:70px; color:${bgColorNps}">{y}</span><br/>`,
+                        format: `<span style="font-size:65px; color:${bgColorNps}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3515,7 +3523,7 @@
     
     <!--begin::Score CSI-->
     <script>
-        let nilaiCsi = 4;
+        let nilaiCsi = Number("{{$customer->customer_satisfaction_index ?? 0}}");
         let bgColorCsi = "";
         if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
             bgColorCsi = "#F1E4A9";
@@ -3653,7 +3661,7 @@
             //     name: 'Score CSI',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -3662,7 +3670,7 @@
                 data: [{
                     y: nilaiCsi,
                     dataLabels: {
-                        format: `<span style="font-size:70px; color:${bgColorCsi}">{y}</span><br/>`,
+                        format: `<span style="font-size:65px; color:${bgColorCsi}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -3687,6 +3695,42 @@
         });
     </script>
     <!--end::Score CSI-->
+    
+    <!--begin::Score CSI-->
+    <script>
+        function deleteStrukturAttach(e) {
+            e.classList.add("disabled");
+            const getIdAttachStruktur = e.getAttribute("data-id-attach");
+            const getSpinnerElt = e.querySelector(".spinner-border");
+            getSpinnerElt.style.display = "";
+            Swal.fire({
+                title: 'Apakah anda yakin ingin menghapus Attachment ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+                }).then( async (result) => {
+                    if (result.isConfirmed) {
+                        const deleteAttachRes = await fetch(`/customer/struktur/${getIdAttachStruktur}/attach/delete`);
+                        const parent = e.parentElement.parentElement.parentElement;
+                        parent.remove();
+                        Swal.fire({
+                            title: 'Attachment ini berhasil dihapus',
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        e.classList.remove("disabled");
+                        getSpinnerElt.style.display = "none";
+                    }
+            })
+        }
+    </script>
+    <!--end::Score CSI-->
+    
 
 
     <!--begin::MAP Leaflet-->
