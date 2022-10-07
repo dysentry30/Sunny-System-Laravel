@@ -16,6 +16,7 @@ use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
 use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -37,8 +38,8 @@ class CustomerController extends Controller
                 return preg_match("/$filter/i", $cust[$column]);
             });
             $all_customer = Customer::all(); //untuk delete modal
-        }else{
-            if(!empty($sort)){
+        } else {
+            if (!empty($sort)) {
                 $results = Customer::sortable()->get();
                 $all_customer = Customer::all(); //untuk delete modal
             } else {
@@ -49,11 +50,11 @@ class CustomerController extends Controller
                 if ($request->ajax()) {
                     foreach ($results as $customers) {
                         $actButton = "";
-                        if(auth()->user()->check_administrator) {
+                        if (auth()->user()->check_administrator) {
                             $actButton = '
                             <td class="text-center">
                                 <button data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_delete'.$customers->id_customer.'"
+                                    data-bs-target="#kt_modal_delete' . $customers->id_customer . '"
                                     id="modal-delete"
                                     class="btn btn-sm btn-light btn-active-primary">Delete
                                 </button>
@@ -61,47 +62,46 @@ class CustomerController extends Controller
                             ';
                         }
 
-                        $artilces.=
-                        '<tr>
+                        $artilces .=
+                            '<tr>
                             <!--begin::Kode Pelanggan=-->
                             <td>
-                            <a href="/customer/view/'.$customers->id_customer. '" class="text-gray-800 text-hover-primary mb-1">'.$customers->kode_pelanggan.'</a>
+                            <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->kode_pelanggan . '</a>
                             </td>
                             <!--end::Kode Pelanggan-->
                             <!--begin::Name=-->
                             <td>
-                            <a href="/customer/view/'.$customers->id_customer.'" class="text-gray-800 text-hover-primary mb-1">'.$customers->name.'</a>
+                            <a href="/customer/view/' . $customers->id_customer . '" class="text-gray-800 text-hover-primary mb-1">' . $customers->name . '</a>
                             </td>
                             <!--end::Name=-->
                             <!--begin::Email=-->
                             <td>
-                            <a href="#">'.($customers->email).'</a>
+                            <a href="#">' . ($customers->email) . '</a>
                             </td>
                             <!--end::Email=-->
                             <!--begin::check_customer-->
                             <td>
-                            '.($customers->check_customer == 1 ? "Yes" : "No").'
+                            ' . ($customers->check_customer == 1 ? "Yes" : "No") . '
                             </td>
                             <!--end::check_customer=-->
                             <!--begin::check_partner-->
                             <td>
-                            '.($customers->check_partner == 1 ? "Yes" : "No").'
+                            ' . ($customers->check_partner == 1 ? "Yes" : "No") . '
                             </td>
                             <!--end::check_partner-->
                             <!--begin::check_competitor-->
                             <td data-filter="mastercard">
-                            '.($customers->check_competitor == 1 ? "Yes" : "No").'
+                            ' . ($customers->check_competitor == 1 ? "Yes" : "No") . '
                             </td>
                             <!--end::check_competitor-->
                             <!--begin::Kode Nasabah=-->
                             <td>
-                            '.$customers->kode_nasabah. '
+                            ' . $customers->kode_nasabah . '
                             </td>
                             <!--end::Kode Nasabah-->
                             <!--begin::Action=-->
-                            '. $actButton . '
+                            ' . $actButton . '
                         </tr>';
-
                     }
                     return $artilces;
                 }
@@ -118,23 +118,25 @@ class CustomerController extends Controller
 
     // }
 
-    public function delete ($id_customer) 
-    { 
+    public function delete($id_customer)
+    {
         $customer = Customer::find($id_customer);
         $customer->delete();
-        Alert::success('Delete', $customer->name.", Berhasil Dihapus");
-        return redirect("/customer")->with('status', 'Customer deleted');   
+        Alert::success('Delete', $customer->name . ", Berhasil Dihapus");
+        return redirect("/customer")->with('status', 'Customer deleted');
     }
 
-    public function new () {
+    public function new()
+    {
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
         // $id_kabupaten = $customer->provinsi; 
         // $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
         return view('Customer/newCustomer', compact(["data_provinsi", "data_negara"]));
     }
-    
-    public function saveNew (Request $request, Customer $newCustomer) {
+
+    public function saveNew(Request $request, Customer $newCustomer)
+    {
         $data = $request->all();
         // dd($data); 
         $messages = [
@@ -154,9 +156,9 @@ class CustomerController extends Controller
             $request->old("phone-number");
             redirect()->back()->with("modal", $data["modal-name"]);
         }
-        
+
         $validation->validate();
-        
+
         $newCustomer->name = $data["name-customer"];
         $newCustomer->check_customer = $request->has("check-customer"); //boolean check
         $newCustomer->check_partner = $request->has("check-partner"); //boolean check
@@ -182,30 +184,30 @@ class CustomerController extends Controller
         // $newCustomer->kode_pic = $data["kode-pic"];
         // $newCustomer->email_pic = $data["email-pic"];
         // $newCustomer->phone_number_pic = $data["phone-number-pic"];
-        
+
         // form attachment
-        Alert::success('Success', $data["name-customer"].", Berhasil Ditambahkan");
+        Alert::success('Success', $data["name-customer"] . ", Berhasil Ditambahkan");
 
         if ($newCustomer->save()) {
             return redirect("/customer/view/$newCustomer->id_customer")->with("success", true);
         }
     }
 
-    public function view ($id_customer) 
+    public function view($id_customer)
     {
         $customer = Customer::find($id_customer);
         // $data_provinsi = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/provinces.json")->json();
         // $data = Http::get("http://maps.googleapis.com/maps/api/geocode/xml?address=". "Boston, USA" . "&sensor=false");
-        
+
         $data_provinsi = json_decode(Storage::get("/public/data/provinsi.json"));
-        $id_kabupaten = $customer->provinsi; 
+        $id_kabupaten = $customer->provinsi;
         $data_kabupaten = json_decode(Storage::get("/public/data/$id_kabupaten.json"));
         $data_negara = json_decode(Storage::get("/public/data/country.json"));
         $pic = CustomerPic::where("id_customer", "=", $id_customer)->get();
         $struktur = StrukturCustomer::where("id_customer", "=", $id_customer)->get();
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
-        
+
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
         //     // $coord_kabupaten = json_decode(Storage::get("/public/data/$p->kabupaten.json"));
@@ -229,34 +231,46 @@ class CustomerController extends Controller
         // begin::chart Performance Pelanggan
         // $kategoriProyek = [];
         // $proyekBerjalan = ProyekBerjalans::all();
-        $kategoriProyek = $proyeks;
+        $kategoriProyek = $proyeks->where("unit_kerja", "!=", "")->groupBy("unit_kerja");
         $namaProyek = [];
         $nilaiOK = [];
+        $totalNilaiOKPerUnit = 0;
         $nilaiForecast = 0;
         $proyekOngoing = 0;
         $proyekClosed = 0;
-        foreach ($kategoriProyek as $kategori){
-            array_push($namaProyek, $kategori->nama_proyek);
-            $nilai = (int) str_replace(",", "", $kategori->nilaiok_proyek);
-            array_push($nilaiOK, $nilai);
-            if(!empty($kategori->proyek->forecasts)) {
-                $nilaiForecast = $kategori->proyek->forecasts->sum(function($f) {
-                    if($f->periode_prognosa == (int) date("m")) {
-                        return $f->nilai_forecast;
-                    }
-                });
+        foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
+            foreach ($proyekBerjalans as $proyekBerjalan) {
+                $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
+                if ($proyekBerjalan->proyek->stage <= 7) {
+                    $proyekOngoing++;
+                }
+                if ($proyekBerjalan->proyek->stage > 7) {
+                    $proyekClosed++;
+                }
             }
-            if ($kategori->stage <= 7) {
-                $proyekOngoing ++;
+            $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
+            if (!empty($unitKerja)) {
+                array_push($nilaiOK, ["name" => $unitKerja->unit_kerja, "y" => $totalNilaiOKPerUnit]);
             }
-            if ($kategori->stage > 7) {
-                $proyekClosed ++;
-            }
-            // dump($kategori->proyek->forecast);
+            $totalNilaiOKPerUnit = 0;
         }
+        // foreach ($kategoriProyek as $kategori){
+        //     // array_push($namaProyek, $kategori->nama_proyek);
+        //     $nilai = (int) str_replace(",", "", $kategori->nilaiok_proyek);
+        //     array_push($nilaiOK, ["name" => $kategori->nama_proyek, "y" => $nilai]);
+        //     if(!empty($kategori->proyek->forecasts)) {
+        //         $nilaiForecast = $kategori->proyek->forecasts->sum(function($f) {
+        //             if($f->periode_prognosa == (int) date("m")) {
+        //                 return $f->nilai_forecast;
+        //             }
+        //         });
+        //     }
+
+        //     // dump($kategori->proyek->forecast);
+        // }
         // dump($kategori->proyek);
         // end::chart Performance Pelanggan
-        
+
         // begin::chart Laba / Rugi
         $namaUnit = [];
         $labaProyek = [];
@@ -265,15 +279,14 @@ class CustomerController extends Controller
         $nilaiTotalLaba = 0;
         $nilaiTotalRugi = 0;
         $nilaiTotalPiutang = 0;
-        $kategoriProyek = $kategoriProyek->where("unit_kerja", "!=", "")->groupBy("unit_kerja");
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
-            foreach($proyekBerjalans as $proyekBerjalan) {
+            foreach ($proyekBerjalans as $proyekBerjalan) {
                 $nilaiTotalLaba += $proyekBerjalan->proyek->laba ?? 0;
                 $nilaiTotalRugi += $proyekBerjalan->proyek->rugi ?? 0;
                 $nilaiTotalPiutang += $proyekBerjalan->proyek->piutang ?? 0;
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
-            if(!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
+            if (!empty($unitKerja) && !in_array($unitKerja->unit_kerja, $namaUnit)) {
                 array_push($namaUnit, $unitKerja->unit_kerja);
             }
             array_push($labaProyek, $nilaiTotalLaba);
@@ -293,20 +306,20 @@ class CustomerController extends Controller
             // if($nilaiLaba != 0) {
             //     array_push($labaProyek, $nilaiLaba);
             // }
-            
+
             // $proyekPiutang = $proyekBerjalan->proyek;
             // $nilaiRugi = (int) str_replace(",", "", $proyekPiutang->rugi ?? 0);
             // if($nilaiRugi != 0) {
             //     array_push($rugiProyek, $nilaiRugi);
             // }
-        } 
+        }
         // dd($namaUnit, $labaProyek, $rugiProyek );
         // end::chart Laba / Rugi
 
         return view('Customer/viewCustomer', [
-            "customer" => $customer, 
-            "attachment" => $customer->customerAttachments->all(),   
-            "strukturAtttachment" => $customer->strukturAttachments->all(),   
+            "customer" => $customer,
+            "attachment" => $customer->customerAttachments->all(),
+            "strukturAtttachment" => $customer->strukturAttachments->all(),
             "proyekberjalan" => $customer->proyekBerjalans->all(),
             'sumberdanas' => SumberDana::all(),
             // "proyekberjalan0" => $customer->proyekBerjalans->where('stage', ">", 0),
@@ -328,12 +341,12 @@ class CustomerController extends Controller
     }
 
     public function saveEdit(
-        Request $request, 
-        Customer $editCustomer, 
-        CustomerAttachments $customerAttachments) 
-        {
+        Request $request,
+        Customer $editCustomer,
+        CustomerAttachments $customerAttachments
+    ) {
 
-        $data = $request->all(); 
+        $data = $request->all();
         // dd($data);
         $messages = [
             "required" => "This field is required",
@@ -353,8 +366,13 @@ class CustomerController extends Controller
             return redirect()->back();
         }
 
+        if ($data["customer-loyalty-rate"] > 5 || $data["net-promoter-score"] > 5 || $data["customer-satisfaction-index"] > 5) {
+            Alert::error('Error', "CSI tidak boleh lebih dari 5 !");
+            return back();
+        }
 
-        $editCustomer=Customer::find($data["id-customer"]);
+
+        $editCustomer = Customer::find($data["id-customer"]);
         // dd($request);
         $editCustomer->name = $data["name-customer"];
         $editCustomer->handphone = $data["handphone"];
@@ -366,7 +384,7 @@ class CustomerController extends Controller
         $editCustomer->email = $data["email"];
         $editCustomer->phone_number = $data["phone-number"];
         $editCustomer->website = $data["website"];
-        
+
         // form company information
         $editCustomer->jenis_instansi = $data["jenis-instansi"];
         $editCustomer->kode_pelanggan = $data["kodepelanggan-company"];
@@ -381,29 +399,35 @@ class CustomerController extends Controller
         // $editCustomer->kode_pic = $data["kode-pic"];
         // $editCustomer->email_pic = $data["email-pic"];
         // $editCustomer->phone_number_pic = $data["phone-number-pic"];
-        
+
         // form table performance
         $editCustomer->nilaiok = $data["nilaiok-performance"];
         $editCustomer->piutang = $data["piutang-performance"];
         $editCustomer->laba = $data["laba-performance"];
         $editCustomer->rugi = $data["rugi-performance"];
 
+        // CSI :: Tab Overview Section CSI
+        $editCustomer->customer_loyalty_rate = $data["customer-loyalty-rate"];
+        $editCustomer->net_promoter_score = $data["net-promoter-score"];
+        $editCustomer->customer_satisfaction_index = $data["customer-satisfaction-index"];
+
+
         // form attachment
+
         $editCustomer->note_attachment = $data["note-attachment"];
-        $customerAttachments->id_customer=$data["id-customer"];
+        $customerAttachments->id_customer = $data["id-customer"];
         // $customerAttachments->name_customer=$data["name-customer"];
-        
+
         $id_customer = $data["id-customer"];
-        
-        if ($_FILES['doc-attachment']['size'] == 0)
-        {   
-            Alert::toast("Edit Berhasil" , "success")->autoClose(3000);
+
+        if ($_FILES['doc-attachment']['size'] == 0) {
+            Alert::toast("Edit Berhasil", "success")->autoClose(3000);
             // file is empty (and not an error)
             if (isset($data["struktur-attachment"])) {
                 self::uploadStrukturOrganisasi($data["struktur-attachment"], $id_customer);
             }
             $editCustomer->save();
-        }else{
+        } else {
             if (isset($data["struktur-attachment"])) {
                 self::uploadStrukturOrganisasi($data["struktur-attachment"], $id_customer);
             }
@@ -433,7 +457,7 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
-    public function pic (Request $request, CustomerPic $newPIC)
+    public function pic(Request $request, CustomerPic $newPIC)
     {
         $data = $request->all();
 
@@ -450,21 +474,20 @@ class CustomerController extends Controller
         }
 
         $validation->validate();
-        
+
         $newPIC->id_customer = $data["id-customer"];
         $newPIC->nama_pic = $data["name-pic"];
         $newPIC->jabatan_pic = $data["kode-pic"];
         $newPIC->email_pic = $data["email-pic"];
         $newPIC->phone_pic = $data["phone-number-pic"];
 
-        Alert::success("Success" , $data["kode-pic"].": ".$data["name-pic"].", PIC Berhasil Ditambah");
+        Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Ditambah");
 
         $newPIC->save();
         return redirect()->back();
-
     }
 
-    public function editPic (Request $request, $id)
+    public function editPic(Request $request, $id)
     {
         $data = $request->all();
 
@@ -481,7 +504,7 @@ class CustomerController extends Controller
         }
 
         $validation->validate();
-        
+
         $editPIC = CustomerPic::find($id);
 
         $editPIC->id_customer = $data["id-customer"];
@@ -490,11 +513,10 @@ class CustomerController extends Controller
         $editPIC->email_pic = $data["email-pic"];
         $editPIC->phone_pic = $data["phone-number-pic"];
 
-        Alert::success("Success" , $data["kode-pic"].": ".$data["name-pic"].", PIC Berhasil Diubah");
+        Alert::success("Success", $data["kode-pic"] . ": " . $data["name-pic"] . ", PIC Berhasil Diubah");
 
         $editPIC->save();
         return redirect()->back();
-
     }
 
     public function deletePic($id)
@@ -506,7 +528,7 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
-    public function struktur (Request $request, StrukturCustomer $newStruktur)
+    public function struktur(Request $request, StrukturCustomer $newStruktur)
     {
         $data = $request->all();
         // dd($data);
@@ -524,7 +546,7 @@ class CustomerController extends Controller
         }
 
         $validation->validate();
-        
+
         // $idCustomer=Customer::find($data["id-customer"]);
         // dd($idCustomer);
 
@@ -537,14 +559,13 @@ class CustomerController extends Controller
         $newStruktur->proyek_struktur = $data["proyek-struktur"];
         $newStruktur->role_struktur = $data["role-struktur"];
 
-        Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
+        Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
         $newStruktur->save();
         return redirect()->back();
-        
     }
 
-    public function editStruktur (Request $request, $id)
+    public function editStruktur(Request $request, $id)
     {
         $data = $request->all();
         // dd($data);
@@ -562,8 +583,8 @@ class CustomerController extends Controller
         }
 
         $validation->validate();
-        
-        $editStruktur = StrukturCustomer::find($id);        
+
+        $editStruktur = StrukturCustomer::find($id);
         $editStruktur->id_customer = $data["id-customer"];
         $editStruktur->nama_struktur = $data["name-struktur"];
         $editStruktur->jabatan_struktur = $data["jabatan-struktur"];
@@ -573,35 +594,47 @@ class CustomerController extends Controller
         $editStruktur->proyek_struktur = $data["proyek-struktur"];
         $editStruktur->role_struktur = $data["role-struktur"];
 
-        Alert::success("Success", $data["jabatan-struktur"].": ".$data["name-struktur"].", Struktur Berhasil Ditambahkan");
+        Alert::success("Success", $data["jabatan-struktur"] . ": " . $data["name-struktur"] . ", Struktur Berhasil Ditambahkan");
 
         $editStruktur->save();
         return redirect()->back();
-        
     }
 
-    public function deleteStruktur ($id)
+    public function deleteStruktur($id)
     {
         $delete = StrukturCustomer::find($id);
-        // dd($delete);
+        dd($delete);
         $delete->delete();
         Alert::success("Success", "Struktur Berhasil Dihapus");
         return redirect()->back();
     }
 
-    public function customerHistory (
-        Request $request, 
-        Customer $modalCustomer, 
-        ProyekBerjalans $customerHistory,) 
-        {
+    public function deleteStrukturAttach($id)
+    {
+        $delete = StrukturAttachment::find($id);
+        $extFile = explode(".", $delete->nama_dokumen);
+        $extFile = $extFile[count($extFile) - 1];
+        if (File::exists(public_path("words/" . $delete->id_document . "." . $extFile))) {
+            File::delete(public_path("words/" . $delete->id_document . "." . $extFile));
+        }
+        $delete->delete();
+        Alert::success("Success", "Struktur Berhasil Dihapus");
+        return redirect()->back();
+    }
 
-        $data = $request->all(); 
+    public function customerHistory(
+        Request $request,
+        Customer $modalCustomer,
+        ProyekBerjalans $customerHistory,
+    ) {
+
+        $data = $request->all();
         // $proyekAll = Proyek::all();
 
-        $modalCustomer=Customer::find($data["id-customer"]);
+        $modalCustomer = Customer::find($data["id-customer"]);
         $customerHistory->id_customer = $data["id-customer"];
         $customerHistory->nama_proyek = $data["nama-proyek"];
-        
+
         $dataProyek = Proyek::where('nama_proyek', "=", $data["nama-proyek"])->get()->first();
         $customerHistory->kode_proyek = $dataProyek->kode_proyek;
         $customerHistory->pic_proyek = $dataProyek->ketua_tender;
@@ -613,7 +646,6 @@ class CustomerController extends Controller
         $modalCustomer->save();
         $customerHistory->save();
         return redirect()->back();
-            
     }
 
 
@@ -631,6 +663,4 @@ class CustomerController extends Controller
         // dd($dokumen);
         $dokumen->save();
     }
-
-    
 }
