@@ -2916,7 +2916,7 @@
                 verticalAlign: 'bottom',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'20px',
+                    fontSize:'15px',
                     // color: '#A0A0A0'
                 },
             },
@@ -3013,7 +3013,7 @@
                 verticalAlign: 'bottom',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'20px',
+                    fontSize:'15px',
                     // color: '#A0A0A0'
                 },
             },
@@ -3085,7 +3085,7 @@
                 verticalAlign: 'bottom',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'20px',
+                    fontSize:'15px',
                     // color: '#A0A0A0'
                 },
             },
