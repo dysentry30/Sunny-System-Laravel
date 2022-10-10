@@ -305,7 +305,7 @@ class ContractManagementsController extends Controller
         $draftContracts = DraftContracts::join("contract_managements as c", "draft_contracts.id_contract", "=", "c.id_contract")->select("draft_contracts.*")->get();
         $review_contracts = ReviewContracts::join("draft_contracts as d", "review_contracts.id_draft_contract", "=", "d.id_draft")->select("review_contracts.*")->get();
         $projects = Proyek::all();
-        return view('Contract/view', ["contract" => ContractManagements::find($id_contract), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects]);
+        return view('Contract/view', ["contract" => ContractManagements::find(urldecode(urldecode($id_contract))), "draftContracts" => $draftContracts, "review_contracts" => $review_contracts, "projects" => $projects]);
     }
 
 
