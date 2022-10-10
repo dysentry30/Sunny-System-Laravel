@@ -48,7 +48,7 @@
                                             <!--begin:::Tab item Forecast Internal-->
                                             @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                                 <li class="nav-item">
-                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                    <a onclick="showSummary()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
                                                         data-bs-toggle="tab" href="#kt_view_summary_dashboard"
                                                         style="font-size:14px;">Summary Dashboard</a>
                                                 </li>
@@ -70,10 +70,18 @@
                                             function showCRM() {
                                                 document.querySelector("#kt_view_dashboard_crm").style.display = "";
                                                 document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
+                                                document.querySelector("#kt_view_summary_dashboard").style.display = "none";
                                             }
                                             function showCCM() {
-                                                document.querySelector("#kt_view_dashboard_crm").style.display = "none";
                                                 document.querySelector("#kt_view_dashboard_ccm").style.display = "";
+                                                document.querySelector("#kt_view_dashboard_crm").style.display = "none";
+                                                document.querySelector("#kt_view_summary_dashboard").style.display = "none";
+                                            }
+                                            function showSummary() {
+                                                document.querySelector("#kt_view_summary_dashboard").style.display = "";
+                                                document.querySelector("#kt_view_dashboard_crm").style.display = "none";
+                                                document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
+                                                document.querySelector("#summary-pipeline").style.display = "";
                                             }
                                         </script>
                                     </div>
@@ -251,8 +259,23 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
-                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? 'show active' : '' }}" id="kt_view_summary_dashboard" role="tabpanel">
-                                <h1>testing</h1>
+                            <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
+                                @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="py-12" id="summary-pipeline" style="display: none">
+                                                <!--begin::MARKETING PIPELINE-->
+                                                <!--end::MARKETING PIPELINE-->
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="py-12" id="summary-pipeline" style="display: none">
+                                                <!--begin::MARKETING PIPELINE-->
+                                                <!--end::MARKETING PIPELINE-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>      
                             <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
@@ -3663,5 +3686,66 @@
     </script>
     <!--End::Clickable Sumber Dana Realisasi -->
     
+
+    <!--begin::MARKETING PIPELINE-->
+    <script>
+        Highcharts.chart('summary-pipeline', {
+            chart: {
+                type: 'funnel'
+            },
+            title: {
+                text: '<b class="h1">Marketing Pipeline</b>'
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b> : {point.y:,.0f}',
+                        softConnector: true
+                    },
+                    center: ['35%', '50%'],
+                    neckWidth: '25%',
+                    neckHeight: '0%',
+                    width: '35%'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            series: [{
+                name: 'Jml Proyek',
+                data: [
+                    ['Perolehan', {{ $prosesTender }}],
+                    ['Terkontrak', {{ $terkontrak }}],
+                    ['Pelaksanaan', {{ $pelaksanaan }}],
+                    ['Serah Terima Pekerjaan', {{ $serahTerima }}],
+                    ['Penutupan', {{ $closing }}]
+                ]
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        plotOptions: {
+                            series: {
+                                dataLabels: {
+                                    inside: true
+                                },
+                                center: ['50%', '50%'],
+                                width: '100%'
+                            }
+                        }
+                    }
+                }]
+            },
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::MARKETING PIPELINE-->
 
 @endsection
