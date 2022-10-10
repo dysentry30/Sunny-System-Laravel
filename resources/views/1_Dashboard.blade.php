@@ -264,47 +264,46 @@
                         <div class="card-body pt-0">
                             <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                                <br><br>
-                                <div class="row">
-                                    <div class="col-5" id="summary-nilai" style="display: none">
-                                        <div class="row ps-8">
-                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #46AAF5">
-                                                <span class="pt-8" style="font-size: 1.5rem">RKAP {{ $years }}</span>
-                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRkapArray[11], 0, '.', '.') }}</p>
+                                    <br><br>
+                                    <div class="row">
+                                        <div class="col-5" id="summary-nilai" style="display: none">
+                                            <div class="row ps-8">
+                                                <div class="card text-center mb-3 me-3 col" style="border: 1px solid #46AAF5">
+                                                    <span class="pt-8" style="font-size: 1.5rem">RKAP {{ $years }}</span>
+                                                    <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRkapArray[11], 0, '.', '.') }}</p>
+                                                </div>
+                                                <div class="card text-center mb-3 me-3 col" style="border: 1px solid #61CB65">
+                                                    <span class="pt-8" style="font-size: 1.5rem">Forecast {{ $years }}</span>
+                                                    <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiForecastArray[11], 0, '.', '.') }}</p>
+                                                </div>
                                             </div>
-                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #61CB65">
-                                                <span class="pt-8" style="font-size: 1.5rem">Forecast {{ $years }}</span>
-                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiForecastArray[11], 0, '.', '.') }}</p>
+                                            <div class="row ps-8">
+                                                @php
+                                                    setlocale(LC_TIME, 'id.UTF-8');
+                                                    $bulan_saat_ini = strftime('%B');
+                                                @endphp
+                                                <div class="card text-center mb-3 me-3 col" style="border: 1px solid #F7C13E">
+                                                    <span class="pt-8" style="font-size: 1.5rem">RKAP s/d {{ $bulan_saat_ini }}</span>
+                                                    <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
+                                                </div>
+                                                <div class="card text-center mb-3 me-3 col" style="border: 1px solid #ED6D3F">
+                                                    <span class="pt-8" style="font-size: 1.5rem">Forecast s/d {{ $bulan_saat_ini }}</span>
+                                                    <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
+                                                </div>
+                                            </div>
+                                            <div class="row ps-8">
+                                                <div class="card text-center mb-3 me-3 col" style="border: 1px solid #9575CD">
+                                                    <span class="pt-8" style="font-size: 1.5rem">Realisasi {{ $years }}</span>
+                                                    <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRealisasiArray[11], 0, '.', '.') }}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="row ps-8">
-                                            @php
-                                                setlocale(LC_TIME, 'id.UTF-8');
-                                                $bulan_saat_ini = strftime('%B');
-                                            @endphp
-                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #F7C13E">
-                                                <span class="pt-8" style="font-size: 1.5rem">RKAP s/d {{ $bulan_saat_ini }}</span>
-                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
-                                            </div>
-                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #ED6D3F">
-                                                <span class="pt-8" style="font-size: 1.5rem">Forecast s/d {{ $bulan_saat_ini }}</span>
-                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
+                                        <div class="col-7">
+                                            <div class="" id="summary-pipeline" style="display: none; height: 100%">
+                                                <!--begin::MARKETING PIPELINE-->
+                                                <!--end::MARKETING PIPELINE-->
                                             </div>
                                         </div>
-                                        <div class="row ps-8">
-                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #9575CD">
-                                                <span class="pt-8" style="font-size: 1.5rem">Realisasi {{ $years }}</span>
-                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRealisasiArray[11], 0, '.', '.') }}</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-7">
-                                        <div class="" id="summary-pipeline" style="display: none; height: 100%">
-                                            <!--begin::MARKETING PIPELINE-->
-                                            <!--end::MARKETING PIPELINE-->
-                                        </div>
-                                    </div>
-                                </div>
                                     </div>
                                     <div class="row" style="display:none" id="proyek-kalah-cancel-proyek-close">
                                         <div class="col-6 mt-11">
