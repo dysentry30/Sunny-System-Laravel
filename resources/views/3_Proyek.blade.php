@@ -79,7 +79,7 @@
                                                     id="kt_toolbar_export">
                                                     <i class="bi bi-download"></i>Export Excel
                                                 </a>
-                                                <a href="/proyek-datatables/set"
+                                                <a target="_blank" href="/proyek-datatables/set"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     id="kt_toolbar_export">
                                                     <i class="bi bi-file-earmark-spreadsheet"></i>Set Data - proyek

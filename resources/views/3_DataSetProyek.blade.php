@@ -378,7 +378,7 @@
                                         
                                     <script>
                                         function resetFilter() {
-                                            window.location.href = "/proyek";
+                                            window.location.href = "/proyek-datatables/set";
                                         }
                                     </script>
                                     <!--end:: RESET-->
