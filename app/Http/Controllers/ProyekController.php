@@ -465,9 +465,9 @@ class ProyekController extends Controller
         // $newProyek->nilai_disetujui = $dataProyek["nilai-disetujui"];
         $newProyek->laporan_terkontrak = $dataProyek["laporan-terkontrak"];
         // form table performance
-        $newProyek->piutang = (int) str_replace('.', '', $dataProyek["piutang-performance"]);
-        $newProyek->laba = (int) str_replace('.', '', $dataProyek["laba-performance"]);
-        $newProyek->rugi = (int) str_replace('.', '', $dataProyek["rugi-performance"]);
+        $newProyek->piutang = str_replace('.', '', $dataProyek["piutang-performance"]);
+        $newProyek->laba = str_replace('.', '', $dataProyek["laba-performance"]);
+        $newProyek->rugi = str_replace('.', '', $dataProyek["rugi-performance"]);
 
         $idCustomer = $dataProyek["customer"];
 
