@@ -4,7 +4,7 @@
 
 {{-- @section('header') --}}
 <!--begin::Header-->
-<div id="kt_header" class="header align-items-stretch">
+<div id="kt_header" class="header align-items-stretch" style="{{ str_contains(Request::Path(), 'datatables') ? 'left: 0px !important' : '' }}">
     <!--begin::Container-->
     <div class="container-fluid d-flex align-items-stretch justify-content-between">
         

@@ -114,7 +114,7 @@ class ProyekController extends Controller
         if (empty($datatables)) {
             return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
         }
-        return view('3_ProyekNew', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
+        return view('3_DataSetProyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
     }
 
     public function save(Request $request, Proyek $newProyek)

@@ -1,21 +1,117 @@
-{{-- Begin::Extend Header --}}
-@extends('template.main')
-{{-- End::Extend Header --}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base href="">
+    <title>Data Set Proyek</title>
+    
+    <!-- begin::DataTables -->
+    <link rel="stylesheet" href="datatables/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="datatables/fixedColumns.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
+    <!-- end::DataTables -->
 
-{{-- Begin::Title --}}
-@section('title', 'Proyek')
-{{-- End::Title --}}
+    <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
+    <!--begin::Fonts-->
 
-<!--begin::Main-->
-@section('content')
+    {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
+    <link rel="stylesheet" href="{{ asset('/css/cssFont.css') }}" />
+    <!--end::Fonts-->
+
+    <!-- begin::Bootstrap CSS -->
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous"> --}}
+    <link href="{{ asset('/bootstrap/bootstrap.min.css') }}" rel="stylesheet">
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css"> --}}
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"> --}}
+    <link rel="stylesheet" href="{{ asset('/bootstrap/bootstrap-icons.css') }}">
+    <!-- end::Bootstrap CSS -->
+
+    <!-- begin::Froala CSS -->
+    {{-- <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet'
+        type='text/css' /> --}}
+    <link href='{{ asset('/froala/froala_editor.pkgd.min.css') }}' rel='stylesheet'
+        type='text/css' />
+    <!-- end::Froala CSS -->
+    
+    <!-- Begin:: Leaflet Map -->
+    {{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin=""/> --}}
+    <!-- End:: Leaflet Map -->
+
+    <!--begin::Page Vendor Stylesheets(used by this page)-->
+    <link href="{{ asset('/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"
+        type="text/css" />
+    <!--end::Page Vendor Stylesheets-->
+
+    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+    <link href="{{ asset('/plugins/global/plugins.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/css/style.bundle.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/css/custom.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/css/stage.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+    <!--end::Global Stylesheets Bundle-->
 
 
+    {{-- begin:: Disable Native Date Browser --}}
+    <style>
+        input[type="date"]::-webkit-input-placeholder {
+            visibility: hidden !important;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        .select2-selection__rendered{
+            color: #181c32 !important;
+        }
+
+        /* change color sortable to default text-gray-400 */
+        th a{
+            color: #b5b5c3 !important;
+        }
+        tr td, tr td a{
+            color: #3f4254 !important;
+        }
+        .swal2-select {
+            border-radius: 0;
+            border: 0;
+            border-bottom: 1px dashed #606061;
+        }
+        /* @media (min-width: 992px) {
+            [data-kt-aside-minimize=on] .aside {
+                width: 50px !important;
+                transition: width 0.3s ease;
+            }
+        } */
+        
+        .fr-wrapper div:not(.fr-element.fr-view):nth-child(1) {
+            display: none;
+        }
+    </style>
+    {{-- end:: Disable Native Date Browser --}}
+</head>
+<!--end::Head-->
+
+
+<body id="kt_body"
+    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed aside-enabled aside-fixed"
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+
+
+
+
+    <!--begin:: CONTENT-->
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
         <!--begin::Page-->
         <div class="page d-flex flex-row flex-column-fluid">
             <!--begin::Wrapper-->
-            <div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
+            <div class="wrapper d-flex flex-column flex-row-fluid" style="padding-left: 0px !important" id="kt_wrapper">
 
                 <!--begin::Header-->
                 @include('template.header')
@@ -24,7 +120,7 @@
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Toolbar-->
-                    <div class="toolbar" id="kt_toolbar">
+                    <div class="toolbar" id="kt_toolbar" style="left: 0px !important">
                         <!--begin::Container-->
                         <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                             <!--begin::Page title-->
@@ -32,7 +128,7 @@
                                 data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                 class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                 <!--begin::Title-->
-                                <h1 class="d-flex align-items-center fs-3 my-1">Proyek
+                                <h1 class="d-flex align-items-center fs-3 my-1">Data Set - Proyek
                                 </h1>
                                 <!--end::Title-->
                             </div>
@@ -43,13 +139,17 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                    <a href="/proyek" class="btn btn-sm btn-light btn-active-primary ms-2"
+                                        id="proyek-back">
+                                        Back</a>
+
+                                    {{-- <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_create_proyek" id="kt_toolbar_primary_button"
                                         id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
-                                        New</button>
+                                        New</button> --}}
 
                                     <!--begin::Wrapper-->
-                                    <div class="me-4" style="margin-left:10px;">
+                                    {{-- <div class="me-4" style="margin-left:10px;">
                                         <!--begin::Menu-->
                                         <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
                                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -68,21 +168,10 @@
                                             <!--begin::Form-->
                                             <div class="">
                                                 <!--begin::Item-->
-                                                {{-- <button type="submit"
-                                                    class="btn btn-active-primary dropdown-item rounded-0"
-                                                    data-bs-toggle="modal" data-bs-target="#kt_modal_import"
-                                                    id="kt_toolbar_import">
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Import Excel
-                                                </button> --}}
                                                 <a href="/proyek/export-proyek"
                                                     class="btn btn-active-primary dropdown-item rounded-0"
                                                     id="kt_toolbar_export">
-                                                    <i class="bi bi-download"></i>Export Excel
-                                                </a>
-                                                <a href="/proyek-datatables/set"
-                                                    class="btn btn-active-primary dropdown-item rounded-0"
-                                                    id="kt_toolbar_export">
-                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Set Data - proyek
+                                                    <i class="bi bi-file-earmark-spreadsheet"></i>Export Excel
                                                 </a>
                                                 <!--end::Item-->
                                             </div>
@@ -90,7 +179,7 @@
                                         </div>
                                         <!--end::Menu 1-->
                                         <!--end::Menu-->
-                                    </div>
+                                    </div> --}}
                                     <!--end::Wrapper-->
 
 
@@ -118,7 +207,7 @@
                                 <form action="" class="d-flex flex-row w-auto" method="get">
                                     <!--Begin:: Select Options-->
                                     <select id="column" name="column" onchange="changes(this)"
-                                        class="form-select form-select-solid select2-hidden-accessible"
+                                        class="form-select form-select-solid"
                                         style="margin-right: 2rem" data-control="select2" data-hide-search="true"
                                         data-placeholder="Column" data-select2-id="select2-data-bulan" tabindex="-1"
                                         aria-hidden="true">
@@ -141,7 +230,7 @@
                                     {{-- @if ($column == 'stage') --}}
                                         <div style="display: none !important" id="filterStage" class="d-flex align-items-center position-relative">
                                             <select name="filter-stage"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Pilih Stage"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -165,7 +254,7 @@
                                     {{-- @elseif ($column == 'jenis_proyek') --}}
                                         <div style="display: none !important" id="filterJenis" class="d-flex align-items-center position-relative">
                                             <select name="filter-jenis"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -176,7 +265,7 @@
                                         </div>
                                         <div style="display: none !important" id="filterTipe" class="d-flex align-items-center position-relative">
                                             <select name="filter-tipe"
-                                                class="form-select form-select-solid select2-hidden-accessible w-auto ms-2"
+                                                class="form-select form-select-solid w-auto ms-2"
                                                 data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek"
                                                 tabindex="-1" aria-hidden="true">
                                                 <option></option>
@@ -302,7 +391,7 @@
 
 
                             <!--begin::Table Proyek-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table id="example" class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -318,9 +407,6 @@
                                         <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
                                         <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
-                                        @if (auth()->user()->check_administrator)
-                                            <th class="min-w-auto text-center"><small>Action</small></th>
-                                        @endif
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -547,20 +633,6 @@
                                             </td>
                                             <!--end::Jenis Proyek-->
 
-                                            @if (auth()->user()->check_administrator)
-                                                <!--begin::Action-->
-                                                <td class="text-center">
-                                                    <!--begin::Button-->
-                                                    <button data-bs-toggle="modal"
-                                                        data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
-                                                        id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-primary">Delete
-                                                    </button>
-                                                    </form>
-                                                    <!--end::Button-->
-                                                </td>
-                                                <!--end::Action-->
-                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -588,426 +660,76 @@
         <!--end::Page-->
     </div>
     <!--end::Root-->
+    <!--end :: CONTENT-->
 
 
-    <!--begin::Modal New Proyek-->
-    <form action="/proyek/save" method="post" enctype="multipart/form-data">
-        @csrf
-
-        <!--begin::Modal - Create Proyek-->
-        <div class="modal fade" id="kt_modal_create_proyek" tabindex="-1" aria-hidden="true">
-            <!--begin::Modal dialog-->
-            <div class="modal-dialog modal-dialog-centered mw-800px">
-                <!--begin::Modal content-->
-                <div class="modal-content">
-                    <!--begin::Modal header-->
-                    <div class="modal-header">
-                        <!--begin::Modal title-->
-                        <h2>New Proyek</h2>
-                        <!--end::Modal title-->
-                        <!--begin::Close-->
-                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                            <span class="svg-icon svg-icon-1">
-                                <i class="bi bi-x-lg"></i>
-                            </span>
-                            <!--end::Svg Icon-->
-                        </div>
-                        <!--end::Close-->
-                    </div>
-                    <!--end::Modal header-->
-
-                    <!--begin::Modal body-->
-                    <div class="modal-body py-lg-6 px-lg-6">
-
-                        <!--begin::Get Modal JS-->
-                        <input type="hidden" class="modal-name" name="modal-name">
-                        <!--end::Get Modal JS-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Nama Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" id="nama-proyek"
-                                        name="nama-proyek" value="{{ old('nama-proyek') }}" placeholder="Nama Proyek" />
-                                    @error('nama-proyek')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Unit Kerja</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    @php
-                                        $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-                                    @endphp
-                                    <select name="unit-kerja" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja">
-                                        <option></option>
-                                        @foreach ($unitkerjas as $unitkerja)
-                                            <option value="{{ $unitkerja->divcode }}"
-                                                {{ old('unit-kerja') == $unitkerja->divcode ? 'selected' : '' }} {{ Auth::user()->unit_kerja == $unitkerja->divcode ? 'selected' : '' }}>
-                                                {{ $unitkerja->unit_kerja }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('unit-kerja')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Jenis Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek">
-                                        <option selected></option>
-                                        <option value="I" {{ old('jenis-proyek') == 'I' ? 'selected' : '' }}>
-                                            Internal</option>
-                                        <option value="N" {{ old('jenis-proyek') == 'N' ? 'selected' : '' }}>
-                                            External</option>
-                                        <option value="J" {{ old('jenis-proyek') == 'J' ? 'selected' : '' }}>
-                                            JO</option>
-                                    </select>
-                                    @error('jenis-proyek')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Tipe Proyek</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select onchange="proyekRetail(this)" id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek">
-                                        <option selected></option>
-                                        <option value="R" {{ old('tipe-proyek') == 'R' ? 'selected' : '' }}>
-                                            Retail</option>
-                                        <option value="P" {{ old('tipe-proyek') == 'P' ? 'selected' : '' }}>
-                                            Non-Retail</option>
-                                    </select>
-                                    @error('tipe-proyek')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <script>
-                            function proyekRetail(e) {
-                                // console.log(e.value);
-                                if (e.value == "R") {
-                                    document.getElementById('div-rkap').style.visibility = "hidden";
-                                    document.getElementById('nilai-rkap').style.value = null;
-                                } else {
-                                    document.getElementById('div-rkap').style.visibility = "";
-                                }                                
-                            }
-
-                        </script>
-                        <!--End::Row Kanan+Kiri-->
-
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div id="div-rkap" class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Nilai OK (Exclude Ppn)</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid reformat"
-                                        id="nilai-rkap" name="nilai-rkap" value="{{ old('nilai-rkap') }}"
-                                        placeholder="Nilai OK (Exclude Ppn)" />
-                                    @error('nilai-rkap')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    {{-- <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">Sumber Dana</span>
-                                    </label> --}}
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    {{-- <select id="sumber-dana" name="sumber-dana" class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Sumber Dana">
-                                        <option></option>
-                                        @foreach ($sumberdanas as $sumberdana)
-                                            <option value="{{ $sumberdana->nama_sumber }}"
-                                                {{ old('sumber-dana') == $sumberdana->nama_sumber ? 'selected' : '' }}>
-                                                {{ $sumberdana->nama_sumber }}</option>
-                                        @endforeach
-                                    </select>
-                                    @error('sumber-dana')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror --}}
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
+    <!--begin::Scrolltop-->
+    <div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+        <!--begin::Svg Icon | path: icons/duotune/arrows/arr066.svg-->
+        <span class="svg-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                fill="none">
+                <rect opacity="0.5" x="13" y="6" width="13" height="2" rx="1"
+                    transform="rotate(90 13 6)" fill="black" />
+                <path
+                    d="M12.5657 8.56569L16.75 12.75C17.1642 13.1642 17.8358 13.1642 18.25 12.75C18.6642 12.3358 18.6642 11.6642 18.25 11.25L12.7071 5.70711C12.3166 5.31658 11.6834 5.31658 11.2929 5.70711L5.75 11.25C5.33579 11.6642 5.33579 12.3358 5.75 12.75C6.16421 13.1642 6.83579 13.1642 7.25 12.75L11.4343 8.56569C11.7467 8.25327 12.2533 8.25327 12.5657 8.56569Z"
+                    fill="black" />
+            </svg>
+        </span>
+        <!--end::Svg Icon-->
+    </div>
+    <!--end::Scrolltop-->
 
 
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">RA Tahun Perolehan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    @php
-                                        $years = (int) date('Y');
-                                        $bulans = (int) date('m');
-                                        // dd($bulans);
-                                    @endphp
-                                    <!--begin::Input-->
-                                    <select id="tahun-perolehan" name="tahun-perolehan"
-                                        class="form-select form-select-solid select2-hidden-accessible" onchange="validationRAPerolehan(this)"
-                                        data-control="select2" data-hide-search="true" data-placeholder="Tahun"
-                                        data-select2-id="select2-data-tahun" tabindex="-1" aria-hidden="true">
-                                        @for ($i = 2021; $i < $years + 10; $i++)
-                                            <option value="{{ $i }}" {{ $years == $i ? 'selected' : '' }}>
-                                                {{ $i }}</option>
-                                        @endfor
-                                    </select>
-                                    @error('tahun-perolehan')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span class="required">RA Bulan Perolehan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--Begin::Input-->
-                                    <select id="bulan-pelaksanaan" name="bulan-pelaksanaan"
-                                        class="form-select form-select-solid" data-control="select2"
-                                        data-hide-search="true" data-placeholder="Bulan Pelaksanaan">
-                                        <option></option>
-                                        <option value="1" {{ $bulans == 1 ? 'selected' : '' }}>Januari</option>
-                                        <option value="2" {{ $bulans == 2 ? 'selected' : '' }}>Februari</option>
-                                        <option value="3" {{ $bulans == 3 ? 'selected' : '' }}>Maret</option>
-                                        <option value="4" {{ $bulans == 4 ? 'selected' : '' }}>April</option>
-                                        <option value="5" {{ $bulans == 5 ? 'selected' : '' }}>Mei</option>
-                                        <option value="6" {{ $bulans == 6 ? 'selected' : '' }}>Juni</option>
-                                        <option value="7" {{ $bulans == 7 ? 'selected' : '' }}>Juli</option>
-                                        <option value="8" {{ $bulans == 8 ? 'selected' : '' }}>Agustus</option>
-                                        <option value="9" {{ $bulans == 9 ? 'selected' : '' }}>September</option>
-                                        <option value="10" {{ $bulans == 10 ? 'selected' : '' }}>Oktober</option>
-                                        <option value="11" {{ $bulans == 11 ? 'selected' : '' }}>November</option>
-                                        <option value="12" {{ $bulans == 12 ? 'selected' : '' }}>Desember</option>
-                                    </select>
-                                    @error('bulan-pelaksanaan')
-                                        <h6 class="text-danger fw-normal">{{ $message }}</h6>
-                                    @enderror
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
 
-                        <!--begin::Row Kanan+Kiri-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Pelanggan</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="customer" name="customer"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="false"
-                                        data-placeholder="Pilih Customer">
-                                        <option></option>
-                                        @foreach ($customers as $customer)
-                                            <option value="{{ $customer->id_customer }}"> {{ $customer->name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
-                                </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End::Row Kanan+Kiri-->
+    <!--end::Main-->
+    
+    <!--begin::Javascript-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script> 
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script> 
+    
+    <script>
+        $(document).ready(function() {
+        $('#example').DataTable( {
+            dom: 'lBfrtip',
+            stateSave : true,
+            // iDisplayLength : 25,
+            // pageLength : 500,
+            // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    exportOptions: {
+                        columns: [ 0, ':visible' ]
+                    }
+                },
+                {
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible'
+                    }
+                },
+                {
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: [ 0, 1, 2, 5 ]
+                    }
+                },
+                'colvis'
+            ]
+        } );
+    } );
+    </script>
+    <!--end::Javascript-->
+
+</body>
+<!--end::Body-->
 
 
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                style="background-color:#008CB4" id="proyek_new_save">Save</button>
-                        </div>
-                        <h6 class="text-danger fw-normal">(*) Kolom Ini Harus Diisi !</h6>
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-        </div>
-        <!--end::Modal - Create App-->
-    </form>
-    <!--end::Modal New Proyek-->
-
-    <!--begin::modal DELETE-->
-    @foreach ($proyeks as $proyek)
-        <form action="/proyek/delete/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
-            @method('delete')
-            @csrf
-            <div class="modal fade" id="kt_modal_delete{{ $proyek->kode_proyek }}" tabindex="-1" aria-hidden="true">
-                <!--begin::Modal dialog-->
-                <div class="modal-dialog modal-dialog-centered mw-800px">
-                    <!--begin::Modal content-->
-                    <div class="modal-content">
-                        <!--begin::Modal header-->
-                        <div class="modal-header">
-                            <!--begin::Modal title-->
-                            <h2>Hapus : {{ $proyek->kode_proyek }} - {{ $proyek->nama_proyek }}
-                            </h2>
-                            <!--end::Modal title-->
-                            <!--begin::Close-->
-                            <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-                                <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
-                                <span class="svg-icon svg-icon-1">
-                                    <i class="bi bi-x-lg"></i>
-                                </span>
-                                <!--end::Svg Icon-->
-                            </div>
-                            <!--end::Close-->
-                        </div>
-                        <!--end::Modal header-->
-                        <!--begin::Modal body-->
-                        <div class="modal-body py-lg-6 px-lg-6">
-                            Data yang dihapus tidak dapat dipulihkan, anda yakin ?
-                            <br>
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-sm btn-light btn-active-primary">Delete</button>
-                        </div>
-                        <!--end::Input group-->
-
-                    </div>
-                    <!--end::Modal body-->
-                </div>
-                <!--end::Modal content-->
-            </div>
-            <!--end::Modal dialog-->
-            </div>
-        </form>
-    @endforeach
-    <!--end::modal DELETE-->
-
-
-@endsection
-@section('js-script')
-<script>
-    $('#kt_modal_create_proyek').on('show.bs.modal', function() {
-        $("#customer").select2({
-            dropdownParent: $("#kt_modal_create_proyek")
-        });
-    });
-    let isYearValidated = false;
-    async function validationRAPerolehan(e) {
-        const selectedYear = e.options[e.selectedIndex].text;
-        const currentYear = new Date().getFullYear();
-        if(selectedYear < currentYear && !isYearValidated) {
-            const resultDialog = await Swal.fire({
-                title: 'Anda yakin ingin memilih tahun sebelum tahun sekarang?',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya'
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    $(e).val(selectedYear);
-                    $(e).select2({
-                        minimumResultsForSearch: -1
-                    });
-                    isYearValidated = true;
-                } else {
-                    $(e).val("2022");
-                    $(e).select2({
-                        minimumResultsForSearch: -1
-                    });
-                }
-                return isYearValidated;
-            });
-            isYearValidated = resultDialog;
-        } else {
-            isYearValidated = false;
-        }
-    }
-</script>
-@endsection
-
-<!--end::Main-->
+</html>
