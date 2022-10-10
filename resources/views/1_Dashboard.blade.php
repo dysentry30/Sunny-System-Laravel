@@ -82,6 +82,9 @@
                                                 document.querySelector("#kt_view_dashboard_crm").style.display = "none";
                                                 document.querySelector("#kt_view_dashboard_ccm").style.display = "none";
                                                 document.querySelector("#summary-pipeline").style.display = "";
+                                                document.querySelector("#proyek-kalah-cancel-proyek-close").style.display = "";
+                                                document.querySelector("#summary-pipeline").style.display = "";
+                                                document.querySelector("#summary-nilai").style.display = "";
                                             }
                                         </script>
                                     </div>
@@ -261,18 +264,119 @@
                         <div class="card-body pt-0">
                             <div class="tab-pane fade" id="kt_view_summary_dashboard" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="py-12" id="summary-pipeline" style="display: none">
-                                                <!--begin::MARKETING PIPELINE-->
-                                                <!--end::MARKETING PIPELINE-->
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-5" id="summary-nilai" style="display: none">
+                                        <div class="row ps-8">
+                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #46AAF5">
+                                                <span class="pt-8" style="font-size: 1.5rem">RKAP {{ $years }}</span>
+                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRkapArray[11], 0, '.', '.') }}</p>
+                                            </div>
+                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #61CB65">
+                                                <span class="pt-8" style="font-size: 1.5rem">Forecast {{ $years }}</span>
+                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiForecastArray[11], 0, '.', '.') }}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row ps-8">
+                                            @php
+                                                setlocale(LC_TIME, 'id.UTF-8');
+                                                $bulan_saat_ini = strftime('%B');
+                                            @endphp
+                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #F7C13E">
+                                                <span class="pt-8" style="font-size: 1.5rem">RKAP s/d {{ $bulan_saat_ini }}</span>
+                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
+                                            </div>
+                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #ED6D3F">
+                                                <span class="pt-8" style="font-size: 1.5rem">Forecast s/d {{ $bulan_saat_ini }}</span>
+                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. 0</p>
+                                            </div>
+                                        </div>
+                                        <div class="row ps-8">
+                                            <div class="card text-center mb-3 me-3 col" style="border: 1px solid #9575CD">
+                                                <span class="pt-8" style="font-size: 1.5rem">Realisasi {{ $years }}</span>
+                                                <hr><p class=" py-4 fw-bolder" style="font-size: 1.8rem">Rp. {{ number_format((int)$nilaiRealisasiArray[11], 0, '.', '.') }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="" id="summary-pipeline" style="display: none; height: 100%">
+                                            <!--begin::MARKETING PIPELINE-->
+                                            <!--end::MARKETING PIPELINE-->
+                                        </div>
+                                    </div>
+                                </div>
+                                    </div>
+                                    <div class="row" style="display:none" id="proyek-kalah-cancel-proyek-close">
+                                        <div class="col-6 mt-11">
+                                            <b class="h1 mb-2"><center>Proyek Teratas yang akan tutup bulan ini</center></b>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-striped fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead class="bg-white" style="position: sticky; top: 0">
+                                                        <tr>
+                                                            <th>Proyek</th>
+                                                            <th>Unit Kerja</th>
+                                                            <th>Stage</th>
+                                                            <th>Nilai Forecast</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold">
+                                                        @foreach ($top_proyeks_close_this_month as $proyek)
+                                                            @php
+                                                                $stage = App\Http\Controllers\DashboardController::getProyekStage($proyek->stage);
+                                                            @endphp
+                                                            <tr>
+                                                                <td>{{$proyek->nama_proyek}}</td>
+                                                                <td>{{$proyek->UnitKerja->unit_kerja}}</td>
+                                                                <td>{{$stage}}</td>
+                                                                <td>{{number_format($proyek->nilai_perolehan, 0, ".", ".")}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <div class="py-12" id="summary-pipeline" style="display: none">
-                                                <!--begin::MARKETING PIPELINE-->
-                                                <!--end::MARKETING PIPELINE-->
-                                            </div>
+                                            <figure class="highcharts-figure py-12">
+                                                <div id="proyek-kalah-cancel">
+                                                </div>
+                                                <!--begin::Table Proyek-->
+                                                <div class="" id="datatable-proyek-kalah-cancel" style="display: none">
+                                                    <div class="text-center">
+                                                        <h2 id="title-table"></h2>
+                                                        <h4 id="total"></h4>
+                                                    </div>
+                                                    <div class="d-flex justify-content-end">
+                                                        <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                            onclick="hideTable('#datatable-proyek-kalah-cancel','#proyek-kalah-cancel')"><i class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                            Chart</button>
+                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
+                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                            onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                    </div>
+                                                    <br>
+                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                            <!--begin::Table head-->
+                                                            <thead class="bg-white" id="table-line-head" style="position: sticky; top: 0">
+                                                                {{-- THead Here --}}
+                                                            </thead>
+                                                            <!--end::Table head-->
+                                                            <!--begin::Table body-->
+                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                {{-- Data Here --}}
+                                                            </tbody>
+                                                            <!--end::Table body-->
+                                                        </table>
+                                                    </div>
+                                                    <!--end::Table Proyek-->
+                                                </div>
+                                            </figure>
                                         </div>
                                     </div>
                                 @endif
@@ -1935,6 +2039,152 @@
         });
     </script>
     <!--end::CLAIM-->
+
+        
+    <!--Begin::CHART PROYEK KALAH - TIDAK LULUS PQ - CANCEL-->
+    <script>
+        const proyek_kalah_cancel_tidak_lulus_pq = JSON.parse('{!!$proyek_kalah_cancel_tidak_lulus_pq->toJson()!!}');
+        Highcharts.chart('proyek-kalah-cancel', {
+            chart: {
+                type: 'column',
+            },
+            title: {
+                text: `<b class="h1">Proyek Kalah, Tidak Lulus PQ & Cancel ${new Date().getFullYear()}</b>`
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    'Kalah',
+                    'Tidak Lulus PQ',
+                    'Cancel',
+                ],
+                crosshair: true
+            },
+            tooltip: {
+                headerFormat: '<span style="color:{point.color};font-size:14px"><b>{point.key}</b></span><table>',
+                pointFormat: '<tr><td style="color:{point.color};font-size:12px;padding:4px;">{point.name}: </td>' +
+                    '<td style="font-size:12px;padding:6px"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            // legend: {
+            //     layout: 'horizontal',
+            //     align: 'center',
+            //     verticalAlign: 'bottom',
+            //     itemStyle: {
+            //         fontSize:'20px',
+            //     },
+            // },
+            legend: {
+                enabled: false,
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E"],
+            series: [
+                    {
+                        colorByPoint: true,
+                        data: [
+                            {
+                                name: "Kalah",
+                                y: proyek_kalah_cancel_tidak_lulus_pq[0],
+                            },
+                            {
+                                name: "Tidak Lulus PQ",
+                                y: proyek_kalah_cancel_tidak_lulus_pq[1],
+                            },
+                            {
+                                name: "Cancel",
+                                y: proyek_kalah_cancel_tidak_lulus_pq[2],
+                            },
+                        ]
+                    }
+            ]
+        });
+    </script>
+    <!--End::CHART PROYEK KALAH - TIDAK LULUS PQ - CANCEL-->
+
+    <!--begin::MARKETING PIPELINE-->
+    <script>
+        Highcharts.chart('summary-pipeline', {
+            chart: {
+                type: 'funnel'
+            },
+            title: {
+                text: '<b class="h1">Marketing Pipeline</b>'
+            },
+            plotOptions: {
+                series: {
+                    dataLabels: {
+                        enabled: false,
+                        format: '<b>{point.name}</b> : {point.y:,.0f}',
+                        softConnector: true
+                    },
+                    center: ['50%', '50%'],
+                    neckWidth: '40%',
+                    neckHeight: '0%',
+                    width: '60%',
+                    showInLegend: true
+                }
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                format: '<b>{point.name}</b> : {point.y}',
+                itemStyle: {
+                    fontSize:'18px',
+                },
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#F1416C", "#083AA9", "#46AAF5" ],
+            series: [{
+                name: 'Jml Proyek',
+                data: [
+                    ['Pasar Dini : '+'{{ $pasarDini }}', {{ $pasarDini }}],
+                    ['Pasar Potensial : '+'{{ $pasarPotensial }}', {{ $pasarPotensial }}],
+                    ['Prakualifikasi : '+'{{ $stagePrakualifikasi }}', {{ $stagePrakualifikasi }}],
+                    ['Tender Diikuti : '+'{{ $stageTender }}', {{ $stageTender }}],
+                    ['Perolehan : '+'{{ $stagePerolehan }}', {{ $stagePerolehan }}],
+                    ['Menang : '+'{{ $stageMenang }}', {{ $stageMenang }}],
+                    // ['Kalah : '+'{{ $stageKalah }}', {{ $stageKalah }}],
+                    ['Terkontrak : '+'{{ $stageTerkontrak }}', {{ $stageTerkontrak }}]
+                ]
+            }],
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        plotOptions: {
+                            series: {
+                                dataLabels: {
+                                    inside: true
+                                },
+                                center: ['50%', '50%'],
+                                width: '100%'
+                            }
+                        }
+                    }
+                }]
+            },
+            credits: {
+                enabled: false
+            },
+        });
+    </script>
+    <!--end::MARKETING PIPELINE-->
+    
 
     <!--Begin::Trigger Point Chart Forecast-->
     <script>
@@ -3685,67 +3935,5 @@
         })
     </script>
     <!--End::Clickable Sumber Dana Realisasi -->
-    
-
-    <!--begin::MARKETING PIPELINE-->
-    <script>
-        Highcharts.chart('summary-pipeline', {
-            chart: {
-                type: 'funnel'
-            },
-            title: {
-                text: '<b class="h1">Marketing Pipeline</b>'
-            },
-            plotOptions: {
-                series: {
-                    dataLabels: {
-                        enabled: true,
-                        format: '<b>{point.name}</b> : {point.y:,.0f}',
-                        softConnector: true
-                    },
-                    center: ['35%', '50%'],
-                    neckWidth: '25%',
-                    neckHeight: '0%',
-                    width: '35%'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
-            series: [{
-                name: 'Jml Proyek',
-                data: [
-                    ['Perolehan', {{ $prosesTender }}],
-                    ['Terkontrak', {{ $terkontrak }}],
-                    ['Pelaksanaan', {{ $pelaksanaan }}],
-                    ['Serah Terima Pekerjaan', {{ $serahTerima }}],
-                    ['Penutupan', {{ $closing }}]
-                ]
-            }],
-            responsive: {
-                rules: [{
-                    condition: {
-                        maxWidth: 500
-                    },
-                    chartOptions: {
-                        plotOptions: {
-                            series: {
-                                dataLabels: {
-                                    inside: true
-                                },
-                                center: ['50%', '50%'],
-                                width: '100%'
-                            }
-                        }
-                    }
-                }]
-            },
-            credits: {
-                enabled: false
-            },
-        });
-    </script>
-    <!--end::MARKETING PIPELINE-->
 
 @endsection

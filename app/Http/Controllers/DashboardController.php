@@ -394,8 +394,53 @@ class DashboardController extends Controller
         }
         // End :: SUMBER DANA REALISASI
 
+        // Begin :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
+        $proyek_kalah_cancel_tidak_lulus_pq = collect();
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", "=", 7)->count()); // Kalah
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("stage", "=", 0)->count()); // Tidak Lulus PQ
+        $proyek_kalah_cancel_tidak_lulus_pq->push($proyeks->where("is_cancel", "=", 1)->count()); // Cancel
+        // End :: CHART PROYEK KALAH - CANCEL - TIDAK LULUS PQ
 
-        return view('1_Dashboard', compact(["totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
+        // Begin :: Table Proyek Teratas yang akan tutup bulan ini
+        $top_proyeks_close_this_month = $proyeks->where("bulan_ri_perolehan", "=", (int) date("m") - 2)->where("tahun_ri_perolehan", "=", (int) date("Y"))->where("stage", "=", 8)->sortByDesc("nilai_perolehan")->values();
+        // End :: Table Proyek Teratas yang akan tutup bulan ini
+        // dd($top_proyeks_close_this_month);
+
+        //begin:: Marketing Pipeline
+        $pasarDini = 0;
+        $pasarPotensial = 0;
+        $stagePrakualifikasi = 0;
+        $stageTender = 0;
+        $stagePerolehan = 0;
+        $stageMenang = 0;
+        $stageKalah = 0;
+        $stageTerkontrak = 0;
+        foreach ($proyeks as $proyek) {
+            $stg = $proyek->stage;
+            if ($stg == 1) {
+                $pasarDini++;
+            } else if ($stg == 2) {
+                $pasarPotensial++;
+            } else if ($stg == 3) {
+                $stagePrakualifikasi++;
+            } else if ($stg == 4) {
+                $stageTender++;
+            } else if ($stg == 5) {
+                $stagePerolehan++;
+            } else if ($stg == 6) {
+                $stageMenang++;
+            } else if ($stg == 7) {
+                $stageKalah++;
+            } else if ($stg == 8) {
+                $stageTerkontrak++;
+            } else {
+                // 
+            };
+        };
+        //end:: Marketing Pipeline
+
+
+        return view('1_Dashboard', compact(["pasarDini", "pasarPotensial", "stagePrakualifikasi", "stageTender", "stagePerolehan", "stageMenang", "stageKalah", "stageTerkontrak", "top_proyeks_close_this_month", "proyek_kalah_cancel_tidak_lulus_pq", "totalRealisasiSumberDana", "totalRKAPSumberDana", "claim_status_array", "anti_claim_status_array", "claim_asuransi_status_array", "nilaiForecastArray", "nilaiRkapArray", "nilaiRealisasiArray", "nilaiForecastTriwunalArray", "year", "month", "proses", "menang", "kalah", "prakualifikasi", "prosesTender", "terkontrak", "pelaksanaan", "serahTerima", "closing", "proyeks", "paretoProyek", "paretoClaim", "paretoAntiClaim", "paretoAsuransi", "kategoriunitKerja", "nilaiOkKumulatif", "nilaiRealisasiKumulatif", "nilaiTerkontrak", "nilaiTerendah", "jumlahMenang", "jumlahKalah", "nilaiMenang", "nilaiKalah", "unitKerja", "unit_kerja_get", "dop_get", "dops"]));
     }
 
     /**
