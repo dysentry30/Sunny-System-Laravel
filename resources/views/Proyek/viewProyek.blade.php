@@ -293,7 +293,7 @@
                                                                 <a href="#"
                                                                     class="stage-button stage-is-done color-is-default"
                                                                     data-bs-toggle="dropdown" role="button"
-                                                                    id="dropdownMenuButton1" aria-expanded="false"
+                                                                    id="menang" aria-expanded="false"
                                                                     style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="1">
                                                                     <div class="d-flex flex-row">
                                                                         <span class="text-white">Menang</span>&nbsp;&nbsp;
@@ -307,7 +307,7 @@
                                                                 <a href="#"
                                                                     class="stage-button stage-is-done color-is-danger"
                                                                     data-bs-toggle="dropdown" role="button"
-                                                                    id="dropdownMenuButton1" aria-expanded="false"
+                                                                    id="menang" aria-expanded="false"
                                                                     style="outline: 0px; cursor: pointer;" stage="1">
                                                                     <div class="d-flex flex-row">
                                                                         <span class="text-white">Kalah</span>&nbsp;&nbsp;
@@ -320,7 +320,7 @@
                                                             @endif
                                                             @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu"
-                                                                aria-labelledby="dropdownMenuButton1">
+                                                                aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
                                                                 </form>
                                                                 <form action="/proyek/stage-save" method="POST"
@@ -356,7 +356,7 @@
                                                             @else
                                                                 {{-- <div class=""> --}}
                                                                 <a href="#" data-bs-toggle="dropdown"
-                                                                    role="button" id="dropdownMenuButton1"
+                                                                    role="button" id="menang"
                                                                     aria-expanded="false"
                                                                     class="stage-button stage-is-not-active color-is-default"
                                                                     style="outline: 0px; cursor: pointer;" stage="8">
@@ -369,7 +369,7 @@
                                                                 </a>
                                                                 @if ($proyek->is_cancel == false)
                                                                 <ul class="dropdown-menu"
-                                                                    aria-labelledby="dropdownMenuButton1">
+                                                                    aria-labelledby="menang">
                                                                     <form action="/proyek/stage-save" method="POST">
                                                                     </form>
                                                                     <form action="/proyek/stage-save" method="POST"
@@ -395,7 +395,7 @@
                                                             @endif
                                                             @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu"
-                                                                aria-labelledby="dropdownMenuButton1">
+                                                                aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
                                                                 </form>
                                                                 <form action="/proyek/stage-save" method="POST"

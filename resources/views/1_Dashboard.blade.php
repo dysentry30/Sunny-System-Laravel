@@ -1134,7 +1134,6 @@
         let nilaiForecast = JSON.parse("{!! json_encode($nilaiForecastArray) !!}");
         let nilaiRkap = JSON.parse("{!! json_encode($nilaiRkapArray) !!}");
         let nilaiRealisasi = JSON.parse("{!! json_encode($nilaiRealisasiArray) !!}");
-        // console.log(nilaiRkap);
 
         const forecast1 = Highcharts.chart('forecast-line', {
 
@@ -3065,7 +3064,12 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    // if(filter.tipe == "Proyek Menang") {
+                    // } else {
+                    //     totalNilaiLainnya += Number(filter.nilai_rkap);
+                    // }
+                    // totalNilaiLainnya += Number(filter.nilai_perolehan ?? filter.nilai_rkap);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -3186,7 +3190,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.penawaran_tender ?? 0)}
+                                ${Intl.NumberFormat(["id"]).format(filter.nilai_perolehan ?? 0)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3218,7 +3222,11 @@
                     for(let filter in filtering) {
                     filter = filtering[filter];
                     let stage = "";
-                    totalNilaiLainnya += Number(filter.nilai_perolehan || filter.nilai_rkap);
+                    totalNilaiLainnya += Number(filter.nilai_perolehan);
+                    // if(filter.tipe == "Proyek Menang") {
+                    // } else {
+                    //     // totalNilaiLainnya += Number(filter.nilai_rkap);
+                    // }
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -3339,7 +3347,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat(["id"]).format(filter.penawaran_tender ?? 0)}
+                                ${Intl.NumberFormat(["id"]).format(filter.nilai_perolehan ?? 0)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3879,7 +3887,11 @@
         competitiveIndex.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
-                getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
+                if(filterGet) {
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-index-jumlah", "#index-jumlah", `/dashboard/index-jumlah/${tipe}`, tipe, 9);
+                }
                 
             })
         })
@@ -3893,7 +3905,11 @@
         competitiveIndexNilai.forEach(point => {
             point.addEventListener("click", async e => {
                 const tipe = point.parentElement.getAttribute("aria-label").replaceAll(/[^a-z][^A-Z]|proyek stage|\./gi, "");
-                getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                if(filterGet) {
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-index-nilai", "#index-nilai", `/dashboard/index-nilai/${tipe}`, tipe, 9);
+                }
                 
             })
         })
@@ -3911,7 +3927,11 @@
                 if(tipe.includes(" ")) {
                     tipe = tipe.replaceAll(" ", "-");
                 }
-                getDataTable("#datatable-sumber-dana-rkap", "#sumber-dana-rkap", `/dashboard/sumber-dana-rkap/${tipe}`, tipe, 9);
+                if(filterGet) {
+                    getDataTable("#datatable-sumber-dana-rkap", "#sumber-dana-rkap", `/dashboard/sumber-dana-rkap/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-sumber-dana-rkap", "#sumber-dana-rkap", `/dashboard/sumber-dana-rkap/${tipe}`, tipe, 9);
+                }
                 
             })
         })
@@ -3928,7 +3948,11 @@
                 if(tipe.includes(" ")) {
                     tipe = tipe.replaceAll(" ", "-");
                 }
-                getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}`, tipe, 9);
+                if(filterGet) {
+                    getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}/${filterGet}`, tipe, 9);
+                } else {
+                    getDataTable("#datatable-sumber-dana-realisasi", "#sumber-dana-realisasi", `/dashboard/sumber-dana-realisasi/${tipe}`, tipe, 9);
+                }
                 
             })
         })
