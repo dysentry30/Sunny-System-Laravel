@@ -46,6 +46,16 @@
                                             <!--end:::Tab item Forecast Bulanan-->
 
                                             <!--begin:::Tab item Forecast Internal-->
+                                            @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
+                                                <li class="nav-item">
+                                                    <a onclick="showCCM()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
+                                                        data-bs-toggle="tab" href="#kt_view_summary_dashboard"
+                                                        style="font-size:14px;">Summary Dashboard</a>
+                                                </li>
+                                            @endif
+                                            <!--end:::Tab item Forecast Internal-->
+
+                                            <!--begin:::Tab item Forecast Internal-->
                                             @if (auth()->user()->check_administrator || auth()->user()->check_admin_kontrak)
                                                 <li class="nav-item">
                                                     <a onclick="showCCM()" class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true"
@@ -54,6 +64,7 @@
                                                 </li>
                                             @endif
                                             <!--end:::Tab item Forecast Internal-->
+
                                         </ul>
                                         <script>
                                             function showCRM() {
@@ -240,6 +251,9 @@
 
                         <!--begin::Card body-->
                         <div class="card-body pt-0">
+                            <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? 'show active' : '' }}" id="kt_view_summary_dashboard" role="tabpanel">
+                                <h1>testing</h1>
+                            </div>      
                             <div class="tab-pane fade {{ auth()->user()->check_admin_kontrak ? '' : 'show active' }}" id="kt_view_dashboard_crm" role="tabpanel">
                                 @if (auth()->user()->check_administrator || auth()->user()->check_user_sales)
                                     <!--begin::FORECAST LINE CHART-->
@@ -952,6 +966,8 @@
 
                                 @endif
                             </div>
+                        </div>
+
                         </div>
                         <!--end::Card body-->
                     </div>
