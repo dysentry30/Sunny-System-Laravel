@@ -82,6 +82,29 @@
             border: 0;
             border-bottom: 1px dashed #606061;
         }
+
+        .dataTables_wrapper .dataTables_length select {
+            padding: 8px !important;
+            border: none !important;
+            width: 40px !important;
+        }
+        div.dataTables_wrapper div.dataTables_length {
+            margin-right: 5px !important;
+            width: none !important;
+        }
+        
+        .buttons-html5 {
+            border-radius: 5px !important;
+            border: none !important;
+        }
+        .buttons-colvis {
+            border: none !important;
+            border-radius: 5px !important;
+        }
+        div.dataTables_wrapper div.dataTables_filter input{
+            border-radius: 5px !important;
+        }
+        
         /* @media (min-width: 992px) {
             [data-kt-aside-minimize=on] .aside {
                 width: 50px !important;
@@ -92,6 +115,7 @@
         .fr-wrapper div:not(.fr-element.fr-view):nth-child(1) {
             display: none;
         }
+
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -396,17 +420,66 @@
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
-                                        <th class="min-w-auto"><small>@sortablelink('kode_proyek', 'Kode Proyek')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun RA Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('bulan_pelaksanaan', 'Bulan RA Perolehan')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nilai_rkap', 'Nilai RKAP')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('forecast', 'Nilai Forecast')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nilai_perolehan', 'Nilai Realisasi')</small></th>
+                                        <th class="min-w-auto"><small>Kode Proyek</small></th>
+                                        <th class="min-w-auto"><small>Nama Proyek</small></th>
+                                        <th class="min-w-auto"><small>Unit Kerja</small></th>
+                                        <th class="min-w-auto"><small>Stage</small></th>
+                                        <th class="min-w-auto"><small>Tahun RA Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Bulan RA Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Nilai RKAP</small></th>
+                                        <th class="min-w-auto"><small>Nilai Forecast</small></th>
+                                        <th class="min-w-auto"><small>Nilai Realisasi</small></th>
                                         <th class="min-w-auto"><small>Pelanggan</small></th>
-                                        <th class="min-w-auto text-center"><small>@sortablelink('jenis_proyek', 'Jenis Proyek')</small></th>
+                                        <th class="min-w-auto text-center"><small>Jenis Proyek</small></th>
+                                        <th class="min-w-auto"><small>Sumber Dana</small></th>
+                                        <th class="min-w-auto"><small>Status Pasar Dini</small></th>
+                                        <th class="min-w-auto"><small>Asal Info proyek</small></th>
+                                        <th class="min-w-auto"><small>Nilai OK Review (Valas) (Exclude Tax)</small></th>
+                                        <th class="min-w-auto"><small>Mata Uang Review</small></th>
+                                        <th class="min-w-auto"><small>Bulan Pelaksanaan Review</small></th>
+                                        <th class="min-w-auto"><small>Laporan Pasar Dini</small></th>
+                                        <th class="min-w-auto"><small>Negara</small></th>
+                                        <th class="min-w-auto"><small>Status Pasar Potensial</small></th>
+                                        <th class="min-w-auto"><small>SBU</small></th>
+                                        <th class="min-w-auto"><small>Klasifikasi</small></th>
+                                        <th class="min-w-auto"><small>Sub Klasifikasi</small></th>
+                                        <th class="min-w-auto"><small>DOP</small></th>
+                                        <th class="min-w-auto"><small>Company</small></th>
+                                        <th class="min-w-auto"><small>Laporan pasar Potensial</small></th>
+                                        <th class="min-w-auto"><small>Proyek Strategis</small></th>
+                                        <th class="min-w-auto"><small>Jadwal PQ</small></th>
+                                        <th class="min-w-auto"><small>HPS / Pagu (Rupiah)</small></th>
+                                        <th class="min-w-auto"><small>Porsi JO (%)</small></th>
+                                        <th class="min-w-auto"><small>Laporan Prakualifikasi</small></th>
+                                        <th class="min-w-auto"><small>Jadwal Pemasukan Tender</small></th>
+                                        <th class="min-w-auto"><small>Lokasi Tender</small></th>
+                                        <th class="min-w-auto"><small>Nilai Penawaran Keseluruhan</small></th>
+                                        <th class="min-w-auto"><small>Laporan Tender Diikuti</small></th>
+                                        <th class="min-w-auto"><small>Nilai Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Peringkat Wika</small></th>
+                                        <th class="min-w-auto"><small>% OE Wika</small></th>
+                                        <th class="min-w-auto"><small>Laporan Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Aspek Pesaing</small></th>
+                                        <th class="min-w-auto"><small>Aspek Non Pesaing</small></th>
+                                        <th class="min-w-auto"><small>Usulan Saran Perbaikan</small></th>
+                                        <th class="min-w-auto"><small>Laporan Menag / Kalah</small></th>
+                                        <th class="min-w-auto"><small>Nilai Kontrak Keseluruhan</small></th>
+                                        <th class="min-w-auto"><small>Nilai Kontrak (Porsi WIKA)</small></th>
+                                        <th class="min-w-auto"><small>Klasifikasi Proyek</small></th>
+                                        <th class="min-w-auto"><small>Jenis Kontrak</small></th>
+                                        <th class="min-w-auto"><small>Sistem Pembayaran</small></th>
+                                        <th class="min-w-auto"><small>No SPK External</small></th>
+                                        <th class="min-w-auto"><small>Tanggal SPK Internal</small></th>
+                                        <th class="min-w-auto"><small>Tahun RI Perolehan</small></th>
+                                        <th class="min-w-auto"><small>Bulan RI Perolehan</small></th>
+                                        <th class="min-w-auto"><small>No Kontrak</small></th>
+                                        <th class="min-w-auto"><small>Tanggal Kontrak</small></th>
+                                        <th class="min-w-auto"><small>Tanggal Mulai Kontrak</small></th>
+                                        <th class="min-w-auto"><small>Tanggal Akhir Kontrak</small></th>
+                                        <th class="min-w-auto"><small>Tanggal Selesai Bash PHO</small></th>
+                                        <th class="min-w-auto"><small>Tanggal Selesai Bash FHO</small></th>
+                                        <th class="min-w-auto"><small>Laporan Terkontrak</small></th>
+
                                     </tr>
                                     <!--end::Table row-->
                                 </thead>
@@ -633,6 +706,350 @@
                                             </td>
                                             <!--end::Jenis Proyek-->
 
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->sumber_dana ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->status_pasdin ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->info_asal_proyek ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nilai_valas_review ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->mata_uang_review ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->bulan_review ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_kualitatif_pasdin	 ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->negara ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->status_pasar ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->sbu ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->klasifikasi ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->sub_klasifikasi ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->dop ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->company ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_kualitatif_paspot ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-center">
+                                                <small>
+                                                    @switch($proyek->proyek_strategis)
+                                                        @case('1')
+                                                            Ya
+                                                        @break
+
+                                                        @default
+                                                            Tidak
+                                                    @endswitch
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->jadwal_pq ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->hps_pagu ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->porsi_jo ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_prakualifikasi ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->jadwal_tender ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->lokasi_tender ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->penawaran_tender ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_tender ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nilai_perolehan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->peringkat_wika ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->oe_wika ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_perolehan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->aspek_pesaing ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->aspek_non_pesaing ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->saran_perbaikan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_menang ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nilai_kontrak_keseluruhan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nilai_perolehan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->klasifikasi_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->jenis_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->jenis_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->sistem_bayar ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nospk_external ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tglspk_internal ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tahun_ri_perolehan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->bulan_ri_perolehan ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->nomor_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tanggal_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tanggal_mulai_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tanggal_akhir_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->tanggal_selesai_fho ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+                                            <!--begin::column-->
+                                            <td class="text-start">
+                                                <small>
+                                                    {{ $proyek->laporan_terkontrak ?? "-" }}
+                                                </small>
+                                            </td>
+                                            <!--end::column-->
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -699,6 +1116,7 @@
         $('#example').DataTable( {
             dom: 'lBfrtip',
             stateSave : true,
+            scrollX : true,
             // iDisplayLength : 25,
             // pageLength : 500,
             // lengthMenu: [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
