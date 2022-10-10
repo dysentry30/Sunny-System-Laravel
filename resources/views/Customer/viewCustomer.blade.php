@@ -1744,21 +1744,25 @@
                                                         <div id="overViewProject">
                                                             <br>
                                                             <div class="row">
-                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
-                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Forecast</span>
-                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$nilaiForecast[0]}} / Rp. {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Forecast</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$nilaiForecast[0]}} / Rp. {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
-                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Opportunity</span>
-                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekOpportunity[0]}} / Rp. {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Opportunity</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOpportunity[0]}} / Rp. {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
-                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Closed</span>
-                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekClosed[0]}} / Rp. {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Closed</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekClosed[0]}} / Rp. {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <div class="card text-white mb-3 me-3 col" style="background-color: #008CB4">
-                                                                    <span class="card-header pt-8 text-center" style="font-size: 1.2rem">Proyek Ongoing</span>
-                                                                    <p class="text-white py-4 text-center fw-bolder" style="font-size: 1rem">{{$proyekOngoing[0]}} / Rp. {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Ongoing</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOngoing[0]}} / Rp. {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                             </div>
                                                             <br>
@@ -2873,10 +2877,7 @@
                 type: 'pie',
                 options3d: {
                     enabled: true,
-                    alpha: 5,
-                    beta: 15,
-                    viewDistance: 50,
-                    depth: 100
+                    alpha: 50,
                 }
             },
             title: {
@@ -2911,23 +2912,31 @@
 
             // },
             legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
                     fontSize:'15px',
                     // color: '#A0A0A0'
                 },
+                itemMarginTop: 10,
+                itemMarginBottom: 10,
+                x: -120,
             },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                },
                 series: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                     showInLegend: true
                 },
+                
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -2976,10 +2985,7 @@
                 type: 'pie',
                 options3d: {
                     enabled: true,
-                    alpha: 5,
-                    beta: 15,
-                    viewDistance: 50,
-                    depth: 100
+                    alpha: 50,
                 }
             },
             title: {
@@ -3008,20 +3014,27 @@
 
             // },
             legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom',
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
                     fontSize:'15px',
                     // color: '#A0A0A0'
                 },
+                itemMarginTop: 10,
+                itemMarginBottom: 10,
+                x: -150,
             },
             colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                },
                 series: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                     showInLegend: true
                 },
