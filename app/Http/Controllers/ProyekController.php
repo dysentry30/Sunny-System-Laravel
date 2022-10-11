@@ -1222,7 +1222,7 @@ class ProyekController extends Controller
             }
         }
         $proyekStage->stage = $request->stage;
-
+        
         $teamProyek = TeamProyek::where('kode_proyek', "=", $proyekStage->kode_proyek)->get();
         if ($teamProyek != null) {
             $teamProyek->each(function ($stage) use ($proyekStage) {
@@ -1232,7 +1232,7 @@ class ProyekController extends Controller
                 }
             });
         }
-
+        
         $proyekBerjalans = ProyekBerjalans::where('kode_proyek', "=", $proyekStage->kode_proyek)->get()->first();
         if ($proyekBerjalans == null) {
             $proyekStage->save();
@@ -1254,11 +1254,13 @@ class ProyekController extends Controller
                     "link" => true,
                 ]);
             }
-            Alert::success("Success", "Stage berhasil diperbarui");
-            return back();
+                Alert::success("Success", "Stage berhasil diperbarui");
+                return back();
         }
+
         Alert::error("Error", "Stage gagal diperbarui");
         return back();
+
     }
 
     public function getKriteria(Request $request)

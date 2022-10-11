@@ -614,7 +614,22 @@
                                         //         }
                                         //     }
                                         // });
+                                        const proyekIsCancel = Boolean("{{$proyek->is_cancel}}");
+
                                         function confirmAction(form) {
+                                            if(proyekIsCancel) {
+                                                Swal.fire({
+                                                    title: '',
+                                                    text: "Cancel Proyek tidak bisa pindah stage",
+                                                    icon: false,
+                                                    toast: true,
+                                                    confirmButtonColor: "#008CB4",
+                                                    timer: 1500,
+                                                    timerProgressBar: true,
+                                                    position: 'top-end',
+                                                });
+                                                return;
+                                            }
                                             const formSend = document.createElement("form");
                                             formSend.setAttribute("method", "post");
                                             formSend.setAttribute("action", "/proyek/stage-save");
@@ -667,6 +682,19 @@
                                         const stageActions = document.querySelectorAll(".stage-action");
                                         stageActions.forEach(stageAction => {
                                             stageAction.addEventListener("click", async e => {
+                                                if(proyekIsCancel) {
+                                                    Swal.fire({
+                                                        title: '',
+                                                        text: "Cancel Proyek tidak bisa pindah stage",
+                                                        icon: false,
+                                                        toast: true,
+                                                        confirmButtonColor: "#008CB4",
+                                                        timer: 1500,
+                                                        timerProgressBar: true,
+                                                        position: 'top-end',
+                                                    });
+                                                    return;
+                                                }
                                                 Swal.fire({
                                                     title: '',
                                                     text: "Yakin Pindah Stage ?",
