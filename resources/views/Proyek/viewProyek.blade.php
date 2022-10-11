@@ -48,7 +48,7 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                @if ($proyek->is_cancel == false)
                     <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
                     @csrf
                 @endif
@@ -95,7 +95,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                    @if ($proyek->is_cancel == false)
                                     <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                     style="background-color:#008CB4">
                                         Save</button>
