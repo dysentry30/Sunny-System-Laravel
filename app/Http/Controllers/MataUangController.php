@@ -22,9 +22,9 @@ class MataUangController extends Controller
         $filter = $request->query("filter");
 
         if (!empty($column)) {
-            $mataUang = MataUang::sortable()->where($column, 'like', '%' . $filter . '%')->get();
+            $mataUang = MataUang::where($column, 'like', '%' . $filter . '%')->get();
         } else {
-            $mataUang = MataUang::sortable()->get();
+            $mataUang = MataUang::get();
         }
 
         return view('/MasterData/MataUang', compact(['mataUang', 'column', 'filter']));
@@ -45,7 +45,7 @@ class MataUangController extends Controller
         ];
         $validation = Validator::make($dataUang, $rules, $messages);
         if ($validation->fails()) {
-            Alert::error('Error', "DOP Fagal Dibuat !");
+            Alert::error('Error', "Mata Uang gagal Dibuat !");
         }
 
         $validation->validate();

@@ -692,13 +692,19 @@
                                     <!--begin::Input-->
                                     <select id="jenis-proyek" name="jenis-proyek" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Jenis Proyek">
-                                        <option selected></option>
+                                        {{-- <option selected></option>
                                         <option value="I" {{ old('jenis-proyek') == 'I' ? 'selected' : '' }}>
                                             Internal</option>
                                         <option value="N" {{ old('jenis-proyek') == 'N' ? 'selected' : '' }}>
                                             External</option>
                                         <option value="J" {{ old('jenis-proyek') == 'J' ? 'selected' : '' }}>
-                                            JO</option>
+                                            JO</option> --}}
+                                        <option></option>
+                                        @foreach ($jenisProyek as $jenis)
+                                            <option value="{{ $jenis->kode_jenis }}"
+                                                {{ old('jenis-proyek') == $jenis->kode_jenis ? 'selected' : '' }}>
+                                                {{ $jenis->jenis_proyek }}</option>
+                                        @endforeach
                                     </select>
                                     @error('jenis-proyek')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>
@@ -719,11 +725,17 @@
                                     <!--begin::Input-->
                                     <select onchange="proyekRetail(this)" id="tipe-proyek" name="tipe-proyek" class="form-select form-select-solid"
                                         data-control="select2" data-hide-search="true" data-placeholder="Tipe Proyek">
-                                        <option selected></option>
+                                        {{-- <option selected></option>
                                         <option value="R" {{ old('tipe-proyek') == 'R' ? 'selected' : '' }}>
                                             Retail</option>
                                         <option value="P" {{ old('tipe-proyek') == 'P' ? 'selected' : '' }}>
-                                            Non-Retail</option>
+                                            Non-Retail</option> --}}
+                                        <option></option>
+                                        @foreach ($tipeProyek as $tipe)
+                                            <option value="{{ $tipe->kode_tipe }}"
+                                                {{ old('tipe-proyek') == $tipe->kode_tipe ? 'selected' : '' }}>
+                                                {{ $tipe->tipe_proyek }}</option>
+                                        @endforeach
                                     </select>
                                     @error('tipe-proyek')
                                         <h6 class="text-danger fw-normal">{{ $message }}</h6>

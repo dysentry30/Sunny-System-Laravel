@@ -402,21 +402,45 @@
                                         </div>
                                         <!--end::Menu Colapse-->
                                     @endif
-                                    @if (!auth()->user()->check_user_sales)
-                                        <!--begin::Menu Colapse-->
-                                        <div id="#kt_aside_menu" data-kt-menu="true"
-                                            style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'mata-uang' ? 'background-color:#008CB4' : '' }}">
-                                            <a class="menu-link " href="/mata-uang" style="color:white; padding-left:20px;">
-                                                <span class="menu-icon">
-                                                    <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-                                                    <i class="bi bi-cash-stack text-white"></i>
-                                                    <!--end::Svg Icon-->
-                                                </span>
-                                                <span class="menu-title" style="font-size: 16px; padding-left: 10px">Mata Uang</span>
-                                            </a>
-                                        </div>
-                                        <!--end::Menu Colapse-->
-                                    @endif
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'mata-uang' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/mata-uang" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-cash-stack text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Mata Uang</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'jenis-proyek' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/jenis-proyek" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-gear-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Jenis Proyek</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'tipe-proyek' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/tipe-proyek" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-gear-fill text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Tipe Proyek</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#008CB4' : '' }}">
