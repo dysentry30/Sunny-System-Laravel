@@ -1142,7 +1142,6 @@ class ProyekController extends Controller
         $years = (int) date('Y');
         $forecasts = Forecast::where("kode_proyek", "=", $kodeProyek)->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
         // $forecasts = $proyekStage->Forecasts->where("periode_prognosa", "=", $periode)->whereYear("created_at", "=", $years)->first();
-
         if($request->stage == 4){
             if ($proyekStage->hps_pagu == 0) {
                 Alert::error("Error", "HPS Pagu Belum Diisi !");
@@ -1214,6 +1213,12 @@ class ProyekController extends Controller
                 } else {
                     $request->stage = 9;
                 }
+            } else if(isset($data["stage-tidak-lulus-pq"])) {
+                $proyekStage->is_tidak_lulus_pq = true;
+                $request->stage = 3;
+            } else if(isset($data["stage-prakualifikasi"])) {
+                $proyekStage->is_tidak_lulus_pq = false;
+                $request->stage = 3;
             }
         }
         $proyekStage->stage = $request->stage;

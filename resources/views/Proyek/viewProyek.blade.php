@@ -48,7 +48,7 @@
 
                 <!--begin::Content-->
                 <!--begin::Form-->
-                @if ($proyek->is_cancel == false)
+                @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                     <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
                     @csrf
                 @endif
@@ -95,7 +95,7 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    @if ($proyek->is_cancel == false)
+                                    @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                     <button type="submit" class="btn btn-sm btn-primary ms-2" id="proyek-save"
                                     style="background-color:#008CB4">
                                         Save</button>
@@ -219,33 +219,86 @@
                                                             </a>
                                                         @endif
 
-                                                        @if ($proyek->stage > 2)
-                                                            <a href="#"
-                                                                class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="3">
-                                                                Prakualifikasi
-                                                            </a>
+                                                        @if ($proyek->is_tidak_lulus_pq)
+                                                        <a href="#"
+                                                            class="stage-button stage-is-done color-is-danger"
+                                                            data-bs-toggle="dropdown" role="button"
+                                                            id="menang" aria-expanded="false"
+                                                            style="outline: 0px; cursor: pointer;" stage="1">
+                                                            <div class="d-flex flex-row">
+                                                                <span class="text-white">Tidak Lulus PQ</span>&nbsp;&nbsp;
+                                                                <span class=""
+                                                                    style="position: relative;top: 15%;"
+                                                                    stage="1"><i
+                                                                        class="bi bi-caret-down-fill text-white"></i></span>
+                                                            </div>
+                                                        </a>
                                                         @else
-                                                            @if (abs($proyek->stage - 3) != 1)
+                                                            @if ($proyek->stage > 2)
                                                                 <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer; pointer-events: none;"
-                                                                    stage="3">
-                                                                    Prakualifikasi
+                                                                    data-bs-toggle="dropdown"
+                                                                    role="button" id="tidak-lulus-pq" aria-expanded="false"
+                                                                    aria-controls="#tidak-lulus-pq"
+                                                                    class="stage-button d-flex align-items-center stage-is-done color-is-default"
+                                                                    style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="3">
+                                                                        <span>Prakualifikasi</span>
+                                                                        <i class="bi bi-caret-down-fill text-white ms-3"></i>
                                                                 </a>
                                                             @else
-                                                                <a href="#"
-                                                                    class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="3">
-                                                                    Prakualifikasi
-                                                                </a>
+                                                                @if (abs($proyek->stage - 3) != 1)
+                                                                    <a href="#"
+                                                                        data-bs-toggle="dropdown"
+                                                                        role="button" id="tidak-lulus-pq" aria-expanded="false"
+                                                                        aria-controls="#tidak-lulus-pq"
+                                                                        class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer; pointer-events: none;"
+                                                                        stage="3">
+                                                                            <span>Prakualifikasi</span>
+                                                                            <i class="bi bi-caret-down-fill text-white ms-3"></i>
+                                                                    </a>
+                                                                @else
+                                                                    <a href="#"
+                                                                        data-bs-toggle="dropdown"
+                                                                        role="button" id="tidak-lulus-pq" aria-expanded="false"
+                                                                        aria-controls="#tidak-lulus-pq"
+                                                                        class="stage-button d-flex align-items-center stage-is-not-active color-is-default"
+                                                                        style="outline: 0px; cursor: pointer;" stage="3">
+                                                                            <span>Prakualifikasi</span>
+                                                                            <i class="bi bi-caret-down-fill text-white ms-3"></i>
+                                                                    </a>
+                                                                @endif
                                                             @endif
                                                         @endif
 
+                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                            <ul class="dropdown-menu"
+                                                                id="tidak-lulus-pq"
+                                                                aria-labelledby="tidak-lulus-pq">
+                                                                <form action="/proyek/stage-save" method="POST">
+                                                                </form>
+                                                                <form action="/proyek/stage-save" method="POST"
+                                                                    onsubmit="confirmAction(this); return false;"
+                                                                    stage="8">
+                                                                    @csrf
+                                                                    <input type="hidden" name="kode_proyek"
+                                                                        value="{{ $proyek->kode_proyek }}">
+                                                                    <li><input type="submit"
+                                                                            onclick="this.form.submitted=this.value"
+                                                                            class="dropdown-item" name="stage-prakualifikasi"
+                                                                            value="Prakualifikasi" />
+                                                                    </li>
+                                                                    <li><input type="submit"
+                                                                            onclick="this.form.submitted=this.value"
+                                                                            class="dropdown-item" name="stage-tidak-lulus-pq"
+                                                                            value="Tidak Lulus PQ" />
+                                                                    </li>
+                                                                </form>
+                                                            </ul>
+                                                        @endif
                                                         @if ($proyek->stage > 3)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="4">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}" stage="4">
                                                                 Tender Diikuti
                                                             </a>
                                                         @else
@@ -259,7 +312,7 @@
                                                             @else
                                                                 <a href="#"
                                                                     class="stage-button stage-action stage-is-not-active color-is-default"
-                                                                    style="outline: 0px; cursor: pointer;" stage="4">
+                                                                    style="outline: 0px; cursor: pointer; {{ $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}" stage="4">
                                                                     Tender Diikuti
                                                                 </a>
                                                             @endif
@@ -318,7 +371,7 @@
                                                                     </div>
                                                                 </a>
                                                             @endif
-                                                            @if ($proyek->is_cancel == false)
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -367,7 +420,7 @@
                                                                         stage="8"><i
                                                                             class="bi bi-caret-down-fill text-white"></i></span>
                                                                 </a>
-                                                                @if ($proyek->is_cancel == false)
+                                                                @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                                 <ul class="dropdown-menu"
                                                                     aria-labelledby="menang">
                                                                     <form action="/proyek/stage-save" method="POST">
@@ -393,7 +446,7 @@
                                                                 @endif
                                                                 {{-- </div> --}}
                                                             @endif
-                                                            @if ($proyek->is_cancel == false)
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu"
                                                                 aria-labelledby="menang">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -445,7 +498,7 @@
                                                                             class="bi bi-caret-down-fill text-white"></i></span>
                                                                 </a>
                                                             @endif
-                                                            @if ($proyek->is_cancel == false)
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -492,7 +545,7 @@
                                                                     Terkontrak
                                                                 </a>
                                                             @endif
-                                                            @if ($proyek->is_cancel == false)
+                                                            @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                                             <ul class="dropdown-menu" id="terkontrak"
                                                                 aria-labelledby="terkontrak">
                                                                 <form action="/proyek/stage-save" method="POST">
@@ -515,7 +568,6 @@
                                                             </ul>
                                                             @endif
                                                         @endif
-
 
 
                                                         {{-- @if ($proyek->stage > 9)
@@ -545,7 +597,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @if ($proyek->is_cancel == false)
+                                    @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                     <script>
                                         // const stages = document.querySelectorAll(".stage-button");
                                         // stages.forEach((stage, i) => {
@@ -570,22 +622,33 @@
                                                     @csrf
                                                     <input type="hidden" name="kode_proyek" value="{{ $proyek->kode_proyek }}">
                                                 `;
+                                            if (form.submitted == "Tidak Lulus PQ") {
+                                                html +=
+                                                    `<input type="hidden" class="dropdown-item" name="stage-tidak-lulus-pq" value="Tidak Lulus PQ" />`;
+                                            }
+                                            if (form.submitted == "Prakualifikasi") {
+                                                html +=
+                                                    `<input type="hidden" class="dropdown-item" name="stage-prakualifikasi" value="Prakualifikasi" />`;
+                                            }
                                             if (form.submitted == "Menang") {
                                                 html +=
-                                                    `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-menang" value="Menang"/>`;
-                                            } else if (form.submitted == "Kalah") {
+                                                    `<input type="hidden" class="dropdown-item" name="stage-menang" value="Menang"/>`;
+                                            }
+                                            if (form.submitted == "Kalah") {
                                                 html +=
-                                                    `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-kalah" value="Kalah"/>`;
+                                                    `<input type="hidden" class="dropdown-item" name="stage-kalah" value="Kalah"/>`;
                                             }
                                             if (form.submitted == "Terkontrak") {
                                                 html +=
-                                                    `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terkontrak" value="Terkontrak"/>`;
-                                            } else if (form.submitted == "Terendah") {
+                                                    `<input type="hidden" class="dropdown-item" name="stage-terkontrak" value="Terkontrak"/>`;
+                                            }
+                                            if (form.submitted == "Terendah") {
                                                 html +=
-                                                    `<input type="hidden" onclick="this.form.submitted=this.value" class="dropdown-item" name="stage-terendah" value="Terendah"/>`;
+                                                    `<input type="hidden" class="dropdown-item" name="stage-terendah" value="Terendah"/>`;
                                             }
                                             formSend.innerHTML = html;
                                             document.body.appendChild(formSend);
+                                            console.log(formSend);
                                             Swal.fire({
                                                 title: '',
                                                 text: "Yakin Pindah Stage ?",
@@ -682,13 +745,22 @@
                                                         <!--end:::Tab item Pasar Potensial-->
                                                     @endif
 
-                                                    @if ($proyek->stage > 2)
+                                                    @if ($proyek->stage > 2 && $proyek->is_tidak_lulus_pq == false)
                                                         <!--begin:::Tab item Prakualifikasi-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4"
                                                                 data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                                 href="#kt_user_view_overview_prakualifikasi"
                                                                 style="font-size:14px;">Prakualifikasi</a>
+                                                        </li>
+                                                        <!--end:::Tab item Prakualifikasi-->
+                                                    @elseif($proyek->is_tidak_lulus_pq)
+                                                        <!--begin:::Tab item Prakualifikasi-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4"
+                                                                data-kt-countup-tabs="true" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_prakualifikasi"
+                                                                style="font-size:14px;">Tidak Lulus PQ</a>
                                                         </li>
                                                         <!--end:::Tab item Prakualifikasi-->
                                                     @endif
