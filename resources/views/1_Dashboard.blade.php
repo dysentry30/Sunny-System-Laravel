@@ -586,7 +586,7 @@
 
                                     <div class="row">
                                         <div class="col-6">
-                                            <figure class="col highcharts-figure py-12">
+                                            <figure class="col highcharts-figure">
                                                 <div class="py-12" id="index-jumlah">
                                                     <!--begin::INDEX JUMLAH-->
                                                     <!--end::INDEX JUMLAH-->
@@ -2312,7 +2312,7 @@
             const titleTable = table.querySelector("#title-table");
             const total = table.querySelector("#total");
             const unitKerja = url.split("/");
-            console.log(type);
+            // console.log(type);
             
             if (type == "Forecast") {
                 if (tableElt.includes("triwulan")) {
@@ -3217,7 +3217,7 @@
                     '<th>Bulan</th>' +
                     `<th class="text-end">Nilai ${type}</th>`
                 '</tr>';
-                console.log(filterRes);
+                // console.log(filterRes);
                 [filterRes].forEach(filtering => {
                     for(let filter in filtering) {
                     filter = filtering[filter];
@@ -3419,7 +3419,11 @@
                     }
 
                     let bulan = "";
-                    // console.log(filter.bulan_pelaksanaan, filter);
+                    // let nilaiTerendahTerkontrak = filter.forecasts[0].realisasi_forecast;
+                    // if (!filter.forecasts[0]) {
+                    //     // console.log(filter);
+                    //     nilaiTerendahTerkontrak = 0;
+                    // }
                     switch (Number(filter.forecasts[0]?.month_realisasi)) {
                         case 1:
                             bulan = "Januari";
@@ -3495,8 +3499,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                // ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].periode_prognosa == new Date().getMonth() ? filter.forecasts[0].realisasi_forecast: 0)}
-                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast) ?? 0}
+                                ${Intl.NumberFormat(["id"]).format(filter.forecasts[0].realisasi_forecast ?? 0)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;

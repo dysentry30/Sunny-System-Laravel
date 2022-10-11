@@ -849,6 +849,9 @@ class DashboardController extends Controller
                 break;
         }
         // dd($proyeks);
+        $proyeks = $proyeks->filter(function ($p) {
+            return $p->Forecasts->count() > 0;
+        });
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
