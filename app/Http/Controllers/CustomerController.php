@@ -250,19 +250,27 @@ class CustomerController extends Controller
                 $proyek = $proyekBerjalan->proyek;
                 if ($proyek->stage <= 3) {
                     $totalProyekOpportunity++;
-                    $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                    $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                        return (int) $f->nilai_forecast;
+                    }) / $per;
                 }
                 if ($proyek->stage <= 5) {
                     $totalProyekOngoing++;
-                    $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                    $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                        return (int) $f->nilai_forecast;
+                    }) / $per;
                 }
                 if ($proyek->stage == 6 || $proyek->stage > 7) {
                     $totalProyekClosed++;
-                    $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                    $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                        return (int) $f->nilai_forecast;
+                    }) / $per;
                 }
                 if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
                     $totalProyekForecast++;
-                    $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum("nilai_forecast") / $per;
+                    $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                        return (int) $f->nilai_forecast;
+                    }) / $per;
                 }
             }
             $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
