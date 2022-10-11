@@ -628,7 +628,7 @@ class CustomerController extends Controller
     public function deleteStruktur($id)
     {
         $delete = StrukturCustomer::find($id);
-        dd($delete);
+        // dd($delete);
         $delete->delete();
         Alert::success("Success", "Struktur Berhasil Dihapus");
         return redirect()->back();

@@ -287,7 +287,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::post('/customer/struktur/{id}/edit', [CustomerController::class, 'editStruktur']);
 
     // Delete Struktur Organisasi    
-    Route::get('/customer/struktur/{id}/delete', [CustomerController::class, 'deleteStruktur']);
+    Route::delete('/customer/struktur/{id}/delete', [CustomerController::class, 'deleteStruktur']);
     
     // Delete Struktur Organisasi Attach  
     Route::get('/customer/struktur/{id}/attach/delete', [CustomerController::class, 'deleteStrukturAttach']);
