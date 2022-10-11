@@ -3220,7 +3220,7 @@
 
     <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiClr = Number("{{$customer->customer_loyalty_rate ?? 1}}");
+        let nilaiClr = Number("{{$customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate}}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiClr >= 1 && nilaiClr < 1.8) {
@@ -3398,7 +3398,7 @@
 
     <!--begin::Score Net Promoter Score-->
     <script>
-        let nilaiNps = Number("{{$customer->net_promoter_score ?? 1}}");
+        let nilaiNps = Number("{{$customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score}}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
         if(nilaiNps >= 1 && nilaiNps < 1.8) {
@@ -3576,7 +3576,7 @@
     
     <!--begin::Score CSI-->
     <script>
-        let nilaiCsi = Number("{{$customer->customer_satisfaction_index ?? 1}}");
+        let nilaiCsi = Number("{{$customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index}}");
         let bgColorCsi = "";
         if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
             bgColorCsi = "#F1E4A9";
