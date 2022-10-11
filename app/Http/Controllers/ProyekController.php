@@ -32,6 +32,8 @@ use App\Models\KriteriaPasarProyek;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\DokumenPrakualifikasi;
+use App\Models\JenisProyek;
+use App\Models\TipeProyek;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -57,6 +59,8 @@ class ProyekController extends Controller
         // dd($proyekBerjalan);
         $customers = Customer::all();
         $sumberdanas = SumberDana::all();
+        $jenisProyek = JenisProyek::all();
+        $tipeProyek = TipeProyek::all();
 
         if (Auth::user()->check_administrator) {
             $unitkerjas = UnitKerja::all();
@@ -112,9 +116,9 @@ class ProyekController extends Controller
         // dd($filter);
 
         if (empty($datatables)) {
-            return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
+            return view('3_Proyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
         }
-        return view('3_DataSetProyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas"]));
+        return view('3_DataSetProyek', compact(["proyeks", "cari", "column", "filter", "customers", "sumberdanas", "unitkerjas", "jenisProyek", "tipeProyek"]));
     }
 
     public function save(Request $request, Proyek $newProyek)
@@ -214,6 +218,7 @@ class ProyekController extends Controller
         $idCustomer = $dataProyek["customer"];
 
         Alert::success('Success', $dataProyek["nama-proyek"] . ", Berhasil Ditambahkan");
+        // dd($newProyek);
 
         if ($newProyek->save()) {
             if ($idCustomer != null) {

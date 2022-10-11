@@ -36,7 +36,9 @@ use App\Http\Controllers\DraftContractController;
 use App\Http\Controllers\KriteriaPasarController;
 use App\Http\Controllers\AddendumContractController;
 use App\Http\Controllers\ContractManagementsController;
+use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
+use App\Http\Controllers\TipeProyekController;
 use App\Models\MataUang;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -918,11 +920,29 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Home Mata Uang
     Route::get('/mata-uang', [MataUangController::class, 'index']);
 
-    // NEW DOP after SAVE
+    // Save Mata Uang
     Route::post('/mata-uang/save', [MataUangController::class, 'store']);
 
-    // NEW DOP after SAVE
+    // Delete Mata Uang
     Route::delete('/mata-uang/delete/{id}', [MataUangController::class, 'delete']);
+
+    // Home Jenis Proyek
+    Route::get('/jenis-proyek', [JenisProyekController::class, 'index']);
+
+    // Save Jenis Proyek
+    Route::post('/jenis-proyek/save', [JenisProyekController::class, 'store']);
+
+    // Delete Jenis Proyek
+    Route::delete('/jenis-proyek/delete/{id}', [JenisProyekController::class, 'delete']);
+
+    // Home Tipe Proyek
+    Route::get('/tipe-proyek', [TipeProyekController::class, 'index']);
+
+    // Save Tipe Proyek
+    Route::post('/tipe-proyek/save', [TipeProyekController::class, 'store']);
+
+    // Delete Tipe Proyek
+    Route::delete('/tipe-proyek/delete/{id}', [TipeProyekController::class, 'delete']);
     //End :: Master Data
 
 
