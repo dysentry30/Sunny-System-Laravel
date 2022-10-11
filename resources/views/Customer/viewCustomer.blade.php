@@ -283,12 +283,12 @@
                                                     <!--end:::Tab item Informasi Perusahaan-->
 
                                                     <!--begin:::Tab item Atachment & Notes-->
-                                                    <li class="nav-item">
+                                                    {{-- <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4"
                                                             data-kt-countup-tabs="true" data-bs-toggle="tab"
                                                             href="#kt_user_view_performance"
                                                             style="font-size:12px;">PERFORMANCE</a>
-                                                    </li>
+                                                    </li> --}}
                                                     <!--end:::Tab item Atachment & Notes-->
 
                                                     <!--begin:::Tab item History-->
@@ -789,74 +789,6 @@
                                                             <!--End begin::Row-->
 
                                                             <br>
-
-                                                            <!--begin::Data CSI-->
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
-                                                                CSI
-                                                            </h3>
-                                                            <!--end::Data CSI-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RA</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            value="" placeholder="Nilai RA" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Presentase</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Presentase" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
-                                                            <!--begin::Row-->
-                                                            <div class="row fv-row">
-                                                                <!--begin::Col-->
-                                                                <div class="col-6">
-                                                                    <!--begin::Input group Website-->
-                                                                    <div class="fv-row mb-7">
-                                                                        <!--begin::Label-->
-                                                                        <label class="fs-6 fw-bold form-label mt-3">
-                                                                            <span>Nilai RI</span>
-                                                                        </label>
-                                                                        <!--end::Label-->
-                                                                        <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            placeholder="Nilai RI" />
-                                                                        <!--end::Input-->
-                                                                    </div>
-                                                                    <!--end::Input group-->
-                                                                </div>
-                                                                <!--End begin::Col-->
-                                                            </div>
-                                                            <!--End begin::Row-->
                                                         </div>
                                                     </div>
                                                     <!--end:::Tab pane Performance-->
@@ -865,6 +797,86 @@
                                                     <!--begin:::Tab pane Struktur Organisasi-->
                                                     <div class="tab-pane fade" id="kt_user_view_organisasi"
                                                         role="tabpanel">
+
+                                                        <!--begin::Attachment-->
+                                                        <h3 class="fw-bolder    m-0" id="HeadDetail"
+                                                            style="font-size:14px;">
+                                                            Upload Struktur Organisasi
+                                                        </h3>
+
+                                                        <div>
+                                                            <label for="struktur-attachment" class="form-label"></label>
+                                                            <input onchange="this.form.submit()"
+                                                                class="form-control form-control-sm" id="struktur-attachment"
+                                                                name="struktur-attachment" type="file"
+                                                                accept=".pdf">
+                                                        </div>
+
+                                                        <br>
+                                                        <div class="ms-3 col-6">
+                                                            <table class="table align-middle table-row-dashed fs-6"
+                                                                id="kt_customers_table">
+                                                                <!--begin::Table head-->
+                                                                <thead>
+                                                                    <!--begin::Table row-->
+                                                                    <tr
+                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
+                                                                        <th class="min-w-auto">Struktur Organisasi Attachment</th>
+                                                                        <th class="min-w-auto">Modified On</th>
+                                                                        {{-- <th class="min-w-auto">Modified By</th> --}}
+                                                                        <th class="w-100px"></th>
+                                                                    </tr>
+                                                                    <!--end::Table row-->
+                                                                </thead>
+                                                                <!--end::Table head-->
+                                                                <!--begin::Table body-->
+                                                                <tbody class="fw-bold text-gray-600">
+                                                                        @foreach ($strukturAtttachment as $strAttachments)
+                                                                            <tr>
+                                                                                <!--begin::Name-->
+                                                                                <td>
+                                                                                    @if (str_contains("$strAttachments->name_attachment", '.doc'))
+                                                                                        <a href="/document/view/{{ $strAttachments->id_struktur_attachment }}/{{ $strAttachments->id_document }}"
+                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                    @else
+                                                                                        <a target="_blank"
+                                                                                            href="{{ asset('words/' . $strAttachments->id_document . '.pdf') }}"
+                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                    @endif
+                                                                                </td>
+                                                                                <!--end::Name-->
+                                                                                <!--begin::Time-->
+                                                                                <td>
+                                                                                    <a>{{ $strAttachments->created_at }}</a>
+                                                                                </td>
+                                                                                <!--end::Time-->
+                                                                                <!--begin::Kode-->
+                                                                                {{-- <td>
+                                                                                    <a>{{ $strAttachments->created_by }}</a>
+                                                                                </td> --}}
+                                                                                <!--end::Kode-->
+                                                                                <!--begin::Action-->
+                                                                                <td class="text-center">
+                                                                                    <small>
+                                                                                        <button 
+                                                                                            type="button"
+                                                                                            onclick="deleteStrukturAttach(this)"
+                                                                                            data-id-attach="{{$strAttachments->id_struktur_attachment}}"
+                                                                                            class="btn d-flex flex-row btn-sm btn-light btn-active-primary align-items-center">
+                                                                                            <span>Delete</span>
+                                                                                            <div class="spinner-border spinner-border-sm ms-3"style="display: none;" role="status"></div>
+                                                                                        </button>
+                                                                                    </small>
+                                                                                </td>
+                                                                                <!--end::Action-->
+                                                                            </tr>
+                                                                        @endforeach
+
+                                                                </tbody>
+                                                                <!--end::Table body-->
+                                                            </table>
+                                                        </div>
+                                                        <br>
                                                         <!--begin::Input-->
                                                         {{-- <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Import Struktur :
@@ -891,6 +903,9 @@
                                                                     <th class="min-w-auto">Email</th>
                                                                     <th class="min-w-auto">Jabatan</th>
                                                                     <th class="min-w-auto">Kontak Nomor</th>
+                                                                    <th class="min-w-auto">Tgl Ulang Tahun</th>
+                                                                    <th class="min-w-auto">Proyek Terkait</th>
+                                                                    <th class="min-w-auto">Role</th>
                                                                     <th class="min-w-auto"></th>
                                                                 </tr>
                                                                 <!--end::Table row-->
@@ -931,6 +946,27 @@
                                                                             {{ $struktur->phone_struktur ?? '-' }}
                                                                         </td>
                                                                         <!--end::Phone-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $struktur->ultah_struktur ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            @foreach ($proyeks as $proyek)
+                                                                            @if ($struktur->proyek_struktur == $proyek->kode_proyek)
+                                                                            {{ $proyek->nama_proyek ?? "-"}}
+                                                                            @else
+                                                                            -
+                                                                            @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <!--end::Column-->
+                                                                        <!--begin::Column-->
+                                                                        <td>
+                                                                            {{ $struktur->role_struktur ?? '-' }}
+                                                                        </td>
+                                                                        <!--end::Column-->
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
                                                                             <small>
@@ -965,7 +1001,14 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Proyek Berjalan
+                                                                <i onclick="hideColumn(this, '#divProyekBerjalan')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divProyekBerjalan')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            
+                                                            <br>
+                                                            <div id="divProyekBerjalan" style="display:none">
 
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
@@ -1003,13 +1046,13 @@
                                                                                     <td>
                                                                                         <a href="#"
                                                                                             class="text-gray-600 text-hover-primary mb-1">
-                                                                                            {{ $proyekberjalan0->proyek->nospk_external }}
+                                                                                            {{ $proyekberjalan0->proyek->nospk_external ?? "" }}
                                                                                         </a>
                                                                                     </td>
                                                                                     <!--end::Kode-->
                                                                                     <!--begin::Unit-->
                                                                                     <td>
-                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja }}
+                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja ?? "" }}
                                                                                     </td>
                                                                                     <!--end::Unit-->
                                                                                     <!--begin::Nilai OK-->
@@ -1019,8 +1062,8 @@
                                                                                     <!--begin::Durasi-->
                                                                                     <td>
                                                                                         @php
-                                                                                            $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak);
-                                                                                            $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak);
+                                                                                            $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date("now"));
+                                                                                            $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date("now"));
                                                                                             $durasi = $tglakhir->diff($tglawal);
                                                                                         @endphp
                                                                                         {{ $durasi->y }} Tahun,
@@ -1042,6 +1085,7 @@
                                                             </table>
                                                             <!--end::Table-->
                                                         </div>
+                                                        </div>
                                                         <!--end::Proyek Berjalan-->
 
                                                         <br><br>
@@ -1051,7 +1095,26 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Proyek Selesai
+                                                                <i onclick="hideColumn(this, '#divProyekSelesai')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divProyekSelesai')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            {{-- <script>
+                                                                function hideColumn() {
+                                                                    document.getElementById("divProyekSelesai").style.display = "none";
+                                                                    document.getElementById("hide-button").style.display = "none";
+                                                                    document.getElementById("show-button").style.display = "";
+                                                                }
+    
+                                                                function showColumn() {
+                                                                    document.getElementById("divProyekSelesai").style.display = "";
+                                                                    document.getElementById("hide-button").style.display = "";
+                                                                    document.getElementById("show-button").style.display = "none";
+                                                                }
+                                                            </script> --}}
+                                                            <br>
+                                                            <div id="divProyekSelesai" style="display:none">
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
                                                                 id="kt_customers_table">
@@ -1173,6 +1236,7 @@
                                                             </table>
                                                             <!--end::Table-->
                                                         </div>
+                                                        </div>
                                                         <!--end::Card title-->
 
                                                         <br><br>
@@ -1182,7 +1246,26 @@
                                                             <h3 class="fw-bolder m-0" id="HeadDetail"
                                                                 style="font-size:14px;">
                                                                 Forecast Proyek
+                                                                <i onclick="hideColumn(this, '#divForecastProyek')" id="hide-button"
+                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divForecastProyek')" id="show-button"
+                                                                class="bi bi-arrows-expand"></i>
                                                             </h3>
+                                                            {{-- <script>
+                                                                function hideColumn() {
+                                                                    document.getElementById("divForecastProyek").style.display = "none";
+                                                                    document.getElementById("hide-button").style.display = "none";
+                                                                    document.getElementById("show-button").style.display = "";
+                                                                }
+    
+                                                                function showColumn() {
+                                                                    document.getElementById("divForecastProyek").style.display = "";
+                                                                    document.getElementById("hide-button").style.display = "";
+                                                                    document.getElementById("show-button").style.display = "none";
+                                                                }
+                                                            </script> --}}
+                                                            <br>
+                                                            <div id="divForecastProyek" style="display:none">
                                                             <!--begin::Table-->
                                                             <table class="table align-middle table-row-dashed fs-6 gy-5"
                                                                 id="kt_customers_table">
@@ -1267,63 +1350,65 @@
                                                                                 <!--end::Stage-->
                                                                                 <!--begin::Nilai Forecast-->
                                                                                 <td>
-                                                                                    @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
-                                                                                        @switch($forecast->month_forecast)
-                                                                                            @case('1')
-                                                                                                Januari
-                                                                                            @break
+                                                                                    @isset($proyekberforecast->proyek->Forecasts)
+                                                                                        @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
+                                                                                            @switch($forecast->month_forecast)
+                                                                                                @case('1')
+                                                                                                    Januari
+                                                                                                @break
 
-                                                                                            @case('2')
-                                                                                                Februari
-                                                                                            @break
+                                                                                                @case('2')
+                                                                                                    Februari
+                                                                                                @break
 
-                                                                                            @case('3')
-                                                                                                Maret
-                                                                                            @break
+                                                                                                @case('3')
+                                                                                                    Maret
+                                                                                                @break
 
-                                                                                            @case('4')
-                                                                                                April
-                                                                                            @break
+                                                                                                @case('4')
+                                                                                                    April
+                                                                                                @break
 
-                                                                                            @case('5')
-                                                                                                Mei
-                                                                                            @break
+                                                                                                @case('5')
+                                                                                                    Mei
+                                                                                                @break
 
-                                                                                            @case('6')
-                                                                                                Juni
-                                                                                            @break
+                                                                                                @case('6')
+                                                                                                    Juni
+                                                                                                @break
 
-                                                                                            @case('7')
-                                                                                                Juli
-                                                                                            @break
+                                                                                                @case('7')
+                                                                                                    Juli
+                                                                                                @break
 
-                                                                                            @case('8')
-                                                                                                Agustus
-                                                                                            @break
+                                                                                                @case('8')
+                                                                                                    Agustus
+                                                                                                @break
 
-                                                                                            @case('9')
-                                                                                                September
-                                                                                            @break
+                                                                                                @case('9')
+                                                                                                    September
+                                                                                                @break
 
-                                                                                            @case('10')
-                                                                                                Oktober
-                                                                                            @break
+                                                                                                @case('10')
+                                                                                                    Oktober
+                                                                                                @break
 
-                                                                                            @case('11')
-                                                                                                November
-                                                                                            @break
+                                                                                                @case('11')
+                                                                                                    November
+                                                                                                @break
 
-                                                                                            @case('12')
-                                                                                                Desember
-                                                                                            @break
+                                                                                                @case('12')
+                                                                                                    Desember
+                                                                                                @break
 
-                                                                                            @default
-                                                                                                Selesai
-                                                                                        @endswitch
+                                                                                                @default
+                                                                                                    Selesai
+                                                                                            @endswitch
 
-                                                                                        :
-                                                                                        {{ $forecast->nilai_forecast }};<br>
-                                                                                    @endforeach
+                                                                                            :
+                                                                                            {{ $forecast->nilai_forecast }};<br>
+                                                                                        @endforeach
+                                                                                    @endisset
                                                                                 </td>
                                                                                 <!--end::Nilai Forecast-->
                                                                             </tr>
@@ -1334,6 +1419,7 @@
                                                                 <!--end::Table body-->
                                                             </table>
                                                             <!--end::Table-->
+                                                        </div>
                                                         </div>
                                                         <!--end::Card title-->
 
@@ -1444,6 +1530,7 @@
                                                         </div>
 
                                                         <br>
+                                                        <br>
                                                         {{-- <button type="submit" class="btn btn-sm btn-primary" id="proyek_new_save">Save</button> --}}
 
                                                         <!--End::Attachment-->
@@ -1471,7 +1558,7 @@
                                                                             <tr>
                                                                                 <!--begin::Name-->
                                                                                 <td>
-                                                                                    @if (str_contains("$attachments->name_attachment", '.doc'))
+                                                                                    @if (str_contains("$attachments->name_attachment", '.docx'))
                                                                                         <a href="/document/view/{{ $attachments->id_customer }}/{{ $attachments->id_document }}"
                                                                                             class="text-hover-primary">{{ $attachments->name_attachment }}</a>
                                                                                     @else
@@ -1533,6 +1620,97 @@
                                                             <!--end::Input Note-->
 
                                                         </div>
+                                                        <!--begin::Data CSI-->
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
+                                                            style="font-size:14px;">CSI
+                                                            <i onclick="hideColumn(this, '#divCSI')" id="hide-button"
+                                                            style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                            onclick="showColumn(this, '#divCSI')" id="show-button"
+                                                            class="bi bi-arrows-expand"></i>
+                                                        </h3>
+                                                        {{-- <script>
+                                                            function hideColumn() {
+                                                                document.getElementById("divCSI").style.display = "none";
+                                                                document.getElementById("hide-button").style.display = "none";
+                                                                document.getElementById("show-button").style.display = "";
+                                                            }
+
+                                                            function showColumn() {
+                                                                document.getElementById("divCSI").style.display = "";
+                                                                document.getElementById("hide-button").style.display = "";
+                                                                document.getElementById("show-button").style.display = "none";
+                                                            }
+                                                        </script> --}}
+                                                        <br>
+                                                        <div id="divCSI" style="display:none">
+                                                        <!--end::Data CSI-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Customer Loyalty Rate</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            name="customer-loyalty-rate"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->customer_loyalty_rate ?? 0}}" placeholder="Customer Loyalty Rate" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Net Promoter Score</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            name="net-promoter-score"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->net_promoter_score ?? 0}}"
+                                                                            placeholder="Net Promoter Score" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                            <!--begin::Row-->
+                                                            <div class="row fv-row">
+                                                                <!--begin::Col-->
+                                                                <div class="col-6">
+                                                                    <!--begin::Input group Website-->
+                                                                    <div class="fv-row mb-7">
+                                                                        <!--begin::Label-->
+                                                                        <label class="fs-6 fw-bold form-label mt-3">
+                                                                            <span>Customer Satisfaction Index</span>
+                                                                        </label>
+                                                                        <!--end::Label-->
+                                                                        <!--begin::Input-->
+                                                                        <input type="text"
+                                                                            name="customer-satisfaction-index"
+                                                                            class="form-control form-control-solid"
+                                                                            value="{{$customer->customer_satisfaction_index ?? 0}}"
+                                                                            placeholder="Customer Satisfaction Index" />
+                                                                        <!--end::Input-->
+                                                                    </div>
+                                                                    <!--end::Input group-->
+                                                                </div>
+                                                                <!--End begin::Col-->
+                                                            </div>
+                                                            <!--End begin::Row-->
+                                                        </div>
                                                     </div>
                                                     <!--end:::Tab pane Atachment & Notes-->
 
@@ -1566,45 +1744,25 @@
                                                         <div id="overViewProject">
                                                             <br>
                                                             <div class="row">
-                                                                <div class="row">
-                                                                    <div class="col py-3  text-center">
-                                                                        <b class="h3">Proyek Forecast</b>
-                                                                    </div>
-                                                                    <div class="col py-3 text-center">
-                                                                        <b class="h3">Proyek Berjalan</b>
-                                                                    </div>
-                                                                    <div class="col py-3 text-center">
-                                                                        <b class="h3">Proyek Selesai</b>
-                                                                    </div>
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Forecast</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$nilaiForecast[0]}} / Rp. {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
                                                                 </div>
-
-                                                                <br>
-
-                                                                <div class="col py-6 text-center" id="proyek-forecast">
-                                                                    <!--begin::proyek forecast-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ number_format($nilaiForecast, 0, '.', ',') }}
-                                                                    </h3>
-                                                                    <!--end::proyek forecast-->
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Opportunity</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOpportunity[0]}} / Rp. {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <span class="vr" style="padding: 0.5px"></span>
-                                                                <div class="col py-6 text-center" id="proyek-ongoing">
-                                                                    <!--begin::proyek ongoing-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ $proyekOngoing }}
-                                                                    </h3>
-                                                                    <!--end::proyek ongoing-->
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Closed</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekClosed[0]}} / Rp. {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
                                                                 </div>
-                                                                <span class="vr" style="padding: 0.5px"></span>
-                                                                <div class="col py-6 text-center" id="proyek-close">
-                                                                    <!--begin::proyek close-->
-                                                                    <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                        style="font-size:20px;">
-                                                                        {{ $proyekClosed }}
-                                                                    </h3>
-                                                                    <!--end::proyek close-->
+                                                                <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
+                                                                    <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Ongoing</span>
+                                                                    <hr>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOngoing[0]}} / Rp. {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                             </div>
                                                             <br>
@@ -1679,15 +1837,33 @@
                                                                 document.getElementById("show-csi").style.display = "none";
                                                             }
                                                         </script>
-                                                        <div id="scoreCSI">
-                                                            <figure class="highcharts-figure">
-                                                                {{-- <div id="container-speed" class="chart-container"></div> --}}
-                                                                <div id="score-csi" class="chart-container"></div>
-                                                            </figure>
-                                                            <hr>
 
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <div id="scoreCLR">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-clr" style="height: 300px" class="chart-container"></div>
+                                                                    </figure>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div id="scoreNPS">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-nps" style="height: 300px" class="chart-container"></div>
+                                                                    </figure>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div id="scoreCSI">
+                                                                    <figure class="highcharts-figure">
+                                                                        {{-- <div id="container-speed" class="chart-container"></div> --}}
+                                                                        <div id="score-csi" style="height: 300px" class="chart-container"></div>
+                                                                    </figure>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                        <!--scoreCSI-->
 
                                                         {{-- <br>
                                                         <div class="col">
@@ -2217,6 +2393,97 @@
                         </div>
                         <!--End begin::Row-->
 
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tanggal Ulang Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <a href="#" class="btn"
+                                        style="background: transparent;"
+                                        id="start-date-modal"
+                                        onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
+                                        value="" placeholder="Tanggal Ulang Tahun" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                        <span>Proyek Tekait</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="proyek-struktur"
+                                        name="proyek-struktur"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="false"
+                                        data-placeholder="Proyek Terkait">
+                                        <option></option>
+                                        @foreach ($proyeks as $pBerjalan)
+                                            <option
+                                                value="{{ $pBerjalan->kode_proyek }}">
+                                                {{ $pBerjalan->nama_proyek }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <!--Begin::Input-->
+                                    <select id="role-struktur"
+                                    name="role-struktur"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Role">
+                                    <option></option>
+                                    <option value="Decision Maker">Decision Maker</option>
+                                    <option value="Influencer">Influencer</option>
+                                    <option value="Gatekeeper">Gatekeeper</option>
+                                    <option value="Buyer">Buyer</option>
+                                    <option value="User" >User</option>
+                                </select>
+                                <!--end::Input-->
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
                     </div>
                     <div class="modal-footer">
 
@@ -2347,6 +2614,115 @@
                                 <!--End begin::Col-->
                             </div>
                             <!--End begin::Row-->
+
+                            <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Tanggal Ulang Tahun</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <a href="#" class="btn"
+                                        style="background: transparent;"
+                                        id="start-date-modal"
+                                        onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill"
+                                            style="color: #008CB4"></i>
+                                    </a>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
+                                        value="{{ $struktur->ultah_struktur }}" placeholder="Tanggal Ulang Tahun" />
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End begin::Row-->
+
+                        <!--begin::Row-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Proyek Tekait</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <select id="proyek-struktur"
+                                        name="proyek-struktur"
+                                        class="form-select form-select-solid"
+                                        data-control="select2" data-hide-search="false"
+                                        data-placeholder="Proyek Terkait">
+                                        <option></option>
+                                        @foreach ($proyeks as $pBerjalan)
+                                            @if ($pBerjalan->kode_proyek == $struktur->proyek_struktur)
+                                                <option
+                                                    value="{{ $pBerjalan->kode_proyek }}"
+                                                    selected>
+                                                    {{ $pBerjalan->nama_proyek }}
+                                                </option>
+                                            @else
+                                                <option
+                                                    value="{{ $pBerjalan->kode_proyek }}">
+                                                    {{ $pBerjalan->nama_proyek }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Role</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <!--Begin::Input-->
+                                    <select id="role-struktur"
+                                    name="role-struktur"
+                                    class="form-select form-select-solid"
+                                    data-control="select2" data-hide-search="true"
+                                    data-placeholder="Pilih Role">
+                                    <option></option>
+                                    <option value="Decision Maker"
+                                        {{ $struktur->role_struktur == 'Decision Maker' ? 'selected' : '' }}>
+                                        Decision Maker</option>
+                                    <option value="Influencer"
+                                        {{ $struktur->role_struktur == 'Influencer' ? 'selected' : '' }}>
+                                        Influencer</option>
+                                    <option value="Gatekeeper"
+                                        {{ $struktur->role_struktur == 'Gatekeeper' ? 'selected' : '' }}>
+                                        Gatekeeper</option>
+                                    <option value="Buyer"
+                                        {{ $struktur->role_struktur == 'Buyer' ? 'selected' : '' }}>
+                                        Buyer</option>
+                                    <option value="User"
+                                        {{ $struktur->role_struktur == 'User' ? 'selected' : '' }}>
+                                        User</option>
+                                </select>
+                                <!--end::Input-->
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End begin::Row-->
 
                         </div>
                         <div class="modal-footer">
@@ -2486,29 +2862,27 @@
 
     <!--begin::Performance Pelanggan-->
     <script>
+        let namaUnit = {!! json_encode($namaUnit) !!};
         let namaProyek = {!! json_encode($namaProyek) !!};
         let nilaiOK = {!! json_encode($nilaiOK) !!};
-        if (namaProyek.length == 0) {
-            namaProyek = ["..."];
-            nilaiOK = [0];
-        }
-        // console.log(namaProyek.length);
+        // if (namaProyek.length == 0) {
+        //     namaProyek = ["..."];
+        //     nilaiOK = [0];
+        // }
         // console.log(nilaiOK);
+        // console.log(namaProyek.length);
 
         Highcharts.chart('performance-pelanggan', {
             chart: {
-                type: 'column',
+                type: 'pie',
                 options3d: {
                     enabled: true,
-                    alpha: 5,
-                    beta: 15,
-                    viewDistance: 50,
-                    depth: 100
+                    alpha: 50,
                 }
             },
             title: {
                 align: 'center',
-                text: '<b class="h3">Nilai OK Proyek</b>'
+                text: '<b class="h3">Nilai OK</b>'
             },
             subtitle: {
                 align: 'center',
@@ -2522,33 +2896,52 @@
             // xAxis: {
             //     type: 'category'
             // },
-            xAxis: {
-                categories: namaProyek,
-                labels: {
-                    skew3d: true,
-                    style: {
-                        fontSize: '16px'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
+            // xAxis: {
+            //     categories: namaProyek,
+            //     labels: {
+            //         skew3d: true,
+            //         style: {
+            //             fontSize: '16px'
+            //         }
+            //     }
+            // },
+            // yAxis: {
+            //     title: {
+            //         text: ''
+            //     }
 
+            // },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                    // color: '#A0A0A0'
+                },
+                itemMarginTop: 10,
+                itemMarginBottom: 10,
+                x: -120,
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                },
                 series: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
-                    showInLegend: false
+                    showInLegend: true
                 },
+                
             },
             tooltip: {
+                headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
                 // headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
             },
 
             // series: [{
@@ -2573,6 +2966,7 @@
             },
             series: [{
                 name: 'Nilai OK',
+                colorByPoint: true,
                 data: nilaiOK,
                 // stack: 'male'
             }]
@@ -2585,16 +2979,13 @@
         $nilaiPiutang = (int) str_replace(',', '', $customer->piutang);
     @endphp
     <script>
-        let nilaiPiutang = {!! $nilaiPiutang !!};
+        let nilaiPiutang = {!! json_encode($piutangProyek) !!};
         Highcharts.chart('piutang-pelanggan', {
             chart: {
-                type: 'column',
+                type: 'pie',
                 options3d: {
                     enabled: true,
-                    alpha: 5,
-                    beta: 15,
-                    viewDistance: 50,
-                    depth: 100
+                    alpha: 50,
                 }
             },
             title: {
@@ -2613,52 +3004,126 @@
             // xAxis: {
             //     type: 'category'
             // },
-            xAxis: {
-                categories: [''],
-                labels: {
-                    skew3d: true,
-                    style: {
-                        fontSize: '16px'
-                    }
-                }
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                }
+            // xAxis: {
+            //     categories: namaUnit,
+            // },
+            // yAxis: {
+            //     title: {
+            //         text: ''
+            //     }
 
+            // },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                    // color: '#A0A0A0'
+                },
+                itemMarginTop: 10,
+                itemMarginBottom: 10,
+                x: -150,
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 45
+                },
                 series: {
                     dataLabels: {
-                        enabled: true
+                        enabled: false
                     },
                     showInLegend: true
                 },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name} {point.y}</span></b><br/>'
             },
 
             credits: {
                 enabled: false
             },
             series: [{
-                name: "Piutang : " + "{{ number_format($nilaiPiutang, 0, ',', ',') }}",
+                name: "Piutang",
                 colorByPoint: true,
-                data: [{
-                    name: 'Nilai Piutang',
-                    y: nilaiPiutang,
-                }]
+                data: nilaiPiutang
             }],
         });
     </script>
     <!--end::Piutang Pelanggan-->
 
     <!--begin::Laba Rugi Pelanggan-->
-    @php
+    <script>
+        let labaProyek = {!! json_encode($labaProyek) !!};
+        let rugiProyek = {!! json_encode($rugiProyek) !!};
+        Highcharts.chart('labarugi-pelanggan', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '<b class="h3">Laba / Rugi</b>',
+                align: 'center'
+            },
+            xAxis: {
+                categories: namaUnit,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray',
+                        textOutline: 'none'
+                    }
+                }
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'15px',
+                    // color: '#A0A0A0'
+                },
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Laba',
+                data: labaProyek
+            }, {
+                name: 'Rugi',
+                data: rugiProyek
+            }]
+        });
+    </script>
+    {{-- @php
         $nilaiLaba = (int) str_replace(',', '', $customer->laba);
         $nilaiRugi = (int) str_replace(',', '', $customer->rugi);
     @endphp
@@ -2750,13 +3215,28 @@
             //     // stack: 'male'
             // }]
         });
-    </script>
+    </script> --}}
     <!--end::Laba Rugi Pelanggan-->
 
-    <!--begin::Score CSI-->
+    <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiCsi = 20;
-        Highcharts.chart('score-csi', {
+        let nilaiClr = Number("{{$customer->customer_loyalty_rate ?? 1}}");
+        let bgColorClr = "";
+        // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
+        if(nilaiClr >= 1 && nilaiClr < 1.8) {
+            bgColorClr = "#a9b8eb";
+        } else if(nilaiClr >= 1.8 && nilaiClr < 2.6) {
+            bgColorClr = "#8092cf";
+        } else if(nilaiClr >= 2.6 && nilaiClr < 3.4) {
+            bgColorClr = "#8092cf";
+        } else if(nilaiClr >= 3.4 && nilaiClr < 4.2) {
+            bgColorClr = "#2f448a";
+        } else if(nilaiClr >= 4.2 && nilaiClr <= 5) {
+            bgColorClr = "#152866";
+        } else {
+            bgColorClr = "#8A0000";
+        }
+        Highcharts.chart('score-clr', {
 
             chart: {
                 type: 'gauge',
@@ -2767,7 +3247,7 @@
             },
 
             title: {
-                text: '<b class="h3">Gauge CSI</b>'
+                text: '<b class="h3">Customer Loyalty Rate</b>'
             },
 
             pane: {
@@ -2795,8 +3275,8 @@
 
             // the value axis
             yAxis: {
-                min: 0,
-                max: 100,
+                min: 1,
+                max: 5,
 
                 minorTickInterval: 'auto',
                 minorTickWidth: 1,
@@ -2805,7 +3285,7 @@
                 // minorTickColor: '#ffffff00',
 
                 // tickPixelInterval: 5,
-                tickPositions: [0, 25, 50, 100],
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
                 tickWidth: 0,
                 tickPosition: 'inside',
                 // tickLength: 5,
@@ -2820,21 +3300,32 @@
                     // text: '<span style="font-size:11px">{series.data}</span><br>'
                 },
                 plotBands: [{
-                    from: 0,
-                    to: 25,
+                    from: 1,
+                    to: 1.8,
                     thickness: 20,
-                    color: '#ED6D3F' // red
+                    color: '#a9b8eb' // white blue
                 }, {
-                    from: 25,
-                    to: 50,
+                    from: 1.8,
+                    to: 2.6,
                     thickness: 20,
-                    color: '#F7C13E' // yellow
+                    color: '#8092cf' // darker white blue
                 }, {
-                    from: 50,
-                    to: 100,
+                    from: 2.6,
+                    to: 3.4,
                     thickness: 20,
-                    color: '#61CB65' // green
-                }]
+                    color: '#495c9c' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#2f448a' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#152866' // dark blue
+                },
+            ]
             },
             tooltip: {
                 enabled: false
@@ -2852,8 +3343,363 @@
                     },
                     dial: {
                         radius: '60%',
-                        backgroundColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
-                        borderColor: (nilaiCsi > 50 ? '#61CB65' : nilaiCsi > 25 ? '#F7C13E' : '#ED6D3F'),
+                        backgroundColor: bgColorClr,
+                        borderColor: bgColorClr,
+                        borderWidth: 1,
+                        baseWidth: 0,
+                        topWidth: 18,
+                        baseLength: '120%', // of radius
+                        rearLength: '-100%'
+                    },
+                    pivot: {
+                        radius: 0
+                    }
+                }
+            },
+
+            // series: [{
+            //     name: 'Score Customer Loyalty Rate',
+            //     data: [75,50],
+            //     dataLabels: {
+            //         format: `<span style="font-size:65px;">{y}</span><br/>`,
+            //     },
+            // }]
+            series: [{
+                name: "Score Customer Loyalty Rate",
+                colorByPoint: true,
+                data: [{
+                    y: nilaiClr,
+                    dataLabels: {
+                        format: `<span style="font-size:45px; color:${bgColorClr}">{y}</span><br/>`,
+                    },
+                }]
+            }],
+            // },
+            // // Add some life
+            // function (chart) {
+            // if (!chart.renderer.forExport) {
+            //     setInterval(function () {
+            //         var point = chart.series[0].points[0],
+            //             newVal,
+            //             inc = Math.round((Math.random() - 0.5) * 20);
+
+            //         newVal = point.y + inc;
+            //         if (newVal < 0 || newVal > 200) {
+            //             newVal = point.y - inc;
+            //         }
+
+            //         point.update(newVal);
+
+            //     }, 3000);
+            // }
+        });
+    </script>
+    <!--end::Score Customer Loyalty Rate-->
+
+    <!--begin::Score Net Promoter Score-->
+    <script>
+        let nilaiNps = Number("{{$customer->net_promoter_score ?? 1}}");
+        let bgColorNps = "";
+        // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
+        if(nilaiNps >= 1 && nilaiNps < 1.8) {
+            bgColorNps = "#Cff9b2";
+        } else if(nilaiNps >= 1.8 && nilaiNps < 2.6) {
+            bgColorNps = "#A5DA81";
+        } else if(nilaiNps >= 2.6 && nilaiNps < 3.4) {
+            bgColorNps = "#8ED260";
+        } else if(nilaiNps >= 3.4 && nilaiNps < 4.2) {
+            bgColorNps = "#6FB73D";
+        } else if(nilaiNps >= 4.2 && nilaiNps <= 5) {
+            bgColorNps = "#46831C";
+        } else {
+            bgColorNps = "#8A0000";
+        }
+        Highcharts.chart('score-nps', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+
+            title: {
+                text: '<b class="h3">Net Promoter Score</b>'
+            },
+
+            pane: {
+                center: ['50%', '70%'],
+                size: '100%',
+                startAngle: -100,
+                endAngle: 100,
+                background: [{
+                    backgroundColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, '#ffffff00'],
+                            [1, '#ffffff00']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '10%'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+                min: 1,
+                max: 5,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 1,
+                // minorTickPosition: 'inside',
+                // minorTickColor: '#ffffff00',
+
+                // tickPixelInterval: 5,
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
+                tickWidth: 0,
+                tickPosition: 'inside',
+                // tickLength: 5,
+                // tickColor: '#666',
+                labels: {
+                    distance: -35,
+                    step: 1,
+                    rotation: 'auto'
+                },
+                title: {
+                    // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                    // text: '<span style="font-size:11px">{series.data}</span><br>'
+                },
+                plotBands: [{
+                    from: 1,
+                    to: 1.8,
+                    thickness: 20,
+                    color: '#Cff9b2' // white blue
+                }, {
+                    from: 1.8,
+                    to: 2.6,
+                    thickness: 20,
+                    color: '#A5DA81' // darker white blue
+                }, {
+                    from: 2.6,
+                    to: 3.4,
+                    thickness: 20,
+                    color: '#8ED260' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#6FB73D' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#46831C' // dark blue
+                },
+            ]
+            },
+            tooltip: {
+                enabled: false
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        enabled: true,
+                        borderColor: false,
+                    },
+                    dial: {
+                        radius: '60%',
+                        backgroundColor: bgColorNps,
+                        borderColor: bgColorNps,
+                        borderWidth: 1,
+                        baseWidth: 0,
+                        topWidth: 18,
+                        baseLength: '120%', // of radius
+                        rearLength: '-100%'
+                    },
+                    pivot: {
+                        radius: 0
+                    }
+                }
+            },
+
+            // series: [{
+            //     name: 'Score Net Promoter Score',
+            //     data: [75,50],
+            //     dataLabels: {
+            //         format: `<span style="font-size:45px;">{y}</span><br/>`,
+            //     },
+            // }]
+            series: [{
+                name: "Score Net Promoter Score",
+                colorByPoint: true,
+                data: [{
+                    y: nilaiNps,
+                    dataLabels: {
+                        format: `<span style="font-size:45px; color:${bgColorNps}">{y}</span><br/>`,
+                    },
+                }]
+            }],
+            // },
+            // // Add some life
+            // function (chart) {
+            // if (!chart.renderer.forExport) {
+            //     setInterval(function () {
+            //         var point = chart.series[0].points[0],
+            //             newVal,
+            //             inc = Math.round((Math.random() - 0.5) * 20);
+
+            //         newVal = point.y + inc;
+            //         if (newVal < 0 || newVal > 200) {
+            //             newVal = point.y - inc;
+            //         }
+
+            //         point.update(newVal);
+
+            //     }, 3000);
+            // }
+        });
+    </script>
+    <!--end::Score Net Promoter Score-->
+    
+    <!--begin::Score CSI-->
+    <script>
+        let nilaiCsi = Number("{{$customer->customer_satisfaction_index ?? 1}}");
+        let bgColorCsi = "";
+        if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
+            bgColorCsi = "#F1E4A9";
+        } else if(nilaiCsi >= 1.8 && nilaiCsi < 2.6) {
+            bgColorCsi = "#E8D373";
+        } else if(nilaiCsi >= 2.6 && nilaiCsi < 3.4) {
+            bgColorCsi = "#CEB543";
+        } else if(nilaiCsi >= 3.4 && nilaiCsi < 4.2) {
+            bgColorCsi = "#B79D25";
+        } else if(nilaiCsi >= 4.2 && nilaiCsi <= 5) {
+            bgColorCsi = "#967D0B";
+        } else {
+            bgColorCsi = "#8A0000";
+        }
+        Highcharts.chart('score-csi', {
+
+            chart: {
+                type: 'gauge',
+                plotBackgroundColor: null,
+                plotBackgroundImage: null,
+                plotBorderWidth: 0,
+                plotShadow: false
+            },
+
+            title: {
+                text: '<b class="h3">Customer Satisfaction Index</b>'
+            },
+
+            pane: {
+                center: ['50%', '70%'],
+                size: '100%',
+                startAngle: -100,
+                endAngle: 100,
+                background: [{
+                    backgroundColor: {
+                        linearGradient: {
+                            x1: 0,
+                            y1: 0,
+                            x2: 0,
+                            y2: 1
+                        },
+                        stops: [
+                            [0, '#ffffff00'],
+                            [1, '#ffffff00']
+                        ]
+                    },
+                    borderWidth: 0,
+                    outerRadius: '10%'
+                }]
+            },
+
+            // the value axis
+            yAxis: {
+                min: 1,
+                max: 5,
+
+                minorTickInterval: 'auto',
+                minorTickWidth: 1,
+                minorTickLength: 1,
+                // minorTickPosition: 'inside',
+                // minorTickColor: '#ffffff00',
+
+                // tickPixelInterval: 5,
+                tickPositions: [1, 1.8, 2.6, 3.4, 4.2, 5],
+                tickWidth: 0,
+                tickPosition: 'inside',
+                // tickLength: 5,
+                // tickColor: '#666',
+                labels: {
+                    distance: -35,
+                    step: 1,
+                    rotation: 'auto'
+                },
+                title: {
+                    // text: '<span style="color:{point.color}"><b>{point.name}</span></b> {point.data}<br/>'
+                    // text: '<span style="font-size:11px">{series.data}</span><br>'
+                },
+                plotBands: [{
+                    from: 1,
+                    to: 1.8,
+                    thickness: 20,
+                    color: '#F1E4A9' // white blue
+                }, {
+                    from: 1.8,
+                    to: 2.6,
+                    thickness: 20,
+                    color: '#E8D373' // darker white blue
+                }, {
+                    from: 2.6,
+                    to: 3.4,
+                    thickness: 20,
+                    color: '#CEB543' // darker white blue
+                }, {
+                    from: 3.4,
+                    to: 4.2,
+                    thickness: 20,
+                    color: '#B79D25' // blue
+                }, {
+                    from: 4.2,
+                    to: 5,
+                    thickness: 20,
+                    color: '#967D0B' // dark blue
+                },
+            ]
+            },
+            tooltip: {
+                enabled: false
+            },
+
+            credits: {
+                enabled: false
+            },
+
+            plotOptions: {
+                gauge: {
+                    dataLabels: {
+                        enabled: true,
+                        borderColor: false,
+                    },
+                    dial: {
+                        radius: '60%',
+                        backgroundColor: bgColorCsi,
+                        borderColor: bgColorCsi,
                         borderWidth: 1,
                         baseWidth: 0,
                         topWidth: 18,
@@ -2870,7 +3716,7 @@
             //     name: 'Score CSI',
             //     data: [75,50],
             //     dataLabels: {
-            //         format: `<span style="font-size:70px;">{y}</span><br/>`,
+            //         format: `<span style="font-size:45px;">{y}</span><br/>`,
             //     },
             // }]
             series: [{
@@ -2879,7 +3725,7 @@
                 data: [{
                     y: nilaiCsi,
                     dataLabels: {
-                        format: `<span style="font-size:70px; ${nilaiCsi > 50 ? 'color:#61CB65' : nilaiCsi > 25 ? 'color:#F7C13E' : 'color:#ED6D3F' }">{y}</span><br/>`,
+                        format: `<span style="font-size:45px; color:${bgColorCsi}">{y}</span><br/>`,
                     },
                 }]
             }],
@@ -2904,6 +3750,58 @@
         });
     </script>
     <!--end::Score CSI-->
+    
+    <!--begin::Score CSI-->
+    <script>
+        function deleteStrukturAttach(e) {
+            e.classList.add("disabled");
+            const getIdAttachStruktur = e.getAttribute("data-id-attach");
+            const getSpinnerElt = e.querySelector(".spinner-border");
+            getSpinnerElt.style.display = "";
+            Swal.fire({
+                title: 'Apakah anda yakin ingin menghapus Attachment ini?',
+                icon: 'warning',
+                showCancelButton: true,
+                cancelButtonColor: '#d33',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+                }).then( async (result) => {
+                    if (result.isConfirmed) {
+                        const deleteAttachRes = await fetch(`/customer/struktur/${getIdAttachStruktur}/attach/delete`);
+                        const parent = e.parentElement.parentElement.parentElement;
+                        parent.remove();
+                        Swal.fire({
+                            title: 'Attachment ini berhasil dihapus',
+                            icon: 'success',
+                            showCancelButton: false,
+                            confirmButtonColor: '#3085d6',
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        e.classList.remove("disabled");
+                        getSpinnerElt.style.display = "none";
+                    }
+            })
+        }
+    </script>
+    <!--end::Score CSI-->
+    
+    <!--Begin:: show / hide element-->
+    <script>
+        function hideColumn(e, elt) {
+            e.parentElement.parentElement.querySelector(elt).style.display = "none";
+            e.parentElement.querySelector("#hide-button").style.display = "none";
+            e.parentElement.querySelector("#show-button").style.display = "";
+        }
+
+        function showColumn(e, elt) {
+            e.parentElement.parentElement.querySelector(elt).style.display = "";
+            e.parentElement.querySelector("#hide-button").style.display = "";
+            e.parentElement.querySelector("#show-button").style.display = "none";
+        }
+    </script>
+    <!--End:: show / hide element-->
+    
 
 
     <!--begin::MAP Leaflet-->
