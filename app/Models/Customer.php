@@ -23,6 +23,11 @@ class Customer extends Model
         return $this->hasMany(CustomerAttachments::class, "id_customer");
     }
 
+    public function strukturAttachments()
+    {
+        return $this->hasMany(StrukturAttachment::class, "id_customer");
+    }
+
     public function proyekBerjalans()
     {
         return $this->hasMany(ProyekBerjalans::class, "id_customer");
