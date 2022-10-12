@@ -335,10 +335,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-
+    
     Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
-
+    
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
+
+    // Reset Porsi JO 
+    Route::get('/proyek/reset-jo/{kode_proyek}', [ProyekController::class, 'resetJo']);
 
     Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
         $data = $request->all();
@@ -587,9 +590,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         $total_rkap = 0;
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user->toArray())->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray())->groupBy("kode_proyek");
         } else {
-            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
+            $proyeks = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->groupBy("kode_proyek");
         }
         // $proyeks = Proyek::where("unit_kerja", $from_user->unit_kerja)->get()->sortBy("kode_proyek");
         foreach ($proyeks as $kode_proyek => $proyek) {
@@ -636,7 +639,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
                 foreach ($forecasts as $forecast) {
 
-                    if ($forecast->month_forecast > $farestMonth) {
+                    if ($forecast->month_forecast > $farestMonth
+                    ) {
                         $farestMonth = $forecast->month_forecast;
                     }
                     $total_forecast += $forecast->nilai_forecast ?? 0;
@@ -828,12 +832,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     //     "msg" => "OKe",
         //     // ]);
         // }
-        if (Auth::user()->check_administrator) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
-            # code...
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",
+                Auth::user()->unit_kerja
+            )) : Auth::user()->unit_kerja;
+        if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
         } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
         }
+        // if (Auth::user()->check_administrator) {
+        //     $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
+        //     # code...
+        // } else {
+        //     $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $request->periode_prognosa)->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->get();
+        // }
         foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }

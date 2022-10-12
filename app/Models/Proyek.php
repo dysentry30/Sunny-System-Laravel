@@ -77,6 +77,11 @@ class Proyek extends Model
         return $this->hasOne(ProyekBerjalans::class, "kode_proyek", "kode_proyek");
     }
 
+    public function PorsiJO()
+    {
+        return $this->hasMany(PorsiJO::class, "kode_proyek", "kode_proyek");
+    }
+
     public function Users()
     {
         return $this->hasMany(User::class);

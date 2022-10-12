@@ -270,7 +270,7 @@
                                                             @endif
                                                         @endif
 
-                                                        @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
+                                                        @if ($proyek->is_cancel == false)
                                                             <ul class="dropdown-menu"
                                                                 id="tidak-lulus-pq"
                                                                 aria-labelledby="tidak-lulus-pq">
@@ -298,7 +298,7 @@
                                                         @if ($proyek->stage > 3)
                                                             <a href="#"
                                                                 class="stage-button stage-action stage-is-done color-is-default"
-                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") || $proyek->is_tidak_lulus_pq == false ? '' : 'pointer-events: none;' }}" stage="4">
+                                                                style="outline: 0px; cursor: pointer; {{ auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)") ? '' : 'pointer-events: none;' }}" stage="4">
                                                                 Tender Diikuti
                                                             </a>
                                                         @else
@@ -599,22 +599,22 @@
                                     </div>
                                     @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                     <script>
-                                        // const stages = document.querySelectorAll(".stage-button");
-                                        // stages.forEach((stage, i) => {
-                                        //     stage.setAttribute("stage", i + 1);
-                                        //     if (i + 1 <= Number("{{ $proyek->stage }}")) {
-                                        //         stage.classList.add("stage-is-done");
-                                        //         stage.style.cursor = "cursor";
-                                        //     } else {
-                                        //         stage.classList.add("stage-is-not-active");
-                                        //         stage.style.cursor = "cursor";
-                                        //         if (i > Number("{{ $proyek->stage }}")) {
-                                        //             stage.style.cursor = "not-allowed";
-                                        //             stage.style.pointerEvents = "none";
-                                        //         }
-                                        //     }
-                                        // });
-                                        const proyekIsCancel = Boolean("{{$proyek->is_cancel}}");
+                                        const stages = document.querySelectorAll(".stage-button");
+                                        stages.forEach((stage, i) => {
+                                            stage.setAttribute("stage", i + 1);
+                                            if (i + 1 <= Number("{{ $proyek->stage }}")) {
+                                                stage.classList.add("stage-is-done");
+                                                stage.style.cursor = "cursor";
+                                            } else {
+                                                stage.classList.add("stage-is-not-active");
+                                                stage.style.cursor = "cursor";
+                                                if (i > Number("{{ $proyek->stage }}")) {
+                                                    stage.style.cursor = "not-allowed";
+                                                    stage.style.pointerEvents = "none";
+                                                }
+                                            }
+                                        });
+                                        const proyekIsCancel = Boolean(Number("{{$proyek->is_cancel}}"));
 
                                         function confirmAction(form) {
                                             if(proyekIsCancel) {
@@ -2310,16 +2310,12 @@
                                                                         class="form-control form-control-solid"
                                                                         id="porsi-jo" name="porsi-jo"
                                                                         value="{{ $proyek->porsi_jo }}"
-                                                                        placeholder="Porsi JO" readonly />
-                                                                    {{-- @error('porsi-jo')
-                                                                        <h6 class="text-danger fw-normal">{{ $message }}
-                                                                        </h6>
-                                                                    @enderror --}}
+                                                                        placeholder="Porsi JO" readonly /> 
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
                                                             </div>
-                                                            <div class="col-3">
+                                                            <div class="col-1">
                                                                 <!--begin::Label-->
                                                                 <label class="fs-6 fw-bold form-label mt-3">
                                                                 </label>
@@ -2327,6 +2323,45 @@
                                                                 </p>
                                                                 <!--end::Label-->
                                                             </div>
+                                                            {{-- @if ($proyek->porsi_jo < 100 && $proyek->jenis_proyek != "J" ) --}}
+                                                            @if ($proyek->porsi_jo < 100)
+                                                            <div class="col-2">
+                                                                {{-- <form action="/proyek/reset-jo/{{ $proyek->kode_proyek }}" method="post" enctype="multipart/form-data">
+                                                                @csrf --}}
+                                                                    <button onclick="resetJO()" type="button" class="btn btn-sm btn-light btn-active-danger mt-12" id="kt_toolbar_primary_button">Reset JO</button>
+                                                                    <script>
+                                                                        function resetJO() {
+                                                                            Swal.fire({
+                                                                                title: 'Yakin Reset Porsi-JO?',
+                                                                                text: "Pilihan tidak bisa dibatalkan !",
+                                                                                icon: "warning",
+                                                                                showCancelButton: true,
+                                                                                confirmButtonColor: '#008CB4',
+                                                                                cancelButtonColor: '#BABABA',
+                                                                                confirmButtonText: 'Ya'
+                                                                                }).then( async (result) => {
+                                                                                    if (result.isConfirmed) {
+                                                                                        const deleteAttachRes = await fetch(`/proyek/reset-jo/{{ $proyek->kode_proyek }}`);
+                                                                                        Swal.fire({
+                                                                                            title: 'JO berhasil Direset',
+                                                                                            icon: 'success',
+                                                                                            showCancelButton: false,
+                                                                                            confirmButtonColor: '#3085d6',
+                                                                                            confirmButtonText: 'OK',
+                                                                                            timer: 1500,
+                                                                                            timerProgressBar: true,
+                                                                                        });
+                                                                                        window.setTimeout( function() {
+                                                                                        window.location.reload();
+                                                                                        }, 1500);
+                                                                                    // } else {
+                                                                                    }
+                                                                            })
+                                                                        }
+                                                                    </script>
+                                                                {{-- </form> --}}
+                                                            </div>
+                                                            @endif
                                                             <!--End begin::Col-->
                                                         </div>
                                                         <!--End begin::Row-->
@@ -2416,6 +2451,7 @@
                                                                 </div>
                                                             </div>
                                                             <!--End begin::Row-->
+                                                            <br>
                                                         @endif
 
 
