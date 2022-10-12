@@ -905,6 +905,30 @@ class ProyekController extends Controller
         }
     }
 
+    public function resetJO(Request $request, $kode_proyek)
+    {
+        $joProyek = Proyek::find($kode_proyek);
+        $joProyek->porsi_jo = 100;
+        $joProyek->jenis_proyek = "J";
+
+        foreach ($joProyek->PorsiJO as $porsi) {
+            $porsi->delete();
+        }
+
+        if ($joProyek->nilai_perolehan != null && $joProyek->stage > 7) {
+            $nilaiPerolehan = (int) str_replace('.', '', $joProyek->nilai_perolehan);
+            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $joProyek->porsi_jo;
+
+            $joProyek->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+        } else {
+            $joProyek->nilai_kontrak_keseluruhan = 0;
+            
+        }
+
+        $joProyek->save();
+        return redirect()->back();  
+    }
+
     private function attachmentMenang(UploadedFile $uploadedFile, $kode_proyek)
     {
         $faker = new Uuid();
@@ -1201,7 +1225,7 @@ class ProyekController extends Controller
                     $nilaiPerolehan = (int) str_replace('.', '', $proyekStage->nilai_perolehan);
                     $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyekStage->porsi_jo;
 
-                    $proyekStage->nilai_kontrak_keseluruhan = $kontrakKeseluruhan;
+                    $proyekStage->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
                     $proyekStage->save();
                 }
                 if ($proyekAttach->count() == 0) {
@@ -1382,12 +1406,24 @@ class ProyekController extends Controller
         // $newPorsiJO->max_jo = $dataPorsiJO["max-porsi"];
 
         $proyek = Proyek::find($dataPorsiJO["porsi-kode-proyek"]);
+        $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
+        
+        if ($proyek->nilai_perolehan != null && $proyek->stage > 7) {
+            $nilaiPerolehan = (int) str_replace('.', '', $proyek->nilai_perolehan);
+            $kontrakKeseluruhan = ($nilaiPerolehan * 100) / $proyek->porsi_jo;
+
+            $proyek->nilai_kontrak_keseluruhan = round($kontrakKeseluruhan);
+        } else {
+            $proyek->nilai_kontrak_keseluruhan = 0;
+        }
+
+
+
         if (($dataPorsiJO["sisa-input"] + $dataPorsiJO["porsijo-company"]) > 100) {
             // dd($dataPorsiJO["sisa-input"], $dataPorsiJO["porsijo-company"]); 
             Alert::error('Error', "Partner JO Gagal Dihapus, Hubungi Admin !");
             return redirect()->back();
         }
-        $proyek->porsi_jo = $dataPorsiJO["sisa-input"];
         // dd($dataPorsiJO);
 
         $proyek->save();
