@@ -40,10 +40,11 @@ class DashboardController extends Controller
         $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if (Auth::user()->check_administrator) {
             // $nilaiHistoryForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("history_forecast.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->whereYear("history_forecast.created_at", "=", (string) $request->get("tahun-history") != "" ? (string) $request->get("tahun-history") : date("Y"))->get();
-            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->get();
+            $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("jenis_proyek", "!=", "I")->where("forecasts.periode_prognosa", "=", $request->get("periode-prognosa") != "" ? (string) $request->get("periode-prognosa") : (int) date("m"))->get()->whereNotIn("unit_kerja", ["B", "C", "D", "8"]);
             // dd($nilaiHistoryForecast, $request->get("periode-prognosa"), (int) date("m"));
             $claims = ClaimManagements::join("proyeks", "proyeks.kode_proyek", "=", "claim_managements.kode_proyek")->get();
-            $unitKerja = UnitKerja::orderBy('unit_kerja')->get();
+            $unitKerja = UnitKerja::orderBy('unit_kerja')->get()->whereNotIn("divcode", ["B", "C", "D", "8"]);
+            // dd($unitKerja);
             $proyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->get();
             $paretoProyeks = Proyek::with(['UnitKerja', 'ContractManagements'])->orderByDesc('nilai_perolehan')->get();
             $contracts = ContractManagements::join("proyeks", "proyeks.kode_proyek", "=", "contract_managements.project_id")->get();
@@ -192,12 +193,12 @@ class DashboardController extends Controller
             // dump($kategoriunitKerja);
             foreach ($unitKerja_nilai_OK->proyeks as $proyekUnit) {
                 // dump($proyekUnit);
-                $nilaiOk += (int) str_replace(",", "", $proyekUnit->nilai_rkap);
-                $nilaiRealisasi += (int) str_replace(",", "", $proyekUnit->nilai_kontrak_keseluruhan);
+                $nilaiOk += (int) str_replace(",", "", ($proyekUnit->nilai_rkap / $per));
+                $nilaiRealisasi += (int) str_replace(",", "", ($proyekUnit->nilai_perolehan / $per));
                 // dump((int) str_replace(",", "", $proyekUnit->nilai_rkap));
             }
-            array_push($nilaiOkKumulatif, $nilaiOk);
-            array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
+            array_push($nilaiOkKumulatif, round($nilaiOk));
+            array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
         } else if (!empty($request->get("dop"))) {
             $unitKerja_nilai_OK = $proyeks->where("dop", $request->get("dop"))->groupBy("unit_kerja");
             // dd($unitKerja_nilai_OK["F"]);
@@ -210,11 +211,11 @@ class DashboardController extends Controller
                 $nilaiRealisasi = 0;
                 foreach ($proyekUnit as $nilai) {
                     // dump($nilai);
-                    $nilaiOk += (int) str_replace(",", "", $nilai->nilai_rkap);
-                    $nilaiRealisasi += (int) str_replace(",", "", $nilai->nilai_kontrak_keseluruhan);
+                    $nilaiOk += (int) str_replace(",", "", ($proyekUnit->nilai_rkap / $per));
+                    $nilaiRealisasi += (int) str_replace(",", "", ($proyekUnit->nilai_perolehan / $per));
                 }
-                array_push($nilaiOkKumulatif, $nilaiOk);
-                array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
+                array_push($nilaiOkKumulatif, round($nilaiOk));
+                array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
             }
             // dd($kategoriunitKerja, $nilaiOkKumulatif, $nilaiRealisasiKumulatif);
             // dd();
@@ -226,12 +227,13 @@ class DashboardController extends Controller
                 $nilaiOk = 0;
                 $nilaiRealisasi = 0;
                 foreach ($unit->proyeks as $proyekUnit) {
-                    $nilaiOk += (int) str_replace(",", "", $proyekUnit->nilai_rkap);
-                    $nilaiRealisasi += (int) str_replace(",", "", $proyekUnit->nilai_kontrak_keseluruhan);
-                    // dump((int) str_replace(",", "", $proyekUnit->nilai_rkap));
+                    foreach ($proyekUnit->Forecasts as $f) {
+                        $nilaiOk += (int) str_replace(",", "", ($f->rkap_forecast));
+                        $nilaiRealisasi += (int) str_replace(",", "", ($f->realisasi_forecast));
+                    }
                 }
-                array_push($nilaiOkKumulatif, $nilaiOk);
-                array_push($nilaiRealisasiKumulatif, $nilaiRealisasi);
+                array_push($nilaiOkKumulatif, round($nilaiOk));
+                array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
             }
         }
         // dd($nilaiOkKumulatif);

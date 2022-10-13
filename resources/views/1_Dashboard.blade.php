@@ -464,46 +464,6 @@
                                     </figure>
                                     <hr> --}}
 
-                                    <figure class="highcharts-figure py-12" style="display:none;">
-                                        <div class="py-12" id="nilai-realisasi">
-                                            <!--begin::NILAI REALISASI-->
-                                            <!--end::NILAI REALISASI-->
-            
-                                        </div>
-                                        <div class="" id="datatable-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
-                                            <div class="text-center">
-                                                <h2 id="title-table"></h2>
-                                                <h4 id="total"></h4>
-                                            </div>
-                                            <div class="d-flex justify-content-end">
-                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                    onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
-                                                    Chart</button>
-                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
-                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
-                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
-                                            </div>
-                                            <br>
-                                            <div class="" style="max-height: 500px; overflow-y:scroll">
-                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
-                                                    <!--begin::Table head-->
-                                                    <thead id="table-line-head" style="position: sticky; top: 0">
-                                                        {{-- THead Here --}}
-                                                    </thead>
-                                                    <!--end::Table head-->
-                                                    <!--begin::Table body-->
-                                                    <tbody class="fw-bold" id="table-line-body">
-                                                        {{-- Data Here --}}
-                                                    </tbody>
-                                                    <!--end::Table body-->
-                                                </table>
-                                            </div>
-                                            <!--end::Table Proyek-->
-                                        </div>
-                                    </figure>
-                                    {{-- <hr> --}}
-
                                     <figure class="highcharts-figure py-12">
                                         <div class="py-12" id="monitoring-proyek">
                                             <!--begin::MONITORING PROYEK-->
@@ -751,6 +711,45 @@
                                             </div>
                                         </figure>
                                     </div>
+                                    <hr>
+
+                                    <figure class="highcharts-figure py-12">
+                                        <div class="pt-12 pb-6" id="nilai-realisasi">
+                                            <!--begin::NILAI REALISASI-->
+                                            <!--end::NILAI REALISASI-->
+                                        </div>
+                                        <div class="" id="datatable-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
+                                            <div class="text-center">
+                                                <h2 id="title-table"></h2>
+                                                <h4 id="total"></h4>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
+                                                    onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    Chart</button>
+                                                <button class="btn btn-sm btn-light btn-active-danger fs-6"
+                                                    onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                            </div>
+                                            <br>
+                                            <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                    <!--begin::Table head-->
+                                                    <thead id="table-line-head" style="position: sticky; top: 0">
+                                                        {{-- THead Here --}}
+                                                    </thead>
+                                                    <!--end::Table head-->
+                                                    <!--begin::Table body-->
+                                                    <tbody class="fw-bold" id="table-line-body">
+                                                        {{-- Data Here --}}
+                                                    </tbody>
+                                                    <!--end::Table body-->
+                                                </table>
+                                            </div>
+                                            <!--end::Table Proyek-->
+                                        </div>
+                                    </figure>
                                     <hr>
                                     
                                     <div class="px-8 py-12" id="pareto-proyek">
@@ -1396,6 +1395,79 @@
             }]
         });
     </script> --}}
+    <script>
+        let kategoriunitKerja = {!! json_encode($kategoriunitKerja) !!};
+        let arrayNilaiOk = {!! json_encode($nilaiOkKumulatif) !!};
+        let nilaiOkKumulatif = arrayNilaiOk.map(nilaiOKsatuan => Math.round(nilaiOKsatuan / 1000000));
+        let sumNilaiOk = nilaiOkKumulatif.reduce((a, b) => a + b, 0);
+        let arrayNilaiRealisasi = {!! json_encode($nilaiRealisasiKumulatif) !!};
+        let nilaiRealisasiKumulatif = arrayNilaiRealisasi.map(nilaiRealsatuan => Math.round(nilaiRealsatuan / 1000000));
+        let sumNilaiRealisasi = nilaiRealisasiKumulatif.reduce((a, b) => a + b, 0);
+        // console.log(nilaiOkKumulatif, arrayNilaiOk);
+        Highcharts.chart('nilai-realisasi', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: '<b class="h1">Nilai Realisasi OK per Divisi dan EA (Dalam Jutaan)</b>',
+                align: 'center'
+            },
+            xAxis: {
+                categories: kategoriunitKerja,
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: ''
+                },
+                stackLabels: {
+                    enabled: true,
+                    style: {
+                        fontWeight: 'bold',
+                        color: ( // theme
+                            Highcharts.defaultOptions.title.style &&
+                            Highcharts.defaultOptions.title.style.color
+                        ) || 'gray',
+                        textOutline: 'none'
+                    }
+                }
+            },
+            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            credits: {
+                enabled: false
+            },
+            legend: {
+                layout: 'horizontal',
+                align: 'center',
+                verticalAlign: 'bottom',
+                // format : '<b>{point.key} : {point.y}</b><br>',
+                itemStyle: {
+                    fontSize:'20px',
+                    // color: '#A0A0A0'
+                },
+            },
+            tooltip: {
+                headerFormat: '<b>{point.x}</b><br/>',
+                pointFormat: '{point.y}<br/>'
+                // pointFormat: '{series.name}: {point.y}<br/>Total: {point.stackTotal}'
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'normal',
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            series: [{
+                name: 'Nilai OK Kumulatif ' + Intl.NumberFormat(["id"]).format(Math.round(sumNilaiOk)),
+                data: nilaiOkKumulatif
+            }, {
+                name: 'Nilai Realisasi Kumulatif ' + Intl.NumberFormat(["id"]).format(Math.round(sumNilaiRealisasi)),
+                data: nilaiRealisasiKumulatif
+            }]
+        });
+    </script>
     <!--end::NILAI REALISASI-->
 
     <!--begin::MONITORING PROYEK-->
@@ -2448,7 +2520,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.nilai_forecast)}
+                                ${Intl.NumberFormat((["id"])).format(filter.nilai_forecast)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2458,7 +2530,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `${type} - ${month}`;
-                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat({}).format(totalForecast)}</b>`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat((["id"])).format(totalForecast)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -2595,7 +2667,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.rkap_forecast)}
+                                ${Intl.NumberFormat((["id"])).format(filter.rkap_forecast)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2605,7 +2677,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai OK - ${month}`;
-                total.innerHTML = `Total Nilai OK = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                total.innerHTML = `Total Nilai OK = <b>${Intl.NumberFormat((["id"])).format(totalNilaiOk)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
@@ -2742,7 +2814,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(filter.realisasi_forecast)}
+                                ${Intl.NumberFormat((["id"])).format(filter.realisasi_forecast)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2752,7 +2824,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai Realisasi - ${month}`;
-                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiRealisasi)}</b>`;
+                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat((["id"])).format(totalNilaiRealisasi)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
@@ -2892,7 +2964,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(Number(filter.nilai_rkap.replaceAll(",", "")))}
+                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_rkap.replaceAll(",", "")))}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2900,7 +2972,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai OK Kumulatif - ${unitKerja[unitKerja.length - 1].replaceAll("-", " ")}`;
-                total.innerHTML = `Total Nilai OK Kumulatif = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                total.innerHTML = `Total Nilai OK Kumulatif = <b>${Intl.NumberFormat((["id"])).format(totalNilaiOk)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3034,7 +3106,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", "")))}
+                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", "")))}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3042,7 +3114,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai Realisasi - ${unitKerja[unitKerja.length - 1].replaceAll("-", " ")}`;
-                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat({}).format(totalNilaiOk)}</b>`;
+                total.innerHTML = `Total Nilai Realisasi = <b>${Intl.NumberFormat((["id"])).format(totalNilaiOk)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3200,7 +3272,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3357,7 +3429,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3667,7 +3739,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat({}).format(nilai)}
+                                ${Intl.NumberFormat((["id"])).format(nilai)}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -3677,7 +3749,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
@@ -3817,7 +3889,7 @@
                 thead.innerHTML = theadHTML;
                 tbody.innerHTML = tbodyHTML;
                 titleTable.innerHTML = `Nilai ${type}`;
-                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat({}).format(totalNilaiLainnya)}</b>`;
+                total.innerHTML = `Total Nilai ${type} = <b>${Intl.NumberFormat((["id"])).format(totalNilaiLainnya)}</b>`;
                 table.style.display = "";
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";

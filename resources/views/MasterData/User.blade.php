@@ -50,9 +50,13 @@ a{{-- Begin::Extend Header --}}
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <a href="/user/new" class="btn btn-sm btn-primary w-80px"
+                                    {{-- <a href="/user/new" class="btn btn-sm btn-primary w-80px"
                                         style="background-color:#008CB4; padding: 7px 30px 7px 30px">
-                                        New</a>
+                                        New</a> --}}
+                                    <button class="btn btn-sm btn-primary w-80px" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_create_user" id="kt_toolbar_primary_button"
+                                        id="kt_toolbar_primary_button" style="background-color:#008CB4; padding: 6px">
+                                        New</button>
 
                                     <!--begin::Wrapper-->
                                     <div class="me-4" style="margin-left:10px;">
@@ -279,6 +283,223 @@ a{{-- Begin::Extend Header --}}
         <!--end::Page-->
     </div>
     <!--end::Root-->
+
+    <!--begin::Modal New User-->
+    <form action="/user/save" method="post" enctype="multipart/form-data">
+        @csrf
+        
+        <!--begin::Modal - Create Proyek-->
+        <div class="modal fade" id="kt_modal_create_user" tabindex="-1" aria-hidden="true">
+            <!--begin::Modal dialog-->
+            <div class="modal-dialog modal-dialog-centered mw-800px">
+                <!--begin::Modal content-->
+                <div class="modal-content">
+                    <!--begin::Modal header-->
+                    <div class="modal-header">
+                        <!--begin::Modal title-->
+                        <h2>New User</h2>
+                        <!--end::Modal title-->
+                        <!--begin::Close-->
+                        <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+                            <span class="svg-icon svg-icon-1">
+                                <i class="bi bi-x-lg"></i>
+                            </span>
+                            <!--end::Svg Icon-->
+                        </div>
+                        <!--end::Close-->
+                    </div>
+                    <!--end::Modal header-->
+                    
+                    <!--begin::Modal body-->
+                    <div class="modal-body py-lg-6 px-lg-6">
+                        
+                        <!--begin::Get Modal JS-->
+                        <input type="hidden" class="modal-name" name="modal-name">
+                        <!--end::Get Modal JS-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Name</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" id="name-user" name="name-user" class="form-control form-control-solid" 
+                                    value="{{ old('name-user') }}" placeholder="Name" />
+                                    @error('name-user')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Email</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="email" class="form-control form-control-solid" 
+                                    id="email" name="email" value="{{ old('email') }}" placeholder="Email" />
+                                    @error('email')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span class="required">Phone Number</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" 
+                                    id="phone-number" name="phone-number" value="{{ old('phone-number') }}" placeholder="Phone Number" />
+                                    @error('phone-number')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                    @enderror
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3 required">
+                                        <span>NIP</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <input type="text" class="form-control form-control-solid" 
+                                    id="nip" name="nip" value="{{ old("nip") }}" placeholder="Website" />
+                                    <!--end::Input-->
+                                </div>
+                                @error('nip')
+                                    <h6 class="text-danger fw-normal">{{ $message }}</h6>
+                                @enderror
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                        </div>
+                        <!--End::Row Kanan+Kiri-->
+
+                        <!--begin::Options-->
+                        <br>
+                        <div class="d-flex" style="flex-direction: row">
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6 ms-4 align-middle">
+                                <input class="form-check-input" type="checkbox" value="" id="administrator" name="administrator" />
+                                <span class="form-check-label me-8 required"><b>Administrator</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
+                                <span class="form-check-label me-8 required"><b>User Sales</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="team-proyek" name="team-proyek" />
+                                <span class="form-check-label me-8 required"><b>Team Proyek</b></span>
+                            </label>
+                            <!--end::Options-->
+                            <!--begin::Options-->
+                            <label class="form-check form-check-sm form-check-custom form-check-solid me-6">
+                                <input class="form-check-input" type="checkbox" value="" id="admin-kontrak" name="admin-kontrak" />
+                                <span class="form-check-label me-8 required"><b>Admin Kontrak</b></span>
+                            </label>
+                            <!--end::Options-->
+                        </div>
+                        <br>
+                        <br>
+                        <!--end::Options-->
+                        
+                        <!--begin:: D-flex -->
+                        <div class="col-6">
+                            <select name="unit-kerja" class="form-select form-select-solid select2-hidden-accessible" data-control="select2" data-hide-search="true" data-placeholder="Unit Kerja" data-select2-id="select2-data-4-1hgp" tabindex="-1" aria-hidden="true">
+                                <option data-select2-id="select2-data-6-c3oy"></option>
+                                @foreach ($unit_kerjas as $unitKerja)
+                                <option value="{{$unitKerja->divcode}}" data-select2-id="{{$unitKerja->divcode}}">{{$unitKerja->unit_kerja}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <br>
+                        <!--end:: D-flex -->
+
+                        <!--begin::Row Kanan+Kiri-->
+                        {{-- <div class="row fv-row">
+                            <!--begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Address Line 1</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" name="AddressLine1"></textarea>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End begin::Col-->
+                            <div class="col-6">
+                                <!--begin::Input group Website-->
+                                <div class="fv-row mb-7">
+                                    <!--begin::Label-->
+                                    <label class="fs-6 fw-bold form-label mt-3">
+                                        <span>Address Line 2</span>
+                                    </label>
+                                    <!--end::Label-->
+                                    <!--begin::Input-->
+                                    <textarea class="form-control form-control-solid" name="AddressLine2"></textarea>
+                                    <!--end::Input-->
+                                </div>
+                                <!--end::Input group-->
+                            </div>
+                            <!--End::Col-->
+                        </div> --}}
+                        <!--End::Row Kanan+Kiri-->
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
+                                style="background-color:#008CB4">Save</button>
+                        </div>
+                    </div>
+                    <!--end::Modal body-->
+                </div>
+                <!--end::Modal content-->
+            </div>
+            <!--end::Modal dialog-->
+        </div>
+        <!--end::Modal - Create App-->
+    </form>
+    <!--end::Modal New User-->
 
     {{-- begin::modal DELETE --}}
     @foreach ($users as $user)
