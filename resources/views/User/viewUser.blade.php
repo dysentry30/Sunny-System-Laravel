@@ -190,15 +190,15 @@
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4 active required"
                                                             data-bs-toggle="tab" href="#kt_user_view_overview_tab"
-                                                            style="font-size:14px;">HAK AKSES</a>
+                                                            style="font-size:14px;">HAK AKSES &nbsp;</a>
                                                     </li>
                                                     <!--end:::Tab item Informasi Perusahaan-->
 
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
                                                         <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_user_information"
-                                                            style="font-size:14px;">USER INFORMATION</a>
+                                                            href="#kt_user_view_overview_user_password"
+                                                            style="font-size:14px;">RESET PASSWORD</a>
                                                     </li>
                                                     <!--end:::Tab item Informasi Perusahaan-->
 
@@ -213,11 +213,11 @@
                                                         role="tabpanel">
 
                                                         <!--begin::Row-->
-                                                        <div class="d-flex flex-column h-150px justify-content-between">
+                                                        <div class="d-flex flex-row h-50px">
                                                             {{-- begin:: Form Input Group --}}
 
                                                             {{-- begin:: Form Input Administrator --}}
-                                                            <div class="form-check">
+                                                            <div class="form-check me-12">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     value=""
                                                                     {{ $user->check_administrator == 1 ? 'checked' : '' }}
@@ -229,7 +229,7 @@
                                                             {{-- end:: Form Input Administrator --}}
 
                                                             {{-- begin:: Form Input Admin Kontrak --}}
-                                                            <div class="form-check">
+                                                            <div class="form-check me-12">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     value=""
                                                                     {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
@@ -241,7 +241,7 @@
                                                             {{-- end:: Form Input Admin Kontrak --}}
 
                                                             {{-- begin:: Form Input User Sales --}}
-                                                            <div class="form-check">
+                                                            <div class="form-check me-12">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     value=""
                                                                     {{ $user->check_user_sales == 1 ? 'checked' : '' }}
@@ -253,7 +253,7 @@
                                                             {{-- end:: Form Input Admin Kontrak --}}
 
                                                             {{-- begin:: Form Input Team Proyek --}}
-                                                            <div class="form-check">
+                                                            <div class="form-check me-12">
                                                                 <input class="form-check-input" type="checkbox"
                                                                     value=""
                                                                     {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
@@ -268,14 +268,11 @@
                                                             {{-- end:: Form Input Group --}}
                                                         </div>
                                                         <!--end::Row-->
+                                                        <hr>
+                                                        <br>
 
-                                                    </div>
-                                                    {{-- end:: Hak Akses --}}
-                                                    <!--begin:::Tab pane Hak Akses-->
-                                                    <div class="tab-pane fade" id="kt_user_view_overview_user_information"
-                                                        role="tabpanel">
                                                         <!--begin:: D-flex -->
-                                                        <div class="d-flex flex-column h-70 justify-content-between">
+                                                        <div class="d-flex flex-column">
                                                             {{-- <select name="unit-kerja"
                                                                 class="form-select form-select-solid"
                                                                 data-control="select2" data-hide-search="true"
@@ -300,7 +297,15 @@
                                                                 @endisset
                                                             </select> --}}
                                                             
-                                                            {{-- Begin :: Dropdown DOP --}}
+                                                            <h3 class="" id="HeadDetail"
+                                                            style="font-size:16px;">
+                                                            Set Unit-Kerja
+                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                data-bs-target="#kt_modal_pic">+</a> --}}
+                                                            </h3>
+                                                            <br>
+
+                                                            <!--Begin :: Dropdown DOP -->
                                                             <div class="row">
                                                                 <div class="col" id="list-dop">
                                                                     @php
@@ -309,7 +314,7 @@
                                                                     @endphp
                                                                     @foreach ($dops as $dop)
                                                                         <p><b>{{$dop->dop}}</b></p>
-                                                                        <div class="" style="display: grid; grid-template-rows: repeat(2, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 2rem;">
+                                                                        <div class="" style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
                                                                             @foreach ($dop->UnitKerjas as $unit_kerja)
                                                                                 <div class="form-check me-3 d-flex align-items-center">
                                                                                     @php
@@ -335,41 +340,48 @@
                                                                         <br>
                                                                     @endforeach
                                                                 </div>
-                                                                {{-- End :: Dropdown DOP --}}
                                                             </div>
+                                                            <!--End :: Dropdown DOP -->
                                                         </div>
-                    </form>
-                    @if ($user->check_administrator == false)
-                    <form action="/user/password/reset" method="post">
-                        @csrf
-                        <input type="hidden" value="{{ $user->id }}" name="id-user">
-                        <input type="hidden" value="" id="socket-id" name="socket-id">
-                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                        style="background-color: #008CB4;">Reset Password</button>
-                    </form>
-                    @endif
-                    @if ($user->check_administrator == true)
-                    <form action="/user/password/reset" method="post">
-                        @csrf
-                        <input type="hidden" value="{{ $user->id }}" name="id-user">
-                        <input type="hidden" value="" id="socket-id" name="socket-id">
-                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
-                        style="background-color: #008CB4;">Reset Password By Request</button>
-                    </form>
-                    @endif
-                </div>
-                <!--end:: D-flex -->
+                                                        
+                                                    </div>
+                                                </form>
+                                                <!--end:: D-flex -->
+                                                    
+                                                    
+                                                <!--Begin :: Reset Password -->
+                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                    
+                                                    @if ($user->check_administrator == false)
+                                                    <form action="/user/password/reset" method="post">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $user->id }}" name="id-user">
+                                                        <input type="hidden" value="" id="socket-id" name="socket-id">
+                                                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                                                        style="background-color: #008CB4;">Reset Password</button>
+                                                    </form>
+                                                    @endif
+                                                    @if ($user->check_administrator == true)
+                                                    <form action="/user/password/reset" method="post">
+                                                        @csrf
+                                                        <input type="hidden" value="{{ $user->id }}" name="id-user">
+                                                        <input type="hidden" value="" id="socket-id" name="socket-id">
+                                                        <button type="submit" name="password-reset" class="btn btn-sm btn-active-primary text-white"
+                                                        style="background-color: #008CB4;">Reset Password By Request</button>
+                                                    </form>
+                                                    @endif
 
+                                                </div>
+                                                <!--End :: Reset Password -->
+                                                
             </div>
-            {{-- end:: Hak Akses --}}
+            <!--end:::Tab content-->
         </div>
-        <!--end:::Tab content-->
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+</div>
+</div>
+</div>
+</div>
     </div>
     <!--end::Card body-->
     </div>

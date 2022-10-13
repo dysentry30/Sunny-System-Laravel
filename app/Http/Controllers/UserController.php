@@ -156,7 +156,7 @@ class UserController extends Controller
 
 
         // dd($is_administrator, $is_admin_kontrak, $is_user_sales, $is_team_proyek);
-        $password = Str::random(20);
+        // $password = Str::random(20);
         $user->nip = $data["nip"];
         // dd($data["nip"]);
         $user->name = $data["name-user"];
