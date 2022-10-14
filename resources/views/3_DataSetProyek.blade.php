@@ -116,6 +116,24 @@
             display: none;
         }
 
+        div.dt-button-collection button.dt-button.active:not(.disabled) {
+            background: #0db0d9 !important;
+            color: white;
+            border-radius: 4px;
+            padding: 10px;
+            border: none;
+            font-weight: normal;
+            
+        }
+        
+        div.dt-button-collection button.dt-button:not(.disabled) {
+            font-weight: normal;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+
+        }
+
     </style>
     {{-- end:: Disable Native Date Browser --}}
 </head>
@@ -1119,6 +1137,19 @@
     <script>
         $(document).ready(function() {
         $('#example').DataTable( {
+            initComplete: function(settings, json) {
+                const btns = document.querySelectorAll(".dt-buttons .dt-button");
+                btns.forEach(btn => {
+                    btn.classList.add("btn");
+                    btn.classList.add("btn-active-primary");
+                });
+                // const btnsCollection = document.querySelectorAll("div.dt-button-collection button.dt-button.active");
+                // console.log(btnsCollection);
+                // btnsCollection.forEach(btn => {
+                //     btn.classList.add("btn");
+                //     btn.classList.add("btn-active-primary");
+                // });
+            },
             dom: 'lBfrtip',
             stateSave : true,
             scrollX : true,
