@@ -25,7 +25,9 @@ class UnitKerjaController extends Controller
         $dops = Dop::all();
         $companies = Company::all();
 
-        if(Auth::user()->check_administrator) {
+        $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+
+        if(Auth::user()->check_administrator || $adminPIC) {
             if (!empty($column)){
                 $unitkerjas = UnitKerja::sortable()->where($column, 'like', '%'.$filter.'%')->get();
             }else{

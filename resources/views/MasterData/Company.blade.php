@@ -38,7 +38,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -49,7 +49,7 @@
                                         New</a>
 
                                     <!--begin::Wrapper-->
-                                    <div class="me-4" style="margin-left:10px;">
+                                    {{-- <div class="me-4" style="margin-left:10px;">
                                         <!--begin::Menu-->
                                         <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary"
                                             data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
@@ -86,7 +86,7 @@
                                         </div>
                                         <!--end::Menu 1-->
                                         <!--end::Menu-->
-                                    </div>
+                                    </div> --}}
                                     <!--end::Wrapper-->
 
 

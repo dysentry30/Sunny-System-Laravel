@@ -35,7 +35,7 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                             
                             <!--begin::Actions-->
                             <div class="d-flex align-items-center py-1">
@@ -48,7 +48,7 @@
                                 <!--end::Button-->
 
                                 <!--begin::Wrapper-->
-                                <div class="me-4" style="margin-left:10px;">
+                                {{-- <div class="me-4" style="margin-left:10px;">
                                     <!--begin::Menu-->
                                     <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
                                         <i class="bi bi-folder2-open"></i>Action</a>
@@ -79,7 +79,7 @@
                                     </div>
                                     <!--end::Menu 1-->
                                     <!--end::Menu-->
-                                </div>
+                                </div> --}}
                                 <!--end::Wrapper-->
 
 
@@ -167,7 +167,7 @@
                                     <a target="_blank" href="{{ asset('faqs/'.$faq->faq_attachment) }}" type="button" class="text-gray-500 text-hover-primary">
                                     Attachement : {{ $faq->faq_attachment }}</a>
                                         
-                                        @if (auth()->user()->check_administrator)
+                                        @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
 
                                             {{-- <a type="submit" class="btn btn-sm btn-light btn-active-primary px-0px py-0px" id="proyek_new_save">Delete</a> --}}
                                                 <!--begin::Action=-->

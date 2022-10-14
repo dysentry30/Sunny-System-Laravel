@@ -100,10 +100,14 @@
     style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
 
     <!--begin::Aside-->
-
     {{-- @yield('aside') --}}
     @if (auth()->user())
     @if (!str_contains(Request::path(), "document/view"))
+
+    @php
+    $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+    @endphp
+
 
         <div id="kt_aside" class="aside aside-dark aside-hoverable" data-kt-drawer="true" data-kt-drawer-name="aside"
             data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true"
@@ -266,7 +270,7 @@
                         @endif
 
 
-                        @if (auth()->user()->check_administrator)
+                        @if (auth()->user()->check_administrator || $adminPIC)
                             <!--Begin::Master Data Expand-->
                             {{-- <div id="#kt_aside_menu" data-kt-menu="true" style="background-color:#008CB4;margin-top:8px;"> --}}
                             <div class="menu-item" 
@@ -374,6 +378,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @if (!auth()->user()->check_user_sales)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'pasal/edit' ? 'background-color:#008CB4' : '' }}">
@@ -387,6 +392,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @endif
                                     @if (!auth()->user()->check_user_sales)
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
@@ -441,6 +447,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @if (!auth()->user()->check_user_sales)
                                     <!--begin::Menu Colapse-->
                                     <div id="#kt_aside_menu" data-kt-menu="true"
                                         style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'team-proyek' ? 'background-color:#008CB4' : '' }}">
@@ -454,6 +461,7 @@
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->
+                                    @endif
                                 </div>
                                 <!--end::Colapse-->
                                 <!--end::Svg Icon-->
@@ -613,8 +621,6 @@
         <!--end::Aside-->
     @endif
     @endif
-
-
 
     <!--begin:: HEADER-->
     {{-- @yield('header') --}}
