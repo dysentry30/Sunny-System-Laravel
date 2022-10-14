@@ -117,12 +117,12 @@ class DashboardController extends Controller
         $historyForecast = $nilaiHistoryForecast->sortBy("month_forecast");
         // dd($historyForecast);
 
-        $nilaiRkap = 0;
+        $nilaiRkapForecast = 0;
         $nilaiRkapArray = [];
         $historyRkap = $nilaiHistoryForecast->sortBy("month_rkap");
         // dd($historyRkap);
 
-        $nilaiRealisasi = 0;
+        $nilaiRealisasiForecast = 0;
         $nilaiRealisasiArray = [];
         $historyRealisasi = $nilaiHistoryForecast->sortBy("month_realisasi");
         // dd($historyRealisasi);
@@ -143,23 +143,23 @@ class DashboardController extends Controller
 
             foreach ($historyRkap as $rkap) {
                 if ($rkap->month_rkap == $i) {
-                    $nilaiRkap += (int) $rkap->rkap_forecast / $per;
+                    $nilaiRkapForecast += (int) $rkap->rkap_forecast / $per;
                 } else {
                     // dump($rkap->month_rkap, $rkap->rkap_forecast);
-                    $nilaiRkap == 0;
+                    $nilaiRkapForecast == 0;
                 }
             }
-            array_push($nilaiRkapArray, round($nilaiRkap));
+            array_push($nilaiRkapArray, round($nilaiRkapForecast));
 
             foreach ($historyRealisasi as $realisasi) {
                 if ($realisasi->month_realisasi == $i) {
                     // dump($realisasi->realisasi_forecast);
-                    $nilaiRealisasi += (int) $realisasi->realisasi_forecast / $per;
+                    $nilaiRealisasiForecast += (int) $realisasi->realisasi_forecast / $per;
                 } else {
-                    $nilaiRealisasi == 0;
+                    $nilaiRealisasiForecast == 0;
                 }
             }
-            array_push($nilaiRealisasiArray, round($nilaiRealisasi));
+            array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast));
         }
         // dump($nilaiRkapArray);
         // dump($nilaiRealisasiArray);
