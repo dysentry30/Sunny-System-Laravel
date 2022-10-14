@@ -1141,7 +1141,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('D1', "Nilai RKAP");
         
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $tipe)->first();
-        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereNotIn("stage", [7])->where("is_cancel", "!=", true);
+        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
 
         $proyeks = $proyeks->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
 
@@ -1155,6 +1155,7 @@ class DashboardController extends Controller
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('D' . $row, $nilaiRKAP);
+            $p->nilai_rkap = $nilaiRKAP;
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
@@ -1193,6 +1194,7 @@ class DashboardController extends Controller
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('D' . $row, $nilaiRealisasi);
+            $p->nilai_perolehan = $nilaiRealisasi;
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
