@@ -124,7 +124,7 @@ class DashboardController extends Controller
 
         $nilaiRealisasiForecast = 0;
         $nilaiRealisasiArray = [];
-        $historyRealisasi = $nilaiHistoryForecast->sortBy("month_realisasi");
+        $historyRealisasi = $nilaiHistoryForecast->where("stage", ">" , 7)->sortBy("month_realisasi");
         // dd($historyRealisasi);
 
         $per = 1000000; //Dibagi Dalam Jutaan
