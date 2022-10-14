@@ -49,7 +49,7 @@
                 <!--begin::Content-->
                 <!--begin::Form-->
                 @if ($proyek->is_cancel == false)
-                    <form action={{ url('/proyek/update/') }} method="post" enctype="multipart/form-data">
+                    <form action={{ url('/proyek/update/') }} onsubmit="disabledSubmitButton(this)" method="post" enctype="multipart/form-data">
                     @csrf
                 @endif
 
@@ -5610,7 +5610,7 @@
     <!--end::DELETE HISTORY ADENDUM-->
 
     <!--begin::modal ADD PESERTA TENDER-->
-    <form action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
+    <form onsubmit="disabledSubmitButton(this)" action="/proyek/peserta-tender/add" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="tender-pagu" value="{{ $proyek->hps_pagu }}">
         <input type="hidden" name="tender-kode-proyek" value="{{ $proyek->kode_proyek }}">
@@ -5937,7 +5937,7 @@
     <!--end::DELETE PESERTA TENDER-->
 
     <!--begin::modal ADD USER SKAT-->
-    <form action="/proyek/user/add" method="post" enctype="multipart/form-data">
+    <form onsubmit="disabledSubmitButton(this)" action="/proyek/user/add" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="assign-kode-proyek" value="{{ $proyek->kode_proyek }}">
         <input type="hidden" name="assign-stage" value="{{ $proyek->stage }}">
