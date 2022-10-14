@@ -358,7 +358,7 @@
 
                                             <!--begin::Stage-->
                                             @php
-                                                if ($proyek->stage == 0 || $proyek->stage == 7 || $proyek->stage == 10 ){
+                                                if ($proyek->stage == 0 || $proyek->stage == 7 || $proyek->stage == 10 || $proyek->is_cancel ){
                                                     $stageColor = "text-danger";
                                                 } else if ($proyek->stage == 8 || $proyek->stage == 9){
                                                     $stageColor = "text-success";
@@ -367,10 +367,13 @@
                                                 }                                                    
                                             @endphp
                                             <td class="{{ $stageColor }}">
+                                                @if ($proyek->is_cancel)
+                                                    Canceled Proyek
+                                                @else
                                                 <small>
                                                     @switch($proyek->stage)
                                                         @case('0')
-                                                            Proyek Canceled
+                                                            Gugur PQ
                                                         @break
 
                                                         @case('1')
@@ -417,6 +420,7 @@
                                                             *Belum Ditentukan
                                                     @endswitch
                                                 </small>
+                                                @endif
                                             </td>
                                             <!--end::Stage-->
                                             <!--begin::Pelaksanaan-->
