@@ -159,8 +159,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <script>
                                                     const historyForecast = JSON.parse('{!! $historyForecast->toJson() !!}');
                                                 </script>
+                                                @if ($unit_kerja instanceof \Illuminate\Support\Collection)
+                                                    @php
+                                                        $unit_kerja_count = $unit_kerja->count();
+                                                    @endphp
+                                                @else
+                                                    @php
+                                                        $unit_kerja_count = collect($unit_kerja);
+                                                    @endphp
+                                                @endif
                                                 @if (!Auth::user()->check_administrator)
-                                                    @if (count($historyForecast) == $unit_kerja->count() )
+                                                    @if (count($historyForecast) == $unit_kerja_count->count())
                                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"

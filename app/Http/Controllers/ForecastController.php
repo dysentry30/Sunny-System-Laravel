@@ -735,7 +735,11 @@ class ForecastController extends Controller
         $is_user_unit_kerja = $historyForecast->contains(function ($h) use ($unit_kerja_user) {
             return $h->contains(function ($p) use ($unit_kerja_user) {
                 if(!empty($unit_kerja_user)) {
-                    return $p->whereIn("divcode", $unit_kerja_user->toArray())->count() > 0;
+                    if ($unit_kerja_user instanceof Collection) {
+                        return $p->whereIn("divcode", $unit_kerja_user->toArray())->count() > 0;
+                    } else {
+                        return $p->where("divcode", "=", $unit_kerja_user)->count() > 0;
+                    }
                 }
                 // return $p->contains(function ($hp) use ($unit_kerja_user) {
                 //     dd($hp);
