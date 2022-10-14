@@ -192,27 +192,30 @@ class DashboardController extends Controller
             array_push($kategoriunitKerja, $unitKerja_nilai_OK->unit_kerja);
             // dump($kategoriunitKerja);
             foreach ($unitKerja_nilai_OK->proyeks as $proyekUnit) {
-                // dump($proyekUnit);
-                $nilaiOk += (int) str_replace(",", "", ($proyekUnit->nilai_rkap / $per));
-                $nilaiRealisasi += (int) str_replace(",", "", ($proyekUnit->nilai_perolehan / $per));
-                // dump((int) str_replace(",", "", $proyekUnit->nilai_rkap));
+                foreach ($proyekUnit->Forecasts as $f) {
+                    $nilaiOk += (int) str_replace(",", "", ($f->rkap_forecast));
+                    $nilaiRealisasi += (int) str_replace(",", "", ($f->realisasi_forecast));
+                }
             }
             array_push($nilaiOkKumulatif, round($nilaiOk));
             array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
         } else if (!empty($request->get("dop"))) {
             $unitKerja_nilai_OK = $proyeks->where("dop", $request->get("dop"))->groupBy("unit_kerja");
-            // dd($unitKerja_nilai_OK["F"]);
-            // dd($kategoriunitKerja[0]);
+            // dd($unitKerja_nilai_OK);
             foreach ($unitKerja_nilai_OK as $key => $proyekUnit) {
                 $divcode = UnitKerja::where("divcode", "=", $key)->get()->first();
                 array_push($kategoriunitKerja, $divcode->unit_kerja);
-                // dump($kategoriunitKerja);
+                // dd($kategoriunitKerja);
                 $nilaiOk = 0;
                 $nilaiRealisasi = 0;
-                foreach ($proyekUnit as $nilai) {
+                foreach ($proyekUnit as $proyekDOP) {
                     // dump($nilai);
-                    $nilaiOk += (int) str_replace(",", "", ($nilai->nilai_rkap / $per));
-                    $nilaiRealisasi += (int) str_replace(",", "", ($nilai->nilai_perolehan / $per));
+                    foreach ($proyekDOP->Forecasts as $f) {
+                        $nilaiOk += (int) str_replace(",", "", ($f->rkap_forecast));
+                        $nilaiRealisasi += (int) str_replace(",", "", ($f->realisasi_forecast));
+                    }
+                    // $nilaiOk += (int) str_replace(",", "", ($nilai->nilai_rkap / $per));
+                    // $nilaiRealisasi += (int) str_replace(",", "", ($nilai->nilai_perolehan / $per));
                 }
                 array_push($nilaiOkKumulatif, round($nilaiOk));
                 array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
@@ -221,6 +224,7 @@ class DashboardController extends Controller
             // dd();
             // dump($kategoriunitKerja);
         } else {
+            // dd($unitKerja);
             foreach ($unitKerja as $unit) {
                 // dump($unit->proyeks);
                 array_push($kategoriunitKerja, $unit->unit_kerja);
