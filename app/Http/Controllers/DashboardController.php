@@ -162,7 +162,7 @@ class DashboardController extends Controller
             array_push($nilaiRealisasiArray, round($nilaiRealisasiForecast));
         }
         // dump($nilaiRkapArray);
-        // dump($nilaiRealisasiArray);
+        dump($nilaiRealisasiArray);
 
 
         // begin :: Tri Wulan
