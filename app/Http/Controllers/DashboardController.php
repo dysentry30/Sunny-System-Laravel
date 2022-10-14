@@ -162,7 +162,7 @@ class DashboardController extends Controller
             array_push($nilaiRealisasiArray, round($nilaiRealisasi));
         }
         // dump($nilaiRkapArray);
-        // dd($nilaiRkap);
+        dd($nilaiRkap);
 
 
         // begin :: Tri Wulan
@@ -211,8 +211,8 @@ class DashboardController extends Controller
                 $nilaiRealisasi = 0;
                 foreach ($proyekUnit as $nilai) {
                     // dump($nilai);
-                    $nilaiOk += (int) str_replace(",", "", ($proyekUnit->nilai_rkap / $per));
-                    $nilaiRealisasi += (int) str_replace(",", "", ($proyekUnit->nilai_perolehan / $per));
+                    $nilaiOk += (int) str_replace(",", "", ($nilai->nilai_rkap / $per));
+                    $nilaiRealisasi += (int) str_replace(",", "", ($nilai->nilai_perolehan / $per));
                 }
                 array_push($nilaiOkKumulatif, round($nilaiOk));
                 array_push($nilaiRealisasiKumulatif, round($nilaiRealisasi));
