@@ -1149,7 +1149,7 @@ class DashboardController extends Controller
         $proyeks->each(function ($p) use (&$row, $sheet) {
             $nilaiRKAP = 0;
             $p->Forecasts->each(function($f) use(&$nilaiRKAP) {
-                $nilaiRKAP += $f->rkap_forecast;
+                $nilaiRKAP += (int) $f->rkap_forecast;
             });
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
@@ -1188,7 +1188,7 @@ class DashboardController extends Controller
         $proyeks->each(function ($p) use (&$row, $sheet) {
             $nilaiRealisasi = 0;
             $p->Forecasts->each(function($f) use(&$nilaiRealisasi) {
-                $nilaiRealisasi += $f->realisasi_forecast;
+                $nilaiRealisasi += (int) $f->realisasi_forecast;
             });
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
