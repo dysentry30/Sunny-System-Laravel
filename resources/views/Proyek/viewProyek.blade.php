@@ -6590,7 +6590,7 @@
 
 
     <!--begin::modal PORSI JO-->
-    <form action="/proyek/porsi-jo" method="post" enctype="multipart/form-data">
+    <form action="/proyek/porsi-jo" onsubmit="disabledSubmitButton(this)" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="porsi-kode-proyek" value="{{ $proyek->kode_proyek }}">
 
@@ -7394,4 +7394,13 @@
         const tabBoots = new bootstrap.Tab(tabContent, {});
         tabBoots.show();
     </script>
+
+    {{-- Begin:: Disabled Submit Button When Submitting --}}
+    <script>
+        function disabledSubmitButton(form) {
+            const submitButtonElts = form.querySelectorAll("button[type='submit']");
+            submitButtonElts.forEach(btn => btn.setAttribute("disabled", ""));
+        }
+    </script>
+    {{-- End:: Disabled Submit Button When Submitting --}}
 @endsection

@@ -1135,10 +1135,9 @@ class DashboardController extends Controller
         $sheet->setCellValue('B1', 'Stage');
         $sheet->setCellValue('C1', 'Unit Kerja');
         $sheet->setCellValue('D1', "Nilai RKAP");
-
-        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-      $unit_kerja = UnitKerja::where("");
-        $proyeks = Proyek::where("unit_kerja", "=", $tipe)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $tipe)->first();
+        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
 
         $proyeks = $proyeks->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
 
@@ -1171,8 +1170,8 @@ class DashboardController extends Controller
         $sheet->setCellValue('D1', "Nilai Realisasi");
 
         // $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
-        $unit_kerja = UnitKerja::where("");
-        $proyeks = Proyek::where("unit_kerja", "=", $tipe)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $tipe)->first();
+        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
 
         $proyeks = $proyeks->sortBy("nilai_perolehan", SORT_REGULAR, true)->values();
 
