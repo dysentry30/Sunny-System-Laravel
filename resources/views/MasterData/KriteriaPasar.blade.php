@@ -38,8 +38,11 @@
                                 <!--end::Title-->
                             </div>
                             <!--end::Page title-->
+                            @php
+                            $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            @endphp
 
-                            @if (auth()->user()->check_administrator)
+                            @if (auth()->user()->check_administrator || $adminPIC)
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
@@ -222,7 +225,7 @@
                                             </td>
                                             <!--end::Coloumn-->
 
-                                            @if (auth()->user()->check_administrator)
+                                            @if (auth()->user()->check_administrator || $adminPIC)
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->

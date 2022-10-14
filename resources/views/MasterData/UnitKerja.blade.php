@@ -39,7 +39,11 @@
                             </div>
                             <!--end::Page title-->
 
-                            @if (auth()->user()->check_administrator)
+                            @php
+                            $adminPIC = str_contains(auth()->user()->name, "(PIC)");
+                            @endphp
+
+                            @if (auth()->user()->check_administrator || $adminPIC)
                                 <!--begin::Actions-->
                                 <div class="d-flex align-items-center py-1">
 
