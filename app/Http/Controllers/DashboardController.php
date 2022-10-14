@@ -1141,16 +1141,20 @@ class DashboardController extends Controller
         $sheet->setCellValue('D1', "Nilai RKAP");
         
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $tipe)->first();
-        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereNotIn("stage", [7])->where("is_cancel", "!=", true);
 
         $proyeks = $proyeks->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
 
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
+            $nilaiRKAP = 0;
+            $p->Forecasts->each(function($f) use(&$nilaiRKAP) {
+                $nilaiRKAP += $f->rkap_forecast;
+            });
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
-            $sheet->setCellValue('D' . $row, $p->nilai_rkap);
+            $sheet->setCellValue('D' . $row, $nilaiRKAP);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
@@ -1175,16 +1179,20 @@ class DashboardController extends Controller
 
         // $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $tipe)->first();
-        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+        $proyeks = Proyek::with("UnitKerja")->where("unit_kerja", "=", $unit_kerja->divcode)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_ri_perolehan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("stage", "=", 8)->where("is_cancel", "!=", true);
 
         $proyeks = $proyeks->sortBy("nilai_perolehan", SORT_REGULAR, true)->values();
 
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
+            $nilaiRealisasi = 0;
+            $p->Forecasts->each(function($f) use(&$nilaiRealisasi) {
+                $nilaiRealisasi += $f->realisasi_forecast;
+            });
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
             $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
-            $sheet->setCellValue('D' . $row, $p->nilai_perolehan);
+            $sheet->setCellValue('D' . $row, $nilaiRealisasi);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
