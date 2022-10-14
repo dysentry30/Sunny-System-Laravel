@@ -141,27 +141,42 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         style="font-size:14px;">Forecast Kumulatif Include Internal</a>
                                                 </li>
                                                 <!--end:::Tab item Forecast S/D-->
+
+                                                <!--begin:::Tab Request Aprroval History-->
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-active-primary pb-4" href="/request-approval-history"
+                                                        style="font-size:14px;">Request Approval History</a>
+                                                </li>
+                                                <!--end:::Tab Request Aprroval History-->
                                             </ul>
                                         </div>
+                                        @php
+                                            $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+                                        @endphp
 
                                         <div class="row">
                                             <div class="d-flex {{$periode != (int) date("m") ? "col-6" : "col-6"}}">
                                                 <script>
-                                                    const historyForecast = "{{ count($historyForecast) }}";
+                                                    const historyForecast = JSON.parse('{!! $historyForecast->toJson() !!}');
                                                 </script>
-                                                @if (Auth::user()->check_administrator)
-                                                    <button type="button" style="background-color: #008CB4;" id="lock-forecast"
-                                                        onclick="lockMonthForecastBulanan(this)"
-                                                        class="btn btn-sm btn-active-primary mt-4">
-
-                                                        @if (count($historyForecast) > 0 )
-                                                            <span class="text-white mx-2 fs-6">Unlock Forecast</span>
-                                                            <i class="bi bi-lock-fill text-white"></i>
+                                                @if (!Auth::user()->check_administrator)
+                                                    @if (count($historyForecast) == $unit_kerja->count() )
+                                                        <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
+                                                            <button type="button" style="background-color: #008CB4;" id="lock-forecast"
+                                                                onclick="lockMonthForecastBulanan(this)"
+                                                                class="btn btn-sm btn-active-primary mt-4 disabled">
+                                                                    <span class="text-white mx-2 fs-6">Unlock Forecast</span>
+                                                                    <i class="bi bi-lock-fill text-white"></i>
+                                                            </button>
+                                                      </div>
                                                         @else
-                                                            <span class="text-white mx-2 fs-6">Lock Forecast</span>
-                                                            <i class="bi bi-unlock-fill text-white"></i>
-                                                        @endif
-                                                    </button>
+                                                        <button type="button" style="background-color: #008CB4;" id="lock-forecast"
+                                                            onclick="lockMonthForecastBulanan(this)"
+                                                            class="btn btn-sm btn-active-primary mt-4">
+                                                                <span class="text-white mx-2 fs-6">Lock Forecast</span>
+                                                                <i class="bi bi-unlock-fill text-white"></i>
+                                                        </button>
+                                                    @endif
                                                 @endif
                                                 
                                                 <button type="button" id="unlock-previous-forecast"
@@ -399,7 +414,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         //     });
                                                                         // }
                                                                         if(!Auth::user()->check_administrator) {
-                                                                            $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
 
                                                                             if($unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                 $dops = $dops->filter(function($dop) use($unit_kerja) {
@@ -414,7 +428,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         
 
                                                                         if($column != "" && !Auth::user()->check_administrator) {
-                                                                            $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
                                                                             $dops = $dops->filter(function($dop) use($filter, $unit_kerja) {
                                                                                 if($unit_kerja instanceof \Illuminate\Support\Collection) {
                                                                                     $dop->UnitKerjas = $dop->UnitKerjas->whereIn("divcode", $unit_kerja->toArray());
@@ -2028,9 +2041,9 @@ fill="none">
     const toastBoots = new bootstrap.Toast(toaster, {});
     const perSejuta = Number("{{$per_sejuta}}");
 
-    if (historyForecast > 0) {
-        disabledAllInputs();
-    }
+    historyForecast.forEach(unitKerja => {
+        disabledAllInputs(unitKerja);
+    })
 
     function reformatNumber(elt) {
         const valueFormatted = Intl.NumberFormat(["id"], {
@@ -2811,6 +2824,7 @@ fill="none">
                     method: "POST",
                     header: {
                         "content-type": "application/json",
+                        "X-Requested-With": "XMLHttpRequest"
                     },
                     body: formData,
                 }).then(res => res.json());
@@ -2844,13 +2858,16 @@ fill="none">
         monthEltBulanan = null;
     }
 
-    function disabledAllInputs() {
-        const allInputsForecast = document.querySelectorAll("input[data-month]");
+    function disabledAllInputs(unitKerja = null) {
+        let allInputsForecast = null;
+        if(unitKerja) {
+            allInputsForecast = document.querySelectorAll(`input[data-unit-kerja='${unitKerja}']`);
+        } else {
+            allInputsForecast = document.querySelectorAll("input[data-month]");
+        }
         if (allInputsForecast) {
             allInputsForecast.forEach(input => {
-                if (input.hasAttribute("disabled")) {
-                    input.removeAttribute("disabled");
-                } else {
+                if (!input.hasAttribute("disabled")) {
                     input.setAttribute("disabled", "");
                 }
             });

@@ -9,6 +9,7 @@ use App\Models\HistoryForecast;
 use App\Models\UnitKerja;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,10 +48,10 @@ class ForecastController extends Controller
         }
 
         if (isset($filter)) {
-            $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function($p) use($filter) {
+            $nilaiHistoryForecast = $nilaiHistoryForecast->filter(function ($p) use ($filter) {
                 return preg_match("/$filter/i", $p->nama_proyek);
             });
-            $nilaiRKAP = $nilaiRKAP->filter(function($p) use($filter) {
+            $nilaiRKAP = $nilaiRKAP->filter(function ($p) use ($filter) {
                 return preg_match("/$filter/i", $p->nama_proyek);
             });
         }
@@ -108,10 +109,15 @@ class ForecastController extends Controller
         }
         $unit_kerja = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
         if ($unit_kerja instanceof \Illuminate\Support\Collection) {
-            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->groupBy(["periode_prognosa"]);
+            $historyForecast = DB::table("history_forecast as f")->select(["f.*", "proyeks.unit_kerja"])->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->whereYear("f.created_at", $year)->get()->whereIn("unit_kerja", $unit_kerja->toArray())->where("is_approved_1", "!=", "f")->groupBy("unit_kerja");
         } else {
-            $historyForecast = DB::table("history_forecast as f")->select("f.*")->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->get()->groupBy(["periode_prognosa"]);
+            $historyForecast = DB::table("history_forecast as f")->select(["f.*", "proyeks.unit_kerja"])->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->where("is_approved_1", "!=", "f")->get()->groupBy("unit_kerja");
         }
+        // dd($historyForecast);
+        $historyForecast = $historyForecast->keys()->map(function($key) {
+            $unit_kerja = UnitKerja::where("divcode", "=", $key)->first()->unit_kerja;
+            return $unit_kerja;
+        });
         $month_title = \Carbon\Carbon::parse(new DateTime("now"))->translatedFormat("F");
         if ($periode != "") {
             $month_title = \Carbon\Carbon::createFromDate(2022, $periode, 1)->translatedFormat("F");
@@ -712,6 +718,56 @@ class ForecastController extends Controller
         return response()->json([
             "unit_kerjas" => $unit_kerjas,
         ]);
+    }
+
+    public function requestApprovalHistoryView(Request $request)
+    {
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        if (!Auth::user()->check_administrator) {
+            if ($unit_kerja_user instanceof Collection) {
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->whereIn("divcode", $unit_kerja_user->toArray())->groupBy(["dop", "unit_kerja"]);
+            } else {
+                $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->where("divcode", "=", $unit_kerja_user)->groupBy(["dop", "unit_kerja"]);
+            }
+        } else {
+            $historyForecast = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->join("unit_kerjas", "proyeks.unit_kerja", "=", "unit_kerjas.divcode")->select(["proyeks.nama_proyek", "unit_kerjas.divcode", "proyeks.dop", "unit_kerjas.unit_kerja", "history_forecast.*"])->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get()->groupBy(["dop", "unit_kerja"]);
+        }
+        $is_user_unit_kerja = $historyForecast->contains(function ($h) use ($unit_kerja_user) {
+            return $h->contains(function ($p) use ($unit_kerja_user) {
+                if(!empty($unit_kerja_user)) {
+                    return $p->whereIn("divcode", $unit_kerja_user->toArray())->count() > 0;
+                }
+                // return $p->contains(function ($hp) use ($unit_kerja_user) {
+                //     dd($hp);
+                // });
+            });
+        });
+        $historyForecast = $historyForecast->map(function ($h) {
+            return $h->map(function ($ph) {
+                $newClass = new stdClass();
+                $newClass->rkap_forecast = $ph->sum("rkap_forecast");
+                $newClass->nilai_forecast = $ph->sum("nilai_forecast");
+                $newClass->realisasi_forecast = $ph->sum("realisasi_forecast");
+                $newClass->periode_prognosa = $ph->avg("periode_prognosa");
+                if($ph->contains(function($history) { return $history->is_approved_1 == null;})) {
+                    $newClass->is_approved_1 = null;
+                }else if($ph->contains(function($history) { return  $history->is_approved_1 == "f";})) {
+                    $newClass->is_approved_1 = "f";
+                } else {
+                    $newClass->is_approved_1 = "t";
+                }
+                if($ph->contains(function($history) { return $history->is_request_unlock == null;})) {
+                    $newClass->is_request_unlock = null;
+                }else if($ph->contains(function($history) { return  $history->is_request_unlock == "f";})) {
+                    $newClass->is_request_unlock = "f";
+                } else {
+                    $newClass->is_request_unlock = "t";
+                }
+                return $newClass;
+            });
+        });
+        // dd($historyForecast);
+        return view("Forecast/viewRequestApproval", compact(["historyForecast", "is_user_unit_kerja"]));
     }
 
     private function stdClassToModel($data, $instance)

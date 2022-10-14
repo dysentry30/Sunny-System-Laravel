@@ -116,7 +116,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::get('/dashboard/sumber-dana-realisasi/{tipe}', [DashboardController::class, "getDataSumberDanaRealisasi"]);
 
     Route::get('/dashboard/sumber-dana-realisasi/{tipe}/{filter}', [DashboardController::class, "getDataSumberDanaRealisasi"]);
-    
+
+    Route::get('/dashboard/nilai-ok-per-divisi/{tipe}', [DashboardController::class, "getDataNilaiOK"]);
+
+    // Route::get('/dashboard/nilai-ok-per-divisi/{tipe}/{filter}', [DashboardController::class, "getDataNilaiOK"]);
+
+    Route::get('/dashboard/nilai-realisasi-per-divisi/{tipe}', [DashboardController::class, "getDataNilaiRealisasi"]);
+
+    // Route::get('/dashboard/nilai-realisasi-per-divisi/{tipe}/{filter}', [DashboardController::class, "getDataNilaiRealisasi"]);
+
     // begin :: contract management
     Route::get('/contract-management', [ContractManagementsController::class, 'index']);
 
@@ -288,7 +296,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Delete Struktur Organisasi    
     Route::delete('/customer/struktur/{id}/delete', [CustomerController::class, 'deleteStruktur']);
-    
+
     // Delete Struktur Organisasi Attach  
     Route::get('/customer/struktur/{id}/attach/delete', [CustomerController::class, 'deleteStrukturAttach']);
 
@@ -335,9 +343,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
-    
+
     Route::get('/proyek/export-proyek', [ProyekController::class, 'exportProyek']);
-    
+
     Route::post('/proyek/update/retail', [ProyekController::class, 'updateRetail']);
 
     // Reset Porsi JO 
@@ -571,8 +579,45 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Get all data from database
     Route::post('/forecast', [ForecastController::class, 'getAllData']);
     Route::post('/forecast/unit-kerja', [ForecastController::class, 'getAllDataUnitKerjas']);
+    Route::get('/request-approval-history', [ForecastController::class, 'requestApprovalHistoryView']);
     // to NEW page 
     // Route::get('/proyek/new', [ProyekController::class, 'new']);
+
+    Route::post('/history/request-unlock', function (Request $request) {
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts->each(function ($h) {
+            $h->is_request_unlock = "f";
+            $h->save();
+        });
+        Alert::toast("Berhasil melakukan request unlock pada unit <b>$unit_kerja->unit_kerja</b>", 'success');
+        return back();
+    });
+
+    Route::post('/history/unlock', function (Request $request) {
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts->each(function ($h) {
+            $h->is_request_unlock = "t";
+            $h->save();
+        });
+        Alert::toast("Berhasil unlock untuk unit <b>$unit_kerja->unit_kerja</b>", 'success');
+        return back();
+    });
+
+    Route::post('/forecast/set-lock/unit-kerja', function (Request $request) {
+        $data = $request->all();
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
+        $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->select(["history_forecast.*", "proyeks.unit_kerja"])->where("proyeks.unit_kerja", "=", $unit_kerja->divcode)->where("history_forecast.periode_prognosa", "=", (int) date("m"))->whereYear("history_forecast.created_at", "=", (int) date("Y"))->get();
+        $history_forecasts->each(function ($h) use ($data) {
+            $h->is_approved_1 = (bool) $data["is_approved"] ? "t" : "f";
+            $h->save();
+        });
+        return response()->json([
+            "status" => "Success",
+            "msg" => "<b>$unit_kerja->unit_kerja</b> berhasil di approved",
+        ]);
+    });
 
     // begin :: Set lock / unlock data month forecast
     Route::post('/forecast/set-lock', function (Request $request) {
@@ -606,12 +651,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             //     // return str_contains($p->created_at->format("m"), date("m")) && $p->nilai_forecast != 0;
             //     return $p->nilai_forecast != 0;
             // });
-            if (empty($current_proyek->tipe_proyek)) {
-                dd($current_proyek, $kode_proyek);
-            }
             if ($current_proyek->tipe_proyek == "R") {
+                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
+                if($history_forecast_count->count() > 0) continue;
                 $history_forecast = new HistoryForecast();
-
+                
                 foreach ($forecasts as $forecast) {
                     $history_forecast->kode_proyek = $kode_proyek;
                     $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
@@ -635,12 +679,13 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->save();
             } else {
 
+                $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
+                if($history_forecast_count->count() > 0) continue;
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
 
-                    if ($forecast->month_forecast > $farestMonth
-                    ) {
+                    if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
                     $total_forecast += $forecast->nilai_forecast ?? 0;
@@ -800,7 +845,6 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     });
 
     Route::post('/forecast/set-unlock', function (Request $request) {
-        $data = $request->all();
         // HistoryForecast::where("periode_prognosa", "=", $data["periode_prognosa"])->delete();
         // $from_user = Auth::user();
         // $unit_kerjas = UnitKerja::find(1);
@@ -832,13 +876,20 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //     //     "msg" => "OKe",
         //     // ]);
         // }
-        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",",
+        $data = $request->all();
+        if (isset($data["unit_kerja"])) {
+            $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
+            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja->divcode)->where("periode_prognosa", "=", (int) date("m"))->select("history_forecast.*")->get();
+        } else {
+            $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(
+                ",",
                 Auth::user()->unit_kerja
             )) : Auth::user()->unit_kerja;
-        if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
-        } else {
-            $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
+            if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+            } else {
+                $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("proyeks.unit_kerja", $unit_kerja_user)->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
+            }
         }
         // if (Auth::user()->check_administrator) {
         //     $history_forecasts = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("periode_prognosa", "=", $data["periode_prognosa"])->get();
@@ -849,10 +900,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         foreach ($history_forecasts as $history_forecast) {
             $history_forecast->delete();
         }
-        return response()->json([
-            "status" => "success",
-            "msg" => "Forecast berhasil dibuka",
-        ]);
+        if ($request->ajax()) {
+            return response()->json([
+                "status" => "success",
+                "msg" => "Forecast berhasil dibuka",
+            ]);
+        }
+        Alert::success('Success', "History berhasil dihapus");
+        return back();
     });
     // end :: Set lock / unlock data month forecast
     //End :: Forecast
@@ -1059,7 +1114,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         } else {
             $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
         }
-        return view("/MasterData/User", ["users" => $users]);
+        return view("/MasterData/User", ["users" => $users, "unit_kerjas" => UnitKerja::all()]);
         // return view("/MasterData/User", ["users" => User::all()->reverse()]);
     });
     // Route::get('/user', [UserController::class, 'index']);

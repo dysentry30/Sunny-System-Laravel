@@ -718,18 +718,19 @@
                                             <!--begin::NILAI REALISASI-->
                                             <!--end::NILAI REALISASI-->
                                         </div>
-                                        <div class="" id="datatable-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
+                                        <div class="" id="datatable-nilai-realisasi" style="display: none;max-height: 500px; overflow-y:scroll">
                                             <div class="text-center">
                                                 <h2 id="title-table"></h2>
                                                 <h4 id="total"></h4>
                                             </div>
                                             <div class="d-flex justify-content-end">
                                                 <button class="btn btn-sm btn-light btn-active-primary fs-6 me-3"
-                                                    onclick="hideTable('#datatable-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
+                                                    onclick="hideTable('#datatable-nilai-realisasi','#nilai-realisasi')"><i class="bi bi-graph-up-arrow fs-6"></i> Show
                                                     Chart</button>
+                                                <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i class="bi bi-download"></i> Export Excel</a>
                                                 <button class="btn btn-sm btn-light btn-active-danger fs-6"
                                                     onclick="toggleFullscreen()" id="exit-fullscreen"><i
-                                                        class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                    class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
                                                 {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
                                             </div>
                                             <br>
@@ -2345,34 +2346,34 @@
         // END :: point trigger forecast triwulan
 
         // BEGIN :: point trigger nilai realisasi
-        const chartPointsForecastRealisasi = document.querySelectorAll("#nilai-realisasi .highcharts-point");
-        chartPointsForecastRealisasi.forEach(point => {
-            point.addEventListener("click", async e => {
-                const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.|^-|^ |^0-9]/gi, "").split(
-                    ".");
-                // const unitKerja = data[0].trim().replaceAll(" ", "-");
-                let unitKerja = data[0].trim().split(" ");
-                unitKerja.pop();
-                unitKerja = unitKerja.join("-");
-                const type = data[1].trim().replaceAll(" ", "-");
-                const date = new Date().getMonth() + 1;
-                const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
-                const tableRealisasi = document.querySelector("#datatable-realisasi");
+        // const chartPointsForecastRealisasi = document.querySelectorAll("#nilai-realisasi .highcharts-point");
+        // chartPointsForecastRealisasi.forEach(point => {
+        //     point.addEventListener("click", async e => {
+        //         const data = point.getAttribute("aria-label").replaceAll(/[^a-z|^A-Z|^.|^-|^ |^0-9]/gi, "").split(
+        //             ".");
+        //         // const unitKerja = data[0].trim().replaceAll(" ", "-");
+        //         let unitKerja = data[0].trim().split(" ");
+        //         unitKerja.pop();
+        //         unitKerja = unitKerja.join("-");
+        //         const type = data[1].trim().replaceAll(" ", "-");
+        //         const date = new Date().getMonth() + 1;
+        //         const prognosa = periodePrognosa.value != "" ? periodePrognosa.value : date;
+        //         const tableRealisasi = document.querySelector("#datatable-realisasi");
                 
-                let url = `/dashboard/realisasi/0/${type}/${unitKerja}`;
-                // console.log(url, unitKerja);
-                const unitKerjaCode = $("#unit-kerja").select2({}).val();
-                if (unitKerjaCode) {
-                    url += `/${unitKerjaCode}`;
-                }
+        //         let url = `/dashboard/realisasi/0/${type}/${unitKerja}`;
+        //         // console.log(url, unitKerja);
+        //         const unitKerjaCode = $("#unit-kerja").select2({}).val();
+        //         if (unitKerjaCode) {
+        //             url += `/${unitKerjaCode}`;
+        //         }
                 
-                getDataTable("#datatable-realisasi", "#nilai-realisasi", url, type, prognosa)
-                // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
-                // triwulanDataTable.forEach(data => {
-                // });
+        //         getDataTable("#datatable-realisasi", "#nilai-realisasi", url, type, prognosa)
+        //         // const triwulanDataTable = await fetch(`/dashboard/triwulan/${prognosa}/${type}/${month}`).then(res => res.json());
+        //         // triwulanDataTable.forEach(data => {
+        //         // });
                 
-            });
-        });
+        //     });
+        // });
         // END :: point trigger nilai realisasi
 
         async function getDataTable(tableElt, chartElt, url, type, prognosa, month = new Date("now")) {
@@ -4033,5 +4034,40 @@
         })
     </script>
     <!--End::Clickable Sumber Dana Realisasi -->
+
+    <!--Begin::Clickable Nilai Realisasi OK Per Divisi Biru -->
+    <script>
+        const nilaiOKPerDivisi = document.querySelectorAll("#nilai-realisasi .highcharts-color-0 :not(.highcharts-column-series)");
+        // console.log(sumberDanaRealisasi);
+        nilaiOKPerDivisi.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.getAttribute("aria-label").split(",")[0].replaceAll(" ", "-");
+                // if(filterGet) {
+                //     getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-ok-per-divisi/${filterGet}`, tipe, 9);
+                // } else {
+                // }
+                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-ok-per-divisi/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Nilai Realisasi OK Per Divisi Biru -->
+
+    <!--Begin::Clickable Nilai Realisasi OK Per Divisi Hijau -->
+    <script>
+        const nilaiRealisasiPerDivisi = document.querySelectorAll("#nilai-realisasi .highcharts-color-1 :not(.highcharts-column-series)");
+        nilaiRealisasiPerDivisi.forEach(point => {
+            point.addEventListener("click", async e => {
+                let tipe = point.getAttribute("aria-label").split(",")[0].replaceAll(" ", "-");
+                // if(filterGet) {
+                //     getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-realisasi-per-divisi/${filterGet}`, NilaiOK, 9);
+                // } else {
+                // }
+                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-realisasi-per-divisi/${tipe}`, tipe, 9);
+                
+            })
+        })
+    </script>
+    <!--End::Clickable Nilai Realisasi OK Per Divisi Hijau -->
 
 @endsection
