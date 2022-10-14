@@ -2830,12 +2830,12 @@
                 const chartLine = document.querySelector("#forecast-line");
                 chartLine.style.display = "none";
             } else if(type == "Nilai-OK-Kumulatif") {
-                filterRes = filterRes.sort((a, b) => Number(b.nilai_rkap.replaceAll(",", "")) - Number(a.nilai_rkap.replaceAll(",", "")))
+                // filterRes = filterRes.sort((a, b) => Number(b.nilai_rkap.replaceAll(",", "")) - Number(a.nilai_rkap.replaceAll(",", "")))
                 let tbodyHTML = ``;
                 let totalNilaiOk = 0;
 
                 let theadHTML =
-                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                '<tr class="text-start bg-white text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
@@ -2846,7 +2846,7 @@
 
                 filterRes.forEach(filter => {
                     let stage = "";
-                    totalNilaiOk += Number(filter.nilai_rkap.replaceAll(",", ""));
+                    totalNilaiOk += Number(filter.nilai_rkap);
                     switch (Number(filter.stage)) {
                         case 0:
                             stage = "Cancel";
@@ -2928,7 +2928,7 @@
                             bulan = "Desember";
                             break;
                         default:
-                            bulan = "Bulan Unknown"
+                            bulan = "-"
                             break;
                     }
 
@@ -2953,7 +2953,7 @@
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${filter.unit_kerja}
+                                ${filter.unit_kerja.unit_kerja}
                             </td>
                             <!--end::Unit Kerja-->
 
@@ -2965,7 +2965,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_rkap.replaceAll(",", "")))}
+                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_rkap))}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -2978,12 +2978,12 @@
                 const chartLine = document.querySelector(chartElt);
                 chartLine.style.display = "none";
             } else if(type == "Nilai-Realisasi-Kumulatif") {
-                filterRes = filterRes.sort((a, b) => Number(b.nilai_kontrak_keseluruhan.replaceAll(",", "")) - Number(a.nilai_kontrak_keseluruhan.replaceAll(",", "")))
+                // filterRes = filterRes.sort((a, b) => Number(b.nilai_kontrak_keseluruhan) - Number(a.nilai_kontrak_keseluruhan))
                 let tbodyHTML = ``;
                 let totalNilaiOk = 0;
 
                 let theadHTML =
-                '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                '<tr class="text-start bg-white text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
                     '<th>Nama Proyek</th>' +
                     '<th>Status Pasar</th>' +
                     '<th>Stage</th>' +
@@ -2994,7 +2994,7 @@
 
                 filterRes.forEach(filter => {
                     let stage = "";
-                    totalNilaiOk += Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", ""));
+                    totalNilaiOk += Number(filter.nilai_perolehan);
                     switch (Number(filter.stage)) {
                         case 1:
                             stage = "Pasar Dini";
@@ -3032,7 +3032,7 @@
 
                     let bulan = "";
                     // console.log(filter.bulan_pelaksanaan);
-                    switch (Number(filter.bulan_pelaksanaan)) {
+                    switch (Number(filter.bulan_ri_perolehan)) {
                         case 1:
                             bulan = "Januari";
                             break;
@@ -3070,7 +3070,7 @@
                             bulan = "Desember";
                             break;
                         default:
-                            bulan = "Bulan Unknown"
+                            bulan = "-"
                             break;
                     }
 
@@ -3095,7 +3095,7 @@
 
                             <!--begin::Unit Kerja-->
                             <td>
-                                ${filter.unit_kerja}
+                                ${filter.unit_kerja.unit_kerja}
                             </td>
                             <!--end::Unit Kerja-->
 
@@ -3107,7 +3107,7 @@
 
                             <!--begin::Nilai Forecast-->
                             <td class="text-end">
-                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_kontrak_keseluruhan.replaceAll(",", "")))}
+                                ${Intl.NumberFormat((["id"])).format(Number(filter.nilai_perolehan))}
                             </td>
                             <!--end::Nilai Forecast-->
                             </tr>`;
@@ -4046,7 +4046,7 @@
                 //     getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-ok-per-divisi/${filterGet}`, tipe, 9);
                 // } else {
                 // }
-                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-ok-per-divisi/${tipe}`, tipe, 9);
+                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-ok-per-divisi/${tipe}`, "Nilai-OK-Kumulatif", 9);
                 
             })
         })
@@ -4063,7 +4063,7 @@
                 //     getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-realisasi-per-divisi/${filterGet}`, NilaiOK, 9);
                 // } else {
                 // }
-                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-realisasi-per-divisi/${tipe}`, tipe, 9);
+                getDataTable("#datatable-nilai-realisasi", "#nilai-realisasi", `/dashboard/nilai-realisasi-per-divisi/${tipe}`, "Nilai-Realisasi-Kumulatif", 9);
                 
             })
         })
