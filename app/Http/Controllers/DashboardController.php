@@ -1123,6 +1123,75 @@ class DashboardController extends Controller
         return response()->json(["href" => $file_name, "data" => $proyeks]);
     }
 
+    public function getDataNilaiOK($tipe, $filter = "") {
+        $spreadsheet = new Spreadsheet();
+        $tipe = str_replace("-", " ", $tipe);
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Stage');
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        $sheet->setCellValue('D1', "Nilai RKAP");
+
+        $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+      $unit_kerja = UnitKerja::where("");
+        $proyeks = Proyek::where("unit_kerja", "=", $tipe)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+
+        $proyeks = $proyeks->sortBy("nilai_rkap", SORT_REGULAR, true)->values();
+
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue('D' . $row, $p->nilai_rkap);
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "$tipe-Nilai-OK-Kumulatif-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+    public function getDataNilaiRealisasi($tipe, $filter = "") {
+        $spreadsheet = new Spreadsheet();
+        $tipe = str_replace("-", " ", $tipe);
+        // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Stage');
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        $sheet->setCellValue('D1', "Nilai Realisasi");
+
+        // $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
+        $unit_kerja = UnitKerja::where("");
+        $proyeks = Proyek::where("unit_kerja", "=", $tipe)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "nilai_perolehan", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
+
+        $proyeks = $proyeks->sortBy("nilai_perolehan", SORT_REGULAR, true)->values();
+
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('C' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
+            $sheet->setCellValue('D' . $row, $p->nilai_perolehan);
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $file_name = "$tipe-Nilai-Realisasi-Kumulatif-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+
     public function getFullMonth($month)
     {
         switch ($month) {

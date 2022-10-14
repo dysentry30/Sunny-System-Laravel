@@ -370,7 +370,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">Kode Pelanggan</span>
+                                                                        <span class="">Kode Unik</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -378,7 +378,7 @@
                                                                         class="form-control form-control-solid"
                                                                         name="kodepelanggan-company"
                                                                         value="{{ $customer->kode_pelanggan }}"
-                                                                        placeholder="Kode Pelanggan" />
+                                                                        placeholder="Kode Unik" />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
@@ -395,7 +395,7 @@
                                                                 <div class="fv-row mb-7">
                                                                     <!--begin::Label-->
                                                                     <label class="fs-6 fw-bold form-label mt-3">
-                                                                        <span class="">NPWP</span>
+                                                                        <span class="">Tipe Unik Kode</span>
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
@@ -403,7 +403,7 @@
                                                                         class="form-control form-control-solid"
                                                                         name="npwp-company"
                                                                         value="{{ $customer->npwp_company }}"
-                                                                        placeholder="NPWP" />
+                                                                        placeholder="Tipe Unik Kode" />
                                                                     <!--end::Input-->
                                                                 </div>
                                                                 <!--end::Input group-->
