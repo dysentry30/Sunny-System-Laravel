@@ -12,14 +12,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var laravel_echo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! laravel-echo */ "./node_modules/laravel-echo/dist/echo.js");
 
 window.Pusher = __webpack_require__(/*! pusher-js */ "./node_modules/pusher-js/dist/web/pusher.js");
-window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
-  broadcaster: 'pusher',
-  key: "local",
-  wsHost: "127.0.0.1",
-  wsPort: 6001,
-  // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-  forceTLS: false
-});
+// window.Echo = new laravel_echo__WEBPACK_IMPORTED_MODULE_0__["default"]({
+//   broadcaster: 'pusher',
+//   key: "local",
+//   wsHost: "127.0.0.1",
+//   wsPort: 6001,
+//   // cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//   forceTLS: false
+// });
 
 /***/ }),
 

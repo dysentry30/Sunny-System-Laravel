@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\NotificationApproval;
 use App\Models\User;
 use App\Models\Proyek;
 use App\Models\Forecast;
@@ -40,6 +41,7 @@ use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\TipeProyekController;
 use App\Models\MataUang;
+use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -605,6 +607,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         return back();
     });
 
+    WebSocketsRouter::webSocket("/testing-websocket", \App\Websockets\SocketHandlers\WebsocketHandler::class);
+
     Route::post('/forecast/set-lock/unit-kerja', function (Request $request) {
         $data = $request->all();
         $unit_kerja = UnitKerja::where("unit_kerja", "=", $data["unit_kerja"])->first();
@@ -1133,11 +1137,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     Route::post('/user/password/reset/new', [UserController::class, "userNewPassword"]);
 
+    Route::get('/user/password/reset/new', [UserController::class, "userNewPassword"]);
+
     Route::post('/user/password/reset/save', [UserController::class, "userNewPasswordSave"]);
 
     Route::post('/user/forecast/set-lock', [UserController::class, "requestLockAnswer"]);
 
     Route::post('/user/forecast/set-unlock', [UserController::class, "requestUnlockAnswer"]);
+
+    Route::post('/check-current-password', [UserController::class, "checkCurrentPassword"]);
 
     Route::get('/user/view/{user}', [UserController::class, "view"]);
 

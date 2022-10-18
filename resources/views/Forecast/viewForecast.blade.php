@@ -108,7 +108,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                     data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 row">
                                     <!--begin::Title-->
-                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast {{"| " . $month_title}}
+                                    <h1 class="d-flex align-items-center fs-3 my-1">Forecast {{"| " . $month_title}} (Dalam jutaan)
                                     </h1>
                                     <div class="row">
                                         <div class="col">
@@ -143,10 +143,10 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 <!--end:::Tab item Forecast S/D-->
 
                                                 <!--begin:::Tab Request Aprroval History-->
-                                                {{-- <li class="nav-item">
+                                                <li class="nav-item">
                                                     <a class="nav-link text-active-primary pb-4" href="/request-approval-history"
                                                         style="font-size:14px;">Request Approval History</a>
-                                                </li> --}}
+                                                </li>
                                                 <!--end:::Tab Request Aprroval History-->
                                             </ul>
                                         </div>
@@ -165,11 +165,11 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                     @endphp
                                                 @else
                                                     @php
-                                                        $unit_kerja_count = collect($unit_kerja);
+                                                        $unit_kerja_count = collect($unit_kerja)->count();
                                                     @endphp
                                                 @endif
                                                 @if (!Auth::user()->check_administrator)
-                                                    @if (count($historyForecast) == $unit_kerja_count->count())
+                                                    @if ($historyForecast->count() == $unit_kerja_count)
                                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"
