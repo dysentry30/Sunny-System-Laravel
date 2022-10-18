@@ -113,7 +113,6 @@ class ForecastController extends Controller
         } else {
             $historyForecast = DB::table("history_forecast as f")->select(["f.*", "proyeks.unit_kerja"])->where("periode_prognosa", "=", (int) $periode)->join("proyeks", "proyeks.kode_proyek", "=", "f.kode_proyek")->where("unit_kerja", "=", Auth::user()->unit_kerja, "or")->whereYear("f.created_at", $year)->where("is_approved_1", "!=", "f")->get()->groupBy("unit_kerja");
         }
-        // dd($historyForecast);
         $historyForecast = $historyForecast->keys()->map(function($key) {
             $unit_kerja = UnitKerja::where("divcode", "=", $key)->first()->unit_kerja;
             return $unit_kerja;

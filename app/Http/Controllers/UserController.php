@@ -259,64 +259,77 @@ class UserController extends Controller
     public function userResetPassword(Request $request)
     {
         $data = $request->all();
-        // $user = User::find($data["user-id"]);
-        $user = auth()->user();
-        // $to_user = User::where("check_administrator", "=", "1")->get()->first();
-        $is_uuid = Str::isUuid($data["id-user"]);
-        if ($is_uuid) {
-            $current_notif = NotificationsModel::find($data["id-user"]);
-            // $socket_id_from_user = $data["socket-id"];
-            $to_user = User::find($current_notif->from_id_user);
-            $all_notif_related_to_user = NotificationsModel::where("from_id_user", "=", $current_notif->from_id_user)->get();
-            $all_notif_related_to_user->each(function ($notif) use ($request, $to_user, $current_notif) {
-                $user = User::find($notif->to_user);
-                if ($request->is_rejected) {
-                    $notif->is_rejected = true;
-                    $msg = "Request ganti password ditolak oleh <b>" . $current_notif->ToUser->name . "</b>";
-                    NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, true, false);
-                } else {
-                    $msg = "Request ganti password disetujui oleh <b>" . $current_notif->ToUser->name . "</b>";
-                    $notif->is_approved = true;
-                    NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, false, false);
-                }
-                $notif->message = $msg;
-                $notif->save();
-            });
-
-            if ($request->is_rejected) {
-                $current_notif->is_rejected = true;
-            } else {
-                $current_notif->is_approved = true;
+        if($data["new-password"] == $data["confirm-password"]) {
+            $user = User::find($data["id-user"]);
+            $user->password = Hash::make($data["new-password"]);
+            if($user->save()) {
+                Alert::success("Success", "Ganti Password berhasil");
+                return redirect()->back();
             }
-            $current_notif->save();
-        } else {
-            $to_user = User::find($data["id-user"]);
+            Alert::error("Error", "Ganti Password gagal!");
+            return redirect()->back();
         }
-
-        $uuid = new Uuid();
-        $id_notif = $uuid->uuid3();
-        if ($user->check_administrator) {
-
-            if ($request->is_rejected) {
-                NotificationPasswordReset::dispatch($user, "Request ganti password ditolak oleh <b>" . $user->name . "</b>", $id_notif, $to_user, true, true);
-            } else {
-                NotificationPasswordReset::dispatch($user, "Request ganti password sudah disetujui oleh <b>" . $user->name . "</b>", $id_notif, $to_user, false, true);
-            }
-        } else {
-            $to_user = User::where("check_administrator", "=", "1")->get();
-            $to_user->each(function ($admin_user) use ($uuid, $user) {
-                $id_notif = $uuid->uuid3();
-                NotificationPasswordReset::dispatch($user, "Request ganti password untuk <b>$user->name</b>", $id_notif, $admin_user, false);
-            });
-        }
-        Alert::success("Success", "Request ganti password berhasil, silahkan tunggu hingga admin menyetujui");
+        Alert::error("Error", "New Password dan Confirm Password tidak sama!");
         return redirect()->back();
+        
+
+        // BEGIN :: RESET PASSWORD USING APPROVAL
+        // // $to_user = User::where("check_administrator", "=", "1")->get()->first();
+        // $is_uuid = Str::isUuid($data["id-user"]);
+        // if ($is_uuid) {
+        //     $current_notif = NotificationsModel::find($data["id-user"]);
+        //     // $socket_id_from_user = $data["socket-id"];
+        //     $to_user = User::find($current_notif->from_id_user);
+        //     $all_notif_related_to_user = NotificationsModel::where("from_id_user", "=", $current_notif->from_id_user)->get();
+        //     $all_notif_related_to_user->each(function ($notif) use ($request, $to_user, $current_notif) {
+        //         $user = User::find($notif->to_user);
+        //         if ($request->is_rejected) {
+        //             $notif->is_rejected = true;
+        //             $msg = "Request ganti password ditolak oleh <b>" . $current_notif->ToUser->name . "</b>";
+        //             NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, true, false);
+        //         } else {
+        //             $msg = "Request ganti password disetujui oleh <b>" . $current_notif->ToUser->name . "</b>";
+        //             $notif->is_approved = true;
+        //             NotificationPasswordReset::dispatch($user, $msg, $notif->id_notification, $to_user, false, false);
+        //         }
+        //         $notif->message = $msg;
+        //         $notif->save();
+        //     });
+
+        //     if ($request->is_rejected) {
+        //         $current_notif->is_rejected = true;
+        //     } else {
+        //         $current_notif->is_approved = true;
+        //     }
+        //     $current_notif->save();
+        // } else {
+        //     $to_user = User::find($data["id-user"]);
+        // }
+
+        // $uuid = new Uuid();
+        // $id_notif = $uuid->uuid3();
+        // if ($user->check_administrator) {
+
+        //     if ($request->is_rejected) {
+        //         NotificationPasswordReset::dispatch($user, "Request ganti password ditolak oleh <b>" . $user->name . "</b>", $id_notif, $to_user, true, true);
+        //     } else {
+        //         NotificationPasswordReset::dispatch($user, "Request ganti password sudah disetujui oleh <b>" . $user->name . "</b>", $id_notif, $to_user, false, true);
+        //     }
+        // } else {
+        //     $to_user = User::where("check_administrator", "=", "1")->get();
+        //     $to_user->each(function ($admin_user) use ($uuid, $user) {
+        //         $id_notif = $uuid->uuid3();
+        //         NotificationPasswordReset::dispatch($user, "Request ganti password untuk <b>$user->name</b>", $id_notif, $admin_user, false);
+        //     });
+        // }
+        // END :: RESET PASSWORD USING APPROVAL
+        
     }
 
     public function userNewPassword(Request $request)
     {
         if ($request->getMethod() == "GET") {
-            Alert::error("Error", "Tidak bisa mengakses halaman ini");
+            Alert::error("Error", "Tidak bisa mengakses halaman ini. Pastikan Reset Password sudah di Approved oleh Admin");
             return redirect()->back();
         }
         $data = $request->all();
@@ -414,6 +427,24 @@ class UserController extends Controller
         }
         LockForeacastEvent::dispatch($from_user, $to_user, "Request Unlock Forecast", $next_user, false, false);
         // $from_user = 
+    }
+
+    public function checkCurrentPassword(Request $request) {
+        $user = User::find($request->id_user);
+        if(Hash::check(trim($request->password), $user->password)) {
+            return response()->json([
+                "status" => "success",
+                "msg" => "Password sesuai"
+            ]);
+        }
+        return response()->json([
+            "status" => "error",
+            "msg" => "Password tidak sesuai"
+        ]);
+    }
+
+    public function TestingWebsocket(Request $request) {
+        dump($request->all());
     }
 
     // public function createUser()

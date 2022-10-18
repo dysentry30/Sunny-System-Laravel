@@ -25,8 +25,8 @@ class AdminAuth
                 "status" => "Login terlebih dahulu",
             ]);
         }
-        $allowed_url_admin_kontrak = join(" ", ["dashboard", "customer", "forecast", "forecast-internal", "forecast-kumulatif-eksternal", "forecast-kumulatif-eksternal-internal", "proyek", "knowledge-base", "company", "sumber-dana", "dop", "pasal", "user", "team-proyek", "sbu", "unit-kerja", "document", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim", "claim-management", "approval-claim", "detail-claim", "kpi", "change-request", "kriteria-pasar", "addendum-contract", "mom-meeting", "perjanjian-kso", "dokumen-pendukung", "kontrak-tanda-tangan", "klarifikasi-negosiasi", "stage"]);
-        $allowed_url_user_sales = join(" ", ["tipe-proyek","jenis-proyek", "mata-uang", "request-approval-history", "dashboard", "customer", "forecast", "forecast-kumulatif-eksternal", "forecast-kumulatif-eksternal-internal", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "team-proyek", "dop", "sbu", "unit-kerja", "kriteria-pasar", "get-kabupaten", "get-kabupaten-coordinate", "document", "forecast-internal", "download-pareto", "download", "proyek-datatables"]);
+        $allowed_url_admin_kontrak = join(" ", ["check-current-password", "user", "dashboard", "customer", "forecast", "forecast-internal", "forecast-kumulatif-eksternal", "forecast-kumulatif-eksternal-internal", "proyek", "knowledge-base", "company", "sumber-dana", "dop", "pasal", "user", "team-proyek", "sbu", "unit-kerja", "document", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim", "claim-management", "approval-claim", "detail-claim", "kpi", "change-request", "kriteria-pasar", "addendum-contract", "mom-meeting", "perjanjian-kso", "dokumen-pendukung", "kontrak-tanda-tangan", "klarifikasi-negosiasi", "stage"]);
+        $allowed_url_user_sales = join(" ", ["check-current-password", "user", "tipe-proyek","jenis-proyek", "mata-uang", "request-approval-history", "dashboard", "customer", "forecast", "forecast-kumulatif-eksternal", "forecast-kumulatif-eksternal-internal", "proyek", "knowledge-base", "company", "sumber-dana", "pasal", "team-proyek", "dop", "sbu", "unit-kerja", "kriteria-pasar", "get-kabupaten", "get-kabupaten-coordinate", "document", "forecast-internal", "download-pareto", "download", "proyek-datatables"]);
         $allowed_url_team_proyek = join(" ", ["dashboard", "proyek", "contract-management", "review-contract", "draft-contract", "issue-project", "question", "input-risk", "laporan-bulanan", "serah-terima", "claim-management", "approval-claim", "detail-claim", "claim", "document", "user"]);
         $concat_allowed_url = "";
 
@@ -53,8 +53,18 @@ class AdminAuth
         } else {
             $path = ucfirst($path[0]);
         }
-        if (str_contains($concat_allowed_url, $request->segment(1))) {
-            return $next($request);
+        if($request->segment(1) == "user") {
+            if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password")) {
+                return $next($request);
+            } else {
+                Alert::error('Error', 'Tidak bisa mengakses halaman ' . $path);
+        
+                return redirect("/proyek");
+            }
+        } else {
+            if (str_contains($concat_allowed_url, $request->segment(1))) {
+                return $next($request);
+            }
         }
 
 

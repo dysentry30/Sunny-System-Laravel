@@ -780,165 +780,165 @@
     {{-- begin::Pusher --}}
     <script>
         let userSocketID = "";
-        window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
-            userSocketID = window.Echo.socketId();
-            let isNotifExist = "";
-            if (data.id_notification != "") {
-                isNotifExist = document.querySelector(`#item-${data.id_notification}`);
-            }
-            const notificationCounter = document.querySelector("#notification-counter");
-            const mainNotifContent = document.querySelector("#main-content-notif");
-            const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
-            const idUser = Number("{{ auth()->user()->id ?? 0 }}");
-            // const idNotification = data.id_notification;
-            const dataDate = new Date(data.timestamp.date);
-            const nowDate = new Date();
-            const diff = Math.abs(dataDate - nowDate);
-            let time = "";
+        // window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
+        //     userSocketID = window.Echo.socketId();
+        //     let isNotifExist = "";
+        //     if (data.id_notification != "") {
+        //         isNotifExist = document.querySelector(`#item-${data.id_notification}`);
+        //     }
+        //     const notificationCounter = document.querySelector("#notification-counter");
+        //     const mainNotifContent = document.querySelector("#main-content-notif");
+        //     const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
+        //     const idUser = Number("{{ auth()->user()->id ?? 0 }}");
+        //     // const idNotification = data.id_notification;
+        //     const dataDate = new Date(data.timestamp.date);
+        //     const nowDate = new Date();
+        //     const diff = Math.abs(dataDate - nowDate);
+        //     let time = "";
 
-            if (diff < 1000) {
-                time = `now`;
-            } else if (diff % 1000 == 0) {
-                time = `${diff} sec`;
-            }
+        //     if (diff < 1000) {
+        //         time = `now`;
+        //     } else if (diff % 1000 == 0) {
+        //         time = `${diff} sec`;
+        //     }
 
-            if (isNotifExist == "" || isNotifExist == null) {
+        //     if (isNotifExist == "" || isNotifExist == null) {
 
-                if (isAdministrator == 1 && data.to_user.id == idUser) {
-                    notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
+        //         if (isAdministrator == 1 && data.to_user.id == idUser) {
+        //             notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
 
-                    let html = `
-                    <!--begin::Item-->
-                        <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
-                            <!--begin::Section-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-4">
-                                    <span class="symbol-label bg-light-primary">
-                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                    </span>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div class="mb-0 me-2">
-                                    <a href="/user/view/${data.from_user.id}"
-                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
-                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                    </div>
-                                    <br>
-                                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
-                                    <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #008CB4;">Authorize</button>
-                                </div>
-                                <!--end::Title-->
+        //             let html = `
+        //             <!--begin::Item-->
+        //                 <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+        //                     <!--begin::Section-->
+        //                     <div class="d-flex align-items-center">
+        //                         <!--begin::Symbol-->
+        //                         <div class="symbol symbol-35px me-4">
+        //                             <span class="symbol-label bg-light-primary">
+        //                                 <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+        //                             </span>
+        //                         </div>
+        //                         <!--end::Symbol-->
+        //                         <!--begin::Title-->
+        //                         <div class="mb-0 me-2">
+        //                             <a href="/user/view/${data.from_user.id}"
+        //                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+        //                             <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+        //                             </div>
+        //                             <br>
+        //                             <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this, true)">Cancel</button>
+        //                             <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="resetPasswordAuthorize(this)" style="background-color: #008CB4;">Authorize</button>
+        //                         </div>
+        //                         <!--end::Title-->
                                 
-                            </div>
-                            <!--end::Section-->
-                            <!--begin::Label-->
-                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
-                            <!--end::Label-->
-                        </div>
-                    <!--end::Item-->
-                    `;
-                    mainNotifContent.innerHTML += html;
-                } else if (data.to_user.id == idUser && data.to_user.check_administrator != 1 && data.message.includes("sudah")) {
-                    notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
+        //                     </div>
+        //                     <!--end::Section-->
+        //                     <!--begin::Label-->
+        //                     <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+        //                     <!--end::Label-->
+        //                 </div>
+        //             <!--end::Item-->
+        //             `;
+        //             mainNotifContent.innerHTML += html;
+        //         } else if (data.to_user.id == idUser && data.to_user.check_administrator != 1 && data.message.includes("sudah")) {
+        //             notificationCounter.innerText = Number(notificationCounter.innerText) + 1;
 
-                    let actionNotifBtn = ``;
-                    if (!data.is_rejected) {
-                        actionNotifBtn = `
-                        <form action="/user/password/reset/new" method="POST">
-                            @csrf
-                            <input type="hidden" name="id-notification" value="${data.id_notification}">
-                            <button type="submit"
-                                name="reset-password"
-                                class="btn btn-sm btn-active-primary text-white"
-                                style="background-color: #008CB4;">Buat password baru</button>
-                        </form>
-                        `;
-                    }
-                    let html = `
-                    <!--begin::Item-->
-                        <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.from_user.id}">
-                            <!--begin::Section-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-4">
-                                    <span class="symbol-label bg-light-primary">
-                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                    </span>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div class="mb-0 me-2">
-                                    <a href="/user/view/${data.from_user.id}"
-                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
-                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                    </div>
-                                    <br>
+        //             let actionNotifBtn = ``;
+        //             if (!data.is_rejected) {
+        //                 actionNotifBtn = `
+        //                 <form action="/user/password/reset/new" method="POST">
+        //                     @csrf
+        //                     <input type="hidden" name="id-notification" value="${data.id_notification}">
+        //                     <button type="submit"
+        //                         name="reset-password"
+        //                         class="btn btn-sm btn-active-primary text-white"
+        //                         style="background-color: #008CB4;">Buat password baru</button>
+        //                 </form>
+        //                 `;
+        //             }
+        //             let html = `
+        //             <!--begin::Item-->
+        //                 <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.from_user.id}">
+        //                     <!--begin::Section-->
+        //                     <div class="d-flex align-items-center">
+        //                         <!--begin::Symbol-->
+        //                         <div class="symbol symbol-35px me-4">
+        //                             <span class="symbol-label bg-light-primary">
+        //                                 <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+        //                             </span>
+        //                         </div>
+        //                         <!--end::Symbol-->
+        //                         <!--begin::Title-->
+        //                         <div class="mb-0 me-2">
+        //                             <a href="/user/view/${data.from_user.id}"
+        //                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+        //                             <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+        //                             </div>
+        //                             <br>
                                     
-                                    ${actionNotifBtn}
+        //                             ${actionNotifBtn}
                                     
-                                </div>
-                                <!--end::Title-->
+        //                         </div>
+        //                         <!--end::Title-->
                                 
-                            </div>
-                            <!--end::Section-->
-                            <!--begin::Label-->
-                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
-                            <!--end::Label-->
-                        </div>
-                    <!--end::Item-->
-                    `;
-                    mainNotifContent.innerHTML += html;
-                }
-            } else {
-                let actionNotifBtn = "";
-                if (data.is_rejected) {
-                    actionNotifBtn = `
-                            <button type="button"
-                                class="btn btn-sm btn-secondary disabled">Sudah tidak
-                                disetujui</button>
-                        `;
-                } else {
-                    actionNotifBtn = `
-                            <button type="button"
-                                class="btn btn-sm btn-secondary disabled">Sudah
-                                disetujui</button>
-                        `;
-                }
+        //                     </div>
+        //                     <!--end::Section-->
+        //                     <!--begin::Label-->
+        //                     <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+        //                     <!--end::Label-->
+        //                 </div>
+        //             <!--end::Item-->
+        //             `;
+        //             mainNotifContent.innerHTML += html;
+        //         }
+        //     } else {
+        //         let actionNotifBtn = "";
+        //         if (data.is_rejected) {
+        //             actionNotifBtn = `
+        //                     <button type="button"
+        //                         class="btn btn-sm btn-secondary disabled">Sudah tidak
+        //                         disetujui</button>
+        //                 `;
+        //         } else {
+        //             actionNotifBtn = `
+        //                     <button type="button"
+        //                         class="btn btn-sm btn-secondary disabled">Sudah
+        //                         disetujui</button>
+        //                 `;
+        //         }
 
-                let html = `
-                            <!--begin::Section-->
-                            <div class="d-flex align-items-center">
-                                <!--begin::Symbol-->
-                                <div class="symbol symbol-35px me-4">
-                                    <span class="symbol-label bg-light-primary">
-                                        <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                    </span>
-                                </div>
-                                <!--end::Symbol-->
-                                <!--begin::Title-->
-                                <div class="mb-0 me-2">
-                                    <a href="/user/view/${data.to_user.id}"
-                                        class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.to_user.name}</a>
-                                    <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                    </div>
-                                    <br>
+        //         let html = `
+        //                     <!--begin::Section-->
+        //                     <div class="d-flex align-items-center">
+        //                         <!--begin::Symbol-->
+        //                         <div class="symbol symbol-35px me-4">
+        //                             <span class="symbol-label bg-light-primary">
+        //                                 <i class="bi bi-key-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+        //                             </span>
+        //                         </div>
+        //                         <!--end::Symbol-->
+        //                         <!--begin::Title-->
+        //                         <div class="mb-0 me-2">
+        //                             <a href="/user/view/${data.to_user.id}"
+        //                                 class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.to_user.name}</a>
+        //                             <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+        //                             </div>
+        //                             <br>
 
-                                    ${actionNotifBtn}
+        //                             ${actionNotifBtn}
 
-                                </div>
-                                <!--end::Title-->
+        //                         </div>
+        //                         <!--end::Title-->
                                 
-                            </div>
-                            <!--end::Section-->
-                            <!--begin::Label-->
-                            <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
-                            <!--end::Label-->
-                    `;
-                isNotifExist.innerHTML = html;
-            }
-        });
+        //                     </div>
+        //                     <!--end::Section-->
+        //                     <!--begin::Label-->
+        //                     <span class="badge badge-light fs-8" id="timestamp-notif">${time}</span>
+        //                     <!--end::Label-->
+        //             `;
+        //         isNotifExist.innerHTML = html;
+        //     }
+        // });
 
         // window.Echo.on('connect', function(){
         //     console.log('connected', window.Echo.socketId());
@@ -1018,155 +1018,155 @@
         // end Reset Password Authorization
 
         // Begin Lock/Unlock Forecast
-        window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent",async data => {
-            // console.log("Data Received");
-            console.log(data);
+        // window.Echo.channel("lock.foreacast.event").listen("LockForeacastEvent",async data => {
+        //     // console.log("Data Received");
+        //     console.log(data);
 
-            const mainNotifContent = document.querySelector("#main-content-notif");
-            const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
-            const lockForecastBtn = document.querySelector("#lock-forecast");
-            const idUser = Number("{{ auth()->user()->id ?? 0 }}");
-            const nextUser = data.next_user.length > 1 ? JSON.stringify(data.next_user) : isNaN(Number(data.next_user[0])) ? "[]" : Number(Number(data.next_user[0]));
-            // const dataDate = new Date(data.timestamp.date);
-            // const nowDate = new Date();
-            // const diff = Math.abs(dataDate - nowDate);
-            // let time = "";
+        //     const mainNotifContent = document.querySelector("#main-content-notif");
+        //     const isAdministrator = Number("{{ auth()->user()->check_administrator ?? 0 }}");
+        //     const lockForecastBtn = document.querySelector("#lock-forecast");
+        //     const idUser = Number("{{ auth()->user()->id ?? 0 }}");
+        //     const nextUser = data.next_user.length > 1 ? JSON.stringify(data.next_user) : isNaN(Number(data.next_user[0])) ? "[]" : Number(Number(data.next_user[0]));
+        //     // const dataDate = new Date(data.timestamp.date);
+        //     // const nowDate = new Date();
+        //     // const diff = Math.abs(dataDate - nowDate);
+        //     // let time = "";
 
-            // if (diff < 1000) {
-            //     time = `now`;
-            // } else if (diff % 1000 == 0) {
-            //     time = `${diff} sec`;
-            // }
+        //     // if (diff < 1000) {
+        //     //     time = `now`;
+        //     // } else if (diff % 1000 == 0) {
+        //     //     time = `${diff} sec`;
+        //     // }
 
-            let html = "";
-            if (data.to_user.check_administrator == isAdministrator && data.to_user.id == idUser && (data.is_rejected || data.is_approved)) {
-                if(lockForecastBtn) {
-                    const icon = lockForecastBtn.querySelector("i");
-                    const formData = new FormData();
-                    formData.append("_token", "{{csrf_token()}}");
-                    formData.append("set-lock", true);
+        //     let html = "";
+        //     if (data.to_user.check_administrator == isAdministrator && data.to_user.id == idUser && (data.is_rejected || data.is_approved)) {
+        //         if(lockForecastBtn) {
+        //             const icon = lockForecastBtn.querySelector("i");
+        //             const formData = new FormData();
+        //             formData.append("_token", "{{csrf_token()}}");
+        //             formData.append("set-lock", true);
                     
-                    const setLockForecastRes = await fetch("/forecast/set-lock", {
-                        method: "POST",
-                        header: {
-                            "Content-Type": "application/json",
-                        },
-                        body: formData,
-                    }).then(res => res.json());
-                    if(data.is_approved) {
-                        // if(icon.classList.contains("bi-lock-fill")) {
-                        //     icon.classList.add("bi-unlock-fill")
-                        //     icon.classList.remove("bi-lock-fill")
-                        // } else {
-                        //     icon.classList.remove("bi-unlock-fill")
-                        //     icon.classList.add("bi-lock-fill")
-                        // }
-                        lockForecastBtn.removeAttribute("disabled");
-                        const allInputsForecast = document.querySelectorAll("input[data-month]");
-                        if(allInputsForecast) {
-                            allInputsForecast.forEach(input => {
-                                if (input.hasAttribute("disabled")) {
-                                    input.removeAttribute("disabled");
-                                } else {
-                                    input.setAttribute("disabled", "");
-                                }
-                            });
-                        }
-                    }
-                    Swal.fire({
-                        title: 'Success',
-                        text: setLockForecastRes.msg,
-                        icon: 'success',
-                        timer: 3000,
-                        showConfirmButton: false,
-                    });
-                }
-                let actionBtnForecast = "";
-                if (data.is_rejected) {
-                    actionBtnForecast = `
-                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock tidak disetujui</button>
-                `;
-            } else if(data.is_approved) {
-                    actionBtnForecast = `
-                    <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock disetujui</button>
-                `;  
-                }
+        //             const setLockForecastRes = await fetch("/forecast/set-lock", {
+        //                 method: "POST",
+        //                 header: {
+        //                     "Content-Type": "application/json",
+        //                 },
+        //                 body: formData,
+        //             }).then(res => res.json());
+        //             if(data.is_approved) {
+        //                 // if(icon.classList.contains("bi-lock-fill")) {
+        //                 //     icon.classList.add("bi-unlock-fill")
+        //                 //     icon.classList.remove("bi-lock-fill")
+        //                 // } else {
+        //                 //     icon.classList.remove("bi-unlock-fill")
+        //                 //     icon.classList.add("bi-lock-fill")
+        //                 // }
+        //                 lockForecastBtn.removeAttribute("disabled");
+        //                 const allInputsForecast = document.querySelectorAll("input[data-month]");
+        //                 if(allInputsForecast) {
+        //                     allInputsForecast.forEach(input => {
+        //                         if (input.hasAttribute("disabled")) {
+        //                             input.removeAttribute("disabled");
+        //                         } else {
+        //                             input.setAttribute("disabled", "");
+        //                         }
+        //                     });
+        //                 }
+        //             }
+        //             Swal.fire({
+        //                 title: 'Success',
+        //                 text: setLockForecastRes.msg,
+        //                 icon: 'success',
+        //                 timer: 3000,
+        //                 showConfirmButton: false,
+        //             });
+        //         }
+        //         let actionBtnForecast = "";
+        //         if (data.is_rejected) {
+        //             actionBtnForecast = `
+        //             <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock tidak disetujui</button>
+        //         `;
+        //     } else if(data.is_approved) {
+        //             actionBtnForecast = `
+        //             <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" disabled>Lock disetujui</button>
+        //         `;  
+        //         }
 
-                html = `
-                        <!--begin::Item-->
-                            <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
-                                <!--begin::Section-->
-                                <div class="d-flex align-items-center">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-35px me-4">
-                                        <span class="symbol-label bg-light-primary">
-                                            <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                        </span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Title-->
-                                    <div class="mb-0 me-2">
-                                        <a href="#"
-                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
-                                        <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                        </div>
-                                        <br>
-                                        ${actionBtnForecast}
-                                    </div>
-                                    <!--end::Title-->
+        //         html = `
+        //                 <!--begin::Item-->
+        //                     <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+        //                         <!--begin::Section-->
+        //                         <div class="d-flex align-items-center">
+        //                             <!--begin::Symbol-->
+        //                             <div class="symbol symbol-35px me-4">
+        //                                 <span class="symbol-label bg-light-primary">
+        //                                     <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+        //                                 </span>
+        //                             </div>
+        //                             <!--end::Symbol-->
+        //                             <!--begin::Title-->
+        //                             <div class="mb-0 me-2">
+        //                                 <a href="#"
+        //                                     class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+        //                                 <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+        //                                 </div>
+        //                                 <br>
+        //                                 ${actionBtnForecast}
+        //                             </div>
+        //                             <!--end::Title-->
                                     
-                                </div>
-                                <!--end::Section-->
-                                <!--begin::Label-->
-                                <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
-                                <!--end::Label-->
-                            </div>
-                        <!--end::Item-->
-                        `;
-                mainNotifContent.innerHTML += html;
-            } else {
-                let buttonActionUnlock = "";
-                if (data.message.includes("Unlock")) {
-                    buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id }, true)`;
-                } else {
-                    buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })`;
-                }
-                if (data.to_user.id == idUser)
-                    html = `
-                        <!--begin::Item-->
-                            <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
-                                <!--begin::Section-->
-                                <div class="d-flex align-items-center">
-                                    <!--begin::Symbol-->
-                                    <div class="symbol symbol-35px me-4">
-                                        <span class="symbol-label bg-light-primary">
-                                            <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
-                                        </span>
-                                    </div>
-                                    <!--end::Symbol-->
-                                    <!--begin::Title-->
-                                    <div class="mb-0 me-2">
-                                        <a href="#"
-                                            class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
-                                        <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
-                                        </div>
-                                        <br>
-                                        <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, true, ${data.to_user.id}, ${data.from_user.id})">Reject</button>
-                                        <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })" style="background-color: #008CB4;">Accept</button>
-                                    </div>
-                                    <!--end::Title-->
+        //                         </div>
+        //                         <!--end::Section-->
+        //                         <!--begin::Label-->
+        //                         <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
+        //                         <!--end::Label-->
+        //                     </div>
+        //                 <!--end::Item-->
+        //                 `;
+        //         mainNotifContent.innerHTML += html;
+        //     } else {
+        //         let buttonActionUnlock = "";
+        //         if (data.message.includes("Unlock")) {
+        //             buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id }, true)`;
+        //         } else {
+        //             buttonActionUnlock = `lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })`;
+        //         }
+        //         if (data.to_user.id == idUser)
+        //             html = `
+        //                 <!--begin::Item-->
+        //                     <div class="d-flex flex-stack py-4 border-bottom" id="item-${data.id_notification}">
+        //                         <!--begin::Section-->
+        //                         <div class="d-flex align-items-center">
+        //                             <!--begin::Symbol-->
+        //                             <div class="symbol symbol-35px me-4">
+        //                                 <span class="symbol-label bg-light-primary">
+        //                                     <i class="bi bi-lock-fill fs-2" id="icon-notif" style="color: rgb(223, 155, 28)"></i>
+        //                                 </span>
+        //                             </div>
+        //                             <!--end::Symbol-->
+        //                             <!--begin::Title-->
+        //                             <div class="mb-0 me-2">
+        //                                 <a href="#"
+        //                                     class="fs-6 text-gray-800 text-hover-primary fw-bolder" id="title-notif">${data.from_user.name}</a>
+        //                                 <div class="text-gray-400 fs-7" id="msg-notif">${data.message}
+        //                                 </div>
+        //                                 <br>
+        //                                 <button type="button" class="btn btn-sm btn-light btn-active-primary" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, true, ${data.to_user.id}, ${data.from_user.id})">Reject</button>
+        //                                 <button type="button" class="btn btn-sm btn-active-primary text-white" data-parent-item="${data.id_notification}" onclick="lockUnlockForecast(this, false, ${nextUser == "[]" ? data.from_user.id : nextUser}, ${nextUser == "[]" ? data.to_user.id : data.from_user.id })" style="background-color: #008CB4;">Accept</button>
+        //                             </div>
+        //                             <!--end::Title-->
                                     
-                                </div>
-                                <!--end::Section-->
-                                <!--begin::Label-->
-                                <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
-                                <!--end::Label-->
-                            </div>
-                        <!--end::Item-->
-                        `;
-                mainNotifContent.innerHTML += html;
-            }
-        });
+        //                         </div>
+        //                         <!--end::Section-->
+        //                         <!--begin::Label-->
+        //                         <span class="badge badge-light fs-8" id="timestamp-notif">${"Now"}</span>
+        //                         <!--end::Label-->
+        //                     </div>
+        //                 <!--end::Item-->
+        //                 `;
+        //         mainNotifContent.innerHTML += html;
+        //     }
+        // });
 
         async function lockUnlockForecast(elt, isRejected = false, nextUser, fromUser, isUnlock = false) {
             const idNotification = elt.getAttribute("data-parent-item");

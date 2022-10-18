@@ -355,6 +355,7 @@
                                         class="d-flex justify-content-center align-self-center text-white text-uppercase font-weight-bold">{{ mb_substr(auth()->user()->name, 0, 1) }}</a>
                                 </div>
                                 <ul class="dropdown-menu pt-6" aria-labelledby="dropdownMenuButton1">
+                                    <a href="/user/view/{{Auth::user()->id}}" class="btn btn-sm dropdown-item rounded-0 mb-3">Profile</a>
                                     <a href="/logout" class="btn btn-sm dropdown-item rounded-0 mb-3">Logout</a>
                                     {{-- <form action="/logout" method="post" class="form" id="kt_sign_in_form">
                                         @csrf

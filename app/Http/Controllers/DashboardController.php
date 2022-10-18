@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Models\Proyek;
 use App\Models\UnitKerja;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -23,6 +24,16 @@ class DashboardController extends Controller
      */
     function index(Request $request)
     {
+        // begin :: Delete Old Excel Files
+        $files = collect(File::allFiles(public_path("excel")));
+        $files->each(function($file) {
+            $now = Carbon::now();
+            $file_date = Carbon::createFromTimestamp($file->getMTime());
+            $diff_date = $file_date->diffInDays($now, true);
+            if($diff_date > 1) File::delete($file);
+        });
+        // end :: Delete Old Excel Files
+        
         //begin::History Forecast
         if ($request->get("periode-prognosa") || $request->get("tahun-history")) {
             $year = (int) $request->get("tahun-history") ?? (int) date("Y");
@@ -878,7 +889,6 @@ class DashboardController extends Controller
 
     public function getDataCompetitive($tipe, $filter = false)
     {
-
         $spreadsheet = new Spreadsheet();
         // nama proyek, status pasar, stage, unit kerja, bulan, nilai forecast
         $sheet = $spreadsheet->getActiveSheet();
@@ -890,7 +900,7 @@ class DashboardController extends Controller
         $sheet->setCellValue('C1', 'Stage');
         $sheet->setCellValue('D1', 'Unit Kerja');
         $sheet->setCellValue('E1', 'Bulan');
-        $sheet->setCellValue('F1', "Nilai Penawaran");
+        $sheet->setCellValue('F1', "Nilai Perolehan");
 
         // dd($tipe);
 
@@ -909,11 +919,7 @@ class DashboardController extends Controller
             if ($filter != false) {
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
             } else {
-                if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                } else {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
-                }
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
             }
         }
         $stage = null;
@@ -921,20 +927,13 @@ class DashboardController extends Controller
             case "Proyek Menang":
                 $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy([
                     ["bulan_pelaksanaan", "asc"],
-                    ["bulan_ri_perolehan", "asc"],
                 ])->values();
-                // if ($stage == 8 || $stage == 6) {
-                // }
-                // $proyeks = $proyeks->whereIn("stage", [5, 6])->filter(function($p) {
-                //     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6;
-                // })->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
                 break;
             case "Proyek Kalah":
                 $stage = 7;
-                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values();
+                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan")->values();
                 break;
         }
-        // dd($proyeks);
         $row = 2;
         $proyeks->each(function ($p) use (&$row, $sheet) {
             $sheet->setCellValue('A' . $row, $p->nama_proyek);
@@ -942,7 +941,7 @@ class DashboardController extends Controller
             $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
-            $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
+            $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);
@@ -986,26 +985,17 @@ class DashboardController extends Controller
             if ($filter != false) {
                 $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->where("unit_kerja", "=", $filter)->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
             } else {
-                if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->whereIn("unit_kerja", $unit_kerja_user->toArray());
-                } else {
-                    $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"])->where("unit_kerja", $unit_kerja_user);
-                }
+                $proyeks = Proyek::with(["UnitKerja", "Forecasts"])->get(["peringkat_wika", "nama_proyek", "kode_proyek", "bulan_awal", "bulan_pelaksanaan", "bulan_ri_perolehan", "nilai_perolehan", "nilai_rkap", "status_pasdin", "stage", "unit_kerja", "penawaran_tender"]);
             }
         }
         $stage = null;
         switch ($tipe) {
             case "Nilai Menang":
-                $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
-                // if ($stage == 8 || $stage == 6) {
-                // }
-                // $proyeks = $proyeks->whereIn("stage", [5, 6])->filter(function($p) {
-                //     return ($p->stage == 5 && $p->peringkat_wika == "Peringkat 1") || $p->stage == 6;
-                // })->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+                $proyeks = $proyeks->whereIn("stage", [6, 8])->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values();
                 break;
             case "Nilai Kalah":
                 $stage = 7;
-                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC);
+                $proyeks = $proyeks->where("stage", "=", $stage)->sortBy("bulan_pelaksanaan", SORT_NUMERIC)->values();
                 break;
         }
         // dd($proyeks);
@@ -1016,7 +1006,7 @@ class DashboardController extends Controller
             $sheet->setCellValue('C' . $row, $this->getProyekStage($p->stage));
             $sheet->setCellValue('D' . $row, $this->getUnitKerjaProyek($p->unit_kerja));
             $sheet->setCellValue('E' . $row, $p->bulan_pelaksanaan);
-            $sheet->setCellValue('F' . $row, $p->nilai_kontrak_keseluruhan);
+            $sheet->setCellValue('F' . $row, $p->nilai_perolehan);
             $row++;
         });
         $writer = new Xlsx($spreadsheet);

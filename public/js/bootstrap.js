@@ -20,18 +20,18 @@ import Echo from 'laravel-echo';
 
 window.Pusher = require('pusher-js');
 
-window.Echo = new Echo({
-    broadcaster: 'pusher',
-    key: process.env.MIX_PUSHER_APP_KEY,
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-    forceTLS: true
-});
+// window.Echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: process.env.MIX_PUSHER_APP_KEY,
+//     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+//     forceTLS: true
+// });
 
 // window.Echo.channel("notification.password.reset").listen("NotificationPasswordReset", (data) => {
 //     console.log("Data Received");
 //     console.log(data);
 // });
 
-window.Echo.connector.connect.bind('connected', () => {
-    console.log('connected');
-  });
+// window.Echo.connector.connect.bind('connected', () => {
+//     console.log('connected');
+//   });

@@ -260,7 +260,7 @@
                                                                                                     style="background-color: rgb(17, 179, 17)">Approved</button>
                                                                                                 @if ($unit_kerja_history->is_request_unlock == "f")
                                                                                                     <form action=""></form>
-                                                                                                    <form action="/history/unlock"class="mt-4" method="POST">
+                                                                                                    <form action="/history/unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                         @csrf
                                                                                                         <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
                                                                                                         <button type="submit"
@@ -300,7 +300,7 @@
                                                                                                         class="btn btn-sm btn-active-primary text-white disabled ms-7"
                                                                                                         style="background-color:#008CB4;">Menunggu Approval Unlock...</button>
                                                                                                 @elseif($unit_kerja_history->is_request_unlock == "t")
-                                                                                                    <form action="/forecast/set-unlock"class="mt-4" method="POST">
+                                                                                                    <form action="/forecast/set-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                         @csrf
                                                                                                         <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
                                                                                                         <button type="submit"
@@ -309,7 +309,7 @@
                                                                                                         style="background-color:#008CB4;">Hapus History</button>
                                                                                                     </form>
                                                                                                 @else
-                                                                                                    <form action="/history/request-unlock"class="mt-4" method="POST">
+                                                                                                    <form action="/history/request-unlock" onsubmit="requestUnlock()" class="mt-4" method="POST">
                                                                                                         @csrf
                                                                                                         <input type="hidden" name="unit_kerja" value="{{$unit_kerja}}">
                                                                                                         <button type="submit"
@@ -383,6 +383,24 @@
 {{-- begin:: JS script --}}
 @section('js-script')
     <script>
+        let socketId = "";
+        const socket = new WebSocket("ws://127.0.0.1:6001/testing-websocket");
+
+        socket.onopen = function(e) {
+            console.log("[open] Connection established");
+        };
+
+        socket.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            console.log(`[message] Data received from server: ${event.data}`);
+            if(!socketId) {
+                socketId = data.socketId;
+            } 
+            if(data.data == "Approved" || data.data == "Rejected" || data.data == "Unlock") {
+                window.location.reload();
+            }
+        };
+
         function confirmAction(e, unitKerja, isApproved) {
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -409,6 +427,11 @@
                         e.parentElement.innerHTML = `<button type="button"
                                                         class="btn btn-sm btn-success text-white disabled"
                                                         style="background-color: rgb(17, 179, 17)">Approved</button>`;
+                        socket.send(JSON.stringify({
+                            event: "History Forecast Approval",
+                            data: "Approved",
+                            socketId: socketId
+                        }));
                         Swal.fire({
                             title: "",
                             html: setLockRes.msg,
@@ -419,10 +442,16 @@
                             timerProgressBar: true,
                             position: 'top-end',
                         });
+                        
                     } else {
                         e.parentElement.innerHTML = `
                         <button type="button"
                         class="btn btn-sm btn-danger text-white disabled">Approval ditolak</button>`;
+                        socket.send(JSON.stringify({
+                            event: "History Forecast Approval",
+                            data: "Rejected",
+                            socketId: socketId
+                        }));
                         Swal.fire({
                             title: "",
                             html: `<b>${unitKerja}</b>, approval ditolak`,
@@ -433,6 +462,7 @@
                             timerProgressBar: true,
                             position: 'top-end',
                         });
+                        
                     }
                     return true;
                 }
@@ -457,6 +487,16 @@
                 return false;
             });
         }
+
+        function requestUnlock() {
+            socket.send(JSON.stringify({
+                event: "Request Unlock History",
+                data: "Unlock",
+                socketId
+            }));
+            return true;
+        }
+
     </script>
 @endsection
 {{-- End:: JS script --}}
