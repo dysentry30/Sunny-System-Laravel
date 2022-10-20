@@ -368,10 +368,10 @@
                                 <div class="form-group">
 
                                     <div id="stage-button" class="stage-list">
-                                        <a href="#" role="link" class="stage-button color-is-default "
+                                        {{-- <a href="#" role="link" class="stage-button color-is-default "
                                             style="outline: 0px; cursor: pointer;">
                                             Perolehan
-                                        </a>
+                                        </a> --}}
                                         <a href="#" role="link" class="stage-button color-is-default "
                                             style="outline: 0px; cursor: pointer;">
                                             Terkontrak
@@ -594,7 +594,7 @@
                                                     <span class="">Nilai Kontrak Review: </span>
                                                 </div>
                                                 <div class="text-dark text-start">
-                                                    <b>{{ $contract->project->nilaiok_review ?? 0 }}</b>
+                                                    <b>{{ number_format($contract->project->nilaiok_review ?? 0, 0, '.', '.') }}</b>
                                                 </div>
                                             </div>
                                             <!--begin::Input group Website-->
@@ -613,6 +613,16 @@
                                             </div>
                                             <div class="text-dark text-start">
                                                 <b>{{ $contract->project->sumber_dana ?? '-' }}</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="d-flex align-items-center">
+                                            <div class="col-5 text-end me-3 ">
+                                                <span class="">Tipe Proyek: </span>
+                                            </div>
+                                            <div class="text-dark text-start">
+                                                <b>{{App\Models\JenisProyek::find($contract->project->jenis_proyek)->jenis_proyek}}</b>
                                             </div>
                                         </div>
                                     </div>
@@ -701,7 +711,7 @@
                     <!--begin::Row-->
                     <div class="row fv-row">
                         <!--begin::Col-->
-                        <div class="col-6">
+                        {{-- <div class="col-6">
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7">
                                 <!--begin::Label-->
@@ -718,9 +728,9 @@
                                 <!--end::Input-->
                             </div>
                             <!--end::Input group-->
-                        </div>
+                        </div> --}}
                         <!--End begin::Col-->
-                        <div class="col-6">
+                        <div class="col">
                             <!--begin::Input group Website-->
                             <div class="fv-row mb-7">
 
@@ -731,11 +741,96 @@
                     </div>
                     <!--End begin::Row-->
 
-                    &nbsp;<br>
-                    &nbsp;<br>
-
                     <!--begin::Card title-->
                     <div class="card-title m-0">
+
+                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
+                            Aanwitjzing
+                            <a href="#" Id="Plus" data-bs-toggle="modal"
+                                data-bs-target="#kt_modal_question_proyek">+</a>
+                        </h3>
+
+                        <!--begin:Table: Review-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                            <!--begin::Table head-->
+                            <thead>
+                                <!--begin::Table row-->
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="min-w-125px">Nama</th>
+                                    <th class="min-w-125px">No. Dokumen</th>
+                                    <th class="min-w-125px">Kategori</th>
+                                    <th class="min-w-125px">Tanggal</th>
+                                    <th class="min-w-125px">Catatan</th>
+                                </tr>
+                                <!--end::Table row-->
+                            </thead>
+                            <!--end::Table head-->
+                            <!--begin::Table body-->
+                            <tbody class="fw-bold text-gray-400">
+                                @if (isset($contract))
+                                    @forelse ($contract->questionsProjects as $questionProject)
+                                        @if ($questionProject->tender_menang == 0)
+                                            <tr>
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $questionProject->document_name_question }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $questionProject->id_document }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Name=-->
+                                                <td>
+                                                    <a target="_blank"
+                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
+                                                        class="text-gray-600 text-hover-primary mb-1">
+                                                        {{ $questionProject->kategori_question }}
+                                                    </a>
+                                                </td>
+                                                <!--end::Name=-->
+                                                <!--begin::Kode=-->
+                                                <td>
+                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
+                                                        {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
+                                                </td>
+                                                <!--end::Kode=-->
+                                                <!--begin::Unit=-->
+                                                <td>{{ $questionProject->note_question }}
+                                                </td>
+                                                <!--end::Unit=-->
+                                            </tr>
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="5" class="text-center">
+                                                <h6><b>There is no data</b></h6>
+                                            </td>
+                                        </tr>
+                                    @endforelse
+                                @else
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <h6><b>There is no data</b></h6>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                            <!--end::Table body-->
+
+                        </table>
+                        <!--End:Table: Review-->
+
+                        <br><br>
 
                         <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                             Draft Kontrak
@@ -960,92 +1055,6 @@
 
                         &nbsp;<br>
                         &nbsp;<br>
-
-                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
-                            Aanwitjzing
-                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                data-bs-target="#kt_modal_question_proyek">+</a>
-                        </h3>
-
-                        <!--begin:Table: Review-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
-                            <!--begin::Table head-->
-                            <thead>
-                                <!--begin::Table row-->
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="min-w-125px">Nama</th>
-                                    <th class="min-w-125px">No. Dokumen</th>
-                                    <th class="min-w-125px">Kategori</th>
-                                    <th class="min-w-125px">Tanggal</th>
-                                    <th class="min-w-125px">Catatan</th>
-                                </tr>
-                                <!--end::Table row-->
-                            </thead>
-                            <!--end::Table head-->
-                            <!--begin::Table body-->
-                            <tbody class="fw-bold text-gray-400">
-                                @if (isset($contract))
-                                    @forelse ($contract->questionsProjects as $questionProject)
-                                        @if ($questionProject->tender_menang == 0)
-                                            <tr>
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->document_name_question }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->id_document }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Name=-->
-                                                <td>
-                                                    <a target="_blank"
-                                                        href="/document/view/{{ $questionProject->id_question }}/{{ $questionProject->id_document }}"
-                                                        class="text-gray-600 text-hover-primary mb-1">
-                                                        {{ $questionProject->kategori_question }}
-                                                    </a>
-                                                </td>
-                                                <!--end::Name=-->
-                                                <!--begin::Kode=-->
-                                                <td>
-                                                    <a href="#" class="text-gray-400 text-hover-primary mb-1">
-                                                        {{ date_format(new DateTime($questionProject->created_at), 'd M, Y') }}</a>
-                                                </td>
-                                                <!--end::Kode=-->
-                                                <!--begin::Unit=-->
-                                                <td>{{ $questionProject->note_question }}
-                                                </td>
-                                                <!--end::Unit=-->
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="5" class="text-center">
-                                                <h6><b>There is no data</b></h6>
-                                            </td>
-                                        </tr>
-                                    @endforelse
-                                @else
-                                    <tr>
-                                        <td colspan="5" class="text-center">
-                                            <h6><b>There is no data</b></h6>
-                                        </td>
-                                    </tr>
-                                @endif
-                            </tbody>
-                            <!--end::Table body-->
-
-                        </table>
-                        <!--End:Table: Review-->
 
                         <br>
                         <br>

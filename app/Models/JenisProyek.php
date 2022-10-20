@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class JenisProyek extends Model
 {
     use HasFactory;
+    protected $primaryKey = "kode_jenis";
+    protected $keyType = "string";
 }
