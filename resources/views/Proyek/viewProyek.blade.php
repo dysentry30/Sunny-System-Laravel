@@ -599,21 +599,21 @@
                                     </div>
                                     @if ($proyek->is_cancel == false || $proyek->is_tidak_lulus_pq == false)
                                     <script>
-                                        const stages = document.querySelectorAll(".stage-button");
-                                        stages.forEach((stage, i) => {
-                                            stage.setAttribute("stage", i + 1);
-                                            if (i + 1 <= Number("{{ $proyek->stage }}")) {
-                                                stage.classList.add("stage-is-done");
-                                                stage.style.cursor = "cursor";
-                                            } else {
-                                                stage.classList.add("stage-is-not-active");
-                                                stage.style.cursor = "cursor";
-                                                if (i > Number("{{ $proyek->stage }}")) {
-                                                    stage.style.cursor = "not-allowed";
-                                                    stage.style.pointerEvents = "none";
-                                                }
-                                            }
-                                        });
+                                        // const stages = document.querySelectorAll(".stage-button");
+                                        // stages.forEach((stage, i) => {
+                                        //     stage.setAttribute("stage", i + 1);
+                                        //     if (i + 1 <= Number("{{ $proyek->stage }}")) {
+                                        //         stage.classList.add("stage-is-done");
+                                        //         stage.style.cursor = "cursor";
+                                        //     } else {
+                                        //         stage.classList.add("stage-is-not-active");
+                                        //         stage.style.cursor = "cursor";
+                                        //         if (i > Number("{{ $proyek->stage }}")) {
+                                        //             stage.style.cursor = "not-allowed";
+                                        //             stage.style.pointerEvents = "none";
+                                        //         }
+                                        //     }
+                                        // });
                                         const proyekIsCancel = Boolean(Number("{{$proyek->is_cancel}}"));
 
                                         function confirmAction(form) {

@@ -1825,7 +1825,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         class="pinForecast HidePin">
                                                                         <center>
                                                                             <p class="">
-                                                                                <b class="col-4">{{number_format($total_ok_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                <b class="col-4">{{number_format($total_ok_tahunan, 0, ".", ".")}}</b>
                                                                             </p>
                                                                         </center>
                                                                     </td>
@@ -1881,7 +1881,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                         <center>
                                                                             <p class="mt-4">
-                                                                                <b class="col-4">{{number_format($total_ok_tahunan / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                <b class="col-4">{{number_format($total_ok_tahunan, 0, ".", ".")}}</b>
                                                                             </p>
                                                                         </center>
                                                                     </td>
