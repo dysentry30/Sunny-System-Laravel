@@ -314,10 +314,10 @@ class ForecastController extends Controller
             // dd($proyeks);
         } else {
             // $proyeks = collect();
-            // $dops = Dop::all()->sortBy("dop");
+            $dops = Dop::all()->sortBy("dop");
 
             // dd($unit_kerja);
-            $dops = Dop::all();
+            // $dops = Dop::all();
             // if ($unit_kerja instanceof \Illuminate\Support\Collection) {
             //     // $proyeks = Proyek::with("Forecasts")->get()->whereIn("unit_kerja", $unit_kerja->toArray());
             //     // dd($dops);
