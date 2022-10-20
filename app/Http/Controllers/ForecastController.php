@@ -255,9 +255,11 @@ class ForecastController extends Controller
         }
 
         $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function ($p) {
-            return (int) $p->rkap_forecast;
             // if($p->tipe_proyek == "R") {
+            //     return (int) $p->rkap_forecast;
+            // } else {
             // }
+            return (int) $p->nilai_rkap;
         });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function ($n) {
             return (int) $n->nilai_forecast;
