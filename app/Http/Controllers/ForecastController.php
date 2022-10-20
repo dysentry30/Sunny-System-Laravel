@@ -254,15 +254,15 @@ class ForecastController extends Controller
             }
         }
 
-        $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function ($p) {
-            if($p->tipe_proyek == "R") {
-                return $p->forecasts->sum(function($f) {
-                    return (int) $f->rkap_forecast;
-                });
-            } else {
-                return (int) $p->nilai_rkap;
-            }
-        });
+        // $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function ($p) {
+        //     if($p->tipe_proyek == "R") {
+        //         return $p->forecasts->sum(function($f) {
+        //             return (int) $f->rkap_forecast;
+        //         });
+        //     } else {
+        //         return (int) $p->nilai_rkap;
+        //     }
+        // });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function ($n) {
             return (int) $n->nilai_forecast;
         });
@@ -400,7 +400,7 @@ class ForecastController extends Controller
                 'dops' => $dops,
                 // 'proyeks' => $proyeks,
                 // "forecast" => true,
-                "nilaiTotalRKAPTahun" => $nilaiTotalRKAPTahun,
+                // "nilaiTotalRKAPTahun" => $nilaiTotalRKAPTahun,
                 "nilaiTotalForecastTahun" => $nilaiTotalForecastTahun,
                 "nilaiTotalRealisasiTahun" => $nilaiTotalRealisasiTahun,
                 "previous_periode_prognosa" => $previous_periode_prognosa,
