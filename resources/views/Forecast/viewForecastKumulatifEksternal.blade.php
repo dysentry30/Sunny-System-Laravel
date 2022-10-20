@@ -454,7 +454,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real1 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 1) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -476,7 +476,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real2 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 2) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -498,7 +498,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real3 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 3) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -520,7 +520,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real4 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 4) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -542,7 +542,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real5 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 5) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -564,7 +564,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real6 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 6) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -586,7 +586,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real7 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 7) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -608,7 +608,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real8 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 8) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -630,7 +630,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real9 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 9) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -652,7 +652,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real10 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 10) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -674,7 +674,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real11 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 11) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -696,7 +696,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     });
                                                                                                 });
                                                                                                 $real12 = $nilaiDOP->sum(function($unitKerja){
-                                                                                                    return $unitKerja->sum(function($forecast){
+                                                                                                    return $unitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                         if ($forecast->month_realisasi <= 12) {
                                                                                                             return (int) $forecast->realisasi_forecast;
                                                                                                         }
@@ -848,7 +848,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real1 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real1 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 1) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -863,7 +863,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real2 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real2 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 2) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -878,7 +878,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real3 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real3 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 3) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -893,7 +893,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real4 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real4 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 4) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -908,7 +908,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real5 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real5 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 5) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -923,7 +923,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real6 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real6 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 6) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -938,7 +938,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real7 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real7 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 7) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -953,7 +953,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real8 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real8 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 8) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -968,7 +968,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real9 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real9 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 9) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -983,7 +983,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real10 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real10 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 10) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -998,7 +998,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real11 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real11 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 11) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -1013,7 +1013,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                         return (int) $forecast->nilai_forecast;
                                                                                                     }
                                                                                                 });
-                                                                                            $real12 = $nilaiUnitKerja->sum(function($forecast){
+                                                                                            $real12 = $nilaiUnitKerja->where("stage", ">", 7)->sum(function($forecast){
                                                                                                     if ($forecast->month_realisasi <= 12) {
                                                                                                         return (int) $forecast->realisasi_forecast;
                                                                                                     }
@@ -1130,7 +1130,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc1 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real1 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 1) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 1 && $nilaiProyek->stage > 7) {
                                                                                                     $real1 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok2 = 0;
@@ -1142,7 +1142,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc2 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real2 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 2) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 2 && $nilaiProyek->stage > 7) {
                                                                                                     $real2 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok3 = 0;
@@ -1154,7 +1154,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc3 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real3 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 3) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 3 && $nilaiProyek->stage > 7) {
                                                                                                     $real3 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok4 = 0;
@@ -1166,7 +1166,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc4 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real4 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 4) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 4 && $nilaiProyek->stage > 7) {
                                                                                                     $real4 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok5 = 0;
@@ -1178,7 +1178,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc5 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real5 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 5) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 5 && $nilaiProyek->stage > 7) {
                                                                                                     $real5 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok6 = 0;
@@ -1190,7 +1190,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc6 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real6 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 6) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 6 && $nilaiProyek->stage > 7) {
                                                                                                     $real6 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok7 = 0;
@@ -1202,7 +1202,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc7 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real7 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 7) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 7 && $nilaiProyek->stage > 7) {
                                                                                                     $real7 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok8 = 0;
@@ -1214,7 +1214,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc8 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real8 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 8) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 8 && $nilaiProyek->stage > 7) {
                                                                                                     $real8 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok9 = 0;
@@ -1226,7 +1226,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc9 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real9 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 9) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 9 && $nilaiProyek->stage > 7) {
                                                                                                     $real9 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok10 = 0;
@@ -1238,7 +1238,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc10 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real10 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 10) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 10 && $nilaiProyek->stage > 7) {
                                                                                                     $real10 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok11 = 0;
@@ -1250,7 +1250,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc11 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real11 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 11) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 11 && $nilaiProyek->stage > 7) {
                                                                                                     $real11 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                                 $ok12 = 0;
@@ -1262,7 +1262,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                                     $fc12 += (int) $nilaiProyek->nilai_forecast;
                                                                                                 };
                                                                                                 $real12 = 0;
-                                                                                                if ($nilaiProyek->month_realisasi <= 12) {
+                                                                                                if ($nilaiProyek->month_realisasi <= 12 && $nilaiProyek->stage > 7) {
                                                                                                     $real12 += (int) $nilaiProyek->realisasi_forecast;
                                                                                                 };
                                                                                             @endphp
