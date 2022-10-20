@@ -242,14 +242,14 @@ class ForecastController extends Controller
 
         if (Auth::user()->check_administrator) {
             $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get();
-            $nilaiRKAP = Proyek::all();
+            $nilaiRKAP = Proyek::all()->whereNotIn("stage", [0,7]);
         } else {
             $unit_kerja_user = str_contains(Auth::user()->unit_kerja, ",") ? collect(explode(",", Auth::user()->unit_kerja)) : Auth::user()->unit_kerja;
             if ($unit_kerja_user instanceof \Illuminate\Support\Collection) {
-                $nilaiRKAP = Proyek::all()->whereIn("unit_kerja", $unit_kerja_user->toArray());
+                $nilaiRKAP = Proyek::all()->whereIn("unit_kerja", $unit_kerja_user->toArray())->whereNotIn("stage", [0,7]);;
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("forecasts.periode_prognosa", "=", $periode)->get()->whereIn("unit_kerja", $unit_kerja_user->toArray());
             } else {
-                $nilaiRKAP = Proyek::all()->whereIn("unit_kerja", Auth::user()->unit_kerja);
+                $nilaiRKAP = Proyek::all()->whereIn("unit_kerja", Auth::user()->unit_kerja)->whereNotIn("stage", [0,7]);
                 $nilaiHistoryForecast = Forecast::join("proyeks", "proyeks.kode_proyek", "=", "forecasts.kode_proyek")->where("proyeks.unit_kerja", "=", Auth::user()->unit_kerja)->where("forecasts.periode_prognosa", "=", $periode)->get();
             }
         }
