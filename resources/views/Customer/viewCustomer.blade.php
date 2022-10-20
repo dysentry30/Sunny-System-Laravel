@@ -39,8 +39,7 @@
                             <!--begin::Container-->
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                                 <!--begin::Page title-->
-                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend"
-                                    data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
+                                <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
                                     class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
                                     <!--begin::Title-->
                                     <h1 class="d-flex align-items-center fs-3 my-1">Account
@@ -52,20 +51,17 @@
                                 <div class="d-flex align-items-center py-1">
 
                                     <!--begin::Button-->
-                                    <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save"
-                                        style="background-color:#008CB4;">
+                                    <button type="submit" class="btn btn-sm btn-primary" id="customer-edit-save" style="background-color:#008CB4;">
                                         Save</button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3"
-                                        onclick="document.location.reload()" style="display: none;" id="cancel-button">
+                                    <button type="button" class="btn btn-sm btn-light btn-active-danger ms-3" onclick="document.location.reload()" style="display: none;" id="cancel-button">
                                         Cancel <i class="bi bi-x"></i></button>
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3"
-                                        id="customer-edit-close">
+                                    <a href="/customer" class="btn btn-sm btn-light btn-active-primary ms-3" id="customer-edit-close">
                                         Close</a>
                                     <!--end::Button-->
 
@@ -102,8 +98,8 @@
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
                                                         <input type="text" id="name-customer" name="name-customer"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            value="{{ $customer->name }}" placeholder="Nama" />
+                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" value="{{ $customer->name }}"
+                                                            placeholder="Nama" />
                                                         @error('name-customer')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror
@@ -119,10 +115,8 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="email"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            id="email" name="email" value="{{ $customer->email }}"
-                                                            placeholder="Email" />
+                                                        <input type="email" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="email" name="email"
+                                                            value="{{ $customer->email }}" placeholder="Email" />
                                                         @error('email')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror
@@ -138,11 +132,8 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            id="phone-number" name="phone-number"
-                                                            value="{{ $customer->phone_number }}"
-                                                            placeholder="Kontak Nomor" />
+                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="phone-number"
+                                                            name="phone-number" value="{{ $customer->phone_number }}" placeholder="Kontak Nomor" />
                                                         @error('phone-number')
                                                             <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror
@@ -158,11 +149,8 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text"
-                                                            class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0"
-                                                            id="handphone" name="handphone"
-                                                            value="{{ $customer->handphone }}"
-                                                            placeholder="Nomor Handphone" />
+                                                        <input type="text" class="form-control rounded-0 border-bottom-dashed border-top-0 border-left-0 border-right-0" id="handphone" name="handphone"
+                                                            value="{{ $customer->handphone }}" placeholder="Nomor Handphone" />
                                                         {{-- @error('phone-number')
                                                         <h6 class="text-danger">{{ $message }}eror</h6>
                                                         @enderror --}}
@@ -179,27 +167,20 @@
 
                                                     <div class="d-flex" style="flex-direction: column;">
                                                         <!--begin::Options-->
-                                                        <label
-                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                {{ $check_customer }} name="check-customer" />
+                                                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value="" {{ $check_customer }} name="check-customer" />
                                                             <span class="form-check-label">Customer</span>
                                                         </label>
                                                         <!--end::Options-->
                                                         <!--begin::Options-->
-                                                        <label
-                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                            <input class="form-check-input" type="checkbox" value=""
-                                                                {{ $check_partner }} name="check-partner" />
+                                                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value="" {{ $check_partner }} name="check-partner" />
                                                             <span class="form-check-label">Partner</span>
                                                         </label>
                                                         <!--end::Options-->
                                                         <!--begin::Options-->
-                                                        <label
-                                                            class="form-check form-check-sm form-check-custom form-check-solid me-5">
-                                                            <input class="form-check-input" type="checkbox"
-                                                                value="" {{ $check_competitor }}
-                                                                name="check-competitor" />
+                                                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                                            <input class="form-check-input" type="checkbox" value="" {{ $check_competitor }} name="check-competitor" />
                                                             <span class="form-check-label">Competitor</span>
                                                         </label>
                                                         <!--end::Options-->
@@ -214,9 +195,8 @@
                                                         </label>
                                                         <!--end::Label-->
                                                         <!--begin::Input-->
-                                                        <input type="text" class="form-control form-control-solid"
-                                                            id="website" name="website"
-                                                            value="{{ $customer->website }}" placeholder="Website" />
+                                                        <input type="text" class="form-control form-control-solid" id="website" name="website" value="{{ $customer->website }}"
+                                                            placeholder="Website" />
                                                         <!--end::Input-->
                                                     </div>
                                                     <!--end::Input group-->
@@ -263,21 +243,17 @@
                                             <!--begin::Card body-->
                                             <div class="card-body pt-5">
                                                 <!--begin:::Tabs-->
-                                                <ul
-                                                    class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
+                                                <ul class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
                                                     <!--begin:::Tab Overview-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview"
+                                                        <a class="nav-link text-active-primary pb-4 active" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_overview"
                                                             style="font-size:12px;">OVERVIEW</a>
                                                     </li>
                                                     <!--end:::Tab Overview-->
 
                                                     <!--begin:::Tab item Informasi Perusahaan-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                                            href="#kt_user_view_company" style="font-size:12px;">COMPANY
+                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab" href="#kt_user_view_company" style="font-size:12px;">COMPANY
                                                             INFORMATION</a>
                                                     </li>
                                                     <!--end:::Tab item Informasi Perusahaan-->
@@ -293,27 +269,21 @@
 
                                                     <!--begin:::Tab item History-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_organisasi"
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_organisasi"
                                                             style="font-size:12px;">STRUKTUR ORGANISASI</a>
                                                     </li>
                                                     <!--end:::Tab item History-->
 
                                                     <!--begin:::Tab item History-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_history"
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_history"
                                                             style="font-size:12px;">HISTORY</a>
                                                     </li>
                                                     <!--end:::Tab item History-->
 
                                                     <!--begin:::Tab item Atachment & Notes-->
                                                     <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4"
-                                                            data-kt-countup-tabs="true" data-bs-toggle="tab"
-                                                            href="#kt_user_view_Notes"
+                                                        <a class="nav-link text-active-primary pb-4" data-kt-countup-tabs="true" data-bs-toggle="tab" href="#kt_user_view_Notes"
                                                             style="font-size:12px;">ATTACHMENTS</a>
                                                     </li>
                                                     <!--end:::Tab item Atachment & Notes-->
@@ -340,21 +310,16 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <select name="jenis-instansi"
-                                                                        class="form-select form-select-solid"
-                                                                        data-control="select2" data-hide-search="true"
+                                                                    <select name="jenis-instansi" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                                                         data-placeholder="Pilih Instansi">
                                                                         <option></option>
                                                                         @foreach ($sumberdanas as $sumberdana)
                                                                             @if ($sumberdana->nama_sumber == $customer->jenis_instansi)
-                                                                                <option
-                                                                                    value="{{ $sumberdana->nama_sumber }}"
-                                                                                    selected>
+                                                                                <option value="{{ $sumberdana->nama_sumber }}" selected>
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @else
-                                                                                <option
-                                                                                    value="{{ $sumberdana->nama_sumber }}">
+                                                                                <option value="{{ $sumberdana->nama_sumber }}">
                                                                                     {{ $sumberdana->nama_sumber }}
                                                                                 </option>
                                                                             @endif
@@ -374,10 +339,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="kodepelanggan-company"
-                                                                        value="{{ $customer->kode_pelanggan }}"
+                                                                    <input type="text" class="form-control form-control-solid" name="kodepelanggan-company" value="{{ $customer->kode_pelanggan }}"
                                                                         placeholder="Kode Unik" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -399,10 +361,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="npwp-company"
-                                                                        value="{{ $customer->npwp_company }}"
+                                                                    <input type="text" class="form-control form-control-solid" name="npwp-company" value="{{ $customer->npwp_company }}"
                                                                         placeholder="Tipe Unik Kode" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -418,10 +377,7 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        name="kodenasabah-company"
-                                                                        value="{{ $customer->kode_nasabah }}"
+                                                                    <input type="text" class="form-control form-control-solid" name="kodenasabah-company" value="{{ $customer->kode_nasabah }}"
                                                                         placeholder="Kode Nasabah" />
                                                                     <!--end::Input-->
                                                                 </div>
@@ -441,21 +397,15 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <select name="negara" id="negara"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2"
-                                                                            data-hide-search="false"
-                                                                            onchange="selectNegara(this)"
-                                                                            data-placeholder="Pilih Negara">
+                                                                        <select name="negara" id="negara" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            onchange="selectNegara(this)" data-placeholder="Pilih Negara">
                                                                             <option value=""></option>
                                                                             @foreach ($data_negara as $negara)
                                                                                 @if ($negara->country == $customer->negara)
-                                                                                    <option value="{{ $negara->country }}"
-                                                                                        selected>{{ $negara->country }}
+                                                                                    <option value="{{ $negara->country }}" selected>{{ $negara->country }}
                                                                                     </option>
                                                                                 @else
-                                                                                    <option
-                                                                                        value="{{ $negara->country }}">
+                                                                                    <option value="{{ $negara->country }}">
                                                                                         {{ $negara->country }}</option>
                                                                                 @endif
                                                                             @endforeach
@@ -478,24 +428,16 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="input-provinsi" name="provinsi"
-                                                                        value="{{ $customer->provinsi }}"
-                                                                        placeholder="Provinsi" style="display: none" />
+                                                                    <input type="text" class="form-control form-control-solid" id="input-provinsi" name="provinsi"
+                                                                        value="{{ $customer->provinsi }}" placeholder="Provinsi" style="display: none" />
                                                                     <div id="div-provinsi">
-                                                                        <select name="provinsi" id="provinsi"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2"
-                                                                            data-hide-search="false"
-                                                                            onchange="selectProvinsi(this)"
-                                                                            data-placeholder="Pilih Customer Provinsi">
+                                                                        <select name="provinsi" id="provinsi" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            onchange="selectProvinsi(this)" data-placeholder="Pilih Customer Provinsi">
                                                                             <option value="{{ $customer->provinsi }}">
                                                                                 {{ $customer->provinsi }}</option>
                                                                             @foreach ($data_provinsi as $provinsi)
                                                                                 @if ($provinsi->id == $customer->provinsi)
-                                                                                    <option value="{{ $provinsi->id }}"
-                                                                                        selected>
+                                                                                    <option value="{{ $provinsi->id }}" selected>
                                                                                         {{ ucwords(strtolower($provinsi->name)) }}
                                                                                     </option>
                                                                                 @else
@@ -523,31 +465,21 @@
                                                                     </label>
                                                                     <!--end::Label-->
                                                                     <!--begin::Input-->
-                                                                    <input type="text"
-                                                                        class="form-control form-control-solid"
-                                                                        id="input-kabupaten" name="kabupaten"
-                                                                        value="{{ $customer->kota_kabupaten }}"
-                                                                        placeholder="Kabupaten" style="display: none" />
+                                                                    <input type="text" class="form-control form-control-solid" id="input-kabupaten" name="kabupaten"
+                                                                        value="{{ $customer->kota_kabupaten }}" placeholder="Kabupaten" style="display: none" />
                                                                     <div id="div-kabupaten">
-                                                                        <select name="kabupaten" id="kabupaten"
-                                                                            class="form-select form-select-solid"
-                                                                            data-control="select2"
-                                                                            data-hide-search="false" {{-- onchange="selectKabupaten(this)" --}}
-                                                                            data-placeholder="Pilih Customer Kabupaten">
-                                                                            <option
-                                                                                value="{{ $customer->kota_kabupaten }}">
+                                                                        <select name="kabupaten" id="kabupaten" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Customer Kabupaten">
+                                                                            <option value="{{ $customer->kota_kabupaten }}">
                                                                                 {{ $customer->kota_kabupaten }}</option>
                                                                             @if (isset($data_kabupaten))
                                                                                 @foreach ($data_kabupaten as $kabupaten)
                                                                                     @if ($kabupaten->id == $customer->kota_kabupaten)
-                                                                                        <option
-                                                                                            value="{{ $kabupaten->id }}"
-                                                                                            selected>
+                                                                                        <option value="{{ $kabupaten->id }}" selected>
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @else
-                                                                                        <option
-                                                                                            value="{{ $kabupaten->id }}">
+                                                                                        <option value="{{ $kabupaten->id }}">
                                                                                             {{ ucwords(strtolower($kabupaten->name)) }}
                                                                                         </option>
                                                                                     @endif
@@ -608,21 +540,17 @@
                                                         <br>
 
                                                         <!--begin::INPUT PIC-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Contact / PIC
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_pic">+</a>
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_pic">+</a>
                                                         </h3>
                                                         <!--end::INPUT PIC-->
                                                         <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                            id="kt_customers_table">
+                                                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                                                             <!--begin::Table head-->
                                                             <thead>
                                                                 <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="text-center">No.</th>
                                                                     <th class="min-w-auto">Nama</th>
                                                                     <th class="min-w-auto">Email</th>
@@ -647,9 +575,7 @@
                                                                         <!--end::Name-->
                                                                         <!--begin::Name-->
                                                                         <td>
-                                                                            <a href="#"
-                                                                                class="text-gray-800 text-hover-primary"
-                                                                                data-bs-toggle="modal"
+                                                                            <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_modal_edit_pic_{{ $pic->id }}">{{ $pic->nama_pic }}</a>
                                                                         </td>
                                                                         <!--end::Name-->
@@ -671,9 +597,7 @@
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
                                                                             <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_pic_delete_{{ $pic->id }}"
-                                                                                    id="modal-delete"
+                                                                                <p data-bs-toggle="modal" data-bs-target="#kt_pic_delete_{{ $pic->id }}" id="modal-delete"
                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                     Delete
                                                                                 </p>
@@ -690,13 +614,10 @@
                                                     <!--end:::Tab pane Informasi Perusahaan-->
 
                                                     <!--begin:::Tab pane Performance-->
-                                                    <div class="tab-pane fade" id="kt_user_view_performance"
-                                                        role="tabpanel">
-                                                        <div class="tab-pane fade show active"
-                                                            id="kt_user_view_performance" role="tabpanel">
+                                                    <div class="tab-pane fade" id="kt_user_view_performance" role="tabpanel">
+                                                        <div class="tab-pane fade show active" id="kt_user_view_performance" role="tabpanel">
                                                             <!--begin::Data Performance-->
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Data Performance
                                                             </h3>
                                                             <!--end::Data Performance-->
@@ -712,12 +633,8 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            id="nilaiok-performance"
-                                                                            name="nilaiok-performance"
-                                                                            value="{{ $customer->nilaiok }}"
-                                                                            placeholder="Nilai OK" />
+                                                                        <input type="text" class="form-control form-control-solid reformat" id="nilaiok-performance" name="nilaiok-performance"
+                                                                            value="{{ $customer->nilaiok }}" placeholder="Nilai OK" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -732,11 +649,8 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="piutang-performance"
-                                                                            value="{{ $customer->piutang }}"
-                                                                            placeholder="Piutang" />
+                                                                        <input type="text" class="form-control form-control-solid reformat" name="piutang-performance"
+                                                                            value="{{ $customer->piutang }}" placeholder="Piutang" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -756,10 +670,7 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="laba-performance"
-                                                                            value="{{ $customer->laba }}"
+                                                                        <input type="text" class="form-control form-control-solid reformat" name="laba-performance" value="{{ $customer->laba }}"
                                                                             placeholder="Laba" />
                                                                         <!--end::Input-->
                                                                     </div>
@@ -775,10 +686,7 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            class="form-control form-control-solid reformat"
-                                                                            name="rugi-performance"
-                                                                            value="{{ $customer->rugi }}"
+                                                                        <input type="text" class="form-control form-control-solid reformat" name="rugi-performance" value="{{ $customer->rugi }}"
                                                                             placeholder="Rugi" />
                                                                         <!--end::Input-->
                                                                     </div>
@@ -795,32 +703,26 @@
 
 
                                                     <!--begin:::Tab pane Struktur Organisasi-->
-                                                    <div class="tab-pane fade" id="kt_user_view_organisasi"
-                                                        role="tabpanel">
+                                                    <div class="tab-pane fade" id="kt_user_view_organisasi" role="tabpanel">
 
                                                         <!--begin::Attachment-->
-                                                        <h3 class="fw-bolder    m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
+                                                        <h3 class="fw-bolder    m-0" id="HeadDetail" style="font-size:14px;">
                                                             Upload Struktur Organisasi
                                                         </h3>
 
                                                         <div>
                                                             <label for="struktur-attachment" class="form-label"></label>
-                                                            <input onchange="this.form.submit()"
-                                                                class="form-control form-control-sm" id="struktur-attachment"
-                                                                name="struktur-attachment" type="file"
-                                                                accept=".pdf">
+                                                            <input onchange="this.form.submit()" class="form-control form-control-sm" id="struktur-attachment" name="struktur-attachment"
+                                                                type="file" accept=".pdf">
                                                         </div>
 
                                                         <br>
                                                         <div class="ms-3 col-6">
-                                                            <table class="table align-middle table-row-dashed fs-6"
-                                                                id="kt_customers_table">
+                                                            <table class="table align-middle table-row-dashed fs-6" id="kt_customers_table">
                                                                 <!--begin::Table head-->
                                                                 <thead>
                                                                     <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
                                                                         <th class="min-w-auto">Struktur Organisasi Attachment</th>
                                                                         <th class="min-w-auto">Modified On</th>
                                                                         {{-- <th class="min-w-auto">Modified By</th> --}}
@@ -831,46 +733,43 @@
                                                                 <!--end::Table head-->
                                                                 <!--begin::Table body-->
                                                                 <tbody class="fw-bold text-gray-600">
-                                                                        @foreach ($strukturAtttachment as $strAttachments)
-                                                                            <tr>
-                                                                                <!--begin::Name-->
-                                                                                <td>
-                                                                                    @if (str_contains("$strAttachments->name_attachment", '.doc'))
-                                                                                        <a href="/document/view/{{ $strAttachments->id_struktur_attachment }}/{{ $strAttachments->id_document }}"
-                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
-                                                                                    @else
-                                                                                        <a target="_blank"
-                                                                                            href="{{ asset('words/' . $strAttachments->id_document . '.pdf') }}"
-                                                                                            class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
-                                                                                    @endif
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                                <!--begin::Time-->
-                                                                                <td>
-                                                                                    <a>{{ $strAttachments->created_at }}</a>
-                                                                                </td>
-                                                                                <!--end::Time-->
-                                                                                <!--begin::Kode-->
-                                                                                {{-- <td>
+                                                                    @foreach ($strukturAtttachment as $strAttachments)
+                                                                        <tr>
+                                                                            <!--begin::Name-->
+                                                                            <td>
+                                                                                @if (str_contains("$strAttachments->name_attachment", '.doc'))
+                                                                                    <a href="/document/view/{{ $strAttachments->id_struktur_attachment }}/{{ $strAttachments->id_document }}"
+                                                                                        class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                @else
+                                                                                    <a target="_blank" href="{{ asset('words/' . $strAttachments->id_document . '.pdf') }}"
+                                                                                        class="text-hover-primary">{{ $strAttachments->nama_dokumen }}</a>
+                                                                                @endif
+                                                                            </td>
+                                                                            <!--end::Name-->
+                                                                            <!--begin::Time-->
+                                                                            <td>
+                                                                                <a>{{ $strAttachments->created_at }}</a>
+                                                                            </td>
+                                                                            <!--end::Time-->
+                                                                            <!--begin::Kode-->
+                                                                            {{-- <td>
                                                                                     <a>{{ $strAttachments->created_by }}</a>
                                                                                 </td> --}}
-                                                                                <!--end::Kode-->
-                                                                                <!--begin::Action-->
-                                                                                <td class="text-center">
-                                                                                    <small>
-                                                                                        <button 
-                                                                                            type="button"
-                                                                                            onclick="deleteStrukturAttach(this)"
-                                                                                            data-id-attach="{{$strAttachments->id_struktur_attachment}}"
-                                                                                            class="btn d-flex flex-row btn-sm btn-light btn-active-primary align-items-center">
-                                                                                            <span>Delete</span>
-                                                                                            <div class="spinner-border spinner-border-sm ms-3"style="display: none;" role="status"></div>
-                                                                                        </button>
-                                                                                    </small>
-                                                                                </td>
-                                                                                <!--end::Action-->
-                                                                            </tr>
-                                                                        @endforeach
+                                                                            <!--end::Kode-->
+                                                                            <!--begin::Action-->
+                                                                            <td class="text-center">
+                                                                                <small>
+                                                                                    <button type="button" onclick="deleteStrukturAttach(this)"
+                                                                                        data-id-attach="{{ $strAttachments->id_struktur_attachment }}"
+                                                                                        class="btn d-flex flex-row btn-sm btn-light btn-active-primary align-items-center">
+                                                                                        <span>Delete</span>
+                                                                                        <div class="spinner-border spinner-border-sm ms-3"style="display: none;" role="status"></div>
+                                                                                    </button>
+                                                                                </small>
+                                                                            </td>
+                                                                            <!--end::Action-->
+                                                                        </tr>
+                                                                    @endforeach
 
                                                                 </tbody>
                                                                 <!--end::Table body-->
@@ -884,20 +783,16 @@
                                                             <input accept=".xls, .xlsx" class="form-control form-control-md form-control-solid" id="doc-attachment" name="import-file" type="file"> --}}
                                                         <!--end::Input-->
 
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Input Struktur Organisasi
-                                                            <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_struktur">+</a>
+                                                            <a href="#" Id="Plus" data-bs-toggle="modal" data-bs-target="#kt_modal_struktur">+</a>
                                                         </h3>
                                                         <!--begin::Table-->
-                                                        <table class="table align-middle table-row-dashed fs-6"
-                                                            id="kt_customers_table">
+                                                        <table class="table align-middle table-row-dashed fs-6" id="kt_customers_table">
                                                             <!--begin::Table head-->
                                                             <thead>
                                                                 <!--begin::Table row-->
-                                                                <tr
-                                                                    class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                                                     <th class="text-center">No.</th>
                                                                     <th class="min-w-auto">Nama</th>
                                                                     <th class="min-w-auto">Email</th>
@@ -925,9 +820,7 @@
                                                                         <!--end::Name-->
                                                                         <!--begin::Name-->
                                                                         <td>
-                                                                            <a href="#"
-                                                                                class="text-gray-800 text-hover-primary"
-                                                                                data-bs-toggle="modal"
+                                                                            <a href="#" class="text-gray-800 text-hover-primary" data-bs-toggle="modal"
                                                                                 data-bs-target="#kt_modal_edit_struktur_{{ $struktur->id }}">{{ $struktur->nama_struktur }}</a>
                                                                         </td>
                                                                         <!--end::Name-->
@@ -954,11 +847,11 @@
                                                                         <!--begin::Column-->
                                                                         <td>
                                                                             @foreach ($proyeks as $proyek)
-                                                                            @if ($struktur->proyek_struktur == $proyek->kode_proyek)
-                                                                            {{ $proyek->nama_proyek ?? "-"}}
-                                                                            @else
-                                                                            -
-                                                                            @endif
+                                                                                @if ($struktur->proyek_struktur == $proyek->kode_proyek)
+                                                                                    {{ $proyek->nama_proyek ?? '-' }}
+                                                                                @else
+                                                                                    -
+                                                                                @endif
                                                                             @endforeach
                                                                         </td>
                                                                         <!--end::Column-->
@@ -970,9 +863,7 @@
                                                                         <!--begin::Action-->
                                                                         <td class="text-center">
                                                                             <small>
-                                                                                <p data-bs-toggle="modal"
-                                                                                    data-bs-target="#kt_struktur_delete_{{ $struktur->id }}"
-                                                                                    id="modal-delete"
+                                                                                <p data-bs-toggle="modal" data-bs-target="#kt_struktur_delete_{{ $struktur->id }}" id="modal-delete"
                                                                                     class="btn btn-sm btn-light btn-active-primary">
                                                                                     Delete
                                                                                 </p>
@@ -998,93 +889,86 @@
 
                                                         <!--begin::Proyek Berjalan-->
                                                         <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Proyek Berjalan
-                                                                <i onclick="hideColumn(this, '#divProyekBerjalan')" id="hide-button"
-                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showColumn(this, '#divProyekBerjalan')" id="show-button"
-                                                                class="bi bi-arrows-expand"></i>
+                                                                <i onclick="hideColumn(this, '#divProyekBerjalan')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                    onclick="showColumn(this, '#divProyekBerjalan')" id="show-button" class="bi bi-arrows-expand"></i>
                                                             </h3>
-                                                            
+
                                                             <br>
                                                             <div id="divProyekBerjalan" style="display:none">
 
-                                                            <!--begin::Table-->
-                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                                        <th class="min-w-auto">Nomor SPK</th>
-                                                                        <th class="min-w-auto">Unit kerja</th>
-                                                                        <th class="min-w-auto">Nilai OK</th>
-                                                                        <th class="min-w-auto">Durasi</th>
-                                                                        <th class="min-w-auto">Start/End</th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">
-                                                                    @if (isset($proyekberjalan))
-                                                                        @foreach ($proyekberjalan as $proyekberjalan0)
-                                                                            @if ($proyekberjalan0->stage <= 7)
-                                                                                <tr>
-                                                                                    <!--begin::Name-->
-                                                                                    <td>
-                                                                                        <a href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}"
-                                                                                            class="text-gray-800 text-hover-primary mb-1">
-                                                                                            {{ $proyekberjalan0->nama_proyek }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name-->
-                                                                                    <!--begin::Kode-->
-                                                                                    <td>
-                                                                                        <a href="#"
-                                                                                            class="text-gray-600 text-hover-primary mb-1">
-                                                                                            {{ $proyekberjalan0->proyek->nospk_external ?? "" }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Kode-->
-                                                                                    <!--begin::Unit-->
-                                                                                    <td>
-                                                                                        {{ $proyekberjalan0->UnitKerja->unit_kerja ?? "" }}
-                                                                                    </td>
-                                                                                    <!--end::Unit-->
-                                                                                    <!--begin::Nilai OK-->
-                                                                                    <td>{{ $proyekberjalan0->nilaiok_proyek }}
-                                                                                    </td>
-                                                                                    <!--end::Nilai OK-->
-                                                                                    <!--begin::Durasi-->
-                                                                                    <td>
-                                                                                        @php
-                                                                                            $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date("now"));
-                                                                                            $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date("now"));
-                                                                                            $durasi = $tglakhir->diff($tglawal);
-                                                                                        @endphp
-                                                                                        {{ $durasi->y }} Tahun,
-                                                                                        {{ $durasi->m }} Bulan
-                                                                                    </td>
-                                                                                    <!--end::Durasi-->
-                                                                                    <!--begin::Start-->
-                                                                                    <td>{{ date_format($tglawal, 'd-M-Y') }}
-                                                                                        /
-                                                                                        {{ date_format($tglakhir, 'd-M-Y') }}
-                                                                                    </td>
-                                                                                    <!--end::End-->
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endif
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
-                                                            <!--end::Table-->
-                                                        </div>
+                                                                <!--begin::Table-->
+                                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Nomor SPK</th>
+                                                                            <th class="min-w-auto">Unit kerja</th>
+                                                                            <th class="min-w-auto">Nilai OK</th>
+                                                                            <th class="min-w-auto">Durasi</th>
+                                                                            <th class="min-w-auto">Start/End</th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    <tbody class="fw-bold text-gray-600">
+                                                                        @if (isset($proyekberjalan))
+                                                                            @foreach ($proyekberjalan as $proyekberjalan0)
+                                                                                @if ($proyekberjalan0->stage <= 7)
+                                                                                    <tr>
+                                                                                        <!--begin::Name-->
+                                                                                        <td>
+                                                                                            <a href="/proyek/view/{{ $proyekberjalan0->kode_proyek }}" class="text-gray-800 text-hover-primary mb-1">
+                                                                                                {{ $proyekberjalan0->nama_proyek }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Name-->
+                                                                                        <!--begin::Kode-->
+                                                                                        <td>
+                                                                                            <a href="#" class="text-gray-600 text-hover-primary mb-1">
+                                                                                                {{ $proyekberjalan0->proyek->nospk_external ?? '' }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Kode-->
+                                                                                        <!--begin::Unit-->
+                                                                                        <td>
+                                                                                            {{ $proyekberjalan0->UnitKerja->unit_kerja ?? '' }}
+                                                                                        </td>
+                                                                                        <!--end::Unit-->
+                                                                                        <!--begin::Nilai OK-->
+                                                                                        <td>{{ $proyekberjalan0->nilaiok_proyek }}
+                                                                                        </td>
+                                                                                        <!--end::Nilai OK-->
+                                                                                        <!--begin::Durasi-->
+                                                                                        <td>
+                                                                                            @php
+                                                                                                $tglakhir = new DateTime($proyekberjalan0->proyek->tanggal_akhir_terkontrak ?? date('now'));
+                                                                                                $tglawal = new DateTime($proyekberjalan0->proyek->tanggal_mulai_terkontrak ?? date('now'));
+                                                                                                $durasi = $tglakhir->diff($tglawal);
+                                                                                            @endphp
+                                                                                            {{ $durasi->y }} Tahun,
+                                                                                            {{ $durasi->m }} Bulan
+                                                                                        </td>
+                                                                                        <!--end::Durasi-->
+                                                                                        <!--begin::Start-->
+                                                                                        <td>{{ date_format($tglawal, 'd-M-Y') }}
+                                                                                            /
+                                                                                            {{ date_format($tglakhir, 'd-M-Y') }}
+                                                                                        </td>
+                                                                                        <!--end::End-->
+                                                                                    </tr>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
                                                         </div>
                                                         <!--end::Proyek Berjalan-->
 
@@ -1092,13 +976,10 @@
 
                                                         <!--begin::Proyek Terkontrak-->
                                                         <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Proyek Selesai
-                                                                <i onclick="hideColumn(this, '#divProyekSelesai')" id="hide-button"
-                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showColumn(this, '#divProyekSelesai')" id="show-button"
-                                                                class="bi bi-arrows-expand"></i>
+                                                                <i onclick="hideColumn(this, '#divProyekSelesai')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                    onclick="showColumn(this, '#divProyekSelesai')" id="show-button" class="bi bi-arrows-expand"></i>
                                                             </h3>
                                                             {{-- <script>
                                                                 function hideColumn() {
@@ -1115,52 +996,50 @@
                                                             </script> --}}
                                                             <br>
                                                             <div id="divProyekSelesai" style="display:none">
-                                                            <!--begin::Table-->
-                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                                        <th class="min-w-auto">Nomor SPK</th>
-                                                                        <th class="min-w-auto">Unit kerja</th>
-                                                                        {{-- <th class="min-w-auto">Stage</th> --}}
-                                                                        <th class="min-w-auto">Divisi</th>
-                                                                        <th class="min-w-auto">Nilai OK</th>
-                                                                        <th class="min-w-auto">Tgl Mulai Kontrak</th>
-                                                                        <th class="min-w-auto">Durasi</th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">
+                                                                <!--begin::Table-->
+                                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Nomor SPK</th>
+                                                                            <th class="min-w-auto">Unit kerja</th>
+                                                                            {{-- <th class="min-w-auto">Stage</th> --}}
+                                                                            <th class="min-w-auto">Divisi</th>
+                                                                            <th class="min-w-auto">Nilai OK</th>
+                                                                            <th class="min-w-auto">Tgl Mulai Kontrak</th>
+                                                                            <th class="min-w-auto">Durasi</th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    <tbody class="fw-bold text-gray-600">
 
 
-                                                                    @if (isset($proyekberjalan))
-                                                                        @foreach ($proyekberjalan as $proyekberjalan6)
-                                                                            @if ($proyekberjalan6->stage > 7)
-                                                                                <tr>
-                                                                                    <!--begin::Name-->
-                                                                                    <td>
-                                                                                        <a href="/proyek/view/{{ $proyekberjalan6->kode_proyek }}"
-                                                                                            class="text-gray-800 text-hover-primary mb-1 text-break">
-                                                                                            {{ $proyekberjalan6->nama_proyek }}
-                                                                                        </a>
-                                                                                    </td>
-                                                                                    <!--end::Name-->
-                                                                                    <!--begin::No.SPK-->
-                                                                                    <td>{{ $proyekberjalan6->proyek->nospk_external }}
-                                                                                    </td>
-                                                                                    <!--end::No.SPK-->
-                                                                                    <!--begin::Unit-->
-                                                                                    <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
-                                                                                    </td>
-                                                                                    <!--end::Unit-->
-                                                                                    <!--begin::Nama Proyek-->
-                                                                                    {{-- <td class="text-center">
+                                                                        @if (isset($proyekberjalan))
+                                                                            @foreach ($proyekberjalan as $proyekberjalan6)
+                                                                                @if ($proyekberjalan6->stage > 7)
+                                                                                    <tr>
+                                                                                        <!--begin::Name-->
+                                                                                        <td>
+                                                                                            <a href="/proyek/view/{{ $proyekberjalan6->kode_proyek }}"
+                                                                                                class="text-gray-800 text-hover-primary mb-1 text-break">
+                                                                                                {{ $proyekberjalan6->nama_proyek }}
+                                                                                            </a>
+                                                                                        </td>
+                                                                                        <!--end::Name-->
+                                                                                        <!--begin::No.SPK-->
+                                                                                        <td>{{ $proyekberjalan6->proyek->nospk_external }}
+                                                                                        </td>
+                                                                                        <!--end::No.SPK-->
+                                                                                        <!--begin::Unit-->
+                                                                                        <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
+                                                                                        </td>
+                                                                                        <!--end::Unit-->
+                                                                                        <!--begin::Nama Proyek-->
+                                                                                        {{-- <td class="text-center">
                                                                                         @switch($proyekberjalan6->stage)
                                                                                             @case('1')
                                                                                                 Pasar Dini
@@ -1202,40 +1081,40 @@
                                                                                                 Selesai
                                                                                         @endswitch
                                                                                     </td> --}}
-                                                                                    <!--end::Nama Proyek-->
-                                                                                    <!--begin::Divisi-->
-                                                                                    <td>{{ $proyekberjalan6->proyek->UnitKerja->divisi }}
-                                                                                    </td>
-                                                                                    <!--end::Divisi-->
-                                                                                    <!--begin::NilaiOK-->
-                                                                                    <td>{{ $proyekberjalan6->proyek->nilai_rkap }}
-                                                                                    </td>
-                                                                                    <!--end::NilaiOK-->
-                                                                                    <!--begin::Tanggal Kontrak-->
-                                                                                    <td>{{ $proyekberjalan6->proyek->tanggal_mulai_terkontrak }}
-                                                                                    </td>
-                                                                                    <!--end::Tanggal Kontrak-->
-                                                                                    <!--begin::Durasi-->
-                                                                                    <td>
-                                                                                        @php
-                                                                                            $tglakhir = new DateTime($proyekberjalan6->proyek->tanggal_akhir_terkontrak);
-                                                                                            $tglawal = new DateTime($proyekberjalan6->proyek->tanggal_mulai_terkontrak);
-                                                                                            $durasi = $tglakhir->diff($tglawal);
-                                                                                        @endphp
-                                                                                        {{ $durasi->y }} Tahun,
-                                                                                        {{ $durasi->m }} Bulan
-                                                                                    </td>
-                                                                                    <!--end::Durasi-->
-                                                                                </tr>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    @endif
+                                                                                        <!--end::Nama Proyek-->
+                                                                                        <!--begin::Divisi-->
+                                                                                        <td>{{ $proyekberjalan6->proyek->UnitKerja->divisi }}
+                                                                                        </td>
+                                                                                        <!--end::Divisi-->
+                                                                                        <!--begin::NilaiOK-->
+                                                                                        <td>{{ $proyekberjalan6->proyek->nilai_rkap }}
+                                                                                        </td>
+                                                                                        <!--end::NilaiOK-->
+                                                                                        <!--begin::Tanggal Kontrak-->
+                                                                                        <td>{{ $proyekberjalan6->proyek->tanggal_mulai_terkontrak }}
+                                                                                        </td>
+                                                                                        <!--end::Tanggal Kontrak-->
+                                                                                        <!--begin::Durasi-->
+                                                                                        <td>
+                                                                                            @php
+                                                                                                $tglakhir = new DateTime($proyekberjalan6->proyek->tanggal_akhir_terkontrak);
+                                                                                                $tglawal = new DateTime($proyekberjalan6->proyek->tanggal_mulai_terkontrak);
+                                                                                                $durasi = $tglakhir->diff($tglawal);
+                                                                                            @endphp
+                                                                                            {{ $durasi->y }} Tahun,
+                                                                                            {{ $durasi->m }} Bulan
+                                                                                        </td>
+                                                                                        <!--end::Durasi-->
+                                                                                    </tr>
+                                                                                @endif
+                                                                            @endforeach
+                                                                        @endif
 
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
-                                                            <!--end::Table-->
-                                                        </div>
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
                                                         </div>
                                                         <!--end::Card title-->
 
@@ -1243,13 +1122,10 @@
 
                                                         <!--begin:: FORECAST Proyek-->
                                                         <div class="card-title m-0">
-                                                            <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                style="font-size:14px;">
+                                                            <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                 Forecast Proyek
-                                                                <i onclick="hideColumn(this, '#divForecastProyek')" id="hide-button"
-                                                                style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showColumn(this, '#divForecastProyek')" id="show-button"
-                                                                class="bi bi-arrows-expand"></i>
+                                                                <i onclick="hideColumn(this, '#divForecastProyek')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                    onclick="showColumn(this, '#divForecastProyek')" id="show-button" class="bi bi-arrows-expand"></i>
                                                             </h3>
                                                             {{-- <script>
                                                                 function hideColumn() {
@@ -1266,160 +1142,158 @@
                                                             </script> --}}
                                                             <br>
                                                             <div id="divForecastProyek" style="display:none">
-                                                            <!--begin::Table-->
-                                                            <table class="table align-middle table-row-dashed fs-6 gy-5"
-                                                                id="kt_customers_table">
-                                                                <!--begin::Table head-->
-                                                                <thead>
-                                                                    <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                                                        <th class="min-w-auto">Nama Proyek</th>
-                                                                        <th class="min-w-auto">Unit kerja</th>
-                                                                        <th class="min-w-auto">Stage</th>
-                                                                        <th class="min-w-auto">Nilai Forecast</th>
-                                                                    </tr>
-                                                                    <!--end::Table row-->
-                                                                </thead>
-                                                                <!--end::Table head-->
-                                                                <!--begin::Table body-->
-                                                                <tbody class="fw-bold text-gray-600">
+                                                                <!--begin::Table-->
+                                                                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
+                                                                    <!--begin::Table head-->
+                                                                    <thead>
+                                                                        <!--begin::Table row-->
+                                                                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                                                            <th class="min-w-auto">Nama Proyek</th>
+                                                                            <th class="min-w-auto">Unit kerja</th>
+                                                                            <th class="min-w-auto">Stage</th>
+                                                                            <th class="min-w-auto">Nilai Forecast</th>
+                                                                        </tr>
+                                                                        <!--end::Table row-->
+                                                                    </thead>
+                                                                    <!--end::Table head-->
+                                                                    <!--begin::Table body-->
+                                                                    <tbody class="fw-bold text-gray-600">
 
-                                                                    @if (isset($proyekberjalan))
-                                                                        @foreach ($proyekberjalan as $proyekberforecast)
-                                                                            <tr>
-                                                                                <!--begin::Name-->
-                                                                                <td>
-                                                                                    <a href="/proyek/view/{{ $proyekberforecast->kode_proyek }}"
-                                                                                        class="text-gray-800 text-hover-primary mb-1 text-break">
-                                                                                        {{ $proyekberforecast->nama_proyek }}
-                                                                                    </a>
-                                                                                </td>
-                                                                                <!--end::Name-->
-                                                                                <!--begin::Divisi-->
-                                                                                <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
-                                                                                </td>
-                                                                                <!--end::Divisi-->
-                                                                                <!--begin::Stage-->
-                                                                                <td class="">
-                                                                                    @switch($proyekberforecast->stage)
-                                                                                        @case('0')
-                                                                                            Proyek Canceled
-                                                                                        @break
+                                                                        @if (isset($proyekberjalan))
+                                                                            @foreach ($proyekberjalan as $proyekberforecast)
+                                                                                <tr>
+                                                                                    <!--begin::Name-->
+                                                                                    <td>
+                                                                                        <a href="/proyek/view/{{ $proyekberforecast->kode_proyek }}"
+                                                                                            class="text-gray-800 text-hover-primary mb-1 text-break">
+                                                                                            {{ $proyekberforecast->nama_proyek }}
+                                                                                        </a>
+                                                                                    </td>
+                                                                                    <!--end::Name-->
+                                                                                    <!--begin::Divisi-->
+                                                                                    <td>{{ $proyekberjalan6->UnitKerja->unit_kerja }}
+                                                                                    </td>
+                                                                                    <!--end::Divisi-->
+                                                                                    <!--begin::Stage-->
+                                                                                    <td class="">
+                                                                                        @switch($proyekberforecast->stage)
+                                                                                            @case('0')
+                                                                                                Proyek Canceled
+                                                                                            @break
 
-                                                                                        @case('1')
-                                                                                            Pasar Dini
-                                                                                        @break
+                                                                                            @case('1')
+                                                                                                Pasar Dini
+                                                                                            @break
 
-                                                                                        @case('2')
-                                                                                            Pasar Potensial
-                                                                                        @break
+                                                                                            @case('2')
+                                                                                                Pasar Potensial
+                                                                                            @break
 
-                                                                                        @case('3')
-                                                                                            Prakualifikasi
-                                                                                        @break
+                                                                                            @case('3')
+                                                                                                Prakualifikasi
+                                                                                            @break
 
-                                                                                        @case('4')
-                                                                                            Tender Diikuti
-                                                                                        @break
+                                                                                            @case('4')
+                                                                                                Tender Diikuti
+                                                                                            @break
 
-                                                                                        @case('5')
-                                                                                            Perolehan
-                                                                                        @break
+                                                                                            @case('5')
+                                                                                                Perolehan
+                                                                                            @break
 
-                                                                                        @case('6')
-                                                                                            Menang
-                                                                                        @break
+                                                                                            @case('6')
+                                                                                                Menang
+                                                                                            @break
 
-                                                                                        @case('7')
-                                                                                            Kalah
-                                                                                        @break
+                                                                                            @case('7')
+                                                                                                Kalah
+                                                                                            @break
 
-                                                                                        @case('8')
-                                                                                            Terkontrak
-                                                                                        @break
+                                                                                            @case('8')
+                                                                                                Terkontrak
+                                                                                            @break
 
-                                                                                        @case('9')
-                                                                                            Terendah
-                                                                                        @break
+                                                                                            @case('9')
+                                                                                                Terendah
+                                                                                            @break
 
-                                                                                        @default
-                                                                                            Selesai
-                                                                                    @endswitch
-                                                                                </td>
-                                                                                <!--end::Stage-->
-                                                                                <!--begin::Nilai Forecast-->
-                                                                                <td>
-                                                                                    @isset($proyekberforecast->proyek->Forecasts)
-                                                                                        @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
-                                                                                            @switch($forecast->month_forecast)
-                                                                                                @case('1')
-                                                                                                    Januari
-                                                                                                @break
+                                                                                            @default
+                                                                                                Selesai
+                                                                                        @endswitch
+                                                                                    </td>
+                                                                                    <!--end::Stage-->
+                                                                                    <!--begin::Nilai Forecast-->
+                                                                                    <td>
+                                                                                        @isset($proyekberforecast->proyek->Forecasts)
+                                                                                            @foreach ($proyekberforecast->proyek->Forecasts as $forecast)
+                                                                                                @switch($forecast->month_forecast)
+                                                                                                    @case('1')
+                                                                                                        Januari
+                                                                                                    @break
 
-                                                                                                @case('2')
-                                                                                                    Februari
-                                                                                                @break
+                                                                                                    @case('2')
+                                                                                                        Februari
+                                                                                                    @break
 
-                                                                                                @case('3')
-                                                                                                    Maret
-                                                                                                @break
+                                                                                                    @case('3')
+                                                                                                        Maret
+                                                                                                    @break
 
-                                                                                                @case('4')
-                                                                                                    April
-                                                                                                @break
+                                                                                                    @case('4')
+                                                                                                        April
+                                                                                                    @break
 
-                                                                                                @case('5')
-                                                                                                    Mei
-                                                                                                @break
+                                                                                                    @case('5')
+                                                                                                        Mei
+                                                                                                    @break
 
-                                                                                                @case('6')
-                                                                                                    Juni
-                                                                                                @break
+                                                                                                    @case('6')
+                                                                                                        Juni
+                                                                                                    @break
 
-                                                                                                @case('7')
-                                                                                                    Juli
-                                                                                                @break
+                                                                                                    @case('7')
+                                                                                                        Juli
+                                                                                                    @break
 
-                                                                                                @case('8')
-                                                                                                    Agustus
-                                                                                                @break
+                                                                                                    @case('8')
+                                                                                                        Agustus
+                                                                                                    @break
 
-                                                                                                @case('9')
-                                                                                                    September
-                                                                                                @break
+                                                                                                    @case('9')
+                                                                                                        September
+                                                                                                    @break
 
-                                                                                                @case('10')
-                                                                                                    Oktober
-                                                                                                @break
+                                                                                                    @case('10')
+                                                                                                        Oktober
+                                                                                                    @break
 
-                                                                                                @case('11')
-                                                                                                    November
-                                                                                                @break
+                                                                                                    @case('11')
+                                                                                                        November
+                                                                                                    @break
 
-                                                                                                @case('12')
-                                                                                                    Desember
-                                                                                                @break
+                                                                                                    @case('12')
+                                                                                                        Desember
+                                                                                                    @break
 
-                                                                                                @default
-                                                                                                    Selesai
-                                                                                            @endswitch
+                                                                                                    @default
+                                                                                                        Selesai
+                                                                                                @endswitch
 
-                                                                                            :
-                                                                                            {{ $forecast->nilai_forecast }};<br>
-                                                                                        @endforeach
-                                                                                    @endisset
-                                                                                </td>
-                                                                                <!--end::Nilai Forecast-->
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    @endif
+                                                                                                :
+                                                                                                {{ $forecast->nilai_forecast }};<br>
+                                                                                            @endforeach
+                                                                                        @endisset
+                                                                                    </td>
+                                                                                    <!--end::Nilai Forecast-->
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        @endif
 
-                                                                </tbody>
-                                                                <!--end::Table body-->
-                                                            </table>
-                                                            <!--end::Table-->
-                                                        </div>
+                                                                    </tbody>
+                                                                    <!--end::Table body-->
+                                                                </table>
+                                                                <!--end::Table-->
+                                                            </div>
                                                         </div>
                                                         <!--end::Card title-->
 
@@ -1516,16 +1390,13 @@
                                                     <div class="tab-pane fade" id="kt_user_view_Notes" role="tabpanel">
                                                         {{-- <input type="file" id="file" class="file" hidden> --}}
                                                         <!--begin::Attachment-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                             Attachments
                                                         </h3>
 
                                                         <div>
                                                             <label for="doc-attachment" class="form-label"></label>
-                                                            <input onchange="this.form.submit()"
-                                                                class="form-control form-control-sm" id="doc-attachment"
-                                                                name="doc-attachment" type="file"
+                                                            <input onchange="this.form.submit()" class="form-control form-control-sm" id="doc-attachment" name="doc-attachment" type="file"
                                                                 accept=".docx, .pdf">
                                                         </div>
 
@@ -1536,13 +1407,11 @@
                                                         <!--End::Attachment-->
 
                                                         <div class="ms-3">
-                                                            <table class="table align-middle table-row-dashed fs-6"
-                                                                id="kt_customers_table">
+                                                            <table class="table align-middle table-row-dashed fs-6" id="kt_customers_table">
                                                                 <!--begin::Table head-->
                                                                 <thead>
                                                                     <!--begin::Table row-->
-                                                                    <tr
-                                                                        class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
+                                                                    <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase">
                                                                         <th class="min-w-auto">Attachment Name</th>
                                                                         <th class="min-w-auto">Modified On</th>
                                                                         <th class="min-w-auto">Modified By</th>
@@ -1562,8 +1431,7 @@
                                                                                         <a href="/document/view/{{ $attachments->id_customer }}/{{ $attachments->id_document }}"
                                                                                             class="text-hover-primary">{{ $attachments->name_attachment }}</a>
                                                                                     @else
-                                                                                        <a target="_blank"
-                                                                                            href="{{ asset('words/' . $attachments->id_document . '.pdf') }}"
+                                                                                        <a target="_blank" href="{{ asset('words/' . $attachments->id_document . '.pdf') }}"
                                                                                             class="text-hover-primary">{{ $attachments->name_attachment }}</a>
                                                                                     @endif
                                                                                 </td>
@@ -1581,9 +1449,7 @@
                                                                                 <!--begin::Action-->
                                                                                 <td class="text-center">
                                                                                     <small>
-                                                                                        <p data-bs-toggle="modal"
-                                                                                            data-bs-target="#kt_attachment_delete_{{ $attachments->id }}"
-                                                                                            id="modal-delete"
+                                                                                        <p data-bs-toggle="modal" data-bs-target="#kt_attachment_delete_{{ $attachments->id }}" id="modal-delete"
                                                                                             class="btn btn-sm btn-light btn-active-primary">
                                                                                             Delete
                                                                                         </p>
@@ -1600,14 +1466,12 @@
                                                         </div>
 
                                                         <!--EDITED begin::Attachement Table-->
-                                                        <div
-                                                            style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
+                                                        <div style="background-color: #FFFF;width:100%;padding:10px;margin-top:5px;">
 
                                                             <!--begin::Note-->
                                                             <div class="fv-row mb-7">
                                                                 <!--begin::Label-->
-                                                                <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                                    style="font-size:14px;">
+                                                                <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">
                                                                     Note
                                                                 </h3>
                                                                 <!--end::Label-->
@@ -1621,12 +1485,9 @@
 
                                                         </div>
                                                         <!--begin::Data CSI-->
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">CSI
-                                                            <i onclick="hideColumn(this, '#divCSI')" id="hide-button"
-                                                            style="display: none" class="bi bi-arrows-collapse"></i><i
-                                                            onclick="showColumn(this, '#divCSI')" id="show-button"
-                                                            class="bi bi-arrows-expand"></i>
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">CSI
+                                                            <i onclick="hideColumn(this, '#divCSI')" id="hide-button" style="display: none" class="bi bi-arrows-collapse"></i><i
+                                                                onclick="showColumn(this, '#divCSI')" id="show-button" class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         {{-- <script>
                                                             function hideColumn() {
@@ -1643,7 +1504,7 @@
                                                         </script> --}}
                                                         <br>
                                                         <div id="divCSI" style="display:none">
-                                                        <!--end::Data CSI-->
+                                                            <!--end::Data CSI-->
                                                             <!--begin::Row-->
                                                             <div class="row fv-row">
                                                                 <!--begin::Col-->
@@ -1656,10 +1517,8 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            name="customer-loyalty-rate"
-                                                                            class="form-control form-control-solid"
-                                                                            value="{{$customer->customer_loyalty_rate ?? 0}}" placeholder="Customer Loyalty Rate" />
+                                                                        <input type="text" name="customer-loyalty-rate" class="form-control form-control-solid"
+                                                                            value="{{ $customer->customer_loyalty_rate ?? 0 }}" placeholder="Customer Loyalty Rate" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1674,11 +1533,8 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            name="net-promoter-score"
-                                                                            class="form-control form-control-solid"
-                                                                            value="{{$customer->net_promoter_score ?? 0}}"
-                                                                            placeholder="Net Promoter Score" />
+                                                                        <input type="text" name="net-promoter-score" class="form-control form-control-solid"
+                                                                            value="{{ $customer->net_promoter_score ?? 0 }}" placeholder="Net Promoter Score" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1698,11 +1554,8 @@
                                                                         </label>
                                                                         <!--end::Label-->
                                                                         <!--begin::Input-->
-                                                                        <input type="text"
-                                                                            name="customer-satisfaction-index"
-                                                                            class="form-control form-control-solid"
-                                                                            value="{{$customer->customer_satisfaction_index ?? 0}}"
-                                                                            placeholder="Customer Satisfaction Index" />
+                                                                        <input type="text" name="customer-satisfaction-index" class="form-control form-control-solid"
+                                                                            value="{{ $customer->customer_satisfaction_index ?? 0 }}" placeholder="Customer Satisfaction Index" />
                                                                         <!--end::Input-->
                                                                     </div>
                                                                     <!--end::Input group-->
@@ -1715,16 +1568,12 @@
                                                     <!--end:::Tab pane Atachment & Notes-->
 
                                                     <!--begin:::Tab pane Over View-->
-                                                    <div class="tab-pane fade show active" id="kt_user_view_overview"
-                                                        role="tabpanel">
+                                                    <div class="tab-pane fade show active" id="kt_user_view_overview" role="tabpanel">
                                                         <br>
                                                         <!--Begin::Title Biru Form: Nilai RKAP Review-->
 
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Overview Project &nbsp;
-                                                            <i onclick="hideOverview()" id="hide-overview"
-                                                                class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showOverview()" id="show-overview"
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Overview Project &nbsp;
+                                                            <i onclick="hideOverview()" id="hide-overview" class="bi bi-arrows-collapse"></i><i onclick="showOverview()" id="show-overview"
                                                                 style="display: none" class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         <script>
@@ -1747,22 +1596,26 @@
                                                                 <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
                                                                     <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Forecast</span>
                                                                     <hr>
-                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$nilaiForecast[0]}} / Rp. {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{ $nilaiForecast[0] }} / Rp.
+                                                                        {{ number_format($nilaiForecast[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                                 <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
                                                                     <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Opportunity</span>
                                                                     <hr>
-                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOpportunity[0]}} / Rp. {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{ $proyekOpportunity[0] }} / Rp.
+                                                                        {{ number_format($proyekOpportunity[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                                 <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
                                                                     <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Closed</span>
                                                                     <hr>
-                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekClosed[0]}} / Rp. {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{ $proyekClosed[0] }} / Rp.
+                                                                        {{ number_format($proyekClosed[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                                 <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
                                                                     <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Ongoing</span>
                                                                     <hr>
-                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{$proyekOngoing[0]}} / Rp. {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
+                                                                    <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{ $proyekOngoing[0] }} / Rp.
+                                                                        {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
                                                                 </div>
                                                             </div>
                                                             <br>
@@ -1772,11 +1625,8 @@
 
                                                         <!--Begin::Title Biru Form: Pelanggan Performance-->
                                                         <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Pelanggan Performance &nbsp;
-                                                            <i onclick="hidePerformance()" id="hide-performance"
-                                                                class="bi bi-arrows-collapse"></i><i
-                                                                onclick="showPerformance()" id="show-performance"
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Pelanggan Performance &nbsp;
+                                                            <i onclick="hidePerformance()" id="hide-performance" class="bi bi-arrows-collapse"></i><i onclick="showPerformance()" id="show-performance"
                                                                 style="display: none" class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         <!--End::Title Biru Form: Pelanggan Performance-->
@@ -1794,33 +1644,133 @@
                                                             }
                                                         </script>
                                                         <div id="pelangganPerformance">
-                                                            <div class="py-6" id="performance-pelanggan">
-                                                                <!--begin::MONITORING PROYEK-->
-                                                                <!--end::MONITORING PROYEK-->
-                                                            </div>
+                                                            <figure class="highcharts-figure py-12">
+                                                                <div class="py-6" id="nilai-ok">
+                                                                    <!--begin::NILAI OK-->
+                                                                    <!--end::NILAI OK-->
+                                                                </div>
+                                                                <div class="" id="datatable-nilai-ok" style="display: none;">
+                                                                    <div class="text-center">
+                                                                        <h2 id="title-table"></h2>
+                                                                        <h4 id="total"></h4>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <button type="button" class="btn btn-sm btn-light btn-active-primary fs-6 me-3" onclick="hideTable('#datatable-nilai-ok','#nilai-ok')"><i
+                                                                                class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                                            Chart</button>
+                                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i
+                                                                                class="bi bi-download"></i> Export Excel</a>
+                                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6" onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                                            <!--begin::Table head-->
+                                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                                {{-- THead Here --}}
+                                                                            </thead>
+                                                                            <!--end::Table head-->
+                                                                            <!--begin::Table body-->
+                                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                                {{-- Data Here --}}
+                                                                            </tbody>
+                                                                            <!--end::Table body-->
+                                                                        </table>
+                                                                    </div>
+                                                                    <!--end::Table Proyek-->
+                                                                </div>
+                                                            </figure>
                                                             <hr>
 
-                                                            <div class="py-6" id="piutang-pelanggan">
-                                                                <!--begin::MONITORING PROYEK-->
-                                                                <!--end::MONITORING PROYEK-->
-                                                            </div>
+                                                            
+                                                            <figure class="highcharts-figure py-12">
+                                                                <div class="py-6" id="piutang-pelanggan">
+                                                                    <!--begin::PIUTANG PELANGGAN-->
+                                                                    <!--end::PIUTANG PELANGGAN-->
+                                                                </div>
+                                                                <div class="" id="datatable-piutang-pelanggan" style="display: none;">
+                                                                    <div class="text-center">
+                                                                        <h2 id="title-table"></h2>
+                                                                        <h4 id="total"></h4>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <button type="button" class="btn btn-sm btn-light btn-active-primary fs-6 me-3" onclick="hideTable('#datatable-piutang-pelanggan','#piutang-pelanggan')"><i
+                                                                                class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                                            Chart</button>
+                                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i
+                                                                                class="bi bi-download"></i> Export Excel</a>
+                                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6" onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                                            <!--begin::Table head-->
+                                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                                {{-- THead Here --}}
+                                                                            </thead>
+                                                                            <!--end::Table head-->
+                                                                            <!--begin::Table body-->
+                                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                                {{-- Data Here --}}
+                                                                            </tbody>
+                                                                            <!--end::Table body-->
+                                                                        </table>
+                                                                    </div>
+                                                                    <!--end::Table Proyek-->
+                                                                </div>
+                                                            </figure>
                                                             <hr>
 
-                                                            <div class="py-6" id="labarugi-pelanggan">
-                                                                <!--begin::MONITORING PROYEK-->
-                                                                <!--end::MONITORING PROYEK-->
-                                                            </div>
+                                                            <figure class="highcharts-figure py-12">
+                                                                <div class="py-6" id="labarugi-pelanggan">
+                                                                    <!--begin::LABARUGI-PELANGGAN-->
+                                                                    <!--end::LABARUGI-PELANGGAN-->
+                                                                </div>
+                                                                <div class="" id="datatable-labarugi-pelanggan" style="display: none;">
+                                                                    <div class="text-center">
+                                                                        <h2 id="title-table"></h2>
+                                                                        <h4 id="total"></h4>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-end">
+                                                                        <button type="button" class="btn btn-sm btn-light btn-active-primary fs-6 me-3" onclick="hideTable('#datatable-labarugi-pelanggan','#labarugi-pelanggan')"><i
+                                                                                class="bi bi-bar-chart-fill fs-6"></i> Show
+                                                                            Chart</button>
+                                                                        <a href="#" target="_blank" id="export-excel-btn" class="btn btn-sm btn-light btn-active-primary fs-6 me-3"><i
+                                                                                class="bi bi-download"></i> Export Excel</a>
+                                                                        <button class="btn btn-sm btn-light btn-active-danger fs-6" onclick="toggleFullscreen()" id="exit-fullscreen"><i
+                                                                                class="bi bi-fullscreen-exit fs-6"></i> Exit Fullscreen</button>
+                                                                        {{-- <button class="btn btn-sm btn-active-primary text-white" style="background-color: #008cb4;"><i class="bi bi-graph-up-arrow text-white"></i></button> --}}
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="" style="max-height: 500px; overflow-y:scroll">
+                                                                        <table class="table align-middle table-row-dashed fs-6 gy-2">
+                                                                            <!--begin::Table head-->
+                                                                            <thead id="table-line-head" class="bg-white" style="position: sticky; top: 0">
+                                                                                {{-- THead Here --}}
+                                                                            </thead>
+                                                                            <!--end::Table head-->
+                                                                            <!--begin::Table body-->
+                                                                            <tbody class="fw-bold" id="table-line-body">
+                                                                                {{-- Data Here --}}
+                                                                            </tbody>
+                                                                            <!--end::Table body-->
+                                                                        </table>
+                                                                    </div>
+                                                                    <!--end::Table Proyek-->
+                                                                </div>
+                                                            </figure>
                                                             <hr>
                                                         </div>
                                                         <!--pelangganPerformance-->
 
                                                         <!--Begin::Title Biru Form: Pelanggan Performance-->
                                                         <br>
-                                                        <h3 class="fw-bolder m-0" id="HeadDetail"
-                                                            style="font-size:14px;">Score CSI &nbsp;
-                                                            <i onclick="hideCSI()" id="hide-csi"
-                                                                class="bi bi-arrows-collapse"></i><i onclick="showCSI()"
-                                                                id="show-csi" style="display: none"
+                                                        <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">Score CSI &nbsp;
+                                                            <i onclick="hideCSI()" id="hide-csi" class="bi bi-arrows-collapse"></i><i onclick="showCSI()" id="show-csi" style="display: none"
                                                                 class="bi bi-arrows-expand"></i>
                                                         </h3>
                                                         <!--End::Title Biru Form: Pelanggan Performance-->
@@ -1949,8 +1899,7 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <select name="nama-proyek" class="form-select form-select-solid" data-control="select2"
-                                data-hide-search="true" data-placeholder="Nama Proyek">
+                            <select name="nama-proyek" class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Nama Proyek">
                                 <option></option>
                                 @foreach ($proyeks as $proyek)
                                     {{-- @if ($proyekberjalans->nama_proyek == $proyek->nama_proyek)
@@ -2027,8 +1976,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="name-pic"
-                                        value="" placeholder="Nama" />
+                                    <input type="text" class="form-control form-control-solid" name="name-pic" value="" placeholder="Nama" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2043,8 +1991,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="kode-pic"
-                                        value="" placeholder="Jabatan" />
+                                    <input type="text" class="form-control form-control-solid" name="kode-pic" value="" placeholder="Jabatan" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2065,8 +2012,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="email-pic"
-                                        value="" placeholder="Email" />
+                                    <input type="text" class="form-control form-control-solid" name="email-pic" value="" placeholder="Email" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2081,8 +2027,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="phone-number-pic"
-                                        value="" placeholder="Kontak Nomor" />
+                                    <input type="text" class="form-control form-control-solid" name="phone-number-pic" value="" placeholder="Kontak Nomor" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2094,8 +2039,7 @@
                     </div>
                     <div class="modal-footer">
 
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#008CB4">Save</button>
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 
                     </div>
                     <!--end::Modal body-->
@@ -2153,8 +2097,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="name-pic"
-                                            value="{{ $pic->nama_pic }}" placeholder="Nama" />
+                                        <input type="text" class="form-control form-control-solid" name="name-pic" value="{{ $pic->nama_pic }}" placeholder="Nama" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2169,8 +2112,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="kode-pic"
-                                            value="{{ $pic->jabatan_pic }}" placeholder="Jabatan" />
+                                        <input type="text" class="form-control form-control-solid" name="kode-pic" value="{{ $pic->jabatan_pic }}" placeholder="Jabatan" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2191,8 +2133,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid" name="email-pic"
-                                            value="{{ $pic->email_pic }}" placeholder="Email" />
+                                        <input type="text" class="form-control form-control-solid" name="email-pic" value="{{ $pic->email_pic }}" placeholder="Email" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2207,9 +2148,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            name="phone-number-pic" value="{{ $pic->phone_pic }}"
-                                            placeholder="Kontak Nomor" />
+                                        <input type="text" class="form-control form-control-solid" name="phone-number-pic" value="{{ $pic->phone_pic }}" placeholder="Kontak Nomor" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2221,8 +2160,7 @@
                         </div>
                         <div class="modal-footer">
 
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                id="new_save" style="background-color:#008CB4">Save</button>
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 
                         </div>
                         <!--end::Modal body-->
@@ -2329,8 +2267,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="name-struktur"
-                                        value="" placeholder="Nama" />
+                                    <input type="text" class="form-control form-control-solid" name="name-struktur" value="" placeholder="Nama" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2345,8 +2282,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="jabatan-struktur"
-                                        value="" placeholder="Jabatan" />
+                                    <input type="text" class="form-control form-control-solid" name="jabatan-struktur" value="" placeholder="Jabatan" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2367,8 +2303,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="email-struktur"
-                                        value="" placeholder="Email" />
+                                    <input type="text" class="form-control form-control-solid" name="email-struktur" value="" placeholder="Email" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2383,8 +2318,7 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="text" class="form-control form-control-solid" name="phone-struktur"
-                                        value="" placeholder="Kontak Nomor" />
+                                    <input type="text" class="form-control form-control-solid" name="phone-struktur" value="" placeholder="Kontak Nomor" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2404,17 +2338,12 @@
                                         <span>Tanggal Ulang Tahun</span>
                                     </label>
                                     <!--end::Label-->
-                                    <a href="#" class="btn"
-                                        style="background: transparent;"
-                                        id="start-date-modal"
-                                        onclick="showCalendarModal(this)">
-                                        <i class="bi bi-calendar2-plus-fill"
-                                            style="color: #008CB4"></i>
+                                    <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
+                                        <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
                                     </a>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
-                                        value="" placeholder="Tanggal Ulang Tahun" />
+                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur" value="" placeholder="Tanggal Ulang Tahun" />
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2435,15 +2364,11 @@
                                     </label>
                                     <!--end::Label-->
                                     <!--begin::Input-->
-                                    <select id="proyek-struktur"
-                                        name="proyek-struktur"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="false"
+                                    <select id="proyek-struktur" name="proyek-struktur" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
                                         data-placeholder="Proyek Terkait">
                                         <option></option>
                                         @foreach ($proyeks as $pBerjalan)
-                                            <option
-                                                value="{{ $pBerjalan->kode_proyek }}">
+                                            <option value="{{ $pBerjalan->kode_proyek }}">
                                                 {{ $pBerjalan->nama_proyek }}
                                             </option>
                                         @endforeach
@@ -2463,19 +2388,16 @@
                                     <!--end::Label-->
                                     <!--begin::Input-->
                                     <!--Begin::Input-->
-                                    <select id="role-struktur"
-                                    name="role-struktur"
-                                    class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true"
-                                    data-placeholder="Pilih Role">
-                                    <option></option>
-                                    <option value="Decision Maker">Decision Maker</option>
-                                    <option value="Influencer">Influencer</option>
-                                    <option value="Gatekeeper">Gatekeeper</option>
-                                    <option value="Buyer">Buyer</option>
-                                    <option value="User" >User</option>
-                                </select>
-                                <!--end::Input-->
+                                    <select id="role-struktur" name="role-struktur" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                        data-placeholder="Pilih Role">
+                                        <option></option>
+                                        <option value="Decision Maker">Decision Maker</option>
+                                        <option value="Influencer">Influencer</option>
+                                        <option value="Gatekeeper">Gatekeeper</option>
+                                        <option value="Buyer">Buyer</option>
+                                        <option value="User">User</option>
+                                    </select>
+                                    <!--end::Input-->
                                     <!--end::Input-->
                                 </div>
                                 <!--end::Input group-->
@@ -2487,8 +2409,7 @@
                     </div>
                     <div class="modal-footer">
 
-                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save"
-                            style="background-color:#008CB4">Save</button>
+                        <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 
                     </div>
                     <!--end::Modal body-->
@@ -2547,9 +2468,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            name="name-struktur" value="{{ $struktur->nama_struktur }}"
-                                            placeholder="Nama" />
+                                        <input type="text" class="form-control form-control-solid" name="name-struktur" value="{{ $struktur->nama_struktur }}" placeholder="Nama" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2564,9 +2483,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            name="jabatan-struktur" value="{{ $struktur->jabatan_struktur }}"
-                                            placeholder="Jabatan" />
+                                        <input type="text" class="form-control form-control-solid" name="jabatan-struktur" value="{{ $struktur->jabatan_struktur }}" placeholder="Jabatan" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2587,9 +2504,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            name="email-struktur" value="{{ $struktur->email_struktur }}"
-                                            placeholder="Email" />
+                                        <input type="text" class="form-control form-control-solid" name="email-struktur" value="{{ $struktur->email_struktur }}" placeholder="Email" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2604,9 +2519,7 @@
                                         </label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" class="form-control form-control-solid"
-                                            name="phone-struktur" value="{{ $struktur->phone_struktur }}"
-                                            placeholder="Kontak Nomor" />
+                                        <input type="text" class="form-control form-control-solid" name="phone-struktur" value="{{ $struktur->phone_struktur }}" placeholder="Kontak Nomor" />
                                         <!--end::Input-->
                                     </div>
                                     <!--end::Input group-->
@@ -2616,119 +2529,100 @@
                             <!--End begin::Row-->
 
                             <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Tanggal Ulang Tahun</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <a href="#" class="btn"
-                                        style="background: transparent;"
-                                        id="start-date-modal"
-                                        onclick="showCalendarModal(this)">
-                                        <i class="bi bi-calendar2-plus-fill"
-                                            style="color: #008CB4"></i>
-                                    </a>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <input type="date" class="form-control form-control-solid" name="ultah-struktur"
-                                        value="{{ $struktur->ultah_struktur }}" placeholder="Tanggal Ulang Tahun" />
-                                    <!--end::Input-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Tanggal Ulang Tahun</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <a href="#" class="btn" style="background: transparent;" id="start-date-modal" onclick="showCalendarModal(this)">
+                                            <i class="bi bi-calendar2-plus-fill" style="color: #008CB4"></i>
+                                        </a>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <input type="date" class="form-control form-control-solid" name="ultah-struktur" value="{{ $struktur->ultah_struktur }}"
+                                            placeholder="Tanggal Ulang Tahun" />
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
                                 </div>
-                                <!--end::Input group-->
+                                <!--End::Col-->
                             </div>
-                            <!--End::Col-->
-                        </div>
-                        <!--End begin::Row-->
+                            <!--End begin::Row-->
 
-                        <!--begin::Row-->
-                        <div class="row fv-row">
-                            <!--begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Proyek Tekait</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <select id="proyek-struktur"
-                                        name="proyek-struktur"
-                                        class="form-select form-select-solid"
-                                        data-control="select2" data-hide-search="false"
-                                        data-placeholder="Proyek Terkait">
-                                        <option></option>
-                                        @foreach ($proyeks as $pBerjalan)
-                                            @if ($pBerjalan->kode_proyek == $struktur->proyek_struktur)
-                                                <option
-                                                    value="{{ $pBerjalan->kode_proyek }}"
-                                                    selected>
-                                                    {{ $pBerjalan->nama_proyek }}
-                                                </option>
-                                            @else
-                                                <option
-                                                    value="{{ $pBerjalan->kode_proyek }}">
-                                                    {{ $pBerjalan->nama_proyek }}
-                                                </option>
-                                            @endif
-                                        @endforeach
-                                    </select>
-                                    <!--end::Input-->
+                            <!--begin::Row-->
+                            <div class="row fv-row">
+                                <!--begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Proyek Tekait</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <select id="proyek-struktur" name="proyek-struktur" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                            data-placeholder="Proyek Terkait">
+                                            <option></option>
+                                            @foreach ($proyeks as $pBerjalan)
+                                                @if ($pBerjalan->kode_proyek == $struktur->proyek_struktur)
+                                                    <option value="{{ $pBerjalan->kode_proyek }}" selected>
+                                                        {{ $pBerjalan->nama_proyek }}
+                                                    </option>
+                                                @else
+                                                    <option value="{{ $pBerjalan->kode_proyek }}">
+                                                        {{ $pBerjalan->nama_proyek }}
+                                                    </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
                                 </div>
-                                <!--end::Input group-->
-                            </div>
-                            <!--End begin::Col-->
-                            <div class="col-6">
-                                <!--begin::Input group Website-->
-                                <div class="fv-row mb-7">
-                                    <!--begin::Label-->
-                                    <label class="fs-6 fw-bold form-label mt-3">
-                                        <span>Role</span>
-                                    </label>
-                                    <!--end::Label-->
-                                    <!--begin::Input-->
-                                    <!--Begin::Input-->
-                                    <select id="role-struktur"
-                                    name="role-struktur"
-                                    class="form-select form-select-solid"
-                                    data-control="select2" data-hide-search="true"
-                                    data-placeholder="Pilih Role">
-                                    <option></option>
-                                    <option value="Decision Maker"
-                                        {{ $struktur->role_struktur == 'Decision Maker' ? 'selected' : '' }}>
-                                        Decision Maker</option>
-                                    <option value="Influencer"
-                                        {{ $struktur->role_struktur == 'Influencer' ? 'selected' : '' }}>
-                                        Influencer</option>
-                                    <option value="Gatekeeper"
-                                        {{ $struktur->role_struktur == 'Gatekeeper' ? 'selected' : '' }}>
-                                        Gatekeeper</option>
-                                    <option value="Buyer"
-                                        {{ $struktur->role_struktur == 'Buyer' ? 'selected' : '' }}>
-                                        Buyer</option>
-                                    <option value="User"
-                                        {{ $struktur->role_struktur == 'User' ? 'selected' : '' }}>
-                                        User</option>
-                                </select>
-                                <!--end::Input-->
-                                    <!--end::Input-->
+                                <!--End begin::Col-->
+                                <div class="col-6">
+                                    <!--begin::Input group Website-->
+                                    <div class="fv-row mb-7">
+                                        <!--begin::Label-->
+                                        <label class="fs-6 fw-bold form-label mt-3">
+                                            <span>Role</span>
+                                        </label>
+                                        <!--end::Label-->
+                                        <!--begin::Input-->
+                                        <!--Begin::Input-->
+                                        <select id="role-struktur" name="role-struktur" class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                            data-placeholder="Pilih Role">
+                                            <option></option>
+                                            <option value="Decision Maker" {{ $struktur->role_struktur == 'Decision Maker' ? 'selected' : '' }}>
+                                                Decision Maker</option>
+                                            <option value="Influencer" {{ $struktur->role_struktur == 'Influencer' ? 'selected' : '' }}>
+                                                Influencer</option>
+                                            <option value="Gatekeeper" {{ $struktur->role_struktur == 'Gatekeeper' ? 'selected' : '' }}>
+                                                Gatekeeper</option>
+                                            <option value="Buyer" {{ $struktur->role_struktur == 'Buyer' ? 'selected' : '' }}>
+                                                Buyer</option>
+                                            <option value="User" {{ $struktur->role_struktur == 'User' ? 'selected' : '' }}>
+                                                User</option>
+                                        </select>
+                                        <!--end::Input-->
+                                        <!--end::Input-->
+                                    </div>
+                                    <!--end::Input group-->
                                 </div>
-                                <!--end::Input group-->
+                                <!--End begin::Col-->
                             </div>
-                            <!--End begin::Col-->
-                        </div>
-                        <!--End begin::Row-->
+                            <!--End begin::Row-->
 
                         </div>
                         <div class="modal-footer">
 
-                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white"
-                                id="new_save" style="background-color:#008CB4">Save</button>
+                            <button type="submit" class="btn btn-sm btn-light btn-active-primary text-white" id="new_save" style="background-color:#008CB4">Save</button>
 
                         </div>
                         <!--end::Modal body-->
@@ -2795,8 +2689,7 @@
         <form action="/customer/attachment/{{ $attachments->id }}/delete" method="post" enctype="multipart/form-data">
             @method('delete')
             @csrf
-            <div class="modal fade" id="kt_attachment_delete_{{ $attachments->id }}" tabindex="-1"
-                aria-hidden="true">
+            <div class="modal fade" id="kt_attachment_delete_{{ $attachments->id }}" tabindex="-1" aria-hidden="true">
                 <!--begin::Modal dialog-->
                 <div class="modal-dialog modal-dialog-centered mw-800px">
                     <!--begin::Modal content-->
@@ -2860,6 +2753,16 @@
     <script src="/js/highcharts/solid-gauge.js"></script>
     <!--end::CDN High Chart-->
 
+    <script>
+        Highcharts.setOptions({
+            chart: {
+                style: {
+                    fontFamily: 'Poppins'
+                }
+            }
+        });
+    </script>
+
     <!--begin::Performance Pelanggan-->
     <script>
         let namaUnit = {!! json_encode($namaUnit) !!};
@@ -2872,7 +2775,7 @@
         // console.log(nilaiOK);
         // console.log(namaProyek.length);
 
-        Highcharts.chart('performance-pelanggan', {
+        Highcharts.chart('nilai-ok', {
             chart: {
                 type: 'pie',
                 options3d: {
@@ -2917,7 +2820,7 @@
                 verticalAlign: 'middle',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'15px',
+                    fontSize: '15px',
                     // color: '#A0A0A0'
                 },
                 itemMarginTop: 10,
@@ -2928,15 +2831,25 @@
             plotOptions: {
                 pie: {
                     innerSize: 100,
-                    depth: 45
+                    depth: 45,
+                    allowPointSelect: false,
+                    cursor: 'pointer',
                 },
                 series: {
                     dataLabels: {
                         enabled: false
                     },
-                    showInLegend: true
+                    showInLegend: true,
+                    states: {
+                        inactive: {
+                            opacity: 1
+                        },
+                        hover: {
+                            enabled: false
+                        },
+                    },
                 },
-                
+
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
@@ -3019,7 +2932,7 @@
                 verticalAlign: 'middle',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'15px',
+                    fontSize: '15px',
                     // color: '#A0A0A0'
                 },
                 itemMarginTop: 10,
@@ -3030,18 +2943,29 @@
             plotOptions: {
                 pie: {
                     innerSize: 100,
-                    depth: 45
+                    depth: 45,
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    showInLegend: true,
                 },
                 series: {
                     dataLabels: {
                         enabled: false
                     },
-                    showInLegend: true
+                    showInLegend: true,
+                    states: {
+                        inactive: {
+                            opacity: 1
+                        },
+                        hover: {
+                            enabled: false
+                        },
+                    },
                 },
             },
             tooltip: {
                 headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
-                pointFormat: '<span style="color:{point.color}"><b>{point.name} {point.y}</span></b><br/>'
+                pointFormat: '<span style="color:{point.color}"><b>{point.name}</span></b><br/>'
             },
 
             credits: {
@@ -3098,7 +3022,7 @@
                 verticalAlign: 'bottom',
                 // format : '<b>{point.key} : {point.y}</b><br>',
                 itemStyle: {
-                    fontSize:'15px',
+                    fontSize: '15px',
                     // color: '#A0A0A0'
                 },
             },
@@ -3111,8 +3035,25 @@
                     stacking: 'normal',
                     dataLabels: {
                         enabled: true
-                    }
-                }
+                    },
+                    innerSize: 75,
+                    depth: 25,
+                    cursor: 'pointer',
+                },
+                series: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                    showInLegend: true,
+                    states: {
+                        inactive: {
+                            opacity: 1
+                        },
+                        hover: {
+                            enabled: false
+                        },
+                    },
+                },
             },
             series: [{
                 name: 'Laba',
@@ -3220,18 +3161,18 @@
 
     <!--begin::Score Customer Loyalty Rate-->
     <script>
-        let nilaiClr = Number("{{$customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate}}");
+        let nilaiClr = Number("{{ $customer->customer_loyalty_rate == 0 || $customer->customer_loyalty_rate == null ? 1 : $customer->customer_loyalty_rate }}");
         let bgColorClr = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
-        if(nilaiClr >= 1 && nilaiClr < 1.8) {
+        if (nilaiClr >= 1 && nilaiClr < 1.8) {
             bgColorClr = "#a9b8eb";
-        } else if(nilaiClr >= 1.8 && nilaiClr < 2.6) {
+        } else if (nilaiClr >= 1.8 && nilaiClr < 2.6) {
             bgColorClr = "#8092cf";
-        } else if(nilaiClr >= 2.6 && nilaiClr < 3.4) {
+        } else if (nilaiClr >= 2.6 && nilaiClr < 3.4) {
             bgColorClr = "#8092cf";
-        } else if(nilaiClr >= 3.4 && nilaiClr < 4.2) {
+        } else if (nilaiClr >= 3.4 && nilaiClr < 4.2) {
             bgColorClr = "#2f448a";
-        } else if(nilaiClr >= 4.2 && nilaiClr <= 5) {
+        } else if (nilaiClr >= 4.2 && nilaiClr <= 5) {
             bgColorClr = "#152866";
         } else {
             bgColorClr = "#8A0000";
@@ -3324,8 +3265,7 @@
                     to: 5,
                     thickness: 20,
                     color: '#152866' // dark blue
-                },
-            ]
+                }, ]
             },
             tooltip: {
                 enabled: false
@@ -3398,18 +3338,18 @@
 
     <!--begin::Score Net Promoter Score-->
     <script>
-        let nilaiNps = Number("{{$customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score}}");
+        let nilaiNps = Number("{{ $customer->net_promoter_score == 0 || $customer->net_promoter_score == null ? 1 : $customer->net_promoter_score }}");
         let bgColorNps = "";
         // nilaiClr >= 1 ? '#a9b8eb' : nilaiClr >= 1.8 ? '#8092cf' : nilaiClr >= 2.6 ? "#8092cf" : nilaiClr >= 3.4 ? "#2f448a" : nilaiClr >= 4.2 ? "#152866" : "" 
-        if(nilaiNps >= 1 && nilaiNps < 1.8) {
+        if (nilaiNps >= 1 && nilaiNps < 1.8) {
             bgColorNps = "#Cff9b2";
-        } else if(nilaiNps >= 1.8 && nilaiNps < 2.6) {
+        } else if (nilaiNps >= 1.8 && nilaiNps < 2.6) {
             bgColorNps = "#A5DA81";
-        } else if(nilaiNps >= 2.6 && nilaiNps < 3.4) {
+        } else if (nilaiNps >= 2.6 && nilaiNps < 3.4) {
             bgColorNps = "#8ED260";
-        } else if(nilaiNps >= 3.4 && nilaiNps < 4.2) {
+        } else if (nilaiNps >= 3.4 && nilaiNps < 4.2) {
             bgColorNps = "#6FB73D";
-        } else if(nilaiNps >= 4.2 && nilaiNps <= 5) {
+        } else if (nilaiNps >= 4.2 && nilaiNps <= 5) {
             bgColorNps = "#46831C";
         } else {
             bgColorNps = "#8A0000";
@@ -3502,8 +3442,7 @@
                     to: 5,
                     thickness: 20,
                     color: '#46831C' // dark blue
-                },
-            ]
+                }, ]
             },
             tooltip: {
                 enabled: false
@@ -3573,20 +3512,20 @@
         });
     </script>
     <!--end::Score Net Promoter Score-->
-    
+
     <!--begin::Score CSI-->
     <script>
-        let nilaiCsi = Number("{{$customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index}}");
+        let nilaiCsi = Number("{{ $customer->customer_satisfaction_index == 0 || $customer->customer_satisfaction_index == null ? 1 : $customer->customer_satisfaction_index }}");
         let bgColorCsi = "";
-        if(nilaiCsi >= 1 && nilaiCsi < 1.8) {
+        if (nilaiCsi >= 1 && nilaiCsi < 1.8) {
             bgColorCsi = "#F1E4A9";
-        } else if(nilaiCsi >= 1.8 && nilaiCsi < 2.6) {
+        } else if (nilaiCsi >= 1.8 && nilaiCsi < 2.6) {
             bgColorCsi = "#E8D373";
-        } else if(nilaiCsi >= 2.6 && nilaiCsi < 3.4) {
+        } else if (nilaiCsi >= 2.6 && nilaiCsi < 3.4) {
             bgColorCsi = "#CEB543";
-        } else if(nilaiCsi >= 3.4 && nilaiCsi < 4.2) {
+        } else if (nilaiCsi >= 3.4 && nilaiCsi < 4.2) {
             bgColorCsi = "#B79D25";
-        } else if(nilaiCsi >= 4.2 && nilaiCsi <= 5) {
+        } else if (nilaiCsi >= 4.2 && nilaiCsi <= 5) {
             bgColorCsi = "#967D0B";
         } else {
             bgColorCsi = "#8A0000";
@@ -3679,8 +3618,7 @@
                     to: 5,
                     thickness: 20,
                     color: '#967D0B' // dark blue
-                },
-            ]
+                }, ]
             },
             tooltip: {
                 enabled: false
@@ -3750,7 +3688,7 @@
         });
     </script>
     <!--end::Score CSI-->
-    
+
     <!--begin::Score CSI-->
     <script>
         function deleteStrukturAttach(e) {
@@ -3765,27 +3703,27 @@
                 cancelButtonColor: '#d33',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Yes, delete it!'
-                }).then( async (result) => {
-                    if (result.isConfirmed) {
-                        const deleteAttachRes = await fetch(`/customer/struktur/${getIdAttachStruktur}/attach/delete`);
-                        const parent = e.parentElement.parentElement.parentElement;
-                        parent.remove();
-                        Swal.fire({
-                            title: 'Attachment ini berhasil dihapus',
-                            icon: 'success',
-                            showCancelButton: false,
-                            confirmButtonColor: '#3085d6',
-                            confirmButtonText: 'OK'
-                        });
-                    } else {
-                        e.classList.remove("disabled");
-                        getSpinnerElt.style.display = "none";
-                    }
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    const deleteAttachRes = await fetch(`/customer/struktur/${getIdAttachStruktur}/attach/delete`);
+                    const parent = e.parentElement.parentElement.parentElement;
+                    parent.remove();
+                    Swal.fire({
+                        title: 'Attachment ini berhasil dihapus',
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK'
+                    });
+                } else {
+                    e.classList.remove("disabled");
+                    getSpinnerElt.style.display = "none";
+                }
             })
         }
     </script>
     <!--end::Score CSI-->
-    
+
     <!--Begin:: show / hide element-->
     <script>
         function hideColumn(e, elt) {
@@ -3801,8 +3739,708 @@
         }
     </script>
     <!--End:: show / hide element-->
-    
 
+    {{-- BEGIN:: NILAI OK CHART CLICKABLE --}}
+    <script>
+        const nilaiOKPointsChartElts = document.querySelectorAll("#nilai-ok .highcharts-point");
+        nilaiOKPointsChartElts.forEach(point => {
+            point.addEventListener("click", async e => {
+                const fillColor = point.getAttribute("fill");
+                const unitKerja = document.querySelector(`#nilai-ok .highcharts-legend-item .highcharts-point[fill="${fillColor}"]`).parentElement.querySelector("text").innerHTML
+                    .toString().split(":")[0];
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id_customer", "{{ $customer->id_customer }}");
+                formData.append("unit_kerja", decodeHTMLEntities(unitKerja.trim()));
+                const result = await fetch("/customer/get-nilai-ok", {
+                    method: "POST",
+                    header: {
+                        "Content-Type": "application/json",
+                    },
+                    body: formData,
+                }).then(res => res.json());
+                getDataTable("#datatable-nilai-ok", "#nilai-ok", result, "Nilai OK");
+                // console.log({
+                //     href,
+                //     data
+                // });
+            });
+        });
+    </script>
+    {{-- END:: NILAI OK CHART CLICKABLE --}}
+
+    {{-- BEGIN:: NILAI PIUTANG CLICKABLE --}}
+    <script>
+        const nilaiPiutangPointsChartElts = document.querySelectorAll("#piutang-pelanggan .highcharts-point");
+        nilaiPiutangPointsChartElts.forEach(point => {
+            point.addEventListener("click", async e => {
+                const fillColor = point.getAttribute("fill");
+                const unitKerja = document.querySelector(`#piutang-pelanggan .highcharts-legend-item .highcharts-point[fill="${fillColor}"]`).parentElement.querySelector("text").innerHTML
+                    .toString().split(":")[0];
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id_customer", "{{ $customer->id_customer }}");
+                formData.append("unit_kerja", decodeHTMLEntities(unitKerja.trim()));
+                const result = await fetch("/customer/get-nilai-piutang", {
+                    method: "POST",
+                    header: {
+                        "Content-Type": "application/json",
+                    },
+                    body: formData,
+                }).then(res => res.json());
+                getDataTable("#datatable-piutang-pelanggan", "#piutang-pelanggan", result, "Piutang");
+                // console.log({
+                //     href,
+                //     data
+                // });
+            });
+        });
+    </script>
+    {{-- END:: NILAI PIUTANG CLICKABLE --}}
+    
+    {{-- BEGIN:: LABA RUGI CLICKABLE --}}
+    <script>
+        const nilaiLabaRugiPointsChartElts = document.querySelectorAll("#labarugi-pelanggan .highcharts-point");
+        const totalUnitKerja = Number("{{$kategoriProyek->count()}}");
+        let counter = 1;
+        nilaiLabaRugiPointsChartElts.forEach((point, i) => {
+            if(counter > totalUnitKerja) counter = 1;
+            point.setAttribute("data-index", counter);
+            point.addEventListener("click", async e => {
+                const fillColor = point.getAttribute("fill");
+                const index = point.getAttribute("data-index");
+                let unitKerja = document.querySelector(`#labarugi-pelanggan .highcharts-axis-labels text:nth-child(${index})`);
+                const type = document.querySelector(`#labarugi-pelanggan .highcharts-legend-item .highcharts-point[fill="${fillColor}"]`).parentElement.querySelector("text").innerHTML
+                    .toString().split(":")[0];
+                    
+                unitKerja = unitKerja.childNodes;
+                if(unitKerja.length > 0) {
+                    let unitKerjaJoin = "";
+                    unitKerja.forEach(elt => {
+                        if(elt.nodeName == "#text") {
+                            unitKerjaJoin += elt.data + " ";
+                        }
+                    });
+                    unitKerja = unitKerjaJoin;
+                } else {
+                    unitKerja = unitKerja[0];
+                }
+
+                const formData = new FormData();
+                formData.append("_token", "{{ csrf_token() }}");
+                formData.append("id_customer", "{{ $customer->id_customer }}");
+                formData.append("type", type);
+                formData.append("unit_kerja", decodeHTMLEntities(unitKerja.trim()));
+                const result = await fetch("/customer/get-nilai-laba-rugi", {
+                    method: "POST",
+                    header: {
+                        "Content-Type": "application/json",
+                    },
+                    body: formData,
+                }).then(res => res.json());
+                getDataTable("#datatable-labarugi-pelanggan", "#labarugi-pelanggan", result, type);
+            });
+            counter++;
+        });
+    </script>
+    {{-- END:: LABA RUGI CLICKABLE --}}
+
+
+    {{-- BEGIN:: HIDE TABLE FUNCTION --}}
+    <script>
+        function hideTable(tableElt, chartElt) {
+            const table = document.querySelector(tableElt);
+            const chartLine = document.querySelector(chartElt);
+            table.style.display = "none";
+            chartLine.style.display = "";
+        }
+    </script>
+    {{-- END:: HIDE TABLE FUNCTION --}}
+
+    {{-- Begin :: Decode Entity  --}}
+    <script>
+        function decodeHTMLEntities(rawStr) {
+            var textArea = document.createElement('textarea');
+            textArea.innerHTML = rawStr;
+            return textArea.value;
+        }
+    </script>
+    {{-- End :: Decode Entity  --}}
+
+    {{-- BEGIN :: CONVERT DATA TO TABLE --}}
+    <script>
+        async function getDataTable(tableElt, chartElt, results, type) {
+            // let {
+            //     href,
+            //     data: filterRes
+            // } = await fetch(url).then(res => res.json());
+            const table = document.querySelector(tableElt);
+            const exportExcelBtn = table.querySelector("#export-excel-btn");
+            const thead = table.querySelector("#table-line-head");
+            const tbody = table.querySelector("#table-line-body");
+            const titleTable = table.querySelector("#title-table");
+            const total = table.querySelector("#total");
+            // console.log(type);
+
+            if (type == "Nilai OK") {
+                let tbodyHTML = ``;
+                let totalForecast = 0;
+
+                let theadHTML =
+                    '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    // '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai OK</th>`
+                '</tr>';
+
+                [results.data].forEach(proyek => {
+                    for (let filter in proyek) {
+                        filter = proyek[filter];
+                        let stage = "";
+                        totalForecast += Number(filter.nilai_rkap);
+                        switch (Number(filter.stage)) {
+                            case 1:
+                                stage = "Pasar Dini";
+                                break;
+                            case 2:
+                                stage = "Pasar Potensial";
+                                break;
+                            case 3:
+                                stage = "Prakualifikasi";
+                                break;
+                            case 4:
+                                stage = "Tender Diikuti";
+                                break;
+                            case 5:
+                                stage = "Perolehan";
+                                break;
+                            case 6:
+                                stage = "Menang";
+                                break;
+                            case 7:
+                                stage = "Kalah";
+                                break;
+                            case 8:
+                                stage = "Terkontrak";
+                                break;
+                            case 9:
+                                stage = "Terendah";
+                                break;
+                            case 10:
+                                stage = "Approval";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // let bulan = "";
+                        // // console.log(filter.bulan_pelaksanaan);
+                        // switch (Number(filter.month_forecast)) {
+                        //     case 1:
+                        //         bulan = "Januari";
+                        //         break;
+                        //     case 2:
+                        //         bulan = "Februari";
+                        //         break;
+                        //     case 3:
+                        //         bulan = "Maret";
+                        //         break;
+                        //     case 4:
+                        //         bulan = "April";
+                        //         break;
+                        //     case 5:
+                        //         bulan = "Mei";
+                        //         break;
+                        //     case 6:
+                        //         bulan = "Juni";
+                        //         break;
+                        //     case 7:
+                        //         bulan = "Juli";
+                        //         break;
+                        //     case 8:
+                        //         bulan = "Agustus";
+                        //         break;
+                        //     case 9:
+                        //         bulan = "September";
+                        //         break;
+                        //     case 10:
+                        //         bulan = "Oktober";
+                        //         break;
+                        //     case 11:
+                        //         bulan = "November";
+                        //         break;
+                        //     case 12:
+                        //         bulan = "Desember";
+                        //         break;
+                        //     default:
+                        //         bulan = "Bulan Unknown"
+                        //         break;
+                        // }
+
+                        tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin) }
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat((["id"])).format(filter.nilai_rkap)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `${type}`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat((["id"])).format(totalForecast)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if (type == "Piutang") {
+                let tbodyHTML = ``;
+                let totalForecast = 0;
+
+                let theadHTML =
+                    '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    // '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Piutang</th>`
+                '</tr>';
+
+                [results.data].forEach(proyek => {
+                    for (let filter in proyek) {
+                        filter = proyek[filter];
+                        let stage = "";
+                        totalForecast += Number(filter.piutang);
+                        switch (Number(filter.stage)) {
+                            case 1:
+                                stage = "Pasar Dini";
+                                break;
+                            case 2:
+                                stage = "Pasar Potensial";
+                                break;
+                            case 3:
+                                stage = "Prakualifikasi";
+                                break;
+                            case 4:
+                                stage = "Tender Diikuti";
+                                break;
+                            case 5:
+                                stage = "Perolehan";
+                                break;
+                            case 6:
+                                stage = "Menang";
+                                break;
+                            case 7:
+                                stage = "Kalah";
+                                break;
+                            case 8:
+                                stage = "Terkontrak";
+                                break;
+                            case 9:
+                                stage = "Terendah";
+                                break;
+                            case 10:
+                                stage = "Approval";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // let bulan = "";
+                        // // console.log(filter.bulan_pelaksanaan);
+                        // switch (Number(filter.month_forecast)) {
+                        //     case 1:
+                        //         bulan = "Januari";
+                        //         break;
+                        //     case 2:
+                        //         bulan = "Februari";
+                        //         break;
+                        //     case 3:
+                        //         bulan = "Maret";
+                        //         break;
+                        //     case 4:
+                        //         bulan = "April";
+                        //         break;
+                        //     case 5:
+                        //         bulan = "Mei";
+                        //         break;
+                        //     case 6:
+                        //         bulan = "Juni";
+                        //         break;
+                        //     case 7:
+                        //         bulan = "Juli";
+                        //         break;
+                        //     case 8:
+                        //         bulan = "Agustus";
+                        //         break;
+                        //     case 9:
+                        //         bulan = "September";
+                        //         break;
+                        //     case 10:
+                        //         bulan = "Oktober";
+                        //         break;
+                        //     case 11:
+                        //         bulan = "November";
+                        //         break;
+                        //     case 12:
+                        //         bulan = "Desember";
+                        //         break;
+                        //     default:
+                        //         bulan = "Bulan Unknown"
+                        //         break;
+                        // }
+
+                        tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin) }
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat((["id"])).format(filter.piutang)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `${type}`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat((["id"])).format(totalForecast)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if (type == "Laba") {
+                let tbodyHTML = ``;
+                let totalForecast = 0;
+
+                let theadHTML =
+                    '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    // '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Laba</th>`
+                '</tr>';
+
+                [results.data].forEach(proyek => {
+                    for (let filter in proyek) {
+                        filter = proyek[filter];
+                        let stage = "";
+                        totalForecast += Number(filter.laba);
+                        switch (Number(filter.stage)) {
+                            case 1:
+                                stage = "Pasar Dini";
+                                break;
+                            case 2:
+                                stage = "Pasar Potensial";
+                                break;
+                            case 3:
+                                stage = "Prakualifikasi";
+                                break;
+                            case 4:
+                                stage = "Tender Diikuti";
+                                break;
+                            case 5:
+                                stage = "Perolehan";
+                                break;
+                            case 6:
+                                stage = "Menang";
+                                break;
+                            case 7:
+                                stage = "Kalah";
+                                break;
+                            case 8:
+                                stage = "Terkontrak";
+                                break;
+                            case 9:
+                                stage = "Terendah";
+                                break;
+                            case 10:
+                                stage = "Approval";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // let bulan = "";
+                        // // console.log(filter.bulan_pelaksanaan);
+                        // switch (Number(filter.month_forecast)) {
+                        //     case 1:
+                        //         bulan = "Januari";
+                        //         break;
+                        //     case 2:
+                        //         bulan = "Februari";
+                        //         break;
+                        //     case 3:
+                        //         bulan = "Maret";
+                        //         break;
+                        //     case 4:
+                        //         bulan = "April";
+                        //         break;
+                        //     case 5:
+                        //         bulan = "Mei";
+                        //         break;
+                        //     case 6:
+                        //         bulan = "Juni";
+                        //         break;
+                        //     case 7:
+                        //         bulan = "Juli";
+                        //         break;
+                        //     case 8:
+                        //         bulan = "Agustus";
+                        //         break;
+                        //     case 9:
+                        //         bulan = "September";
+                        //         break;
+                        //     case 10:
+                        //         bulan = "Oktober";
+                        //         break;
+                        //     case 11:
+                        //         bulan = "November";
+                        //         break;
+                        //     case 12:
+                        //         bulan = "Desember";
+                        //         break;
+                        //     default:
+                        //         bulan = "Bulan Unknown"
+                        //         break;
+                        // }
+
+                        tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin) }
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat((["id"])).format(filter.laba)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `${type}`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat((["id"])).format(totalForecast)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            } else if (type == "Rugi") {
+                let tbodyHTML = ``;
+                let totalForecast = 0;
+
+                let theadHTML =
+                    '<tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">' +
+                    '<th>Nama Proyek</th>' +
+                    '<th>Status Pasar</th>' +
+                    '<th>Stage</th>' +
+                    '<th>Unit Kerja</th>' +
+                    // '<th>Bulan</th>' +
+                    `<th class="text-end">Nilai Rugi</th>`
+                '</tr>';
+
+                [results.data].forEach(proyek => {
+                    for (let filter in proyek) {
+                        filter = proyek[filter];
+                        let stage = "";
+                        totalForecast += Number(filter.rugi);
+                        switch (Number(filter.stage)) {
+                            case 1:
+                                stage = "Pasar Dini";
+                                break;
+                            case 2:
+                                stage = "Pasar Potensial";
+                                break;
+                            case 3:
+                                stage = "Prakualifikasi";
+                                break;
+                            case 4:
+                                stage = "Tender Diikuti";
+                                break;
+                            case 5:
+                                stage = "Perolehan";
+                                break;
+                            case 6:
+                                stage = "Menang";
+                                break;
+                            case 7:
+                                stage = "Kalah";
+                                break;
+                            case 8:
+                                stage = "Terkontrak";
+                                break;
+                            case 9:
+                                stage = "Terendah";
+                                break;
+                            case 10:
+                                stage = "Approval";
+                                break;
+                            default:
+                                break;
+                        }
+
+                        // let bulan = "";
+                        // // console.log(filter.bulan_pelaksanaan);
+                        // switch (Number(filter.month_forecast)) {
+                        //     case 1:
+                        //         bulan = "Januari";
+                        //         break;
+                        //     case 2:
+                        //         bulan = "Februari";
+                        //         break;
+                        //     case 3:
+                        //         bulan = "Maret";
+                        //         break;
+                        //     case 4:
+                        //         bulan = "April";
+                        //         break;
+                        //     case 5:
+                        //         bulan = "Mei";
+                        //         break;
+                        //     case 6:
+                        //         bulan = "Juni";
+                        //         break;
+                        //     case 7:
+                        //         bulan = "Juli";
+                        //         break;
+                        //     case 8:
+                        //         bulan = "Agustus";
+                        //         break;
+                        //     case 9:
+                        //         bulan = "September";
+                        //         break;
+                        //     case 10:
+                        //         bulan = "Oktober";
+                        //         break;
+                        //     case 11:
+                        //         bulan = "November";
+                        //         break;
+                        //     case 12:
+                        //         bulan = "Desember";
+                        //         break;
+                        //     default:
+                        //         bulan = "Bulan Unknown"
+                        //         break;
+                        // }
+
+                        tbodyHTML += `<tr>
+
+                            <!--begin::Email-->
+                            <td>
+                            <a target="_blank" href="/proyek/view/${ filter.kode_proyek }" id="click-name"
+                            class="text-gray-800 text-hover-primary mb-1">${filter.nama_proyek}</a>
+                            </td>
+                            <!--end::Email-->
+                            <!--begin::Name-->
+                            <td>
+                                ${filter.status_pasdin == null ? "-" : (filter.status_pasdin == "" ? "-" : filter.status_pasdin) }
+                            </td>
+                            <!--end::Name-->
+                            <!--begin::Stage-->
+                            <td>
+                                ${stage}
+                            </td>
+                            <!--end::Stage-->
+
+                            <!--begin::Unit Kerja-->
+                            <td>
+                                ${filter.unit_kerja}
+                            </td>
+                            <!--end::Unit Kerja-->
+
+                            <!--begin::Nilai Forecast-->
+                            <td class="text-end">
+                                ${Intl.NumberFormat((["id"])).format(filter.rugi)}
+                            </td>
+                            <!--end::Nilai Forecast-->
+                            </tr>`;
+                    }
+                });
+                thead.innerHTML = theadHTML;
+                tbody.innerHTML = tbodyHTML;
+                titleTable.innerHTML = `${type}`;
+                total.innerHTML = `Total ${type} = <b>${Intl.NumberFormat((["id"])).format(totalForecast)}</b>`;
+                table.style.display = "";
+                const chartLine = document.querySelector(chartElt);
+                chartLine.style.display = "none";
+            }
+            exportExcelBtn.setAttribute("href", `/download/${results.href}`);
+        }
+    </script>
+    {{-- END :: CONVERT DATA TO TABLE --}}
 
     <!--begin::MAP Leaflet-->
     {{-- <script>

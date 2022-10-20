@@ -302,6 +302,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Delete Struktur Organisasi Attach  
     Route::get('/customer/struktur/{id}/attach/delete', [CustomerController::class, 'deleteStrukturAttach']);
 
+    // Get nilai OK Customer  
+    Route::post('/customer/get-nilai-ok', [CustomerController::class, 'getNilaiOKCustomer']);
+
+    // Get nilai Piutang  
+    Route::post('/customer/get-nilai-piutang', [CustomerController::class, 'getNilaiPiutangCustomer']);
+
+    // Get nilai Laba Rugi  
+    Route::post('/customer/get-nilai-laba-rugi', [CustomerController::class, 'getNilaiLabaRugiCustomer']);
+
     // Begin :: get Kabupaten
     Route::get('/get-kabupaten/{id}', function ($id) {
         // $data_kabupaten = Http::get("https://emsifa.github.io/api-wilayah-indonesia/api/regencies/$id.json")->json();

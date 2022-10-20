@@ -192,21 +192,33 @@
                                                 <!--begin:::Tabs-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                    <!--begin:::Tab item Informasi Perusahaan-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4 active required"
-                                                            data-bs-toggle="tab" href="#kt_user_view_overview_tab"
-                                                            style="font-size:14px;">HAK AKSES &nbsp;</a>
-                                                    </li>
-                                                    <!--end:::Tab item Informasi Perusahaan-->
+                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                        <!--begin:::Tab item Informasi Perusahaan-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4 active required"
+                                                                data-bs-toggle="tab" href="#kt_user_view_overview_tab"
+                                                                style="font-size:14px;">HAK AKSES &nbsp;</a>
+                                                        </li>
+                                                        <!--end:::Tab item Informasi Perusahaan-->
+                                                    
+                                                        <!--begin:::Tab item Informasi Perusahaan-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_user_password"
+                                                                style="font-size:14px;">RESET PASSWORD</a>
+                                                        </li>
+                                                        <!--end:::Tab item Informasi Perusahaan-->
+                                                    @else 
+                                                    
+                                                        <!--begin:::Tab item Informasi Perusahaan-->
+                                                        <li class="nav-item">
+                                                            <a class="nav-link text-active-primary active pb-4" data-bs-toggle="tab"
+                                                                href="#kt_user_view_overview_user_password"
+                                                                style="font-size:14px;">RESET PASSWORD</a>
+                                                        </li>
+                                                        <!--end:::Tab item Informasi Perusahaan-->
+                                                    @endif
 
-                                                    <!--begin:::Tab item Informasi Perusahaan-->
-                                                    <li class="nav-item">
-                                                        <a class="nav-link text-active-primary pb-4" data-bs-toggle="tab"
-                                                            href="#kt_user_view_overview_user_password"
-                                                            style="font-size:14px;">RESET PASSWORD</a>
-                                                    </li>
-                                                    <!--end:::Tab item Informasi Perusahaan-->
 
                                                 </ul>
                                                 <!--end:::Tabs-->
@@ -214,149 +226,152 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    <!--begin:::Tab pane Hak Akses-->
-                                                    <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
-                                                        role="tabpanel">
+                                                    @if (Auth::user()->check_administrator || str_contains(Auth::user()->name, "PIC"))
+                                                        <!--begin:::Tab pane Hak Akses-->
+                                                        <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
+                                                            role="tabpanel">
 
-                                                        <!--begin::Row-->
-                                                        <div class="d-flex flex-row h-50px">
-                                                            {{-- begin:: Form Input Group --}}
+                                                            <!--begin::Row-->
+                                                            <div class="d-flex flex-row h-50px">
+                                                                {{-- begin:: Form Input Group --}}
 
-                                                            {{-- begin:: Form Input Administrator --}}
-                                                            <div class="form-check me-12">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    value=""
-                                                                    {{ $user->check_administrator == 1 ? 'checked' : '' }}
-                                                                    name="administrator" id="administrator">
-                                                                <label class="form-check-label" for="administrator">
-                                                                    Administrator
-                                                                </label>
+                                                                {{-- begin:: Form Input Administrator --}}
+                                                                <div class="form-check me-12">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value=""
+                                                                        {{ $user->check_administrator == 1 ? 'checked' : '' }}
+                                                                        name="administrator" id="administrator">
+                                                                    <label class="form-check-label" for="administrator">
+                                                                        Administrator
+                                                                    </label>
+                                                                </div>
+                                                                {{-- end:: Form Input Administrator --}}
+
+                                                                {{-- begin:: Form Input Admin Kontrak --}}
+                                                                <div class="form-check me-12">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value=""
+                                                                        {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
+                                                                        name="admin-kontrak" id="admin-kontrak">
+                                                                    <label class="form-check-label" for="admin-kontrak">
+                                                                        Admin Kontrak
+                                                                    </label>
+                                                                </div>
+                                                                {{-- end:: Form Input Admin Kontrak --}}
+
+                                                                {{-- begin:: Form Input User Sales --}}
+                                                                <div class="form-check me-12">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value=""
+                                                                        {{ $user->check_user_sales == 1 ? 'checked' : '' }}
+                                                                        name="user-sales" id="user-sales">
+                                                                    <label class="form-check-label" for="user-sales">
+                                                                        User Sales
+                                                                    </label>
+                                                                </div>
+                                                                {{-- end:: Form Input Admin Kontrak --}}
+
+                                                                {{-- begin:: Form Input Team Proyek --}}
+                                                                <div class="form-check me-12">
+                                                                    <input class="form-check-input" type="checkbox"
+                                                                        value=""
+                                                                        {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
+                                                                        name="team-proyek" id="team-proyek">
+                                                                    <label class="form-check-label" for="team-proyek">
+                                                                        Team Proyek
+                                                                    </label>
+                                                                </div>
+                                                                {{-- end:: Form Input Team Proyek --}}
+
+
+                                                                {{-- end:: Form Input Group --}}
                                                             </div>
-                                                            {{-- end:: Form Input Administrator --}}
-
-                                                            {{-- begin:: Form Input Admin Kontrak --}}
-                                                            <div class="form-check me-12">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    value=""
-                                                                    {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
-                                                                    name="admin-kontrak" id="admin-kontrak">
-                                                                <label class="form-check-label" for="admin-kontrak">
-                                                                    Admin Kontrak
-                                                                </label>
-                                                            </div>
-                                                            {{-- end:: Form Input Admin Kontrak --}}
-
-                                                            {{-- begin:: Form Input User Sales --}}
-                                                            <div class="form-check me-12">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    value=""
-                                                                    {{ $user->check_user_sales == 1 ? 'checked' : '' }}
-                                                                    name="user-sales" id="user-sales">
-                                                                <label class="form-check-label" for="user-sales">
-                                                                    User Sales
-                                                                </label>
-                                                            </div>
-                                                            {{-- end:: Form Input Admin Kontrak --}}
-
-                                                            {{-- begin:: Form Input Team Proyek --}}
-                                                            <div class="form-check me-12">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    value=""
-                                                                    {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
-                                                                    name="team-proyek" id="team-proyek">
-                                                                <label class="form-check-label" for="team-proyek">
-                                                                    Team Proyek
-                                                                </label>
-                                                            </div>
-                                                            {{-- end:: Form Input Team Proyek --}}
-
-
-                                                            {{-- end:: Form Input Group --}}
-                                                        </div>
-                                                        <!--end::Row-->
-                                                        <hr>
-                                                        <br>
-
-                                                        <!--begin:: D-flex -->
-                                                        <div class="d-flex flex-column">
-                                                            {{-- <select name="unit-kerja"
-                                                                class="form-select form-select-solid"
-                                                                data-control="select2" data-hide-search="true"
-                                                                data-placeholder="Unit Kerja" tabindex="-1"
-                                                                aria-hidden="true">
-                                                                <option data-select2-id="select2-data-6-c3oy"></option>
-                                                                @isset($user->unit_kerja)
-                                                                    @foreach ($unit_kerjas as $unitKerja)
-                                                                        @if ($user->unit_kerja == $unitKerja->divcode)
-                                                                            <option value="{{ $unitKerja->divcode }}"
-                                                                                selected
-                                                                                data-select2-id="{{ $unitKerja->divcode }}">
-                                                                                {{ $unitKerja->unit_kerja }}</option>
-                                                                        @endif
-                                                                    @endforeach
-                                                                @else
-                                                                    @foreach ($unit_kerjas as $unitKerja)
-                                                                        <option value="{{ $unitKerja->divcode }}"
-                                                                            data-select2-id="{{ $unitKerja->divcode }}">
-                                                                            {{ $unitKerja->unit_kerja }}</option>
-                                                                    @endforeach
-                                                                @endisset
-                                                            </select> --}}
-                                                            
-                                                            <h3 class="" id="HeadDetail"
-                                                            style="font-size:16px;">
-                                                            Set Unit-Kerja
-                                                            {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
-                                                                data-bs-target="#kt_modal_pic">+</a> --}}
-                                                            </h3>
+                                                            <!--end::Row-->
+                                                            <hr>
                                                             <br>
 
-                                                            <!--Begin :: Dropdown DOP -->
-                                                            <div class="row">
-                                                                <div class="col" id="list-dop">
-                                                                    @php
-                                                                        $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : $user->unit_kerja;
-                                                                        // dd($list_unit_kerja);
-                                                                    @endphp
-                                                                    @foreach ($dops as $dop)
-                                                                        <p><b>{{$dop->dop}}</b></p>
-                                                                        <div class="" style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
-                                                                            @foreach ($dop->UnitKerjas as $unit_kerja)
-                                                                                <div class="form-check me-3 d-flex align-items-center">
-                                                                                    @php
-                                                                                        // dd($list_unit_kerja);
-                                                                                        $is_unit_kerja_choosen =  $list_unit_kerja instanceof \Illuminate\Support\Collection ? $list_unit_kerja->contains($unit_kerja->divcode) : $list_unit_kerja == $unit_kerja->divcode;
-                                                                                        // dd($is_unit_kerja_choosen);
-                                                                                    @endphp
-                                                                                    @if ($is_unit_kerja_choosen)
-                                                                                        <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
-                                                                                            value="{{$unit_kerja->divcode}}" checked
-                                                                                            name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
-                                                                                    @else 
-                                                                                        <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
-                                                                                            value="{{$unit_kerja->divcode}}"
-                                                                                            name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
-                                                                                    @endif
-                                                                                    <label class="form-check-label" for="{{$unit_kerja->divcode}}">
-                                                                                        <small>{{$unit_kerja->unit_kerja}}</small>
-                                                                                    </label>
-                                                                                </div>
-                                                                            @endforeach
-                                                                        </div>
-                                                                        <br>
-                                                                    @endforeach
+                                                            <!--begin:: D-flex -->
+                                                            <div class="d-flex flex-column">
+                                                                {{-- <select name="unit-kerja"
+                                                                    class="form-select form-select-solid"
+                                                                    data-control="select2" data-hide-search="true"
+                                                                    data-placeholder="Unit Kerja" tabindex="-1"
+                                                                    aria-hidden="true">
+                                                                    <option data-select2-id="select2-data-6-c3oy"></option>
+                                                                    @isset($user->unit_kerja)
+                                                                        @foreach ($unit_kerjas as $unitKerja)
+                                                                            @if ($user->unit_kerja == $unitKerja->divcode)
+                                                                                <option value="{{ $unitKerja->divcode }}"
+                                                                                    selected
+                                                                                    data-select2-id="{{ $unitKerja->divcode }}">
+                                                                                    {{ $unitKerja->unit_kerja }}</option>
+                                                                            @endif
+                                                                        @endforeach
+                                                                    @else
+                                                                        @foreach ($unit_kerjas as $unitKerja)
+                                                                            <option value="{{ $unitKerja->divcode }}"
+                                                                                data-select2-id="{{ $unitKerja->divcode }}">
+                                                                                {{ $unitKerja->unit_kerja }}</option>
+                                                                        @endforeach
+                                                                    @endisset
+                                                                </select> --}}
+                                                                
+                                                                <h3 class="" id="HeadDetail"
+                                                                style="font-size:16px;">
+                                                                Set Unit-Kerja
+                                                                {{-- <a href="#" Id="Plus" data-bs-toggle="modal"
+                                                                    data-bs-target="#kt_modal_pic">+</a> --}}
+                                                                </h3>
+                                                                <br>
+
+                                                                <!--Begin :: Dropdown DOP -->
+                                                                <div class="row">
+                                                                    <div class="col" id="list-dop">
+                                                                        @php
+                                                                            $list_unit_kerja = str_contains($user->unit_kerja, ",") ? collect(explode(",", $user->unit_kerja)) : $user->unit_kerja;
+                                                                            // dd($list_unit_kerja);
+                                                                        @endphp
+                                                                        @foreach ($dops as $dop)
+                                                                            <p><b>{{$dop->dop}}</b></p>
+                                                                            <div class="" style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
+                                                                                @foreach ($dop->UnitKerjas as $unit_kerja)
+                                                                                    <div class="form-check me-3 d-flex align-items-center">
+                                                                                        @php
+                                                                                            // dd($list_unit_kerja);
+                                                                                            $is_unit_kerja_choosen =  $list_unit_kerja instanceof \Illuminate\Support\Collection ? $list_unit_kerja->contains($unit_kerja->divcode) : $list_unit_kerja == $unit_kerja->divcode;
+                                                                                            // dd($is_unit_kerja_choosen);
+                                                                                        @endphp
+                                                                                        @if ($is_unit_kerja_choosen)
+                                                                                            <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                                value="{{$unit_kerja->divcode}}" checked
+                                                                                                name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
+                                                                                        @else 
+                                                                                            <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                                value="{{$unit_kerja->divcode}}"
+                                                                                                name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
+                                                                                        @endif
+                                                                                        <label class="form-check-label" for="{{$unit_kerja->divcode}}">
+                                                                                            <small>{{$unit_kerja->unit_kerja}}</small>
+                                                                                        </label>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                            <br>
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
+                                                                <!--End :: Dropdown DOP -->
                                                             </div>
-                                                            <!--End :: Dropdown DOP -->
+                                                            
                                                         </div>
-                                                        
-                                                    </div>
+                                                        <!--end:::Tab pane Hak Akses-->
+                                                    @endif
                                                 </form>
                                                 <!--end:: D-flex -->
                                                     
                                                     
                                                 <!--Begin :: Reset Password -->
-                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
                                                     
                                                     <form action="/user/password/reset" autocomplete="off" method="post">
                                                         @csrf

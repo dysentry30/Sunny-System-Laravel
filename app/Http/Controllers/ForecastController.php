@@ -56,8 +56,8 @@ class ForecastController extends Controller
             });
         }
         // dd($nilaiRKAP);
-        $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function ($n) {
-            return (int) $n->nilai_rkap;
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function ($n) {
+            return (int) $n->rkap_forecast;
         });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function ($n) {
             return (int) $n->nilai_forecast;
@@ -254,8 +254,12 @@ class ForecastController extends Controller
             }
         }
 
-        $nilaiTotalRKAPTahun = $nilaiRKAP->sum(function ($n) {
-            return (int) $n->nilai_rkap;
+        $nilaiTotalRKAPTahun = $nilaiHistoryForecast->sum(function ($p) {
+            if($p->tipe_proyek == "R") {
+                return (int) $p->rkap_forecast;
+            } else {
+                return (int) $p->nilai_rkap;
+            }
         });
         $nilaiTotalForecastTahun = $nilaiHistoryForecast->sum(function ($n) {
             return (int) $n->nilai_forecast;

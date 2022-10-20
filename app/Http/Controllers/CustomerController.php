@@ -21,6 +21,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class CustomerController extends Controller
 {
@@ -681,6 +683,129 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
+    public function getNilaiOKCustomer(Request $request) {
+        $customer = Customer::find($request->id_customer);
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
+        $proyeks = $customer->proyekBerjalans->map(function($pb) {
+            return $pb->proyek;
+        });
+        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("nilai_rkap")->values();
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Stage');
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        $sheet->setCellValue('D1', "Nilai OK");
+        
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet, $unit_kerja) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
+            $sheet->setCellValue('D' . $row, $p->nilai_rkap);
+            // $p->nilai_ok = $nilai_ok;
+            $p->unit_kerja = $unit_kerja->unit_kerja;
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $unit_kerja_join = str_replace(" ", "-", $unit_kerja->unit_kerja);
+        $file_name = "$unit_kerja_join-Nilai-OK-Pelanggan-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+    public function getNilaiPiutangCustomer(Request $request) {
+        $customer = Customer::find($request->id_customer);
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
+        $proyeks = $customer->proyekBerjalans->map(function($pb) {
+            return $pb->proyek;
+        });
+        $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("piutang")->values();
+        
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Stage');
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        $sheet->setCellValue('D1', "Nilai Piutang");
+        
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet, $unit_kerja) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
+            $sheet->setCellValue('D' . $row, $p->piutang);
+            // $p->nilai_ok = $nilai_ok;
+            $p->unit_kerja = $unit_kerja->unit_kerja;
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $unit_kerja_join = str_replace(" ", "-", $unit_kerja->unit_kerja);
+        $file_name = "$unit_kerja_join-Nilai-Piutang-Pelanggan-" . date('dmYHis') . ".xlsx";
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
+
+    public function getNilaiLabaRugiCustomer(Request $request) {
+        $customer = Customer::find($request->id_customer);
+        $type = $request->type;
+        $unit_kerja = UnitKerja::where("unit_kerja", "=", $request->unit_kerja)->first();
+        $proyeks = $customer->proyekBerjalans->map(function($pb) {
+            return $pb->proyek;
+        });
+        if($type == "Laba") {
+            $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("laba")->values();
+        } else {
+            $proyeks = $proyeks->where("unit_kerja", "=", $unit_kerja->divcode)->sortByDesc("rugi")->values();
+        }
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->getStyle("A1:F1")->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('0db0d9');
+        $sheet->setCellValue('A1', 'Nama Proyek');
+        $sheet->setCellValue('B1', 'Stage');
+        $sheet->setCellValue('C1', 'Unit Kerja');
+        if($type == "Laba") {
+            $sheet->setCellValue('D1', "Nilai Laba");
+        } else {
+            $sheet->setCellValue('D1', "Nilai Rugi");
+        }
+        
+        $row = 2;
+        $proyeks->each(function ($p) use (&$row, $sheet, $unit_kerja, $type) {
+            $sheet->setCellValue('A' . $row, $p->nama_proyek);
+            $sheet->setCellValue('B' . $row, $this->getProyekStage($p->stage));
+            $sheet->setCellValue('C' . $row, $unit_kerja->unit_kerja);
+            if($type == "Laba") {
+                $sheet->setCellValue('D' . $row, $p->laba);
+            } else {
+                $sheet->setCellValue('D' . $row, $p->rugi);
+            }
+            // $p->nilai_ok = $nilai_ok;
+            $p->unit_kerja = $unit_kerja->unit_kerja;
+            $row++;
+        });
+        $writer = new Xlsx($spreadsheet);
+        $unit_kerja_join = str_replace(" ", "-", $unit_kerja->unit_kerja);
+        if($type == "Laba") {
+            $file_name = "$unit_kerja_join-Nilai-Laba-Pelanggan-" . date('dmYHis') . ".xlsx";
+        } else {
+            $file_name = "$unit_kerja_join-Nilai-Rugi-Pelanggan-" . date('dmYHis') . ".xlsx";
+        }
+        $writer->save(public_path("excel/$file_name"));
+
+        return response()->json(["href" => $file_name, "data" => $proyeks]);
+    }
 
     private function uploadStrukturOrganisasi(UploadedFile $uploadedFile, $id_customer)
     {
@@ -696,4 +821,80 @@ class CustomerController extends Controller
         // dd($dokumen);
         $dokumen->save();
     }
+
+    public function getFullMonth($month)
+    {
+        switch ($month) {
+            case 1:
+                return "Januari";
+                break;
+            case 2:
+                return "Februari";
+                break;
+            case 3:
+                return "Maret";
+                break;
+            case 4:
+                return "April";
+                break;
+            case 5:
+                return "Mei";
+                break;
+            case 6:
+                return "Juni";
+                break;
+            case 7:
+                return "Juli";
+                break;
+            case 8:
+                return "Agustus";
+                break;
+            case 9:
+                return "September";
+                break;
+            case 10:
+                return "Oktober";
+                break;
+            case 11:
+                return "November";
+                break;
+            case 12:
+                return "Desember";
+                break;
+        }
+    }
+
+    public static function getProyekStage($month)
+    {
+        switch ($month) {
+            case 0:
+                return "Pasar Dini";
+                break;
+            case 1:
+                return "Pasar Dini";
+                break;
+            case 2:
+                return "Pasar Potensial";
+                break;
+            case 3:
+                return "Prakualifikasi";
+                break;
+            case 4:
+                return "Tender Diikuti";
+                break;
+            case 5:
+                return "Perolehan";
+                break;
+            case 6:
+                return "Menang";
+                break;
+            case 7:
+                return "Terendah";
+                break;
+            case 8:
+                return "Terkontrak";
+                break;
+        }
+    }
+
 }
