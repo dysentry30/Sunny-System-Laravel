@@ -959,7 +959,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
                                                                                             if($p->tipe_proyek == "R") {
                                                                                                 if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                    return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) {
+                                                                                                    return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
                                                                                                             return (int) $f->rkap_forecast;
                                                                                                         }
