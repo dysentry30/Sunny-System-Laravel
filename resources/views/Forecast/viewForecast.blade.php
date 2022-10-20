@@ -402,6 +402,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         $month_counter = 1;
                                                                         $is_data_found = false;
                                                                         $total_ok = 0;
+                                                                        $total_ok_tahunan = 0;
                                                                         $total_year_ok = 0;
                                                                         $total_forecast = 0;
                                                                         $total_month_forecast = 0;
@@ -827,6 +828,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         }
                                                                                     }
+                                                                                    $total_ok_tahunan += (int) $total_ok_per_dop_tahunan;
                                                                                 @endphp 
                                                                             <!--begin::Total Coloumn-->
                                                                             <td data-dop="{{$dop->dop}}" class="pinForecast HidePin">{{number_format($total_ok_per_dop_tahunan / $per_sejuta, 0, ".", ".")}}</td>
@@ -1823,7 +1825,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         class="pinForecast HidePin">
                                                                         <center>
                                                                             <p class="">
-                                                                                <b class="col-4">{{number_format($nilaiTotalRKAPTahun / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                <b class="col-4">{{number_format($total_ok_tahunan / $per_sejuta, 0, ".", ".")}}</b>
                                                                             </p>
                                                                         </center>
                                                                     </td>
@@ -1879,7 +1881,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         style="position: -webkit-sticky; position: sticky; background-color: #f2f4f7; right: 200px;">
                                                                         <center>
                                                                             <p class="mt-4">
-                                                                                <b class="col-4">{{number_format($nilaiTotalRKAPTahun / $per_sejuta, 0, ".", ".")}}</b>
+                                                                                <b class="col-4">{{number_format($total_ok_tahunan / $per_sejuta, 0, ".", ".")}}</b>
                                                                             </p>
                                                                         </center>
                                                                     </td>
