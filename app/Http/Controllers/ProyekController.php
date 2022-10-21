@@ -1043,35 +1043,55 @@ class ProyekController extends Controller
         });
 
         Alert::success('Delete', $deleteProyek->nama_proyek . ", Berhasil Dihapus");
-
-        if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
-            $deleteProyek->delete();
-            $contractManagement->delete();
+        if(!empty($proyekBerjalan)) {
             $proyekBerjalan->delete();
-            foreach ($forecasts as $f) {
-                $f->delete();
-            }
-            foreach ($historyForecasts as $hf) {
-                $hf->delete();
-            }
-        } elseif ($proyekBerjalan != null && $contractManagement != null) {
-            $deleteProyek->delete();
-            $contractManagement->delete();
-            $proyekBerjalan->delete();
-        } elseif ($contractManagement !=  null) {
-            $deleteProyek->delete();
-            $contractManagement->delete();
-        } elseif ($forecasts !=  null) {
-            $deleteProyek->delete();
-            foreach ($forecasts as $f) {
-                $f->delete();
-            }
-            foreach ($historyForecasts as $hf) {
-                $hf->delete();
-            }
-        } else {
-            $deleteProyek->delete();
         }
+        if(!empty($contractManagement)) {
+            $contractManagement->delete();
+        }
+        if(!empty($claimManagement)) {
+            $claimManagement->delete();
+        }
+        if(!empty($forecasts)) {
+            foreach ($forecasts as $f) {
+                $f->delete();
+            }
+        }
+        if(!empty($historyForecasts)) {
+            foreach ($historyForecasts as $hf) {
+                $hf->delete();
+            }
+        }
+        $deleteProyek->delete();
+        
+        // if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
+        //     $deleteProyek->delete();
+        //     $contractManagement->delete();
+        //     $proyekBerjalan->delete();
+        //     foreach ($forecasts as $f) {
+        //         $f->delete();
+        //     }
+        //     foreach ($historyForecasts as $hf) {
+        //         $hf->delete();
+        //     }
+        // } elseif ($proyekBerjalan != null && $contractManagement != null) {
+        //     $deleteProyek->delete();
+        //     $contractManagement->delete();
+        //     $proyekBerjalan->delete();
+        // } elseif ($contractManagement !=  null) {
+        //     $deleteProyek->delete();
+        //     $contractManagement->delete();
+        // } elseif ($forecasts !=  null) {
+        //     $deleteProyek->delete();
+        //     foreach ($forecasts as $f) {
+        //         $f->delete();
+        //     }
+        //     foreach ($historyForecasts as $hf) {
+        //         $hf->delete();
+        //     }
+        // } else {
+        //     $deleteProyek->delete();
+        // }
 
         // dd($proyekBerjalan); 
         // dd($deleteProyek->kode_proyek);
