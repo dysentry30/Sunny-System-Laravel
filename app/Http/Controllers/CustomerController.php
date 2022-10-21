@@ -250,8 +250,9 @@ class CustomerController extends Controller
             foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
+                        dd($proyekBerjalan, $proyekBerjalan->proyek);
                         if (!empty($proyekBerjalan)){
-                            $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap / $per ?? 0;
+                            $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                             
                             $proyek = $proyekBerjalan->proyek;
                             if ($proyek->stage <= 3) {
@@ -282,7 +283,7 @@ class CustomerController extends Controller
                     }
                     $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
                     if (!empty($unitKerja)) {
-                        $totalOkLegend = number_format($totalNilaiOKPerUnit, 0, '.', '.');
+                        $totalOkLegend = number_format($totalNilaiOKPerUnit / $per, 0, '.', '.');
                         array_push($nilaiOK, ["name" => $unitKerja->unit_kerja." : $totalOkLegend", "y" => $totalNilaiOKPerUnit]);
                     }
                     $totalNilaiOKPerUnit = 0;
