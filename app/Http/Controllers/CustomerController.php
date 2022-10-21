@@ -248,7 +248,9 @@ class CustomerController extends Controller
         $totalAmountProyekOpportunity = 0;
         foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
             foreach ($proyekBerjalans as $proyekBerjalan) {
-                $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap / $per ?? 0;
+                if ($proyekBerjalan->proyek->nilai_rkap != null){
+                    $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap / $per ?? 0;
+                }
                 $proyek = $proyekBerjalan->proyek;
                 if ($proyek->stage <= 3) {
                     $totalProyekOpportunity++;
