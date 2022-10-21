@@ -234,9 +234,9 @@ Route::middleware(["web"])->group(function () {
             $xml_data = new SimpleXMLElement('<?xml version="1.0"?><data></data>');
 
             // function call to convert array to xml
-            arrayToXML($data, $xml_data);
-            dd($xml_data);
-            return response()->json($data);
+            $data = arrayToXML($proyeks->toArray(), $xml_data);
+            // print_r($data);
+            return response($data);
         }
         return response()->json([
             "status" => 401,
@@ -435,5 +435,6 @@ Route::middleware(["web"])->group(function () {
                 $xml_data->addChild("$key", htmlspecialchars("$value"));
             }
         }
+        return $xml_data->asXML();
     }
 });
