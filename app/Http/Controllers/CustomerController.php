@@ -250,32 +250,32 @@ class CustomerController extends Controller
             foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
-                        dump($proyekBerjalan, $proyekBerjalan->proyek);
+                        // dd($proyekBerjalan, $proyekBerjalan->proyek);
                         if (!empty($proyekBerjalan)){
                             $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                             
-                            $proyek = $proyekBerjalan->proyek;
-                            if ($proyek->stage <= 3) {
+                            // $proyek = $proyekBerjalan->proyek;
+                            if ($proyekBerjalan->proyek->stage <= 3) {
                                 $totalProyekOpportunity++;
-                                $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                $totalAmountProyekOpportunity += $proyekBerjalan->proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
                                     return (int) $f->nilai_forecast;
                                 }) / $per;
                             }
-                            if ($proyek->stage <= 5) {
+                            if ($proyekBerjalan->proyek->stage <= 5) {
                                 $totalProyekOngoing++;
-                                $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                $totalAmountProyekOngoing += $proyekBerjalan->proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
                                     return (int) $f->nilai_forecast;
                                 }) / $per;
                             }
-                            if ($proyek->stage == 6 || $proyek->stage > 7) {
+                            if ($proyekBerjalan->proyek->stage == 6 || $proyekBerjalan->proyek->stage > 7) {
                                 $totalProyekClosed++;
-                                $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                $totalAmountProyekClosed += $proyekBerjalan->proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
                                     return (int) $f->nilai_forecast;
                                 }) / $per;
                             }
-                            if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                            if($proyekBerjalan->proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
                                 $totalProyekForecast++;
-                                $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                $totalAmountProyekForecast += $proyekBerjalan->proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
                                     return (int) $f->nilai_forecast;
                                 }) / $per;
                             }
