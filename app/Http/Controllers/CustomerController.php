@@ -274,12 +274,12 @@ class CustomerController extends Controller
                             //         return (int) $f->nilai_forecast;
                             //     }) / $per;
                             // }
-                            // if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
-                            //     $totalProyekForecast++;
-                            //     $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                            //         return (int) $f->nilai_forecast;
-                            //     }) / $per;
-                            // }
+                            if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                                $totalProyekForecast++;
+                                $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
                         }
                     }
                     $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
