@@ -551,7 +551,7 @@
                                             </td>
                                             <!--end::Jenis Proyek-->
 
-                                            @if (auth()->user()->check_administrator)
+                                            @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                 <!--begin::Action-->
                                                 <td class="text-center">
                                                     <!--begin::Button-->
