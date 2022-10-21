@@ -1049,9 +1049,6 @@ class ProyekController extends Controller
         if(!empty($contractManagement)) {
             $contractManagement->delete();
         }
-        if(!empty($claimManagement)) {
-            $claimManagement->delete();
-        }
         if(!empty($forecasts)) {
             foreach ($forecasts as $f) {
                 $f->delete();
@@ -1063,7 +1060,7 @@ class ProyekController extends Controller
             }
         }
         $deleteProyek->delete();
-        
+
         // if ($proyekBerjalan != null && $contractManagement != null && $forecasts != null) {
         //     $deleteProyek->delete();
         //     $contractManagement->delete();
