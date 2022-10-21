@@ -250,33 +250,34 @@ class CustomerController extends Controller
             foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
-                        if (!empty($proyekBerjalan->proyek->nilai_rkap)){
+                        if (!empty($proyekBerjalan)){
                             $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap / $per ?? 0;
-                        }
-                        $proyek = $proyekBerjalan->proyek;
-                        if ($proyek->stage <= 3) {
-                            $totalProyekOpportunity++;
-                            $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if ($proyek->stage <= 5) {
-                            $totalProyekOngoing++;
-                            $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if ($proyek->stage == 6 || $proyek->stage > 7) {
-                            $totalProyekClosed++;
-                            $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
-                        }
-                        if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
-                            $totalProyekForecast++;
-                            $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
-                                return (int) $f->nilai_forecast;
-                            }) / $per;
+                            
+                            $proyek = $proyekBerjalan->proyek;
+                            if ($proyek->stage <= 3) {
+                                $totalProyekOpportunity++;
+                                $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if ($proyek->stage <= 5) {
+                                $totalProyekOngoing++;
+                                $totalAmountProyekOngoing += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if ($proyek->stage == 6 || $proyek->stage > 7) {
+                                $totalProyekClosed++;
+                                $totalAmountProyekClosed += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
+                            if($proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->count() > 0) {
+                                $totalProyekForecast++;
+                                $totalAmountProyekForecast += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
+                                    return (int) $f->nilai_forecast;
+                                }) / $per;
+                            }
                         }
                     }
                     $unitKerja = UnitKerja::where("divcode", "=", $kode_unit_kerja)->first();
