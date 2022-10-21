@@ -255,7 +255,7 @@ class CustomerController extends Controller
                             $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                             
                             $proyek = $proyekBerjalan->proyek;
-                            dump($proyek, $proyek->stage);
+                            dump($proyek);
                             // if ($proyek->stage <= 3) {
                             //     $totalProyekOpportunity++;
                             //     $totalAmountProyekOpportunity += $proyek->forecasts->where("periode_prognosa", "=", (int) date("m"))->sum(function($f) {
