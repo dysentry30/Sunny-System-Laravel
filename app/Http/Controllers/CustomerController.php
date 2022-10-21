@@ -250,7 +250,7 @@ class CustomerController extends Controller
             foreach ($kategoriProyek as $kode_unit_kerja => $proyekBerjalans) {
                 if (!empty($proyekBerjalans)) {
                     foreach ($proyekBerjalans as $proyekBerjalan) {
-                        dd($proyekBerjalan, $proyekBerjalan->proyek);
+                        dump($proyekBerjalan, $proyekBerjalan->proyek);
                         if (!empty($proyekBerjalan)){
                             $totalNilaiOKPerUnit += $proyekBerjalan->proyek->nilai_rkap ?? 0;
                             
