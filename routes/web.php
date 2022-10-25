@@ -1122,8 +1122,10 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // begin :: USERS
     Route::get('/user', function () {
         //Menggunakan metode Eager Loading agar memangkas loading query database 
-        if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)")) {
+        if (Auth::user()->check_administrator) {
             $users = User::with('UnitKerja')->get()->reverse();
+        } else if(str_contains(auth()->user()->name, "(PIC)")) {
+            $users = User::with('UnitKerja')->get()->reverse()->where("check_administrator", "!=", true);
         } else {
             $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
         }
