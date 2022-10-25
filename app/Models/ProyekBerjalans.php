@@ -16,6 +16,11 @@ class ProyekBerjalans extends Model
         return $this->hasOne(Proyek::class, 'kode_proyek', 'kode_proyek');
     }
 
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id_customer', 'id_customer');
+    }
+
     public function UnitKerja()
     {
         return $this->hasOne(UnitKerja::class, "divcode", "unit_kerja");

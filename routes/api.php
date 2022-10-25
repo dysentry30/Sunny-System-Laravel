@@ -8,6 +8,7 @@ use App\Models\Proyek;
 use App\Models\ProyekBerjalans;
 use App\Models\UnitKerja;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
@@ -145,12 +146,11 @@ Route::middleware(["web"])->group(function () {
         $periode = getPeriode($request->periode);
         $is_bpmcsrf_exist = $request->header("BPMCSRF");
         if (isset($is_bpmcsrf_exist)) {
-
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
             if (isset($request->unitkerjaid)) {
                 // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
-                $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"])->filter(function ($p) use ($periode) {
+                $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
                     $is_forecast_exist = $p->Forecasts->where("periode_prognosa", $periode[1])->count() > 0;
                     unset($p->Forecasts);
                     return $is_forecast_exist;
@@ -161,82 +161,106 @@ Route::middleware(["web"])->group(function () {
                     "msg" => "Unit Kerja Not Found"
                 ], 400);
             }
+
             $proyeks = $proyeks->map(function ($p) use ($request) {
+                $p->Id = $p->id;
                 if (str_contains($p->kode_proyek, "KD")) {
-                    $p->kode_crm = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                    $p->UsrKodeProyek = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                 } else {
-                    $p->kode_crm = $p->kode_proyek;
+                    $p->UsrKodeProyek = $p->kode_proyek;
                 }
-                $p->nama_proyek = $p->nama_proyek;
-                $p->departemen_id = $p->unit_kerja;
-                $p->ap_id = "";
+                $p->Title = $p->nama_proyek;
+                // $p->ap_id = "";
                 switch ($p->jenis_proyek) {
                     case "I":
-                        $p->jenis = "Internal";
+                        $p->UsrJenis = "Internal";
                         break;
                     case "N":
-                        $p->jenis = "Eksternal";
+                        $p->UsrJenis = "Eksternal";
                         break;
                     case "J":
-                        $p->jenis = "JO";
+                        $p->UsrJenis = "JO";
                         break;
                 }
-                $p->kategori = "PROYEK";
+                $p->UsrKontrakMulai = $p->tanggal_mulai_terkontrak;
+                $p->UsrAkhirKontrak = $p->tanggal_akhir_terkontrak;
+                $p->UsrNoSPK = $p->nospk_external;
+                $p->UsrBASTPHO = $p->tanggal_selesai_pho;
+                $p->UsrBASTFHO = $p->tanggal_selesai_fho;
+                $p->UsrPorsi = $p->porsi_jo;
+                $p->UsrNilaiKontrak = $p->nilai_perolehan;
+                $p->UsrKlasifikasiProyek = $p->klasifikasi_terkontrak;
+                $p->UsrNoKontrak = $p->nomor_terkontrak;
+                $p->UsrNilaiTukar = $p->kurs_review;
+                $p->UsrValas = $p->nilai_valas_review;
+                $p->UsrTanggalSPKEkternal = $p->tglspk_internal;
+                $p->UsrTanggalKontrak = $p->tanggal_terkontrak;
+                $proyek_berjalan = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first();
+                $p->Account = [ 
+                    "Name" => $proyek_berjalan->name ?? NULL,
+                    "UsrKdNasabah" => $proyek_berjalan->customer->kode_nasabah ?? NULL,
+                ];
+                $p->UsrProvinsi = $p->provinsi;
+                $p->UsrNegara = $p->negara;
+                $p->UsrSumberDana = $p->sumber_dana;
+                $p->UsrSistemPembayaran = $p->sistem_bayar;
+                $p->UsrMataUang = $p->sistem_bayar;
+                $p->UsrJenisKontrak = $p->jenis_terkontrak;
+                $p->UsrNilaiKontrakKeseluruhan = $p->nilai_kontrak_keseluruhan;
+                $p->UsrNilaiKontrakKeseluruhan = $p->nilai_kontrak_keseluruhan;
+                $p->UsrNilaiKontrakKeseluruhan = $p->nilai_kontrak_keseluruhan;
+                $p->UsrNilaiKontrakKeseluruhan = $p->nilai_kontrak_keseluruhan;
 
-                switch ($p->stage) {
-                    case 0:
-                        $p->tahap = "Pasar Dini";
-                        break;
-                    case 1:
-                        $p->tahap = "Pasar Dini";
-                        break;
-                    case 2:
-                        $p->tahap = "Pasar Potensial";
-                        break;
-                    case 3:
-                        $p->tahap = "Prakualifikasi";
-                        break;
-                    case 4:
-                        $p->tahap = "Tender Diikuti";
-                        break;
-                    case 5:
-                        $p->tahap = "Perolehan";
-                        break;
-                    case 6:
-                        $p->tahap = "Menang";
-                        break;
-                    case 7:
-                        $p->tahap = "Terendah";
-                        break;
-                    case 8:
-                        $p->tahap = "Terkontrak";
-                        break;
-                }
-                // dd($p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
-                $p->pemberi_kerja = ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "";
-                $p->rencana_perolehan = null;
-                $p->perkiraan_durasi = date_create($p->tanggal_mulai_terkontrak)->diff(date_create($p->tanggal_akhir_terkontrak))->days;
-                $p->periode = $request->periode;
-                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->stage, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak);
+                // switch ($p->stage) {
+                //     case 0:
+                //         $p->tahap = "Pasar Dini";
+                //         break;
+                //     case 1:
+                //         $p->tahap = "Pasar Dini";
+                //         break;
+                //     case 2:
+                //         $p->tahap = "Pasar Potensial";
+                //         break;
+                //     case 3:
+                //         $p->tahap = "Prakualifikasi";
+                //         break;
+                //     case 4:
+                //         $p->tahap = "Tender Diikuti";
+                //         break;
+                //     case 5:
+                //         $p->tahap = "Perolehan";
+                //         break;
+                //     case 6:
+                //         $p->tahap = "Menang";
+                //         break;
+                //     case 7:
+                //         $p->tahap = "Terendah";
+                //         break;
+                //     case 8:
+                //         $p->tahap = "Terkontrak";
+                //         break;
+                // }
+                unset($p->jenis_proyek, $p->unit_kerja, $p->kode_proyek, $p->tanggal_mulai_terkontrak, $p->tanggal_akhir_terkontrak, $p->id);
+                unset($p->tanggal_selesai_pho, $p->tanggal_selesai_fho, $p->nama_proyek, $p->nospk_external, $p->porsi_jo, $p->nilai_kontrak_keseluruhan);
+                unset($p->nilai_kontrak_keseluruhan, $p->nilai_valas_review, $p->tanggal_terkontrak, $p->nilai_perolehan, $p->kurs_review, $p->klasifikasi_terkontrak);
+                unset($p->nomor_terkontrak, $p->tglspk_internal);
 
                 return $p;
             });
             $data = [
-                "GetDetailProyekResult" => [
-                    "Success" => true,
-                    "Message" => null,
-                    "TotalData" => $proyeks->count(),
-                    "Data" => $proyeks,
-                ],
-
+                // "Success" => true,
+                "TakenDate" => Carbon::now()->translatedFormat("d F Y H:i:s"),
+                // "Message" => null,
+                // "TotalData" => $proyeks->count(),
+                "Data" => $proyeks->toArray(),
             ];
             // creating object of SimpleXMLElement
-            $xml_data = new SimpleXMLElement('<?xml version="1.0"?><data></data>');
+            $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8" standalone="yes" ?><feed></feed>');
 
             // function call to convert array to xml
-            $data = arrayToXML($proyeks->toArray(), $xml_data);
+            $data = arrayToXML($data, $xml_data);
             // print_r($data);
-            return response($data);
+            return response($data)->header("Content-Type", "text/xml");
         }
         return response()->json([
             "status" => 401,
@@ -425,11 +449,14 @@ Route::middleware(["web"])->group(function () {
     function arrayToXML($array, &$xml_data)
     {
         foreach ($array as $key => $value) {
+            // $xml_data->addAttribute('type', 'application/xml');
             if (is_array($value)) {
                 if (is_numeric($key)) {
-                    $key = 'item' . $key; //dealing with <0/>..<n/> issues
+                    $key = 'entry'; //dealing with <0/>..<n/> issues
                 }
+                // $subnode = $xml_data->addChild("entry");
                 $subnode = $xml_data->addChild($key);
+                // $subnode = $xml_data->addChild("content");
                 arrayToXML($value, $subnode);
             } else {
                 $xml_data->addChild("$key", htmlspecialchars("$value"));
