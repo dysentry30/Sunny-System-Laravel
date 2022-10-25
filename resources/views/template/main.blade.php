@@ -393,7 +393,7 @@
                                     </div>
                                     <!--end::Menu Colapse-->
                                     @endif
-                                    @if (!auth()->user()->check_user_sales)
+                                    @if (auth()->user()->check_administrator || $adminPIC)
                                         <!--begin::Menu Colapse-->
                                         <div id="#kt_aside_menu" data-kt-menu="true"
                                             style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'user' ? 'background-color:#008CB4' : '' }}">
@@ -1329,6 +1329,24 @@
         }
         document.querySelectorAll('.reformat').forEach(inp => {
             inp.addEventListener('input', reformat);
+        });
+
+        // script reformat number by add class
+        function reformatRetail() {
+            // console.log(Number(this.value.replace(/[^0-9][^\+\-]/gi, "")));
+            if(this.value.includes("-") && !this.value.includes("+")) {
+                this.value = Intl.NumberFormat("id").format(Number(this.value.replace(/[^0-9]/gi, "")) * -1);
+                return;
+            }else if(this.value.includes("+")) {
+                this.value = Intl.NumberFormat("id").format(Number(this.value.replace(/[^0-9|-]/gi, "")) * -1);
+                return;
+            }
+            this.value = Intl.NumberFormat("id").format(Number(this.value.replace(/[^0-9|-]/gi, "")));
+            // this.value = Intl.NumberFormat("en-US").format(this.value.replace(/[^0-9]/gi, ""));
+            // return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
+        document.querySelectorAll('.reformat-retail').forEach(inp => {
+            inp.addEventListener('input', reformatRetail);
         });
     </script>
     <!--end::Page Custom Javascript-->

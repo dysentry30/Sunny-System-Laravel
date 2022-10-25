@@ -3147,7 +3147,7 @@
                                             @endphp
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiok-{{ $i }}"
                                                     name="nilaiok-{{ $i }}"
                                                     value="{{ number_format((int) $forecast->rkap_forecast, 0, '.', '.') }}"
@@ -3155,7 +3155,7 @@
                                             </td>
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiforecast-{{ $i }}"
                                                     name="nilaiforecast-{{ $i }}"
                                                     value="{{ number_format((int) $forecast->nilai_forecast, 0, '.', '.') }}"
@@ -3163,7 +3163,7 @@
                                             </td>
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilairealisasi-{{ $i }}"
                                                     name="nilairealisasi-{{ $i }}"
                                                     value="{{ number_format((int) $forecast->realisasi_forecast, 0, '.', '.') }}"
@@ -3172,21 +3172,21 @@
                                         @else
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiok-{{ $i }}"
                                                     name="nilaiok-{{ $i }}"
                                                     placeholder="Isi Nilai Perolehan" />
                                             </td>
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiforecast-{{ $i }}"
                                                     name="nilaiforecast-{{ $i }}"
                                                     placeholder="Isi Nilai Forecast" />
                                             </td>
                                             <td class="text-dark">
                                                 <input type="text"
-                                                    class="text-end form-control form-control-solid reformat"
+                                                    class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilairealisasi-{{ $i }}"
                                                     name="nilairealisasi-{{ $i }}"
                                                     placeholder="Isi Nilai Realisasi" />
