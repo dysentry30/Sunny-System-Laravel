@@ -53,7 +53,7 @@ class AdminAuth
         } else {
             $path = ucfirst($path[0]);
         }
-        if($request->segment(1) == "user") {
+        if($request->segment(1) == "user" && !str_contains(auth()->user()->name, "(PIC)")) {
             if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password")) {
                 return $next($request);
             } else {
