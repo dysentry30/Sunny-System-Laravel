@@ -145,7 +145,7 @@
                                                         placeholder="Email" />
                                                     <!--end::Input-->
                                                 </div>
-                                                <!--end::Input group-->
+                                                <!--end::Input group Email-->
 
                                                 <!--begin::Input group Phone-->
                                                 <div class="fv-row mb-7">
@@ -160,7 +160,19 @@
                                                         placeholder="Phone Number" />
                                                     <!--end::Input-->
                                                 </div>
-                                                <!--end::Input group-->
+                                                <!--end::Input group Phone-->
+
+                                                <!--begin::Input group is Active-->
+                                                <div class="form-check me-12">
+                                                    <!--begin::Input-->
+                                                    <input class="form-check-input" type="checkbox" value="" {{ $user->is_active == 1 ? 'checked' : '' }} 
+                                                    name="is-active" id="is-active">
+                                                    <!--end::Input-->
+                                                    <label class="form-check-label">
+                                                        <span class="">Is Active</span>
+                                                    </label>
+                                                </div>
+                                                <!--end::Input group is Active-->
 
                                                 <!--begin::Input group Address 2-->
                                                 {{-- <div class="fv-row mb-7" style="margin-top:10px;">
@@ -192,7 +204,7 @@
                                                 <!--begin:::Tabs-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                    @if (Auth::user()->check_administrator)
+                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                         <!--begin:::Tab item Informasi Perusahaan-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4 active required"
@@ -226,7 +238,7 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    @if (Auth::user()->check_administrator)
+                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
                                                             role="tabpanel">
@@ -235,30 +247,43 @@
                                                             <div class="d-flex flex-row h-50px">
                                                                 {{-- begin:: Form Input Group --}}
 
-                                                                {{-- begin:: Form Input Administrator --}}
-                                                                <div class="form-check me-12">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        value=""
-                                                                        {{ $user->check_administrator == 1 ? 'checked' : '' }}
-                                                                        name="administrator" id="administrator">
-                                                                    <label class="form-check-label" for="administrator">
-                                                                        Administrator
-                                                                    </label>
-                                                                </div>
-                                                                {{-- end:: Form Input Administrator --}}
+                                                                @if (Auth::user()->check_administrator)
+                                                                    {{-- begin:: Form Input Administrator --}}
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->check_administrator == 1 ? 'checked' : '' }}
+                                                                            name="administrator" id="administrator">
+                                                                        <label class="form-check-label" for="administrator">
+                                                                            Administrator
+                                                                        </label>
+                                                                    </div>
+                                                                    {{-- end:: Form Input Administrator --}}
 
-                                                                {{-- begin:: Form Input Admin Kontrak --}}
-                                                                <div class="form-check me-12">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        value=""
-                                                                        {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
-                                                                        name="admin-kontrak" id="admin-kontrak">
-                                                                    <label class="form-check-label" for="admin-kontrak">
-                                                                        Admin Kontrak
-                                                                    </label>
-                                                                </div>
-                                                                {{-- end:: Form Input Admin Kontrak --}}
+                                                                    {{-- begin:: Form Input Admin Kontrak --}}
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value=""
+                                                                            {{ $user->check_admin_kontrak == 1 ? 'checked' : '' }}
+                                                                            name="admin-kontrak" id="admin-kontrak">
+                                                                        <label class="form-check-label" for="admin-kontrak">
+                                                                            Admin Kontrak
+                                                                        </label>
+                                                                    </div>
+                                                                    {{-- end:: Form Input Admin Kontrak --}}
 
+                                                                    {{-- begin:: Form Input Team Proyek --}}
+                                                                    <div class="form-check me-12">
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                        value=""
+                                                                        {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
+                                                                        name="team-proyek" id="team-proyek">
+                                                                        <label class="form-check-label" for="team-proyek">
+                                                                            Team Proyek
+                                                                        </label>
+                                                                    </div>
+                                                                    {{-- end:: Form Input Team Proyek --}}
+                                                                @endif
                                                                 {{-- begin:: Form Input User Sales --}}
                                                                 <div class="form-check me-12">
                                                                     <input class="form-check-input" type="checkbox"
@@ -270,19 +295,6 @@
                                                                     </label>
                                                                 </div>
                                                                 {{-- end:: Form Input Admin Kontrak --}}
-
-                                                                {{-- begin:: Form Input Team Proyek --}}
-                                                                <div class="form-check me-12">
-                                                                    <input class="form-check-input" type="checkbox"
-                                                                        value=""
-                                                                        {{ $user->check_team_proyek == 1 ? 'checked' : '' }}
-                                                                        name="team-proyek" id="team-proyek">
-                                                                    <label class="form-check-label" for="team-proyek">
-                                                                        Team Proyek
-                                                                    </label>
-                                                                </div>
-                                                                {{-- end:: Form Input Team Proyek --}}
-
 
                                                                 {{-- end:: Form Input Group --}}
                                                             </div>
@@ -337,6 +349,9 @@
                                                                                 <button type="button" onclick="selectAllUnitKerja(this)" data-dop="{{$dop->dop}}" class="btn btn-link btn-sm">Select all</button>
                                                                             </div>
                                                                             <div class="" style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
+                                                                                @php
+                                                                                    $dop->UnitKerjas = $dop->UnitKerjas->whereNotIn("divcode", ["B", "C", "D", "8"])
+                                                                                @endphp
                                                                                 @foreach ($dop->UnitKerjas as $unit_kerja)
                                                                                     <div class="form-check me-3 d-flex align-items-center">
                                                                                         @php
@@ -376,7 +391,7 @@
                                                     
                                                     
                                                 <!--Begin :: Reset Password -->
-                                                <div class="tab-pane fade {{!(Auth::user()->check_administrator) ? "show active" : ""}}" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
                                                     
                                                     <form action="/user/password/reset" autocomplete="off" method="post">
                                                         @csrf

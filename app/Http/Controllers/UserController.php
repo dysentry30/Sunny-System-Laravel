@@ -66,9 +66,15 @@ class UserController extends Controller
                 'email' => ["required", "email"],
                 'password' => ["required"]
             ]);
-            if (Auth::attempt($credentials) && Auth::check()) {
+            if (Auth::attempt($credentials) && Auth::check() && Auth::user()->is_active) {
+                // dd(Auth::user());
                 $request->session()->regenerate();
                 return redirect()->intended("/dashboard");
+            } else {
+                // dd(Auth::user());
+                Auth::logout();
+                Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                return redirect()->intended("/");
             }
         }
 
@@ -122,39 +128,39 @@ class UserController extends Controller
         $is_admin_kontrak = $request->has("admin-kontrak") ?? false;
         $is_user_sales = $request->has("user-sales") ?? false;
         $is_team_proyek = $request->has("team-proyek") ?? false;
-
-
+        
+        
         if ($is_administrator == false && $is_admin_kontrak == false && $is_user_sales == false && $is_team_proyek == false) {
             $rules["administrator"] = "accepted";
             $rules["admin-kontrak"] = "accepted";
             $rules["user-sales"] = "accepted";
             $rules["team-proyek"] = "accepted";
-
+            
             Alert::error("Error", "Pilih Hak Akses Terlebih Dahulu");
             $request->old("nip");
             $request->old("name-user");
             $request->old("email");
             $request->old("phone-number");
             // dd("tes");
-
+            
             if ($validation->fails()) {
                 $request->old("nip");
                 $request->old("name-user");
                 $request->old("email");
                 $request->old("phone-number");
                 // return redirect()->back();
-
+                
                 Alert::error('Error', "User Gagal Dibuat, Periksa Kembali !");
                 $validation->validate();
-
+                
                 // return redirect()->back();
             }
-
+            
             $validation = Validator::make($data, $rules, $messages);
             $validation->validate();
         }
-
-
+        
+        
         // dd($is_administrator, $is_admin_kontrak, $is_user_sales, $is_team_proyek);
         // $password = Str::random(20);
         $user->nip = $data["nip"];
@@ -243,7 +249,10 @@ class UserController extends Controller
         $user->name = $data["name-user"];
         $user->email = $data["email"];
         $user->no_hp = $data["phone-number"];
-        $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+        $user->is_active = $request->has("is-active");
+        if (!Auth::user()->check_administrator) {
+            $user->unit_kerja = count($data["unit-kerja"]) > 1 ? join(",", $data["unit-kerja"]) : $data["unit-kerja"][0];
+        }
         // $user->alamat = $data["alamat"];
         $user->check_administrator = $is_administrator;
         $user->check_admin_kontrak = $is_admin_kontrak;
