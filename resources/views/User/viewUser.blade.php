@@ -204,7 +204,7 @@
                                                 <!--begin:::Tabs-->
                                                 <ul
                                                     class="nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-bold mb-8">
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                                    @if (str_contains(auth()->user()->name, "(PIC)"))
                                                         <!--begin:::Tab item Informasi Perusahaan-->
                                                         <li class="nav-item">
                                                             <a class="nav-link text-active-primary pb-4 active required"
@@ -238,7 +238,7 @@
                                                 <!--begin:::Tab content -->
                                                 <div class="tab-content" id="myTabContent">
 
-                                                    @if (Auth::user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
+                                                    @if (str_contains(auth()->user()->name, "(PIC)"))
                                                         <!--begin:::Tab pane Hak Akses-->
                                                         <div class="tab-pane fade show active" id="kt_user_view_overview_tab"
                                                             role="tabpanel">
@@ -391,7 +391,11 @@
                                                     
                                                     
                                                 <!--Begin :: Reset Password -->
-                                                <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                @if (!str_contains(auth()->user()->name, "(PIC)"))
+                                                    <div class="tab-pane fade show active" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                @else 
+                                                    <div class="tab-pane fade" id="kt_user_view_overview_user_password" role="tabpanel">
+                                                @endif
                                                     
                                                     <form action="/user/password/reset" autocomplete="off" method="post">
                                                         @csrf
