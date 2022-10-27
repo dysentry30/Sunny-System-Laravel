@@ -100,7 +100,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                     <!--begin::Content-->
                     <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                         <!--begin::Toolbar-->
-                        <div style=" height:175px" class="toolbar" id="kt_toolbar">
+                        <div style=" height:auto" class="toolbar" id="kt_toolbar">
                             <!--begin::Container-->
                             <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
                                 <!--begin::Page title-->
@@ -173,7 +173,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         <div class="" data-bs-toggle="tooltip" data-bs-html="true" data-bs-title="Untuk Request Unlock, silahkan buka tab <b>Request Approval History</b>." data-bs-placement="top">
                                                             <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                                 onclick="lockMonthForecastBulanan(this)"
-                                                                class="btn btn-sm btn-active-primary mt-4 disabled">
+                                                                class="btn btn-sm btn-active-primary mt-4 me-6 disabled">
                                                                     <span class="text-white mx-2 fs-6">Unlock Forecast</span>
                                                                     <i class="bi bi-lock-fill text-white"></i>
                                                             </button>
@@ -181,7 +181,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                         @else
                                                         <button type="button" style="background-color: #008CB4;" id="lock-forecast"
                                                             onclick="lockMonthForecastBulanan(this)"
-                                                            class="btn btn-sm btn-active-primary mt-4">
+                                                            class="btn btn-sm btn-active-primary mt-4 me-6">
                                                                 <span class="text-white mx-2 fs-6">Lock Forecast</span>
                                                                 <i class="bi bi-unlock-fill text-white"></i>
                                                         </button>
@@ -190,7 +190,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                 
                                                 <button type="button" id="unlock-previous-forecast"
                                                 onclick="unlockPreviousForecast()"
-                                                class="btn btn-sm btn-light btn-active-primary mt-4 ms-6">
+                                                class="btn btn-sm btn-light btn-active-primary mt-4 ms-0">
                                                         <span class="fs-6">Pilih Bulan Forecast</span>
                                                 </button>
 
