@@ -702,9 +702,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                     if ($forecast->month_forecast > $farestMonth) {
                         $farestMonth = $forecast->month_forecast;
                     }
-                    $total_forecast += $forecast->nilai_forecast ?? 0;
-                    $total_realisasi += $forecast->realisasi_forecast;
-                    $total_rkap += $forecast->rkap_forecast;
+                    $total_forecast += (int) $forecast->nilai_forecast ?? 0;
+                    $total_realisasi += (int) $forecast->realisasi_forecast;
+                    $total_rkap += (int) $forecast->rkap_forecast;
                 }
                 // RKAP, REALISASI
                 $history_forecast->kode_proyek = $kode_proyek;
