@@ -715,7 +715,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
                 // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                $history_forecast->realisasi_forecast = $current_proyek->nilai_perolehan == null ? 0 : str_replace(",", "", (int) $current_proyek->nilai_perolehan ?? 0) ?? 0;
+                $history_forecast->realisasi_forecast = $current_proyek->nilai_perolehan == null ? 0 : str_replace(",", "", (int) $current_proyek->nilai_perolehan ?? 0) ?? "0";
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                 $history_forecast->month_realisasi = $current_proyek->bulan_ri_perolehan ?? 0;
                 $history_forecast->periode_prognosa = $request->periode_prognosa;
