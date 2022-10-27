@@ -2816,7 +2816,7 @@ fill="none">
         } else {
             if (monthTitle) {
                 modalBody.innerHTML = `
-                    <p>Apakah anda yakin ingin membuka forecast pada bulan <b>{{ $month_title }}</b>?</p>
+                    <p>Apakah anda yakin ingin mengunci forecast pada bulan <b>{{ $month_title }}</b>?</p>
                 `;
             } else {
                 modalBody.innerHTML = `
