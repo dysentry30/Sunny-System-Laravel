@@ -672,14 +672,14 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 
                 foreach ($forecasts as $forecast) {
                     $history_forecast->kode_proyek = $kode_proyek;
-                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? 0;
+                    $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
-                    $history_forecast->rkap_forecast = $forecast->rkap_forecast;
+                    $history_forecast->rkap_forecast = $forecast->rkap_forecast ?? "0";
                     // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
                     $history_forecast->month_rkap = $forecast->month_rkap;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
-                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast;
+                    $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
@@ -711,7 +711,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->nilai_forecast = (string) $total_forecast;
                 $history_forecast->month_forecast = $farestMonth;
                 // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
-                $history_forecast->rkap_forecast = $total_rkap;
+                $history_forecast->rkap_forecast = (string) $total_rkap;
                 $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
                 // $history_forecast->month_rkap = $current_proyek->bulan_pelaksa;
                 // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
