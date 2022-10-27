@@ -332,7 +332,10 @@
                                                                             // dd($list_unit_kerja);
                                                                         @endphp
                                                                         @foreach ($dops as $dop)
-                                                                            <p><b>{{$dop->dop}}</b></p>
+                                                                            <div class="d-flex justify-content-between align-items-center">
+                                                                                <p><b>{{$dop->dop}}</b></p>
+                                                                                <button type="button" onclick="selectAllUnitKerja(this)" data-dop="{{$dop->dop}}" class="btn btn-link btn-sm">Select all</button>
+                                                                            </div>
                                                                             <div class="" style="display: grid; grid-template-rows: repeat(1, 1fr); grid-template-columns: repeat(5, 1fr); row-gap: 1rem;">
                                                                                 @foreach ($dop->UnitKerjas as $unit_kerja)
                                                                                     <div class="form-check me-3 d-flex align-items-center">
@@ -343,10 +346,12 @@
                                                                                         @endphp
                                                                                         @if ($is_unit_kerja_choosen)
                                                                                             <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                                data-dop="{{$dop->dop}}"
                                                                                                 value="{{$unit_kerja->divcode}}" checked
                                                                                                 name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
                                                                                         @else 
                                                                                             <input class="form-check-input me-2" style="width: 1.5rem;height: 1.5rem;border-radius:3px;" type="checkbox"
+                                                                                                data-dop="{{$dop->dop}}"
                                                                                                 value="{{$unit_kerja->divcode}}"
                                                                                                 name="unit-kerja[]" id="{{$unit_kerja->divcode}}">
                                                                                         @endif
@@ -513,6 +518,14 @@
                 e.classList.add("is-invalid");
                 new bootstrap.Tooltip(submitBtn.parentElement).enabled();
             }
+        }
+
+        function selectAllUnitKerja(e) {
+            const dop = e.getAttribute("data-dop");
+            const inputCheckUnitKerjas = document.querySelectorAll(`input[data-dop="${dop}"]`);
+            inputCheckUnitKerjas.forEach(input => {
+                input.checked = true;
+            });
         }
     </script>
 @endsection
