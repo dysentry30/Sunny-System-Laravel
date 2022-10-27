@@ -754,10 +754,18 @@ class ForecastController extends Controller
         $historyForecast = $historyForecast->map(function ($h) {
             return $h->map(function ($ph) {
                 $newClass = new stdClass();
-                $newClass->rkap_forecast = (int) $ph->sum("rkap_forecast");
-                $newClass->nilai_forecast = (int) $ph->sum("nilai_forecast");
-                $newClass->realisasi_forecast = (int) $ph->sum("realisasi_forecast");
-                $newClass->periode_prognosa = (int) $ph->avg("periode_prognosa");
+                $newClass->rkap_forecast = $ph->sum(function($f) {
+                    return (int) $f->rkap_forecast;
+                });
+                $newClass->nilai_forecast = $ph->sum(function($f) {
+                    return (int) $f->nilai_forecast;
+                });
+                $newClass->realisasi_forecast = $ph->sum(function($f) {
+                    return (int) $f->realisasi_forecast;
+                });
+                $newClass->periode_prognosa = (int) $ph->avg(function($f) {
+                    return (int) $f->periode_prognosa;
+                });
                 $newClass->created_at = $ph->first()->created_at;
                 if($ph->contains(function($history) { return $history->is_approved_1 == null;})) {
                     $newClass->is_approved_1 = null;
