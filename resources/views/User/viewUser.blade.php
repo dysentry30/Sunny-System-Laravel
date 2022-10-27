@@ -163,15 +163,27 @@
                                                 <!--end::Input group Phone-->
 
                                                 <!--begin::Input group is Active-->
-                                                <div class="form-check me-12">
-                                                    <!--begin::Input-->
-                                                    <input class="form-check-input" type="checkbox" value="" {{ $user->is_active == 1 ? 'checked' : '' }} 
-                                                    name="is-active" id="is-active">
-                                                    <!--end::Input-->
-                                                    <label class="form-check-label">
-                                                        <span class="">Is Active</span>
-                                                    </label>
-                                                </div>
+                                                @if (str_contains(Auth::user()->name, "(PIC)")) 
+                                                    <div class="form-check me-12">
+                                                        <!--begin::Input-->
+                                                        <input class="form-check-input" type="checkbox" value="" {{ $user->is_active == 1 ? 'checked' : '' }} 
+                                                        name="is-active" id="is-active">
+                                                        <!--end::Input-->
+                                                        <label class="form-check-label">
+                                                            <span class="">Is Active</span>
+                                                        </label>
+                                                    </div>
+                                                @else
+                                                    <div class="form-check me-12">
+                                                        <!--begin::Input-->
+                                                        <input class="form-check-input" type="checkbox" value=""
+                                                        name="is-active" id="is-active">
+                                                        <!--end::Input-->
+                                                        <label class="form-check-label">
+                                                            <span class="">Is Active</span>
+                                                        </label>
+                                                    </div>
+                                                @endif
                                                 <!--end::Input group is Active-->
 
                                                 <!--begin::Input group Address 2-->
