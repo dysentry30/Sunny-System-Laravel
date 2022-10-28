@@ -4619,7 +4619,9 @@
                                     $countForecast = $proyek->Forecasts->where("periode_prognosa", "=", $bulans);
                                 @endphp
                                 @if (count($countForecast) > 1 )
-                                <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
+                                    @isset($forecast->kode_proyek)
+                                        <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
+                                    @endisset
                                 @endif
                                 <!--end::input-->
                             </tr>
