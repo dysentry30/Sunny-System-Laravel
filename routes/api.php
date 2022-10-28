@@ -142,7 +142,7 @@ Route::middleware(["web"])->group(function () {
     })->middleware("userAuth");
 
     // Begin Detail Proyek yang ada forecast
-    Route::post('/detail-proyek-xml', function (Request $request) {
+    Route::get('/detail-proyek-xml', function (Request $request) {
         $periode = getPeriode($request->periode);
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
