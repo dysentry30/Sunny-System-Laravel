@@ -4861,7 +4861,7 @@
                                 {{-- @dump(count($proyek->Forecasts)) --}}
                                 @if (isset($proyek->Forecasts))
                                     @if (count($proyek->Forecasts) > 1)
-                                    <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $forecast->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
+                                    <td class="text-danger fw-bolder">*Proyek Non-Retail {{ $proyek->kode_proyek }},<br>&nbsp;Tidak Dapat Multi Bulan. Hub Admin !</td>
                                     @endif
                                 @endif
                                 <!--end::input-->
