@@ -244,6 +244,23 @@
                                                                                                         class="d-flex align-items-center">
                                                                                                         <div class="col-4">
                                                                                                             <span>Nilai
+                                                                                                                RKAP:
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                        <div class="col">
+                                                                                                            <span><b>Rp.
+                                                                                                                    <span
+                                                                                                                        class="text-end">{{ number_format($unit_kerja_history->rkap_forecast, 0, '.', '.') }}</span></b></span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col">
+                                                                                                    <div
+                                                                                                        class="d-flex align-items-center">
+                                                                                                        <div class="col-4">
+                                                                                                            <span>Nilai
                                                                                                                 Forecast:
                                                                                                             </span>
                                                                                                         </div>
@@ -268,23 +285,6 @@
                                                                                                             <span><b>Rp.
                                                                                                                     <span
                                                                                                                         class="text-end">{{ number_format($unit_kerja_history->realisasi_forecast, 0, '.', '.') }}</span></b></span>
-                                                                                                        </div>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            <div class="row">
-                                                                                                <div class="col">
-                                                                                                    <div
-                                                                                                        class="d-flex align-items-center">
-                                                                                                        <div class="col-4">
-                                                                                                            <span>Nilai
-                                                                                                                RKAP:
-                                                                                                            </span>
-                                                                                                        </div>
-                                                                                                        <div class="col">
-                                                                                                            <span><b>Rp.
-                                                                                                                    <span
-                                                                                                                        class="text-end">{{ number_format($unit_kerja_history->rkap_forecast, 0, '.', '.') }}</span></b></span>
                                                                                                         </div>
                                                                                                     </div>
                                                                                                 </div>
