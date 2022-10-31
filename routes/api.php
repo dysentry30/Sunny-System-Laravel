@@ -143,22 +143,22 @@ Route::middleware(["web"])->group(function () {
 
     // Begin Detail Proyek yang ada forecast
     Route::get('/detail-proyek-xml', function (Request $request) {
-        $periode = getPeriode($request->periode);
+        $periode = getPeriode(date("Y") . date("m"));
         // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
         // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-        if (isset($request->unitkerjaid)) {
-            // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
-            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
-                $is_forecast_exist = $p->Forecasts->where("periode_prognosa", $periode[1])->count() > 0;
-                unset($p->Forecasts);
-                return $is_forecast_exist;
-            });
-        } else {
-            return response()->json([
-                "status" => 400,
-                "msg" => "Unit Kerja Not Found"
-            ], 400);
-        }
+        $proyeks = Proyek::where("tahun_perolehan", "=", $periode[0])->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
+            $is_forecast_exist = $p->Forecasts->where("periode_prognosa", $periode[1])->count() > 0;
+            unset($p->Forecasts);
+            return $is_forecast_exist;
+        });
+        // if (isset($request->unitkerjaid)) {
+        //     // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
+        // } else {
+        //     return response()->json([
+        //         "status" => 400,
+        //         "msg" => "Unit Kerja Not Found"
+        //     ], 400);
+        // }
 
         $proyeks = $proyeks->map(function ($p) use ($request) {
             $p->Id = $p->id;
