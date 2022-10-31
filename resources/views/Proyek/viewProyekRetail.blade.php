@@ -103,9 +103,9 @@
                                     <!--end::Button-->
 
                                     <!--begin::Button-->
-                                    <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
+                                    {{-- <a class="btn btn-sm btn-light btn-active-danger ms-2" data-bs-toggle="modal"
                                         data-bs-target="#kt_modal_cancel_proyek" id="kt_toolbar_export">Cancel Proyek
-                                    </a>
+                                    </a> --}}
                                     <!--end::Button-->
 
                                     <!--begin::Action-->
