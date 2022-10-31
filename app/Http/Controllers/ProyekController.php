@@ -341,6 +341,9 @@ class ProyekController extends Controller
 
         $validation->validate();
 
+        $bulans = (int) date('m');
+        $years = (int) date('Y');
+
         // form PASAR DINI
         $newProyek->nama_proyek = $dataProyek["nama-proyek"];
         // $newProyek->unit_kerja = $dataProyek["unit-kerja"];
@@ -351,6 +354,8 @@ class ProyekController extends Controller
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
         if($dataProyek["tipe-proyek"] == "R") {
             $newProyek->stage = 8;
+            $forecasts = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
+            $forecasts->delete();
         }
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
@@ -433,8 +438,7 @@ class ProyekController extends Controller
         // $newProyek->matauang_terkontrak = $dataProyek["matauang-terkontrak"];
         $newProyek->bulan_ri_perolehan = $dataProyek["bulan-ri-perolehan"];
         // dd($dataProyek);
-        $bulans = (int) date('m');
-        $years = (int) date('Y');
+        
         $newForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
         if (isset($newForecast)) {
             // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ) {
