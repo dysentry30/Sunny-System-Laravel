@@ -667,34 +667,34 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             // });
             if ($current_proyek->tipe_proyek == "R") {
                 $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
-                if($history_forecast_count->count() > 0) continue;
-                $history_forecast = new HistoryForecast();
-                
+                if ($history_forecast_count->count() > 0) continue;
+                // dd($current_proyek);
                 foreach ($forecasts as $forecast) {
+                    $history_forecast = new HistoryForecast();
+                    // if ($forecast->month_forecast > $farestMonth) {
+                    //     $farestMonth = $forecast->month_forecast;
+                    // }
+                    // $total_forecast += (int) $forecast->nilai_forecast;
+                    // $total_realisasi += (int) $forecast->realisasi_forecast;
+                    // $total_rkap += (int) $forecast->rkap_forecast;
                     $history_forecast->kode_proyek = $kode_proyek;
                     $history_forecast->nilai_forecast = $forecast->nilai_forecast ?? "0";
                     $history_forecast->month_forecast = $forecast->month_forecast;
                     // $history_forecast->rkap_forecast = str_replace(".", "", (int) $current_proyek->nilai_rkap ?? 0) ?? 0;
                     $history_forecast->rkap_forecast = $forecast->rkap_forecast ?? "0";
-                    // $history_forecast->month_rkap = (int) $current_proyek->bulan_pelaksanaan ?? 1;
-                    $history_forecast->month_rkap = $forecast->month_rkap;
+                    $history_forecast->month_rkap = (int) $forecast->month_rkap;
+                    // $history_forecast->month_rkap = $forecast->month_rkap;
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan == null ? 0 : str_replace(",", "", $current_proyek->nilai_kontrak_keseluruhan ?? 0);
                     $history_forecast->realisasi_forecast = $forecast->realisasi_forecast ?? "0";
                     // $history_forecast->realisasi_forecast = $current_proyek->nilai_kontrak_keseluruhan;
                     $history_forecast->month_realisasi = $forecast->month_realisasi;
                     $history_forecast->periode_prognosa = $request->periode_prognosa;
-                    // if ($forecast->month_forecast > $farestMonth) {
-                    //     $farestMonth = $forecast->month_forecast;
-                    // }
-                    // $total_forecast += $forecast->nilai_forecast;
-                    // $total_realisasi += $forecast->realisasi_forecast;
-                    // $total_rkap += $forecast->rkap_forecast;
+                    $history_forecast->save();
                 }
-                $history_forecast->save();
             } else {
 
                 $history_forecast_count = HistoryForecast::where("kode_proyek", "=", $kode_proyek)->get();
-                if($history_forecast_count->count() > 0) continue;
+                if ($history_forecast_count->count() > 0) continue;
                 $history_forecast = new HistoryForecast();
 
                 foreach ($forecasts as $forecast) {
@@ -724,11 +724,11 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
                 $history_forecast->save();
                 // if ($index == $forecasts->count() - 1) {
                 // }
-                $farestMonth = 0;
-                $total_forecast = 0;
-                $total_realisasi = 0;
-                $total_rkap = 0;
             }
+            $farestMonth = 0;
+            $total_forecast = 0;
+            $total_realisasi = 0;
+            $total_rkap = 0;
         }
         return response()->json([
             "status" => "success",
@@ -1127,7 +1127,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
         //Menggunakan metode Eager Loading agar memangkas loading query database 
         if (Auth::user()->check_administrator) {
             $users = User::with('UnitKerja')->get()->reverse();
-        } else if(str_contains(auth()->user()->name, "(PIC)")) {
+        } else if (str_contains(auth()->user()->name, "(PIC)")) {
             $users = User::with('UnitKerja')->get()->reverse()->where("check_administrator", "!=", true);
         } else {
             $users = User::join("unit_kerjas", "unit_kerjas.divcode", "=", "users.unit_kerja")->where("unit_kerjas.divcode", "=", Auth::user()->unit_kerja)->get();
