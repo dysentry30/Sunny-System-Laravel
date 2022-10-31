@@ -62,19 +62,21 @@ class UserController extends Controller
                 ])->cookie("BPMCSRF", $token, 60);
             }
         } else {
+            
             $credentials = $request->validate([
                 'email' => ["required", "email"],
                 'password' => ["required"]
             ]);
-            if (Auth::attempt($credentials) && Auth::check() && Auth::user()->is_active) {
+            if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
-                return redirect()->intended("/dashboard");
-            } else {
-                // dd(Auth::user());
-                Auth::logout();
-                Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
-                return redirect()->intended("/");
+                if (Auth::user()->is_active) {
+                    return redirect()->intended("/dashboard");
+                }else{
+                    Auth::logout();
+                    Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+                    return redirect()->intended("/");
+                }
             }
         }
 
