@@ -995,19 +995,19 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     @php
                                                                                     if ($column != "") {
                                                                                         $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
-                                                                                            if($p->tipe_proyek == "R") {
-                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                    return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
-                                                                                                        if($periode == $f->periode_prognosa) {
-                                                                                                            return (int) $f->rkap_forecast;
-                                                                                                        }
-                                                                                                    });
-                                                                                                }
-                                                                                            } else {
-                                                                                                if(preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                    return (int) $p->nilai_rkap;
-                                                                                                }
+                                                                                            if(preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                                    if($periode == $f->periode_prognosa) {
+                                                                                                        return (int) $f->rkap_forecast;
+                                                                                                    }
+                                                                                                });
                                                                                             }
+                                                                                            // if($p->tipe_proyek == "R") {
+                                                                                            // } else {
+                                                                                            //     if(preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                            //         return (int) $p->nilai_rkap;
+                                                                                            //     }
+                                                                                            // }
                                                                                         });
                                                                                         $total_forecast_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
                                                                                             if(preg_match("/$filter/i", $p->nama_proyek)) {
@@ -1019,29 +1019,29 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             }
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
-                                                                                            if($p->tipe_proyek == "R" && preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
-                                                                                                    if($periode == $f->periode_prognosa) {
-                                                                                                        return (int) $f->realisasi_forecast;
-                                                                                                    }
-                                                                                                });
-                                                                                            } else {
-                                                                                                if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek)) {
-                                                                                                    return (int) $p->nilai_perolehan;
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                                if($periode == $f->periode_prognosa) {
+                                                                                                    return (int) $f->realisasi_forecast;
                                                                                                 }
-                                                                                            }
+                                                                                            });
+                                                                                            // if($p->tipe_proyek == "R" && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                            // } else {
+                                                                                            //     if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek)) {
+                                                                                            //         return (int) $p->nilai_perolehan;
+                                                                                            //     }
+                                                                                            // }
                                                                                         });
                                                                                     } else {
                                                                                         $total_ok_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode) {
-                                                                                            if($p->tipe_proyek == "R") {
-                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
-                                                                                                    if($periode == $f->periode_prognosa) {
-                                                                                                        return (int) $f->rkap_forecast;
-                                                                                                    }
-                                                                                                });
-                                                                                            } else {
-                                                                                                return (int) $p->nilai_rkap;
-                                                                                            }
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                                if($periode == $f->periode_prognosa) {
+                                                                                                    return (int) $f->rkap_forecast;
+                                                                                                }
+                                                                                            });
+                                                                                            // if($p->tipe_proyek == "R") {
+                                                                                            // } else {
+                                                                                            //     return (int) $p->nilai_rkap;
+                                                                                            // }
                                                                                         });
                                                                                         $total_forecast_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode) {
                                                                                             return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
@@ -1051,17 +1051,17 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode) {
-                                                                                            if($p->tipe_proyek == "R") {
-                                                                                                return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
-                                                                                                    if($periode == $f->periode_prognosa) {
-                                                                                                        return (int) $f->realisasi_forecast;
-                                                                                                    }
-                                                                                                });
-                                                                                            } else {
-                                                                                                if($p->stage == 8) {
-                                                                                                    return (int) $p->nilai_perolehan;
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                                if($periode == $f->periode_prognosa) {
+                                                                                                    return (int) $f->realisasi_forecast;
                                                                                                 }
-                                                                                            }
+                                                                                            });
+                                                                                            // if($p->tipe_proyek == "R") {
+                                                                                            // } else {
+                                                                                            //     if($p->stage == 8) {
+                                                                                            //         return (int) $p->nilai_perolehan;
+                                                                                            //     }
+                                                                                            // }
                                                                                         });
                                                                                     }
                                                                                     @endphp 
