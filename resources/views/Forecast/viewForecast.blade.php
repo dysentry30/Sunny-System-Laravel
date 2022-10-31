@@ -1019,7 +1019,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             }
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
-                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p) {
                                                                                                 if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek) && $periode == $f->periode_prognosa) {
                                                                                                     return (int) $f->realisasi_forecast;
                                                                                                 }
@@ -1051,7 +1051,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode) {
-                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p) {
                                                                                                 if($p->stage == 8 && $periode == $f->periode_prognosa) {
                                                                                                     return (int) $f->realisasi_forecast;
                                                                                                 }
