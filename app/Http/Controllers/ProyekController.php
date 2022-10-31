@@ -169,7 +169,6 @@ class ProyekController extends Controller
         //auto filled by required 
         $newProyek->bulan_awal = $dataProyek["bulan-pelaksanaan"];
 
-        $newProyek->stage = "1";
         $newProyek->dop = $unitKerja->dop;
         $newProyek->company = $unitKerja->company;
 
@@ -196,6 +195,11 @@ class ProyekController extends Controller
         $unit_kerja = $dataProyek["unit-kerja"];
         $jenis_proyek = $dataProyek["jenis-proyek"];
         $tipe_proyek = $dataProyek["tipe-proyek"];
+        if($tipe_proyek == "R") {
+            $newProyek->stage = 8;
+        } else {
+            $newProyek->stage = 1;
+        }
         $tahun = $dataProyek["tahun-perolehan"];
 
         // Kondisi kalau tahun lebih besar dari 2021 maka O Selain itu A
@@ -345,7 +349,9 @@ class ProyekController extends Controller
         $newProyek->sumber_dana = $dataProyek["sumber-dana"];
         $newProyek->jenis_proyek = $dataProyek["jenis-proyek"];
         $newProyek->tipe_proyek = $dataProyek["tipe-proyek"];
-
+        if($dataProyek["tipe-proyek"] == "R") {
+            $newProyek->stage = 8;
+        }
         // $newProyek->pic = $dataProyek["pic"];
         $newProyek->bulan_pelaksanaan = $dataProyek["bulan-pelaksanaan"];
         $newProyek->nilai_rkap = (int) str_replace('.', '', $dataProyek["nilai-rkap"]);
