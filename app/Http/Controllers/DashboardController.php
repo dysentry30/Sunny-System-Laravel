@@ -24,6 +24,11 @@ class DashboardController extends Controller
      */
     function index(Request $request)
     {
+
+        // Begin :: Copy Data Forecast If current month not exists
+        self::copyDataForecast();
+        // End :: Copy Data Forecast If current month not exists
+        
         // begin :: Delete Old Excel Files
         $files = collect(File::allFiles(public_path("excel")));
         $files->each(function($file) {
@@ -1273,5 +1278,20 @@ class DashboardController extends Controller
     public static function getUnitKerjaProyek($divcode)
     {
         return UnitKerja::where("divcode", "=", $divcode)->first()->unit_kerja;
+    }
+
+    static function copyDataForecast() {
+        $month = (int) date("m");
+        $year = (int) date("Y");
+        $is_forecasts_exist = Forecast::where("periode_prognosa", "=", $month)->whereYear("created_at", "=", $year)->get()->count() > 0 ? true : false;
+        if(!$is_forecasts_exist) {
+            $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->whereYear("created_at", "=", $year)->get();
+            // dd($forecasts);
+            // $forecasts->each(function($f) {
+            //     // $new_forecast = $f->replicate();
+            //     dd($f);
+            //     // dd($new_forecast);
+            // });
+        }
     }
 }

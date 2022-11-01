@@ -1019,7 +1019,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             }
                                                                                         });
                                                                                         $total_realisasi_per_divisi_tahunan = $unitKerja->Proyeks->sum(function($p) use($per_sejuta, $i, $filter, $column, $periode) {
-                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p) {
+                                                                                            return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode, $p, $filter) {
                                                                                                 if($p->stage == 8 && preg_match("/$filter/i", $p->nama_proyek) && $periode == $f->periode_prognosa) {
                                                                                                     return (int) $f->realisasi_forecast;
                                                                                                 }
@@ -1104,7 +1104,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode)->map(function($f) use($per_sejuta) {
                                                                                                 $f->rkap_forecast = (int) $f->rkap_forecast / $per_sejuta;
-                                                                                                $f->nilai_forecast = (int) $f->nilai_forecast / $per_sejuta;
+                                                                                                $f->nilai_forecast = (int) round($f->nilai_forecast / $per_sejuta);
                                                                                                 // (int) $f->realisasi_forecast /= $per_sejuta;
                                                                                                 return $f;
                                                                                             });
@@ -1439,7 +1439,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             @php
                                                                                                 $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode)->map(function($f) use($per_sejuta) {
                                                                                                     $f->rkap_forecast = (int) $f->rkap_forecast /$per_sejuta;
-                                                                                                    $f->nilai_forecast = (int) $f->nilai_forecast / $per_sejuta;
+                                                                                                    $f->nilai_forecast = (int) round($f->nilai_forecast / $per_sejuta);
                                                                                                     return $f;
                                                                                                 });
                                                                                             @endphp
