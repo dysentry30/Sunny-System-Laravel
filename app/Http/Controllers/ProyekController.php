@@ -247,7 +247,7 @@ class ProyekController extends Controller
     }
 
 
-    public function edit($kode_proyek)
+    public function edit($kode_proyek, $periodePrognosa = "")
     {
         $proyek = Proyek::find($kode_proyek);
         $mataUang = MataUang::all();
@@ -304,8 +304,9 @@ class ProyekController extends Controller
                 //     ]
             );
         } else {
+            $periodePrognosa = $periodePrognosa == "" ? (int) date("m") : $periodePrognosa;
             $tabPane = "";
-            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(['companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane']));
+            return view('Proyek/viewProyekRetail', ["proyek" => $proyek, "proyeks" => Proyek::all()], compact(["periodePrognosa", 'companies', 'sumberdanas', 'dops', 'sbus', 'unitkerjas', 'customers', 'users', 'kriteriapasar', 'kriteriapasarproyek', 'teams', 'pesertatender', 'proyekberjalans', 'historyForecast', 'porsiJO', 'data_negara', 'tabPane']));
             // return redirect()->back();
         }
     }

@@ -3039,20 +3039,65 @@
                     <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">History Forecast</h3>
                     <!--End::Title Biru Form: List History-->
 
-                    {{-- begin::Detail History Forecast --}}
+                    <!-- begin::Detail History Forecast -->
                     <div class="d-flex flex-row-reverse mb-5">
-                        <div>
+                        <div class="">
                             Periode Prognosa :
                             @php
                                 setlocale(LC_TIME, 'id.UTF-8');
                                 $periode_prognosa = strftime('%B');
+                                // $periodePrognosa = (int) date('m');
                             @endphp
-                            <b class="mx-4">{{ $periode_prognosa }}</b>
+                            {{-- <b class="mx-4" class="btn btn-sm btn-flex btn-light btn-active-primary"
+                            data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">{{ $periode_prognosa }}</a></b> --}}
+                            <!--begin::Input-->
+                            <select onchange="periodePrognosa(this)" id="periode-prognosa" name="periode-prognosa"
+                                class="form-select"
+                                data-control="select2" data-hide-search="true"
+                                data-placeholder="Pilih Periode">
+                                <option value="1"
+                                    {{ $periodePrognosa == '1' ? 'selected' : '' }}>
+                                    Januari</option>
+                                <option value="2"
+                                    {{ $periodePrognosa == '2' ? 'selected' : '' }}>
+                                    Februari</option>
+                                <option value="3"
+                                    {{ $periodePrognosa == '3' ? 'selected' : '' }}>
+                                    Maret</option>
+                                <option value="4"
+                                    {{ $periodePrognosa == '4' ? 'selected' : '' }}>
+                                    April</option>
+                                <option value="5"
+                                    {{ $periodePrognosa == '5' ? 'selected' : '' }}>
+                                    Mei</option>
+                                <option value="6"
+                                    {{ $periodePrognosa == '6' ? 'selected' : '' }}>
+                                    Juni</option>
+                                <option value="7"
+                                    {{ $periodePrognosa == '7' ? 'selected' : '' }}>
+                                    Juli</option>
+                                <option value="8"
+                                    {{ $periodePrognosa == '8' ? 'selected' : '' }}>
+                                    Agustus</option>
+                                <option value="9"
+                                    {{ $periodePrognosa == '9' ? 'selected' : '' }}>
+                                    September</option>
+                                <option value="10"
+                                    {{ $periodePrognosa == '10' ? 'selected' : '' }}>
+                                    Oktober</option>
+                                <option value="11"
+                                    {{ $periodePrognosa == '11' ? 'selected' : '' }}>
+                                    November</option>
+                                <option value="12"
+                                    {{ $periodePrognosa == '12' ? 'selected' : '' }}>
+                                    Desember</option>
+                            </select>
+                            <!--end::Input-->
                         </div>
                     </div>
                     <hr>
                     <br>
-                    {{-- end::Detail History Forecast --}}
+                    <!-- end::Detail History Forecast -->
 
                     <!--begin::Table-->
                     <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
@@ -3072,8 +3117,7 @@
                         <!--begin::Table body-->
                         <tbody class="fw-bold text-gray-600">
                             @for ($i = 1; $i <= 12; $i++)
-                                <form action="/proyek/forecast/{{ $i }}/retail" onsubmit="disabledSubmitButton(this)" method="post">
-                                    @csrf
+                                <form action="/proyek/forecast/{{ $i }}/{{ $periodePrognosa }}/retail" onsubmit="disabledSubmitButton(this)" method="post">                                    @csrf
                                     <input type="hidden" name="kode-proyek" value="{{ $proyek->kode_proyek }}"
                                         id="kode-proyek">
                                     <tr>
@@ -3136,8 +3180,7 @@
                                         <!--end::Name-->
                                         <!--begin::input-->
                                         @php
-                                            $bulans = (int) date('m');
-                                            $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->filter(function ($f) use ($i) {
+                                            $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periodePrognosa)->filter(function ($f) use ($i) {
                                                 return $f->month_forecast == $i;
                                             });
                                         @endphp
@@ -3318,4 +3361,16 @@
         const tabBoots = new bootstrap.Tab(tabContent, {});
         tabBoots.show();
     </script>
+
+    {{-- Begin :: Change periode --}}
+    {{-- /proyek/view/{kode_proyek}/{periodePrognosa} --}}
+    <script>
+        const kodeProyek = "{{$proyek->kode_proyek}}";
+        function periodePrognosa(e) {
+            const periode = e.value;
+            window.location.href = `/proyek/view/${kodeProyek}/${periode}`;
+            return;
+        }
+    </script>
+    {{-- End :: Change periode --}}
 @endsection

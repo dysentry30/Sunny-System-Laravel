@@ -351,7 +351,9 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // VIEW to proyek and EDIT 
     Route::get('/proyek/view/{kode_proyek}', [ProyekController::class, 'edit']);
-
+    
+    Route::get('/proyek/view/{kode_proyek}/{periodePrognosa}', [ProyekController::class, 'edit']);
+    
     // direct to Project after EDIT 
     Route::post('/proyek/update', [ProyekController::class, 'update']);
 
