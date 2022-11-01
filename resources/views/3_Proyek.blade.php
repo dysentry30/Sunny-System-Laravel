@@ -6,9 +6,19 @@
 @section('title', 'Proyek')
 {{-- End::Title --}}
 
+<style>
+    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+        /* background-color: red !important; */
+        --bs-table-accent-bg: #8ecae650 !important;
+    }
+
+    .table>:not(caption)>*>* {
+        padding: 0.25rem 0.25rem !important;
+    }
+</style>
+
 <!--begin::Main-->
 @section('content')
-
 
     <!--begin::Root-->
     <div class="d-flex flex-column flex-root">
@@ -298,17 +308,17 @@
 
 
                         <!--begin::Card body-->
-                        <div class="card-body pt-0 ">
+                        <div class="card-body pt-0 px-0">
 
 
                             <!--begin::Table Proyek-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase text-sm gs-0">
-                                        <th class="min-w-auto"><small>@sortablelink('kode_proyek', 'Kode Proyek')</small></th>
-                                        <th class="min-w-auto"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
+                                        <th class="min-w-auto ps-3"><small>@sortablelink('kode_proyek', 'Kode Proyek')</small></th>
+                                        <th class="w-25"><small>@sortablelink('nama_proyek', 'Nama Proyek')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('unit_kerja', 'Unit Kerja')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('stage', 'Stage')</small></th>
                                         <th class="min-w-auto"><small>@sortablelink('tahun_perolehan', 'Tahun RA Perolehan')</small></th>
@@ -333,9 +343,9 @@
                                     @foreach ($proyeks as $proyek)
                                         <tr>
                                             <!--begin::Name-->
-                                            <td>
+                                            <td class="ps-3">
                                                 <small>
-                                                    <a href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
+                                                    <a target="_blank" href="/proyek/view/{{ $proyek->kode_proyek }}" id="click-name"
                                                         class="text-gray-800 text-hover-primary">{{ $proyek->kode_proyek }}</a>
                                                 </small>
                                             </td>
@@ -349,7 +359,7 @@
                                             </td>
                                             <!--end::Email-->
                                             <!--begin::Company-->
-                                            <td>
+                                            <td class="w-10" style="max-width: 120px">
                                                 <small>
                                                     {{ $proyek->UnitKerja->unit_kerja }}
                                                 </small>
@@ -359,18 +369,20 @@
                                             <!--begin::Stage-->
                                             @php
                                                 if ($proyek->stage == 0 || $proyek->stage == 7 || $proyek->stage == 10 || $proyek->is_cancel ){
-                                                    $stageColor = "text-danger";
+                                                    $stageColor = "badge-light-danger";
                                                 } else if ($proyek->stage == 8 || $proyek->stage == 9){
-                                                    $stageColor = "text-success";
+                                                    $stageColor = "badge-light-success";
                                                 } else {
-                                                    $stageColor = "";
+                                                    $stageColor = "badge-light-primary";
                                                 }                                                    
                                             @endphp
-                                            <td class="{{ $stageColor }}">
+                                            <td class="" style="max-width: 80px">
                                                 @if ($proyek->is_cancel)
-                                                    Canceled Proyek
+                                                <small class="badge fs-8 {{ $stageColor }}">
+                                                    Canceled
+                                                </small>
                                                 @else
-                                                <small>
+                                                <small class="badge {{ $stageColor }}">
                                                     @switch($proyek->stage)
                                                         @case('0')
                                                             Gugur PQ
@@ -519,13 +531,18 @@
                                             </td>
                                             <!--end::Realisasi-->
 
-                                            <!--begin::Realisasi-->
-                                            <td class="text-start {{ $proyek->proyekBerjalan ? '' : 'text-danger' }}">
-                                                <small>
-                                                    {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }}
+                                            <!--begin::customer-->
+                                            <td class="text-break text-start {{ $proyek->proyekBerjalan ? '' : 'text-danger' }} text-truncate" style="max-width: 120px">
+                                                <small class="{{ $proyek->proyekBerjalan ? '' : 'badge badge-light-danger' }}">
+                                                    {{-- {{ $proyek->proyekBerjalan->name_customer ?? "*Belum Ditentukan" }} --}}
+                                                    @if ($proyek->proyekBerjalan)
+                                                    <a target="_blank" href="/customer/view/{{ $proyek->proyekBerjalan->id_customer }}" class="text-gray-800 text-hover-primary">{{ $proyek->proyekBerjalan->name_customer }}</a>
+                                                    @else
+                                                    *Belum Ditentukan
+                                                    @endif
                                                 </small>
                                             </td>
-                                            <!--end::Realisasi-->
+                                            <!--end::customer-->
 
 
                                             <!--begin::Jenis Proyek-->
@@ -553,12 +570,12 @@
 
                                             @if (auth()->user()->check_administrator || str_contains(auth()->user()->name, "(PIC)"))
                                                 <!--begin::Action-->
-                                                <td class="text-center">
+                                                <td class="text-center px-3">
                                                     <!--begin::Button-->
                                                     <button data-bs-toggle="modal"
                                                         data-bs-target="#kt_modal_delete{{ $proyek->kode_proyek }}"
                                                         id="modal-delete"
-                                                        class="btn btn-sm btn-light btn-active-primary">Delete
+                                                        class="btn btn-sm btn-light btn-active-danger">Delete
                                                     </button>
                                                     </form>
                                                     <!--end::Button-->
