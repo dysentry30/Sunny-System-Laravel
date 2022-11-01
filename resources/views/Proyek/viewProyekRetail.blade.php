@@ -3143,7 +3143,6 @@
                                         @endphp
                                         @if (count($forecasts) > 0)
                                             @php
-                                                $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
                                                 // dd($forecast);
                                             @endphp
                                             <td class="text-dark">
