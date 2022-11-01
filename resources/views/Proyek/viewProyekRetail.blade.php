@@ -3136,15 +3136,15 @@
                                         <!--end::Name-->
                                         <!--begin::input-->
                                         @php
-                                            $forecasts = $proyek->Forecasts->filter(function ($f) use ($i) {
+                                            $bulans = (int) date('m');
+                                            $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $bulans)->filter(function ($f) use ($i) {
                                                 return $f->month_forecast == $i;
                                             });
                                         @endphp
                                         @if (count($forecasts) > 0)
                                             @php
-                                                $bulans = (int) date('m');
                                                 $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
-                                                dd($forecast);
+                                                // dd($forecast);
                                             @endphp
                                             <td class="text-dark">
                                                 <input type="text"
