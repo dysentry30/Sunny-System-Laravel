@@ -560,11 +560,11 @@ class ProyekController extends Controller
         }
 
         // dd($dataProyek);
-        if ($dataProyek["month-forecast"] != null && $dataProyek["nilai-forecast"] != null ){
-            // $bulans = (int) date('m');
+        // if ($dataProyek["nilai-perolehan"] != null && $newProyek->stage == 8 && $dataProyek["bulan-ri-perolehan"] != null){
+        if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
             $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
             if (isset($editForecast)) {
-                $editForecast->month_forecast = $dataProyek["month-forecast"];
+                // $editForecast->month_forecast = $dataProyek["month-forecast"];
                 if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
                     $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                     $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
@@ -576,8 +576,10 @@ class ProyekController extends Controller
             } else {
                 $newForecast = new Forecast();
                 $newForecast->kode_proyek = $newProyek->kode_proyek;
-                $newForecast->month_forecast = $dataProyek["month-forecast"];
-                $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                // $newForecast->month_forecast = $dataProyek["month-forecast"];
+                // $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
+                $newForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
+                $newForecast->nilai_forecast = $dataProyek["nilai-perolehan"];
                 $newForecast->periode_prognosa = $bulans;
                 $newForecast->save();
             }
