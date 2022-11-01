@@ -565,14 +565,14 @@ class ProyekController extends Controller
             $editForecast = Forecast::where("kode_proyek", "=", $newProyek->kode_proyek)->where("periode_prognosa", "=", $bulans)->whereYear("created_at", "=", $years)->first();
             if (isset($editForecast)) {
                 // $editForecast->month_forecast = $dataProyek["month-forecast"];
-                if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
-                    $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-                    $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
-                    $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
-                } else {
-                    $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
-                }
+                $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
+                $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
+                $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 $editForecast->save();
+                // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
+                // } else {
+                // }
             } else {
                 $newForecast = new Forecast();
                 $newForecast->kode_proyek = $newProyek->kode_proyek;
@@ -580,6 +580,8 @@ class ProyekController extends Controller
                 // $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 $newForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
                 $newForecast->nilai_forecast = $dataProyek["nilai-perolehan"];
+                $newForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
+                $newForecast->realisasi_forecast = $dataProyek["nilai-perolehan"];
                 $newForecast->periode_prognosa = $bulans;
                 $newForecast->save();
             }
