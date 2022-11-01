@@ -3186,6 +3186,7 @@
                                         @endphp
                                         @if (count($forecasts) > 0)
                                             @php
+                                                $forecast = $forecasts->first();
                                                 // dd($forecast);
                                             @endphp
                                             <td class="text-dark">
