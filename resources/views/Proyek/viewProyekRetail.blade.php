@@ -3139,9 +3139,9 @@
                                             $forecasts = $proyek->Forecasts->filter(function ($f) use ($i) {
                                                 return $f->month_forecast == $i;
                                             });
-                                            dd($forecasts->count());
+                                            dd(count($forecasts));
                                         @endphp
-                                        @if (isset($forecasts) && count($forecasts) > 0)
+                                        @if (count($forecasts) > 0)
                                             @php
                                                 $bulans = (int) date('m');
                                                 $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
