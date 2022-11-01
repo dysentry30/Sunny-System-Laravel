@@ -364,15 +364,15 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     // Reset Porsi JO 
     Route::get('/proyek/reset-jo/{kode_proyek}', [ProyekController::class, 'resetJo']);
 
-    Route::post('/proyek/forecast/{i}/retail', function (Request $request, $i) {
+    Route::post('/proyek/forecast/{i}/{periodePrognosa}/retail', function (Request $request, $i, $periodePrognosa) {
         $data = $request->all();
-        // dd($data, $i);
+        // dd($data, $i, $periodePrognosa);
 
-        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("periode_prognosa", "=", (int) date("m"))->get()->first();
+        $findForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", (int) $i)->where("periode_prognosa", "=", $periodePrognosa)->get()->first();
         // $tabPane = "kt_user_view_overview_forecast";
 
         if (empty($findForecast)) {
-            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->where("periode_prognosa", "=", (int) date("m"))->get()->first();
+            $nullForecast = Forecast::where("kode_proyek", "=", $data["kode-proyek"])->where("month_forecast", "=", null)->where("periode_prognosa", "=", $periodePrognosa)->get()->first();
             if (!empty($nullForecast)) {
                 $nullForecast->delete();
             }
@@ -388,8 +388,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $forecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
             $forecast->month_realisasi = (int) $i;
 
-            $prognosa = (int) date('m');
-            $forecast->periode_prognosa = $prognosa;
+            // $prognosa = (int) date('m');
+            $forecast->periode_prognosa = $periodePrognosa;
 
             // dd($tabPane);
 
@@ -410,8 +410,8 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
             $findForecast->realisasi_forecast = (string) (str_replace(".", "", $data["nilairealisasi-" . $i] ?? 0));
             $findForecast->month_realisasi = (int) $i;
 
-            $prognosa = (int) date('m');
-            $findForecast->periode_prognosa = $prognosa;
+            // $prognosa = (int) date('m');
+            $findForecast->periode_prognosa = $periodePrognosa;
 
             $findForecast->save();
 
