@@ -3140,7 +3140,7 @@
                                                 return $f->month_forecast == $i;
                                             });
                                         @endphp
-                                        @if (count($forecasts) > 0)
+                                        @if (isset($forecasts) && count($forecasts) > 0)
                                             @php
                                                 $bulans = (int) date('m');
                                                 $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
@@ -3150,7 +3150,7 @@
                                                     class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiok-{{ $i }}"
                                                     name="nilaiok-{{ $i }}"
-                                                    value="{{ number_format((int) $forecast->rkap_forecast ?? 0, 0, '.', '.') }}"
+                                                    value="{{ number_format((int) $forecast->rkap_forecast, 0, '.', '.') }}"
                                                     placeholder="Nilai Perolehan" />
                                             </td>
                                             <td class="text-dark">
