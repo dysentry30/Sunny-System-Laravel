@@ -3144,6 +3144,7 @@
                                             @php
                                                 $bulans = (int) date('m');
                                                 $forecast = $forecasts->where("periode_prognosa", "=", $bulans)->first();
+                                                dd($forecast);
                                             @endphp
                                             <td class="text-dark">
                                                 <input type="text"
