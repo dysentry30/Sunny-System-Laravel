@@ -3150,7 +3150,7 @@
                                                     class="text-end form-control form-control-solid reformat-retail"
                                                     id="nilaiok-{{ $i }}"
                                                     name="nilaiok-{{ $i }}"
-                                                    value="{{ number_format((int) $forecast->rkap_forecast, 0, '.', '.') }}"
+                                                    value="{{ number_format((int) $forecast->rkap_forecast ?? 0, 0, '.', '.') }}"
                                                     placeholder="Nilai Perolehan" />
                                             </td>
                                             <td class="text-dark">
