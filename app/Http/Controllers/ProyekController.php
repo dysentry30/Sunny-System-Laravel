@@ -579,9 +579,9 @@ class ProyekController extends Controller
                 // $newForecast->month_forecast = $dataProyek["month-forecast"];
                 // $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 $newForecast->month_forecast = $dataProyek["bulan-ri-perolehan"];
-                $newForecast->nilai_forecast = $dataProyek["nilai-perolehan"];
+                $newForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $newForecast->month_realisasi = $dataProyek["bulan-ri-perolehan"];
-                $newForecast->realisasi_forecast = $dataProyek["nilai-perolehan"];
+                $newForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $newForecast->periode_prognosa = $bulans;
                 $newForecast->save();
             }
