@@ -3139,7 +3139,7 @@
                                             $forecasts = $proyek->Forecasts->filter(function ($f) use ($i) {
                                                 return $f->month_forecast == $i;
                                             });
-                                            dd($forecasts);
+                                            dd($forecasts->count());
                                         @endphp
                                         @if (isset($forecasts) && count($forecasts) > 0)
                                             @php
