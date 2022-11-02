@@ -64,9 +64,18 @@ class UserController extends Controller
         } else {
             
             $credentials = $request->validate([
-                'email' => ["required", "email"],
+                'email' => ["required"],
                 'password' => ["required"]
             ]);
+            if($request->ajax()) {
+                // if(Auth::check()) Auth::logout();
+                $user = User::where("email", "=", $request->email)->first();
+                if(!empty($user) && Hash::check($request->password, $user->password)) {
+                    return response()->json(["is_success" => true]);
+                }
+                // return abort(401, "Unauthorized");
+                return response()->json(["is_success" => false]);
+            }
             if (Auth::attempt($credentials) && Auth::check()) {
                 // dd(Auth::user());
                 $request->session()->regenerate();
@@ -79,7 +88,6 @@ class UserController extends Controller
                 }
             }
         }
-
         Alert::error("Login Gagal", "Pastikan Email dan Password Benar");
         // dd("gagal login");
         return back();
