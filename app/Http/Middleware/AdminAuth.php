@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminAuth
@@ -52,6 +53,11 @@ class AdminAuth
             $path = join(" ", $path);
         } else {
             $path = ucfirst($path[0]);
+        }
+        if (!auth()->user()->is_active ) {
+            Auth::logout();
+            Alert::error("USER NON ACTIVE", "Hubungi Admin (PIC)");
+            return redirect("/");
         }
         if($request->segment(1) == "user" && !str_contains(auth()->user()->name, "(PIC)")) {
             if (str_contains($concat_allowed_url, $request->segment(1)) && ($request->segment(2) == "view" || $request->segment(2) == "password")) {
