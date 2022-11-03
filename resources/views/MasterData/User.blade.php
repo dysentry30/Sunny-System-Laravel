@@ -153,19 +153,19 @@ a{{-- Begin::Extend Header --}}
 
 
                             <!--begin::Table-->
-                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                        <th class="min-w-auto">No.</th>
+                                        <th class="min-w-auto px-4">No.</th>
                                         <th class="min-w-auto">Nip</th>
                                         <th class="min-w-auto">Name</th>
                                         <th class="min-w-auto">Username</th>
                                         <th class="min-w-auto">Unit Kerja</th>
                                         <th class="min-w-auto">Role</th>
                                         <th class="min-w-auto text-center">Is Active</th>
-                                        <th class="min-w-auto text-end">Nomor Kontak</th>
+                                        <th class="min-w-auto">Nomor Kontak</th>
                                         @if (auth()->user()->check_administrator)
                                             <th class="text-center">
                                                 Action
@@ -185,7 +185,7 @@ a{{-- Begin::Extend Header --}}
                                         <tr>
 
                                             <!--begin::No=-->
-                                            <td>
+                                            <td class="px-4">
                                                 {{ $no++ }}
                                             </td>
                                             <!--end::No=-->
@@ -241,13 +241,15 @@ a{{-- Begin::Extend Header --}}
                                             <!--end::Role=-->
 
                                             <!--begin::Created at=-->
-                                            <td class="text-center badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
-                                                {{ $user->is_active == true ? 'yes' : 'No' }}
+                                            <td class="text-center">
+                                                <p class="fs-6 badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                    {{ $user->is_active == true ? 'yes' : '* No' }}
+                                                </p>
                                             </td>
                                             <!--end::Created at=-->
 
                                             <!--begin::Email-->
-                                            <td class="text-end">
+                                            <td class="px-4">
                                                 {{ $user->no_hp ?? '-' }}
                                             </td>
                                             <!--end::Email-->
