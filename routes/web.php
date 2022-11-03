@@ -6,6 +6,7 @@ use App\Models\Proyek;
 use App\Models\Forecast;
 use App\Models\UnitKerja;
 use App\Models\Opportunity;
+use App\Models\IndustryOwner;
 use Illuminate\Http\Request;
 use PhpOffice\PhpWord\PhpWord;
 use App\Mail\UserPasswordEmail;
@@ -1031,6 +1032,12 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 
     // Delete Tipe Proyek
     Route::delete('/tipe-proyek/delete/{id}', [TipeProyekController::class, 'delete']);
+
+    // Master Data Industry Owner
+    Route::get('/industry-owner', function(Request $request) {
+        $industryOwners = IndustryOwner::all();
+        return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
+    });
     //End :: Master Data
 
 

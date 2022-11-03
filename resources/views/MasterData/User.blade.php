@@ -6,6 +6,17 @@ a{{-- Begin::Extend Header --}}
 @section('title', 'Users')
 {{-- End::Title --}}
 
+<style>
+    .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+        /* background-color: red !important; */
+        --bs-table-accent-bg: #8ecae650 !important;
+    }
+
+    /* .table>:not(caption)>*>* {
+        padding: 0.25rem 0.25rem !important;
+    } */
+</style>
+
 <!--begin::Main-->
 @section('content')
 
@@ -142,7 +153,7 @@ a{{-- Begin::Extend Header --}}
 
 
                             <!--begin::Table-->
-                            <table class="table align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
+                            <table class="table table-striped table-hover align-middle table-row-dashed fs-6 gy-2" id="kt_customers_table">
                                 <!--begin::Table head-->
                                 <thead>
                                     <!--begin::Table row-->
@@ -230,8 +241,8 @@ a{{-- Begin::Extend Header --}}
                                             <!--end::Role=-->
 
                                             <!--begin::Created at=-->
-                                            <td class="text-center">
-                                                {{ $user->is_active == 1 ? 'yes' : 'No' }}
+                                            <td class="text-center badge {{ $user->is_active == true ? 'badge-light-success' : 'badge-light-danger' }}">
+                                                {{ $user->is_active == true ? 'yes' : 'No' }}
                                             </td>
                                             <!--end::Created at=-->
 
