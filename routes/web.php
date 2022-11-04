@@ -41,7 +41,10 @@ use App\Http\Controllers\ContractManagementsController;
 use App\Http\Controllers\JenisProyekController;
 use App\Http\Controllers\MataUangController;
 use App\Http\Controllers\TipeProyekController;
+use App\Models\JenisProyek;
 use App\Models\MataUang;
+use App\Models\ProyekBerjalans;
+use App\Models\Sbu;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -1034,7 +1037,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
     Route::delete('/tipe-proyek/delete/{id}', [TipeProyekController::class, 'delete']);
 
     // Master Data Industry Owner
-    Route::get('/industry-owner', function(Request $request) {
+    Route::get('/industry-owner', function (Request $request) {
         $industryOwners = IndustryOwner::all();
         return view("/MasterData/IndustryOwner", compact(["industryOwners"]));
     });
@@ -1367,6 +1370,111 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
         $p->author = [
             "name" => ""
         ];
+        $p->Account = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Name" => ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "",
+                            "UsrKdNasabah" => $p->kode_nasabah ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $p->UsrProvinsi = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Description" => $p->provinsi ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $p->UsrNegara = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Description" => $p->negara ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $p->UsrSistemPembayaran = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Description" => $p->sistem_bayar ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        $p->UsrMataUang = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "ShortName" => $p->mata_uang_awal ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $p->UsrJenisKontrak = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Description" => $p->jenis_terkontrak ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $p->UsrSumberDanaL = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Name" => $p->sumber_dana ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $p->UsrSBUL = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "UsrKode" => $p->sbu,
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $p->UsrJenis = [
+            "inline" => [
+                "entry" => [
+                    "content" => [
+                        "properties" => [
+                            "Name" => JenisProyek::find($p->jenis_proyek)->jenis_proyek ?? "",
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
         // $sign = ":";
         $p->content = [
             "m:properties" => [
@@ -1460,9 +1568,9 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
         return $p;
     });
     $data = $proyeks->toArray();
-    // $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
+    $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
     // creating object of SimpleXMLElement
-    $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <title type="text">OpportunityCollection</title> <updated>$taken_date</updated> </feed>');
+    $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <title type="text">OpportunityCollection</title> <updated>'. $taken_date .'</updated> </feed>');
     // <id>https://crm.wika.co.id/api/detail-proyek-xml</id> 
     // function call to convert array to xml
     $data = arrayToXML($data, $xml_data);
@@ -1486,7 +1594,36 @@ function arrayToXML($array, &$xml_data)
                 $key = 'entry'; //dealing with <0/>..<n/> issues
             }
             // $subnode = $xml_data->addChild("entry");
-            $subnode = $xml_data->addChild($key);
+            if ($key == 'Account') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrProvinsi') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrNegara') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrSistemPembayaran') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrMataUang') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrJenisKontrak') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrSumberDanaL') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrSBUL') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else if ($key == 'UsrJenis') {
+                $subnode = $xml_data->addChild("link");
+                $subnode->addAttribute('Title', $key);
+            } else {
+                $subnode = $xml_data->addChild($key);
+            }
             // $subnode = $xml_data->addChild("content");
             arrayToXML($value, $subnode);
         } else {
