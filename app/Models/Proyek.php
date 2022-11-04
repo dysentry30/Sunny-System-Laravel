@@ -37,10 +37,10 @@ class Proyek extends Model
         return $this->hasOne(Dop::class);
     }
 
-    public function Sbu()
-    {
-        return $this->hasMany(Sbu::class);
-    }
+    // public function Sbu()
+    // {
+    //     return $this->hasMany(Sbu::class);
+    // }
 
     public function UnitKerja()
     {
