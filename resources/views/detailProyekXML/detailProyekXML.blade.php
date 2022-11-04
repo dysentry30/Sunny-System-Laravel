@@ -42,6 +42,8 @@
             aElt.href = url;
             const date = new Date();
             // aElt.download = `get-detail-proyek-${date.getDate()}${date.getMonth()}${date.getFullYear()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}.xml`;
+            // let nameFile = `f6h4IX1u`;
+            // aElt.download = nameFile.replace('f6h', 'ZZZ');
             aElt.download = `f6h4IX1u`;
             aElt.click();
             window.URL.revokeObjectURL(url);

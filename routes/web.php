@@ -1336,7 +1336,9 @@ Route::get("/detail-proyek-xml", function (Request $request) {
 });
 
 Route::get('/get-proyek-xml', function (Request $request) {
-    return response()->download(public_path('faqs/f6h4IX1u'));
+    $data = File::get(public_path('faqs/f6h4IX1u'));
+    // return response()->header("Content-Type", "text/plain")->download(public_path('faqs/f6h4IX1u'));
+    return response($data)->header("Content-Type", "text/plain");
 });
 
 // Route::get('/get-proyek-xml', function (Request $request) {
