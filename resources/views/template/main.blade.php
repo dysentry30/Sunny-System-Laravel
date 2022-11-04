@@ -8,7 +8,8 @@
     <base href="">
     <title>@yield('title')</title>
 
-    <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
+    {{-- <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" /> --}}
+    <link rel="icon" type="image/x-icon" href="public/media/logos/Icon-Sunny.png">
     <!--begin::Fonts-->
 
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
@@ -282,6 +283,7 @@
                             str_contains(Request::Path(), 'pasal/edit') ||
                             str_contains(Request::Path(), 'user') ||
                             str_contains(Request::Path(), 'kriteria-pasar') ||
+                            str_contains(Request::Path(), 'industry-owner') ||
                             str_contains(Request::Path(), 'team-proyek') ? 'background-color:#008CB4' : '' }}">
 
                                     <a class="menu-link" id="collapse-button" style="color:white; padding-left:20px;"
@@ -458,6 +460,22 @@
                                                 <!--end::Svg Icon-->
                                             </span>
                                             <span class="menu-title" style="font-size: 16px; padding-left: 10px">Team Proyek</span>
+                                        </a>
+                                    </div>
+                                    <!--end::Menu Colapse-->
+                                    @endif
+
+                                    @if (!auth()->user()->check_user_sales)
+                                    <!--begin::Menu Colapse-->
+                                    <div id="#kt_aside_menu" data-kt-menu="true"
+                                        style="background-color:#0ca1c6; padding:8px 0px 8px 40px; {{ Request::Path() == 'industry-owner' ? 'background-color:#008CB4' : '' }}">
+                                        <a class="menu-link " href="/industry-owner" style="color:white; padding-left:20px;">
+                                            <span class="menu-icon">
+                                                <!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+                                                <i class="bi bi-building text-white"></i>
+                                                <!--end::Svg Icon-->
+                                            </span>
+                                            <span class="menu-title" style="font-size: 16px; padding-left: 10px">Industry Owner</span>
                                         </a>
                                     </div>
                                     <!--end::Menu Colapse-->

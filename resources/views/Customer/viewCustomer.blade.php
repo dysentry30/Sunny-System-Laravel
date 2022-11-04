@@ -531,6 +531,49 @@
                                                             </script>
                                                             <!--end::Fungsi Select Provinsi-->
 
+                                                            {{-- Begin :: Industry Owner --}}
+                                                            <!--begin::Row-->
+                                                            <div class="col-6">
+                                                                <!--begin::Input group Website-->
+                                                                <div class="fv-row mb-7">
+                                                                    <!--begin::Label-->
+                                                                    <label class="fs-6 fw-bold form-label mt-3">
+                                                                        <span class="">Industri Owner</span>
+                                                                    </label>
+                                                                    <!--end::Label-->
+                                                                    <!--begin::Input-->
+                                                                    <input type="text" class="form-control form-control-solid" id="input-industry-owner" name="industry-owner"
+                                                                        value="{{ $customer->kota_kabupaten }}" placeholder="industry-owner" style="display: none" />
+                                                                    <div id="div-industry-owner">
+                                                                        <select name="industry-owner" id="industry-owner" class="form-select form-select-solid" data-control="select2" data-hide-search="false"
+                                                                            {{-- onchange="selectKabupaten(this)" --}} data-placeholder="Pilih Industry Owner">
+                                                                            <option value="" selected></option>
+                                                                            @foreach ($industryOwners as $industryOwner)
+                                                                                <option value="{{ $industryOwner->code_owner }}">
+                                                                                    {{ $industryOwner->owner_description }}</option>
+                                                                            @endforeach
+                                                                            {{-- @if (isset($data_kabupaten))
+                                                                                @foreach ($data_kabupaten as $kabupaten)
+                                                                                    @if ($kabupaten->id == $customer->kota_kabupaten)
+                                                                                        <option value="{{ $kabupaten->id }}" selected>
+                                                                                            {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                        </option>
+                                                                                    @else
+                                                                                        <option value="{{ $kabupaten->id }}">
+                                                                                            {{ ucwords(strtolower($kabupaten->name)) }}
+                                                                                        </option>
+                                                                                    @endif
+                                                                                @endforeach
+                                                                            @endif --}}
+                                                                        </select>
+                                                                    </div>
+                                                                    <!--end::Input-->
+                                                                </div>
+                                                                <!--end::Input group-->
+                                                            </div>
+                                                            <!--End begin::Col-->
+                                                            {{-- End :: Industry Owner --}}
+
 
                                                         </div>
                                                         <!--End begin::Row-->

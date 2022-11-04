@@ -1453,14 +1453,15 @@ Route::get('/get-proyek-xml', function (Request $request) {
         return $p;
     });
     $data = $proyeks->toArray();
-    $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
+    // $taken_date = Carbon\Carbon::now()->translatedFormat("d F Y H:i:s");
     // creating object of SimpleXMLElement
-    $xml_data = new SimpleXMLElement("<?xml version='1.0' encoding='utf-8' standalone='yes' ?> <feed xml:base='https://crm.wika.co.id/api/detail-proyek-xml' xmlns='http://www.w3.org/2005/Atom' xmlns:d='http://schemas.microsoft.com/ado/2007/08/dataservices' xmlns:m='http://schemas.microsoft.com/ado/2007/08/dataservices/metadata' xmlns:georss='http://www.georss.org/georss' xmlns:gml='http://www.opengis.net/gml'> <id>https://crm.wika.co.id/api/detail-proyek-xml</id> <title type='text'>OpportunityCollection</title> <updated>$taken_date</updated> </feed>");
+    $xml_data = new SimpleXMLElement('<?xml version="1.0" encoding="utf-8"?> <feed xml:base="https://crm.wika.co.id/api/detail-proyek-xml" xmlns="http://www.w3.org/2005/Atom" xmlns:d="http://schemas.microsoft.com/ado/2007/08/dataservices" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:georss="http://www.georss.org/georss" xmlns:gml="http://www.opengis.net/gml"> <id>https://crm.wika.co.id/api/detail-proyek-xml</id> <title type="text">OpportunityCollection</title> <updated>$taken_date</updated> </feed>');
     
     // <link rel='self' title='OpportunityCollection' href='OpportunityCollection' />
     // function call to convert array to xml
     $data = arrayToXML($data, $xml_data);
     // print_r($data);
+    $data = str_replace(array("\r", "\n"), "", $data);
     return response($data)->header("Content-Type", "text/xml");
 });
 // End API PROYEK XML

@@ -14,6 +14,7 @@ use App\Models\StrukturCustomer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use App\Models\IndustryOwner;
 use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -210,6 +211,7 @@ class CustomerController extends Controller
         $proyeks = ProyekBerjalans::where("id_customer", "=", $id_customer)->get();
         $area_proyeks = collect();
         $per = 1000000;
+        $industryOwners = IndustryOwner::all();
 
         // foreach($proyeks as $p) {
         //     $p = Proyek::find($p->kode_proyek);
@@ -378,7 +380,7 @@ class CustomerController extends Controller
             "proyekOngoing" => $proyekOngoing,
             "proyekClosed" => $proyekClosed,
             "area_proyeks" => $area_proyeks,
-        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity"));
+        ], compact("namaUnit", "labaProyek", "rugiProyek", "piutangProyek", "proyekOpportunity", "industryOwners"));
     }
 
     public function saveEdit(
