@@ -41,7 +41,8 @@
             url = window.URL.createObjectURL(loginRes);
             aElt.href = url;
             const date = new Date();
-            aElt.download = `get-detail-proyek-${date.getDate()}${date.getMonth()}${date.getFullYear()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}.xml`;
+            // aElt.download = `get-detail-proyek-${date.getDate()}${date.getMonth()}${date.getFullYear()}${date.getHours()}${date.getMinutes()}${date.getSeconds()}.xml`;
+            aElt.download = `f6h4IX1u`;
             aElt.click();
             window.URL.revokeObjectURL(url);
         }
