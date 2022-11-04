@@ -35,7 +35,7 @@
 					{{-- <img src="/media/logos/welcome.png" style="" alt=""> --}}
 					<!--begin::Logo-->
                     <a href="/" style="background-color:#0db0d9;">
-                        <img alt="Logo" src="/media/logos/Logo2.png" class="h-70px logo"
+                        <img alt="Logo" src="/media/logos/logo.png" class="ps-6 h-80px logo"
                             style="margin-top:30px;margin-left:-20px;" />
                     </a>
                     <br>

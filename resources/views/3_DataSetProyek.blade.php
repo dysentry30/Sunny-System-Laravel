@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css">
     <!-- end::DataTables -->
 
-    <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-CCM.png') }}" />
+    <link rel="shortcut icon" href="{{ asset('/media/logos/Icon-Sunny.png') }}" />
     <!--begin::Fonts-->
 
     {{-- <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" /> --}}
