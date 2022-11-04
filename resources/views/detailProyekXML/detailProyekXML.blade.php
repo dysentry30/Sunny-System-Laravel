@@ -8,31 +8,31 @@
 </head>
 <body>
     <script>
-        const email = prompt("Email");
-        const password = prompt("Password");
-        login();
-        async function login() {
-            const formData = new FormData();
-            formData.append("email", email);
-            formData.append("password", password);
-            formData.append("_token", "{{csrf_token()}}");
-            const loginRes = await fetch("/login", {
-                method: "POST",
-                headers: {
-                    // "Content-Type": "application/json",
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-                body: formData,
-            }).then(res => res.json());
-            console.log(loginRes);
-            if(loginRes.is_success) {
-                await getDetailProyekXML()
-                return;
-            }
-            window.location.href = "/abort/401/Unauthorized";
-            return;
-        }
-
+        // const email = prompt("Email");
+        // const password = prompt("Password");
+        // login();
+        // async function login() {
+        //     const formData = new FormData();
+        //     formData.append("email", email);
+        //     formData.append("password", password);
+        //     formData.append("_token", "{{csrf_token()}}");
+        //     const loginRes = await fetch("/login", {
+        //         method: "POST",
+        //         headers: {
+        //             // "Content-Type": "application/json",
+        //             "X-Requested-With": "XMLHttpRequest",
+        //         },
+        //         body: formData,
+        //     }).then(res => res.json());
+        //     console.log(loginRes);
+        //     if(loginRes.is_success) {
+        //         await getDetailProyekXML()
+        //         return;
+        //     }
+        //     window.location.href = "/abort/401/Unauthorized";
+        //     return;
+        // }
+        getDetailProyekXML();
         async function getDetailProyekXML() {
             const loginRes = await fetch("/get-proyek-xml").then(res => res.blob());
             console.log(loginRes);
