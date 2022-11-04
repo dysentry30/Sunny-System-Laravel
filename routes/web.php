@@ -1341,7 +1341,7 @@ Route::group(['middleware' => ["userAuth", "admin"]], function () {
 //     return response($data)->header("Content-Type", "text/xml");
 // });
 
-Route::get('/detail-proyek-xml', function (Request $request) {
+Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $request) {
     $periode = getPeriode(date("Y") . date("m"));
     // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
     // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
