@@ -3036,7 +3036,7 @@
 
                     <!--Begin::Title Biru Form: History-->
                     <br>
-                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">History Forecast</h3>
+                    <h3 class="fw-bolder m-0" id="HeadDetail" style="font-size:14px;">History Forecast (Input nilai real)</h3>
                     <!--End::Title Biru Form: List History-->
 
                     <!-- begin::Detail History Forecast -->
