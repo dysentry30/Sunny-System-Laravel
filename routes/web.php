@@ -1881,31 +1881,31 @@ function arrayToXML($array, &$xml_data)
             // $subnode = $xml_data->addChild("entry");
             if ($key == 'Account') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrProvinsi') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrNegara') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrSistemPembayaran') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrMataUang') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrJenisKontrak') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrSumberDanaL') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrSBUL') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else if ($key == 'UsrJenis') {
                 $subnode = $xml_data->addChild("link");
-                $subnode->addAttribute('Title', $key);
+                $subnode->addAttribute('title', $key);
             } else {
                 $subnode = $xml_data->addChild($key);
             }
