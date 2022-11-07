@@ -515,9 +515,14 @@
 
                                             <!--begin::Forecast-->
                                             <td class="text-end">
+                                                @php
+                                                    $total_forecast = $proyek->Forecasts->sum(function($f) {
+                                                        return (int) $f->nilai_forecast;
+                                                    })
+                                                @endphp
                                                 <small>
                                                     {{-- {{ $proyek->forecast }} --}}
-                                                    {{ number_format((int)$proyek->forecast, 0, '.', '.') ?? '-' }}
+                                                    {{ number_format((int)$total_forecast, 0, '.', '.') ?? '-' }}
                                                 </small>
                                             </td>
                                             <!--end::Forecast-->

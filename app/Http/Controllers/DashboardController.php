@@ -1285,11 +1285,19 @@ class DashboardController extends Controller
         $year = (int) date("Y");
         $is_forecasts_exist = Forecast::where("periode_prognosa", "=", $month)->whereYear("created_at", "=", $year)->get()->count() > 0 ? true : false;
         if(!$is_forecasts_exist) {
-            $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->whereYear("created_at", "=", $year)->get();
+            if($month == 1) {
+                $forecasts = Forecast::where("periode_prognosa", "=", $month + 11)->whereYear("created_at", "=", $year - 1)->get();
+            } else {
+                $forecasts = Forecast::where("periode_prognosa", "=", $month - 1)->whereYear("created_at", "=", $year)->get();
+            }
             // dd($forecasts);
-            // $forecasts->each(function($f) {
-            //     // $new_forecast = $f->replicate();
-            //     dd($f);
+            // $forecasts->each(function($f) use($month) {
+            //     $new_forecast = $f->replicate();
+            //     // dd($f);
+            //     $new_forecast->created_at = now();
+            //     $new_forecast->updated_at = now();
+            //     $new_forecast->periode_prognosa = $month;
+            //     $new_forecast->save();
             //     // dd($new_forecast);
             // });
         }

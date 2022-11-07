@@ -1603,7 +1603,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     // if (isset($request->unitkerjaid)) {
     //     // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
     // } else {
-    //     return response()->json([
+    //     return response()->json([    
     //         "status" => 400,
     //         "msg" => "Unit Kerja Not Found"
     //     ], 400);
