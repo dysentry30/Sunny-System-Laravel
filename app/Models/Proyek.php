@@ -29,7 +29,7 @@ class Proyek extends Model
 
     public function SumberDana()
     {
-        return $this->hasMany(SumberDana::class);
+        return $this->hasOne(SumberDana::class, "kode_sumber", "sumber_dana");
     }
 
     public function Dop()
