@@ -1485,7 +1485,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
         // $sign = ":";
         $p->content = [
             "m:properties" => [
-                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
+                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek_crm", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
                 "d:Title" => $p->nama_proyek,
                 "d:UsrKontrakMulai" => $p->tanggal_mulai_terkontrak,
                 "d:UsrAkhirKontrak" => $p->tanggal_akhir_terkontrak,
@@ -1501,7 +1501,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
                 "d:UsrTanggalSPKEkternal" => $p->tglspk_internal,
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
+                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek_crm", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
             ],
         ];
         // $p->ap_id = "";
@@ -1726,7 +1726,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         // $sign = ":";
         $p->content = [
             "m:properties" => [
-                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
+                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek_crm", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
                 "d:Title" => $p->nama_proyek,
                 "d:UsrKontrakMulai" => $p->tanggal_mulai_terkontrak,
                 "d:UsrAkhirKontrak" => $p->tanggal_akhir_terkontrak,
@@ -1742,7 +1742,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrTanggalSPKEkternal" => $p->tglspk_internal,
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
+                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek_crm", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
             ],
         ];
         // $p->ap_id = "";
