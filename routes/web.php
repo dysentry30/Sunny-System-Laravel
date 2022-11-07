@@ -1722,14 +1722,14 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
 
-        if($p->sumber_dana == "Loan") $p->sumber_dana = "LOAN";
+        if($p->SumberDana->kode_sumber == "Loan") $p->SumberDana->kode_sumber = "LOAN";
 
         $p->UsrSumberDanaL = [
             "inline" => [
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Name" => $p->sumber_dana ?? "",
+                            "Name" => $p->SumberDana->kode_sumber ?? "",
                         ]
                     ]
                 ]
