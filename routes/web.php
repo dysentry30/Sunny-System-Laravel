@@ -1647,18 +1647,29 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => $p->negara ?? "",
+                            "Description" => $p->negara == 'Indonesia' ? "ID" : '',
                         ]
                     ]
                 ]
             ]
         ];
+        switch ($p->sistem_bayar) {
+            case "Milestone":
+                $sistem_bayar = "CP03";
+                break;
+            case "CPF (Turn key)":
+                $sistem_bayar = "CP02";
+                break;
+                case "Monthly":
+                $sistem_bayar = "CP01";
+                break;
+        };
         $p->UsrSistemPembayaran = [
             "inline" => [
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => $p->sistem_bayar ?? "",
+                            "Description" => $sistem_bayar ?? "",
                         ]
                     ]
                 ]
@@ -1676,12 +1687,33 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
 
+        switch ($p->jenis_terkontrak) {
+            case "Cost-Plus":
+                $jenis_terkontrak = "JKT01";
+                break;
+            case "Turnkey":
+                $jenis_terkontrak = "JKT02";
+                break;
+            case "Design & Build":
+                $jenis_terkontrak = "JKT03";
+                break;
+            case "OM":
+                $jenis_terkontrak = "JKT04";
+                break;
+            case "Unit Price":
+                $jenis_terkontrak = "JKT05";
+                break;
+            case "Lumpsum":
+                $jenis_terkontrak = "JKT06";
+                break;
+        };
+        
         $p->UsrJenisKontrak = [
             "inline" => [
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => $p->jenis_terkontrak ?? "",
+                            "Description" => $jenis_terkontrak ?? "",
                         ]
                     ]
                 ]
