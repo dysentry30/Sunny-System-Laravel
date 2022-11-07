@@ -46,6 +46,7 @@ use App\Models\MataUang;
 use App\Models\ProyekBerjalans;
 use App\Models\Sbu;
 use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -1350,7 +1351,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
     // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
     // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
     // $proyeks = Proyek::where("tahun_perolehan", "=", $periode[0])->where("stage", "=", 8)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
-    $proyeks = Proyek::where("stage", "=", 8)->get(["*"])->filter(function ($p) use ($periode) {
+    $proyeks = Proyek::where("stage", "=", 8)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu"])->filter(function ($p) use ($periode) {
         if ($periode[1] == 1) {
             $is_forecast_exist = $p->Forecasts->where("periode_prognosa", ((int) $periode[1] + 11))->whereYear("created_at", "=", ((int) date("Y") - 1))->count() > 0;
         } else {
@@ -1484,7 +1485,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
         // $sign = ":";
         $p->content = [
             "m:properties" => [
-                "d:Id" => $p->id,
+                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
                 "d:Title" => $p->nama_proyek,
                 "d:UsrKontrakMulai" => $p->tanggal_mulai_terkontrak,
                 "d:UsrAkhirKontrak" => $p->tanggal_akhir_terkontrak,
@@ -1500,7 +1501,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection', function (Request $reques
                 "d:UsrTanggalSPKEkternal" => $p->tglspk_internal,
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => $p->kode_proyek,
+                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
             ],
         ];
         // $p->ap_id = "";
@@ -1591,7 +1592,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
     // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
     // $forecasts = Proyek::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
     // $proyeks = Proyek::where("tahun_perolehan", "=", $periode[0])->where("stage", "=", 8)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak"])->filter(function ($p) use ($periode) {
-    $proyeks = Proyek::where("stage", "=", 8)->where("unit_kerja", "=", $unitKerjaPis)->get(["*"])->filter(function ($p) use ($periode) {
+    $proyeks = Proyek::where("stage", "=", 8)->where("unit_kerja", "=", $unitKerjaPis)->get(["id", "tanggal_selesai_pho", "tanggal_selesai_fho", "jenis_proyek", "kode_proyek", "nama_proyek", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak", "nospk_external", "porsi_jo", "nilai_kontrak_keseluruhan", "nomor_terkontrak", "nilai_valas_review", "tglspk_internal", "tanggal_terkontrak", "nilai_perolehan", "kurs_review", "klasifikasi_terkontrak", "provinsi", "negara", "sistem_bayar", "sumber_dana", "sbu"])->filter(function ($p) use ($periode) {
         if ($periode[1] == 1) {
             $is_forecast_exist = $p->Forecasts->where("periode_prognosa", ((int) $periode[1] + 11))->whereYear("created_at", "=", ((int) date("Y") - 1))->count() > 0;
         } else {
@@ -1725,7 +1726,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         // $sign = ":";
         $p->content = [
             "m:properties" => [
-                "d:Id" => $p->id,
+                "d:Id" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->uuid_crm ?? $p->id,
                 "d:Title" => $p->nama_proyek,
                 "d:UsrKontrakMulai" => $p->tanggal_mulai_terkontrak,
                 "d:UsrAkhirKontrak" => $p->tanggal_akhir_terkontrak,
@@ -1741,7 +1742,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "d:UsrTanggalSPKEkternal" => $p->tglspk_internal,
                 "d:UsrTanggalKontrak" => $p->tanggal_terkontrak,
                 "d:UsrNilaiKontrakKeseluruhan" => $p->nilai_kontrak_keseluruhan,
-                "d:UsrKodeProyek" => $p->kode_proyek,
+                "d:UsrKodeProyek" => DB::table("proyek_code_crm")->where("nama_proyek", '=', $p->nama_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek,
             ],
         ];
         // $p->ap_id = "";
@@ -1811,6 +1812,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         unset($p->tanggal_selesai_pho, $p->tanggal_selesai_fho, $p->nama_proyek, $p->nospk_external, $p->porsi_jo, $p->nilai_kontrak_keseluruhan);
         unset($p->nilai_kontrak_keseluruhan, $p->nilai_valas_review, $p->tanggal_terkontrak, $p->nilai_perolehan, $p->kurs_review, $p->klasifikasi_terkontrak);
         unset($p->nomor_terkontrak, $p->tglspk_internal);
+        unset($p->provinsi, $p->negara, $p->sistem_bayar, $p->sumber_dana, $p->sbu);
 
         return $p;
     });
