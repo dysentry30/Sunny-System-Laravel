@@ -1682,7 +1682,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "ShortName" => $mata_uang->mata_uang_kode,
+                            "ShortName" => $mata_uang->mata_uang_kode ?? "",
                         ]
                     ]
                 ]
