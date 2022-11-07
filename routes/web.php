@@ -1625,7 +1625,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                     "content" => [
                         "properties" => [
                             "Name" => ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->name_customer ?? "",
-                            "UsrKdNasabah" => $p->kode_nasabah ?? "",
+                            "UsrKdNasabah" => ProyekBerjalans::where("kode_proyek", "=", $p->kode_proyek)->first()->customer->kode_nasabah ?? "",
                         ]
                     ]
                 ]
