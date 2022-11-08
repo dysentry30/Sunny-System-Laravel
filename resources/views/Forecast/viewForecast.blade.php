@@ -2832,6 +2832,14 @@ fill="none">
     }
 
     async function confirmedLock() {
+        const currentDate = new Date();
+        if(currentDate.getDate() < 15 && currentDate.getMonth() + 1 == "{{$periode == "" ? (int) date('m') : (int) $periode}}") {
+            Toast.fire({
+                html: "Mohon cek kembali <b>Pilih Bulan</b> Otorisasi",
+                icon: "warning",
+            });
+            return;
+        }
         const getIconElt = monthEltBulanan.querySelector("i");
         // monthEltBulanan.setAttribute("disabled", "");
         const formData = new FormData();
