@@ -454,6 +454,9 @@ class CustomerController extends Controller
         $editCustomer->net_promoter_score = $data["net-promoter-score"];
         $editCustomer->customer_satisfaction_index = $data["customer-satisfaction-index"];
 
+        // CUSTOMER SAP :: Tab Company Information SAP
+        
+
 
         // form attachment
 
