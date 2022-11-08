@@ -138,15 +138,15 @@
                                     <!--begin::Table row-->
                                     <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
                                         <th class="min-w-auto">@sortablelink('unit_kerja','Unit Kerja')</th>
-                                        <th class="min-w-auto text-center">DOP</th>
+                                        {{-- <th class="min-w-auto text-center">DOP</th> --}}
                                         <th class="min-w-auto text-center">Bulan Pelaporan</th>
                                         <th class="min-w-auto text-center">Tahun Pelaporan</th>
                                         <th class="min-w-auto text-center">Total OK Review</th>
                                         <th class="min-w-auto text-center">Total OK Awal</th>
                                         <th class="min-w-auto text-center">Total Forecast</th>
                                         <th class="min-w-auto text-center">Total Realisasi</th>
-                                        <th class="min-w-auto text-center">Tanggal Locked</th>
-                                        <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th>
+                                        {{-- <th class="min-w-auto text-center">Tanggal Locked</th> --}}
+                                        {{-- <th class="min-w-auto text-center">@sortablelink('is_active','Is Locked')</th> --}}
                                         {{-- <th class="text-center">Action</th>
                                         <th class="text-center">Settings</th> --}}
                                     </tr>
@@ -155,17 +155,20 @@
                                 <!--end::Table head-->
                                 <!--begin::Table body-->
                                 <tbody class="fw-bold text-gray-600">
-                                    @foreach ($history_forecasts as $history)
+                                    @foreach ($history_forecasts as $unit_kerja => $history)
                                         <tr>
                                             <td class="">
                                                 <a href="#" id="click-name"
-                                                    class="text-hover-primary mb-1">{{ $history->unit_kerja }}</a>
+                                                    class="text-hover-primary mb-1">{{ $unit_kerja }}</a>
                                             </td>
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 {{$history->dop}}
-                                            </td>
+                                            </td> --}}
                                             <td class="text-center">
-                                                @switch($history->periode_prognosa)
+                                                @php
+                                                    $periode_prognosa = $history->first()->periode_prognosa;
+                                                @endphp
+                                                @switch($periode_prognosa)
                                                     @case('1')
                                                     Januari
                                                     @break
@@ -216,28 +219,39 @@
                                                 @endswitch
                                             </td>
                                             <td class="text-center">
-                                                {{-- {{2022}} --}}
-                                                2022
+                                                {{date("Y")}}
+                                                {{-- @dd(date($history->last()->created_at))
+                                                {{date($history->first()->created_at)}} --}}
                                             </td>
                                             <td class="text-center">
-                                                {{$history->nilaiok_review}}
+                                                {{ number_format((int) $history->sum(function($f) {
+                                                    return (int) $f->nilaiok_review;
+                                                }), 0, ".", ".") }}
                                             </td>
                                             <td class="text-center">
-                                                {{$history->nilaiok_awal}}
+                                                {{number_format((int) $history->sum(function($f) {
+                                                    return (int) $f->nilaiok_awal;
+                                                }), 0, ".", ".")}}
                                             </td>
                                             <td class="text-center">
-                                                {{number_format($history->nilai_forecast, 0, ",", ",")}}
+                                                {{number_format((int) $history->sum(function($f) {
+                                                    return (int) $f->nilai_forecast;
+                                                }), 0, ",", ",")}}
                                             </td>
                                             <td class="text-center">
-                                                {{number_format($history->realisasi_forecast, 0, ",", ",")}}
+                                                {{number_format((int) $history->sum(function($f) {
+                                                    if($f->stage >= 8) {
+                                                        return (int) $f->realisasi_forecast;
+                                                    }
+                                                }), 0, ",", ",")}}
                                             </td>
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 {{Carbon\Carbon::parse($history->created_at)->translatedFormat("d F Y")}}
-                                            </td>
-                                            <td class="text-center">
-                                                {{-- {{$history->dop}} --}}
+                                            </td> --}}
+                                            {{-- <td class="text-center">
+                                                {{$history->dop}}
                                                 Yes
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                     {{-- @foreach ($proyeks as $proyekArray)
