@@ -203,7 +203,7 @@ Route::middleware(["web"])->group(function () {
                     "Message" => null,
                     "TotalData" => $proyeks->count(),
                     "TotalRealisasi" => $total_realisasi,
-                    "Data" => $proyeks->all(),
+                    "Data" => [$proyeks->all()],
                 ],
 
             ];
