@@ -1602,6 +1602,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
         unset($p->Forecasts);
         return $is_forecast_exist;
     });
+    
     // if (isset($request->unitkerjaid)) {
     //     // $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("tahun_perolehan", "=", $periode[0])->where("bulan_pelaksanaan", "=", $periode[1])->get(["nama_proyek", "kode_proyek", "unit_kerja", "jenis_proyek", "stage", "tanggal_mulai_terkontrak", "tanggal_akhir_terkontrak"]);
     // } else {
@@ -1722,7 +1723,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
             ]
         ];
 
-        if($p->SumberDana->kode_sumber == "Loan") $p->SumberDana->kode_sumber = "LOAN";
+        if(!empty($p->SumberDana->kode_sumber) && $p->SumberDana->kode_sumber == "Loan") $p->SumberDana->kode_sumber = "LOAN";
 
         $p->UsrSumberDanaL = [
             "inline" => [
