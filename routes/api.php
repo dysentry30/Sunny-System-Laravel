@@ -4,6 +4,7 @@ use App\Http\Controllers\ProyekController;
 use App\Http\Controllers\UserController;
 use App\Models\Customer;
 use App\Models\Forecast;
+use App\Models\HistoryForecast;
 use App\Models\Proyek;
 use App\Models\ProyekBerjalans;
 use App\Models\UnitKerja;
@@ -174,7 +175,7 @@ Route::middleware(["web"])->group(function () {
                 }
                 $data_ok = collect();
                 for ($i = 1; $i <= 12; $i++) {
-                    $f = Forecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->spk_code)->where("month_rkap", "=", $i)->first();
+                    $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
                     if (!empty($f) && $i == $f->month_rkap) {
                         $data_ok->push([
                             "month" => $i,
