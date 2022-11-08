@@ -152,7 +152,7 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->where("is_cancel", "!=", true)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan"])->where("stage", "!=", 8)->where("stage", "!=", 7);
+            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan"])->where("stage", "!=", 8)->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = $proyeks->sum("nilai_perolehan");
             $proyeks = $proyeks->map(function ($p) use ($periode) {
                 if (str_contains($p->kode_proyek, "KD")) {
