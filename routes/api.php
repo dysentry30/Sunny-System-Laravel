@@ -164,10 +164,10 @@ Route::middleware(["web"])->group(function () {
                 $p->proyek_name = $p->nama_proyek;
                 switch ($p->jenis_proyek) {
                     case "I":
-                        $p->type_code = "Internal";
+                        $p->type_code = "Intern";
                         break;
                     case "N":
-                        $p->type_code = "Eksternal";
+                        $p->type_code = "Extern";
                         break;
                     case "J":
                         $p->type_code = "JO";
