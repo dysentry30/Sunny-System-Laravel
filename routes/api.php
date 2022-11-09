@@ -156,7 +156,7 @@ Route::middleware(["web"])->group(function () {
             
             $total_realisasi = $proyeks->sum("nilai_perolehan");
             $proyeks = $proyeks->map(function ($p) use ($periode) {
-                if($p->tipe_proyek == "R") {
+                if($p->tipe_proyek == "R" && ($p->stage != 7 || !$p->is_cancel)) {
                     if (str_contains($p->kode_proyek, "KD")) {
                         $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
                         // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
