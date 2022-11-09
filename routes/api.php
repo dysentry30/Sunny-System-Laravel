@@ -77,10 +77,10 @@ Route::middleware(["web"])->group(function () {
                 $p->ap_id = "";
                 switch ($p->jenis_proyek) {
                     case "I":
-                        $p->jenis = "Internal";
+                        $p->jenis = "INTERN";
                         break;
                     case "N":
-                        $p->jenis = "Eksternal";
+                        $p->jenis = "EXTERN";
                         break;
                     case "J":
                         $p->jenis = "JO";
@@ -164,10 +164,10 @@ Route::middleware(["web"])->group(function () {
                 $p->proyek_name = $p->nama_proyek;
                 switch ($p->jenis_proyek) {
                     case "I":
-                        $p->type_code = "Intern";
+                        $p->type_code = "INTERN";
                         break;
                     case "N":
-                        $p->type_code = "Extern";
+                        $p->type_code = "EXTERN";
                         break;
                     case "J":
                         $p->type_code = "JO";
