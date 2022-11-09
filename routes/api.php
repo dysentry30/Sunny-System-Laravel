@@ -177,11 +177,11 @@ Route::middleware(["web"])->group(function () {
                     }
                     $data_ok = collect();
                     for ($i = 1; $i <= 12; $i++) {
-                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
-                        if (!empty($f) && $i == $f->month_rkap) {
+                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                        if (!empty($f) && $i == $f->month_forecast) {
                             $data_ok->push([
                                 "month" => $i,
-                                "total" => (int) $f->rkap_forecast
+                                "total" => (int) $f->nilai_forecast
                             ]);
                         } else {
                             $data_ok->push([
@@ -211,11 +211,11 @@ Route::middleware(["web"])->group(function () {
                     }
                     $data_ok = collect();
                     for ($i = 1; $i <= 12; $i++) {
-                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
-                        if (!empty($f) && $i == $f->month_rkap) {
+                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                        if (!empty($f) && $i == $f->month_forecast) {
                             $data_ok->push([
                                 "month" => $i,
-                                "total" => (int) $f->rkap_forecast
+                                "total" => (int) $f->nilai_forecast
                             ]);
                         } else {
                             $data_ok->push([
