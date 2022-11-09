@@ -1120,6 +1120,24 @@ class ProyekController extends Controller
         // $cancelForecast->delete();
         // dd($cancelProyek);
         $cancelProyek->is_cancel = true;
+
+        $forecasts = Forecast::where('kode_proyek', "=", $kode_proyek)->get();
+        // $proyekBerjalan = ProyekBerjalans::where('kode_proyek', "=", $kode_proyek)->get()->first();
+        // $contractManagement = ContractManagements::where('project_id', "=", $kode_proyek)->get()->first();
+        // $claimManagement = ClaimManagements::where('kode_proyek', "=", $kode_proyek)->get();
+        // $historyForecasts = HistoryForecast::where('kode_proyek', "=", $kode_proyek)->get();
+        
+        if(!empty($forecasts)) {
+            foreach ($forecasts as $f) {
+                $f->delete();
+            }
+        }
+        // if(!empty($historyForecasts)) {
+        //     foreach ($historyForecasts as $hf) {
+        //         $hf->delete();
+        //     }
+        // }
+        
         $cancelProyek->save();
 
         Alert::warning('Cancel', $cancelProyek->nama_proyek . ", Telah ter-Cancel");
