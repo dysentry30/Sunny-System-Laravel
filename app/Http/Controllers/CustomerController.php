@@ -14,6 +14,7 @@ use App\Models\StrukturCustomer;
 use Illuminate\Http\UploadedFile;
 use Illuminate\support\Facades\DB;
 use App\Models\CustomerAttachments;
+use App\Models\CustomerSAP;
 use App\Models\IndustryOwner;
 use App\Models\StrukturAttachment;
 use Illuminate\Support\Facades\Auth;
@@ -455,7 +456,43 @@ class CustomerController extends Controller
         $editCustomer->customer_satisfaction_index = $data["customer-satisfaction-index"];
 
         // CUSTOMER SAP :: Tab Company Information SAP
-        
+        $customer_sap = new CustomerSAP();
+        $customer_sap->id_customer = $editCustomer->id_customer;
+        // $customer_sap->supplier = $data["supplier"];
+        $customer_sap->bp_grouping = $data["bp-grouping"];
+        $customer_sap->name_2 = $data["name-2"];
+        $customer_sap->name_3 = $data["name-3"];
+        $customer_sap->search_term_1 = $data["search-term-1"];
+        $customer_sap->search_term_2 = $data["search-term-2"];
+        $customer_sap->language = $data["languange"];
+        $customer_sap->bp_role = $data["bp-role"];
+        $customer_sap->reconciliation_account = $data["reconciliation-account"];
+        $customer_sap->check_double_invoice = $data["check-double-invoice"];
+        $customer_sap->withholding_tax_type = $data["withholding-tax-type"];
+        $customer_sap->subject = $data["subject"];
+        $customer_sap->oblig_from = $data["oblig-from"];
+        $customer_sap->oblig_to = $data["oblig-to"];
+        $customer_sap->sales_organization = $data["sales-organization"];
+        $customer_sap->distribution_channel = $data["distribution-channel"];
+        $customer_sap->customer_group = $data["customer-group"];
+        $customer_sap->price_procedure_term = $data["price-procedure-term"];
+        $customer_sap->shipping_conditions = $data["shipping-condition"];
+        $customer_sap->account_assignment_group = $data["account-assignment-group"];
+        $customer_sap->purchasing_organization = $data["purchasing-organization"];
+        $customer_sap->order_currency = $data["order-currency"];
+        $customer_sap->gr_based_invoice_verification = $data["gr-based-invoice-verification"];
+        $customer_sap->confirmation_control_key = $data["confirmation-control-key"];
+        $customer_sap->tax_number_category = $data["tax-number-category"];
+        $customer_sap->tax_number = $data["tax-number"];
+        $customer_sap->bank_country_key = $data["bank-country-key"];
+        $customer_sap->id_cusbank_keystomer = $data["bank-keys"];
+        $customer_sap->account_no = $data["account-no"];
+        $customer_sap->account_holder_name = $data["account-holder-name"];
+        $customer_sap->partner_function = $data["partner-function"];
+        $customer_sap->tax_category = $data["tax-category"];
+        $customer_sap->tax_classification = $data["tax-classification"];
+        $customer_sap->last_name = $data["last-name"];
+        $customer_sap->street = $data["street"];
 
 
         // form attachment
