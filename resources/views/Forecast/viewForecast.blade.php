@@ -866,7 +866,9 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         {{-- begin:: Foreach Unit Kerja --}}
                                                                         
                                                                         @foreach ($dop->UnitKerjas as $unitKerja)
-                                                                            
+                                                                            @php
+                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks->where("is_cancel", "!=", true);
+                                                                            @endphp
                                                                             @php
                                                                                 $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);                                                                                
                                                                                 if($column == "nama_proyek") {
@@ -1100,9 +1102,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                 </tr>
                                                                                 {{-- begin:: Foreach Proyek --}}
                                                                                 @if ($column != "")
-                                                                                    @php
-                                                                                        $unitKerja->Proyeks = $unitKerja->Proyeks->where("is_cancel", "!=", true);
-                                                                                    @endphp
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                         @php
                                                                                             $forecasts = $proyek->Forecasts->where("periode_prognosa", "=", $periode)->map(function($f) use($per_sejuta) {
@@ -1423,9 +1422,6 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endphp
                                                                                     @endforeach
                                                                                 @else
-                                                                                    @php
-                                                                                        $unitKerja->Proyeks = $unitKerja->Proyeks->where("is_cancel", "!=", true);
-                                                                                    @endphp
                                                                                     @foreach ($unitKerja->Proyeks as $proyek)
                                                                                     
                                                                                         <tr id="{{ $unit_kerja_name }}"
