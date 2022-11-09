@@ -2312,7 +2312,7 @@
 
                                                         <div id="overViewProject">
                                                             <br>
-                                                            <div class="row">
+                                                            {{-- <div class="row">
                                                                 <div class="card text-white mb-3 me-3 text-center col" style="background-color: #008CB4">
                                                                     <span class="text-center pt-8" style="font-size: 1.2rem">Proyek Forecast</span>
                                                                     <hr>
@@ -2337,9 +2337,152 @@
                                                                     <p class="text-white py-4 fw-bolder" style="font-size: 1.5rem">{{ $proyekOngoing[0] }} / Rp.
                                                                         {{ number_format($proyekOngoing[1], 0, '.', '.') }}</p>
                                                                 </div>
+                                                            </div> --}}
+                                                            <!--begin::Card Status-->
+                                                            <div class="row">
+                                                                <!--begin::Card column-->
+                                                                <div class="col-3">
+                                                                    <!--begin::Card body-->
+                                                                    <div class="card-body p-0">
+                                                                        <!--begin::Card widget 20-->
+                                                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #017EB8;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                                            <!--begin::Header-->
+                                                                            <div class="card-header pt-2">
+                                                                                <!--begin::Title-->
+                                                                                <div class="card-title d-flex flex-column">
+                                                                                    <!--begin::Amount-->
+                                                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $nilaiForecast[0] }}</span>
+                                                                                    <!--end::Amount-->
+                                                                                    <!--begin::Subtitle-->
+                                                                                    <span class="text-white pt-1 fs-12">Proyek Forecast</span>
+                                                                                    <!--end::Subtitle-->
+                                                                                </div>
+                                                                                <!--end::Title-->
+                                                                            </div>
+                                                                            <!--end::Header-->
+                                                                            <hr class="text-white">
+                                                                            <!--begin::Card body-->
+                                                                            <div class="card-body d-flex align-items-end pt-0">
+                                                                                <!--begin::Progress-->
+                                                                                <div class="text-start fs-1 text-white">
+                                                                                    <span>{{ number_format($nilaiForecast[1], 0, '.', '.') }}</span>
+                                                                                </div>
+                                                                                <!--end::Progress-->
+                                                                            </div>
+                                                                            <!--end::Card body-->
+                                                                        </div>
+                                                                        <!--end::Card widget 20-->
+                                                                    </div>
+                                                                    <!--end::Card body-->
+                                                                </div>
+                                                                <!--end-begin::Card column-->
+                                                                <div class="col-3">
+                                                                    <!--begin::Card body-->
+                                                                    <div class="card-body p-0">
+                                                                        <!--begin::Card widget 20-->
+                                                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #28B3AC;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                                            <!--begin::Header-->
+                                                                            <div class="card-header pt-2">
+                                                                                <!--begin::Title-->
+                                                                                <div class="card-title d-flex flex-column">
+                                                                                    <!--begin::Amount-->
+                                                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $proyekClosed[0] }}</span>
+                                                                                    <!--end::Amount-->
+                                                                                    <!--begin::Subtitle-->
+                                                                                    <span class="text-white pt-1 fs-12">Proyek Opportunity</span>
+                                                                                    <!--end::Subtitle-->
+                                                                                </div>
+                                                                                <!--end::Title-->
+                                                                            </div>
+                                                                            <!--end::Header-->
+                                                                            <hr class="text-white">
+                                                                            <!--begin::Card body-->
+                                                                            <div class="card-body d-flex align-items-end pt-0">
+                                                                                <!--begin::Progress-->
+                                                                                <div class="text-start fs-1 text-white">
+                                                                                    <span>{{ number_format($proyekClosed[1], 0, '.', '.') }}</span>
+                                                                                </div>
+                                                                                <!--end::Progress-->
+                                                                            </div>
+                                                                            <!--end::Card body-->
+                                                                        </div>
+                                                                        <!--end::Card widget 20-->
+                                                                    </div>
+                                                                    <!--end::Card body-->
+                                                                </div>
+                                                                <!--end-begin::Card column-->
+                                                                <div class="col-3">
+                                                                    <!--begin::Card body-->
+                                                                    <div class="card-body p-0">
+                                                                        <!--begin::Card widget 20-->
+                                                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #F7AD1A;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                                            <!--begin::Header-->
+                                                                            <div class="card-header pt-2">
+                                                                                <!--begin::Title-->
+                                                                                <div class="card-title d-flex flex-column">
+                                                                                    <!--begin::Amount-->
+                                                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $proyekClosed[0] }}</span>
+                                                                                    <!--end::Amount-->
+                                                                                    <!--begin::Subtitle-->
+                                                                                    <span class="text-white pt-1 fs-12">Proyek Closed</span>
+                                                                                    <!--end::Subtitle-->
+                                                                                </div>
+                                                                                <!--end::Title-->
+                                                                            </div>
+                                                                            <!--end::Header-->
+                                                                            <hr class="text-white">
+                                                                            <!--begin::Card body-->
+                                                                            <div class="card-body d-flex align-items-end pt-0">
+                                                                                <!--begin::Progress-->
+                                                                                <div class="text-start fs-1 text-white">
+                                                                                    <span>{{ number_format($proyekClosed[1], 0, '.', '.') }}</span>
+                                                                                </div>
+                                                                                <!--end::Progress-->
+                                                                            </div>
+                                                                            <!--end::Card body-->
+                                                                        </div>
+                                                                        <!--end::Card widget 20-->
+                                                                    </div>
+                                                                    <!--end::Card body-->
+                                                                </div>
+                                                                <!--end-begin::Card column-->
+                                                                <div class="col-3">
+                                                                    <!--begin::Card body-->
+                                                                    <div class="card-body p-0">
+                                                                        <!--begin::Card widget 20-->
+                                                                        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end h-md-90 mb-5 mb-xl-10" style="background-color: #E86340;background-image:url('/media/patterns/vector-1.png');background-repeat: no-repeat;background-size: auto;">
+                                                                            <!--begin::Header-->
+                                                                            <div class="card-header pt-2">
+                                                                                <!--begin::Title-->
+                                                                                <div class="card-title d-flex flex-column">
+                                                                                    <!--begin::Amount-->
+                                                                                    <span class="fs-2hx fw-bold text-white me-2 lh-1 ls-n2">{{ $proyekOngoing[0] }}</span>
+                                                                                    <!--end::Amount-->
+                                                                                    <!--begin::Subtitle-->
+                                                                                    <span class="text-white pt-1 fs-12">Proyek Ongoing</span>
+                                                                                    <!--end::Subtitle-->
+                                                                                </div>
+                                                                                <!--end::Title-->
+                                                                            </div>
+                                                                            <!--end::Header-->
+                                                                            <hr class="text-white">
+                                                                            <!--begin::Card body-->
+                                                                            <div class="card-body d-flex align-items-end pt-0">
+                                                                                <!--begin::Progress-->
+                                                                                <div class="text-start fs-1 text-white">
+                                                                                    <span>{{ number_format($proyekOngoing[1], 0, '.', '.') }}</span>
+                                                                                </div>
+                                                                                <!--end::Progress-->
+                                                                            </div>
+                                                                            <!--end::Card body-->
+                                                                        </div>
+                                                                        <!--end::Card widget 20-->
+                                                                    </div>
+                                                                    <!--end::Card body-->
+                                                                </div>
+                                                                <!--end::Card column-->
                                                             </div>
-                                                            <br>
-                                                            <hr>
+                                                            <!--end::Card Status--> 
                                                         </div>
                                                         <!--overViewProject-->
 
@@ -2496,20 +2639,20 @@
                                                         <!--End::Title Biru Form: Pelanggan Performance-->
                                                         <script>
                                                             function hideCSI() {
-                                                                document.getElementById("scoreCSI").style.display = "none";
+                                                                document.getElementById("divCSI").style.display = "none";
                                                                 document.getElementById("hide-csi").style.display = "none";
                                                                 document.getElementById("show-csi").style.display = "";
                                                             }
 
                                                             function showCSI() {
-                                                                document.getElementById("scoreCSI").style.display = "";
+                                                                document.getElementById("divCSI").style.display = "";
                                                                 document.getElementById("hide-csi").style.display = "";
                                                                 document.getElementById("show-csi").style.display = "none";
                                                             }
                                                         </script>
 
-                                                        <div class="row">
-                                                            <div class="col">
+                                                        <div id="divCSI" class="row">
+                                                            <div class="col-4">
                                                                 <div id="scoreCLR">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
@@ -2517,7 +2660,7 @@
                                                                     </figure>
                                                                 </div>
                                                             </div>
-                                                            <div class="col">
+                                                            <div class="col-4">
                                                                 <div id="scoreNPS">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
@@ -2525,7 +2668,7 @@
                                                                     </figure>
                                                                 </div>
                                                             </div>
-                                                            <div class="col">
+                                                            <div class="col-4">
                                                                 <div id="scoreCSI">
                                                                     <figure class="highcharts-figure">
                                                                         {{-- <div id="container-speed" class="chart-container"></div> --}}
@@ -3479,7 +3622,8 @@
                 style: {
                     fontFamily: 'Poppins'
                 }
-            }
+            },
+            colors: ["#017EB8", "#28B3AC", "#F7AD1A", "#9FE7F5", "#E86340", "#063F5C"],
         });
     </script>
 
@@ -3547,7 +3691,7 @@
                 itemMarginBottom: 10,
                 x: -120,
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
+            // colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 pie: {
                     innerSize: 100,
@@ -3659,7 +3803,7 @@
                 itemMarginBottom: 10,
                 x: -150,
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
+            // colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD", "#083AA9", "#CD104D", "#1C6758"],
             plotOptions: {
                 pie: {
                     innerSize: 100,
@@ -3732,7 +3876,7 @@
                     }
                 }
             },
-            colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
+            // colors: ["#46AAF5", "#61CB65", "#F7C13E", "#ED6D3F", "#9575CD"],
             credits: {
                 enabled: false
             },
@@ -3964,27 +4108,27 @@
                     from: 1,
                     to: 1.8,
                     thickness: 20,
-                    color: '#a9b8eb' // white blue
+                    color: '#55c8fe' // white blue
                 }, {
                     from: 1.8,
                     to: 2.6,
                     thickness: 20,
-                    color: '#8092cf' // darker white blue
+                    color: '#1db6fd' // darker white blue
                 }, {
                     from: 2.6,
                     to: 3.4,
                     thickness: 20,
-                    color: '#495c9c' // darker white blue
+                    color: '#019ae1' // darker white blue
                 }, {
                     from: 3.4,
                     to: 4.2,
                     thickness: 20,
-                    color: '#2f448a' // blue
+                    color: '#0073a9' // blue
                 }, {
                     from: 4.2,
                     to: 5,
                     thickness: 20,
-                    color: '#152866' // dark blue
+                    color: '#004d70' // dark blue
                 }, ]
             },
             tooltip: {
@@ -4141,27 +4285,27 @@
                     from: 1,
                     to: 1.8,
                     thickness: 20,
-                    color: '#Cff9b2' // white blue
+                    color: '#a2eae6' // white blue
                 }, {
                     from: 1.8,
                     to: 2.6,
                     thickness: 20,
-                    color: '#A5DA81' // darker white blue
+                    color: '#74dfda' // darker white blue
                 }, {
                     from: 2.6,
                     to: 3.4,
                     thickness: 20,
-                    color: '#8ED260' // darker white blue
+                    color: '#45d5ce' // darker white blue
                 }, {
                     from: 3.4,
                     to: 4.2,
                     thickness: 20,
-                    color: '#6FB73D' // blue
+                    color: '#29b9b2' // blue
                 }, {
                     from: 4.2,
                     to: 5,
                     thickness: 20,
-                    color: '#46831C' // dark blue
+                    color: '#1f8a85' // dark blue
                 }, ]
             },
             tooltip: {
@@ -4317,27 +4461,27 @@
                     from: 1,
                     to: 1.8,
                     thickness: 20,
-                    color: '#F1E4A9' // white blue
+                    color: '#fdebc8' // white blue
                 }, {
                     from: 1.8,
                     to: 2.6,
                     thickness: 20,
-                    color: '#E8D373' // darker white blue
+                    color: '#fbd791' // darker white blue
                 }, {
                     from: 2.6,
                     to: 3.4,
                     thickness: 20,
-                    color: '#CEB543' // darker white blue
+                    color: '#f9c45a' // darker white blue
                 }, {
                     from: 3.4,
                     to: 4.2,
                     thickness: 20,
-                    color: '#B79D25' // blue
+                    color: '#f7b023' // blue
                 }, {
                     from: 4.2,
                     to: 5,
                     thickness: 20,
-                    color: '#967D0B' // dark blue
+                    color: '#db9407' // dark blue
                 }, ]
             },
             tooltip: {
