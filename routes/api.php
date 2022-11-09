@@ -152,40 +152,77 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "nilai_perolehan", "is_cancel"])->where("stage", "!=", 8)->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $proyeks = Proyek::where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel"]);
+            
             $total_realisasi = $proyeks->sum("nilai_perolehan");
             $proyeks = $proyeks->map(function ($p) use ($periode) {
-                if (str_contains($p->kode_proyek, "KD")) {
-                    $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                    // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
-                } else {
-                    $p->spk_code = $p->kode_proyek;
-                }
-                $p->proyek_name = $p->nama_proyek;
-                switch ($p->jenis_proyek) {
-                    case "I":
-                        $p->type_code = "INTERN";
-                        break;
-                    case "N":
-                        $p->type_code = "EXTERN";
-                        break;
-                    case "J":
-                        $p->type_code = "JO";
-                        break;
-                }
-                $data_ok = collect();
-                for ($i = 1; $i <= 12; $i++) {
-                    $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
-                    if (!empty($f) && $i == $f->month_rkap) {
-                        $data_ok->push([
-                            "month" => $i,
-                            "total" => (int) $f->rkap_forecast
-                        ]);
+                if($p->tipe_proyek == "R") {
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
                     } else {
-                        $data_ok->push([
-                            "month" => $i,
-                            "total" => 0
-                        ]);
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    $p->proyek_name = $p->nama_proyek;
+                    switch ($p->jenis_proyek) {
+                        case "I":
+                            $p->type_code = "INTERN";
+                            break;
+                        case "N":
+                            $p->type_code = "EXTERN";
+                            break;
+                        case "J":
+                            $p->type_code = "JO";
+                            break;
+                    }
+                    $data_ok = collect();
+                    for ($i = 1; $i <= 12; $i++) {
+                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
+                        if (!empty($f) && $i == $f->month_rkap) {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => (int) $f->rkap_forecast
+                            ]);
+                        } else {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => 0
+                            ]);
+                        }
+                    }
+                } else if($p->stage != 8 || $p->stage != 7 || !$p->is_cancel) {
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                    } else {
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    $p->proyek_name = $p->nama_proyek;
+                    switch ($p->jenis_proyek) {
+                        case "I":
+                            $p->type_code = "INTERN";
+                            break;
+                        case "N":
+                            $p->type_code = "EXTERN";
+                            break;
+                        case "J":
+                            $p->type_code = "JO";
+                            break;
+                    }
+                    $data_ok = collect();
+                    for ($i = 1; $i <= 12; $i++) {
+                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_rkap", "=", $i)->first();
+                        if (!empty($f) && $i == $f->month_rkap) {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => (int) $f->rkap_forecast
+                            ]);
+                        } else {
+                            $data_ok->push([
+                                "month" => $i,
+                                "total" => 0
+                            ]);
+                        }
                     }
                 }
                 $p->component_id = 0;
