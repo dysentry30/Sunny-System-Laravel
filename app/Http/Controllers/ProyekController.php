@@ -568,7 +568,6 @@ class ProyekController extends Controller
                 $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->realisasi_forecast = (int) str_replace('.', '', $dataProyek["nilai-perolehan"]);
                 $editForecast->month_realisasi = (int) $newProyek->bulan_ri_perolehan;
-                $editForecast->nilai_forecast = (int) str_replace('.', '', $dataProyek["nilai-forecast"]);
                 $editForecast->save();
                 // if (isset($newProyek->bulan_ri_perolehan) && isset($newProyek->nilai_perolehan) && $newProyek->stage > 7 ){
                 // } else {
