@@ -1637,7 +1637,7 @@ Route::get('/detail-proyek-xml/OpportunityCollection/{unitKerja}', function (Req
                 "entry" => [
                     "content" => [
                         "properties" => [
-                            "Description" => $p->provinsi ?? "Jakarta Raya",
+                            "Description" => $p->provinsi ?? "JKT",
                         ]
                     ]
                 ]
