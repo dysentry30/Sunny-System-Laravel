@@ -179,7 +179,7 @@ Route::middleware(["web"])->group(function () {
                     $data_ok = collect();
                     for ($i = 1; $i <= 12; $i++) {
                         $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
-                        if ($i == $f->month_forecast) {
+                        if (!empty($f) && $i == $f->month_forecast) {
                             $data_ok->push([
                                 "month" => $i,
                                 "total" => (int) $f->nilai_forecast
