@@ -191,7 +191,7 @@ Route::middleware(["web"])->group(function () {
                             ]);
                         }
                     }
-                    $total_realisasi += $p->nilai_perolehan;
+                    $total_realisasi += $p->nilai_forecast;
                 } else {
                     if (str_contains($p->kode_proyek, "KD")) {
                         $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
@@ -231,7 +231,7 @@ Route::middleware(["web"])->group(function () {
                 $p->component_id = 0;
                 $p->header_id = 0;
                 $p->data_ok = $data_ok;
-                $total_realisasi += $p->nilai_perolehan;
+                $total_realisasi += $p->nilai_forecast;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
                 unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
