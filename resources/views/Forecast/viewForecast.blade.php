@@ -674,7 +674,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     if($column != "") {
                                                                                         if(isset($is_forecast)) {
                                                                                             $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         // return $p->nilai_rkap;
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
@@ -695,7 +695,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                             return (int) $f->nilai_forecast;
@@ -705,7 +705,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
                                                                                                             return (int) $f->realisasi_forecast;
@@ -718,7 +718,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         } else {
                                                                                             $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         // return $p->nilai_rkap;
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
@@ -739,7 +739,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek)) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                             return (int) $f->nilai_forecast;
@@ -749,7 +749,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if(preg_match("/$filter/i", $p->nama_proyek) && $p->stage == 8) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
                                                                                                             return (int) $f->realisasi_forecast;
@@ -762,7 +762,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                     } else {
                                                                                         if(isset($is_forecast)) {
                                                                                             $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     // return $p->nilai_rkap;
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
@@ -777,7 +777,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                         return (int) $f->nilai_forecast;
                                                                                                     });
@@ -785,7 +785,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->where("jenis_proyek", "!=", "I")->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if($p->stage == 8) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
                                                                                                             return (int) $f->realisasi_forecast;
@@ -795,7 +795,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
                                                                                         } else {
                                                                                             $total_ok_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     // return $p->nilai_rkap;
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($periode) {
                                                                                                         if($periode == $f->periode_prognosa) {
@@ -810,7 +810,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_forecast_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode, $filter) {
                                                                                                         return (int) $f->nilai_forecast;
                                                                                                     });
@@ -818,7 +818,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                             });
 
                                                                                             $total_realisasi_per_dop_tahunan = $dop->UnitKerjas->sum(function($unit_kerja) use($per_sejuta, $i, $periode, $filter) {
-                                                                                                return $unit_kerja->Proyeks->where("is_cancel", "!=", true)->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
+                                                                                                return $unit_kerja->Proyeks->sum(function($p) use($per_sejuta, $i, $periode, $filter) {
                                                                                                     if($p->stage == 8) {
                                                                                                         return $p->Forecasts->where("periode_prognosa", "=", $periode)->sum(function($f) use($per_sejuta, $i, $periode) {
                                                                                                             return (int) $f->realisasi_forecast;
@@ -867,7 +867,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                         
                                                                         @foreach ($dop->UnitKerjas as $unitKerja)
                                                                             @php
-                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks->where("is_cancel", "!=", true);
+                                                                                $unitKerja->Proyeks = $unitKerja->Proyeks;
                                                                             @endphp
                                                                             @php
                                                                                 $unit_kerja_name = preg_replace("/[^\w]/", "-", $unitKerja->unit_kerja);                                                                                
