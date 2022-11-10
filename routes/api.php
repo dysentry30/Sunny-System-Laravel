@@ -157,13 +157,13 @@ Route::middleware(["web"])->group(function () {
             
             $proyeks = $proyeks->map(function ($p) use ($periode) {
                 if($p->tipe_proyek == "R") {
-                    // if (str_contains($p->kode_proyek, "KD")) {
-                    //     $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                    //     // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
-                    // } else {
-                    //     $p->spk_code = $p->kode_proyek;
-                    // }
-                    $p->spk_code = $p->kode_proyek.'tes-pis';
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                    } else {
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    // $p->spk_code = $p->kode_proyek.'tes-pis';
                     $p->proyek_name = $p->nama_proyek;
                     switch ($p->jenis_proyek) {
                         case "I":
@@ -193,13 +193,13 @@ Route::middleware(["web"])->group(function () {
                     }
                 // $total_realisasi += $p->nilai_perolehan;
                 } else {
-                    // if (str_contains($p->kode_proyek, "KD")) {
-                    //     $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                    //     // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
-                    // } else {
-                    //     $p->spk_code = $p->kode_proyek;
-                    // }
-                    $p->spk_code = $p->kode_proyek;
+                    if (str_contains($p->kode_proyek, "KD")) {
+                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                    } else {
+                        $p->spk_code = $p->kode_proyek;
+                    }
+                    // $p->spk_code = $p->kode_proyek;
                     $p->proyek_name = $p->nama_proyek;
                     switch ($p->jenis_proyek) {
                         case "I":
