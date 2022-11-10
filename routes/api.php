@@ -152,8 +152,8 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             
             $proyeks = $proyeks->map(function ($p) use ($periode) {
                 if($p->tipe_proyek == "R") {
@@ -233,6 +233,7 @@ Route::middleware(["web"])->group(function () {
                 $p->data_ok = $data_ok;
                 // $total_realisasi += $p->nilai_perolehan;
                 unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
+                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa);
                 // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
                 // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
                 // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
