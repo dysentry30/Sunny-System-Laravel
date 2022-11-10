@@ -1335,7 +1335,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_new = $forecasts->sum(function($f) {
                                                                                                 return (int) $f->rkap_forecast;
-                                                                                            })
+                                                                                            });
                                                                                             $total_ok_formatted = number_format($total_ok, 0, ',', '.');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
@@ -1673,7 +1673,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @php
                                                                                             $total_ok_new = $forecasts->sum(function($f) {
                                                                                                 return (int) $f->rkap_forecast;
-                                                                                            })
+                                                                                            });
                                                                                             $total_ok_formatted = number_format($total_ok_new, 0, ',', '.');
                                                                                             $total_forecast_formatted = number_format($total_forecast, 0, ',', '.');
                                                                                             if(!empty($proyek->bulan_ri_perolehan)) {
