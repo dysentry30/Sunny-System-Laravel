@@ -244,7 +244,7 @@ Route::middleware(["web"])->group(function () {
                 "GetDetailNilaiProyekResult" => [
                     "Success" => true,
                     "Message" => null,
-                    "TotalData" => $total_realisasi,
+                    "TotalData" => $proyeks->count(),
                     "TotalRealisasi" => $total_realisasi,
                     "Data" => $proyeks->flatten(),
                 ],
