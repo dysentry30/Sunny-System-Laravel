@@ -152,92 +152,94 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true);
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true)->groupBy("kode_proyek");
             // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = 0;
-            $proyeks = $proyeks->map(function ($p) use ($periode, &$total_realisasi) {
-                if($p->tipe_proyek == "R") {
-                    if (str_contains($p->kode_proyek, "KD")) {
-                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
-                    } else {
-                        $p->spk_code = $p->kode_proyek;
-                    }
-                    // $p->spk_code = $p->kode_proyek.'tes-pis';
-                    $p->proyek_name = $p->nama_proyek;
-                    switch ($p->jenis_proyek) {
-                        case "I":
-                            $p->type_code = "INTERN";
-                            break;
-                        case "N":
-                            $p->type_code = "EXTERN";
-                            break;
-                        case "J":
-                            $p->type_code = "JO";
-                            break;
-                    }
-                    $data_ok = collect();
-                    for ($i = 1; $i <= 12; $i++) {
-                        $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
-                        if (!empty($f) && $i == $f->month_forecast) {
-                            $data_ok->push([
-                                "month" => $i,
-                                "total" => (int) $f->nilai_forecast
-                            ]);
+            $proyeks = $proyeks->map(function ($h) use ($periode, &$total_realisasi) {
+                return $h->map(function($p) use($periode, &$total_realisasi) {
+                    if($p->tipe_proyek == "R") {
+                        if (str_contains($p->kode_proyek, "KD")) {
+                            $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                            // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
                         } else {
-                            $data_ok->push([
-                                "month" => $i,
-                                "total" => 0
-                            ]);
+                            $p->spk_code = $p->kode_proyek;
+                        }
+                        // $p->spk_code = $p->kode_proyek.'tes-pis';
+                        $p->proyek_name = $p->nama_proyek;
+                        switch ($p->jenis_proyek) {
+                            case "I":
+                                $p->type_code = "INTERN";
+                                break;
+                            case "N":
+                                $p->type_code = "EXTERN";
+                                break;
+                            case "J":
+                                $p->type_code = "JO";
+                                break;
+                        }
+                        $data_ok = collect();
+                        for ($i = 1; $i <= 12; $i++) {
+                            $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                            if (!empty($f) && $i == $f->month_forecast) {
+                                $data_ok->push([
+                                    "month" => $i,
+                                    "total" => (int) $f->nilai_forecast
+                                ]);
+                            } else {
+                                $data_ok->push([
+                                    "month" => $i,
+                                    "total" => 0
+                                ]);
+                            }
+                        }
+                        $total_realisasi += (int) $p->realisasi_forecast;
+                    } else {
+                        if (str_contains($p->kode_proyek, "KD")) {
+                            $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
+                            // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
+                        } else {
+                            $p->spk_code = $p->kode_proyek;
+                        }
+                        // $p->spk_code = $p->kode_proyek;
+                        $p->proyek_name = $p->nama_proyek;
+                        switch ($p->jenis_proyek) {
+                            case "I":
+                                $p->type_code = "INTERN";
+                                break;
+                            case "N":
+                                $p->type_code = "EXTERN";
+                                break;
+                            case "J":
+                                $p->type_code = "JO";
+                                break;
+                        }
+                        $data_ok = collect();
+                        for ($i = 1; $i <= 12; $i++) {
+                            // $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
+                            if (!empty($p) && $i == $p->month_forecast) {
+                                $data_ok->push([
+                                    "month" => $i,
+                                    "total" => (int) $p->nilai_forecast
+                                ]);
+                            } else {
+                                $data_ok->push([
+                                    "month" => $i,
+                                    "total" => 0
+                                ]);
+                            }
                         }
                     }
+                    $p->component_id = 0;
+                    $p->header_id = 0;
+                    $p->data_ok = $data_ok;
                     $total_realisasi += (int) $p->realisasi_forecast;
-                } else {
-                    if (str_contains($p->kode_proyek, "KD")) {
-                        $p->spk_code = Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->first()->kode_proyek_crm ?? $p->kode_proyek;
-                        // Illuminate\Support\Facades\DB::table('proyek_code_crm')->where("kode_proyek", "=", $p->kode_proyek)->dump();
-                    } else {
-                        $p->spk_code = $p->kode_proyek;
-                    }
-                    // $p->spk_code = $p->kode_proyek;
-                    $p->proyek_name = $p->nama_proyek;
-                    switch ($p->jenis_proyek) {
-                        case "I":
-                            $p->type_code = "INTERN";
-                            break;
-                        case "N":
-                            $p->type_code = "EXTERN";
-                            break;
-                        case "J":
-                            $p->type_code = "JO";
-                            break;
-                    }
-                    $data_ok = collect();
-                    for ($i = 1; $i <= 12; $i++) {
-                        // $f = HistoryForecast::where("periode_prognosa", '=', $periode[1])->where("kode_proyek", '=', $p->kode_proyek)->where("month_forecast", "=", $i)->first();
-                        if (!empty($p) && $i == $p->month_forecast) {
-                            $data_ok->push([
-                                "month" => $i,
-                                "total" => (int) $p->nilai_forecast
-                            ]);
-                        } else {
-                            $data_ok->push([
-                                "month" => $i,
-                                "total" => 0
-                            ]);
-                        }
-                    }
-                }
-                $p->component_id = 0;
-                $p->header_id = 0;
-                $p->data_ok = $data_ok;
-                $total_realisasi += (int) $p->realisasi_forecast;
-                unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
-                unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast);
-                // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
-                // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
-                // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
-                return $p;
+                    unset($p->kode_proyek, $p->nama_proyek, $p->jenis_proyek, $p->unit_kerja, $p->nilai_perolehan, $p->is_cancel, $p->stage, $p->tipe_proyek);
+                    unset($p->month_forecast, $p->nilai_forecast, $p->periode_prognosa, $p->realisasi_forecast);
+                    // $p->nilai_forecast = $p->forecasts->sum("nilai_forecast");
+                    // $p->rkap_forecast = $p->forecasts->sum("rkap_forecast");
+                    // $p->realisasi_forecast = $p->forecasts->sum("realisasi_forecast");
+                    return $p;
+                });
             });
             $data = [
                 "GetDetailNilaiProyekResult" => [
