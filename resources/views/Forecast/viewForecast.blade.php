@@ -1334,7 +1334,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         <!--begin::Total Side Coloumn-->
                                                                                         @php
                                                                                             
-                                                                                            if($p->tipe_proyek == "R") {
+                                                                                            if($proyek->tipe_proyek == "R") {
                                                                                                 $total_ok_new = $forecasts->sum(function($f) {
                                                                                                     return (int) $f->rkap_forecast;
                                                                                                 });
@@ -1676,7 +1676,7 @@ $arrNamaBulan = [1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April', 5 
                                                                                         @endfor
                                                                                         <!--begin::Total Side Coloumn-->
                                                                                         @php
-                                                                                            if($p->tipe_proyek == "R") {
+                                                                                            if($proyek->tipe_proyek == "R") {
                                                                                                 $total_ok_new = $forecasts->sum(function($f) {
                                                                                                     return (int) $f->rkap_forecast;
                                                                                                 });
