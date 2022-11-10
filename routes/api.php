@@ -152,7 +152,7 @@ Route::middleware(["web"])->group(function () {
 
             // $forecasts = Forecast::with(["Proyek"])->get(["*"])->unique("kode_proyek");
             // $forecasts = Forecast::where("periode_prognosa", '=', (int) $prognosa)->whereYear("created_at", "=", $tahun)->get();
-            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true)->unique('kode_proyek');;
+            $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get(["nama_proyek", "stage", "proyeks.kode_proyek", "unit_kerja", "jenis_proyek", "tipe_proyek", "nilai_perolehan", "is_cancel", "month_forecast", "nilai_forecast", "realisasi_forecast", "periode_prognosa"])->where("stage", "!=", 7)->where("is_cancel", "!=", true)->unique('nama_proyek');
             // $proyeks = HistoryForecast::join("proyeks", "proyeks.kode_proyek", "=", "history_forecast.kode_proyek")->where("unit_kerja", "=", $request->unitkerjaid)->get()->where("stage", "!=", 7)->where("is_cancel", "!=", true);
             $total_realisasi = 0;
             $proyeks = $proyeks->map(function ($p) use ($periode, &$total_realisasi) {
